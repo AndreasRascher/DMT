@@ -1,0 +1,72 @@
+{
+	"folders": [
+		{
+			"path": ".alpackages",
+			"name": ".alpackages"
+		},
+		{
+			"path": "ruleSets"
+		},
+		{
+			"path": "DMTCore",
+			"name": "APP Core"
+		},
+		{
+			"path": "DMTOnPrem",
+			"name": "APP OnPrem"
+		}
+	],
+	"settings": {
+		"launch": {
+			"version": "0.2.0",
+			"configurations": [{
+				"name": "BC22",
+				"type": "al",
+				"request": "launch",
+				"environmentType": "OnPrem",
+				"server": "http://bc22/",
+				"serverInstance": "BC",
+				"authentication": "UserPassword",
+				"startupObjectId": 22,
+				"breakOnError": "ExcludeTry",
+				"breakOnRecordWrite": "None",
+				"launchBrowser": true,
+				"enableSqlInformationDebugger": true,
+				"enableLongRunningSqlStatements": true,
+				"longRunningSqlStatementsThreshold": 500,
+				"numberOfSqlStatements": 10,
+				"tenant": "default",
+				"usePublicURLFromServer": true
+			}],
+			"compounds": []
+		},
+		"[al]": {
+			"editor.wordBasedSuggestions": false,
+			"editor.suggestSelection": "first",
+			"editor.formatOnSave": true,
+			"editor.semanticHighlighting.enabled": true
+		},
+		"al.packageCachePath": [
+			"..\\.alpackages"
+		],
+		"al.enableCodeActions": true,
+		"al.enableCodeAnalysis": true,
+		"al.ruleSetPath": "..\\ruleSets\\DMTRuleSet.json",
+		"al.compilationOptions": {
+			"maxDegreeOfParallelism": 4
+		},
+		"CRS.FileNamePattern": "<ObjectNameShort>.al",
+		"CRS.ExtensionObjectNamePattern": "<BaseNameShort>",
+		"CRS.FileNamePatternExtensions": "<BaseNameShort>.<ObjectType>.al",
+		"CRS.RenameWithGit": true,
+		"CRS.RemoveUnderscoreFromFilename": true,
+		"alOutline.completionProviders": [
+			"VariableNamesWithType"
+		],
+		"editor.snippetSuggestions": "bottom",
+		"xliffSync.parseFromDeveloperNote": true,
+		"xliffSync.parseFromDeveloperNoteOverwrite": true,
+		"editor.stickyScroll.enabled": true,
+		"editor.stickyScroll.maxLineCount": 5
+	}
+}

@@ -1,0 +1,38 @@
+{
+  "id": "d7ae64ad-e30e-4572-ae94-3ba0036cae5a",
+  "name": "DMTOnPrem",
+  "publisher": "Andreas Rascher",
+  "version": "1.0.0.0",
+  "brief": "",
+  "description": "",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [
+    {      
+      "id": "4698691e-c550-4026-9fac-05f90572a975",
+      "name": "DMT Core",
+      "publisher": "Andreas Rascher",
+      "version": "1.0.0.0"
+    }
+  ],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "22.0.0.0",
+  "idRanges": [
+    {
+      "from": 90000,
+      "to": 99999
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "11.0",
+  "features": ["NoImplicitWith","TranslationFile"],
+  "target": "OnPrem"
+}
