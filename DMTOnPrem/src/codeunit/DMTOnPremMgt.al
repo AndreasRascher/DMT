@@ -1,4 +1,4 @@
-codeunit 90001 "DMTOnPremMgt"
+codeunit 90002 "DMTOnPremMgt"
 {
     procedure LookUpPath(CurrentPath: Text; LookUpFolder: Boolean) ResultPath: Text[250]
     var

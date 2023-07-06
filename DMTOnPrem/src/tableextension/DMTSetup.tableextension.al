@@ -2,7 +2,7 @@ tableextension 90000 "DMTSetup" extends DMTSetup
 {
     fields
     {
-        field(30; "Default Export Folder Path"; Text[250])
+        field(90000; "Default Export Folder Path"; Text[250])
         {
             Caption = 'Default Export Folder', comment = 'de-DE=Standard Export Ordnerpfad';
             DataClassification = ToBeClassified;
@@ -30,7 +30,7 @@ tableextension 90000 "DMTSetup" extends DMTSetup
                 Rec."Default Export Folder Path" := DMTOnPremMgt.LookUpPath(Rec."Default Export Folder Path", true);
             end;
         }
-        field(31; "Schema.csv File Path"; Text[250])
+        field(90001; "Schema.csv File Path"; Text[250])
         {
             Caption = 'Schema File Path', comment = 'de-DE=Pfad Schemadatei';
             trigger OnValidate()
@@ -45,7 +45,7 @@ tableextension 90000 "DMTSetup" extends DMTSetup
                 Rec."Schema.csv File Path" := DMTOnPremMgt.LookUpPath(Rec."Schema.csv File Path", false);
             end;
         }
-        field(32; "Backup.xml File Path"; Text[250])
+        field(90002; "Backup.xml File Path"; Text[250])
         {
             Caption = 'Backup.xml File Path', comment = 'de-DE=Pfad Backup.xml';
             trigger OnValidate()
