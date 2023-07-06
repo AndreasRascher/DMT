@@ -12,73 +12,65 @@ page 90000 "DMT Setup"
     {
         area(Content)
         {
-            group("Global Settings")
+            group("Object Generator")
             {
-                Caption = 'Global Settings', comment = 'de-DE=Globale Einstellungen';
+                Caption = 'Object Generator', comment = 'de-DE=Objekte generieren';
                 group(ObjectIDs)
                 {
                     Caption = 'Object IDs', comment = 'de-DE=Objekt IDs';
                     field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; ShowMandatory = true; }
                     field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; ShowMandatory = true; }
                 }
-                group(Debugging)
-                {
-                    field(SessionID; SessionId())
-                    {
-                        ApplicationArea = All;
-                        Caption = 'SessionID';
-                        trigger OnAssistEdit()
-                        var
-                            activeSession: Record "Active Session";
-                            Choice: Integer;
-                            NoOfChoices: Integer;
-                            SessionListID: Integer;
-                            StopSessionInstructionLbl: Label 'Select which session to stop:\<Session ID> - <User ID> - <Client Type>- <Login Datetime>', comment = 'de-DE=Wählen Sie eine Session zum Beenden aus:\<Session ID> - <User ID> - <Client Type> - <Login Datetime>';
-                            SessionList: List of [Integer];
-                            Choices: Text;
-                        begin
-                            if activeSession.FindSet() then
-                                repeat
-                                    Choices += StrSubstNo('%1 - %2 - %3 - %4,', activeSession."Session ID", activeSession."User ID", activeSession."Client Type", activeSession."Login Datetime");
-                                    NoOfChoices += 1;
-                                    SessionList.Add(activeSession."Session ID");
-                                until activeSession.Next() = 0;
-                            Choices += 'StopAllOtherSessions,';
-                            Choices += 'Cancel';
-                            Choice := StrMenu(Choices, NoOfChoices + 2, StopSessionInstructionLbl);
-                            if Choice <> 0 then
-                                case true of
-                                    //StopAllOtherSessions
-                                    (Choice = NoOfChoices + 1):
-                                        begin
-                                            foreach SessionListID in SessionList do begin
-                                                if SessionId() <> SessionListID then
-                                                    if StopSession(SessionListID) then;
-                                            end;
-                                        end;
-                                    //Cancel
-                                    (Choice = NoOfChoices + 2):
-                                        begin
-
-                                        end;
-                                end;
-                            if Choice <= NoOfChoices then begin
-                                if Choice <> 0 then // Cancel Menu
-                                    Message('%1', StopSession(SessionList.Get(Choice)));
-                            end;
-                        end;
-                    }
-                    field("UserID"; UserId) { ApplicationArea = All; Caption = 'User ID'; }
-                }
+                field("Import with FlowFields"; Rec."Import with FlowFields") { ApplicationArea = All; }
             }
-            group("Company Settings")
+            group(Debugging)
             {
-                Caption = 'Company Settings', comment = 'de-DE=Mandanteneinstellungen';
-                group(Performance)
+                field(SessionID; SessionId())
                 {
-                    field("Import with FlowFields"; Rec."Import with FlowFields") { ApplicationArea = All; }
-                }
+                    ApplicationArea = All;
+                    Caption = 'SessionID';
+                    trigger OnAssistEdit()
+                    var
+                        activeSession: Record "Active Session";
+                        Choice: Integer;
+                        NoOfChoices: Integer;
+                        SessionListID: Integer;
+                        StopSessionInstructionLbl: Label 'Select which session to stop:\<Session ID> - <User ID> - <Client Type>- <Login Datetime>', comment = 'de-DE=Wählen Sie eine Session zum Beenden aus:\<Session ID> - <User ID> - <Client Type> - <Login Datetime>';
+                        SessionList: List of [Integer];
+                        Choices: Text;
+                    begin
+                        if activeSession.FindSet() then
+                            repeat
+                                Choices += StrSubstNo('%1 - %2 - %3 - %4,', activeSession."Session ID", activeSession."User ID", activeSession."Client Type", activeSession."Login Datetime");
+                                NoOfChoices += 1;
+                                SessionList.Add(activeSession."Session ID");
+                            until activeSession.Next() = 0;
+                        Choices += 'StopAllOtherSessions,';
+                        Choices += 'Cancel';
+                        Choice := StrMenu(Choices, NoOfChoices + 2, StopSessionInstructionLbl);
+                        if Choice <> 0 then
+                            case true of
+                                //StopAllOtherSessions
+                                (Choice = NoOfChoices + 1):
+                                    begin
+                                        foreach SessionListID in SessionList do begin
+                                            if SessionId() <> SessionListID then
+                                                if StopSession(SessionListID) then;
+                                        end;
+                                    end;
+                                //Cancel
+                                (Choice = NoOfChoices + 2):
+                                    begin
 
+                                    end;
+                            end;
+                        if Choice <= NoOfChoices then begin
+                            if Choice <> 0 then // Cancel Menu
+                                Message('%1', StopSession(SessionList.Get(Choice)));
+                        end;
+                    end;
+                }
+                field("UserID"; UserId) { ApplicationArea = All; Caption = 'User ID'; }
             }
         }
     }

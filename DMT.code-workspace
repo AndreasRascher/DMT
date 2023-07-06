@@ -27,7 +27,7 @@
 				"server": "http://bc22/",
 				"serverInstance": "BC",
 				"authentication": "UserPassword",
-				"startupObjectId": 22,
+				"startupObjectId": 90005,
 				"breakOnError": "ExcludeTry",
 				"breakOnRecordWrite": "None",
 				"launchBrowser": true,
@@ -36,7 +36,8 @@
 				"longRunningSqlStatementsThreshold": 500,
 				"numberOfSqlStatements": 10,
 				"tenant": "default",
-				"usePublicURLFromServer": true
+				"usePublicURLFromServer": true,
+				"schemaUpdateMode": "ForceSync"
 			}],
 			"compounds": []
 		},
@@ -67,7 +68,10 @@
 		"editor.snippetSuggestions": "bottom",
 		"xliffSync.parseFromDeveloperNote": true,
 		"xliffSync.parseFromDeveloperNoteOverwrite": true,
+		"xliffSync.fileType": "xlf",
+		"xliffSync.parseFromDeveloperNoteSeparator": "±",
 		"editor.stickyScroll.enabled": true,
-		"editor.stickyScroll.maxLineCount": 5
+		"editor.stickyScroll.maxLineCount": 5,
+		"git.openRepositoryInParentFolders": "prompt"
 	}
 }

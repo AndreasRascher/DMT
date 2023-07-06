@@ -1,4 +1,4 @@
-page 90006 "FileBrowser"
+page 90008 "FileBrowser"
 {
     PageType = Worksheet;
     UsageCategory = None;

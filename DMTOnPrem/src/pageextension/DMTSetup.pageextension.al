@@ -3,7 +3,7 @@ pageextension 90000 "DMTSetup" extends "DMT Setup"
     layout
     {
         // Add changes to page layout here
-        addafter("Global Settings")
+        addlast(Content)
         {
             group(OnPremSettings)
             {

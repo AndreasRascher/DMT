@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en-US" target-language="en-US" original="DMTOnPrem">
+    <body>
+      <group id="body">
+        <trans-unit id="PageExtension 521254526 - Control 4138548914 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 425834526">
+          <source>OnPrem Settings</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=OnPrem Einstellungen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension DMTSetup - Control OnPremSettings - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 521254526 - Control 229062570 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 425834526">
+          <source>Paths</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Pfade</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension DMTSetup - Control Paths - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 521254526 - Field 2843815182 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 521254526">
+          <source>Backup.xml File Path</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Pfad Backup.xml</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTSetup - Field Backup.xml File Path - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 521254526 - Field 3332974040 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 521254526">
+          <source>Default Export Folder</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Standard Export Ordnerpfad</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTSetup - Field Default Export Folder Path - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 521254526 - Field 4219784878 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 521254526">
+          <source>Schema File Path</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Pfad Schemadatei</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTSetup - Field Schema.csv File Path - Property Caption</note>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

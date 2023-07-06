@@ -1,4 +1,4 @@
-page 99999 SourceFiles
+page 90005 SourceFiles
 {
     PageType = List;
     ApplicationArea = All;
@@ -13,7 +13,7 @@ page 99999 SourceFiles
             {
                 field("File ID"; Rec."File ID") { Visible = false; }
                 field(Name; Rec.Name) { }
-                field(Path; Rec.Path) { }
+                field(Extension; Rec.Extension) { }
                 field(Size; Rec.Size) { }
                 field("DateTime"; Rec.UploadDateTime) { }
             }
@@ -28,13 +28,16 @@ page 99999 SourceFiles
     {
         area(Processing)
         {
-            action(ActionName)
+            action(UploadFileToDefaultFolder)
             {
+                Image = MoveUp;
+                Caption = 'Upload File';
                 ApplicationArea = All;
-
-                trigger OnAction();
+                trigger OnAction()
+                var
+                    SourceFileMgt: Codeunit DMTSourceFileMgt;
                 begin
-
+                    SourceFileMgt.UploadFileIntoFileStorage();
                 end;
             }
         }

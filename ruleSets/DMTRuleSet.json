@@ -71,6 +71,11 @@
             "id": "AL0603",
             "action": "None",
             "justification": "An implicit conversion is being performed from a value of type 'Option' to a value of type Enum"
+        },
+        {
+            "id":"PTE0005",
+            "action":"None",
+            "justification":"onPrem"
         }
     ]
 }

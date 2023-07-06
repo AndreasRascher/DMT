@@ -7,11 +7,10 @@ table 90004 DMTSourceFileStorage
     {
         field(1; "File ID"; Integer) { }
         field(10; "File Blob"; Blob) { }
-        field(100; Path; Code[98]) { Caption = 'Path'; Editable = false; }
-        field(102; Name; Text[99]) { Caption = 'Name'; Editable = false; }
-        field(103; Size; Integer) { Caption = 'Size'; Editable = false; }
-        field(104; Extension; Text[10]) { Caption = 'Extension', Comment = 'de-DE=Dateiendung'; Editable = false; }
-        field(105; UploadDateTime; DateTime) { Caption = 'Uploaded at', Comment = 'de-DE=Hochgeladen am'; Editable = false; }
+        field(100; Name; Text[99]) { Caption = 'Name'; Editable = false; }
+        field(101; Extension; Text[10]) { Caption = 'Extension', Comment = 'de-DE=Dateiendung'; Editable = false; }
+        field(102; Size; Integer) { Caption = 'Size'; Editable = false; }
+        field(103; UploadDateTime; DateTime) { Caption = 'Uploaded at', Comment = 'de-DE=Hochgeladen am'; Editable = false; }
     }
 
     keys
