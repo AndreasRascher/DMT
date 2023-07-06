@@ -55,6 +55,7 @@
 		"al.compilationOptions": {
 			"maxDegreeOfParallelism": 4
 		},
+		"al.codeAnalyzers": ["${PerTenantExtensionCop}","${CodeCop}","${UICop}"],
 		"CRS.FileNamePattern": "<ObjectNameShort>.al",
 		"CRS.ExtensionObjectNamePattern": "<BaseNameShort>",
 		"CRS.FileNamePatternExtensions": "<BaseNameShort>.<ObjectType>.al",
