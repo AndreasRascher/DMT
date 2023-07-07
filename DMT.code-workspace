@@ -72,6 +72,7 @@
 		"xliffSync.parseFromDeveloperNoteSeparator": "±",
 		"editor.stickyScroll.enabled": true,
 		"editor.stickyScroll.maxLineCount": 5,
-		"git.openRepositoryInParentFolders": "prompt"
+		"git.openRepositoryInParentFolders": "prompt",
+		"alOutline.addToolTipsToPageFields": false
 	}
 }

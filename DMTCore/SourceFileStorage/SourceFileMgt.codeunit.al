@@ -61,9 +61,10 @@ codeunit 90001 DMTSourceFileMgt
         IStr: InStream;
         FileNameInArchive: Text;
     begin
+        OK := true;
         If not FileName.ToLower().EndsWith('zip') then
             exit(false);
-        DataCompression.OpenZipArchive(InStr, false, 850);
+        DataCompression.OpenZipArchive(InStr, false, 850); // Codepage 850 - Umlaute in Dateinamem werden sonst nicht richtig dargestellt 
         DataCompression.GetEntryList(EntryList);
         foreach FileNameInArchive in EntryList do begin
             Clear(TempBlob);
@@ -72,7 +73,6 @@ codeunit 90001 DMTSourceFileMgt
             TempBlob.CreateInStream(IStr);
             AddFileToStorage(FileNameInArchive, IStr, true);
         end;
-        exit(true);
     end;
 
 
