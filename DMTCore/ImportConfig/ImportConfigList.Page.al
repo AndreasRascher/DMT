@@ -5,6 +5,7 @@ page 90010 DMTImportConfigList
     UsageCategory = Lists;
     ApplicationArea = All;
     SourceTable = DMTImportConfigHeader;
+    CardPageId = DMTImportConfigCard;
 
     layout
     {
