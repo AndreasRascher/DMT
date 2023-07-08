@@ -26,7 +26,7 @@ page 91011 DMTDataLayoutCard
             }
             part(DMTLayoutLinePart; DMTLayoutLinePart)
             {
-                SubPageLink = "File Layout ID" = field(ID);
+                SubPageLink = "Data Layout ID" = field(ID);
             }
         }
     }
