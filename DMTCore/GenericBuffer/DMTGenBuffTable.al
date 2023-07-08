@@ -6,7 +6,6 @@ table 91001 "DMTGenBuffTable"
     {
         field(1; "Entry No."; Integer) { }
         field(10; "Import from Filename"; Text[250]) { }
-        field(11; "Import File Path"; Text[250]) { }
         field(12; "Source ID"; RecordId) { }
         field(13; IsCaptionLine; Boolean) { }
         field(14; "Column Count"; Integer) { }
@@ -285,7 +284,6 @@ table 91001 "DMTGenBuffTable"
         FieldIndex: Integer;
     begin
         GenBuffTable_CaptionLine.SetRange(IsCaptionLine, true);
-        GenBuffTable_CaptionLine.SetRange("Import File Path", GenBuffTable_First."Import File Path");
         GenBuffTable_CaptionLine.SetRange("Import from Filename", GenBuffTable_First."Import from Filename");
         if not GenBuffTable_CaptionLine.FindFirst() then
             Error('No lines found for %1', GenBuffTable_First."Import from Filename");
@@ -299,14 +297,15 @@ table 91001 "DMTGenBuffTable"
         NoOfCols := DMTGenBufferFieldCaptions.GetNoOfCaptions();
     end;
 
-    // internal procedure FilterBy(DataFile: Record DMTDataFile) HasLinesInFilter: Boolean
-    // begin
-    //     DataFile.TestField(Name);
-    //     DataFile.TestField(Path);
-    //     Rec.SetRange("Import from Filename", DataFile.Name);
-    //     Rec.SetRange("Import File Path", DataFile.Path);
-    //     HasLinesInFilter := not Rec.IsEmpty;
-    // end;
+    internal procedure FilterBy(ImportConfigHeader: Record DMTImportConfigHeader) HasLinesInFilter: Boolean
+    var
+        SourceFileStorage: Record DMTSourceFileStorage;
+    begin
+        ImportConfigHeader.TestField(SourceFileID);
+        SourceFileStorage.Get(ImportConfigHeader.SourceFileID);
+        Rec.SetRange("Import from Filename", SourceFileStorage.Name);
+        HasLinesInFilter := not Rec.IsEmpty;
+    end;
 
     // internal procedure FindSetLinesByFileNameWithoutCaptionLine(DataFile: Record DMTDataFile) FindSetOK: Boolean
     // begin
@@ -340,27 +339,29 @@ table 91001 "DMTGenBuffTable"
             exit(Choices.Split(',').Get(Choice));
     end;
 
-    // internal procedure GetColCaptionForImportedFile(DataFile: Record DMTDataFile; var BuffTableCaptions: Dictionary of [Integer, Text]) OK: Boolean
-    // var
-    //     GenBuffTable: Record DMTGenBuffTable;
-    //     RecRef: RecordRef;
-    //     FieldIndex: Integer;
-    // begin
-    //     OK := true;
-    //     if not GenBuffTable.FilterBy(DataFile) then begin
-    //         Message('Keine Zeilen in der Puffertabelle gefunden für %1', DataFile.FullDataFilePath());
-    //         exit(false);
-    //     end;
-    //     GenBuffTable.SetRange(IsCaptionLine, true);
-    //     if not GenBuffTable.FindFirst() then begin
-    //         Message('Keine Überschriftenzeile in der Puffertabelle gefunden für %1', DataFile.FullDataFilePath());
-    //         exit(false);
-    //     end;
-    //     RecRef.GetTable(GenBuffTable);
-    //     for FieldIndex := 1 to GenBuffTable."Column Count" do begin
-    //         BuffTableCaptions.Add(FieldIndex, Format(RecRef.Field(1000 + FieldIndex).Value));
-    //     end;
-    // end;
+    internal procedure GetColCaptionForImportedFile(ImportConfigHeader: Record DMTImportConfigHeader; var BuffTableCaptions: Dictionary of [Integer, Text]) OK: Boolean
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+        DMTDataLayout: Record DMTDataLayout;
+        RecRef: RecordRef;
+        FieldIndex: Integer;
+    begin
+        OK := true;
+        DMTDataLayout.Get(ImportConfigHeader."Data Layout ID");
+        if not GenBuffTable.FilterBy(ImportConfigHeader) then begin
+            Message('Keine Zeilen in der Puffertabelle gefunden (%1 - %2)', ImportConfigHeader.TableCaption, ImportConfigHeader.ID);
+            exit(false);
+        end;
+        GenBuffTable.SetRange(IsCaptionLine, true);
+        if not GenBuffTable.FindFirst() then begin
+            Message('Keine Überschriftenzeile in der Puffertabelle gefunden (%1 - %2)', ImportConfigHeader.TableCaption, ImportConfigHeader.ID);
+            exit(false);
+        end;
+        RecRef.GetTable(GenBuffTable);
+        for FieldIndex := 1 to GenBuffTable."Column Count" do begin
+            BuffTableCaptions.Add(FieldIndex, Format(RecRef.Field(1000 + FieldIndex).Value));
+        end;
+    end;
 
     local procedure GetFieldCaption(FieldNo: Integer) FieldCaption: Text
     begin

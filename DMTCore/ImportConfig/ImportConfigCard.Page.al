@@ -5,6 +5,7 @@ page 91008 DMTImportConfigCard
     ApplicationArea = All;
     UsageCategory = None;
     SourceTable = DMTImportConfigHeader;
+    DelayedInsert = true;
 
     layout
     {
@@ -15,10 +16,8 @@ page 91008 DMTImportConfigCard
                 Caption = 'General', Comment = 'de-DE=Allgemein';
 
                 field(ID; Rec.ID) { }
-                field("Target Table Caption"; Rec."Target Table Caption") { }
-                field("Target Table ID"; Rec."Target Table ID") { }
-                field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { }
-                field("Data Layout Code"; Rec."Data Layout Code")
+                field(SourceFileID; Rec.SourceFileID) { }
+                field("Data Layout Code"; Rec."Data Layout ID")
                 {
                     trigger OnValidate()
                     begin
@@ -26,6 +25,9 @@ page 91008 DMTImportConfigCard
                         CurrPage.LinePart.Page.DoUpdate(false);
                     end;
                 }
+                field("Target Table Caption"; Rec."Target Table Caption") { }
+                field("Target Table ID"; Rec."Target Table ID") { }
+                field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { }
                 field("Import Only New Records"; Rec."Import Only New Records") { }
             }
             part(LinePart; ImportConfigLinePart)

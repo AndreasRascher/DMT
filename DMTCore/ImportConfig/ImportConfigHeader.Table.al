@@ -18,12 +18,37 @@ table 91003 DMTImportConfigHeader
             CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Target Table ID")));
             Editable = false;
         }
+        field(40; "Use Separate Buffer Table"; Boolean)
+        {
+            Caption = 'Use Separate Buffer Table', Comment = 'de-DE=Separate Puffertabelle verwenden';
+            trigger OnValidate()
+            begin
+                if not "Use Separate Buffer Table" then begin
+                    Clear(Rec."Import XMLPort ID");
+                    Clear(Rec."Buffer Table ID");
+                end;
+            end;
+        }
+        field(41; "Import XMLPort ID"; Integer)
+        {
+            Caption = 'Import XMLPortID', Comment = 'de-DE=XMLPort ID für Import';
+            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(XMLport), "App Package ID" = field("Current App Package ID Filter"));
+            ValidateTableRelation = false;
+            BlankZero = true;
+        }
+        field(42; "Buffer Table ID"; Integer)
+        {
+            Caption = 'Buffertable ID', Comment = 'de-DE=Puffertabelle ID';
+            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table), "App Package ID" = field("Current App Package ID Filter"));
+            ValidateTableRelation = false;
+            BlankZero = true;
+        }
         #region Import and Processing Options
         field(50; LastUsedUpdateFieldsSelection; Blob) { }
         field(51; LastUsedFilter; Blob) { }
         field(52; "Use OnInsert Trigger"; Boolean) { Caption = 'Use OnInsert Trigger', Comment = 'de-DE=OnInsert Trigger verwenden'; InitValue = true; }
         field(53; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
-        field(54; "Data Layout Code"; Code[50]) { Caption = 'Data Layout Code', Comment = 'de-DE=Datenlayout Code'; TableRelation = DMTDataLayout; }
+        field(54; "Data Layout ID"; Code[50]) { Caption = 'Data Layout Code', Comment = 'de-DE=Datenlayout Code'; TableRelation = DMTDataLayout; }
         #endregion Import and Processing Options
         field(100; SourceFileID; Integer) { Caption = 'Source File ID', Comment = 'de-DE=Quell-Datei ID'; TableRelation = DMTSourceFileStorage; }
     }
@@ -35,7 +60,7 @@ table 91003 DMTImportConfigHeader
 
     trigger OnInsert()
     begin
-        Rec.testfield("Data Layout Code");
+        Rec.testfield("Data Layout ID");
         Rec.TestField(SourceFileID);
         Rec.ID := GetNextID();
     end;
@@ -47,5 +72,10 @@ table 91003 DMTImportConfigHeader
         NextID := 1;
         if DataLayout.FindLast() then
             NextID += DataLayout.ID;
+    end;
+
+    internal procedure FilterRelated(var ImportConfigLine: Record DMTImportConfigLine)
+    begin
+        ImportConfigLine.SetRange("Imp.Conf.Header ID", Rec.ID);
     end;
 }

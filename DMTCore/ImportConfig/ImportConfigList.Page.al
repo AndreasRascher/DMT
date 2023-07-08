@@ -13,7 +13,7 @@ page 91010 DMTImportConfigList
         {
             repeater(Group)
             {
-                field("Data Layout Code"; Rec."Data Layout Code") { }
+                field("Data Layout Code"; Rec."Data Layout ID") { }
                 field(ID; Rec.ID) { }
                 field("Target Table Caption"; Rec."Target Table Caption") { }
                 field("Target Table ID"; Rec."Target Table ID") { }
@@ -36,7 +36,7 @@ page 91010 DMTImportConfigList
 
                 trigger OnAction()
                 var
-                    ImportCfgMgt: Codeunit ImportCfgMgt;
+                    ImportCfgMgt: Codeunit DMTImportConfigMgt;
                 begin
                     ImportCfgMgt.ImportNAVSchemaFile();
                 end;
