@@ -1,4 +1,4 @@
-page 90000 "DMT Setup"
+page 91000 "DMT Setup"
 {
     Caption = 'Data Migration Tool Setup', comment = 'de-DE=Data Migration Tool Einrichtung';
     AdditionalSearchTerms = 'DMT Setup', comment = 'de-DE=DMT Einrichtung';
@@ -12,6 +12,11 @@ page 90000 "DMT Setup"
     {
         area(Content)
         {
+            group(MigrationSettings)
+            {
+                Caption = 'Migration Settings', Comment = 'de-DE=Migration Einstellungen';
+
+            }
             group("Object Generator")
             {
                 Caption = 'Object Generator', comment = 'de-DE=Objekte generieren';

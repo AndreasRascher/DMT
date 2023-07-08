@@ -1,4 +1,4 @@
-table 90001 "DMTGenBuffTable"
+table 91001 "DMTGenBuffTable"
 {
     DataClassification = ToBeClassified;
 

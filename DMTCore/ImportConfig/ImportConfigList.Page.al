@@ -1,4 +1,4 @@
-page 90010 DMTImportConfigList
+page 91010 DMTImportConfigList
 {
     Caption = 'DMT Import Config List', Comment = 'DMT Importkonfigurationen';
     PageType = List;

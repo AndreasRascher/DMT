@@ -1,4 +1,4 @@
-table 90004 DMTSourceFileStorage
+table 91004 DMTSourceFileStorage
 {
     Caption = 'DMT Source Files', Comment = 'DMT Quelldateien';
     DataClassification = CustomerContent;

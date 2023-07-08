@@ -1583,6 +1583,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Weisen Sie ein Datenlayout zu um eine Felderzuordnung einzurichten.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Control AssignDataLayout - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1854940516 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Source Files</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=DMT Quelldateien</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SourceFiles - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1854940516 - Action 1263952573 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Upload File</source>
           <note from="Developer" annotates="general" priority="2"></note>

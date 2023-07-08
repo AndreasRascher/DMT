@@ -1,8 +1,9 @@
-page 90005 SourceFiles
+page 91005 SourceFiles
 {
+    Caption = 'DMT Source Files', Comment = 'de-DE=DMT Quelldateien';
     PageType = List;
     ApplicationArea = All;
-    UsageCategory = None;
+    UsageCategory = Lists;
     SourceTable = DMTSourceFileStorage;
 
     layout

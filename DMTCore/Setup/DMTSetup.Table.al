@@ -1,4 +1,4 @@
-table 90000 DMTSetup
+table 91000 DMTSetup
 {
     Caption = 'DMT Setup', comment = 'de-DE=DMT Einrichtung';
     DataClassification = ToBeClassified;
@@ -6,19 +6,11 @@ table 90000 DMTSetup
     fields
     {
         field(1; "Primary Key"; Code[10]) { Caption = 'Primary Key', comment = 'de-DE=Primärschlüssel'; }
-        field(10; "Obj. ID Range Buffer Tables"; Text[250])
-        {
-            Caption = 'Obj. ID Range Buffer Tables', comment = 'de-DE=Objekt ID Bereich für Puffertabellen';
-        }
-        field(11; "Obj. ID Range XMLPorts"; Text[250])
-        {
-            Caption = 'Obj. ID Range XMLPorts (Import)', comment = 'de-DE=Objekt ID Bereich für XMLPorts (Import)';
-        }
+        field(10; MigrationProfil; Enum DMTMigrationProfile) { Caption = 'Migration Profil', Comment = 'Migrationsprofil'; }
+        field(20; "Obj. ID Range Buffer Tables"; Text[250]) { Caption = 'Obj. ID Range Buffer Tables', comment = 'de-DE=Objekt ID Bereich für Puffertabellen'; }
+        field(21; "Obj. ID Range XMLPorts"; Text[250]) { Caption = 'Obj. ID Range XMLPorts (Import)', comment = 'de-DE=Objekt ID Bereich für XMLPorts (Import)'; }
+        field(22; "Import with FlowFields"; Boolean) { Caption = 'Create Buffer Tables with Flowfields', comment = 'de-DE=Puffertabellen mit Flowfields generieren'; }
 
-        field(41; "Import with FlowFields"; Boolean)
-        {
-            Caption = 'Gen. Buffer Tables with Flowfields', comment = 'de-DE=Puffertabellen mit Flowfields generieren';
-        }
     }
     keys
     {

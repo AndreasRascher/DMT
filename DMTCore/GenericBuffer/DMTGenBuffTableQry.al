@@ -1,4 +1,4 @@
-query 90000 DMTGenBuffTableQry
+query 91000 DMTGenBuffTableQry
 {
     QueryType = Normal;
 

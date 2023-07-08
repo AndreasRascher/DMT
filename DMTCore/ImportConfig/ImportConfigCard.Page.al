@@ -1,4 +1,4 @@
-page 90008 DMTImportConfigCard
+page 91008 DMTImportConfigCard
 {
     Caption = 'DMT Import Config Card', Comment = 'de-DE=Importkonfiguration Karte';
     PageType = Document;
@@ -18,7 +18,14 @@ page 90008 DMTImportConfigCard
                 field("Target Table Caption"; Rec."Target Table Caption") { }
                 field("Target Table ID"; Rec."Target Table ID") { }
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { }
-                field("Data Layout Code"; Rec."Data Layout Code") { }
+                field("Data Layout Code"; Rec."Data Layout Code")
+                {
+                    trigger OnValidate()
+                    begin
+                        CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
+                        CurrPage.LinePart.Page.DoUpdate(false);
+                    end;
+                }
                 field("Import Only New Records"; Rec."Import Only New Records") { }
             }
             part(LinePart; ImportConfigLinePart)
