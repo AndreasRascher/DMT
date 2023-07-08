@@ -1,6 +1,6 @@
 table 91004 DMTSourceFileStorage
 {
-    Caption = 'DMT Source Files', Comment = 'DMT Quelldateien';
+    Caption = 'DMT Source File', Comment = 'DMT Quelldatei';
     DataClassification = CustomerContent;
 
     fields

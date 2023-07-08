@@ -3,7 +3,7 @@ page 91008 DMTImportConfigCard
     Caption = 'DMT Import Config Card', Comment = 'de-DE=Importkonfiguration Karte';
     PageType = Document;
     ApplicationArea = All;
-    UsageCategory = Lists;
+    UsageCategory = None;
     SourceTable = DMTImportConfigHeader;
 
     layout

@@ -25,10 +25,27 @@ table 91003 DMTImportConfigHeader
         field(53; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
         field(54; "Data Layout Code"; Code[50]) { Caption = 'Data Layout Code', Comment = 'de-DE=Datenlayout Code'; TableRelation = DMTDataLayout; }
         #endregion Import and Processing Options
+        field(100; SourceFileID; Integer) { Caption = 'Source File ID', Comment = 'de-DE=Quell-Datei ID'; TableRelation = DMTSourceFileStorage; }
     }
 
     keys
     {
         key(PK; ID) { Clustered = true; }
     }
+
+    trigger OnInsert()
+    begin
+        Rec.testfield("Data Layout Code");
+        Rec.TestField(SourceFileID);
+        Rec.ID := GetNextID();
+    end;
+
+    procedure GetNextID() NextID: Integer
+    var
+        DataLayout: Record DMTDataLayout;
+    begin
+        NextID := 1;
+        if DataLayout.FindLast() then
+            NextID += DataLayout.ID;
+    end;
 }

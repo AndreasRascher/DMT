@@ -35,9 +35,10 @@ codeunit 91002 ImportCfgMgt
         end;
         foreach TableID in TableIDs do begin
             // delete old
+            dataLayout.Reset();
             dataLayout.SetRange(NAVTableID, TableID);
-            if not dataLayout.IsEmpty then
-                dataLayout.Delete(true);
+            if dataLayout.FindFirst() then
+                dataLayout.DeleteAll(true);
             // load fields
             NAVFieldBuffer.Reset();
             NAVFieldBuffer.FindSet(false);
@@ -46,8 +47,11 @@ codeunit 91002 ImportCfgMgt
             // add header
             Clear(dataLayout);
             dataLayout.Name := NAVFieldBuffer.TableName;
-            dataLayout.NAVTableID := NAVFieldBuffer.TableNo;
             dataLayout.SourceFileFormat := dataLayout.SourceFileFormat::"NAV CSV Export";
+            dataLayout.NAVTableID := NAVFieldBuffer.TableNo;
+            dataLayout.NAVNoOfRecords := NAVFieldBuffer."No. of Records";
+            dataLayout.NAVPrimaryKey := NAVFieldBuffer."Primary Key";
+            dataLayout.NAVTableCaption := NAVFieldBuffer."Table Caption";
             dataLayout.Insert(true);
             repeat
                 Clear(dataLayoutLine);

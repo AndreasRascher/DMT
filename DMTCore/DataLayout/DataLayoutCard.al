@@ -3,7 +3,7 @@ page 91011 DMTDataLayoutCard
     Caption = 'DMT Data Layout', Comment = 'de-DE=DMT Datenlayout';
     PageType = List;
     ApplicationArea = All;
-    UsageCategory = Lists;
+    UsageCategory = None;
     SourceTable = DMTDataLayout;
 
     layout
@@ -22,6 +22,10 @@ page 91011 DMTDataLayoutCard
                         CurrPage.DMTLayoutLinePart.Page.SetRepeaterVisibility(Rec);
                         CurrPage.DMTLayoutLinePart.Page.DoUpdate(false);
                     end;
+                }
+                group(NAV)
+                {
+                    field(NAVTableID; Rec.NAVTableID) { }
                 }
             }
             part(DMTLayoutLinePart; DMTLayoutLinePart)

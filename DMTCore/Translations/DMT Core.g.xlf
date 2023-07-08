@@ -23,6 +23,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Name</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field Name - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 4224547593 - Field 2503397726 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>NAV TableID</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=NAV Tabellen ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field NAVTableID - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 4224547593 - Field 1013576988 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source File Format</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Dateiformat</note>
@@ -43,15 +48,15 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field ColumnName - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2231340739 - Field 3893498913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>File ID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field Data Layout ID - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 2231340739 - Field 4065219740 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Type</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field DataType - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2231340739 - Field 1784126515 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>File ID</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field File Layout ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2231340739 - Field 1820164459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Type</source>
@@ -1414,9 +1419,14 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 521254526 - Field 2204498840 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Gen. Buffer Tables with Flowfields</source>
+          <source>Create Buffer Tables with Flowfields</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Puffertabellen mit Flowfields generieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Import with FlowFields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 521254526 - Field 451378894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Migration Profil</source>
+          <note from="Developer" annotates="general" priority="2">Migrationsprofil</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field MigrationProfil - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 521254526 - Field 2593167842 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Obj. ID Range Buffer Tables</source>
@@ -1478,6 +1488,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Wählen Sie eine Datei zum Hochladen aus</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTSourceFileMgt - Method UploadFileIntoFileStorage - NamedType UploadFileMsg</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2597982507 - Method 1710761149 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import finished</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit ImportCfgMgt - Method ImportNAVSchemaFile - NamedType ImportFinishedMsg</note>
+        </trans-unit>
         <trans-unit id="Page 425834526 - Property 2019332006" size-unit="char" translate="yes" xml:space="preserve">
           <source>NAV,Backup,Lists,,</source>
           <note from="Developer" annotates="general" priority="2">de-DE=NAV,Backup,Listen,,</note>
@@ -1507,6 +1522,11 @@
           <source>User ID</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control UserID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 425834526 - Control 3157111635 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Migration Settings</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Migration Einstellungen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control MigrationSettings - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Control 2950689218 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Object Generator</source>
@@ -1593,6 +1613,31 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SourceFiles - Action UploadFileToDefaultFolder - Property Caption</note>
         </trans-unit>
+        <trans-unit id="XmlPort 2995423981 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMT NAVFieldBufferImport - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2995423981 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMT NAVFieldBufferImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2995423981 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMT NAVFieldBufferImport - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2995423981 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMT NAVFieldBufferImport - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 2995423981 - Control 520131415 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMT NAVFieldBufferImport - Control GetDatabaseNameCtrl - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 3703598467 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>All Files (*.*)|*.*</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Alle Dateien (*.*)|*.*</note>
@@ -1627,6 +1672,16 @@
           <source>ZIP Files (*.zip)|*.zip</source>
           <note from="Developer" annotates="general" priority="2">de-DE=ZIP-Dateien (*.zip)|*.zip</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue ZIP - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2115101342 - EnumValue 2335996673 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>From NAV</source>
+          <note from="Developer" annotates="general" priority="2">Aus NAV</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTMigrationProfile - EnumValue From NAV - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2115101342 - EnumValue 437562606 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>None</source>
+          <note from="Developer" annotates="general" priority="2">keins</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTMigrationProfile - EnumValue No Profile - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3953448519 - EnumValue 2521149591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Custom CSV</source>

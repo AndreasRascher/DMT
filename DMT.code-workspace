@@ -27,7 +27,7 @@
 				"server": "http://bc22/",
 				"serverInstance": "BC",
 				"authentication": "UserPassword",
-				"startupObjectId": 90005,
+				"startupObjectId": 91010,
 				"breakOnError": "ExcludeTry",
 				"breakOnRecordWrite": "None",
 				"launchBrowser": true,

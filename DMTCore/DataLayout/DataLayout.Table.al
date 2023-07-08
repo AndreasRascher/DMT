@@ -11,6 +11,9 @@ table 91002 DMTDataLayout
         field(100; CSVFieldSeparator; Text[10]) { Caption = 'Field Separator', Comment = 'de-DE=Feldtrenner'; }
         field(101; CSVLineSeparator; Text[10]) { Caption = 'Line Separator', Comment = 'de-DE=Zeilentrenner'; }
         field(200; NAVTableID; Integer) { Caption = 'NAV TableID', Comment = 'de-DE=NAV Tabellen ID'; }
+        field(50000; "NAVTableCaption"; Text[80]) { Caption = 'Table Caption', Locked = true; }
+        field(50001; "NAVPrimaryKey"; Text[250]) { Caption = 'Primary Key', Locked = true; }
+        field(50004; "NAVNoOfRecords"; Integer) { Caption = 'No. of Records', Locked = true; }
     }
 
     keys

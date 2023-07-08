@@ -27,5 +27,21 @@ page 91010 DMTImportConfigList
 
     actions
     {
+        area(Processing)
+        {
+            action(ImportNAVSchemaFile)
+            {
+                ApplicationArea = All;
+                Image = Import;
+
+                trigger OnAction()
+                var
+                    ImportCfgMgt: Codeunit ImportCfgMgt;
+                begin
+                    ImportCfgMgt.ImportNAVSchemaFile();
+                end;
+
+            }
+        }
     }
 }
