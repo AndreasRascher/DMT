@@ -1593,12 +1593,6 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld250 - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1296439604 - Field 2804341594 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import File Path</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2"/>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Import File Path - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2840077126 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import from Filename</source>
           <target state="needs-translation"/>
@@ -1623,17 +1617,29 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Import Konfiguration Kopf</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 200502431 - Field 2474851393 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 200502431 - Field 3434788173 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffertable ID</source>
+          <target state="translated">Puffertabelle ID</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Puffertabelle ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Buffer Table ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 200502431 - Field 3893498913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Layout Code</source>
           <target state="translated">Datenlayout Code</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Datenlayout Code</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Data Layout Code - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Data Layout ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 523320669 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Only New Records</source>
           <target state="translated">Nur neue Datensätze importieren</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Nur neue Datensätze importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Import Only New Records - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 200502431 - Field 4176070204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import XMLPortID</source>
+          <target state="translated">XMLPort ID für Import</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=XMLPort ID für Import</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Import XMLPort ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 1409273199 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>LastUsedFilter</source>
@@ -1646,6 +1652,12 @@
           <target state="needs-translation"/>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field LastUsedUpdateFieldsSelection - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 200502431 - Field 1556966194 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source File ID</source>
+          <target state="translated">Quell-Datei ID</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Quell-Datei ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field SourceFileID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 4040554107 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Table Caption</source>
@@ -1665,11 +1677,29 @@
           <note from="Developer" annotates="general" priority="2">de-DE=OnInsert Trigger verwenden</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Use OnInsert Trigger - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 200502431 - Field 3660718236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Separate Buffer Table</source>
+          <target state="translated">Separate Puffertabelle verwenden</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Separate Puffertabelle verwenden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Use Separate Buffer Table - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3570477496 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Import Configuration Line</source>
           <target state="translated">Import Konfiguration Zeile</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Import Konfiguration Zeile</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 90410743 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fixed Value</source>
+          <target state="translated">Fester Wert</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Fester Wert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Fixed Value - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 4236431109 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ignore Errors</source>
+          <target state="translated">Fehler ignorieren </target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Fehler ignorieren </note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Ignore Validation Error - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3570477496 - Field 2144357174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Imp.Conf.Header ID</source>
@@ -1677,11 +1707,41 @@
           <note from="Developer" annotates="general" priority="2">de=DE=Import Konfig. Kopf ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Imp.Conf.Header ID - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 3492171417 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Key Field</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">Schlüsselfeld</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Is Key Field(Target) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 1564647935 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Action</source>
+          <target state="translated">Aktion</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Aktion</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Processing Action - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 4163973499 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Field Caption</source>
+          <target state="translated">Herkunftsfeld Bezeichnung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Herkunftsfeld Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Source Field Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 3160832348 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Field No.</source>
+          <target state="translated">Herkunftsfeld Nr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Herkunftsfeld Nr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Source Field No. - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3570477496 - Field 1870234639 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Field Caption</source>
           <target state="translated">Zielfeld Bezeichnung</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Zielfeld Bezeichnung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Target Field Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 2561976296 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Field Name</source>
+          <target state="translated">Zielfeld Name</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zielfeld Name</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Target Field Name - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3570477496 - Field 3323085680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Field No.</source>
@@ -1695,6 +1755,18 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Ziel Tabellen ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Target Table ID - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 3305167575 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Validation Order</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">Reihenfolge Validierung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Validation Order - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 303076341 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Valid. Type</source>
+          <target state="translated">Valid. Typ</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Valid. Typ</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Validation Type - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 521254526 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Setup</source>
           <target state="translated">DMT Einrichtung</target>
@@ -1703,8 +1775,7 @@
         </trans-unit>
         <trans-unit id="Table 521254526 - Field 2204498840 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create Buffer Tables with Flowfields</source>
-          <target state="needs-adaptation">Puffertabellen mit Flowfields generieren</target>
-          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <target state="translated">Puffertabellen mit Flowfields generieren</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Puffertabellen mit Flowfields generieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Import with FlowFields - Property Caption</note>
         </trans-unit>
@@ -1733,9 +1804,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Primary Key - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3763097529 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>DMT Source Files</source>
+          <source>DMT Source File</source>
           <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2">DMT Quelldateien</note>
+          <note from="Developer" annotates="general" priority="2">DMT Quelldatei</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3763097529 - Field 3979136067 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1774,6 +1845,18 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Hochgeladen am</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Field UploadDateTime - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Codeunit 4228541464 - Method 3234253707 - NamedType 2857577032" size-unit="char" translate="yes" xml:space="preserve">
+          <source>All fields are already assigned. Overwrite existing assignment?</source>
+          <target state="translated">Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportConfigMgt - Method CreateTargetFieldNamesDict - NamedType ReplaceExistingMatchesQst</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 4228541464 - Method 1710761149 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import finished</source>
+          <target state="translated">Import abgeschlossen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportConfigMgt - Method ImportNAVSchemaFile - NamedType ImportFinishedMsg</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3371792372 - Method 3508704786 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import finished</source>
           <target state="translated">Import abgeschlossen</target>
@@ -1785,12 +1868,6 @@
           <target state="translated">Wählen Sie eine Datei zum Hochladen aus</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Wählen Sie eine Datei zum Hochladen aus</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTSourceFileMgt - Method UploadFileIntoFileStorage - NamedType UploadFileMsg</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2597982507 - Method 1710761149 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import finished</source>
-          <target state="translated">Import abgeschlossen</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit ImportCfgMgt - Method ImportNAVSchemaFile - NamedType ImportFinishedMsg</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Property 2019332006" size-unit="char" translate="yes" xml:space="preserve">
           <source>NAV,Backup,Lists,,</source>
@@ -1864,6 +1941,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Datenlayouts Übersicht</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataLayouts - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3373207527 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fields</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">Felder</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldLookup - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 4209446702 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT GenBufferList</source>
           <target state="translated">DMT Generischer Puffer Übersicht</target>
@@ -1924,6 +2007,66 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Weisen Sie ein Datenlayout zu um eine Felderzuordnung einzurichten.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Control AssignDataLayout - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 4216454578 - Action 3059880053 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Change Validation Order</source>
+          <target state="translated">Validierungsreihenfolge ändern</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Validierungsreihenfolge ändern</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action ChangeValidationOrder - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4216454578 - Action 1937377350 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Down</source>
+          <target state="translated">Unten</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Unten</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action MoveSelectedDown - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4216454578 - Action 335558120 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bottom</source>
+          <target state="translated">Ende</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ende</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action MoveSelectedToEnd - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4216454578 - Action 1500585524 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Top</source>
+          <target state="translated">Anfang</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anfang</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action MoveSelectedToTop - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4216454578 - Action 2279867719 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Up</source>
+          <target state="translated">Oben</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Oben</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action MoveSelectedUp - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4216454578 - Action 2625649774 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Init Target Fields</source>
+          <target state="translated">Feldliste initialisieren</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Feldliste initialisieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action InitTargetFields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4216454578 - Action 3471137671 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lines</source>
+          <target state="translated">Zeilen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zeilen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action Lines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4216454578 - Action 925261692 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set Validation Type to assign without validate</source>
+          <target state="translated">Validierungsart auf Zuweisen ohne validieren setzen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Validierungsart auf Zuweisen ohne validieren setzen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action DMTField_SetValidateFieldToFalse - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4216454578 - Action 3439534607 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set Field Validate to always</source>
+          <target state="translated">Validierungsart auf Immer setzen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Validierungsart auf Immer setzen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action FieldMapping_SetValidateFieldToAlways - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4216454578 - Action 3855411490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Popose Matching Fields</source>
+          <target state="translated">Feldzuordnung vorschlagen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Feldzuordnung vorschlagen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action ProposeMatchingFields - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1854940516 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Source Files</source>
           <target state="translated">DMT Quelldateien</target>
@@ -1965,6 +2108,42 @@
           <target state="needs-translation"/>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMT NAVFieldBufferImport - Control GetDatabaseNameCtrl - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 101561864 - EnumValue 3972427471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fixed Value</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFieldProcessingType - EnumValue FixedValue - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 101561864 - EnumValue 785863684 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ignore</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFieldProcessingType - EnumValue Ignore - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 101561864 - EnumValue 4224198349 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Transfer</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFieldProcessingType - EnumValue Transfer - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2382970280 - EnumValue 4070199025 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Always</source>
+          <target state="translated">Immer</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Immer</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFieldValidationType - EnumValue AlwaysValidate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2382970280 - EnumValue 2662413565 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Assign without validation</source>
+          <target state="translated">Zuweisen ohne Validierung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zuweisen ohne Validierung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFieldValidationType - EnumValue AssignWithoutValidate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2382970280 - EnumValue 1230108087 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>If not empty</source>
+          <target state="translated">Wenn nicht leer</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Wenn nicht leer</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFieldValidationType - EnumValue ValidateOnlyIfNotEmpty - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 3703598467 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>All Files (*.*)|*.*</source>

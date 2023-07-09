@@ -34,6 +34,7 @@ table 91005 DMTDataLayoutLine
         field(28; NAVOptionCaption; Text[2048]) { Caption = 'OptionCaption', Locked = true; }
         field(29; "NAVNo. of Records"; Integer) { Caption = 'No. of Records', Locked = true; }
         #endregion NAVFieldInformation
+        field(100; "Data File ID Filter"; Integer) { Caption = 'Data File ID Filter', Locked = true; FieldClass = FlowFilter; }
     }
 
     keys

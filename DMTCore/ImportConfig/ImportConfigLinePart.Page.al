@@ -5,6 +5,7 @@ page 91009 ImportConfigLinePart
     ApplicationArea = All;
     UsageCategory = None;
     SourceTable = DMTImportConfigLine;
+    InsertAllowed = false;
 
     layout
     {
@@ -34,7 +35,12 @@ page 91009 ImportConfigLinePart
                     ApplicationArea = All;
                     StyleExpr = LineStyleExpr;
                 }
-                field("From Field No."; Rec."Source Field No.") { LookupPageId = DMTFieldLookup; HideValue = IsFixedValue; ApplicationArea = All; }
+                field("From Field No."; Rec."Source Field No.")
+                {
+                    LookupPageId = DMTFieldLookup;
+                    HideValue = IsFixedValue;
+                    ApplicationArea = All;
+                }
                 field("Ignore Validation Error"; Rec."Ignore Validation Error") { ApplicationArea = All; }
                 field("Validation Type"; Rec."Validation Type") { ApplicationArea = All; }
                 field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
@@ -159,7 +165,7 @@ page 91009 ImportConfigLinePart
 
     procedure SetRepeaterProperties(ImportConfigHeader: Record DMTImportConfigHeader)
     begin
-        HasDataLayoutAssigned := ImportConfigHeader."Data Layout ID" <> '';
+        HasDataLayoutAssigned := ImportConfigHeader."Data Layout ID" <> 0;
     end;
 
     procedure DoUpdate(SaveRecord: Boolean)

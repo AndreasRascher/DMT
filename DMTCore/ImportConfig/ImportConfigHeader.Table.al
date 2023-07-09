@@ -48,7 +48,7 @@ table 91003 DMTImportConfigHeader
         field(51; LastUsedFilter; Blob) { }
         field(52; "Use OnInsert Trigger"; Boolean) { Caption = 'Use OnInsert Trigger', Comment = 'de-DE=OnInsert Trigger verwenden'; InitValue = true; }
         field(53; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
-        field(54; "Data Layout ID"; Code[50]) { Caption = 'Data Layout Code', Comment = 'de-DE=Datenlayout Code'; TableRelation = DMTDataLayout; }
+        field(54; "Data Layout ID"; Integer) { Caption = 'Data Layout Code', Comment = 'de-DE=Datenlayout Code'; TableRelation = DMTDataLayout; }
         #endregion Import and Processing Options
         field(100; SourceFileID; Integer) { Caption = 'Source File ID', Comment = 'de-DE=Quell-Datei ID'; TableRelation = DMTSourceFileStorage; }
     }

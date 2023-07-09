@@ -34,8 +34,8 @@ page 91012 DMTFieldLookup
     // FieldNo: Integer;
     begin
         if IsLoaded then exit;
-        Error('ToDo');
-        // Rec.FilterGroup(4);
+        Rec.FilterGroup(4);
+        Error(Rec.GetView());
         // case true of
         //     Rec.GetFilter(TableNo) <> '':
         //         begin

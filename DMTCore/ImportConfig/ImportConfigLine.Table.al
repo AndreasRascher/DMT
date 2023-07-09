@@ -37,7 +37,7 @@ table 91006 DMTImportConfigLine
         field(20; "Source Field No."; Integer)
         {
             Caption = 'Source Field No.', comment = 'de-DE=Herkunftsfeld Nr.';
-            TableRelation = DMTDataLayoutLine."Column No.";
+            TableRelation = DMTDataLayoutLine."Column No." where("Data File ID Filter" = field("Data File ID"));
             ValidateTableRelation = false;
             BlankZero = true;
             trigger OnValidate()
@@ -77,6 +77,7 @@ table 91006 DMTImportConfigLine
             end;
         }
         field(102; "Validation Order"; Integer) { Caption = 'Validation Order', comment = 'Reihenfolge Validierung'; }
+
 
     }
 

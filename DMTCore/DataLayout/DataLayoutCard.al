@@ -39,15 +39,6 @@ page 91011 DMTDataLayoutCard
     {
         area(Processing)
         {
-            action(ActionName)
-            {
-                ApplicationArea = All;
-
-                trigger OnAction();
-                begin
-
-                end;
-            }
         }
     }
     trigger OnAfterGetCurrRecord()

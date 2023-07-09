@@ -32,7 +32,7 @@ page 91008 DMTImportConfigCard
             }
             part(LinePart; ImportConfigLinePart)
             {
-                SubPageLink = "Imp.Conf.Header ID" = field(ID);
+                SubPageLink = "Imp.Conf.Header ID" = field(ID), "Imp.Conf.Header ID Filter" = field("Data Layout ID");
             }
         }
         area(Factboxes)
@@ -44,9 +44,16 @@ page 91008 DMTImportConfigCard
     actions
     {
     }
-    trigger OnAfterGetCurrRecord()
+
+    trigger OnAfterGetRecord()
     begin
         CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
         CurrPage.LinePart.Page.DoUpdate(false);
     end;
+
+    // trigger OnAfterGetCurrRecord()
+    // begin
+    //     CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
+    //     CurrPage.LinePart.Page.DoUpdate(false);
+    // end;
 }
