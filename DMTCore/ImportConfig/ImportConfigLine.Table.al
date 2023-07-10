@@ -37,7 +37,7 @@ table 91006 DMTImportConfigLine
         field(20; "Source Field No."; Integer)
         {
             Caption = 'Source Field No.', comment = 'de-DE=Herkunftsfeld Nr.';
-            TableRelation = DMTDataLayoutLine."Column No." where("Data File ID Filter" = field("Data File ID"));
+            TableRelation = DMTDataLayoutLine."Column No." where("Data File ID Filter" = field("Imp.Conf.Header ID"));
             ValidateTableRelation = false;
             BlankZero = true;
             trigger OnValidate()
@@ -90,8 +90,21 @@ table 91006 DMTImportConfigLine
     }
 
     local procedure UpdateSourceFieldCaptionAndProcessingAction(FromFieldNo: Integer)
+    var
+        DataLayoutLine: Record DMTDataLayoutLine;
+        ImportConfigHeader: Record DMTImportConfigHeader;
     begin
-        Error('Procedure UpdateSourceFieldCaptionAndProcessingAction not implemented.');
+        case FromFieldNo of
+            Rec.fieldno("Source Field No."):
+                begin
+                    ImportConfigHeader.Get(Rec."Imp.Conf.Header ID");
+                    DataLayoutLine.Get(ImportConfigHeader."Data Layout ID", Rec."Source Field No.");
+                    Rec."Source Field Caption" := DataLayoutLine.ColumnName;
+                    Rec."Processing Action" := Rec."Processing Action"::Transfer;
+                end;
+            else
+                Error('unhandled %1', FromFieldNo);
+        end;
     end;
 
     procedure CopyToTemp(var TempImportConfigLine: Record DMTImportConfigLine temporary) LineCount: Integer

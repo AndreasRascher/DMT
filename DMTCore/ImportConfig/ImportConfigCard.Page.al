@@ -30,9 +30,9 @@ page 91008 DMTImportConfigCard
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { }
                 field("Import Only New Records"; Rec."Import Only New Records") { }
             }
-            part(LinePart; ImportConfigLinePart)
+            part(LinePart; DMTImportConfigLinePart)
             {
-                SubPageLink = "Imp.Conf.Header ID" = field(ID), "Imp.Conf.Header ID Filter" = field("Data Layout ID");
+                SubPageLink = "Imp.Conf.Header ID" = field(ID);
             }
         }
         area(Factboxes)

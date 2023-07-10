@@ -26,6 +26,10 @@ page 91012 DMTFieldLookup
 
     procedure LoadLines()
     var
+        ImportConfigHeader: Record DMTImportConfigHeader;
+        DataLayout: Record DMTDataLayout;
+        DataLayoutLine: Record DMTDataLayoutLine;
+        TempDataLayoutLine: Record DMTDataLayoutLine temporary;
     // DataFile: Record DMTDataFile;
     // TempFieldBuffer: Record DMTFieldBuffer temporary;
     // GenBuffTable: Record DMTGenBuffTable;
@@ -35,21 +39,19 @@ page 91012 DMTFieldLookup
     begin
         if IsLoaded then exit;
         Rec.FilterGroup(4);
-        Error(Rec.GetView());
-        // case true of
-        //     Rec.GetFilter(TableNo) <> '':
-        //         begin
-        //             DataFile.BufferTableType := DataFile.BufferTableType::"Seperate Buffer Table per CSV";
-        //             DataFile."Buffer Table ID" := Rec.GetRangeMin(TableNo);
-        //         end;
-        //     Rec.GetFilter("Data File ID Filter") <> '':
-        //         begin
-        //             DataFile.Get(Rec.GetRangeMin("Data File ID Filter"));
-        //         end;
-        //     else
-        //         Error('unhandled case');
-        // end;
-        // Rec.FilterGroup(0);
+        case true of
+            Rec.GetFilter("Data File ID Filter") <> '':
+                begin
+                    ImportConfigHeader.Get(Rec.GetRangeMin("Data File ID Filter"));
+                    DataLayout.Get(ImportConfigHeader."Data Layout ID");
+                    DataLayoutLine.SetRange("Data Layout ID", DataLayout.ID);
+                    DataLayoutLine.CopyToTemp(TempDataLayoutLine);
+                    Rec.Copy(TempDataLayoutLine, true);
+                end;
+            else
+                Error('unhandled case');
+        end;
+        Rec.FilterGroup(0);
 
 
         // case DataFile.BufferTableType of
