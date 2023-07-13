@@ -1653,6 +1653,12 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field LastUsedUpdateFieldsSelection - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 200502431 - Field 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No.of Records in Buffer Table</source>
+          <target state="translated">Anz. Datensätze in Puffertabelle</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze in Puffertabelle</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field No.of Records in Buffer Table - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 200502431 - Field 1556966194 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source File ID</source>
           <target state="translated">Quell-Datei ID</target>
@@ -1845,6 +1851,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Hochgeladen am</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Field UploadDateTime - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1497472904 - Method 523601278 - NamedType 613393458" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Select an import file</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTExcelMgt - Method LoadFileWithDialog - NamedType selectAnImportFileLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 4228541464 - Method 3234253707 - NamedType 2857577032" size-unit="char" translate="yes" xml:space="preserve">
           <source>All fields are already assigned. Overwrite existing assignment?</source>
           <target state="translated">Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</target>
@@ -1983,6 +1995,102 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Allgemein</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control General - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 809130730 - Control 3451064716 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Records in</source>
+          <target state="translated">Anz. Datensätze in</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze in</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control TableInfo - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Control 465333454 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target</source>
+          <target state="translated">Ziel</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ziel</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control No. of Records In Trgt. Table - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Control 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer</source>
+          <target state="translated">Puffer</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Puffer</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control No.of Records in Buffer Table - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 537879431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import to Buffer Table</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">Import in Puffertabelle</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action ImportBufferDataFromFile - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1011073045 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lines</source>
+          <target state="translated">Zeilen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zeilen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1011073045 - Control 3666579133 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Assign a data layout to assign fields.</source>
+          <target state="translated">Weisen Sie ein Datenlayout zu um eine Felderzuordnung einzurichten.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Weisen Sie ein Datenlayout zu um eine Felderzuordnung einzurichten.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Control AssignDataLayout - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1011073045 - Action 3059880053 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Change Validation Order</source>
+          <target state="translated">Validierungsreihenfolge ändern</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Validierungsreihenfolge ändern</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action ChangeValidationOrder - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1011073045 - Action 1937377350 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Down</source>
+          <target state="translated">Unten</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Unten</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action MoveSelectedDown - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1011073045 - Action 335558120 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bottom</source>
+          <target state="translated">Ende</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ende</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action MoveSelectedToEnd - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1011073045 - Action 1500585524 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Top</source>
+          <target state="translated">Anfang</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anfang</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action MoveSelectedToTop - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1011073045 - Action 2279867719 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Up</source>
+          <target state="translated">Oben</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Oben</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action MoveSelectedUp - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1011073045 - Action 2625649774 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Init Target Fields</source>
+          <target state="translated">Feldliste initialisieren</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Feldliste initialisieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action InitTargetFields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1011073045 - Action 3471137671 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lines</source>
+          <target state="translated">Zeilen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zeilen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action Lines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1011073045 - Action 925261692 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set Validation Type to assign without validate</source>
+          <target state="translated">Validierungsart auf Zuweisen ohne validieren setzen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Validierungsart auf Zuweisen ohne validieren setzen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action DMTField_SetValidateFieldToFalse - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1011073045 - Action 3439534607 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set Field Validate to always</source>
+          <target state="translated">Validierungsart auf Immer setzen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Validierungsart auf Immer setzen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action FieldMapping_SetValidateFieldToAlways - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1011073045 - Action 3855411490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Popose Matching Fields</source>
+          <target state="translated">Feldzuordnung vorschlagen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Feldzuordnung vorschlagen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action ProposeMatchingFields - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 215230028 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Import Config List</source>
           <target state="needs-translation"/>
@@ -1994,78 +2102,6 @@
           <target state="translated">Zeilen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTLayoutLinePart - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 4216454578 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Lines</source>
-          <target state="translated">Zeilen</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Zeilen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 4216454578 - Control 3666579133 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Assign a data layout to assign fields.</source>
-          <target state="translated">Weisen Sie ein Datenlayout zu um eine Felderzuordnung einzurichten.</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Weisen Sie ein Datenlayout zu um eine Felderzuordnung einzurichten.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Control AssignDataLayout - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 4216454578 - Action 3059880053 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Change Validation Order</source>
-          <target state="translated">Validierungsreihenfolge ändern</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Validierungsreihenfolge ändern</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action ChangeValidationOrder - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 4216454578 - Action 1937377350 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Down</source>
-          <target state="translated">Unten</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Unten</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action MoveSelectedDown - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 4216454578 - Action 335558120 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Bottom</source>
-          <target state="translated">Ende</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Ende</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action MoveSelectedToEnd - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 4216454578 - Action 1500585524 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Top</source>
-          <target state="translated">Anfang</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Anfang</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action MoveSelectedToTop - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 4216454578 - Action 2279867719 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Up</source>
-          <target state="translated">Oben</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Oben</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action MoveSelectedUp - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 4216454578 - Action 2625649774 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Init Target Fields</source>
-          <target state="translated">Feldliste initialisieren</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Feldliste initialisieren</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action InitTargetFields - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 4216454578 - Action 3471137671 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Lines</source>
-          <target state="translated">Zeilen</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Zeilen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action Lines - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 4216454578 - Action 925261692 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Set Validation Type to assign without validate</source>
-          <target state="translated">Validierungsart auf Zuweisen ohne validieren setzen</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Validierungsart auf Zuweisen ohne validieren setzen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action DMTField_SetValidateFieldToFalse - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 4216454578 - Action 3439534607 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Set Field Validate to always</source>
-          <target state="translated">Validierungsart auf Immer setzen</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Validierungsart auf Immer setzen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action FieldMapping_SetValidateFieldToAlways - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 4216454578 - Action 3855411490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Popose Matching Fields</source>
-          <target state="translated">Feldzuordnung vorschlagen</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Feldzuordnung vorschlagen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page ImportConfigLinePart - Action ProposeMatchingFields - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1854940516 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Source Files</source>

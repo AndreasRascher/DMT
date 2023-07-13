@@ -1,9 +1,57 @@
-codeunit 91004 DMTExcelMgt
+codeunit 91005 DMTExcelMgt implements ISourceFileImport
 {
-
-    internal procedure ImportFile()
+    procedure ImportToBufferTable(ImportConfigHeader: Record DMTImportConfigHeader);
+    var
+        SourceFileStorage: Record DMTSourceFileStorage;
+        GenBuffTable: Record DMTGenBuffTable;
+        IStr: InStream;
+        xl_LineNo, LastExcelLineNo, LastExcelColNo : Integer;
     begin
-        ReadExcelSheet();
+        // Delete existing lines
+        if GenBuffTable.FilterBy(ImportConfigHeader) then
+            GenBuffTable.DeleteAll();
+        // Read File Blob
+        SourceFileStorage.get(ImportConfigHeader.SourceFileID);
+        SourceFileStorage.TestField(Name);
+        SourceFileStorage.CalcFields("File Blob");
+        SourceFileStorage."File Blob".CreateInStream(IStr);
+        // Import Excel
+        ImportFileFromStream(IStr);
+        LastExcelLineNo := GetLastRowNo_ExcelSheet(tempExcelBufferGlobal);
+        LastExcelColNo := GetLastColumnNo_ExcelSheet(tempExcelBufferGlobal);
+        for xl_LineNo := 1 to LastExcelLineNo do
+            ImportLine(xl_LineNo, LastExcelColNo, xl_LineNo = 1, SourceFileStorage.Name);
+        // Update Buffer Record Count
+        GenBuffTable.Reset();
+        GenBuffTable.FilterBy(ImportConfigHeader);
+        GenBuffTable.SetRange(IsCaptionLine, false); // don't count header line
+        ImportConfigHeader."No.of Records in Buffer Table" := GenBuffTable.Count;
+        ImportConfigHeader.Modify();
+    end;
+
+    local procedure ImportLine(xl_LineNo: Integer; LastExcelColNo: Integer; IsColumnCaptionLine: Boolean; ImportFromFileName: Text);
+    var
+        genBuffTable: Record DMTGenBuffTable;
+        RecRef: RecordRef;
+        NextEntryNo: Integer;
+        CurrColIndex: Integer;
+    begin
+        NextEntryNo := genBuffTable.GetNextEntryNo();
+        genBuffTable.Init();
+        genBuffTable."Entry No." := NextEntryNo;
+        genBuffTable.IsCaptionLine := IsColumnCaptionLine;
+        for CurrColIndex := 1 to LastExcelColNo do begin
+            // if MaxColCount < (CurrColIndex - 1000) then
+            // MaxColCount := (CurrColIndex - 1000);
+            RecRef.GetTable(GenBuffTable);
+            // RecRef.Field(GenBuffTable.FieldNo("Import from Filename")).Value := CopyStr(CurrFileName, 1, MaxStrLen(GenBuffTable."Import from Filename"));
+            // RecRef.Field(GenBuffTable.FieldNo("Source ID")).Value := CurrDataFile.RecordId;
+            RecRef.Field(1000 + CurrColIndex).Value := GetCellValueAsText(xl_LineNo, CurrColIndex, tempExcelBufferGlobal);
+            RecRef.SetTable(GenBuffTable);
+        end;
+        genBuffTable."Import from Filename" := CopyStr(ImportFromFileName, 1, MaxStrLen(genBuffTable."Import from Filename"));
+        genBuffTable."Column Count" := LastExcelColNo;
+        genBuffTable.Insert();
     end;
 
     internal procedure GetHeaderLine() HeaderLine: Dictionary of [Text, Integer];
@@ -11,19 +59,26 @@ codeunit 91004 DMTExcelMgt
         HeaderLine := ReadHeaderLine(1, tempExcelBufferGlobal);
     end;
 
-    internal procedure ReadExcelSheet()
+    internal procedure ImportFileFromStream(var inStr: InStream)
+    var
+        SheetName: Text;
+    begin
+        SheetName := tempExcelBufferGlobal.SelectSheetsNameStream(inStr);
+        tempExcelBufferGlobal.OpenBookStream(inStr, SheetName);
+        tempExcelBufferGlobal.ReadSheet();
+    end;
+
+    internal procedure LoadFileWithDialog()
     var
         TempBlob: Codeunit "Temp Blob";
-        inStr: InStream;
         selectAnImportFileLbl: Label 'Select an import file';
-        SheetName, FileName : Text;
+        FileName: Text;
+        inStr: InStream;
     begin
         TempBlob.CreateInStream(inStr);
         if not UploadIntoStream(selectAnImportFileLbl, '', format(enum::DMTFileFilter::Excel), FileName, inStr) then
             exit;
-        SheetName := tempExcelBufferGlobal.SelectSheetsNameStream(inStr);
-        tempExcelBufferGlobal.OpenBookStream(inStr, SheetName);
-        tempExcelBufferGlobal.ReadSheet();
+        ImportFileFromStream(inStr);
     end;
 
     // local procedure ImportFileToBuffer()
@@ -134,5 +189,4 @@ codeunit 91004 DMTExcelMgt
 
     var
         tempExcelBufferGlobal: Record "Excel Buffer" temporary;
-
 }

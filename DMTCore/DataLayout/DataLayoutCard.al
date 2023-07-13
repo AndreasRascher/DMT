@@ -23,6 +23,7 @@ page 91011 DMTDataLayoutCard
                         CurrPage.DMTLayoutLinePart.Page.DoUpdate(false);
                     end;
                 }
+
                 group(NAV)
                 {
                     field(NAVTableID; Rec.NAVTableID) { }
@@ -50,7 +51,7 @@ page 91011 DMTDataLayoutCard
                     HeaderLine: Dictionary of [Text, Integer];
                     ColumnName: Text;
                 begin
-                    ExcelMgt.ImportFile();
+                    ExcelMgt.LoadFileWithDialog();
                     HeaderLine := ExcelMgt.GetHeaderLine();
 
                     foreach columnName in HeaderLine.Keys do begin

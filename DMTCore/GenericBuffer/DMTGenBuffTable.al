@@ -363,6 +363,17 @@ table 91001 "DMTGenBuffTable"
         end;
     end;
 
+    internal procedure GetNextEntryNo() NextEntryNo: Integer
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+    begin
+        NextEntryNo := 1;
+        GenBuffTable.Reset();
+        if GenBuffTable.FindLast() then begin
+            NextEntryNo += GenBuffTable."Entry No.";
+        end;
+    end;
+
     local procedure GetFieldCaption(FieldNo: Integer) FieldCaption: Text
     begin
         if not DMTGenBufferFieldCaptions.HasCaption(FieldNo) then
@@ -370,31 +381,31 @@ table 91001 "DMTGenBuffTable"
         FieldCaption := '3,' + DMTGenBufferFieldCaptions.GetCaption(FieldNo);
     end;
 
-    // procedure ShowImportDataForFile(DataFile: Record DMTDataFile)
-    // var
-    //     GenBuffTable: Record DMTGenBuffTable;
-    //     NoOfCols: Integer;
-    // begin
-    //     DMTGenBufferFieldCaptions.DisposeCaptions();
-    //     GenBuffTable.FilterBy(DataFile);
-    //     GenBuffTable.FindFirst();
-    //     NoOfCols := GenBuffTable.InitFirstLineAsCaptions(GenBuffTable);
+    procedure ShowImportDataForFile(ImportConfigHeader: Record DMTImportConfigHeader)
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+        NoOfCols: Integer;
+    begin
+        DMTGenBufferFieldCaptions.DisposeCaptions();
+        GenBuffTable.FilterBy(ImportConfigHeader);
+        GenBuffTable.FindFirst();
+        NoOfCols := GenBuffTable.InitFirstLineAsCaptions(GenBuffTable);
 
-    //     GenBuffTable.Reset();
-    //     GenBuffTable.FilterBy(DataFile);
-    //     GenBuffTable.SetRange(IsCaptionLine, false);
-    //     // less Columns is faster
-    //     case NoOfCols of
-    //         0 .. 50:
-    //             Page.Run(Page::DMTGenBufferList50, GenBuffTable);
-    //         51 .. 100:
-    //             Page.Run(Page::DMTGenBufferList100, GenBuffTable);
-    //         101 .. 150:
-    //             Page.Run(Page::DMTGenBufferList150, GenBuffTable);
-    //         else
-    //             Page.Run(Page::DMTGenBufferList250, GenBuffTable);
-    //     end;
-    // end;
+        GenBuffTable.Reset();
+        GenBuffTable.FilterBy(ImportConfigHeader);
+        GenBuffTable.SetRange(IsCaptionLine, false);
+        // less Columns is faster
+        case NoOfCols of
+            0 .. 50:
+                Page.Run(Page::DMTGenBufferList50, GenBuffTable);
+            51 .. 100:
+                Page.Run(Page::DMTGenBufferList100, GenBuffTable);
+            101 .. 150:
+                Page.Run(Page::DMTGenBufferList150, GenBuffTable);
+            else
+                Page.Run(Page::DMTGenBufferList250, GenBuffTable);
+        end;
+    end;
 
     var
         DMTGenBufferFieldCaptions: Codeunit DMTSessionStorage;

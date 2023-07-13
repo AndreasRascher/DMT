@@ -1378,6 +1378,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field LastUsedUpdateFieldsSelection - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 200502431 - Field 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No.of Records in Buffer Table</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze in Puffertabelle</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field No.of Records in Buffer Table - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 200502431 - Field 1556966194 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source File ID</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Quell-Datei ID</note>
@@ -1538,10 +1543,10 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Hochgeladen am</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Field UploadDateTime - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Codeunit 1497472904 - Method 3848482430 - NamedType 613393458" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 1497472904 - Method 523601278 - NamedType 613393458" size-unit="char" translate="yes" xml:space="preserve">
           <source>Select an import file</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTExcelMgt - Method ReadExcelSheet - NamedType selectAnImportFileLbl</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTExcelMgt - Method LoadFileWithDialog - NamedType selectAnImportFileLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 4228541464 - Method 3234253707 - NamedType 2857577032" size-unit="char" translate="yes" xml:space="preserve">
           <source>All fields are already assigned. Overwrite existing assignment?</source>
@@ -1657,6 +1662,26 @@
           <source>General</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Allgemein</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control General - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Control 3451064716 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Records in</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze in</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control TableInfo - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Control 465333454 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ziel</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control No. of Records In Trgt. Table - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Control 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Puffer</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control No.of Records in Buffer Table - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 537879431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import to Buffer Table</source>
+          <note from="Developer" annotates="general" priority="2">Import in Puffertabelle</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action ImportBufferDataFromFile - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1011073045 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Lines</source>

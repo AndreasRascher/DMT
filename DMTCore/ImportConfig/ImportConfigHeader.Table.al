@@ -18,6 +18,7 @@ table 91003 DMTImportConfigHeader
             CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Target Table ID")));
             Editable = false;
         }
+        field(20; "No.of Records in Buffer Table"; Integer) { Caption = 'No.of Records in Buffer Table', comment = 'de-DE=Anz. Datensätze in Puffertabelle'; Editable = false; }
         field(40; "Use Separate Buffer Table"; Boolean)
         {
             Caption = 'Use Separate Buffer Table', Comment = 'de-DE=Separate Puffertabelle verwenden';
@@ -77,5 +78,14 @@ table 91003 DMTImportConfigHeader
     internal procedure FilterRelated(var ImportConfigLine: Record DMTImportConfigLine)
     begin
         ImportConfigLine.SetRange("Imp.Conf.Header ID", Rec.ID);
+    end;
+
+    internal procedure ShowTableContent(TableID: Integer) OK: Boolean
+    var
+        TableMeta: Record "Table Metadata";
+    begin
+        OK := TableMeta.Get(TableID);
+        if OK then
+            Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, TableID));
     end;
 }
