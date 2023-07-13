@@ -39,7 +39,7 @@ table 91007 "DMT NAVFieldBuffer"
         field(50004; "No. of Records"; Integer) { Caption = 'No. of Records', Locked = true; }
         field(99999; "Data File ID Filter"; Integer)
         {
-            Caption = 'Datafile ID Filter', Locked = true;
+            Caption = 'ImportConfigHeader ID Filter', Locked = true;
             FieldClass = FlowFilter;
         }
     }

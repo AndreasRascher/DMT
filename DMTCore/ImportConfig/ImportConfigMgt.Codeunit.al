@@ -72,7 +72,7 @@ codeunit 91002 DMTImportConfigMgt
         end;
     end;
 
-    internal procedure PageAction_InitFieldMapping(ImportConfigHeaderID: Integer): Boolean
+    internal procedure PageAction_InitImportConfigLine(ImportConfigHeaderID: Integer): Boolean
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
         ImportConfigLine, ImportConfigLine_NEW : Record DMTImportConfigLine;
@@ -104,73 +104,73 @@ codeunit 91002 DMTImportConfigMgt
         end;
     end;
 
-    internal procedure PageAction_FieldMapping_SetValidateField(var TempImportConfigLine_Selected: Record DMTImportConfigLine temporary; NewValue: Enum DMTFieldValidationType)
+    internal procedure PageAction_ImportConfigLine_SetValidateField(var TempImportConfigLine_Selected: Record DMTImportConfigLine temporary; NewValue: Enum DMTFieldValidationType)
     var
-        FieldMapping: Record DMTImportConfigLine;
+        ImportConfigLine: Record DMTImportConfigLine;
         NoOfRecords: Integer;
     begin
         NoOfRecords := TempImportConfigLine_Selected.Count;
         if not TempImportConfigLine_Selected.FindFirst() then exit;
         TempImportConfigLine_Selected.FindSet();
         repeat
-            FieldMapping.Get(TempImportConfigLine_Selected.RecordId);
-            if FieldMapping."Validation Type" <> NewValue then begin
-                FieldMapping."Validation Type" := NewValue;
-                FieldMapping.Modify()
+            ImportConfigLine.Get(TempImportConfigLine_Selected.RecordId);
+            if ImportConfigLine."Validation Type" <> NewValue then begin
+                ImportConfigLine."Validation Type" := NewValue;
+                ImportConfigLine.Modify()
             end;
         until TempImportConfigLine_Selected.Next() = 0;
     end;
 
     internal procedure PageAction_MoveSelectedLines(var TempImportConfigLine_Selected: Record DMTImportConfigLine temporary; Direction: Option Up,Down,Top,Bottom)
     var
-        FieldMapping: Record DMTImportConfigLine;
-        TempFieldMapping: Record DMTImportConfigLine temporary;
+        ImportConfigLine: Record DMTImportConfigLine;
+        TempImportConfigLine: Record DMTImportConfigLine temporary;
         i: Integer;
         RefPos: Integer;
     begin
-        FieldMapping.SetRange("Target Table ID", TempImportConfigLine_Selected."Target Table ID");
-        FieldMapping.SetCurrentKey("Validation Order");
-        FieldMapping.CopyToTemp(TempFieldMapping);
+        ImportConfigLine.SetRange("Target Table ID", TempImportConfigLine_Selected."Target Table ID");
+        ImportConfigLine.SetCurrentKey("Validation Order");
+        ImportConfigLine.CopyToTemp(TempImportConfigLine);
 
-        TempFieldMapping.SetCurrentKey("Validation Order");
+        TempImportConfigLine.SetCurrentKey("Validation Order");
         case Direction of
             Direction::Bottom:
                 begin
-                    TempFieldMapping.FindLast();
-                    RefPos := TempFieldMapping."Validation Order";
+                    TempImportConfigLine.FindLast();
+                    RefPos := TempImportConfigLine."Validation Order";
                     TempImportConfigLine_Selected.FindSet();
                     repeat
                         i += 1;
-                        TempFieldMapping.Get(TempImportConfigLine_Selected.RecordId);
-                        TempFieldMapping."Validation Order" := RefPos + i * 10000;
-                        TempFieldMapping.Modify();
+                        TempImportConfigLine.Get(TempImportConfigLine_Selected.RecordId);
+                        TempImportConfigLine."Validation Order" := RefPos + i * 10000;
+                        TempImportConfigLine.Modify();
                     until TempImportConfigLine_Selected.Next() = 0;
                 end;
             Direction::Top:
                 begin
-                    TempFieldMapping.FindFirst();
-                    RefPos := TempFieldMapping."Validation Order";
+                    TempImportConfigLine.FindFirst();
+                    RefPos := TempImportConfigLine."Validation Order";
                     TempImportConfigLine_Selected.Find('+');
                     repeat
                         i += 1;
-                        TempFieldMapping.Get(TempImportConfigLine_Selected.RecordId);
-                        TempFieldMapping."Validation Order" := RefPos - i * 10000;
-                        TempFieldMapping.Modify();
+                        TempImportConfigLine.Get(TempImportConfigLine_Selected.RecordId);
+                        TempImportConfigLine."Validation Order" := RefPos - i * 10000;
+                        TempImportConfigLine.Modify();
                     until TempImportConfigLine_Selected.Next(-1) = 0;
                 end;
             Direction::Up:
                 begin
                     TempImportConfigLine_Selected.FindSet();
                     repeat
-                        TempFieldMapping.Get(TempImportConfigLine_Selected.RecordId);
-                        RefPos := TempFieldMapping."Validation Order";
-                        if TempFieldMapping.Next(-1) <> 0 then begin
-                            i := TempFieldMapping."Validation Order";
-                            TempFieldMapping."Validation Order" := RefPos;
-                            TempFieldMapping.Modify();
-                            TempFieldMapping.Get(TempImportConfigLine_Selected.RecordId);
-                            TempFieldMapping."Validation Order" := i;
-                            TempFieldMapping.Modify();
+                        TempImportConfigLine.Get(TempImportConfigLine_Selected.RecordId);
+                        RefPos := TempImportConfigLine."Validation Order";
+                        if TempImportConfigLine.Next(-1) <> 0 then begin
+                            i := TempImportConfigLine."Validation Order";
+                            TempImportConfigLine."Validation Order" := RefPos;
+                            TempImportConfigLine.Modify();
+                            TempImportConfigLine.Get(TempImportConfigLine_Selected.RecordId);
+                            TempImportConfigLine."Validation Order" := i;
+                            TempImportConfigLine.Modify();
                         end;
                     until TempImportConfigLine_Selected.Next() = 0;
                 end;
@@ -180,29 +180,29 @@ codeunit 91002 DMTImportConfigMgt
                     TempImportConfigLine_Selected.Ascending(false);
                     TempImportConfigLine_Selected.FindSet();
                     repeat
-                        TempFieldMapping.Get(TempImportConfigLine_Selected.RecordId);
-                        RefPos := TempFieldMapping."Validation Order";
-                        if TempFieldMapping.Next(1) <> 0 then begin
-                            i := TempFieldMapping."Validation Order";
-                            TempFieldMapping."Validation Order" := RefPos;
-                            TempFieldMapping.Modify();
-                            TempFieldMapping.Get(TempImportConfigLine_Selected.RecordId);
-                            TempFieldMapping."Validation Order" := i;
-                            TempFieldMapping.Modify();
+                        TempImportConfigLine.Get(TempImportConfigLine_Selected.RecordId);
+                        RefPos := TempImportConfigLine."Validation Order";
+                        if TempImportConfigLine.Next(1) <> 0 then begin
+                            i := TempImportConfigLine."Validation Order";
+                            TempImportConfigLine."Validation Order" := RefPos;
+                            TempImportConfigLine.Modify();
+                            TempImportConfigLine.Get(TempImportConfigLine_Selected.RecordId);
+                            TempImportConfigLine."Validation Order" := i;
+                            TempImportConfigLine.Modify();
                         end;
                     until TempImportConfigLine_Selected.Next() = 0;
                 end;
         end;
-        TempFieldMapping.Reset();
-        TempFieldMapping.SetCurrentKey("Validation Order");
-        TempFieldMapping.FindSet();
+        TempImportConfigLine.Reset();
+        TempImportConfigLine.SetCurrentKey("Validation Order");
+        TempImportConfigLine.FindSet();
         Clear(i);
         repeat
             i += 1;
-            FieldMapping.Get(TempFieldMapping.RecordId);
-            FieldMapping."Validation Order" := i * 10000;
-            FieldMapping.Modify(false);
-        until TempFieldMapping.Next() = 0;
+            ImportConfigLine.Get(TempImportConfigLine.RecordId);
+            ImportConfigLine."Validation Order" := i * 10000;
+            ImportConfigLine.Modify(false);
+        until TempImportConfigLine.Next() = 0;
     end;
 
     procedure PageAction_ProposeMatchingFields("Imp.Conf.Header ID": Integer)

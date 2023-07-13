@@ -60,7 +60,7 @@ page 91009 DMTImportConfigLinePart
                 Image = SuggestField;
                 trigger OnAction()
                 begin
-                    ImportConfigMgt.PageAction_InitFieldMapping(Rec.GetRangeMin("Imp.Conf.Header ID"));
+                    ImportConfigMgt.PageAction_InitImportConfigLine(Rec.GetRangeMin("Imp.Conf.Header ID"));
                 end;
             }
             action(ProposeMatchingFields)
@@ -76,7 +76,7 @@ page 91009 DMTImportConfigLinePart
             group(Lines)
             {
                 Caption = 'Lines', Comment = 'de-DE=Zeilen';
-                action(FieldMapping_SetValidateFieldToAlways)
+                action(ImportConfigLine_SetValidateFieldToAlways)
                 {
                     Caption = 'Set Field Validate to always', Comment = 'de-DE=Validierungsart auf Immer setzen';
                     ApplicationArea = All;
@@ -84,7 +84,7 @@ page 91009 DMTImportConfigLinePart
                     trigger OnAction()
                     begin
                         GetSelection(TempImportConfigLine_Selected);
-                        ImportConfigMgt.PageAction_FieldMapping_SetValidateField(TempImportConfigLine_Selected, Enum::DMTFieldValidationType::AlwaysValidate);
+                        ImportConfigMgt.PageAction_ImportConfigLine_SetValidateField(TempImportConfigLine_Selected, Enum::DMTFieldValidationType::AlwaysValidate);
                     end;
                 }
                 action(DMTField_SetValidateFieldToFalse)
@@ -95,7 +95,7 @@ page 91009 DMTImportConfigLinePart
                     trigger OnAction()
                     begin
                         GetSelection(TempImportConfigLine_Selected);
-                        ImportConfigMgt.PageAction_FieldMapping_SetValidateField(TempImportConfigLine_Selected, Enum::DMTFieldValidationType::AssignWithoutValidate);
+                        ImportConfigMgt.PageAction_ImportConfigLine_SetValidateField(TempImportConfigLine_Selected, Enum::DMTFieldValidationType::AssignWithoutValidate);
                     end;
                 }
             }

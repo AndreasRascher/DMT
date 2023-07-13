@@ -32,40 +32,23 @@ page 91008 DMTImportConfigCard
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { }
                 field("Import Only New Records"; Rec."Import Only New Records") { }
             }
-            group(TableInfo)
-            {
-                Caption = 'No. of Records in', Comment = 'de-DE=Anz. Datensätze in';
-                field("No. of Records In Trgt. Table"; GetNoOfRecordsInTrgtTable())
-                {
-                    Caption = 'Target', Comment = 'de-DE=Ziel';
-                    ApplicationArea = All;
-                    trigger OnDrillDown()
-                    begin
-                        Rec.ShowTableContent(Rec."Target Table ID");
-                    end;
-                }
-                field("No.of Records in Buffer Table"; rec."No.of Records in Buffer Table")
-                {
-                    Caption = 'Buffer', Comment = 'de-DE=Puffer';
-                    ApplicationArea = All;
-                    trigger OnDrillDown()
-                    var
-                        genBuffTable: Record DMTGenBuffTable;
-                    begin
-                        if not genBuffTable.FilterBy(Rec) then
-                            exit;
-                        genBuffTable.ShowImportDataForFile(Rec);
-                    end;
-                }
-            }
             part(LinePart; DMTImportConfigLinePart)
             {
                 SubPageLink = "Imp.Conf.Header ID" = field(ID);
             }
         }
-        area(Factboxes)
+        area(FactBoxes)
         {
-
+            part(TableInfoFactBox; DMTImportConfigFactBox)
+            {
+                ApplicationArea = All;
+                Caption = 'Info', Comment = 'de-DE=Info';
+            }
+            part(LogFactBox; DMTImportConfigFactBox)
+            {
+                ApplicationArea = All;
+                Caption = 'Log', Comment = 'de-DE=Protokoll';
+            }
         }
     }
 
@@ -85,13 +68,218 @@ page 91008 DMTImportConfigCard
                 trigger OnAction()
                 var
                     dataLayout: Record DMTDataLayout;
+                    Log: Codeunit DMTLog;
+                    Start: DateTime;
                     SourceFileImport: Interface ISourceFileImport;
                 begin
+                    Start := CurrentDateTime;
                     dataLayout.Get(Rec."Data Layout ID");
                     SourceFileImport := dataLayout.SourceFileFormat;
                     SourceFileImport.ImportToBufferTable(Rec);
+                    Log.AddImportToBufferSummary(Rec, CurrentDateTime - Start);
                 end;
             }
+            action(DeleteRecordsInTargetTable)
+            {
+                Caption = 'Delete Records In Target Table', Comment = 'de-DE=Datensätze in Zieltabelle löschen';
+                ApplicationArea = All;
+                Image = "Invoicing-Delete";
+                Promoted = false;
+
+                trigger OnAction()
+                var
+                    ChangeRecordWithPerm: Codeunit DMTChangeRecordWithPerm;
+                begin
+                    ChangeRecordWithPerm.DeleteRecordsInTargetTable(Rec);
+                    Rec.UpdateBufferRecordCount();
+                end;
+            }
+
+            action(CountLines)
+            {
+                Caption = 'Count Lines in Target';
+                ApplicationArea = All;
+                Image = CalcWorkCenterCalendar;
+                trigger OnAction()
+                var
+                    FPBuilder: Codeunit DMTFPBuilder;
+                    RecRef: RecordRef;
+                    TargetTableView, TargetTableFilter : Text;
+                    NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
+                begin
+                    RecRef.Open(Rec."Target Table ID");
+                    if TargetTableView <> '' then
+                        RecRef.SetView(TargetTableView);
+                    if FPBuilder.RunModal(RecRef, true) then begin
+                        TargetTableView := RecRef.GetView();
+                        TargetTableFilter := RecRef.GetFilters;
+                        Message(NoOfLinesInFilterLbl, TargetTableFilter, RecRef.Count);
+                    end;
+                end;
+            }
+            action(CountLinesInSource)
+            {
+                Caption = 'Count Lines in Buffer';
+                ApplicationArea = All;
+                Image = CalcWorkCenterCalendar;
+                trigger OnAction()
+                var
+                    FPBuilder: Codeunit DMTFPBuilder;
+                    RecRef: RecordRef;
+                    NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
+                    TargetTableFilter, TargetTableView : Text;
+                begin
+                    Rec.InitBufferRef(RecRef);
+                    if TargetTableView <> '' then
+                        RecRef.SetView(TargetTableView);
+                    if FPBuilder.RunModal(RecRef, true) then begin
+                        TargetTableView := RecRef.GetView();
+                        TargetTableFilter := RecRef.GetFilters;
+                        Message(NoOfLinesInFilterLbl, TargetTableFilter, RecRef.Count);
+                    end;
+                end;
+            }
+
+            action(TransferToTargetTable)
+            {
+                Caption = 'Import to Target Table', Comment = 'de-DE=In Zieltabelle übertragen';
+                ApplicationArea = All;
+                Image = TransferOrder;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                var
+                    Migrate: Codeunit DMTMigrate;
+                begin
+                    Migrate.AllFieldsFrom(Rec);
+                end;
+            }
+            action(UpdateFields)
+            {
+                Caption = 'Update Fields', Comment = 'de-DE=Felder aktualisieren';
+                ApplicationArea = All;
+                Image = TransferOrder;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                begin
+                    // PageActions.UpdateFields(Rec);
+                end;
+            }
+            action(RetryBufferRecordsWithError)
+            {
+                Caption = 'Retry Records With Error', Comment = 'de-DE=Fehler erneut verarbeiten';
+                ApplicationArea = All;
+                Image = TransferOrder;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                begin
+                    // PageActions.RetryBufferRecordsWithError(Rec);
+                end;
+            }
+            action(OpenLog)
+            {
+                Caption = 'Log', Comment = 'de-DE=Protokoll';
+                ApplicationArea = All;
+                Image = ErrorLog;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                var
+                    Log: Codeunit DMTLog;
+                begin
+                    Log.ShowLogEntriesFor(Rec);
+                end;
+            }
+            action(CreateXMLPort)
+            {
+                ApplicationArea = All;
+                Image = XMLSetup;
+                Caption = 'Create XMLPort', comment = 'de-DE=XMLPort erstellen';
+
+                // trigger OnAction()
+                // begin
+                //     PageActions.DownloadALXMLPort(Rec);
+                // end;
+            }
+            action(CreateBufferTable)
+            {
+                ApplicationArea = All;
+                Image = Table;
+                Caption = 'Create Buffer Table', comment = 'de-DE=Puffertabelle erstellen';
+
+                // trigger OnAction()
+                // begin
+                //     PageActions.DownloadALBufferTableFile(Rec);
+                // end;
+            }
+            action(CheckTransferedRecords)
+            {
+                ApplicationArea = All;
+                Image = Table;
+                Caption = 'Check Transfered Records', comment = 'de-DE=Übertragene Datensätze Prüfen';
+
+                // trigger OnAction()
+                // var
+                //     Migrate: Codeunit DMTMigrate;
+                //     CollationProblems: Dictionary of [RecordId, RecordId];
+                //     RecordMapping: Dictionary of [RecordId, RecordId];
+                //     NotTransferedRecords: List of [RecordId];
+                // begin
+                //     // RecordMapping := DMTImport.CreateSourceToTargetRecIDMapping(Rec, NotTransferedRecords);
+                //     CollationProblems := Migrate.FindCollationProblems(RecordMapping);
+                //     Message('No. of Records not Transfered: %1\' +
+                //             'No. of Collation Problems: %2', NotTransferedRecords.Count, CollationProblems.Count);
+                // end;
+            }
+            action(CreateCode)
+            {
+                Caption = 'Create AL Mapping Code', comment = 'de-DE=Mapping AL Code erstellen';
+                ApplicationArea = All;
+                Image = CodesList;
+                // trigger OnAction()
+                // var
+                //     DMTCode: Page DMTCode;
+                // begin
+                //     DMTCode.InitForImportConfigLine(Rec);
+                //     DMTCode.Run();
+                // end;
+            }
+            action(ExportTargetTableToCSV)
+            {
+                Caption = 'Export target table to CSV', Comment = 'de-DE=Zieltabelle als CSV exportieren';
+                ApplicationArea = All;
+                Image = CodesList;
+                // trigger OnAction()
+                // begin
+                //     PageActions.ExportTargetTableToCSV(Rec);
+                // end;
+            }
+            action(PreviewCSV)
+            {
+                Caption = 'PreviewCSV';
+                ApplicationArea = All;
+                //     trigger OnAction()
+                //     var
+                //         ImportFileMgt: Codeunit DMTImportFileMgt;
+                //     begin
+                //         ImportFileMgt.ImportPreviewFromFilePath(Rec, 1, 3);
+                //     end;
+            }
+
         }
     }
 
@@ -101,19 +289,12 @@ page 91008 DMTImportConfigCard
         CurrPage.LinePart.Page.DoUpdate(false);
     end;
 
-    internal procedure GetNoOfRecordsInTrgtTable(): Integer
-    var
-        TableMetadata: Record "Table Metadata";
-        RecRef: RecordRef;
+    trigger OnAfterGetCurrRecord()
     begin
-        if not TableMetadata.get(Rec."Target Table ID") then exit(0);
-        RecRef.Open(Rec."Target Table ID");
-        exit(RecRef.Count);
+        CurrPage.TableInfoFactBox.Page.ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(Rec);
+        CurrPage.LogFactBox.Page.ShowAsLogAndUpdateOnAfterGetCurrRecord(Rec);
+        //     CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
+        //     CurrPage.LinePart.Page.DoUpdate(false);
     end;
 
-    // trigger OnAfterGetCurrRecord()
-    // begin
-    //     CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
-    //     CurrPage.LinePart.Page.DoUpdate(false);
-    // end;
 }

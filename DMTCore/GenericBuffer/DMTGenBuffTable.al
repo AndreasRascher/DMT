@@ -273,7 +273,7 @@ table 91001 "DMTGenBuffTable"
     // begin
     //     if (ImportConfigHeader.Name = '') or (MaxColCount = 0) then
     //         exit(false);
-    //     if GenBuffTable.FilterBy(DataFile) then
+    //     if GenBuffTable.FilterBy(ImportConfigHeader) then
     //         GenBuffTable.ModifyAll("Column Count", MaxColCount);
     // end;
 
@@ -310,7 +310,7 @@ table 91001 "DMTGenBuffTable"
     // internal procedure FindSetLinesByFileNameWithoutCaptionLine(ImportConfigHeader : Record DMTImportConfigHeader) FindSetOK: Boolean
     // begin
     //     Rec.SetRange(IsCaptionLine, false);
-    //     Rec.FilterBy(DataFile);
+    //     Rec.FilterBy(ImportConfigHeader);
     //     FindSetOK := Rec.FindSet(false, false);
     // end;
 
@@ -381,7 +381,7 @@ table 91001 "DMTGenBuffTable"
         FieldCaption := '3,' + DMTGenBufferFieldCaptions.GetCaption(FieldNo);
     end;
 
-    procedure ShowImportDataForFile(ImportConfigHeader: Record DMTImportConfigHeader)
+    procedure ShowBufferTable(ImportConfigHeader: Record DMTImportConfigHeader)
     var
         GenBuffTable: Record DMTGenBuffTable;
         NoOfCols: Integer;

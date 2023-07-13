@@ -42,6 +42,8 @@ page 91011 DMTDataLayoutCard
         {
             action(ImportHeadLineAsColumnNames)
             {
+                Caption = 'Import column names from column headers', Comment = 'de-DE=Spaltennamen aus Spaltenüberschriften importieren';
+                Image = ImportExcel;
                 ApplicationArea = All;
 
                 trigger OnAction()
@@ -53,6 +55,8 @@ page 91011 DMTDataLayoutCard
                 begin
                     ExcelMgt.LoadFileWithDialog();
                     HeaderLine := ExcelMgt.GetHeaderLine();
+                    if Rec.Name = '' then
+                        Rec.Name := CopyStr(ExcelMgt.SelectedFileName(), 1, MaxStrLen(Rec.Name));
 
                     foreach columnName in HeaderLine.Keys do begin
                         Clear(dataLayoutLine);

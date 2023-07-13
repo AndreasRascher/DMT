@@ -15,7 +15,6 @@ page 91000 "DMT Setup"
             group(MigrationSettings)
             {
                 Caption = 'Migration Settings', Comment = 'de-DE=Migration Einstellungen';
-
             }
             group("Object Generator")
             {
@@ -82,103 +81,68 @@ page 91000 "DMT Setup"
 
     actions
     {
-        area(Creation)
-        {
-            action(ImportNAVSchema)
-            {
-                // Caption = 'Import Schema.csv', comment = 'de-DE=NAV Schema.csv importieren';
-                // ApplicationArea = All;
-                // Image = DataEntry;
-                // Promoted = true;
-                // PromotedOnly = true;
-                // PromotedIsBig = true;
-                // PromotedCategory = New;
-
-                // trigger OnAction()
-                // var
-                //     ObjMgt: Codeunit DMTObjMgt;
-                // begin
-                //     ObjMgt.ImportNAVSchemaFile();
-                // end;
-            }
-            action(FindValidObjIDRanges)
-            {
-                // Caption = 'Find available Object ID ranges', comment = 'de-DE=Verfügbare Objekt-ID Bereiche ermitteln';
-                // ApplicationArea = All;
-                // Image = DataEntry;
-                // Promoted = true;
-                // PromotedOnly = true;
-                // PromotedIsBig = true;
-                // PromotedCategory = New;
-
-                // trigger OnAction()
-                // begin
-                //     Rec.ProposeObjectRanges();
-                // end;
-            }
-        }
         area(Reporting)
         {
             action(ClearGenBuffer)
             {
-                // Caption = 'Delete Gen. Buffer Table Lines', comment = 'de-DE=Alle Zeilen in gen. Puffertabelle löschen';
-                // ApplicationArea = All;
-                // Image = ListPage;
-                // Promoted = true;
-                // PromotedOnly = true;
-                // PromotedIsBig = true;
-                // PromotedCategory = Report;
-                // trigger OnAction()
-                // var
-                //     DMTGenBuffTable: Record DMTGenBuffTable;
-                // begin
-                //     if Confirm('Delete all lines in Gen. Buffer Table?') then
-                //         DMTGenBuffTable.DeleteAll();
-                // end;
+                Caption = 'Delete Gen. Buffer Table Lines', comment = 'de-DE=Alle Zeilen in gen. Puffertabelle löschen';
+                ApplicationArea = All;
+                Image = ListPage;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Report;
+                trigger OnAction()
+                var
+                    DMTGenBuffTable: Record DMTGenBuffTable;
+                    deleteGenBufferLinesQst: Label 'Delete all lines in Gen. Buffer Table?', Comment = 'de-DE=Alle Zeilen in gen. Puffertabelle löschen?';
+                begin
+                    if Confirm(deleteGenBufferLinesQst) then
+                        DMTGenBuffTable.DeleteAll();
+                end;
             }
         }
         area(Processing)
         {
             action(XMLExport)
             {
-                // Caption = 'Create Backup', comment = 'de-DE=Backup erstellen';
-                // ApplicationArea = All;
-                // Image = CreateXMLFile;
-                // Promoted = true;
-                // PromotedOnly = true;
-                // PromotedIsBig = true;
-                // PromotedCategory = Process;
+                Caption = 'Create Backup', comment = 'de-DE=Backup erstellen';
+                ApplicationArea = All;
+                Image = CreateXMLFile;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
 
-                // trigger OnAction()
-                // var
-                //     XMLBackup: Codeunit DMTXMLBackup;
-                // begin
-                //     XMLBackup.Export();
-                // end;
+                trigger OnAction()
+                var
+                    XMLBackup: Codeunit DMTXMLBackup;
+                begin
+                    XMLBackup.Export();
+                end;
             }
             action(XMLImport)
             {
-                // Caption = 'Import Backup', comment = 'de-DE=Backup importieren';
-                // ApplicationArea = All;
-                // Image = ImportCodes;
-                // Promoted = true;
-                // PromotedOnly = true;
-                // PromotedIsBig = true;
-                // PromotedCategory = Process;
+                Caption = 'Import Backup', comment = 'de-DE=Backup importieren';
+                ApplicationArea = All;
+                Image = ImportCodes;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
 
-                // trigger OnAction()
-                // var
-                //     ImportConfigHeader : Record DMTImportConfigHeader;
-                //     PageActions: Codeunit DMTDataFilePageAction;
-                //     XMLBackup: Codeunit DMTXMLBackup;
-                // begin
-                //     XMLBackup.Import();
-                //     // Update imported "Qty.Lines In Trgt. Table" with actual values
-                //     if ImportConfigHeader.FindSet() then
-                //         repeat
-                //             PageActions.UpdateQtyLinesInBufferTable(DataFile);
-                //         until ImportConfigHeader.Next() = 0;
-                // end;
+                trigger OnAction()
+                var
+                    ImportConfigHeader: Record DMTImportConfigHeader;
+                    XMLBackup: Codeunit DMTXMLBackup;
+                begin
+                    XMLBackup.Import();
+                    // Update imported "Qty.Lines In Trgt. Table" with actual values
+                    if ImportConfigHeader.FindSet() then
+                        repeat
+                            ImportConfigHeader.UpdateBufferRecordCount();
+                        until ImportConfigHeader.Next() = 0;
+                end;
             }
         }
 

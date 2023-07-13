@@ -21,12 +21,8 @@ codeunit 91005 DMTExcelMgt implements ISourceFileImport
         LastExcelColNo := GetLastColumnNo_ExcelSheet(tempExcelBufferGlobal);
         for xl_LineNo := 1 to LastExcelLineNo do
             ImportLine(xl_LineNo, LastExcelColNo, xl_LineNo = 1, SourceFileStorage.Name);
-        // Update Buffer Record Count
-        GenBuffTable.Reset();
-        GenBuffTable.FilterBy(ImportConfigHeader);
-        GenBuffTable.SetRange(IsCaptionLine, false); // don't count header line
-        ImportConfigHeader."No.of Records in Buffer Table" := GenBuffTable.Count;
-        ImportConfigHeader.Modify();
+
+        ImportConfigHeader.UpdateBufferRecordCount();
     end;
 
     local procedure ImportLine(xl_LineNo: Integer; LastExcelColNo: Integer; IsColumnCaptionLine: Boolean; ImportFromFileName: Text);
@@ -79,6 +75,17 @@ codeunit 91005 DMTExcelMgt implements ISourceFileImport
         if not UploadIntoStream(selectAnImportFileLbl, '', format(enum::DMTFileFilter::Excel), FileName, inStr) then
             exit;
         ImportFileFromStream(inStr);
+        SelectedFileName(FileName);
+    end;
+
+    internal procedure SelectedFileName(FileNameNew: Text)
+    begin
+        FileNameGlobal := FileNameNew;
+    end;
+
+    internal procedure SelectedFileName(): Text
+    begin
+        exit(FileNameGlobal);
     end;
 
     // local procedure ImportFileToBuffer()
@@ -189,4 +196,6 @@ codeunit 91005 DMTExcelMgt implements ISourceFileImport
 
     var
         tempExcelBufferGlobal: Record "Excel Buffer" temporary;
+        FileNameGlobal: Text;
+
 }

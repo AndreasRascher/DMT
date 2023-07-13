@@ -1,1 +1,1 @@
-﻿{"Added":[],"Modified":[{"Id":91006,"Kind":11,"Name":"DMTLog","PackagePath":"/src/Log/LogMgt.codeunit.al"},{"Id":91008,"Kind":10,"Name":"DMTLogEntry","PackagePath":"/src/Log/LogEntry.table.al"},{"Id":91003,"Kind":10,"Name":"DMTImportConfigHeader","PackagePath":"/src/ImportConfig/ImportConfigHeader.Table.al"},{"Id":91001,"Kind":14,"Name":"DMTLogQry","PackagePath":"/src/Log/LogQry.al"}],"Removed":[{"Id":0,"Kind":12,"Name":"DMTLogEntries","PackagePath":"/src/Log/LogMgt.codeunit.al"}]}
+﻿{"Added":[],"Modified":[],"Removed":[]}

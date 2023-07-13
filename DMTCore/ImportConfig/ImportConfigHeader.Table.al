@@ -75,9 +75,10 @@ table 91003 DMTImportConfigHeader
             NextID += DataLayout.ID;
     end;
 
-    internal procedure FilterRelated(var ImportConfigLine: Record DMTImportConfigLine)
+    internal procedure FilterRelated(var ImportConfigLine: Record DMTImportConfigLine) HasLinesInFilter: Boolean
     begin
         ImportConfigLine.SetRange("Imp.Conf.Header ID", Rec.ID);
+        HasLinesInFilter := not ImportConfigLine.IsEmpty;
     end;
 
     internal procedure ShowTableContent(TableID: Integer) OK: Boolean
@@ -97,4 +98,55 @@ table 91003 DMTImportConfigHeader
         SourceFileStorage.TestField(Name);
         exit(SourceFileStorage.Name);
     end;
+
+    internal procedure ShowBufferTable()
+    var
+        genBuffTable: Record DMTGenBuffTable;
+    begin
+        if not genBuffTable.FilterBy(Rec) then
+            exit;
+        genBuffTable.ShowBufferTable(Rec);
+    end;
+
+    procedure UpdateBufferRecordCount()
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+    begin
+        GenBuffTable.Reset();
+        GenBuffTable.FilterBy(Rec);
+        GenBuffTable.SetRange(IsCaptionLine, false); // don't count header line
+        Rec."No.of Records in Buffer Table" := GenBuffTable.Count;
+        Rec.Modify();
+    end;
+
+    procedure GetNoOfRecordsInTrgtTable(): Integer
+    var
+        TableMetadata: Record "Table Metadata";
+        RecRef: RecordRef;
+    begin
+        if not TableMetadata.get(Rec."Target Table ID") then exit(0);
+        RecRef.Open(Rec."Target Table ID");
+        exit(RecRef.Count);
+    end;
+
+    procedure InitBufferRef(var BufferRef: RecordRef)
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+        TableMetadata: Record "Table Metadata";
+        BufferTableMissingErr: Label 'Buffer Table %1 not found', Comment = 'de-DE=Eine Puffertabelle mit der ID %1 wurde nicht gefunden.';
+    begin
+        if not Rec."Use Separate Buffer Table" then begin
+            // GenBuffTable.InitFirstLineAsCaptions(DMTRec);
+            GenBuffTable.FilterGroup(2);
+            GenBuffTable.SetRange(IsCaptionLine, false);
+            GenBuffTable.FilterBy(Rec);
+            GenBuffTable.FilterGroup(0);
+            BufferRef.GetTable(GenBuffTable);
+        end else begin
+            if not TableMetadata.Get(Rec."Buffer Table ID") then
+                Error(BufferTableMissingErr, Rec."Buffer Table ID");
+            BufferRef.Open(Rec."Buffer Table ID");
+        end;
+    end;
+
 }

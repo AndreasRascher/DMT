@@ -4,24 +4,24 @@ table 91008 DMTLogEntry
     {
         field(1; "Entry No."; Integer)
         {
-            Caption = 'Entry No.', comment = 'Lfd.Nr.';
+            Caption = 'Entry No.', comment = 'de-DE=Lfd.Nr.';
             AutoIncrement = true;
         }
         field(10; Usage; Enum DMTLogUsage) { Caption = 'Usage', Comment = 'de-DE=Verwendung'; }
         field(11; "Process No."; Integer) { Caption = 'Process No.', Comment = 'de-DE=Vorgangsnr.'; }
         field(12; "Entry Type"; Enum DMTLogEntryType) { Caption = 'Entry Type', Comment = 'de-DE=Postenart'; }
-        field(20; "Source ID"; RecordId) { Caption = 'Source ID'; }
-        field(21; "Source ID (Text)"; Text[250]) { Caption = 'Source ID (Text)'; }
-        field(30; "Target ID"; RecordId) { Caption = 'Target ID'; }
-        field(31; "Target ID (Text)"; Text[250]) { Caption = 'Target ID (Text)'; }
-        field(32; "Target Table ID"; Integer) { }
-        field(33; "Target Field No."; Integer) { }
-        field(40; "Context Description"; Text[2048]) { Caption = 'Context Description', Comment = 'Kontext Beschreibung'; }
-        field(41; ErrorCode; Text[250]) { Caption = 'Error Code', Comment = 'Fehler Code'; }
-        field(42; "Error Call Stack"; Blob) { Caption = 'Error Callstack', Comment = 'Fehler Aufrufliste'; }
-        field(43; "Ignore Error"; Boolean) { Caption = 'Ignore Error', comment = 'Fehler ignorieren'; }
-        field(44; "Error Field Value"; Text[250]) { Caption = 'Error Field Value', comment = 'Fehler für Feldwert'; }
-        field(51; SourceFileName; Text[250]) { Caption = 'Data File Name', comment = 'Dateiname Exportdatei'; }
+        field(20; "Source ID"; RecordId) { Caption = 'Source ID', Comment = 'de-DE=Herkunfts-ID'; }
+        field(21; "Source ID (Text)"; Text[250]) { Caption = 'Source ID (Text)', Comment = 'de-DE=Herkunfts-ID (Text)'; }
+        field(30; "Target ID"; RecordId) { Caption = 'Target ID', Comment = 'de-DE=Ziel-ID'; }
+        field(31; "Target ID (Text)"; Text[250]) { Caption = 'Target ID (Text)', Comment = 'de-DE=Ziel-ID (Text)'; }
+        field(32; "Target Table ID"; Integer) { Caption = 'Target Table ID', Comment = 'de-DE=Zieltabellen ID'; }
+        field(33; "Target Field No."; Integer) { Caption = 'Target Field No.', Comment = 'de-De=Zielfeldnr.'; }
+        field(40; "Context Description"; Text[2048]) { Caption = 'Context Description', Comment = 'de-DE=Kontext Beschreibung'; }
+        field(41; ErrorCode; Text[250]) { Caption = 'Error Code', Comment = 'de-DE=Fehler Code'; }
+        field(42; "Error Call Stack"; Blob) { Caption = 'Error Callstack', Comment = 'de-DE=Fehler Aufrufliste'; }
+        field(43; "Ignore Error"; Boolean) { Caption = 'Ignore Error', comment = 'de-DE=Fehler ignorieren'; }
+        field(44; "Error Field Value"; Text[250]) { Caption = 'Error Field Value', comment = 'de-DE=Fehler für Feldwert'; }
+        field(51; SourceFileName; Text[250]) { Caption = 'Source File Name', comment = 'de-DE=Quelldatei Name'; }
     }
 
     keys

@@ -182,7 +182,7 @@ codeunit 91003 DMTMigrationLib
             UpdateGlobalDimNoInDimensionValues();
     end;
 
-    internal procedure ApplyKnownProcessingRulesToNewDataFileRec(var ImportConfigHeader: Record DMTImportConfigHeader)
+    internal procedure ApplyKnownProcessingRulesToNewImportConfigHeaderRec(var ImportConfigHeader: Record DMTImportConfigHeader)
     begin
         case ImportConfigHeader."Target Table ID" of
             Database::"Item Vendor",
