@@ -88,4 +88,13 @@ table 91003 DMTImportConfigHeader
         if OK then
             Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, TableID));
     end;
+
+    internal procedure GetSourceFileName(): Text[250]
+    var
+        SourceFileStorage: Record DMTSourceFileStorage;
+    begin
+        SourceFileStorage.Get(Rec.SourceFileID);
+        SourceFileStorage.TestField(Name);
+        exit(SourceFileStorage.Name);
+    end;
 }

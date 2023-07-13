@@ -168,16 +168,16 @@ page 91000 "DMT Setup"
 
                 // trigger OnAction()
                 // var
-                //     DataFile: Record DMTDataFile;
+                //     ImportConfigHeader : Record DMTImportConfigHeader;
                 //     PageActions: Codeunit DMTDataFilePageAction;
                 //     XMLBackup: Codeunit DMTXMLBackup;
                 // begin
                 //     XMLBackup.Import();
                 //     // Update imported "Qty.Lines In Trgt. Table" with actual values
-                //     if DataFile.FindSet() then
+                //     if ImportConfigHeader.FindSet() then
                 //         repeat
                 //             PageActions.UpdateQtyLinesInBufferTable(DataFile);
-                //         until DataFile.Next() = 0;
+                //         until ImportConfigHeader.Next() = 0;
                 // end;
             }
         }

@@ -267,11 +267,11 @@ table 91001 "DMTGenBuffTable"
         key(Key1; "Entry No.") { Clustered = true; }
     }
 
-    // internal procedure UpdateMaxColCount(DataFile: Record DMTDataFile; MaxColCount: Integer) UpdateDone: Boolean
+    // internal procedure UpdateMaxColCount(ImportConfigHeader : Record DMTImportConfigHeader; MaxColCount: Integer) UpdateDone: Boolean
     // var
     //     GenBuffTable: Record DMTGenBuffTable;
     // begin
-    //     if (DataFile.Name = '') or (MaxColCount = 0) then
+    //     if (ImportConfigHeader.Name = '') or (MaxColCount = 0) then
     //         exit(false);
     //     if GenBuffTable.FilterBy(DataFile) then
     //         GenBuffTable.ModifyAll("Column Count", MaxColCount);
@@ -307,7 +307,7 @@ table 91001 "DMTGenBuffTable"
         HasLinesInFilter := not Rec.IsEmpty;
     end;
 
-    // internal procedure FindSetLinesByFileNameWithoutCaptionLine(DataFile: Record DMTDataFile) FindSetOK: Boolean
+    // internal procedure FindSetLinesByFileNameWithoutCaptionLine(ImportConfigHeader : Record DMTImportConfigHeader) FindSetOK: Boolean
     // begin
     //     Rec.SetRange(IsCaptionLine, false);
     //     Rec.FilterBy(DataFile);

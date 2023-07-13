@@ -30,7 +30,7 @@ page 91012 DMTFieldLookup
         DataLayout: Record DMTDataLayout;
         DataLayoutLine: Record DMTDataLayoutLine;
         TempDataLayoutLine: Record DMTDataLayoutLine temporary;
-    // DataFile: Record DMTDataFile;
+    // ImportConfigHeader : Record DMTImportConfigHeader;
     // TempFieldBuffer: Record DMTFieldBuffer temporary;
     // GenBuffTable: Record DMTGenBuffTable;
     // Field: Record Field;
@@ -54,8 +54,8 @@ page 91012 DMTFieldLookup
         Rec.FilterGroup(0);
 
 
-        // case DataFile.BufferTableType of
-        //     DataFile.BufferTableType::"Generic Buffer Table for all Files":
+        // case ImportConfigHeader.BufferTableType of
+        //     ImportConfigHeader.BufferTableType::"Generic Buffer Table for all Files":
         //         begin
         //             GenBuffTable.GetColCaptionForImportedFile(DataFile, BuffTableCaptions);
         //             foreach FieldNo in BuffTableCaptions.Keys do begin
@@ -67,9 +67,9 @@ page 91012 DMTFieldLookup
         //             IsLoaded := true;
         //         end;
 
-        //     DataFile.BufferTableType::"Seperate Buffer Table per CSV":
+        //     ImportConfigHeader.BufferTableType::"Seperate Buffer Table per CSV":
         //         begin
-        //             Field.SetRange(TableNo, DataFile."Buffer Table ID");
+        //             Field.SetRange(TableNo, ImportConfigHeader."Buffer Table ID");
         //             Field.SetFilter("No.", '<2000000000'); // no system fields
         //             Field.FindSet(false, false);
         //             repeat

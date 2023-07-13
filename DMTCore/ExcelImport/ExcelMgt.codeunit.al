@@ -45,7 +45,7 @@ codeunit 91005 DMTExcelMgt implements ISourceFileImport
             // MaxColCount := (CurrColIndex - 1000);
             RecRef.GetTable(GenBuffTable);
             // RecRef.Field(GenBuffTable.FieldNo("Import from Filename")).Value := CopyStr(CurrFileName, 1, MaxStrLen(GenBuffTable."Import from Filename"));
-            // RecRef.Field(GenBuffTable.FieldNo("Source ID")).Value := CurrDataFile.RecordId;
+            // RecRef.Field(GenBuffTable.FieldNo("Source ID")).Value := CurrImportConfigHeader.RecordId;
             RecRef.Field(1000 + CurrColIndex).Value := GetCellValueAsText(xl_LineNo, CurrColIndex, tempExcelBufferGlobal);
             RecRef.SetTable(GenBuffTable);
         end;
