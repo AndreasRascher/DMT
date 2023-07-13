@@ -98,9 +98,14 @@ table 91006 DMTImportConfigLine
             Rec.fieldno("Source Field No."):
                 begin
                     ImportConfigHeader.Get(Rec."Imp.Conf.Header ID");
-                    DataLayoutLine.Get(ImportConfigHeader."Data Layout ID", Rec."Source Field No.");
-                    Rec."Source Field Caption" := DataLayoutLine.ColumnName;
-                    Rec."Processing Action" := Rec."Processing Action"::Transfer;
+                    if DataLayoutLine.Get(ImportConfigHeader."Data Layout ID", Rec."Source Field No.") then begin
+                        Rec."Source Field Caption" := DataLayoutLine.ColumnName;
+                        Rec."Processing Action" := Rec."Processing Action"::Transfer;
+                    end else begin
+                        // clear fields
+                        Clear(Rec."Source Field Caption");
+                        Clear(Rec."Processing Action");
+                    end;
                 end;
             else
                 Error('unhandled %1', FromFieldNo);

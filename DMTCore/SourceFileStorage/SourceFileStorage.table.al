@@ -1,5 +1,6 @@
 table 91004 DMTSourceFileStorage
 {
+    LookupPageId = 91005;
     Caption = 'DMT Source File', Comment = 'DMT Quelldatei';
     DataClassification = CustomerContent;
 

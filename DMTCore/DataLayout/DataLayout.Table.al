@@ -2,6 +2,8 @@ table 91002 DMTDataLayout
 {
     Caption = 'Data Layout', Comment = 'de-DE=Datenlayout';
     DataClassification = CustomerContent;
+    LookupPageId = DMTDataLayouts;
+    DrillDownPageId = DMTDataLayouts;
 
     fields
     {

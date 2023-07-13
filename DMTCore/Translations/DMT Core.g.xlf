@@ -1538,6 +1538,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Hochgeladen am</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Field UploadDateTime - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1497472904 - Method 3848482430 - NamedType 613393458" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Select an import file</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTExcelMgt - Method ReadExcelSheet - NamedType selectAnImportFileLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 4228541464 - Method 3234253707 - NamedType 2857577032" size-unit="char" translate="yes" xml:space="preserve">
           <source>All fields are already assigned. Overwrite existing assignment?</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</note>

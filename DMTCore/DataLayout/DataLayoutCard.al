@@ -39,6 +39,32 @@ page 91011 DMTDataLayoutCard
     {
         area(Processing)
         {
+            action(ImportHeadLineAsColumnNames)
+            {
+                ApplicationArea = All;
+
+                trigger OnAction()
+                var
+                    dataLayoutLine: Record DMTDataLayoutLine;
+                    ExcelMgt: Codeunit DMTExcelMgt;
+                    HeaderLine: Dictionary of [Text, Integer];
+                    ColumnName: Text;
+                begin
+                    ExcelMgt.ImportFile();
+                    HeaderLine := ExcelMgt.GetHeaderLine();
+
+                    foreach columnName in HeaderLine.Keys do begin
+                        Clear(dataLayoutLine);
+
+                        dataLayoutLine."Data Layout ID" := Rec.ID;
+                        dataLayoutLine."Column No." := HeaderLine.Get(ColumnName);
+                        dataLayoutLine.ColumnName := CopyStr(ColumnName, 1, MaxStrLen(dataLayoutLine.ColumnName));
+
+                        dataLayoutLine.Insert(true);
+                    end;
+                end;
+
+            }
         }
     }
     trigger OnAfterGetCurrRecord()
