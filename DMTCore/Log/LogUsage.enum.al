@@ -1,4 +1,3 @@
-//Import to Buffer, Process Buffer, Field Update, Document Migration, Record Deletion, FieldUpdate
 enum 91006 DMTLogUsage
 {
     value(0; " ") { Caption = ' ', Locked = true; }

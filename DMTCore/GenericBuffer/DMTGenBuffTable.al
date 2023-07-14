@@ -267,16 +267,6 @@ table 91001 "DMTGenBuffTable"
         key(Key1; "Entry No.") { Clustered = true; }
     }
 
-    // internal procedure UpdateMaxColCount(ImportConfigHeader : Record DMTImportConfigHeader; MaxColCount: Integer) UpdateDone: Boolean
-    // var
-    //     GenBuffTable: Record DMTGenBuffTable;
-    // begin
-    //     if (ImportConfigHeader.Name = '') or (MaxColCount = 0) then
-    //         exit(false);
-    //     if GenBuffTable.FilterBy(ImportConfigHeader) then
-    //         GenBuffTable.ModifyAll("Column Count", MaxColCount);
-    // end;
-
     procedure InitFirstLineAsCaptions(GenBuffTable_First: Record DMTGenBuffTable) NoOfCols: Integer
     var
         GenBuffTable_CaptionLine: Record DMTGenBuffTable;
@@ -301,8 +291,8 @@ table 91001 "DMTGenBuffTable"
     var
         SourceFileStorage: Record DMTSourceFileStorage;
     begin
-        ImportConfigHeader.TestField(SourceFileID);
-        SourceFileStorage.Get(ImportConfigHeader.SourceFileID);
+        ImportConfigHeader.TestField("Source File ID");
+        SourceFileStorage.Get(ImportConfigHeader."Source File ID");
         Rec.SetRange("Import from Filename", SourceFileStorage.Name);
         HasLinesInFilter := not Rec.IsEmpty;
     end;

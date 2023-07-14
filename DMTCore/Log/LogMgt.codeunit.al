@@ -196,18 +196,6 @@ codeunit 91006 DMTLog
         logEntry.Insert();
     end;
 
-    // internal procedure CreateNoOfBufferRecordsProcessedEntry(ImportConfigHeader : Record DMTImportConfigHeader; noOfRecordsProcessed: Integer)
-    // var
-    //     logEntry: Record DMTLogEntry;
-    //     noOfRecordsProcessedLbl: Label '%1 records processed';
-    // begin
-    //     logEntry.Usage := logEntry.Usage::"Process Buffer - Record";
-    //     logEntry."Process No." := 0;
-    //     logEntry."Target Table ID" := ImportConfigHeader."Target Table ID";
-    //     logEntry."Context Description" := StrSubstNo(noOfRecordsProcessedLbl, noOfRecordsProcessed);
-    //     logEntry.Insert();
-    // end;
-
     procedure CreateSummary()
     var
         LogEntry: Record DMTLogEntry;

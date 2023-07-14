@@ -1617,6 +1617,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Import Konfiguration Kopf</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 200502431 - Method 705889565 - NamedType 935989145" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer Table %1 not found</source>
+          <target state="translated">Eine Puffertabelle mit der ID %1 wurde nicht gefunden.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Eine Puffertabelle mit der ID %1 wurde nicht gefunden.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Method InitBufferRef - NamedType BufferTableMissingErr</note>
+        </trans-unit>
         <trans-unit id="Table 200502431 - Field 3434788173 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffertable ID</source>
           <target state="translated">Puffertabelle ID</target>
@@ -1659,11 +1665,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze in Puffertabelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field No.of Records in Buffer Table - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 200502431 - Field 1556966194 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 200502431 - Field 831512162 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source File ID</source>
           <target state="translated">Quell-Datei ID</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Quell-Datei ID</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field SourceFileID - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Source File ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 4040554107 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Table Caption</source>
@@ -1724,6 +1730,18 @@
           <target state="translated">Aktion</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Aktion</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Processing Action - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 1614643981 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Field Caption</source>
+          <target state="translated">Zielfeld Bezeichnung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zielfeld Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Search Target Field Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 870794884 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Selection</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">Auswahl</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Selection - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3570477496 - Field 4163973499 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source Field Caption</source>
@@ -1869,6 +1887,204 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Verwendung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Usage - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 2200046723 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Indentation</source>
+          <target state="translated">Einrückung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Einrückung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Indentation - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line No.</source>
+          <target state="translated">Zeilennr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zeilennr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Line No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 3950656103 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processing Duration</source>
+          <target state="translated">Verarbeitungszeit</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Verarbeitungszeit</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Processing Duration - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 76420432 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Table No.</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Source Table No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 530928583 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Start Time</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field StartTime - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 1878130204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Type</source>
+          <target state="translated">Art</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Art</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 2769288159 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Field 1 Caption</source>
+          <target state="translated">Vgl.-Wert 1 Bezeichnung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vgl.-Wert 1 Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Comp.Val.1 Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 884246890 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Field 2 Caption</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Comp.Val.2 Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 455746087 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Value 1</source>
+          <target state="translated">Vgl.-Wert 1</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vgl.-Wert 1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Comp.Value 1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 2368835938 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Value 2</source>
+          <target state="translated">Vgl.-Wert 2</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vgl.-Wert 2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Comp.Value 2 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 2954286148 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Value 1 Field No.</source>
+          <target state="translated">Vgl.-Wert 1 Feld Nr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vgl.-Wert 1 Feld Nr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Compare Value 1 Field No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 154565229 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Value 2 Field No.</source>
+          <target state="translated">Vgl.-Wert 2 Feld Nr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vgl.-Wert 2 Feld Nr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Compare Value 2 Field No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 195937587 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ImportConfigHeader Name</source>
+          <target state="translated">Dateiname</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Dateiname</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Data File Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 2144357174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ImportConfigHeader ID</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Imp.Conf.Header ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line No.</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Line No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 697060706 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line Type</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field LineType - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 1489364258 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value 1</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">Neuer Wert 1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field New Value 1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 1400066348 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value 1 Caption</source>
+          <target state="translated">Neuer Wert 1 Bezeichnung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Neuer Wert 1 Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field New Value 1 Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 2704657317 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Value 1 Field No.</source>
+          <target state="translated">Vgl.-Wert 1 Feld Nr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vgl.-Wert 1 Feld Nr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field New Value 1 Field No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 3871241703 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value 2 Caption</source>
+          <target state="translated">Neuer Wert 2 Bezeichnung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Neuer Wert 2 Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field New Value 2 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 3112951621 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value 2 Caption</source>
+          <target state="translated">Neuer Wert 2 Bezeichnung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Neuer Wert 2 Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field New Value 2 Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 2952865436 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Value 2 Field No.</source>
+          <target state="translated">Vgl.-Wert 2 Feld Nr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vgl.-Wert 2 Feld Nr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field New Value 2 Field No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 335306059 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Compare Values</source>
+          <target state="translated">Anz. Vergleichswerte</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anz. Vergleichswerte</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field No. of Compare Values - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 950508093 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Lines</source>
+          <target state="translated">Anzahl Zeilen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anzahl Zeilen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field No. of Lines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 3827651487 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Values to modify</source>
+          <target state="translated">Anz. zu ändernder Werte</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anz. zu ändernder Werte</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field No. of Values to modify - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 925334572 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Related Table Caption (New Val.1)</source>
+          <target state="translated">Relation zu Tabelle (Neu 1)</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Relation zu Tabelle (Neu 1)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Rel.to Table Cpt.(New Val.1) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 1003416349 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Related Table Caption (New Val.2)</source>
+          <target state="translated">Relation zu Tabelle (Neu 2)</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Relation zu Tabelle (Neu 2)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Rel.to Table Cpt.(New Val.2) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 1434945624 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Related to Table ID (New.Fld.1)</source>
+          <target state="translated">Tabellenrelation ID (Neu 1)</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Tabellenrelation ID (Neu 1)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Rel.to Table ID (New Val.1) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 1513027401 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Related to Table ID (New Val.2)</source>
+          <target state="translated">Tabellenrelation ID (Neu 2)</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Tabellenrelation ID (Neu 2)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Rel.to Table ID (New Val.2) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 1634282205 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Code</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Replacement Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1747667157 - Field 1666780894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table ID</source>
+          <target state="translated">Ziel Tabellen ID</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ziel Tabellen ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Target Table ID - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 521254526 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Setup</source>
           <target state="translated">DMT Einrichtung</target>
@@ -1970,6 +2186,48 @@
           <target state="needs-translation"/>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLog - Method CheckIfProcessNoIsSet - NamedType ProcessNoNotInitializedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 623866352 - Method 1479878862 - NamedType 1097618994" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The buffer table is empty for %1:%2</source>
+          <target state="translated">Die Puffertable entält keine Zeilen für %1:%2</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Die Puffertable entält keine Zeilen für %1:%2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method CheckBufferTableIsNotEmpty - NamedType bufferTableEmptyErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 623866352 - Method 1507708651 - NamedType 4003859195" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No field mapping found for %1 "%2"</source>
+          <target state="translated">Kein Feldmapping gefunden für  %1 "%2"</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Kein Feldmapping gefunden für  %1 "%2"</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method CheckMappedFieldsExist - NamedType ImportConfigLineEmptyErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 623866352 - Method 3730941943 - NamedType 2931333304" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Duration</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">de-DE Dauer</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method PrepareProgressBar - NamedType DurationLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 623866352 - Method 3730941943 - NamedType 1970759069" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Time Remaining</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">de-DE Verbleibende Zeit</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method PrepareProgressBar - NamedType TimeRemainingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 623866352 - Method 984899932 - NamedType 4071086809" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No buffer table records match the filter.\ Filter: "%1"</source>
+          <target state="translated">Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method ProcessFullBuffer - NamedType NoBufferTableRecorsInFilterErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 623866352 - Method 771327502 - NamedType 1000503204" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Records..\processed: %1\imported: %2\With Error: %3\Processing Time:%4</source>
+          <target state="translated">Anzahl Datensätze..\verarbeitet: %1\eingelesen : %2\mit Fehlern: %3\Verarbeitungsdauer: %4</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anzahl Datensätze..\verarbeitet: %1\eingelesen : %2\mit Fehlern: %3\Verarbeitungsdauer: %4</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method ShowResultDialog - NamedType ResultMsg</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1536080462 - Method 1564743796 - NamedType 3980904368" size-unit="char" translate="yes" xml:space="preserve">
+          <source>"%1" is not a valid %2 value.</source>
+          <target state="translated">"%1" ist kein gültiger %2 Wert</target>
+          <note from="Developer" annotates="general" priority="2">de-DE="%1" ist kein gültiger %2 Wert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTRefHelper - Method EvaluateFieldRef - NamedType InvalidValueForTypeErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3371792372 - Method 3508704786 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import finished</source>
@@ -2085,6 +2343,48 @@
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Datenlayouts Übersicht</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataLayouts - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2771814392 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Delete Data in Target Table</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">Daten in Zieltabelle löschen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDataInTargetTable - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2771814392 - Method 1361802906 - NamedType 3955357399" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warning! %1 Records in table "%2" (company "%3") will be deleted. Continue?</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDataInTargetTable - Method ConfirmDeletion - NamedType DeleteAllRecordsInTargetTableWarningMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 2771814392 - Method 2008557734 - NamedType 1183320433" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Process Stopped</source>
+          <target state="translated">Vorgang abgebrochen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vorgang abgebrochen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDataInTargetTable - Method DeleteRecordsInList - NamedType ProcessStoppedErr</note>
+        </trans-unit>
+        <trans-unit id="Page 2771814392 - Control 3501145842 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Table Filter</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDataInTargetTable - Control SourceTableView - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2771814392 - Control 1955418601 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table Filter</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDataInTargetTable - Control TargetTableFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2771814392 - Control 4252807150 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use On Delete Trigger</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDataInTargetTable - Control UseOnDeleteTriggerCtrl - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2771814392 - Action 1386164311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Start</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDataInTargetTable - Action StartDeletingCtrl - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3373207527 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fields</source>
           <target state="needs-translation"/>
@@ -2139,11 +2439,101 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Info</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control TableInfoFactBox - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 809130730 - Action 1454049982 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check Transfered Records</source>
+          <target state="translated">Übertragene Datensätze Prüfen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Übertragene Datensätze Prüfen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CheckTransferedRecords - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 1922075018 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Count Lines in Target</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CountLines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 1922075018 - Method 1377591017 - NamedType 1392962668" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filter:%1 \ No. of Lines in Filter: %2</source>
+          <target state="translated">Filter:%1 \ Anzahl Zeilen im Filter: %2</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CountLines - Method OnAction - NamedType NoOfLinesInFilterLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 321739984 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Count Lines in Buffer</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CountLinesInSource - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 321739984 - Method 1377591017 - NamedType 1392962668" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filter:%1 \ No. of Lines in Filter: %2</source>
+          <target state="translated">Filter:%1 \ Anzahl Zeilen im Filter: %2</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CountLinesInSource - Method OnAction - NamedType NoOfLinesInFilterLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 3711327542 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Create Buffer Table</source>
+          <target state="translated">Puffertabelle erstellen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Puffertabelle erstellen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CreateBufferTable - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 3448018027 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Create AL Mapping Code</source>
+          <target state="translated">Mapping AL Code erstellen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Mapping AL Code erstellen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CreateCode - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 2778232640 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Create XMLPort</source>
+          <target state="translated">XMLPort erstellen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=XMLPort erstellen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CreateXMLPort - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 116037593 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Delete Records In Target Table</source>
+          <target state="translated">Datensätze in Zieltabelle löschen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Datensätze in Zieltabelle löschen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action DeleteRecordsInTargetTable - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 670310682 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Export target table to CSV</source>
+          <target state="translated">Zieltabelle als CSV exportieren</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zieltabelle als CSV exportieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action ExportTargetTableToCSV - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 809130730 - Action 537879431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to Buffer Table</source>
           <target state="needs-translation"/>
           <note from="Developer" annotates="general" priority="2">Import in Puffertabelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action ImportBufferDataFromFile - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 455269300 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Log</source>
+          <target state="translated">Protokoll</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Protokoll</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action OpenLog - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 4075396280 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>PreviewCSV</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action PreviewCSV - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 1016274576 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Retry Records With Error</source>
+          <target state="translated">Fehler erneut verarbeiten</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Fehler erneut verarbeiten</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action RetryBufferRecordsWithError - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 4138182889 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import to Target Table</source>
+          <target state="translated">In Zieltabelle übertragen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=In Zieltabelle übertragen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action TransferToTargetTable - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Action 544469732 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Update Fields</source>
+          <target state="translated">Felder aktualisieren</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Felder aktualisieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action UpdateFields - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1337506145 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>ImportConfig FactBox</source>
@@ -2241,7 +2631,7 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Validierungsart auf Zuweisen ohne validieren setzen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action DMTField_SetValidateFieldToFalse - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1011073045 - Action 3439534607 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1011073045 - Action 2143214942 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Set Field Validate to always</source>
           <target state="translated">Validierungsart auf Immer setzen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Validierungsart auf Immer setzen</note>
@@ -2294,6 +2684,270 @@
           <target state="needs-translation"/>
           <note from="Developer" annotates="general" priority="2">Ignorierte Fehler anzeigen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTLogEntries - Action ShowIgnored - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Processing Plan</source>
+          <target state="translated">DMT Verarbeitungsplan</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=DMT Verarbeitungsplan</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Property 3863440606" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Plan</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Property AdditionalSearchTerms</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 3177385690 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Default Values</source>
+          <target state="translated">Vorgabewerte</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vorgabewerte</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control FixedValues - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 2185914457 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Process selected fields only</source>
+          <target state="translated">Ausgew. Felder verarbeiten</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ausgew. Felder verarbeiten</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control ProcessSelectedFieldsOnly - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 1608331573 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Table Filter</source>
+          <target state="translated">Quelldaten Filter</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Quelldaten Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control SourceTableFilter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 247166185 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Delete</source>
+          <target state="translated">Löschen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Löschen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action DeleteLine - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 1042755249 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Indent Left</source>
+          <target state="translated">Links einrücken</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Links einrücken</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentLeft - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 242972736 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Indent Right</source>
+          <target state="translated">Rechts einrücken</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Rechts einrücken</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentRight - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 4181015414 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New</source>
+          <target state="translated">Neu</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Neu</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action NewLine - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 1179400017 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Renumber Lines</source>
+          <target state="translated">Zeilen neu nummerieren</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zeilen neu nummerieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action RenumberLinesAction - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 3066818762 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reset Lines</source>
+          <target state="translated">Zeilen zurücksetzen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zeilen zurücksetzen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action ResetLinesAction - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 620325036 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Start</source>
+          <target state="translated">Ausführen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ausführen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action Start - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 866183911 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Create Backup</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">Backup erstellen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action XMLExport - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 2090228232 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import Backup</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">Backup importieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action XMLImport - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3333708309 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processing Instructions</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3333708309 - Control 45670998 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filter</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Control FilterList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3333708309 - Control 3030844192 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fixed Values</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Control FixedValuesList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3333708309 - Control 4276839630 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fields</source>
+          <target state="translated">Vorgabwerte</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vorgabwerte</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Control UpdateFieldsList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3333708309 - Action 66295949 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Add/Remove Field</source>
+          <target state="translated">Feld hinzufügen/entfernen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Feld hinzufügen/entfernen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Action AddField - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3333708309 - Action 746276264 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Edit</source>
+          <target state="translated">Bearbeiten</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Bearbeiten</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Action Edit - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3333708309 - Action 647208151 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reset Selection</source>
+          <target state="translated">Auswahl zurücksetzen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Auswahl zurücksetzen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Action ResetSelection - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3164644726 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Replacements</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentsPart - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3164644726 - Method 548813222 - NamedType 2740794933" size-unit="char" translate="yes" xml:space="preserve">
+          <source>&lt;Click to Edit&gt;</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentsPart - Method GetCompareFieldsList - NamedType ClickToEditLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 3164644726 - Method 436987598 - NamedType 2740794933" size-unit="char" translate="yes" xml:space="preserve">
+          <source>&lt;Click to Edit&gt;</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentsPart - Method GetNewValueFieldsList - NamedType ClickToEditLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 3164644726 - Control 590387162 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Fields</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentsPart - Control Comparefields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3164644726 - Control 4286164242 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value Fields</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentsPart - Control NewValueFields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3164644726 - Control 3548871262 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Fields</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentsPart - Control Overview_Comparefields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3164644726 - Control 1443900214 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value Fields</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentsPart - Control Overview_NewValueFields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 43196361 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Replacement Card</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementCard - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 43196361 - Control 2044106759 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field Setup</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementCard - Control Field Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 43196361 - Control 3013109062 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Value 1</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementCard - Control FromField1Group - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 43196361 - Control 1262037187 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Value 2</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementCard - Control FromField2Group - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 43196361 - Control 2780874720 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Caption</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementCard - Control FieldCaption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 43196361 - Control 1178234503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Rel.to Table ID</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementCard - Control Rel.to Table ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 43196361 - Control 1024374337 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Rel.to Table</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementCard - Control Rel.to Table Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 43196361 - Control 3857107201 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value 1</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementCard - Control ToFieldGroup1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 43196361 - Control 3219410584 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value 2</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementCard - Control ToFieldGroup2 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 43196361 - Control 2445482498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>General</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementCard - Control General - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 43196361 - Action 896305376 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Propose Assignments</source>
+          <target state="translated">Zuordnung vorschlagen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zuordnung vorschlagen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementCard - Action ProposeAssignments - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 747257115 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mapping</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementRulesPart - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1772711340 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Replacements</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacements - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 783956376 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Select multiple fields</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectMultipleFields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 783956376 - Control 1782468518 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Current Selection</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectMultipleFields - Control SelectedFieldsList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 783956376 - Control 2626035516 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Select Fields</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectMultipleFields - Control SelectedFields - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1854940516 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Source Files</source>
@@ -2492,6 +3146,42 @@
           <target state="needs-translation"/>
           <note from="Developer" annotates="general" priority="2">keins</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTMigrationProfile - EnumValue No Profile - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4037377007 - EnumValue 3533810158 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer + Target</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Buffer + Target - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4037377007 - EnumValue 739346273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Group</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Group - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4037377007 - EnumValue 286210954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import to Buffer</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Import To Buffer - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4037377007 - EnumValue 4081878561 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import to Target</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Import To Target - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4037377007 - EnumValue 1280137342 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Run Codeunit</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Run Codeunit - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4037377007 - EnumValue 375687917 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Update Field</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Update Field - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3953448519 - EnumValue 2521149591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Custom CSV</source>

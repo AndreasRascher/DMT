@@ -1,4 +1,4 @@
-codeunit 73007 DMTMigrate
+codeunit 91014 DMTMigrate
 {
     /// <summary>
     /// Process buffer records defined by RecordIds
@@ -23,7 +23,7 @@ codeunit 73007 DMTMigrate
         ImportSettings.ImportConfigHeader(ImportConfigHeader);
         ImportSettings.NoUserInteraction(true);
         ImportSettings.StopProcessingRecIDListAfterError(StopProcessingRecIDListAfterError);
-        LoadFieldMapping(ImportSettings);
+        LoadImportConfigLine(ImportSettings);
         IsFullyProcessed := ListOfBufferRecIDsInner(RecIdToProcessList, Log, ImportSettings);
     end;
     /// <summary>
@@ -34,8 +34,8 @@ codeunit 73007 DMTMigrate
         DMTImportSettings: Codeunit DMTImportSettings;
     begin
         DMTImportSettings.ImportConfigHeader(ImportConfigHeader);
-        DMTImportSettings.SourceTableView(ImportConfigHeader.ReadLastSourceTableView());
-        LoadFieldMapping(DMTImportSettings);
+        DMTImportSettings.SourceTableView(ImportConfigHeader.ReadLastUsedSourceTableView());
+        LoadImportConfigLine(DMTImportSettings);
         ProcessFullBuffer(DMTImportSettings);
     end;
     /// <summary>
@@ -47,7 +47,7 @@ codeunit 73007 DMTMigrate
     begin
         DMTImportSettings.ImportConfigHeader(ImportConfigHeader);
         DMTImportSettings.NoUserInteraction(true);
-        LoadFieldMapping(DMTImportSettings);
+        LoadImportConfigLine(DMTImportSettings);
         ProcessFullBuffer(DMTImportSettings);
     end;
     /// <summary>
@@ -60,7 +60,7 @@ codeunit 73007 DMTMigrate
         DMTImportSettings.ImportConfigHeader(ImportConfigHeader);
         DMTImportSettings.UpdateFieldsFilter(ImportConfigHeader.ReadLastFieldUpdateSelection());
         DMTImportSettings.UpdateExistingRecordsOnly(true);
-        LoadFieldMapping(DMTImportSettings);
+        LoadImportConfigLine(DMTImportSettings);
         ProcessFullBuffer(DMTImportSettings);
     end;
 
@@ -77,55 +77,55 @@ codeunit 73007 DMTMigrate
         DMTImportSettings.ImportConfigHeader(ImportConfigHeader);
         DMTImportSettings.UpdateFieldsFilter(ProcessingPlan.ReadUpdateFieldsFilter());
         DMTImportSettings.SourceTableView(ProcessingPlan.ReadSourceTableView());
-        LoadFieldMapping(DMTImportSettings);
+        LoadImportConfigLine(DMTImportSettings);
         ProcessFullBuffer(DMTImportSettings);
     end;
 
-    local procedure LoadFieldMapping(var DMTImportSettings: Codeunit DMTImportSettings) OK: Boolean
+    local procedure LoadImportConfigLine(var DMTImportSettings: Codeunit DMTImportSettings) OK: Boolean
     var
-        ConfigLine: Record DMTImportConfigLine;
-        TempFieldMapping, TempFieldMapping_ProcessingPlanSettings : Record DMTFieldMapping temporary;
+        ImportConfigLine: Record DMTImportConfigLine;
+        TempImportConfigLine, TempImportConfigLine_ProcessingPlanSettings : Record DMTImportConfigLine temporary;
         ImportConfigHeader: Record DMTImportConfigHeader;
     begin
         ImportConfigHeader := DMTImportSettings.ImportConfigHeader();
-        ImportConfigHeader.FilterRelated(FieldMapping);
-        FieldMapping.SetFilter("Processing Action", '<>%1', FieldMapping."Processing Action"::Ignore);
-        if ImportConfigHeader.BufferTableType = ImportConfigHeader.BufferTableType::"Seperate Buffer Table per CSV" then
-            FieldMapping.SetFilter("Source Field No.", '<>0');
+        ImportConfigHeader.FilterRelated(ImportConfigLine);
+        ImportConfigLine.SetFilter("Processing Action", '<>%1', ImportConfigLine."Processing Action"::Ignore);
+        if ImportConfigHeader."Use Separate Buffer Table" then
+            ImportConfigLine.SetFilter("Source Field No.", '<>0');
 
         if DMTImportSettings.UpdateFieldsFilter() <> '' then begin // Scope ProcessingPlan
-            FieldMapping.SetRange("Is Key Field(Target)", true);
+            ImportConfigLine.SetRange("Is Key Field(Target)", true);
             // Mark Key Fields
-            FieldMapping.FindSet();
+            ImportConfigLine.FindSet();
             repeat
-                FieldMapping.Mark(true);
-            until FieldMapping.Next() = 0;
+                ImportConfigLine.Mark(true);
+            until ImportConfigLine.Next() = 0;
 
             // Mark Selected Fields
-            FieldMapping.SetRange("Is Key Field(Target)");
-            FieldMapping.SetFilter("Target Field No.", DMTImportSettings.UpdateFieldsFilter());
-            FieldMapping.FindSet();
+            ImportConfigLine.SetRange("Is Key Field(Target)");
+            ImportConfigLine.SetFilter("Target Field No.", DMTImportSettings.UpdateFieldsFilter());
+            ImportConfigLine.FindSet();
             repeat
-                FieldMapping.Mark(true);
-            until FieldMapping.Next() = 0;
+                ImportConfigLine.Mark(true);
+            until ImportConfigLine.Next() = 0;
 
-            FieldMapping.SetRange("Target Field No.");
-            FieldMapping.MarkedOnly(true);
+            ImportConfigLine.SetRange("Target Field No.");
+            ImportConfigLine.MarkedOnly(true);
         end;
-        FieldMapping.CopyToTemp(TempFieldMapping);
+        ImportConfigLine.CopyToTemp(TempImportConfigLine);
         // Apply Processing Plan Settings
         if DMTImportSettings.ProcessingPlan()."Line No." <> 0 then begin
-            DMTImportSettings.ProcessingPlan().ConvertDefaultValuesViewToFieldLines(TempFieldMapping_ProcessingPlanSettings);
-            if TempFieldMapping_ProcessingPlanSettings.FindSet() then
+            DMTImportSettings.ProcessingPlan().ConvertDefaultValuesViewToFieldLines(TempImportConfigLine_ProcessingPlanSettings);
+            if TempImportConfigLine_ProcessingPlanSettings.FindSet() then
                 repeat
-                    TempFieldMapping.Get(TempFieldMapping_ProcessingPlanSettings.RecordId);
-                    TempFieldMapping := TempFieldMapping_ProcessingPlanSettings;
-                    TempFieldMapping.Modify();
-                until TempFieldMapping_ProcessingPlanSettings.Next() = 0;
+                    TempImportConfigLine.Get(TempImportConfigLine_ProcessingPlanSettings.RecordId);
+                    TempImportConfigLine := TempImportConfigLine_ProcessingPlanSettings;
+                    TempImportConfigLine.Modify();
+                until TempImportConfigLine_ProcessingPlanSettings.Next() = 0;
         end;
 
-        OK := TempFieldMapping.FindFirst();
-        DMTImportSettings.SetFieldMapping(TempFieldMapping);
+        OK := TempImportConfigLine.FindFirst();
+        DMTImportSettings.SetImportConfigLine(TempImportConfigLine);
     end;
 
     local procedure ProcessFullBuffer(var DMTImportSettings: Codeunit DMTImportSettings)
@@ -138,6 +138,7 @@ codeunit 73007 DMTMigrate
         BufferRef, BufferRef2 : RecordRef;
         Start: DateTime;
         ResultType: Enum DMTProcessingResultType;
+        NoBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filter: "%1"', comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"';
     begin
         Start := CurrentDateTime;
         APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
@@ -153,7 +154,7 @@ codeunit 73007 DMTMigrate
 
         //Prepare Progress Bar
         if not BufferRef.FindSet() then
-            Error(format(enum::DMTErrMsg::NoBufferTableRecorsInFilter), BufferRef.GetFilters);
+            Error(NoBufferTableRecorsInFilterErr, BufferRef.GetFilters);
 
         PrepareProgressBar(ProgressDialog, ImportConfigHeader, BufferRef);
         ProgressDialog.Open();
@@ -351,38 +352,33 @@ codeunit 73007 DMTMigrate
 
     procedure CheckMappedFieldsExist(ImportConfigHeader: Record DMTImportConfigHeader)
     var
-        ConfigLine: Record DMTImportConfigLine;
-        FieldMappingEmptyErr: Label 'No field mapping found for "%1"',
-                          comment = 'de-DE=Kein Feldmapping gefunden für "%1"';
+        ImportConfigLine: Record DMTImportConfigLine;
+        ImportConfigLineEmptyErr: Label 'No field mapping found for %1 "%2"',
+                          comment = 'de-DE=Kein Feldmapping gefunden für  %1 "%2"';
     begin
         // Key Fields Mapping Exists
-        ImportConfigHeader.FilterRelated(FieldMapping);
-        FieldMapping.SetFilter("Processing Action", '<>%1', FieldMapping."Processing Action"::Ignore);
-        FieldMapping.SetRange("Is Key Field(Target)", true);
-        FieldMapping.SetFilter("Source Field No.", '<>0');
+        ImportConfigHeader.FilterRelated(ImportConfigLine);
+        ImportConfigLine.SetFilter("Processing Action", '<>%1', ImportConfigLine."Processing Action"::Ignore);
+        ImportConfigLine.SetRange("Is Key Field(Target)", true);
+        ImportConfigLine.SetFilter("Source Field No.", '<>0');
 
         ImportConfigHeader.CalcFields("Target Table Caption");
-        if FieldMapping.IsEmpty then
-            Error(FieldMappingEmptyErr, ImportConfigHeader.FullImportConfigHeaderPath());
+        if ImportConfigLine.IsEmpty then
+            Error(ImportConfigLineEmptyErr, ImportConfigHeader.TableCaption, ImportConfigHeader.ID);
     end;
 
     procedure CheckBufferTableIsNotEmpty(ImportConfigHeader: Record DMTImportConfigHeader)
     var
         GenBuffTable: Record DMTGenBuffTable;
-        RecRef: RecordRef;
+        refHelper: Codeunit DMTRefHelper;
+        bufferTableEmptyErr: Label 'The buffer table is empty for %1:%2', Comment = 'de-DE=Die Puffertable entält keine Zeilen für %1:%2';
     begin
-        case ImportConfigHeader.BufferTableType of
-            ImportConfigHeader.BufferTableType::"Seperate Buffer Table per CSV":
-                begin
-                    RecRef.Open(ImportConfigHeader."Buffer Table ID");
-                    if RecRef.IsEmpty then
-                        Error('Tabelle "%1" (ID:%2) enthält keine Daten', RecRef.Caption, ImportConfigHeader."Buffer Table ID");
-                end;
-            ImportConfigHeader.BufferTableType::"Generic Buffer Table for all Files":
-                begin
-                    if not GenBuffTable.FilterBy(ImportConfigHeader) then
-                        Error('Für "%1" wurden keine importierten Daten gefunden', ImportConfigHeader.FullImportConfigHeaderPath());
-                end;
+        if ImportConfigHeader."Use Separate Buffer Table" then begin
+            if refHelper.IsTableEmpty(ImportConfigHeader."Buffer Table ID") then
+                Error(bufferTableEmptyErr, ImportConfigHeader.TableCaption, ImportConfigHeader.ID);
+        end else begin
+            if not GenBuffTable.FilterBy(ImportConfigHeader) then
+                Error(bufferTableEmptyErr, ImportConfigHeader.TableCaption, ImportConfigHeader.ID);
         end;
     end;
 
@@ -421,4 +417,28 @@ codeunit 73007 DMTMigrate
             end;
         end;
     end;
+
+    procedure AssignFieldWithoutValidate(var TargetRef: RecordRef; SourceRef: RecordRef; var importConfigLine: Record DMTImportConfigLine; DoModify: Boolean)
+    var
+        RefHelper: Codeunit DMTRefHelper;
+        FromField: FieldRef;
+        ToField: FieldRef;
+        EvaluateOptionValueAsNumber: Boolean;
+    begin
+        // Check - Don't copy from or to timestamp
+        if (importConfigLine."Source Field No." = 0) then Error('AssignFieldWithoutValidate: Invalid Paramter FromFieldNo = 0');
+        if (importConfigLine."Target Field No." = 0) then Error('AssignFieldWithoutValidate: Invalid Paramter ToFieldNo = 0');
+        EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRef.Number);
+        FromField := SourceRef.Field(importConfigLine."Source Field No.");
+        ToField := TargetRef.Field(importConfigLine."Target Field No.");
+        if ToField.Type = FromField.Type then
+            ToField.Value := FromField.Value
+        else
+            if not RefHelper.EvaluateFieldRef(ToField, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
+                Error('Evaluating "%1" into "%2" failed', FromField.Value, ToField.Caption);
+        // ApplyReplacements(ImportConfigLine, ToField);
+        if DoModify then
+            TargetRef.Modify();
+    end;
+
 }

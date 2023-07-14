@@ -51,7 +51,7 @@ table 91003 DMTImportConfigHeader
         field(53; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
         field(54; "Data Layout ID"; Integer) { Caption = 'Data Layout Code', Comment = 'de-DE=Datenlayout Code'; TableRelation = DMTDataLayout; }
         #endregion Import and Processing Options
-        field(100; SourceFileID; Integer) { Caption = 'Source File ID', Comment = 'de-DE=Quell-Datei ID'; TableRelation = DMTSourceFileStorage; }
+        field(100; "Source File ID"; Integer) { Caption = 'Source File ID', Comment = 'de-DE=Quell-Datei ID'; TableRelation = DMTSourceFileStorage; }
     }
 
     keys
@@ -62,7 +62,7 @@ table 91003 DMTImportConfigHeader
     trigger OnInsert()
     begin
         Rec.testfield("Data Layout ID");
-        Rec.TestField(SourceFileID);
+        Rec.TestField("Source File ID");
         Rec.ID := GetNextID();
     end;
 
@@ -94,7 +94,7 @@ table 91003 DMTImportConfigHeader
     var
         SourceFileStorage: Record DMTSourceFileStorage;
     begin
-        SourceFileStorage.Get(Rec.SourceFileID);
+        SourceFileStorage.Get(Rec."Source File ID");
         SourceFileStorage.TestField(Name);
         exit(SourceFileStorage.Name);
     end;
@@ -136,7 +136,6 @@ table 91003 DMTImportConfigHeader
         BufferTableMissingErr: Label 'Buffer Table %1 not found', Comment = 'de-DE=Eine Puffertabelle mit der ID %1 wurde nicht gefunden.';
     begin
         if not Rec."Use Separate Buffer Table" then begin
-            // GenBuffTable.InitFirstLineAsCaptions(DMTRec);
             GenBuffTable.FilterGroup(2);
             GenBuffTable.SetRange(IsCaptionLine, false);
             GenBuffTable.FilterBy(Rec);
@@ -148,5 +147,73 @@ table 91003 DMTImportConfigHeader
             BufferRef.Open(Rec."Buffer Table ID");
         end;
     end;
+
+    procedure LoadImportConfigLines(var TempImportConfigLine: Record DMTImportConfigLine temporary) OK: Boolean
+    var
+        ImportConfigLine: Record DMTImportConfigLine;
+    begin
+        Rec.FilterRelated(ImportConfigLine);
+        ImportConfigLine.SetFilter("Processing Action", '<>%1', ImportConfigLine."Processing Action"::Ignore);
+        if rec."Use Separate Buffer Table" then
+            ImportConfigLine.SetFilter("Source Field No.", '<>0');
+        ImportConfigLine.CopyToTemp(TempImportConfigLine);
+        OK := TempImportConfigLine.FindFirst();
+    end;
+
+    procedure GetDataLayout() DataLayout: Record DMTDataLayout
+    begin
+        Rec.TestField(Rec."Data Layout ID");
+        DataLayout.Get(Rec."Data Layout ID");
+    end;
+
+    procedure GetSourceFileStorage() SourceFileStorage: Record DMTSourceFileStorage
+    begin
+        Rec.TestField(Rec."Source File ID");
+        SourceFileStorage.Get(Rec."Source File ID");
+    end;
+
+    procedure ReadLastFieldUpdateSelection() LastFieldUpdateSelectionAsText: Text
+    var
+        IStr: InStream;
+    begin
+        Rec.CalcFields(LastUsedUpdateFieldsSelection);
+        if not Rec.LastUsedUpdateFieldsSelection.HasValue then exit('');
+        Rec.LastUsedUpdateFieldsSelection.CreateInStream(IStr);
+        IStr.ReadText(LastFieldUpdateSelectionAsText);
+    end;
+
+    procedure WriteLastFieldUpdateSelection(LastFieldUpdateSelectionAsText: Text)
+    var
+        OStr: OutStream;
+    begin
+        Clear(Rec.LastUsedUpdateFieldsSelection);
+        Rec.Modify();
+        Rec.LastUsedUpdateFieldsSelection.CreateOutStream(OStr);
+        OStr.WriteText(LastFieldUpdateSelectionAsText);
+        Rec.Modify();
+    end;
+
+    procedure ReadLastUsedSourceTableView() TableView: Text
+    var
+        IStr: InStream;
+    begin
+        Rec.CalcFields(LastUsedFilter);
+        if not Rec.LastUsedFilter.HasValue then exit('');
+        Rec.LastUsedFilter.CreateInStream(IStr);
+        IStr.ReadText(TableView);
+    end;
+
+    procedure WriteSourceTableView(TableView: Text)
+    var
+        OStr: OutStream;
+    begin
+        Clear(Rec.LastUsedFilter);
+        Rec.Modify();
+        Rec.LastUsedFilter.CreateOutStream(OStr);
+        OStr.WriteText(TableView);
+        Rec.Modify();
+    end;
+
+
 
 }

@@ -43,9 +43,6 @@ table 91006 DMTImportConfigLine
             trigger OnValidate()
             begin
                 UpdateSourceFieldCaptionAndProcessingAction(Rec.FieldNo("Source Field No."));
-                // if CurrFieldNo = Rec.FieldNo("Source Field No.") then
-                //     UpdateSourceFieldCaption();
-                // UpdateProcessingAction(Rec.FieldNo("Source Field No."));
             end;
         }
         field(21; "Source Field Caption"; Text[80]) { Caption = 'Source Field Caption', comment = 'de-DE=Herkunftsfeld Bezeichnung'; Editable = false; }
@@ -77,6 +74,16 @@ table 91006 DMTImportConfigLine
             end;
         }
         field(102; "Validation Order"; Integer) { Caption = 'Validation Order', comment = 'Reihenfolge Validierung'; }
+        #region SelectMulipleFields
+        field(200; "Search Target Field Caption"; Text[80])
+        {
+            Description = 'Searchable field';
+            Caption = 'Target Field Caption', comment = 'de-DE=Zielfeld Bezeichnung';
+            Editable = false;
+        }
+        field(201; Selection; Boolean) { Caption = 'Selection', Comment = 'Auswahl'; }
+
+        #endregion SelectMulipleFields
 
 
     }

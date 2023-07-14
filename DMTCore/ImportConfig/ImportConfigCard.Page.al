@@ -17,7 +17,7 @@ page 91008 DMTImportConfigCard
                 Caption = 'General', Comment = 'de-DE=Allgemein';
 
                 field(ID; Rec.ID) { Visible = false; }
-                field(SourceFileID; Rec.SourceFileID) { ShowMandatory = true; }
+                field(SourceFileID; Rec."Source File ID") { ShowMandatory = true; }
                 field("Data Layout Code"; Rec."Data Layout ID")
                 {
                     ShowMandatory = true;
@@ -67,14 +67,12 @@ page 91008 DMTImportConfigCard
                 PromotedCategory = Process;
                 trigger OnAction()
                 var
-                    dataLayout: Record DMTDataLayout;
                     Log: Codeunit DMTLog;
                     Start: DateTime;
                     SourceFileImport: Interface ISourceFileImport;
                 begin
                     Start := CurrentDateTime;
-                    dataLayout.Get(Rec."Data Layout ID");
-                    SourceFileImport := dataLayout.SourceFileFormat;
+                    SourceFileImport := Rec.GetDataLayout().SourceFileFormat;
                     SourceFileImport.ImportToBufferTable(Rec);
                     Log.AddImportToBufferSummary(Rec, CurrentDateTime - Start);
                 end;
@@ -210,10 +208,10 @@ page 91008 DMTImportConfigCard
                 Image = XMLSetup;
                 Caption = 'Create XMLPort', comment = 'de-DE=XMLPort erstellen';
 
-                // trigger OnAction()
-                // begin
-                //     PageActions.DownloadALXMLPort(Rec);
-                // end;
+                trigger OnAction()
+                begin
+                    //     PageActions.DownloadALXMLPort(Rec);
+                end;
             }
             action(CreateBufferTable)
             {
@@ -221,10 +219,10 @@ page 91008 DMTImportConfigCard
                 Image = Table;
                 Caption = 'Create Buffer Table', comment = 'de-DE=Puffertabelle erstellen';
 
-                // trigger OnAction()
-                // begin
-                //     PageActions.DownloadALBufferTableFile(Rec);
-                // end;
+                trigger OnAction()
+                begin
+                    //     PageActions.DownloadALBufferTableFile(Rec);
+                end;
             }
             action(CheckTransferedRecords)
             {

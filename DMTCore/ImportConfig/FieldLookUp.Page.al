@@ -47,40 +47,12 @@ page 91012 DMTFieldLookup
                     DataLayoutLine.SetRange("Data Layout ID", DataLayout.ID);
                     DataLayoutLine.CopyToTemp(TempDataLayoutLine);
                     Rec.Copy(TempDataLayoutLine, true);
+                    IsLoaded := true;
                 end;
             else
                 Error('unhandled case');
         end;
         Rec.FilterGroup(0);
-
-
-        // case ImportConfigHeader.BufferTableType of
-        //     ImportConfigHeader.BufferTableType::"Generic Buffer Table for all Files":
-        //         begin
-        //             GenBuffTable.GetColCaptionForImportedFile(ImportConfigHeader, BuffTableCaptions);
-        //             foreach FieldNo in BuffTableCaptions.Keys do begin
-        //                 TempFieldBuffer.TableNo := GenBuffTable.RecordId.TableNo;
-        //                 TempFieldBuffer."No." := FieldNo + 1000;
-        //                 TempFieldBuffer."Field Caption" := CopyStr(BuffTableCaptions.Get(FieldNo), 1, MaxStrLen(TempFieldBuffer."Field Caption"));
-        //                 TempFieldBuffer.Insert();
-        //             end;
-        //             IsLoaded := true;
-        //         end;
-
-        //     ImportConfigHeader.BufferTableType::"Seperate Buffer Table per CSV":
-        //         begin
-        //             Field.SetRange(TableNo, ImportConfigHeader."Buffer Table ID");
-        //             Field.SetFilter("No.", '<2000000000'); // no system fields
-        //             Field.FindSet(false, false);
-        //             repeat
-        //                 TempFieldBuffer.ReadFrom(Field);
-        //                 TempFieldBuffer.Insert(false);
-        //             until Field.Next() = 0;
-        //             IsLoaded := true;
-        //         end;
-        // end;
-
-        // Rec.Copy(TempFieldBuffer, true);
     end;
 
     var

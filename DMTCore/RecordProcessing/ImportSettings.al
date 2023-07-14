@@ -10,16 +10,16 @@ codeunit 91010 DMTImportSettings
         exit(SourceTableViewGlobal);
     end;
 
-    procedure SetFieldMapping(var TempImportConfigLine: Record DMTImportConfigLine temporary)
+    procedure SetImportConfigLine(var TempImportConfigLine: Record DMTImportConfigLine temporary)
     begin
-        TempFieldMappingGlobal.Copy(TempImportConfigLine, true);
+        TempImportConfigLineGlobal.Copy(TempImportConfigLine, true);
     end;
 
-    procedure GetFieldMapping(var TempImportConfigLine: Record DMTImportConfigLine temporary)
+    procedure GetImportConfigLine(var TempImportConfigLine: Record DMTImportConfigLine temporary)
     begin
-        if TempFieldMappingGlobal.IsEmpty then
-            Error('FieldMapping empty');
-        TempImportConfigLine.Copy(TempFieldMappingGlobal, true);
+        if TempImportConfigLineGlobal.IsEmpty then
+            Error('ImportConfigLine empty');
+        TempImportConfigLine.Copy(TempImportConfigLineGlobal, true);
     end;
 
     procedure NoUserInteraction(NoUserInteractionNew: Boolean)
@@ -94,7 +94,7 @@ codeunit 91010 DMTImportSettings
     end;
 
     var
-        TempFieldMappingGlobal: Record DMTFieldMapping temporary;
+        TempImportConfigLineGlobal: Record DMTImportConfigLine temporary;
         ImportConfigHeaderGlobal: Record DMTImportConfigHeader;
         ProcessingPlanGlobal: Record DMTProcessingPlan;
         SourceTableViewGlobal, UpdateFieldsFilterGlobal : Text;

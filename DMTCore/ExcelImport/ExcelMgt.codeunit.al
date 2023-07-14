@@ -11,7 +11,7 @@ codeunit 91005 DMTExcelMgt implements ISourceFileImport
         if GenBuffTable.FilterBy(ImportConfigHeader) then
             GenBuffTable.DeleteAll();
         // Read File Blob
-        SourceFileStorage.get(ImportConfigHeader.SourceFileID);
+        SourceFileStorage.get(ImportConfigHeader."Source File ID");
         SourceFileStorage.TestField(Name);
         SourceFileStorage.CalcFields("File Blob");
         SourceFileStorage."File Blob".CreateInStream(IStr);
@@ -37,11 +37,7 @@ codeunit 91005 DMTExcelMgt implements ISourceFileImport
         genBuffTable."Entry No." := NextEntryNo;
         genBuffTable.IsCaptionLine := IsColumnCaptionLine;
         for CurrColIndex := 1 to LastExcelColNo do begin
-            // if MaxColCount < (CurrColIndex - 1000) then
-            // MaxColCount := (CurrColIndex - 1000);
             RecRef.GetTable(GenBuffTable);
-            // RecRef.Field(GenBuffTable.FieldNo("Import from Filename")).Value := CopyStr(CurrFileName, 1, MaxStrLen(GenBuffTable."Import from Filename"));
-            // RecRef.Field(GenBuffTable.FieldNo("Source ID")).Value := CurrImportConfigHeader.RecordId;
             RecRef.Field(1000 + CurrColIndex).Value := GetCellValueAsText(xl_LineNo, CurrColIndex, tempExcelBufferGlobal);
             RecRef.SetTable(GenBuffTable);
         end;
@@ -87,16 +83,6 @@ codeunit 91005 DMTExcelMgt implements ISourceFileImport
     begin
         exit(FileNameGlobal);
     end;
-
-    // local procedure ImportFileToBuffer()
-    // var
-    //     xl_LineNo: Integer;
-    // begin
-    //     LastExcelLineNo := GetLastRowNo_ExcelSheet(tempExcelBuffer_Leads);
-    //     LastExcelColNo := GetLastColumnNo_ExcelSheet(tempExcelBuffer_Leads);
-    //     for xl_LineNo := 2 to LastExcelLineNo do
-    //         ImportLine(xl_LineNo);
-    // end;
 
     local procedure ReadHeaderLine(xl_RowNo: Integer; var tempExcelBuff: Record "Excel Buffer" temporary) HeaderLine: Dictionary of [Text, Integer]
     var

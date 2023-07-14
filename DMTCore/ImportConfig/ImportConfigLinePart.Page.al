@@ -107,7 +107,6 @@ page 91009 DMTImportConfigLinePart
                 {
                     ApplicationArea = All;
                     Caption = 'Up', Comment = 'de-DE=Oben';
-                    // Scope = Repeater;
                     Image = MoveUp;
                     trigger OnAction()
                     var
@@ -121,7 +120,6 @@ page 91009 DMTImportConfigLinePart
                 {
                     ApplicationArea = All;
                     Caption = 'Down', Comment = 'de-DE=Unten';
-                    // Scope = Repeater;
                     Image = MoveDown;
                     trigger OnAction()
                     var
@@ -135,7 +133,6 @@ page 91009 DMTImportConfigLinePart
                 {
                     ApplicationArea = All;
                     Caption = 'Top', Comment = 'de-DE=Anfang';
-                    // Scope = Repeater;
                     Image = ChangeTo;
                     trigger OnAction()
                     var
@@ -149,7 +146,6 @@ page 91009 DMTImportConfigLinePart
                 {
                     ApplicationArea = All;
                     Caption = 'Bottom', Comment = 'de-DE=Ende';
-                    // Scope = Repeater;
                     Image = Apply;
                     trigger OnAction()
                     var
