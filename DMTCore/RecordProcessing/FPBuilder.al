@@ -40,7 +40,7 @@ codeunit 91012 DMTFPBuilder
     begin
         case true of
             // If Generic Buffer is Source
-            (ImportConfigHeader.ID <> 0) and ImportConfigHeader."Use Separate Buffer Table" and (ImportConfigHeader.FilterRelated(ImportConfigLine)):
+            (ImportConfigHeader.ID <> 0) and not ImportConfigHeader."Use Separate Buffer Table" and (ImportConfigHeader.FilterRelated(ImportConfigLine)):
                 begin
                     // Init Captions
                     if GenBuffTable.FilterBy(ImportConfigHeader) then

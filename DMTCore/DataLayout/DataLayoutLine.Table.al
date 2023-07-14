@@ -7,19 +7,19 @@ table 91005 DMTDataLayoutLine
     {
         field(1; "Data Layout ID"; Integer) { Caption = 'File ID'; }
         field(2; "Column No."; Integer) { Caption = 'Column No.', Comment = 'de-DE=Spaltennr.'; }
-        field(10; ColumnName; Text[50]) { Caption = 'Column Name'; }
+        field(10; ColumnName; Text[50]) { Caption = 'Column Name''de-DE=Spaltenname'; }
         field(11; DataType; Option)
         {
-            Caption = 'Data Type';
+            Caption = 'Data Type', comment = 'de-DE=Datentyp';
             OptionMembers = Text,Date,Time,DateTime,Decimal,Boolean,Integer,GUID,BLOB;
         }
         #region NAVFieldInformation
         field(20; NAVDataType; Option)
         {
-            Caption = 'Data Type';
+            Caption = 'Data Type', comment = 'de-DE=NAV Datentyp';
             OptionMembers = TableFilter,RecordID,Text,Date,Time,DateFormula,Decimal,Binary,BLOB,Boolean,Integer,Code,Option,BigInteger,Duration,GUID,DateTime;
         }
-        field(21; NAVLen; Integer) { Caption = 'Len', Locked = true; }
+        field(21; NAVLen; Integer) { Caption = 'Len', comment = 'de-DE=NAV Len', Locked = true; }
         field(22; NAVClass; Option)
         {
             Caption = 'Class', locked = true;

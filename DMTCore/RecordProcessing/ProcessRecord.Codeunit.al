@@ -28,7 +28,7 @@ codeunit 91008 DMTProcessRecord
         FieldWithTypeCorrectValueToValidate, TargetField : FieldRef;
         SourceField: FieldRef;
     begin
-        SourceField := SourceRef.Field(TempImportConfigLine."Source Field No.");
+        SourceField := SourceRef.Field(TempImportConfigLine."Source Field No." + GenBufferFieldNoOffSet);
         TargetField := TmpTargetRef.Field(TempImportConfigLine."Target Field No.");
         AssignValueToFieldRef(SourceRef, TempImportConfigLine, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
 
@@ -58,9 +58,8 @@ codeunit 91008 DMTProcessRecord
     var
         FromField: FieldRef;
         EvaluateOptionValueAsNumber: Boolean;
-        RefHelper: Codeunit DMTRefHelper;
     begin
-        FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
+        FromField := SourceRecRef.Field(ImportConfigLine."Source Field No." + GenBufferFieldNoOffSet);
         EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRecRef.Number);
         FieldWithTypeCorrectValueToValidate := TargetRecRef.Field(ImportConfigLine."Target Field No.");
 
@@ -145,6 +144,8 @@ codeunit 91008 DMTProcessRecord
         RunMode := RunMode::FieldTransfer;
         Clear(ErrorLogDict);
         ReplacementsMgt.InitFor(ImportConfigHeader, _SourceRef, ImportConfigHeader."Target Table ID");
+        if not ImportConfigHeader."Use Separate Buffer Table" then
+            GenBufferFieldNoOffSet := 1000;
     end;
 
     procedure InitInsert()
@@ -262,5 +263,6 @@ codeunit 91008 DMTProcessRecord
         TargetKeyFieldIDs: List of [Integer];
         ProcessedFields: List of [RecordId];
         RunMode: Option FieldTransfer,InsertRecord,ModifyRecord;
+        GenBufferFieldNoOffSet: Integer;
 
 }

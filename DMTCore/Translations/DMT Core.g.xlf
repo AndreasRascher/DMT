@@ -44,7 +44,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field Column No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2231340739 - Field 967337907 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Column Name</source>
+          <source>Column Name'de-DE=Spaltenname</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field ColumnName - Property Caption</note>
         </trans-unit>
@@ -55,12 +55,12 @@
         </trans-unit>
         <trans-unit id="Table 2231340739 - Field 4065219740 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Type</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Datentyp</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field DataType - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2231340739 - Field 1820164459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Type</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=NAV Datentyp</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field NAVDataType - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Method 777108172 - NamedType 2038427244" size-unit="char" translate="yes" xml:space="preserve">
@@ -1852,6 +1852,11 @@
           <source>No. of Records..\processed: %1\imported: %2\With Error: %3\Processing Time:%4</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Anzahl Datensätze..\verarbeitet: %1\eingelesen : %2\mit Fehlern: %3\Verarbeitungsdauer: %4</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method ShowResultDialog - NamedType ResultMsg</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1862996940 - Method 1551467728 - NamedType 1980850096" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 %2%3</source>
+          <note from="Developer" annotates="general" priority="2">%1 = First Half of Progress Bar; %2 Percentage Text; %3 Second Half of Progress Bar </note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProgressDialog - Method ProgressBar - NamedType ProgressBarTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 1536080462 - Method 1564743796 - NamedType 3980904368" size-unit="char" translate="yes" xml:space="preserve">
           <source>"%1" is not a valid %2 value.</source>
