@@ -13,7 +13,7 @@ page 91011 DMTDataLayoutCard
             group(General)
             {
                 Caption = 'General', Comment = 'de-De=Allgemein';
-                field(ID; Rec.ID) { }
+                field(ID; Rec.ID) { Visible = false; }
                 field(Name; Rec.Name) { }
                 field(SourceFileFormat; Rec.SourceFileFormat)
                 {

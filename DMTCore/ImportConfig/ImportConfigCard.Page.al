@@ -58,7 +58,7 @@ page 91008 DMTImportConfigCard
         {
             action(ImportBufferDataFromFile)
             {
-                Caption = 'Import to Buffer Table', Comment = 'Import in Puffertabelle';
+                Caption = 'Import to Buffer Table', Comment = 'de-DE=Import in Puffertabelle';
                 ApplicationArea = All;
                 Image = Import;
                 Promoted = true;
@@ -166,8 +166,10 @@ page 91008 DMTImportConfigCard
                 PromotedCategory = Process;
 
                 trigger OnAction()
+                var
+                    importConfigMgt: Codeunit DMTImportConfigMgt;
                 begin
-                    // PageActions.UpdateFields(Rec);
+                    importConfigMgt.PageAction_UpdateFields(Rec);
                 end;
             }
             action(RetryBufferRecordsWithError)
@@ -181,8 +183,10 @@ page 91008 DMTImportConfigCard
                 PromotedCategory = Process;
 
                 trigger OnAction()
+                var
+                    importConfigMgt: Codeunit DMTImportConfigMgt;
                 begin
-                    // PageActions.RetryBufferRecordsWithError(Rec);
+                    importConfigMgt.PageAction_RetryBufferRecordsWithError(Rec);
                 end;
             }
             action(OpenLog)
@@ -230,18 +234,18 @@ page 91008 DMTImportConfigCard
                 Image = Table;
                 Caption = 'Check Transfered Records', comment = 'de-DE=Übertragene Datensätze Prüfen';
 
-                // trigger OnAction()
-                // var
-                //     Migrate: Codeunit DMTMigrate;
-                //     CollationProblems: Dictionary of [RecordId, RecordId];
-                //     RecordMapping: Dictionary of [RecordId, RecordId];
-                //     NotTransferedRecords: List of [RecordId];
-                // begin
-                //     // RecordMapping := DMTImport.CreateSourceToTargetRecIDMapping(Rec, NotTransferedRecords);
-                //     CollationProblems := Migrate.FindCollationProblems(RecordMapping);
-                //     Message('No. of Records not Transfered: %1\' +
-                //             'No. of Collation Problems: %2', NotTransferedRecords.Count, CollationProblems.Count);
-                // end;
+                trigger OnAction()
+                var
+                    Migrate: Codeunit DMTMigrate;
+                    CollationProblems: Dictionary of [RecordId, RecordId];
+                    RecordMapping: Dictionary of [RecordId, RecordId];
+                    NotTransferedRecords: List of [RecordId];
+                begin
+                    // RecordMapping := DMTImport.CreateSourceToTargetRecIDMapping(Rec, NotTransferedRecords);
+                    CollationProblems := Migrate.FindCollationProblems(RecordMapping);
+                    Message('No. of Records not Transfered: %1\' +
+                            'No. of Collation Problems: %2', NotTransferedRecords.Count, CollationProblems.Count);
+                end;
             }
             action(CreateCode)
             {

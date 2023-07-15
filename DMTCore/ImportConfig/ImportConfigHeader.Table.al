@@ -50,6 +50,13 @@ table 91003 DMTImportConfigHeader
         field(52; "Use OnInsert Trigger"; Boolean) { Caption = 'Use OnInsert Trigger', Comment = 'de-DE=OnInsert Trigger verwenden'; InitValue = true; }
         field(53; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
         field(54; "Data Layout ID"; Integer) { Caption = 'Data Layout Code', Comment = 'de-DE=Datenlayout Code'; TableRelation = DMTDataLayout; }
+        field(55; "Source File Name"; Text[250])
+        {
+            Caption = 'Source File Name', Comment = 'de-DE=Quelldatei';
+            FieldClass = FlowField;
+            CalcFormula = lookup(DMTSourceFileStorage.Name where("File ID" = field("Source File ID")));
+            Editable = false;
+        }
         #endregion Import and Processing Options
         field(100; "Source File ID"; Integer) { Caption = 'Source File ID', Comment = 'de-DE=Quell-Datei ID'; TableRelation = DMTSourceFileStorage; }
     }

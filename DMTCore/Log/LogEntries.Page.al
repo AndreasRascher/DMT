@@ -1,6 +1,6 @@
 page 91013 "DMTLogEntries"
 {
-    Caption = 'DMT Log Entries';
+    Caption = 'DMT Log Entries', comment = 'de=DE=DMT Protokollposten';
     DeleteAllowed = false;
     Editable = false;
     InsertAllowed = false;
@@ -47,7 +47,7 @@ page 91013 "DMTLogEntries"
         {
             action(HideIgnored)
             {
-                Caption = 'Hide ignored Errors', comment = 'Ignorierte Fehler ausblenden';
+                Caption = 'Hide ignored Errors', comment = 'de-DE=Ignorierte Fehler ausblenden';
                 ApplicationArea = All;
                 Image = ShowList;
                 Promoted = true;
@@ -64,7 +64,7 @@ page 91013 "DMTLogEntries"
             }
             action(ShowIgnored)
             {
-                Caption = 'Show ignored Errors', comment = 'Ignorierte Fehler anzeigen';
+                Caption = 'Show ignored Errors', comment = 'de-DE=Ignorierte Fehler anzeigen';
                 ApplicationArea = All;
                 Image = ShowList;
                 Promoted = true;
@@ -81,7 +81,7 @@ page 91013 "DMTLogEntries"
             }
             action(DeleteFilteredLines)
             {
-                Caption = 'Delete filtered lines', Comment = 'Gefilterte Zeilen löschen';
+                Caption = 'Delete filtered lines', Comment = 'de-DE=Gefilterte Zeilen löschen';
                 ApplicationArea = All;
                 Image = Delete;
                 Promoted = true;

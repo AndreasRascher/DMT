@@ -6,7 +6,7 @@ query 91001 DMTLogQry
     {
         dataitem(DataItemName; DMTLogEntry)
         {
-            column(ImportConfigHeaderName; SourceFileName) { }
+            column(SourceFileName; SourceFileName) { }
             column(QtyRecordID) { Method = Count; }
             column(SourceID; "Source ID") { }
         }

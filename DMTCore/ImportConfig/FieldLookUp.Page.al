@@ -1,6 +1,6 @@
 page 91012 DMTFieldLookup
 {
-    Caption = 'Fields', comment = 'Felder';
+    Caption = 'Fields', comment = 'de-DE=Felder';
     PageType = List;
     UsageCategory = None;
     SourceTable = DMTDataLayoutLine;
@@ -14,7 +14,6 @@ page 91012 DMTFieldLookup
             {
                 field(Caption; Rec.NAVFieldCaption) { ApplicationArea = All; }
                 field(Name; Rec.ColumnName) { ApplicationArea = All; }
-
             }
         }
     }

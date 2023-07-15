@@ -14,7 +14,7 @@ page 91016 DMTProcessInstructionFactBox
         {
             repeater(FilterList)
             {
-                Caption = 'Filter', Comment = 'Filter';
+                Caption = 'Filter', Comment = 'de-DE=Filter';
                 Visible = IsSourceTableFilterView;
                 field(FieldCaption; Rec."Source Field Caption") { ApplicationArea = All; }
                 // field(FilterValue; Rec.Comment) { ApplicationArea = All; }

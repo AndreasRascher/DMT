@@ -14,6 +14,9 @@
 		{
 			"path": "DMTOnPrem",
 			"name": "APP OnPrem"
+		},
+		{
+			"path": "DMTCodeGenerator"
 		}
 	],
 	"settings": {

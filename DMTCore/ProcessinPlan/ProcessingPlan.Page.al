@@ -201,7 +201,7 @@ page 91017 DMTProcessingPlan
             }
             action(XMLExport)
             {
-                Caption = 'Create Backup', Comment = 'Backup erstellen';
+                Caption = 'Create Backup', Comment = 'de-DE=Backup erstellen';
                 ApplicationArea = All;
                 Image = CreateXMLFile;
 
@@ -218,7 +218,7 @@ page 91017 DMTProcessingPlan
             }
             action(XMLImport)
             {
-                Caption = 'Import Backup', Comment = 'Backup importieren';
+                Caption = 'Import Backup', Comment = 'de-DE=Backup importieren';
                 ApplicationArea = All;
                 Image = ImportCodes;
                 // Promoted = true;
