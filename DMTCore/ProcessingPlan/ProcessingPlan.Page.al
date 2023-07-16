@@ -78,7 +78,7 @@ page 91017 DMTProcessingPlan
         {
             action(Start)
             {
-                Caption = 'Start', comment = 'de-DE=Ausführen';
+                Caption = 'Start', Comment = 'de-DE=Ausführen';
                 ApplicationArea = All;
                 Image = Start;
                 // Promoted = true;
@@ -110,12 +110,12 @@ page 91017 DMTProcessingPlan
                     // find line before current rec
                     LineBefore := Rec;
                     if LineBefore.Next(-1) <> -1 then
-                        clear(LineBefore);
+                        Clear(LineBefore);
 
                     // find line no after current rec
                     Line := Rec;
                     if Line.Next(1) <> 1 then
-                        clear(Line);
+                        Clear(Line);
                     NextLineNo := Line."Line No.";
                     case true of
                         // Rec is last line oder first line
@@ -152,7 +152,7 @@ page 91017 DMTProcessingPlan
             }
             action(IndentLeft)
             {
-                Caption = 'Indent Left', comment = 'de-DE=Links einrücken';
+                Caption = 'Indent Left', Comment = 'de-DE=Links einrücken';
                 ApplicationArea = All;
                 Image = DecreaseIndent;
 
@@ -165,7 +165,7 @@ page 91017 DMTProcessingPlan
             }
             action(IndentRight)
             {
-                Caption = 'Indent Right', comment = 'de-DE=Rechts einrücken';
+                Caption = 'Indent Right', Comment = 'de-DE=Rechts einrücken';
                 ApplicationArea = All;
                 Image = Indent;
 
@@ -178,7 +178,7 @@ page 91017 DMTProcessingPlan
             }
             action(ResetLinesAction)
             {
-                Caption = 'Reset Lines', comment = 'de-DE=Zeilen zurücksetzen';
+                Caption = 'Reset Lines', Comment = 'de-DE=Zeilen zurücksetzen';
                 ApplicationArea = All;
                 Image = Restore;
 
@@ -191,7 +191,7 @@ page 91017 DMTProcessingPlan
             }
             action(RenumberLinesAction)
             {
-                Caption = 'Renumber Lines', comment = 'de-DE=Zeilen neu nummerieren';
+                Caption = 'Renumber Lines', Comment = 'de-DE=Zeilen neu nummerieren';
                 ApplicationArea = All;
                 Image = NumberGroup;
                 trigger OnAction()

@@ -103,7 +103,7 @@ page 91008 DMTImportConfigCard
                     FPBuilder: Codeunit DMTFPBuilder;
                     RecRef: RecordRef;
                     TargetTableView, TargetTableFilter : Text;
-                    NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
+                    NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', Comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
                 begin
                     RecRef.Open(Rec."Target Table ID");
                     if TargetTableView <> '' then
@@ -124,7 +124,7 @@ page 91008 DMTImportConfigCard
                 var
                     FPBuilder: Codeunit DMTFPBuilder;
                     RecRef: RecordRef;
-                    NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
+                    NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', Comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
                     TargetTableFilter, TargetTableView : Text;
                 begin
                     Rec.InitBufferRef(RecRef);
@@ -210,7 +210,7 @@ page 91008 DMTImportConfigCard
             {
                 ApplicationArea = All;
                 Image = XMLSetup;
-                Caption = 'Create XMLPort', comment = 'de-DE=XMLPort erstellen';
+                Caption = 'Create XMLPort', Comment = 'de-DE=XMLPort erstellen';
 
                 trigger OnAction()
                 begin
@@ -221,7 +221,7 @@ page 91008 DMTImportConfigCard
             {
                 ApplicationArea = All;
                 Image = Table;
-                Caption = 'Create Buffer Table', comment = 'de-DE=Puffertabelle erstellen';
+                Caption = 'Create Buffer Table', Comment = 'de-DE=Puffertabelle erstellen';
 
                 trigger OnAction()
                 begin
@@ -232,7 +232,7 @@ page 91008 DMTImportConfigCard
             {
                 ApplicationArea = All;
                 Image = Table;
-                Caption = 'Check Transfered Records', comment = 'de-DE=Übertragene Datensätze Prüfen';
+                Caption = 'Check Transfered Records', Comment = 'de-DE=Übertragene Datensätze Prüfen';
 
                 trigger OnAction()
                 var
@@ -249,7 +249,7 @@ page 91008 DMTImportConfigCard
             }
             action(CreateCode)
             {
-                Caption = 'Create AL Mapping Code', comment = 'de-DE=Mapping AL Code erstellen';
+                Caption = 'Create AL Mapping Code', Comment = 'de-DE=Mapping AL Code erstellen';
                 ApplicationArea = All;
                 Image = CodesList;
                 // trigger OnAction()

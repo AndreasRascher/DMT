@@ -199,9 +199,9 @@ page 91019 DMTReplacementAssigmentsPart
     var
         replacementHeader: Record DMTReplacement;
     begin
-        rec.TestField(LineType, rec.LineType::Assignment);
+        Rec.TestField(LineType, Rec.LineType::Assignment);
 
-        replacementHeader.Get(rec.LineType::Header, Rec."Replacement Code", 0);
+        replacementHeader.Get(Rec.LineType::Header, Rec."Replacement Code", 0);
         if replacementHeader."No. of Compare Values" = replacementHeader."No. of Values to modify" then begin
             case replacementHeader."No. of Compare Values" of
                 replacementHeader."No. of Compare Values"::"1":

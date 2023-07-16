@@ -20,31 +20,32 @@ page 91009 DMTImportConfigLinePart
             repeater(LineRepeater)
             {
                 Editable = HasDataLayoutAssigned;
-                field("Processing Action"; Rec."Processing Action") { ApplicationArea = All; }
-                field("To Field No."; Rec."Target Field No.") { Visible = false; ApplicationArea = All; Editable = false; }
-                field("To Field Caption"; Rec."Target Field Caption") { ApplicationArea = All; StyleExpr = LineStyleExpr; Editable = false; }
+                field("Processing Action"; Rec."Processing Action") { }
+                field("To Field No."; Rec."Target Field No.") { Visible = false; Editable = false; }
+                field("To Field Caption"; Rec."Target Field Caption") { StyleExpr = LineStyleExpr; Editable = false; }
                 field("From Field Caption"; Rec."Source Field Caption")
                 {
                     HideValue = IsFixedValue;
-                    ApplicationArea = All;
                     StyleExpr = LineStyleExpr;
                 }
                 field("Target Field Name"; Rec."Target Field Name")
                 {
                     Visible = false;
-                    ApplicationArea = All;
                     StyleExpr = LineStyleExpr;
                 }
                 field("From Field No."; Rec."Source Field No.")
                 {
                     LookupPageId = DMTFieldLookup;
                     HideValue = IsFixedValue;
-                    ApplicationArea = All;
                 }
-                field("Ignore Validation Error"; Rec."Ignore Validation Error") { ApplicationArea = All; }
-                field("Validation Type"; Rec."Validation Type") { ApplicationArea = All; }
-                field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
-                field(ValidationOrder; Rec."Validation Order") { ApplicationArea = All; Visible = false; }
+                field("Ignore Validation Error"; Rec."Ignore Validation Error")
+                {
+                    ToolTip = 'Ingore occuring field error and import data',
+                    Comment = 'de-DE=VerarbeitungsfehlerDaten importieren auch';
+                }
+                field("Validation Type"; Rec."Validation Type") { }
+                field("Fixed Value"; Rec."Fixed Value") { }
+                field(ValidationOrder; Rec."Validation Order") { Visible = false; }
             }
         }
     }
@@ -55,7 +56,7 @@ page 91009 DMTImportConfigLinePart
         {
             action(InitTargetFields)
             {
-                Caption = 'Init Target Fields', comment = 'de-DE=Feldliste initialisieren';
+                Caption = 'Init Target Fields', Comment = 'de-DE=Feldliste initialisieren';
                 ApplicationArea = All;
                 Image = SuggestField;
                 trigger OnAction()
@@ -65,7 +66,7 @@ page 91009 DMTImportConfigLinePart
             }
             action(ProposeMatchingFields)
             {
-                Caption = 'Popose Matching Fields', comment = 'de-DE=Feldzuordnung vorschlagen';
+                Caption = 'Popose Matching Fields', Comment = 'de-DE=Feldzuordnung vorschlagen';
                 ApplicationArea = All;
                 Image = SuggestField;
                 trigger OnAction()
@@ -79,7 +80,6 @@ page 91009 DMTImportConfigLinePart
                 action(ImportConfigLine_SetValidateFieldToAlways)
                 {
                     Caption = 'Set Field Validate to always', Comment = 'de-DE=Validierungsart auf Immer setzen';
-                    ApplicationArea = All;
                     Image = SetupLines;
                     trigger OnAction()
                     begin
@@ -90,7 +90,6 @@ page 91009 DMTImportConfigLinePart
                 action(DMTField_SetValidateFieldToFalse)
                 {
                     Caption = 'Set Validation Type to assign without validate', Comment = 'de-DE=Validierungsart auf Zuweisen ohne validieren setzen';
-                    ApplicationArea = All;
                     Image = SetupLines;
                     trigger OnAction()
                     begin
@@ -105,7 +104,6 @@ page 91009 DMTImportConfigLinePart
                 Caption = 'Change Validation Order', Comment = 'de-DE=Validierungsreihenfolge ändern';
                 action(MoveSelectedUp)
                 {
-                    ApplicationArea = All;
                     Caption = 'Up', Comment = 'de-DE=Oben';
                     Image = MoveUp;
                     trigger OnAction()
@@ -118,7 +116,6 @@ page 91009 DMTImportConfigLinePart
                 }
                 action(MoveSelectedDown)
                 {
-                    ApplicationArea = All;
                     Caption = 'Down', Comment = 'de-DE=Unten';
                     Image = MoveDown;
                     trigger OnAction()
@@ -131,7 +128,6 @@ page 91009 DMTImportConfigLinePart
                 }
                 action(MoveSelectedToTop)
                 {
-                    ApplicationArea = All;
                     Caption = 'Top', Comment = 'de-DE=Anfang';
                     Image = ChangeTo;
                     trigger OnAction()
@@ -144,7 +140,6 @@ page 91009 DMTImportConfigLinePart
                 }
                 action(MoveSelectedToEnd)
                 {
-                    ApplicationArea = All;
                     Caption = 'Bottom', Comment = 'de-DE=Ende';
                     Image = Apply;
                     trigger OnAction()
@@ -182,6 +177,18 @@ page 91009 DMTImportConfigLinePart
         Debug := ImportConfigLine.Count;
         ImportConfigLine.CopyToTemp(ImportConfigLine_SELECTED);
         HasLines := ImportConfigLine_SELECTED.FindFirst();
+    end;
+
+    trigger OnAfterGetRecord()
+    var
+        Log: Codeunit DMTLog;
+    begin
+        // IsFixedValue := Rec."Processing Action" = Rec."Processing Action"::FixedValue;
+        LineStyleExpr := '';
+        if Rec."Processing Action" = Rec."Processing Action"::Ignore then
+            LineStyleExpr := Format(Enum::DMTFieldStyle::Grey);
+        if Log.FieldErrorsExistFor(Rec) then
+            LineStyleExpr := Format(Enum::DMTFieldStyle::"Red + Italic");
     end;
 
     var

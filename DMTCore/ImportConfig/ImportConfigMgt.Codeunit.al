@@ -5,7 +5,7 @@ codeunit 91002 DMTImportConfigMgt
         TempBlob: Codeunit "Temp Blob";
         FieldImport: XmlPort "DMT NAVFieldBufferImport";
         InStr: InStream;
-        ImportFinishedMsg: Label 'Import finished', comment = 'de-DE=Import abgeschlossen';
+        ImportFinishedMsg: Label 'Import finished', Comment = 'de-DE=Import abgeschlossen';
         FileName: Text;
     begin
         TempBlob.CreateInStream(InStr);
@@ -29,7 +29,7 @@ codeunit 91002 DMTImportConfigMgt
         TableID: Integer;
     begin
         if NAVFieldBuffer.IsEmpty then exit;
-        while NAVFieldBuffer.Findfirst() do begin
+        while NAVFieldBuffer.FindFirst() do begin
             TableIDs.Add(NAVFieldBuffer.TableNo);
             NAVFieldBuffer.SetFilter(TableNo, StrSubstNo('>%1', NAVFieldBuffer.TableNo));
         end;
@@ -236,7 +236,7 @@ codeunit 91002 DMTImportConfigMgt
         Migrate: Codeunit DMTMigrate;
         LogQry: Query DMTLogQry;
         RecIdList: List of [RecordId];
-        NoErrorFoundLbl: label 'No errors were found for retry', Comment = 'de-DE=Es wurden keine Fehler zur erneuten Verbeitung gefunden';
+        NoErrorFoundLbl: Label 'No errors were found for retry', Comment = 'de-DE=Es wurden keine Fehler zur erneuten Verbeitung gefunden';
     begin
         LogQry.SetRange(LogQry.SourceFileName, ImportConfigHeader.GetSourceFileName());
         LogQry.Open();
@@ -315,7 +315,7 @@ codeunit 91002 DMTImportConfigMgt
     var
         ImportConfigLine: Record DMTImportConfigLine;
         Field: Record Field;
-        ReplaceExistingMatchesQst: Label 'All fields are already assigned. Overwrite existing assignment?', comment = 'de-DE=Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?';
+        ReplaceExistingMatchesQst: Label 'All fields are already assigned. Overwrite existing assignment?', Comment = 'de-DE=Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?';
     begin
         ImportConfigHeader.FilterRelated(ImportConfigLine);
         ImportConfigLine.SetFilter("Source Field No.", '<>%1', 0);

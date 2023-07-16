@@ -1,8 +1,9 @@
 page 90000 DMTCode
 {
-    Caption = 'Code';
+    Caption = 'Code', Locked = true;
     PageType = List;
     UsageCategory = None;
+    ApplicationArea = All;
     SourceTableTemporary = true;
     SourceTable = Integer;
     SourceTableView = sorting(Number);
@@ -14,15 +15,18 @@ page 90000 DMTCode
         {
             group(Settings)
             {
-                field(SourceRecVarName; SourceRecVarName) { Caption = 'Variable Name (Source Record)'; ApplicationArea = All; }
-                field(TargetRecVarName; TargetRecVarName) { Caption = 'Variable Name (Target Record)'; ApplicationArea = All; }
+                field(SourceRecVarName; SourceRecVarName)
+                {
+                    Caption = 'Variable Name (Source Record)',
+                    Comment = 'de-DE=Variablenname (Herkunftsdatensatz)';
+                }
+                field(TargetRecVarName; TargetRecVarName) { Caption = 'Variable Name (Target Record)'; }
             }
             repeater(GroupName)
             {
                 field(Line; CodeLines.Get(Rec.Number))
                 {
                     Caption = 'Code';
-                    ApplicationArea = All;
                 }
             }
         }
@@ -34,7 +38,6 @@ page 90000 DMTCode
         {
             action(CreateCode)
             {
-                ApplicationArea = All;
                 Image = Create;
 
                 trigger OnAction()

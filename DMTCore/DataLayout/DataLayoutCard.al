@@ -24,9 +24,24 @@ page 91011 DMTDataLayoutCard
                     end;
                 }
 
-                group(NAV)
+            }
+            group(NAV)
+            {
+                Visible = Rec.SourceFileFormat = Rec.SourceFileFormat::"NAV CSV Export";
+                field(NAVTableID; Rec.NAVTableID) { }
+                field(NAVTableCaption; Rec.NAVTableCaption) { }
+                field(NAVNoOfRecords; Rec.NAVNoOfRecords) { }
+            }
+            group(Excel)
+            {
+                Visible = Rec.SourceFileFormat = Rec.SourceFileFormat::Excel;
+                field(XLSHeadingRowNo; Rec.XLSHeadingRowNo) { }
+                field(XLSDefaultSheetName; Rec.XLSDefaultSheetName)
                 {
-                    field(NAVTableID; Rec.NAVTableID) { }
+                    trigger OnDrillDown()
+                    begin
+                        Rec.LookupDefaultExcelSheetName()
+                    end;
                 }
             }
             part(DMTLayoutLinePart; DMTLayoutLinePart)
@@ -53,12 +68,13 @@ page 91011 DMTDataLayoutCard
                     HeaderLine: Dictionary of [Text, Integer];
                     ColumnName: Text;
                 begin
-                    ExcelMgt.LoadFileWithDialog();
-                    HeaderLine := ExcelMgt.GetHeaderLine();
+                    ExcelMgt.InitFileStreamFromUpload();
+                    ExcelMgt.ReadSheet(Rec.XLSDefaultSheetName);
+                    HeaderLine := ExcelMgt.ReadHeaderLine(Rec.XLSHeadingRowNo);
                     if Rec.Name = '' then
                         Rec.Name := CopyStr(ExcelMgt.SelectedFileName(), 1, MaxStrLen(Rec.Name));
 
-                    foreach columnName in HeaderLine.Keys do begin
+                    foreach ColumnName in HeaderLine.Keys do begin
                         Clear(dataLayoutLine);
 
                         dataLayoutLine."Data Layout ID" := Rec.ID;

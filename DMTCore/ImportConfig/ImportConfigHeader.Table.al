@@ -4,21 +4,21 @@ table 91003 DMTImportConfigHeader
     fields
     {
         field(1; ID; Integer) { Caption = 'ID', Locked = true; }
-        field(3; "Current App Package ID Filter"; Guid) { Caption = 'Current Package ID Filter', locked = true; FieldClass = FlowFilter; }
-        field(4; "Other App Packages ID Filter"; Guid) { Caption = 'Other App Packages ID Filter', locked = true; FieldClass = FlowFilter; }
+        field(3; "Current App Package ID Filter"; Guid) { Caption = 'Current Package ID Filter', Locked = true; FieldClass = FlowFilter; }
+        field(4; "Other App Packages ID Filter"; Guid) { Caption = 'Other App Packages ID Filter', Locked = true; FieldClass = FlowFilter; }
         field(10; "Target Table ID"; Integer)
         {
-            Caption = 'Target Table ID', comment = 'de-DE=Zieltabellen ID';
+            Caption = 'Target Table ID', Comment = 'de-DE=Zieltabellen ID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table), "App Package ID" = field("Other App Packages ID Filter"));
         }
         field(11; "Target Table Caption"; Text[250])
         {
-            Caption = 'Target Table Caption', comment = 'de-DE=Zieltabelle Bezeichnung';
+            Caption = 'Target Table Caption', Comment = 'de-DE=Zieltabelle Bezeichnung';
             FieldClass = FlowField;
             CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Target Table ID")));
             Editable = false;
         }
-        field(20; "No.of Records in Buffer Table"; Integer) { Caption = 'No.of Records in Buffer Table', comment = 'de-DE=Anz. Datensätze in Puffertabelle'; Editable = false; }
+        field(20; "No.of Records in Buffer Table"; Integer) { Caption = 'No.of Records in Buffer Table', Comment = 'de-DE=Anz. Datensätze in Puffertabelle'; Editable = false; }
         field(40; "Use Separate Buffer Table"; Boolean)
         {
             Caption = 'Use Separate Buffer Table', Comment = 'de-DE=Separate Puffertabelle verwenden';
@@ -49,7 +49,7 @@ table 91003 DMTImportConfigHeader
         field(51; LastUsedFilter; Blob) { }
         field(52; "Use OnInsert Trigger"; Boolean) { Caption = 'Use OnInsert Trigger', Comment = 'de-DE=OnInsert Trigger verwenden'; InitValue = true; }
         field(53; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
-        field(54; "Data Layout ID"; Integer) { Caption = 'Data Layout Code', Comment = 'de-DE=Datenlayout Code'; TableRelation = DMTDataLayout; }
+        field(54; "Data Layout ID"; Integer) { Caption = 'Data Layout ID', Comment = 'de-DE=Datenlayout ID'; TableRelation = DMTDataLayout; }
         field(55; "Source File Name"; Text[250])
         {
             Caption = 'Source File Name', Comment = 'de-DE=Quelldatei';
@@ -68,7 +68,7 @@ table 91003 DMTImportConfigHeader
 
     trigger OnInsert()
     begin
-        Rec.testfield("Data Layout ID");
+        Rec.TestField("Data Layout ID");
         Rec.TestField("Source File ID");
         Rec.ID := GetNextID();
     end;
@@ -131,7 +131,7 @@ table 91003 DMTImportConfigHeader
         TableMetadata: Record "Table Metadata";
         RecRef: RecordRef;
     begin
-        if not TableMetadata.get(Rec."Target Table ID") then exit(0);
+        if not TableMetadata.Get(Rec."Target Table ID") then exit(0);
         RecRef.Open(Rec."Target Table ID");
         exit(RecRef.Count);
     end;
@@ -161,7 +161,7 @@ table 91003 DMTImportConfigHeader
     begin
         Rec.FilterRelated(ImportConfigLine);
         ImportConfigLine.SetFilter("Processing Action", '<>%1', ImportConfigLine."Processing Action"::Ignore);
-        if rec."Use Separate Buffer Table" then
+        if Rec."Use Separate Buffer Table" then
             ImportConfigLine.SetFilter("Source Field No.", '<>0');
         ImportConfigLine.CopyToTemp(TempImportConfigLine);
         OK := TempImportConfigLine.FindFirst();

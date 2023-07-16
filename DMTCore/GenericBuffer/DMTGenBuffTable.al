@@ -1,4 +1,4 @@
-table 91001 "DMTGenBuffTable"
+table 91001 DMTGenBuffTable
 {
     DataClassification = ToBeClassified;
 
@@ -311,7 +311,7 @@ table 91001 "DMTGenBuffTable"
         FileList: List of [Text];
         Choices: Text;
         FileName: Text;
-        GenBufferTableIsEmptyErr: Label 'the generic Buffer Table is empty', comment = 'de-DE=Die generische Puffertabelle ist leer';
+        GenBufferTableIsEmptyErr: Label 'the generic Buffer Table is empty', Comment = 'de-DE=Die generische Puffertabelle ist leer';
     begin
         GenBuffTableQry.Open();
         while GenBuffTableQry.Read() do begin

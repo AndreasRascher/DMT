@@ -7,27 +7,27 @@ table 91005 DMTDataLayoutLine
     {
         field(1; "Data Layout ID"; Integer) { Caption = 'File ID'; }
         field(2; "Column No."; Integer) { Caption = 'Column No.', Comment = 'de-DE=Spaltennr.'; }
-        field(10; ColumnName; Text[50]) { Caption = 'Column Name''de-DE=Spaltenname'; }
+        field(10; ColumnName; Text[50]) { Caption = 'Column Name', Comment = 'de-DE=Spaltenname'; }
         field(11; DataType; Option)
         {
-            Caption = 'Data Type', comment = 'de-DE=Datentyp';
+            Caption = 'Data Type', Comment = 'de-DE=Datentyp';
             OptionMembers = Text,Date,Time,DateTime,Decimal,Boolean,Integer,GUID,BLOB;
         }
         #region NAVFieldInformation
         field(20; NAVDataType; Option)
         {
-            Caption = 'Data Type', comment = 'de-DE=NAV Datentyp';
+            Caption = 'Data Type', Comment = 'de-DE=NAV Datentyp';
             OptionMembers = TableFilter,RecordID,Text,Date,Time,DateFormula,Decimal,Binary,BLOB,Boolean,Integer,Code,Option,BigInteger,Duration,GUID,DateTime;
         }
-        field(21; NAVLen; Integer) { Caption = 'Len', comment = 'de-DE=NAV Len', Locked = true; }
+        field(21; NAVLen; Integer) { Caption = 'Len', Comment = 'de-DE=NAV Len', Locked = true; }
         field(22; NAVClass; Option)
         {
-            Caption = 'Class', locked = true;
+            Caption = 'Class', Locked = true;
             OptionMembers = Normal,FlowField,FlowFilter;
             OptionCaptionML = ENU = 'Normal,FlowField,FlowFilter', DEU = 'Normal,FlowField,FlowFilter';
         }
         field(23; NAVEnabled; Boolean) { Caption = 'Enabled', Locked = true; }
-        field(24; "NAVFieldCaption"; Text[80]) { Caption = 'Field Caption', Locked = true; }
+        field(24; NAVFieldCaption; Text[80]) { Caption = 'Field Caption', Locked = true; }
         field(25; "NAV Table Caption"; Text[80]) { Caption = 'Table Caption', Locked = true; }
         field(26; "NAV Primary Key"; Text[250]) { Caption = 'Primary Key', Locked = true; }
         field(27; NAVOptionString; Text[2048]) { Caption = 'OptionString', Locked = true; }

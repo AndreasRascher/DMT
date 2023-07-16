@@ -10,17 +10,17 @@ table 91006 DMTImportConfigLine
         }
         field(10; "Target Table ID"; Integer)
         {
-            Caption = 'Target Table ID', comment = 'de-DE=Ziel Tabellen ID';
+            Caption = 'Target Table ID', Comment = 'de-DE=Ziel Tabellen ID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
         }
         field(11; "Target Field No."; Integer)
         {
-            Caption = 'Target Field No.', comment = 'de-DE=Ziel Feldnr.';
+            Caption = 'Target Field No.', Comment = 'de-DE=Ziel Feldnr.';
             TableRelation = Field."No." where(TableNo = field("Target Table ID"));
         }
         field(12; "Target Field Name"; Text[80])
         {
-            Caption = 'Target Field Name', comment = 'de-DE=Zielfeld Name';
+            Caption = 'Target Field Name', Comment = 'de-DE=Zielfeld Name';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = lookup(Field.FieldName where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
@@ -28,15 +28,15 @@ table 91006 DMTImportConfigLine
 
         field(13; "Target Field Caption"; Text[80])
         {
-            Caption = 'Target Field Caption', comment = 'de-DE=Zielfeld Bezeichnung';
+            Caption = 'Target Field Caption', Comment = 'de-DE=Zielfeld Bezeichnung';
             FieldClass = FlowField;
             Editable = false;
             CalcFormula = lookup(Field."Field Caption" where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
         }
-        field(14; "Is Key Field(Target)"; Boolean) { Caption = 'Key Field', Comment = 'Schlüsselfeld'; Editable = false; }
+        field(14; "Is Key Field(Target)"; Boolean) { Caption = 'Key Field', Comment = 'de-DE=Schlüsselfeld'; Editable = false; }
         field(20; "Source Field No."; Integer)
         {
-            Caption = 'Source Field No.', comment = 'de-DE=Herkunftsfeld Nr.';
+            Caption = 'Source Field No.', Comment = 'de-DE=Herkunftsfeld Nr.';
             TableRelation = DMTDataLayoutLine."Column No." where("Data File ID Filter" = field("Imp.Conf.Header ID"));
             ValidateTableRelation = false;
             BlankZero = true;
@@ -45,13 +45,13 @@ table 91006 DMTImportConfigLine
                 UpdateSourceFieldCaptionAndProcessingAction(Rec.FieldNo("Source Field No."));
             end;
         }
-        field(21; "Source Field Caption"; Text[80]) { Caption = 'Source Field Caption', comment = 'de-DE=Herkunftsfeld Bezeichnung'; Editable = false; }
-        field(50; "Validation Type"; Enum DMTFieldValidationType) { Caption = 'Valid. Type', comment = 'de-DE=Valid. Typ'; }
-        field(52; "Ignore Validation Error"; Boolean) { Caption = 'Ignore Errors', comment = 'de-DE=Fehler ignorieren '; }
-        field(100; "Processing Action"; Enum DMTFieldProcessingType) { Caption = 'Action', comment = 'de-DE=Aktion'; }
+        field(21; "Source Field Caption"; Text[80]) { Caption = 'Source Field Caption', Comment = 'de-DE=Herkunftsfeld Bezeichnung'; Editable = false; }
+        field(50; "Validation Type"; Enum DMTFieldValidationType) { Caption = 'Valid. Type', Comment = 'de-DE=Valid. Typ'; }
+        field(52; "Ignore Validation Error"; Boolean) { Caption = 'Ignore Errors', Comment = 'de-DE=Fehler ignorieren '; }
+        field(100; "Processing Action"; Enum DMTFieldProcessingType) { Caption = 'Action', Comment = 'de-DE=Aktion'; }
         field(101; "Fixed Value"; Text[250])
         {
-            Caption = 'Fixed Value', comment = 'de-DE=Fester Wert';
+            Caption = 'Fixed Value', Comment = 'de-DE=Fester Wert';
             trigger OnValidate()
             var
                 ConfigValidateMgt: Codeunit "Config. Validate Management";
@@ -73,15 +73,15 @@ table 91006 DMTImportConfigLine
                 end;
             end;
         }
-        field(102; "Validation Order"; Integer) { Caption = 'Validation Order', comment = 'Reihenfolge Validierung'; }
+        field(102; "Validation Order"; Integer) { Caption = 'Validation Order', Comment = 'de-DE=Reihenfolge Validierung'; }
         #region SelectMulipleFields
         field(200; "Search Target Field Caption"; Text[80])
         {
             Description = 'Searchable field';
-            Caption = 'Target Field Caption', comment = 'de-DE=Zielfeld Bezeichnung';
+            Caption = 'Target Field Caption', Comment = 'de-DE=Zielfeld Bezeichnung';
             Editable = false;
         }
-        field(201; Selection; Boolean) { Caption = 'Selection', Comment = 'Auswahl'; }
+        field(201; Selection; Boolean) { Caption = 'Selection', Comment = 'de-DE=Auswahl'; }
 
         #endregion SelectMulipleFields
 
@@ -102,7 +102,7 @@ table 91006 DMTImportConfigLine
         ImportConfigHeader: Record DMTImportConfigHeader;
     begin
         case FromFieldNo of
-            Rec.fieldno("Source Field No."):
+            Rec.FieldNo("Source Field No."):
                 begin
                     ImportConfigHeader.Get(Rec."Imp.Conf.Header ID");
                     if DataLayoutLine.Get(ImportConfigHeader."Data Layout ID", Rec."Source Field No.") then begin

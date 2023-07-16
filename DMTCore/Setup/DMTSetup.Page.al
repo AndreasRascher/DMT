@@ -1,12 +1,12 @@
 page 91000 "DMT Setup"
 {
-    Caption = 'Data Migration Tool Setup', comment = 'de-DE=Data Migration Tool Einrichtung';
-    AdditionalSearchTerms = 'DMT Setup', comment = 'de-DE=DMT Einrichtung';
+    Caption = 'Data Migration Tool Setup', Comment = 'de-DE=Data Migration Tool Einrichtung';
+    AdditionalSearchTerms = 'DMT Setup', Comment = 'de-DE=DMT Einrichtung';
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = Administration;
     SourceTable = DMTSetup;
-    PromotedActionCategories = 'NAV,Backup,Lists,,', comment = 'de-DE=NAV,Backup,Listen,,';
+    PromotedActionCategories = 'NAV,Backup,Lists,,', Comment = 'de-DE=NAV,Backup,Listen,,';
 
     layout
     {
@@ -18,10 +18,10 @@ page 91000 "DMT Setup"
             }
             group("Object Generator")
             {
-                Caption = 'Object Generator', comment = 'de-DE=Objekte generieren';
+                Caption = 'Object Generator', Comment = 'de-DE=Objekte generieren';
                 group(ObjectIDs)
                 {
-                    Caption = 'Object IDs', comment = 'de-DE=Objekt IDs';
+                    Caption = 'Object IDs', Comment = 'de-DE=Objekt IDs';
                     field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; ShowMandatory = true; }
                     field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; ShowMandatory = true; }
                 }
@@ -39,7 +39,7 @@ page 91000 "DMT Setup"
                         Choice: Integer;
                         NoOfChoices: Integer;
                         SessionListID: Integer;
-                        StopSessionInstructionLbl: Label 'Select which session to stop:\<Session ID> - <User ID> - <Client Type>- <Login Datetime>', comment = 'de-DE=Wählen Sie eine Session zum Beenden aus:\<Session ID> - <User ID> - <Client Type> - <Login Datetime>';
+                        StopSessionInstructionLbl: Label 'Select which session to stop:\<Session ID> - <User ID> - <Client Type>- <Login Datetime>', Comment = 'de-DE=Wählen Sie eine Session zum Beenden aus:\<Session ID> - <User ID> - <Client Type> - <Login Datetime>';
                         SessionList: List of [Integer];
                         Choices: Text;
                     begin
@@ -74,7 +74,7 @@ page 91000 "DMT Setup"
                         end;
                     end;
                 }
-                field("UserID"; UserId) { ApplicationArea = All; Caption = 'User ID'; }
+                field(UserID; UserId) { ApplicationArea = All; Caption = 'User ID'; }
             }
         }
     }
@@ -85,7 +85,7 @@ page 91000 "DMT Setup"
         {
             action(ClearGenBuffer)
             {
-                Caption = 'Delete Gen. Buffer Table Lines', comment = 'de-DE=Alle Zeilen in gen. Puffertabelle löschen';
+                Caption = 'Delete Gen. Buffer Table Lines', Comment = 'de-DE=Alle Zeilen in gen. Puffertabelle löschen';
                 ApplicationArea = All;
                 Image = ListPage;
                 Promoted = true;
@@ -106,7 +106,7 @@ page 91000 "DMT Setup"
         {
             action(XMLExport)
             {
-                Caption = 'Create Backup', comment = 'de-DE=Backup erstellen';
+                Caption = 'Create Backup', Comment = 'de-DE=Backup erstellen';
                 ApplicationArea = All;
                 Image = CreateXMLFile;
                 Promoted = true;
@@ -123,7 +123,7 @@ page 91000 "DMT Setup"
             }
             action(XMLImport)
             {
-                Caption = 'Import Backup', comment = 'de-DE=Backup importieren';
+                Caption = 'Import Backup', Comment = 'de-DE=Backup importieren';
                 ApplicationArea = All;
                 Image = ImportCodes;
                 Promoted = true;

@@ -65,7 +65,7 @@ table 91009 DMTProcessingPlan
             BlankZero = true;
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table), "App Package ID" = field("Current App Package ID Filter"));
         }
-        field(31; "Current App Package ID Filter"; Guid) { Caption = 'Current Package ID Filter', locked = true; FieldClass = FlowFilter; }
+        field(31; "Current App Package ID Filter"; Guid) { Caption = 'Current Package ID Filter', Locked = true; FieldClass = FlowFilter; }
         field(32; "Source Table Filter"; Blob) { Caption = 'Source Table Filter Blob', Locked = true; }
         field(33; "Update Fields Filter"; Blob) { Caption = 'Update Fields Filter', Locked = true; }
         field(34; "Default Field Values"; Blob) { Caption = 'Default Field Values', Locked = true; }

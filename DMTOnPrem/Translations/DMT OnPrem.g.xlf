@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en-US" target-language="en-US" original="DMT OnPrem">
+    <body>
+      <group id="body">
+        <trans-unit id="Page 2669947503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copy Report Helper</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2669947503 - Method 553027262 - NamedType 2691011787" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User AL Code is not available for the %1 %2. Enable with Powershell command:\\set-NAVServerConfiguration -ServerInstance BC -KeyName ProtectNAVAppSourceFiles -KeyValue false -ApplyTo All</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Method ReadALCode - NamedType ALCodeNotAvailableErr</note>
+        </trans-unit>
+        <trans-unit id="Page 2669947503 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Options</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Control Options - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2669947503 - Control 1300577764 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Add SetData GetData CustomCode</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Control addSetDataGetDataCustomCodeOption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2669947503 - Control 2069234263 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remove al whitespace</source>
+          <note from="Developer" annotates="general" priority="2">Nicht benötigte Leerzeichen entfernen.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - Control RemoveALReportWhiteSpaceOption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2669947503 - View 395510365 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Purchase</source>
+          <note from="Developer" annotates="general" priority="2">Verkauf</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - View Purchase - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2669947503 - View 1406942772 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales</source>
+          <note from="Developer" annotates="general" priority="2">Einkauf</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Copy Report Helper - View Sales - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 521254526 - Control 4138548914 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 425834526">
+          <source>OnPrem Settings</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=OnPrem Einstellungen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension DMTSetup - Control OnPremSettings - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 521254526 - Control 229062570 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 425834526">
+          <source>Paths</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Pfade</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension DMTSetup - Control Paths - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 521254526 - Field 2843815182 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 521254526">
+          <source>Backup.xml File Path</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Pfad Backup.xml</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTSetup - Field Backup.xml File Path - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 521254526 - Field 3332974040 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 521254526">
+          <source>Default Export Folder</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Standard Export Ordnerpfad</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTSetup - Field Default Export Folder Path - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 521254526 - Field 4219784878 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 521254526">
+          <source>Schema File Path</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Pfad Schemadatei</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTSetup - Field Schema.csv File Path - Property Caption</note>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

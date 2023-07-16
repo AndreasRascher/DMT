@@ -4,7 +4,7 @@ table 91008 DMTLogEntry
     {
         field(1; "Entry No."; Integer)
         {
-            Caption = 'Entry No.', comment = 'de-DE=Lfd.Nr.';
+            Caption = 'Entry No.', Comment = 'de-DE=Lfd.Nr.';
             AutoIncrement = true;
         }
         field(10; Usage; Enum DMTLogUsage) { Caption = 'Usage', Comment = 'de-DE=Verwendung'; }
@@ -19,9 +19,9 @@ table 91008 DMTLogEntry
         field(40; "Context Description"; Text[2048]) { Caption = 'Context Description', Comment = 'de-DE=Kontext Beschreibung'; }
         field(41; ErrorCode; Text[250]) { Caption = 'Error Code', Comment = 'de-DE=Fehler Code'; }
         field(42; "Error Call Stack"; Blob) { Caption = 'Error Callstack', Comment = 'de-DE=Fehler Aufrufliste'; }
-        field(43; "Ignore Error"; Boolean) { Caption = 'Ignore Error', comment = 'de-DE=Fehler ignorieren'; }
-        field(44; "Error Field Value"; Text[250]) { Caption = 'Error Field Value', comment = 'de-DE=Fehler für Feldwert'; }
-        field(51; SourceFileName; Text[250]) { Caption = 'Source File Name', comment = 'de-DE=Quelldatei Name'; }
+        field(43; "Ignore Error"; Boolean) { Caption = 'Ignore Error', Comment = 'de-DE=Fehler ignorieren'; }
+        field(44; "Error Field Value"; Text[250]) { Caption = 'Error Field Value', Comment = 'de-DE=Fehler für Feldwert'; }
+        field(51; SourceFileName; Text[250]) { Caption = 'Source File Name', Comment = 'de-DE=Quelldatei Name'; }
     }
 
     keys

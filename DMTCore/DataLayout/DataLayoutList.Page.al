@@ -19,7 +19,7 @@ page 91007 DMTDataLayouts
                 field(SourceFileFormat; Rec.SourceFileFormat) { }
             }
         }
-        area(Factboxes)
+        area(FactBoxes)
         {
 
         }

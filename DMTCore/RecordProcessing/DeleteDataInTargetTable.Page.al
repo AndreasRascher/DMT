@@ -216,7 +216,7 @@ page 91015 DMTDeleteDataInTargetTable
         Log: Codeunit DMTLog;
         RecID: RecordId;
         MaxSteps: Integer;
-        ProcessStoppedErr: Label 'Process Stopped', comment = 'de-DE=Vorgang abgebrochen';
+        ProcessStoppedErr: Label 'Process Stopped', Comment = 'de-DE=Vorgang abgebrochen';
     begin
         Log.InitNewProcess(Enum::DMTLogUsage::"Delete Record", ImportConfigHeader);
         MaxSteps := TargetRecordIDsToDelete.Count;
@@ -240,7 +240,7 @@ page 91015 DMTDeleteDataInTargetTable
         DeleteRecordsWithErrorLog: Codeunit DMTDeleteRecordsWithErrorLog;
     begin
         DeleteRecordsWithErrorLog.InitRecordToDelete(recID, useOnDeleteTrigger);
-        Log.IncNoOfProcessedRecords();
+        log.IncNoOfProcessedRecords();
         if DeleteRecordsWithErrorLog.Run() then begin
             log.AddTargetSuccessEntry(recID, ImportConfigHeader);
             log.IncNoOfSuccessfullyProcessedRecords();
@@ -257,7 +257,7 @@ page 91015 DMTDeleteDataInTargetTable
         CurrImportConfigHeader := ImportConfigHeader;
     end;
 
-    procedure GetTargetRefRecordID(importConfigHeader: record DMTimportConfigHeader; SourceRef: RecordRef; var TmpImportConfigLine: Record DMTImportConfigLine temporary) TargetRecID: RecordId
+    procedure GetTargetRefRecordID(importConfigHeader: Record DMTImportConfigHeader; SourceRef: RecordRef; var TmpImportConfigLine: Record DMTImportConfigLine temporary) TargetRecID: RecordId
     var
         Migrate: Codeunit DMTMigrate;
         RefHelper: Codeunit DMTRefHelper;

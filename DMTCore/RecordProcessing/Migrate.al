@@ -138,7 +138,7 @@ codeunit 91014 DMTMigrate
         BufferRef, BufferRef2 : RecordRef;
         Start: DateTime;
         ResultType: Enum DMTProcessingResultType;
-        NoBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filter: "%1"', comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"';
+        NoBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filter: "%1"', Comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"';
     begin
         Start := CurrentDateTime;
         APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
@@ -353,8 +353,7 @@ codeunit 91014 DMTMigrate
     procedure CheckMappedFieldsExist(ImportConfigHeader: Record DMTImportConfigHeader)
     var
         ImportConfigLine: Record DMTImportConfigLine;
-        ImportConfigLineEmptyErr: Label 'No field mapping found for %1 "%2"',
-                          comment = 'de-DE=Kein Feldmapping gefunden für  %1 "%2"';
+        ImportConfigLineEmptyErr: Label 'No field mapping found for %1 "%2"', Comment = 'de-DE=Kein Feldmapping gefunden für  %1 "%2"';
     begin
         // Key Fields Mapping Exists
         ImportConfigHeader.FilterRelated(ImportConfigLine);

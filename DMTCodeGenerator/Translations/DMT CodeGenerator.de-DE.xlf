@@ -1,21 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
-  <file datatype="xml" source-language="en-US" target-language="en-US" original="DMT CodeGenerator">
+  <file datatype="xml" source-language="en-US" target-language="de-DE" original="DMT CodeGenerator">
     <body>
       <group id="body">
         <trans-unit id="Page 2911572108 - Control 1735507514 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Code</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCode - Control Line - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2911572108 - Control 2218892245 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Variable Name (Source Record)</source>
+          <target state="translated">Variablenname (Herkunftsdatensatz)</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Variablenname (Herkunftsdatensatz)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCode - Control SourceRecVarName - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2911572108 - Control 2161219289 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Variable Name (Target Record)</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCode - Control TargetRecVarName - Property Caption</note>
         </trans-unit>
       </group>

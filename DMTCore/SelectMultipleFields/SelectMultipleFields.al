@@ -1,6 +1,6 @@
-page 91018 "DMTSelectMultipleFields"
+page 91018 DMTSelectMultipleFields
 {
-    Caption = 'Select multiple fields';
+    Caption = 'Select multiple fields', Comment = 'de-DE=Mehrere Felder auswählen';
     PageType = List;
     UsageCategory = None;
     SourceTable = DMTImportConfigLine;
@@ -17,14 +17,15 @@ page 91018 "DMTSelectMultipleFields"
         {
             group(Options)
             {
-                field(SelectedFieldsList; SelectedFieldsCaption) { ApplicationArea = All; Caption = 'Current Selection'; Editable = false; }
+                field(SelectedFieldsList; SelectedFieldsCaption) { ApplicationArea = All; Caption = 'Current Selection', Comment = 'de-DE=Aktuelle Auswahl'; Editable = false; }
             }
             repeater(SelectedFields)
             {
-                Caption = 'Select Fields';
+                Caption = 'Select Fields', Comment = 'de-DE=Felder auswählen';
                 field("Target Field No."; Rec."Target Field No.") { ApplicationArea = All; Editable = false; Visible = ShowTargetFieldInfo; }
                 field("Target Field Name"; Rec."Target Field Name") { ApplicationArea = All; Editable = false; Visible = ShowTargetFieldInfo; }
-                field("Target Field Caption"; Rec."Search Target Field Caption") { ApplicationArea = All; Editable = false; Visible = ShowTargetFieldInfo; }
+                // field("Target Field Caption"; Rec."Search Target Field Caption") { ApplicationArea = All; Editable = false; Visible = ShowTargetFieldInfo; }
+                field("Target Field Caption"; Rec."Target Field Caption") { ApplicationArea = All; Editable = false; Visible = ShowTargetFieldInfo; }
                 field("Source Field No."; Rec."Source Field No.") { ApplicationArea = All; Editable = false; Visible = ShowSourceFieldInfo; }
                 field("Source Field Caption"; Rec."Source Field Caption") { ApplicationArea = All; Editable = false; Visible = ShowSourceFieldInfo; }
                 field(Selection; Rec.Selection)
@@ -76,7 +77,7 @@ page 91018 "DMTSelectMultipleFields"
     begin
         TempImportConfigLine.Copy(Rec, true);
         TempImportConfigLine.Reset();
-        TempImportConfigLine.Setrange(Selection, true);
+        TempImportConfigLine.SetRange(Selection, true);
         if TempImportConfigLine.FindSet() then
             repeat
                 FieldIDList.Add(TempImportConfigLine."Source Field No.");
@@ -92,7 +93,7 @@ page 91018 "DMTSelectMultipleFields"
         Clear(TargetFieldIDListAsText);
         TempImportConfigLine.Copy(ImportConfigLine_REC, true);
         TempImportConfigLine.Reset();
-        TempImportConfigLine.Setrange(Selection, true);
+        TempImportConfigLine.SetRange(Selection, true);
         if TempImportConfigLine.FindSet() then
             repeat
                 FieldIDList.Add(TempImportConfigLine."Target Field No.");
@@ -140,12 +141,12 @@ page 91018 "DMTSelectMultipleFields"
         RestoreSourceSelection(SelectedSourceFieldIDFilter);
     end;
 
-    local procedure LoadImportConfigLine(var TempImportConfigLine: Record DMTImportConfigLine temporary; DataFieldID: Integer) Success: Boolean
+    local procedure LoadImportConfigLine(var TempImportConfigLine: Record DMTImportConfigLine temporary; ImportConfigHeaderID: Integer) Success: Boolean
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
         ImportConfigLine: Record DMTImportConfigLine;
     begin
-        if not ImportConfigHeader.Get(DataFieldID) then
+        if not ImportConfigHeader.Get(ImportConfigHeaderID) then
             exit(false);
         if ImportConfigHeader."Target Table ID" = 0 then
             exit(false);

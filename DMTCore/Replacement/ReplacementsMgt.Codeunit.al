@@ -1,4 +1,4 @@
-codeunit 91018 "DMTReplacementsMgt"
+codeunit 91018 DMTReplacementsMgt
 {
     EventSubscriberInstance = StaticAutomatic;
 
@@ -14,7 +14,7 @@ codeunit 91018 "DMTReplacementsMgt"
             Replacement.DeleteAll();
     end;
 
-    procedure InitFor(ImportConfigHeader: record DMTImportConfigHeader; var SourceRef: RecordRef; TargetTableID: Integer)
+    procedure InitFor(ImportConfigHeader: Record DMTImportConfigHeader; var SourceRef: RecordRef; TargetTableID: Integer)
     var
         CompareFieldNumbers: List of [Integer];
     begin
@@ -143,29 +143,29 @@ codeunit 91018 "DMTReplacementsMgt"
             // Get Header
             ReplacementHeader.Get(TempReplacementLine.LineType::Header, TempReplacementLine."Replacement Code", 0);
             // Get Assignment
-            ReplacementAssignmentForImportConfigHeaderGlobal.reset();
+            ReplacementAssignmentForImportConfigHeaderGlobal.Reset();
             ReplacementAssignmentForImportConfigHeaderGlobal.SetRange("Replacement Code", TempReplacementLine."Replacement Code");
             ReplacementAssignmentForImportConfigHeaderGlobal.FindFirst();
 
             case ReplacementHeader."No. of Compare Values" of
                 ReplacementHeader."No. of Compare Values"::"1":
                     begin
-                        IsMatch := format(CompareFieldValueArray[1].Value) = TempReplacementLine."Comp.Value 1";
+                        IsMatch := Format(CompareFieldValueArray[1].Value) = TempReplacementLine."Comp.Value 1";
                     end;
                 ReplacementHeader."No. of Compare Values"::"2":
                     begin
-                        IsMatch := format(CompareFieldValueArray[1].Value) = TempReplacementLine."Comp.Value 1";
-                        IsMatch := IsMatch and (format(CompareFieldValueArray[2].Value) = TempReplacementLine."Comp.Value 2");
+                        IsMatch := Format(CompareFieldValueArray[1].Value) = TempReplacementLine."Comp.Value 1";
+                        IsMatch := IsMatch and (Format(CompareFieldValueArray[2].Value) = TempReplacementLine."Comp.Value 2");
                     end;
                 else
-                    error('unhandled case');
+                    Error('unhandled case');
             end;
 
             if IsMatch then begin
                 case ReplacementHeader."No. of Values to modify" of
                     ReplacementHeader."No. of Values to modify"::"1":
                         begin
-                            ReplacementAssignmentForImportConfigHeaderGlobal.Testfield("New Value 1 Field No.");
+                            ReplacementAssignmentForImportConfigHeaderGlobal.TestField("New Value 1 Field No.");
                             NewValueFieldNumbers.Add(ReplacementAssignmentForImportConfigHeaderGlobal."New Value 1 Field No.");
                             StoreArrayPosForTargetFieldNo(ReplacementAssignmentForImportConfigHeaderGlobal."New Value 1 Field No.");
                             ArrayPos := GetArrayPosByTargetFieldNo(ReplacementAssignmentForImportConfigHeaderGlobal."New Value 1 Field No.");
@@ -174,14 +174,14 @@ codeunit 91018 "DMTReplacementsMgt"
                         end;
                     ReplacementHeader."No. of Values to modify"::"2":
                         begin
-                            ReplacementAssignmentForImportConfigHeaderGlobal.Testfield("New Value 1 Field No.");
+                            ReplacementAssignmentForImportConfigHeaderGlobal.TestField("New Value 1 Field No.");
                             NewValueFieldNumbers.Add(ReplacementAssignmentForImportConfigHeaderGlobal."New Value 1 Field No.");
                             StoreArrayPosForTargetFieldNo(ReplacementAssignmentForImportConfigHeaderGlobal."New Value 1 Field No.");
                             ArrayPos := GetArrayPosByTargetFieldNo(ReplacementAssignmentForImportConfigHeaderGlobal."New Value 1 Field No.");
                             NewValueFieldArray[ArrayPos] := DummyTargetRef.Field(ReplacementAssignmentForImportConfigHeaderGlobal."New Value 1 Field No.");
                             NewValueFieldArray[ArrayPos].Value(TempReplacementLine."New Value 1");
 
-                            ReplacementAssignmentForImportConfigHeaderGlobal.Testfield("New Value 2 Field No.");
+                            ReplacementAssignmentForImportConfigHeaderGlobal.TestField("New Value 2 Field No.");
                             NewValueFieldNumbers.Add(ReplacementAssignmentForImportConfigHeaderGlobal."New Value 2 Field No.");
                             StoreArrayPosForTargetFieldNo(ReplacementAssignmentForImportConfigHeaderGlobal."New Value 2 Field No.");
                             ArrayPos := GetArrayPosByTargetFieldNo(ReplacementAssignmentForImportConfigHeaderGlobal."New Value 2 Field No.");
@@ -189,7 +189,7 @@ codeunit 91018 "DMTReplacementsMgt"
                             NewValueFieldArray[ArrayPos].Value(TempReplacementLine."New Value 2");
                         end;
                     else
-                        error('unhandled case');
+                        Error('unhandled case');
                 end;
             end;
         until TempReplacementLine.Next() = 0;
@@ -243,14 +243,14 @@ codeunit 91018 "DMTReplacementsMgt"
         case ReplacementHeader."No. of Values to modify" of
             ReplacementHeader."No. of Values to modify"::"1":
                 begin
-                    ReplacementHeader.Testfield("Rel.to Table ID (New Val.1)");
+                    ReplacementHeader.TestField("Rel.to Table ID (New Val.1)");
                     LoadImportConfigLineForMatchingTableRelations(TempImportConfigLineFound[1], ReplacementHeader."Rel.to Table ID (New Val.1)", TableNoFilter);
                 end;
             ReplacementHeader."No. of Values to modify"::"2":
                 begin
-                    ReplacementHeader.Testfield("Rel.to Table ID (New Val.1)");
+                    ReplacementHeader.TestField("Rel.to Table ID (New Val.1)");
                     LoadImportConfigLineForMatchingTableRelations(TempImportConfigLineFound[1], ReplacementHeader."Rel.to Table ID (New Val.1)", TableNoFilter);
-                    ReplacementHeader.Testfield("Rel.to Table ID (New Val.2)");
+                    ReplacementHeader.TestField("Rel.to Table ID (New Val.2)");
                     LoadImportConfigLineForMatchingTableRelations(TempImportConfigLineFound[2], ReplacementHeader."Rel.to Table ID (New Val.2)", TableNoFilter);
                 end;
             else

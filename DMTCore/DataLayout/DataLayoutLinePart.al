@@ -46,16 +46,6 @@ page 91006 DMTLayoutLinePart
     {
     }
 
-    trigger OnFindRecord(Which: Text): Boolean
-    var
-        DataLayoutLine: Record DMTDataLayoutLine;
-    begin
-        DataLayoutLine.Copy(Rec);
-        DataLayoutLine.FilterGroup(4);
-
-        exit(Rec.Find(Which));
-    end;
-
     procedure SetRepeaterVisibility(DataLayout: Record DMTDataLayout)
     begin
         RepeaterVisibilty := RepeaterVisibilty::Default;
@@ -64,8 +54,8 @@ page 91006 DMTLayoutLinePart
                 RepeaterVisibilty := RepeaterVisibilty::"Custom CSV";
             DMTSourceFileFormat::"NAV CSV Export":
                 RepeaterVisibilty := RepeaterVisibilty::"NAV CSV";
-            DMTSourceFileFormat::"Excel":
-                RepeaterVisibilty := RepeaterVisibilty::"Excel";
+            DMTSourceFileFormat::Excel:
+                RepeaterVisibilty := RepeaterVisibilty::Excel;
         end;
     end;
 
@@ -76,4 +66,5 @@ page 91006 DMTLayoutLinePart
 
     var
         RepeaterVisibilty: Option Default,"NAV CSV","Custom CSV",Excel;
+
 }

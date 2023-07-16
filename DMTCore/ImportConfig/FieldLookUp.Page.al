@@ -1,6 +1,6 @@
 page 91012 DMTFieldLookup
 {
-    Caption = 'Fields', comment = 'de-DE=Felder';
+    Caption = 'Fields', Comment = 'de-DE=Felder';
     PageType = List;
     UsageCategory = None;
     SourceTable = DMTDataLayoutLine;

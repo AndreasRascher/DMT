@@ -19,7 +19,7 @@ page 91005 SourceFiles
                 field("DateTime"; Rec.UploadDateTime) { }
             }
         }
-        area(Factboxes)
+        area(FactBoxes)
         {
 
         }

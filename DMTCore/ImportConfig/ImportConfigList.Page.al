@@ -20,7 +20,7 @@ page 91010 DMTImportConfigList
                 field("Target Table Caption"; Rec."Target Table Caption") { }
             }
         }
-        area(Factboxes)
+        area(FactBoxes)
         {
 
         }

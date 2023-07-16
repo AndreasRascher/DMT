@@ -22,7 +22,7 @@ table 91010 DMTReplacement
         {
             Caption = 'Line No.';
         }
-        field(10; "Description"; Text[100]) { Caption = 'Description'; }
+        field(10; Description; Text[100]) { Caption = 'Description'; }
         #endregion TableKeys
         #region Compare Values
         field(100; "No. of Compare Values"; Option)
@@ -84,7 +84,7 @@ table 91010 DMTReplacement
         #endregion NewValues
         field(300; "No. of Lines"; Integer)
         {
-            Caption = 'No. of Lines', comment = 'de-DE=Anzahl Zeilen';
+            Caption = 'No. of Lines', Comment = 'de-DE=Anzahl Zeilen';
             FieldClass = FlowField;
             CalcFormula = count(DMTReplacement where(LineType = const(Line), "Replacement Code" = field("Replacement Code")));
             Editable = false;
@@ -104,27 +104,27 @@ table 91010 DMTReplacement
         }
         field(402; "Target Table ID"; Integer)
         {
-            Caption = 'Target Table ID', comment = 'de-DE=Ziel Tabellen ID';
+            Caption = 'Target Table ID', Comment = 'de-DE=Ziel Tabellen ID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
         }
         field(403; "Compare Value 1 Field No."; Integer)
         {
-            Caption = 'Compare Value 1 Field No.', comment = 'de-DE=Vgl.-Wert 1 Feld Nr.';
+            Caption = 'Compare Value 1 Field No.', Comment = 'de-DE=Vgl.-Wert 1 Feld Nr.';
             TableRelation = DMTImportConfigLine."Source Field No." where("Target Table ID" = field("Target Table ID"), "Source Field No." = field("Compare Value 1 Field No."));
         }
         field(404; "Compare Value 2 Field No."; Integer)
         {
-            Caption = 'Compare Value 2 Field No.', comment = 'de-DE=Vgl.-Wert 2 Feld Nr.';
+            Caption = 'Compare Value 2 Field No.', Comment = 'de-DE=Vgl.-Wert 2 Feld Nr.';
             TableRelation = DMTImportConfigLine."Source Field No." where("Target Table ID" = field("Target Table ID"), "Source Field No." = field("Compare Value 2 Field No."));
         }
         field(405; "New Value 1 Field No."; Integer)
         {
-            Caption = 'Compare Value 1 Field No.', comment = 'de-DE=Vgl.-Wert 1 Feld Nr.';
+            Caption = 'Compare Value 1 Field No.', Comment = 'de-DE=Vgl.-Wert 1 Feld Nr.';
             TableRelation = DMTImportConfigLine."Target Field No." where("Target Table ID" = field("Target Table ID"), "Target Field No." = field("New Value 1 Field No."));
         }
         field(406; "New Value 2 Field No."; Integer)
         {
-            Caption = 'Compare Value 2 Field No.', comment = 'de-DE=Vgl.-Wert 2 Feld Nr.';
+            Caption = 'Compare Value 2 Field No.', Comment = 'de-DE=Vgl.-Wert 2 Feld Nr.';
             TableRelation = DMTImportConfigLine."Target Field No." where("Target Table ID" = field("Target Table ID"), "Target Field No." = field("New Value 2 Field No."));
         }
         #endregion ImportConfigHeaderTargetFieldAssignment
@@ -151,8 +151,8 @@ table 91010 DMTReplacement
                 Rec.TestField("Line No.");
             Rec.LineType::Assignment:
                 begin
-                    Rec.Testfield("Imp.Conf.Header ID");
-                    Rec.Testfield("Replacement Code");
+                    Rec.TestField("Imp.Conf.Header ID");
+                    Rec.TestField("Replacement Code");
                     Rec."Line No." := Rec."Imp.Conf.Header ID";
                 end;
         end;
@@ -167,11 +167,11 @@ table 91010 DMTReplacement
         DMTReplacement: Record DMTReplacement;
     begin
         if Rec.LineType = Rec.LineType::Header then begin
-            DMTReplacement.SetRange("Replacement Code", rec."Replacement Code");
+            DMTReplacement.SetRange("Replacement Code", Rec."Replacement Code");
             DMTReplacement.SetRange(LineType, Rec.LineType::Line);
             if not DMTReplacement.IsEmpty then
                 DMTReplacement.DeleteAll();
-            DMTReplacement.SetRange("Replacement Code", rec."Replacement Code");
+            DMTReplacement.SetRange("Replacement Code", Rec."Replacement Code");
             DMTReplacement.SetRange(LineType, Rec.LineType::Assignment);
             if not DMTReplacement.IsEmpty then
                 DMTReplacement.DeleteAll();
@@ -245,6 +245,6 @@ table 91010 DMTReplacement
 
     procedure IsEqual(DMTReplacement: Record DMTReplacement): Boolean
     begin
-        exit(format(Rec) = format(DMTReplacement));
+        exit(Format(Rec) = Format(DMTReplacement));
     end;
 }

@@ -4,12 +4,12 @@ codeunit 91001 DMTSourceFileMgt
     var
         TempBlob: Codeunit "Temp Blob";
         IStr: InStream;
-        ImportFinishedMsg: Label 'Import finished', comment = 'de-DE=Import abgeschlossen';
-        UploadFileMsg: Label 'Select a file to upload', comment = 'de-DE=Wählen Sie eine Datei zum Hochladen aus';
+        ImportFinishedMsg: Label 'Import finished', Comment = 'de-DE=Import abgeschlossen';
+        UploadFileMsg: Label 'Select a file to upload', Comment = 'de-DE=Wählen Sie eine Datei zum Hochladen aus';
         FileName: Text;
     begin
         TempBlob.CreateInStream(IStr);
-        if not UploadIntoStream(UploadFileMsg, '', Format(enum::DMTFileFilter::All), FileName, IStr) then
+        if not UploadIntoStream(UploadFileMsg, '', Format(Enum::DMTFileFilter::All), FileName, IStr) then
             exit;
 
         if not GetFilesFromZipFile(FileName, IStr) then begin
@@ -18,7 +18,7 @@ codeunit 91001 DMTSourceFileMgt
         Message(ImportFinishedMsg);
     end;
 
-    local procedure AddFileToStorage(FileName: Text; IStr: InStream; ReplaceFilesWithSameName: boolean)
+    local procedure AddFileToStorage(FileName: Text; IStr: InStream; ReplaceFilesWithSameName: Boolean)
     var
         SourceFileStorage, SourceFileStorageExisting : Record DMTSourceFileStorage;
         FileManagement: Codeunit "File Management";
@@ -62,7 +62,7 @@ codeunit 91001 DMTSourceFileMgt
         FileNameInArchive: Text;
     begin
         OK := true;
-        If not FileName.ToLower().EndsWith('zip') then
+        if not FileName.ToLower().EndsWith('zip') then
             exit(false);
         DataCompression.OpenZipArchive(InStr, false, 850); // Codepage 850 - Umlaute in Dateinamem werden sonst nicht richtig dargestellt 
         DataCompression.GetEntryList(EntryList);

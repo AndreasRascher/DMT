@@ -51,7 +51,7 @@ codeunit 91006 DMTLog
         LogEntry.Insert(true);
     end;
 
-    procedure AddTargetSuccessEntry(SourceID: RecordID; ImportConfigHeader: Record DMTImportConfigHeader)
+    procedure AddTargetSuccessEntry(SourceID: RecordId; ImportConfigHeader: Record DMTImportConfigHeader)
     var
         ImportConfigLineDummy: Record DMTImportConfigLine;
         ErrorItemDummy: Dictionary of [Text, Text];
@@ -59,26 +59,26 @@ codeunit 91006 DMTLog
         AddEntry(SourceID, Enum::DMTLogEntryType::Success, ImportConfigHeader, ImportConfigLineDummy, ErrorItemDummy);
     end;
 
-    procedure AddTargetErrorByIDEntry(TargetID: RecordID; ImportConfigHeader: Record DMTImportConfigHeader; ErrorItem: Dictionary of [Text, Text])
+    procedure AddTargetErrorByIDEntry(TargetID: RecordId; ImportConfigHeader: Record DMTImportConfigHeader; ErrorItem: Dictionary of [Text, Text])
     var
         ImportConfigLineDummy: Record DMTImportConfigLine;
     begin
         AddEntry(TargetID, Enum::DMTLogEntryType::Error, ImportConfigHeader, ImportConfigLineDummy, ErrorItem);
     end;
 
-    procedure AddErrorByImportConfigLineEntry(SourceID: RecordID; ImportConfigHeader: Record DMTImportConfigHeader; ImportConfigLine: Record DMTImportConfigLine; ErrorItem: Dictionary of [Text, Text])
+    procedure AddErrorByImportConfigLineEntry(SourceID: RecordId; ImportConfigHeader: Record DMTImportConfigHeader; ImportConfigLine: Record DMTImportConfigLine; ErrorItem: Dictionary of [Text, Text])
     begin
         AddEntry(SourceID, Enum::DMTLogEntryType::Error, ImportConfigHeader, ImportConfigLine, ErrorItem);
     end;
 
-    local procedure AddEntry(sourceID: RecordID; logEntryType: Enum DMTLogEntryType; ImportConfigHeader: Record DMTImportConfigHeader; ImportConfigLine: Record DMTImportConfigLine; errorItem: Dictionary of [Text, Text])
+    local procedure AddEntry(sourceID: RecordId; logEntryType: Enum DMTLogEntryType; ImportConfigHeader: Record DMTImportConfigHeader; ImportConfigLine: Record DMTImportConfigLine; errorItem: Dictionary of [Text, Text])
     var
         targetIDDummy: RecordId;
     begin
         AddEntry(sourceID, targetIDDummy, logEntryType, ImportConfigHeader, ImportConfigLine, errorItem);
     end;
 
-    local procedure AddEntry(SourceID: RecordID; TargetID: RecordId; LogEntryType: Enum DMTLogEntryType; ImportConfigHeader: Record DMTImportConfigHeader; ImportConfigLine: Record DMTImportConfigLine; ErrorItem: Dictionary of [Text, Text])
+    local procedure AddEntry(SourceID: RecordId; TargetID: RecordId; LogEntryType: Enum DMTLogEntryType; ImportConfigHeader: Record DMTImportConfigHeader; ImportConfigLine: Record DMTImportConfigLine; ErrorItem: Dictionary of [Text, Text])
     var
         LogEntry: Record DMTLogEntry;
         KeyImportConfigLine: Record DMTImportConfigLine;
@@ -214,7 +214,7 @@ codeunit 91006 DMTLog
 
     local procedure CheckIfProcessNoIsSet()
     var
-        ProcessNoNotInitializedErr: label 'Process number has not been initialized';
+        ProcessNoNotInitializedErr: Label 'Process number has not been initialized';
     begin
         if LogEntryTemplate."Process No." = 0 then
             Error(ProcessNoNotInitializedErr);

@@ -92,7 +92,7 @@ codeunit 91012 DMTFPBuilder
                 for fieldIndex := 1 to recRef.FieldCount do begin
                     if recRef.FieldIndex(fieldIndex).GetFilter <> '' then begin
                         Clear(JObj);
-                        JObj.Add(format(recRef.FieldIndex(fieldIndex).Number), recRef.FieldIndex(fieldIndex).GetFilter);
+                        JObj.Add(Format(recRef.FieldIndex(fieldIndex).Number), recRef.FieldIndex(fieldIndex).GetFilter);
                         JFilters.Add(JObj);
                     end;
                     // JFilterGroupsWithFilters.Add(JObj);
@@ -114,7 +114,7 @@ codeunit 91012 DMTFPBuilder
         ImportConfigHeader: Record DMTImportConfigHeader;
     begin
         ImportConfigHeader.Get(ImportConfigHeaderID);
-        ImportConfigHeader.InitBufferRef(RecRef);
+        ImportConfigHeader.InitBufferRef(recRef);
         RestorFiltersForRecRef(recRef, FilterDetailsJSON, true);
     end;
 
