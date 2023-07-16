@@ -4,7 +4,7 @@ page 91021 DMTReplacementRulesPart
     PageType = ListPart;
     UsageCategory = None;
     SourceTable = DMTReplacement;
-    SourceTableView = sorting(LineType, "Replacement Code", "Line No.") where(LineType = const(Line));
+    SourceTableView = sorting("Line Type", Code, "Line No.") where("Line Type" = const(Rule));
     AutoSplitKey = true;
 
     layout

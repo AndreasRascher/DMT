@@ -36,6 +36,10 @@ page 91008 DMTImportConfigCard
             {
                 SubPageLink = "Imp.Conf.Header ID" = field(ID);
             }
+            part(Replacements; DMTReplacementAssigmentsPart)
+            {
+                SubPageLink = "Imp.Conf.Header ID" = field(ID), "Target Table ID" = field("Target Table ID"), "Line Type" = const(Assignment);
+            }
         }
         area(FactBoxes)
         {
@@ -289,6 +293,7 @@ page 91008 DMTImportConfigCard
     begin
         CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
         CurrPage.LinePart.Page.DoUpdate(false);
+        CurrPage.Replacements.Page.InitializeAsAssignmentPerImportConfigHeader();
     end;
 
     trigger OnAfterGetCurrRecord()

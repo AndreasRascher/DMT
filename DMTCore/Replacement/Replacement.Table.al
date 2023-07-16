@@ -6,24 +6,11 @@ table 91010 DMTReplacement
     {
 
         #region TableKeys
-        field(1; LineType; Option)
-        {
-            Caption = 'Line Type';
-            OptionMembers = Header,Line,Assignment;
-        }
-        field(2; "Replacement Code"; Code[100])
-        {
-            Caption = 'Code';
-            NotBlank = true;
-            TableRelation = if (LineType = const(Assignment)) DMTReplacement."Replacement Code" where(LineType = const(Header));
-            ValidateTableRelation = false;
-        }
-        field(3; "Line No."; Integer)
-        {
-            Caption = 'Line No.';
-        }
-        field(10; Description; Text[100]) { Caption = 'Description'; }
+        field(1; "Line Type"; Option) { Caption = 'Line Type'; OptionMembers = Replacement,Rule,Assignment; }
+        field(2; "Code"; Code[100]) { Caption = 'Code'; NotBlank = true; }
+        field(3; "Line No."; Integer) { Caption = 'Line No.'; }
         #endregion TableKeys
+        field(10; Description; Text[100]) { Caption = 'Description'; }
         #region Compare Values
         field(100; "No. of Compare Values"; Option)
         {
@@ -82,11 +69,12 @@ table 91010 DMTReplacement
             Editable = false;
         }
         #endregion NewValues
-        field(300; "No. of Lines"; Integer)
+        field(300; "No. of Rules"; Integer)
         {
-            Caption = 'No. of Lines', Comment = 'de-DE=Anzahl Zeilen';
+            Description = 'Show No. of Rules in List';
+            Caption = 'No. of Rules', Comment = 'de-DE=Anzahl Regeln';
             FieldClass = FlowField;
-            CalcFormula = count(DMTReplacement where(LineType = const(Line), "Replacement Code" = field("Replacement Code")));
+            CalcFormula = count(DMTReplacement where("Line Type" = const(Rule), Code = field(Code)));
             Editable = false;
         }
         #region ImportConfigHeaderTargetFieldAssignment
@@ -132,92 +120,86 @@ table 91010 DMTReplacement
 
     keys
     {
-        key(Key1; LineType, "Replacement Code", "Line No.")
+        key(Key1; "Line Type", Code, "Line No.")
         {
             Clustered = true;
         }
     }
     fieldgroups
     {
-        fieldgroup(DropDown; "Replacement Code", Description) { }
+        fieldgroup(DropDown; Code, Description) { }
     }
 
     trigger OnInsert()
     begin
-        case Rec.LineType of
-            Rec.LineType::Header:
+        case Rec."Line Type" of
+            Rec."Line Type"::Replacement:
                 Rec.TestField("Line No.", 0);
-            Rec.LineType::Line:
+            Rec."Line Type"::Rule:
                 Rec.TestField("Line No.");
-            Rec.LineType::Assignment:
+            Rec."Line Type"::Assignment:
                 begin
                     Rec.TestField("Imp.Conf.Header ID");
-                    Rec.TestField("Replacement Code");
+                    Rec.TestField(Code);
                     Rec."Line No." := Rec."Imp.Conf.Header ID";
                 end;
         end;
-    end;
-
-    trigger OnModify()
-    begin
     end;
 
     trigger OnDelete()
     var
         DMTReplacement: Record DMTReplacement;
     begin
-        if Rec.LineType = Rec.LineType::Header then begin
-            DMTReplacement.SetRange("Replacement Code", Rec."Replacement Code");
-            DMTReplacement.SetRange(LineType, Rec.LineType::Line);
+        if Rec."Line Type" = Rec."Line Type"::Replacement then begin
+            DMTReplacement.SetRange(Code, Rec.Code);
+            // delete Rules
+            DMTReplacement.SetRange("Line Type", Rec."Line Type"::Rule);
             if not DMTReplacement.IsEmpty then
                 DMTReplacement.DeleteAll();
-            DMTReplacement.SetRange("Replacement Code", Rec."Replacement Code");
-            DMTReplacement.SetRange(LineType, Rec.LineType::Assignment);
+            DMTReplacement.SetRange(Code, Rec.Code);
+            // delete Assignments
+            DMTReplacement.SetRange("Line Type", Rec."Line Type"::Assignment);
             if not DMTReplacement.IsEmpty then
                 DMTReplacement.DeleteAll();
         end;
     end;
 
-    trigger OnRename()
-    begin
-    end;
-
     internal procedure GetCaption(FieldNo: Integer) FieldCaption: Text
     var
-        ReplacementHeader, ReplacementLine : Record DMTReplacement;
+        Replacement, ReplacementLine : Record DMTReplacement;
         CurrentFilter: Text;
         CustomFieldCaption: Text;
     begin
         // GetPagePartFilter
         ReplacementLine.Copy(Rec);
         ReplacementLine.FilterGroup(4);
-        CurrentFilter := ReplacementLine.GetFilter("Replacement Code");
+        CurrentFilter := ReplacementLine.GetFilter(Code);
         if CurrentFilter in [''/*Not loaded*/, ''''''/*New header Record with empty code*/] then
             exit('');
-        if not ReplacementHeader.Get(ReplacementHeader.LineType::Header, ReplacementLine."Replacement Code") then
+        if not Replacement.Get(Replacement."Line Type"::Replacement, ReplacementLine.Code) then
             exit;
 
         case FieldNo of
             Rec.FieldNo("Comp.Value 1"):
                 begin
                     FieldCaption := Rec.FieldCaption("Comp.Value 1");
-                    CustomFieldCaption := ReplacementHeader."Comp.Val.1 Caption";
+                    CustomFieldCaption := Replacement."Comp.Val.1 Caption";
                 end;
             Rec.FieldNo("Comp.Value 2"):
                 begin
                     FieldCaption := Rec.FieldCaption("Comp.Value 2");
-                    CustomFieldCaption := ReplacementHeader."Comp.Val.2 Caption";
+                    CustomFieldCaption := Replacement."Comp.Val.2 Caption";
 
                 end;
             Rec.FieldNo("New Value 1"):
                 begin
                     FieldCaption := Rec.FieldCaption("New Value 1");
-                    CustomFieldCaption := ReplacementHeader."New Value 1 Caption";
+                    CustomFieldCaption := Replacement."New Value 1 Caption";
                 end;
             Rec.FieldNo("New Value 2"):
                 begin
                     FieldCaption := Rec.FieldCaption("New Value 2");
-                    CustomFieldCaption := ReplacementHeader."New Value 2 Caption";
+                    CustomFieldCaption := Replacement."New Value 2 Caption";
                 end;
         end;
         if CustomFieldCaption <> '' then
@@ -237,7 +219,7 @@ table 91010 DMTReplacement
 
     procedure filterAssignmentFor(ImportConfigHeader: Record DMTImportConfigHeader) HasLines: Boolean;
     begin
-        Rec.SetRange(LineType, LineType::Assignment);
+        Rec.SetRange("Line Type", "Line Type"::Assignment);
         Rec.SetRange("Imp.Conf.Header ID", ImportConfigHeader.ID);
         Rec.SetRange("Target Table ID", ImportConfigHeader."Target Table ID");
         HasLines := not Rec.IsEmpty;

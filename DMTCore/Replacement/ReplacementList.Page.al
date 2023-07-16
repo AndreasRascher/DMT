@@ -1,0 +1,24 @@
+page 91022 DMTReplacementList
+{
+    Caption = 'DMT Replacement List', Comment = 'de-DE=DMT Ersetzungen';
+    PageType = List;
+    UsageCategory = Lists;
+    ApplicationArea = All;
+    SourceTable = DMTReplacement;
+    CardPageId = DMTReplacementCard;
+    SourceTableView = where("Line Type" = const(Replacement));
+    DataCaptionFields = Code, Description;
+
+    layout
+    {
+        area(Content)
+        {
+            repeater(Group)
+            {
+                field("Code"; Rec.Code) { ApplicationArea = All; }
+                field(Description; Rec.Description) { ApplicationArea = All; }
+                field("No. of Rules"; Rec."No. of Rules") { ApplicationArea = All; }
+            }
+        }
+    }
+}

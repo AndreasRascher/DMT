@@ -5,19 +5,17 @@ page 91019 DMTReplacementAssigmentsPart
     UsageCategory = None;
     SourceTable = DMTReplacement;
     // AutoSplitKey = true;
-    SourceTableView = where(LineType = const(Assignment));
+    SourceTableView = where("Line Type" = const(Assignment));
     DelayedInsert = true;
 
     layout
     {
         area(Content)
         {
-            // field(IsImportConfigHeaderVisible; IsImportConfigHeaderVisible) { ApplicationArea = All; }
             repeater(AssignmentPerImportConfigHeader)
             {
                 Visible = IsAssignmentPerImportConfigHeader;
-                // field(IsAssignmentPerImportConfigHeader; IsAssignmentPerImportConfigHeader) { ApplicationArea = All; }
-                field("Replacement Code"; Rec."Replacement Code") { ApplicationArea = All; }
+                field(Code; Rec.Code) { ApplicationArea = All; }
                 field(Comparefields; GetCompareFieldsList())
                 {
                     Caption = 'Compare Fields';
@@ -40,14 +38,13 @@ page 91019 DMTReplacementAssigmentsPart
             repeater(AssignmentPerReplacement)
             {
                 Visible = IsAssignmentPerReplacement;
-                // field(IsAssignmentPerReplacement; IsAssignmentPerReplacement) { ApplicationArea = All; }
 
                 field(Overview_ImportConfigHeaderName; Rec."Data File Name") { ApplicationArea = All; }
                 field(Overview_ImportConfigHeaderID; Rec."Imp.Conf.Header ID") { ApplicationArea = All; }
-                field(Overview_ReplacementCode; Rec."Replacement Code") { ApplicationArea = All; TableRelation = DMTReplacement."Replacement Code" where(LineType = const(Header)); }
+                field(Overview_ReplacementCode; Rec.Code) { ApplicationArea = All; TableRelation = DMTReplacement.Code where("Line Type" = const(Replacement)); }
                 field(Overview_Comparefields; GetCompareFieldsList())
                 {
-                    Caption = 'Compare Fields';
+                    Caption = 'Compare Fields', Comment = 'de-DE=Vergleichswerte';
                     ApplicationArea = All;
                     trigger OnDrillDown()
                     begin
@@ -56,7 +53,7 @@ page 91019 DMTReplacementAssigmentsPart
                 }
                 field(Overview_NewValueFields; GetNewValueFieldsList())
                 {
-                    Caption = 'New Value Fields';
+                    Caption = 'New Value Fields', Comment = 'de-DE=Neue Werte';
                     ApplicationArea = All;
                     trigger OnDrillDown()
                     begin
@@ -100,7 +97,7 @@ page 91019 DMTReplacementAssigmentsPart
         ImportConfigLine: Record DMTImportConfigLine;
         ClickToEditLbl: Label '<Click to Edit>';
     begin
-        if Rec."Replacement Code" = '' then exit('');
+        if Rec.Code = '' then exit('');
         ImportConfigLine.SetRange("Imp.Conf.Header ID", Rec."Imp.Conf.Header ID");
         ImportConfigLine.SetFilter("Source Field No.", '%1|%2', Rec."Compare Value 1 Field No.", Rec."Compare Value 2 Field No.");
         ImportConfigLine.FilterGroup(2);
@@ -121,7 +118,7 @@ page 91019 DMTReplacementAssigmentsPart
         ImportConfigLine: Record DMTImportConfigLine;
         ClickToEditLbl: Label '<Click to Edit>';
     begin
-        if Rec."Replacement Code" = '' then exit('');
+        if Rec.Code = '' then exit('');
         ImportConfigLine.SetRange("Imp.Conf.Header ID", Rec."Imp.Conf.Header ID");
         ImportConfigLine.SetFilter("Target Field No.", '%1|%2', Rec."New Value 1 Field No.", Rec."New Value 2 Field No.");
         if not ImportConfigLine.FindSet(false) then
@@ -199,9 +196,9 @@ page 91019 DMTReplacementAssigmentsPart
     var
         replacementHeader: Record DMTReplacement;
     begin
-        Rec.TestField(LineType, Rec.LineType::Assignment);
+        Rec.TestField("Line Type", Rec."Line Type"::Assignment);
 
-        replacementHeader.Get(Rec.LineType::Header, Rec."Replacement Code", 0);
+        replacementHeader.Get(Rec."Line Type"::Replacement, Rec.Code, 0);
         if replacementHeader."No. of Compare Values" = replacementHeader."No. of Values to modify" then begin
             case replacementHeader."No. of Compare Values" of
                 replacementHeader."No. of Compare Values"::"1":
@@ -242,7 +239,7 @@ page 91019 DMTReplacementAssigmentsPart
 
     local procedure OnDrillDownCompareFields()
     begin
-        if (Rec."Replacement Code" <> '') then
+        if (Rec.Code <> '') then
             CurrPage.SaveRecord();
         EditCompareFieldsList();
         IfTargetFieldsEmptyPopulateWithCompareFields();
@@ -250,7 +247,7 @@ page 91019 DMTReplacementAssigmentsPart
 
     local procedure OnDrillDownNewValueFields()
     begin
-        if (Rec."Replacement Code" <> '') then
+        if (Rec.Code <> '') then
             CurrPage.SaveRecord();
         EditNewValueFieldsList();
     end;

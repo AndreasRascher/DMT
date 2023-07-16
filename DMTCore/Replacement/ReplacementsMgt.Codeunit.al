@@ -9,7 +9,7 @@ codeunit 91018 DMTReplacementsMgt
     begin
         if Rec.IsTemporary or not RunTrigger then exit;
         Replacement.SetRange("Imp.Conf.Header ID", Rec.ID);
-        Replacement.SetRange(LineType, Replacement.LineType::Assignment);
+        Replacement.SetRange("Line Type", Replacement."Line Type"::Assignment);
         if not Replacement.IsEmpty then
             Replacement.DeleteAll();
     end;
@@ -57,7 +57,7 @@ codeunit 91018 DMTReplacementsMgt
         ReplacementAssignment: Record DMTReplacement;
         TempReplacementAssignment: Record DMTReplacement temporary;
     begin
-        ReplacementAssignment.SetRange(LineType, ReplacementAssignment.LineType::Assignment);
+        ReplacementAssignment.SetRange("Line Type", ReplacementAssignment."Line Type"::Assignment);
         ReplacementAssignment.SetRange("Imp.Conf.Header ID", ImportConfigHeader.ID);
         if not ReplacementAssignment.FindSet() then
             exit(false);
@@ -77,7 +77,7 @@ codeunit 91018 DMTReplacementsMgt
         if not ReplacementAssignmentForImportConfigHeader.FindSet() then
             exit(false);
         repeat
-            ReplacementLine.SetRange(LineType, ReplacementLine.LineType::Line);
+            ReplacementLine.SetRange("Line Type", ReplacementLine."Line Type"::Line);
             ReplacementLine.SetRange("Replacement Code", ReplacementAssignmentForImportConfigHeader."Replacement Code");
             if ReplacementLine.FindSet() then
                 repeat
@@ -139,9 +139,9 @@ codeunit 91018 DMTReplacementsMgt
         TempReplacementLine.FindSet();
         repeat
             Clear(IsMatch);
-            TempReplacementLine.TestField(LineType, TempReplacementLine.LineType::Line);
+            TempReplacementLine.TestField("Line Type", TempReplacementLine."Line Type"::Line);
             // Get Header
-            ReplacementHeader.Get(TempReplacementLine.LineType::Header, TempReplacementLine."Replacement Code", 0);
+            ReplacementHeader.Get(TempReplacementLine."Line Type"::Header, TempReplacementLine."Replacement Code", 0);
             // Get Assignment
             ReplacementAssignmentForImportConfigHeaderGlobal.Reset();
             ReplacementAssignmentForImportConfigHeaderGlobal.SetRange("Replacement Code", TempReplacementLine."Replacement Code");
@@ -230,7 +230,7 @@ codeunit 91018 DMTReplacementsMgt
         ReplacementAssignments: Record DMTReplacement;
         TableNoFilter: Text;
     begin
-        ReplacementHeader.TestField(LineType, ReplacementHeader.LineType::Header);
+        ReplacementHeader.TestField("Line Type", ReplacementHeader."Line Type"::Header);
 
         // Search Relations in Target Fields
         //ImportConfigHeader.SetFilter(ID, '48|106'); //debug
@@ -274,7 +274,7 @@ codeunit 91018 DMTReplacementsMgt
                                 TempImportConfigLineFound[1].SetRange("Target Table ID", ImportConfigHeader."Target Table ID");
                                 if TempImportConfigLineFound[1].FindFirst() then begin
                                     Clear(ReplacementAssignments);
-                                    ReplacementAssignments.LineType := ReplacementAssignments.LineType::Assignment;
+                                    ReplacementAssignments."Line Type" := ReplacementAssignments."Line Type"::Assignment;
                                     ReplacementAssignments."Replacement Code" := ReplacementHeader."Replacement Code";
                                     ReplacementAssignments."Imp.Conf.Header ID" := ImportConfigHeader.ID;
                                     ReplacementAssignments."Target Table ID" := ImportConfigHeader."Target Table ID";
@@ -295,7 +295,7 @@ codeunit 91018 DMTReplacementsMgt
                                 TempImportConfigLineFound[2].SetRange("Target Table ID", ImportConfigHeader."Target Table ID");
                                 if TempImportConfigLineFound[1].FindFirst() and TempImportConfigLineFound[2].FindFirst() then begin
                                     Clear(ReplacementAssignments);
-                                    ReplacementAssignments.LineType := ReplacementAssignments.LineType::Assignment;
+                                    ReplacementAssignments."Line Type" := ReplacementAssignments."Line Type"::Assignment;
                                     ReplacementAssignments."Replacement Code" := ReplacementHeader."Replacement Code";
                                     ReplacementAssignments."Imp.Conf.Header ID" := ImportConfigHeader.ID;
                                     ReplacementAssignments."Target Table ID" := ImportConfigHeader."Target Table ID";
