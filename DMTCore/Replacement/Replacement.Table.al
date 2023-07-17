@@ -6,11 +6,11 @@ table 91010 DMTReplacement
     {
 
         #region TableKeys
-        field(1; "Line Type"; Option) { Caption = 'Line Type'; OptionMembers = Replacement,Rule,Assignment; }
-        field(2; "Code"; Code[100]) { Caption = 'Code'; NotBlank = true; }
-        field(3; "Line No."; Integer) { Caption = 'Line No.'; }
+        field(1; "Line Type"; Option) { Caption = 'Line Type', Comment = 'de-DE=Zeilenart'; OptionMembers = Replacement,Rule,Assignment; }
+        field(2; "Code"; Code[100]) { Caption = 'Code', Locked = true; NotBlank = true; }
+        field(3; "Line No."; Integer) { Caption = 'Line No.', Comment = 'de-DE=Zeilennr.'; }
         #endregion TableKeys
-        field(10; Description; Text[100]) { Caption = 'Description'; }
+        field(10; Description; Text[100]) { Caption = 'Description', Comment = 'de-DE=Beschreibung'; }
         #region Compare Values
         field(100; "No. of Compare Values"; Option)
         {
@@ -228,5 +228,12 @@ table 91010 DMTReplacement
     procedure IsEqual(DMTReplacement: Record DMTReplacement): Boolean
     begin
         exit(Format(Rec) = Format(DMTReplacement));
+    end;
+
+    procedure getDefaultImplementation(var IReplacementHandler: Interface IReplacementHandler)
+    var
+        ReplacementHandlerImpl: codeunit ReplacementHandlerImpl;
+    begin
+        IReplacementHandler := ReplacementHandlerImpl;
     end;
 }

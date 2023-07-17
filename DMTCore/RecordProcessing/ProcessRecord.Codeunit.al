@@ -32,8 +32,8 @@ codeunit 91008 DMTProcessRecord
         TargetField := TmpTargetRef.Field(TempImportConfigLine."Target Field No.");
         AssignValueToFieldRef(SourceRef, TempImportConfigLine, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
 
-        if ReplacementsMgt.HasReplacementForTargetField(TargetField.Number) then begin
-            FieldWithTypeCorrectValueToValidate := ReplacementsMgt.GetReplacmentValueFor(TargetField.Number);
+        if IReplacementHandler.HasReplacementsForTargetField(TargetField.Number) then begin
+            FieldWithTypeCorrectValueToValidate := IReplacementHandler.GetReplacementValue(TargetField.Number);
         end;
         CurrValueToAssign := FieldWithTypeCorrectValueToValidate;
         CurrValueToAssign_IsInitialized := true;
@@ -132,6 +132,8 @@ codeunit 91008 DMTProcessRecord
     end;
 
     procedure InitFieldTransfer(_SourceRef: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings)
+    var
+        Replacement: Record DMTReplacement;
     begin
         ImportConfigHeader := DMTImportSettings.ImportConfigHeader();
         SourceRef := _SourceRef;
@@ -143,9 +145,11 @@ codeunit 91008 DMTProcessRecord
         TargetRef_INIT.Init();
         RunMode := RunMode::FieldTransfer;
         Clear(ErrorLogDict);
-        ReplacementsMgt.InitFor(ImportConfigHeader, _SourceRef, ImportConfigHeader."Target Table ID");
+        IReplacementHandler.InitBatchProcess(ImportConfigHeader);
+        IReplacementHandler.InitProcess(_SourceRef);
         if not ImportConfigHeader."Use Separate Buffer Table" then
             GenBufferFieldNoOffSet := 1000;
+        Replacement.getDefaultImplementation(IReplacementHandler);
     end;
 
     procedure InitInsert()
@@ -252,10 +256,10 @@ codeunit 91008 DMTProcessRecord
         TempImportConfigLine: Record DMTImportConfigLine temporary;
         ChangeRecordWithPerm: Codeunit DMTChangeRecordWithPerm;
         RefHelper: Codeunit DMTRefHelper;
-        ReplacementsMgt: Codeunit DMTReplacementsMgt;
         CurrFieldToProcess: RecordId;
         SourceRef, TargetRef_INIT, TmpTargetRef : RecordRef;
         CurrValueToAssign: FieldRef;
+        IReplacementHandler: Interface IReplacementHandler;
         CurrValueToAssign_IsInitialized: Boolean;
         SkipRecord, TargetRecordExists, HasNotIgnoredErrors : Boolean;
         UpdateFieldsInExistingRecordsOnly: Boolean;

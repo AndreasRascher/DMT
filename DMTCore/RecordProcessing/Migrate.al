@@ -139,6 +139,8 @@ codeunit 91014 DMTMigrate
         Start: DateTime;
         ResultType: Enum DMTProcessingResultType;
         NoBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filter: "%1"', Comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"';
+        replacement: Record DMTReplacement;
+        iReplacementHandler: Interface IReplacementHandler;
     begin
         Start := CurrentDateTime;
         APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
@@ -160,17 +162,21 @@ codeunit 91014 DMTMigrate
         ProgressDialog.Open();
         ProgressDialog.UpdateFieldControl('Filter', ConvertStr(BufferRef.GetFilters, '@', '_'));
 
+        replacement.getDefaultImplementation(iReplacementHandler);
+        iReplacementHandler.InitBatchProcess(ImportConfigHeader);
 
         if DMTImportSettings.UpdateFieldsFilter() <> '' then
             Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Field Update", ImportConfigHeader)
         else
             Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", ImportConfigHeader);
 
+
         repeat
             // hier weiter machen:
             // Wenn beim Feldupdate ein Zieldatensatz nicht existiert, dann soll der als geskipped gekennzeichnet werden
             // Nur wenn ein Zieldatensatz existiert und kein Fehler auftreteten ist , dann ist das ok
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
+            iReplacementHandler.InitProcess(BufferRef2);
             ProcessSingleBufferRecord(BufferRef2, DMTImportSettings, Log, ResultType);
             UpdateLog(DMTImportSettings, Log, ResultType);
             UpdateProgress(DMTImportSettings, ProgressDialog, ResultType);

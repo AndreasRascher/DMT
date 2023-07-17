@@ -84,8 +84,6 @@ table 91006 DMTImportConfigLine
         field(201; Selection; Boolean) { Caption = 'Selection', Comment = 'de-DE=Auswahl'; }
 
         #endregion SelectMulipleFields
-
-
     }
 
     keys
