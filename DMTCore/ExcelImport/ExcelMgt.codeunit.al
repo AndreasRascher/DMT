@@ -15,7 +15,7 @@ codeunit 91005 DMTExcelMgt implements ISourceFileImport
         // Read File Blob
         SourceFileStorage.Get(ImportConfigHeader."Source File ID");
         SourceFileStorage.TestField(Name);
-        TempBlob.FromRecord(SourceFileStorage, SourceFileStorage.FieldNo("File Blob"));
+        SourceFileStorage.GetFileAsTempBlob(TempBlob);
         InitFileStreamFromBlob(TempBlob, SourceFileStorage.Name);
         ReadSheet(ImportConfigHeader.GetDataLayout().XLSDefaultSheetName);
 

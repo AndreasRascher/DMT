@@ -64,15 +64,27 @@ page 91011 DMTDataLayoutCard
                 trigger OnAction()
                 var
                     dataLayoutLine: Record DMTDataLayoutLine;
-                    ExcelMgt: Codeunit DMTExcelMgt;
+                    sourceFileStorage: Record DMTSourceFileStorage;
+                    tempBlob: Codeunit "Temp Blob";
+                    excelReadFirstLine: Codeunit DMTExcelReadFirstLine;
                     HeaderLine: Dictionary of [Text, Integer];
                     ColumnName: Text;
                 begin
-                    ExcelMgt.InitFileStreamFromUpload();
-                    ExcelMgt.ReadSheet(Rec.XLSDefaultSheetName);
-                    HeaderLine := ExcelMgt.ReadHeaderLine(Rec.XLSHeadingRowNo);
+                    // select source
+                    if Page.RunModal(0, sourceFileStorage) <> Action::LookupOK then
+                        exit;
+                    sourceFileStorage.TestField(Name);
+                    sourceFileStorage.GetFileAsTempBlob(tempBlob);
+                    BindSubscription(excelReadFirstLine);
+                    excelReadFirstLine.Init(sourceFileStorage, Rec.XLSHeadingRowNo);
+                    if excelReadFirstLine.Run() then;
+                    HeaderLine := excelReadFirstLine.GetHeadlineColumnValues();
+
                     if Rec.Name = '' then
-                        Rec.Name := CopyStr(ExcelMgt.SelectedFileName(), 1, MaxStrLen(Rec.Name));
+                        Rec.Name := sourceFileStorage.Name;
+                    if Rec.Name.EndsWith('.xlsx') and (Rec.SourceFileFormat = Rec.SourceFileFormat::" ") then
+                        Rec.SourceFileFormat := Rec.SourceFileFormat::Excel;
+                    CurrPage.Update(true);
 
                     foreach ColumnName in HeaderLine.Keys do begin
                         Clear(dataLayoutLine);
@@ -86,6 +98,10 @@ page 91011 DMTDataLayoutCard
                 end;
 
             }
+        }
+        area(Promoted)
+        {
+            actionref(ImportHeadLineAsColumnNamesRef; ImportHeadLineAsColumnNames) { }
         }
     }
     trigger OnAfterGetCurrRecord()

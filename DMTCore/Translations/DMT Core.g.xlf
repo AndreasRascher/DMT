@@ -2505,7 +2505,7 @@
         </trans-unit>
         <trans-unit id="Page 1854940516 - Action 1263952573 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Upload File</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de=DE=Datei hochladen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SourceFiles - Action UploadFileToDefaultFolder - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 2995423981 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

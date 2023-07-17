@@ -32,7 +32,7 @@ page 91005 SourceFiles
             action(UploadFileToDefaultFolder)
             {
                 Image = MoveUp;
-                Caption = 'Upload File';
+                Caption = 'Upload File', Comment = 'de=DE=Datei hochladen';
                 ApplicationArea = All;
                 trigger OnAction()
                 var
@@ -41,6 +41,10 @@ page 91005 SourceFiles
                     SourceFileMgt.UploadFileIntoFileStorage();
                 end;
             }
+        }
+        area(Promoted)
+        {
+            actionref(Upload; UploadFileToDefaultFolder) { }
         }
     }
 }

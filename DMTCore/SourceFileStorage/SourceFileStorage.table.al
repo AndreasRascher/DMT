@@ -13,9 +13,14 @@ table 91004 DMTSourceFileStorage
         field(102; Size; Integer) { Caption = 'Size', Comment = 'de-DE=Größe'; Editable = false; }
         field(103; UploadDateTime; DateTime) { Caption = 'Uploaded at', Comment = 'de-DE=Hochgeladen am'; Editable = false; }
     }
-
     keys
     {
         key(PK; "File ID") { Clustered = true; }
     }
+
+    procedure GetFileAsTempBlob(var tempBlob: Codeunit "Temp Blob")
+    begin
+        Clear(tempBlob);
+        tempBlob.FromRecord(Rec, Rec.FieldNo("File Blob"));
+    end;
 }
