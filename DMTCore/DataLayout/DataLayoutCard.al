@@ -78,6 +78,8 @@ page 91011 DMTDataLayoutCard
                     BindSubscription(excelReadFirstLine);
                     excelReadFirstLine.Init(sourceFileStorage, Rec.XLSHeadingRowNo);
                     if excelReadFirstLine.Run() then;
+                    if GetLastErrorText() <> '' then
+                        Error(GetLastErrorText());
                     HeaderLine := excelReadFirstLine.GetHeadlineColumnValues();
 
                     if Rec.Name = '' then

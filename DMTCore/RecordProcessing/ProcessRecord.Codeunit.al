@@ -145,11 +145,11 @@ codeunit 91008 DMTProcessRecord
         TargetRef_INIT.Init();
         RunMode := RunMode::FieldTransfer;
         Clear(ErrorLogDict);
+        Replacement.getDefaultImplementation(IReplacementHandler);
         IReplacementHandler.InitBatchProcess(ImportConfigHeader);
         IReplacementHandler.InitProcess(_SourceRef);
         if not ImportConfigHeader."Use Separate Buffer Table" then
             GenBufferFieldNoOffSet := 1000;
-        Replacement.getDefaultImplementation(IReplacementHandler);
     end;
 
     procedure InitInsert()

@@ -30,6 +30,7 @@ page 91014 DMTImportConfigFactBox
                         ApplicationArea = All;
                         trigger OnDrillDown()
                         begin
+                            CurrImportConfigHeader.find('='); // update if changes on main page have not been read
                             CurrImportConfigHeader.ShowBufferTable();
                         end;
                     }

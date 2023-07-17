@@ -1,6 +1,6 @@
 page 91020 DMTReplacementCard
 {
-    Caption = 'DMT Replacement Card';
+    Caption = 'DMT Replacement Card', comment = 'de-DE=DMT Ersetzungen Karte';
     PageType = Card;
     ApplicationArea = All;
     UsageCategory = None;

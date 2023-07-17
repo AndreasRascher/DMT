@@ -33,7 +33,15 @@ table 91006 DMTImportConfigLine
             Editable = false;
             CalcFormula = lookup(Field."Field Caption" where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
         }
-        field(14; "Is Key Field(Target)"; Boolean) { Caption = 'Key Field', Comment = 'de-DE=Schlüsselfeld'; Editable = false; }
+        field(14; "Target Table Relation"; Integer)
+        {
+            Caption = 'Target Table Relation', Comment = 'de-DE=Tab. -Rel. (Zielfeld)';
+            FieldClass = FlowField;
+            Editable = false;
+            CalcFormula = lookup(Field.RelationTableNo where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
+            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
+        }
+        field(15; "Is Key Field(Target)"; Boolean) { Caption = 'Key Field', Comment = 'de-DE=Schlüsselfeld'; Editable = false; }
         field(20; "Source Field No."; Integer)
         {
             Caption = 'Source Field No.', Comment = 'de-DE=Herkunftsfeld Nr.';
@@ -75,13 +83,19 @@ table 91006 DMTImportConfigLine
         }
         field(102; "Validation Order"; Integer) { Caption = 'Validation Order', Comment = 'de-DE=Reihenfolge Validierung'; }
         #region SelectMulipleFields
-        field(200; "Search Target Field Caption"; Text[80])
+        field(200; "Search Target Field Name"; Text[80])
         {
-            Description = 'Searchable field';
+            Description = 'Searchable field because Flowfields are not covered by the page search';
+            Caption = 'Target Field Name', Comment = 'de-DE=Zielfeld Name';
+            Editable = false;
+        }
+        field(201; "Search Target Field Caption"; Text[80])
+        {
+            Description = 'Searchable field because Flowfields are not covered by the page search';
             Caption = 'Target Field Caption', Comment = 'de-DE=Zielfeld Bezeichnung';
             Editable = false;
         }
-        field(201; Selection; Boolean) { Caption = 'Selection', Comment = 'de-DE=Auswahl'; }
+        field(202; Selection; Boolean) { Caption = 'Selection', Comment = 'de-DE=Auswahl'; }
 
         #endregion SelectMulipleFields
     }

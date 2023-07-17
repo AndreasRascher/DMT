@@ -95,6 +95,7 @@ codeunit 91002 DMTImportConfigMgt
                         ImportConfigLine_NEW."Imp.Conf.Header ID" := ImportConfigHeaderID;
                         ImportConfigLine_NEW."Target Field No." := TargetRecRef.FieldIndex(i).Number;
                         ImportConfigLine_NEW."Target Table ID" := ImportConfigHeader."Target Table ID";
+                        ImportConfigLine_NEW."Target Table Relation" := TargetRecRef.FieldIndex(i).Relation;
                         ImportConfigLine_NEW."Processing Action" := ImportConfigLine_NEW."Processing Action"::Ignore; //default for fields without action
                         ImportConfigLine_NEW."Validation Order" := i * 10000;
                         ImportConfigLine_NEW."Is Key Field(Target)" := KeyFieldIDsList.Contains(ImportConfigLine_NEW."Target Field No.");
@@ -260,7 +261,7 @@ codeunit 91002 DMTImportConfigMgt
         NewFieldName, SourceFieldName : Text;
     begin
         // Load Target Field Names
-        TargetFieldNames := CreateTargetFieldNamesDict(ImportConfigHeader);
+        TargetFieldNames := CreateTargetFieldNamesDict(ImportConfigHeader, true);
         if TargetFieldNames.Count = 0 then
             exit;
 
@@ -311,7 +312,7 @@ codeunit 91002 DMTImportConfigMgt
         end;
     end;
 
-    local procedure CreateTargetFieldNamesDict(ImportConfigHeader: Record DMTImportConfigHeader) TargetFieldNames: Dictionary of [Integer, Text]
+    local procedure CreateTargetFieldNamesDict(ImportConfigHeader: Record DMTImportConfigHeader; UseCaptionInstead: Boolean) TargetFieldNames: Dictionary of [Integer, Text]
     var
         ImportConfigLine: Record DMTImportConfigLine;
         Field: Record Field;
@@ -330,7 +331,10 @@ codeunit 91002 DMTImportConfigMgt
             exit;
         repeat
             Field.Get(ImportConfigLine."Target Table ID", ImportConfigLine."Target Field No.");
-            TargetFieldNames.Add(Field."No.", Field.FieldName);
+            if UseCaptionInstead then
+                TargetFieldNames.Add(Field."No.", Field."Field Caption")
+            else
+                TargetFieldNames.Add(Field."No.", Field.FieldName);
         until ImportConfigLine.Next() = 0;
     end;
 

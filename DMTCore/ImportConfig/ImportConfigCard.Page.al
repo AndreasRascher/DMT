@@ -293,7 +293,6 @@ page 91008 DMTImportConfigCard
     begin
         CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
         CurrPage.LinePart.Page.DoUpdate(false);
-        CurrPage.Replacements.Page.InitializeAsAssignmentPerImportConfigHeader();
     end;
 
     trigger OnAfterGetCurrRecord()

@@ -1,44 +1,17 @@
 page 91019 DMTReplacementAssigmentsPart
 {
-    Caption = 'Replacements';
+    Caption = 'Assignments', Comment = 'de-DE=Zuordnung';
     PageType = ListPart;
     UsageCategory = None;
     SourceTable = DMTReplacement;
-    // AutoSplitKey = true;
     SourceTableView = where("Line Type" = const(Assignment));
-    DelayedInsert = true;
-
+    InsertAllowed = false;
     layout
     {
         area(Content)
         {
-            repeater(AssignmentPerImportConfigHeader)
-            {
-                Visible = IsAssignmentPerImportConfigHeader;
-                field(Code; Rec.Code) { ApplicationArea = All; }
-                field(Comparefields; GetCompareFieldsList())
-                {
-                    Caption = 'Compare Fields';
-                    ApplicationArea = All;
-                    trigger OnDrillDown()
-                    begin
-                        OnDrillDownCompareFields();
-                    end;
-                }
-                field(NewValueFields; GetNewValueFieldsList())
-                {
-                    Caption = 'New Value Fields';
-                    ApplicationArea = All;
-                    trigger OnDrillDown()
-                    begin
-                        OnDrillDownNewValueFields();
-                    end;
-                }
-            }
             repeater(AssignmentPerReplacement)
             {
-                Visible = IsAssignmentPerReplacement;
-
                 field(Overview_ImportConfigHeaderName; Rec."Data File Name") { ApplicationArea = All; }
                 field(Overview_ImportConfigHeaderID; Rec."Imp.Conf.Header ID") { ApplicationArea = All; }
                 field(Overview_ReplacementCode; Rec.Code) { ApplicationArea = All; TableRelation = DMTReplacement.Code where("Line Type" = const(Replacement)); }
@@ -68,15 +41,43 @@ page 91019 DMTReplacementAssigmentsPart
     {
         area(Processing)
         {
-            // action(Toggle)
-            // {
-            //     Caption = 'Update';
-            //     ApplicationArea = All;
-            //     trigger OnAction()
-            //     begin
-            //         CurrPage.Update();
-            //     end;
-            // }
+            action(AddFieldMapping)
+            {
+                Caption = 'Add Field Mapping', Comment = 'de-DE=Feldmapping hinzufügen';
+                ApplicationArea = All;
+                trigger OnAction()
+                var
+                    tempImportConfigLine: Record DMTImportConfigLine temporary;
+                    ReplacementAssignment: Record DMTReplacement;
+                    FieldMappings: Page DMTFieldMappings;
+                begin
+                    FieldMappings.LookupMode(true);
+                    if FieldMappings.RunModal() = Action::LookupOK then begin
+                        FieldMappings.GetSelection(tempImportConfigLine);
+                    end;
+                    if tempImportConfigLine.FindSet() then
+                        repeat
+
+                            ReplacementAssignment.Reset();
+                            ReplacementAssignment.SetRange(Code, Rec.Code);
+                            ReplacementAssignment.SetRange("Line Type", ReplacementAssignment."Line Type"::Assignment);
+                            ReplacementAssignment.SetRange("Imp.Conf.Header ID", tempImportConfigLine."Imp.Conf.Header ID");
+                            ReplacementAssignment.SetRange("Target Table ID", tempImportConfigLine."Target Table ID");
+                            ReplacementAssignment.SetRange("Compare Value 1 Field No.", tempImportConfigLine."Target Field No.");
+                            if ReplacementAssignment.IsEmpty then begin
+                                ReplacementAssignment.Reset();
+                                ReplacementAssignment.Code := Rec.Code;
+                                ReplacementAssignment."Line Type" := ReplacementAssignment."Line Type"::Assignment;
+                                ReplacementAssignment."Imp.Conf.Header ID" := tempImportConfigLine."Imp.Conf.Header ID";
+                                ReplacementAssignment."Target Table ID" := tempImportConfigLine."Target Table ID";
+                                ReplacementAssignment."Compare Value 1 Field No." := tempImportConfigLine."Target Field No.";
+                                ReplacementAssignment."Line No." := GetNextLineNo(ReplacementAssignment.Code, ReplacementAssignment."Line Type"::Assignment);
+                                ReplacementAssignment.Insert();
+                            end;
+
+                        until tempImportConfigLine.Next() = 0;
+                end;
+            }
         }
     }
 
@@ -252,27 +253,14 @@ page 91019 DMTReplacementAssigmentsPart
         EditNewValueFieldsList();
     end;
 
-    procedure InitializeAsAssignmentPerReplacement()
-    begin
-        if IsInitialized then
-            exit;
-        IsInitialized := true;
-        IsAssignmentPerImportConfigHeader := false;
-        IsAssignmentPerReplacement := true;
-        CurrPage.Update();
-    end;
-
-    procedure InitializeAsAssignmentPerImportConfigHeader()
-    begin
-        if IsInitialized then
-            exit;
-        IsAssignmentPerImportConfigHeader := true;
-        IsAssignmentPerReplacement := false;
-        CurrPage.Update();
-    end;
-
+    local procedure GetNextLineNo(ReplacementCode: Code[100]; LineType: Option) nextLineNo: Integer
     var
-        [InDataSet]
-        IsAssignmentPerImportConfigHeader, IsAssignmentPerReplacement : Boolean;
-        IsInitialized: Boolean;
+        replacement: Record DMTReplacement;
+    begin
+        replacement.SetRange(Code, ReplacementCode);
+        replacement.SetRange("Line Type", LineType);
+        nextLineNo := 10000;
+        if replacement.FindLast() then
+            nextLineNo += replacement."Line No.";
+    end;
 }

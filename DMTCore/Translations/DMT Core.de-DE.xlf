@@ -88,9 +88,10 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field ColumnName - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2231340739 - Field 3893498913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>File ID</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2"/>
+          <source>Data Layout ID</source>
+          <target state="needs-adaptation"> Datenlayout ID</target>
+          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <note from="Developer" annotates="general" priority="2">de-DE= Datenlayout ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field Data Layout ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2231340739 - Field 4065219740 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -3006,7 +3007,7 @@
         <trans-unit id="Page 1854940516 - Action 1263952573 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Upload File</source>
           <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Developer" annotates="general" priority="2">de=DE=Datei hochladen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SourceFiles - Action UploadFileToDefaultFolder - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 2995423981 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
