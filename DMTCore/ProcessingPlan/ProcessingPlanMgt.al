@@ -1,8 +1,10 @@
 codeunit 91015 DMTProcessingPlanMgt
 {
     internal procedure ImportWithProcessingPlanParams(ProcessingPlan: Record DMTProcessingPlan)
+    var
+        Migrate: Codeunit DMTMigrate;
     begin
-        Error('Procedure ImportWithProcessingPlanParams not implemented.');
+        Migrate.BufferFor(ProcessingPlan);
     end;
 
     internal procedure ImportToBufferTable(ImportConfigHeader: Record DMTImportConfigHeader; HideDialog: Boolean)

@@ -58,10 +58,10 @@ table 91009 DMTProcessingPlan
                 end;
             end;
         }
-        field(12; Description; Text[250]) { Caption = 'Description'; }
+        field(12; Description; Text[250]) { Caption = 'Description', Comment = 'de-DE=Beschreibung'; }
         field(30; "Source Table No."; Integer)
         {
-            Caption = 'Source Table No.';
+            Caption = 'Source Table No.', Comment = 'de-DE=Herkunftstabellennr.';
             BlankZero = true;
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table), "App Package ID" = field("Current App Package ID Filter"));
         }

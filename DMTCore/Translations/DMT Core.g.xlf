@@ -1615,7 +1615,7 @@
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Description</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Beschreibung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Description - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 2200046723 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1635,7 +1635,7 @@
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 76420432 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source Table No.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Herkunftstabellennr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Source Table No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 530928583 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2675,7 +2675,7 @@
         </trans-unit>
         <trans-unit id="Enum 4037377007 - EnumValue 3533810158 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffer + Target</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Puffer- und Zieltab. importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Buffer + Target - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 4037377007 - EnumValue 739346273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2685,22 +2685,22 @@
         </trans-unit>
         <trans-unit id="Enum 4037377007 - EnumValue 286210954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to Buffer</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=In Puffertabelle einlesen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Import To Buffer - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 4037377007 - EnumValue 4081878561 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import to Target</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=In Zieltabelle einlesen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Import To Target - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 4037377007 - EnumValue 1280137342 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Run Codeunit</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Codeunit ausführen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Run Codeunit - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 4037377007 - EnumValue 375687917 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Update Field</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Felder aktualisieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Update Field - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3953448519 - EnumValue 2521149591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
