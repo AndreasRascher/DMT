@@ -240,6 +240,24 @@ page 91017 DMTProcessingPlan
                 end;
             }
         }
+        area(Promoted)
+        {
+            actionref(StartRef; Start) { }
+            actionref(NewLineRef; NewLine) { }
+            actionref(DeleteLineRef; DeleteLine) { }
+            actionref(IndentLeftRef; IndentLeft) { }
+            actionref(IndentRightRef; IndentRight) { }
+            actionref(RenumberLinesActionRef; RenumberLinesAction) { }
+            actionref(ResetLinesActionRef; ResetLinesAction) { }
+            group(XMLBackup)
+            {
+                ShowAs = SplitButton;
+                Caption = 'XML Backup', Locked = true;
+                Image = XMLSetup;
+                actionref(XMLExportRef; XMLExport) { }
+                actionref(XMLImportRef; XMLImport) { }
+            }
+        }
     }
 
     trigger OnAfterGetRecord()

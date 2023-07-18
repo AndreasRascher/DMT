@@ -36,10 +36,10 @@ page 91008 DMTImportConfigCard
             {
                 SubPageLink = "Imp.Conf.Header ID" = field(ID);
             }
-            part(Replacements; DMTReplacementAssigmentsPart)
-            {
-                SubPageLink = "Imp.Conf.Header ID" = field(ID), "Target Table ID" = field("Target Table ID"), "Line Type" = const(Assignment);
-            }
+            // part(Replacements; DMTReplacementAssigmentsPart)
+            // {
+            //     SubPageLink = "Imp.Conf.Header ID" = field(ID), "Target Table ID" = field("Target Table ID"), "Line Type" = const(Assignment);
+            // }
         }
         area(FactBoxes)
         {

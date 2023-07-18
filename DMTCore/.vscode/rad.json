@@ -1,1 +1,1 @@
-﻿{"Added":[],"Modified":[{"Id":91008,"Kind":22,"Name":"DMTProcessingPlanType","PackagePath":"/src/ProcessingPlan/ProcessingPlanType.al"},{"Id":91009,"Kind":10,"Name":"DMTProcessingPlan","PackagePath":"/src/ProcessingPlan/ProcessingPlan.Table.al"}],"Removed":[]}
+﻿{"Added":[],"Modified":[{"Id":91009,"Kind":10,"Name":"DMTProcessingPlan","PackagePath":"/src/ProcessingPlan/ProcessingPlan.Table.al"}],"Removed":[]}
