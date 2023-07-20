@@ -46,12 +46,25 @@ page 91012 DMTFieldLookup
                     DataLayoutLine.SetRange("Data Layout ID", DataLayout.ID);
                     DataLayoutLine.CopyToTemp(TempDataLayoutLine);
                     Rec.Copy(TempDataLayoutLine, true);
+                    ApplyFieldIdOffsetInGenBuffTableTo(TempDataLayoutLine);
                     IsLoaded := true;
                 end;
             else
                 Error('unhandled case');
         end;
         Rec.FilterGroup(0);
+    end;
+
+    /// <summary>
+    /// Field IDs in Gen. Buffer Table start from 1000
+    /// </summary>
+    /// <param name="TempDataLayoutLine"></param>
+    local procedure ApplyFieldIdOffsetInGenBuffTableTo(var TempDataLayoutLine: Record DMTDataLayoutLine temporary)
+    var
+        GenBufferFieldNoOffSet: Integer;
+    begin
+        GenBufferFieldNoOffSet := 1000;
+        TempDataLayoutLine."Column No." += GenBufferFieldNoOffSet;
     end;
 
     var

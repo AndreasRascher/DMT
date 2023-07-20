@@ -1,1 +1,1 @@
-﻿{"Added":[],"Modified":[],"Removed":[]}
+﻿{"Added":[],"Modified":[{"Id":91000,"Kind":10,"Name":"DMTSetup","PackagePath":"/src/Setup/DMTSetup.Table.al"},{"Id":91000,"Kind":12,"Name":"DMT Setup","PackagePath":"/src/Setup/DMTSetup.Page.al"},{"Id":91012,"Kind":12,"Name":"DMTFieldLookup","PackagePath":"/src/ImportConfig/FieldLookUp.Page.al"}],"Removed":[]}

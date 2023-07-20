@@ -76,6 +76,11 @@ page 91000 "DMT Setup"
                 }
                 field(UserID; UserId) { ApplicationArea = All; Caption = 'User ID'; }
             }
+            group("Field Mapping")
+            {
+                Caption = 'Mapping fields', Comment = 'de-DE=Mapping der Felder';
+                field("Use exist. mappings"; Rec."Use exist. mappings") { }
+            }
         }
     }
 

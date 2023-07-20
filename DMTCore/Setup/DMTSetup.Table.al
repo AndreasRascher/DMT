@@ -10,6 +10,7 @@ table 91000 DMTSetup
         field(20; "Obj. ID Range Buffer Tables"; Text[250]) { Caption = 'Obj. ID Range Buffer Tables', Comment = 'de-DE=Objekt ID Bereich für Puffertabellen'; }
         field(21; "Obj. ID Range XMLPorts"; Text[250]) { Caption = 'Obj. ID Range XMLPorts (Import)', Comment = 'de-DE=Objekt ID Bereich für XMLPorts (Import)'; }
         field(22; "Import with FlowFields"; Boolean) { Caption = 'Create Buffer Tables with Flowfields', Comment = 'de-DE=Puffertabellen mit Flowfields generieren'; }
+        field(23; "Use exist. mappings"; Boolean) { Caption = 'Propose matching fields - Use existing mappings', Comment = 'de-DE=Feldzuordnung vorschlagen - Existierende Feld-Mappings verwenden'; }
 
     }
     keys

@@ -256,6 +256,7 @@ codeunit 91002 DMTImportConfigMgt
         ImportConfigLine: Record DMTImportConfigLine;
         MigrationLib: Codeunit DMTMigrationLib;
         SourceFieldNames, TargetFieldNames : Dictionary of [Integer, Text];
+        ExistingFieldMappings: Dictionary of [Text, Text];
         FoundAtIndex: Integer;
         SourceFieldID, TargetFieldID : Integer;
         NewFieldName, SourceFieldName : Text;
@@ -287,6 +288,28 @@ codeunit 91002 DMTImportConfigMgt
                 ImportConfigLine.Modify();
             end;
         end;
+
+        // //Load Existing Mappings
+        // ImportConfigLine.Reset();
+        // ImportConfigLine.SetAutoCalcFields("Target Field Caption");
+        // ImportConfigLine.SetFilter("Source Field Caption", '<>''''');
+        // ImportConfigLine.SetFilter("Target Field Caption", '<>''''');
+        // if ImportConfigLine.FindSet(false) then
+        //     repeat
+        //         ExistingFieldMappings.Set(ImportConfigLine."Source Field Caption", ImportConfigLine."Target Field Caption");
+        //     until ImportConfigLine.Next() = 0;
+
+        // foreach SourceFieldID in SourceFieldNames.Keys do begin
+        //     SourceFieldName := SourceFieldNames.Get(SourceFieldID);
+        //     FoundAtIndex := ExistingFieldMappings.Values.IndexOf(SourceFieldName);
+        //     // TargetField.SetFilter(FieldName, ConvertStr(BuffTableCaption, '@()&', '????'));
+        //     TargetFieldID := TargetFieldNames.Keys.Get(FoundAtIndex);
+        //     // SetSourceField
+        //     ImportConfigLine.Get(ImportConfigHeader.ID, TargetFieldID);
+        //     ImportConfigLine.Validate("Source Field No.", SourceFieldID); // Validate to update processing action
+        //     ImportConfigLine."Source Field Caption" := CopyStr(TargetFieldNames.Get(TargetFieldID), 1, MaxStrLen(ImportConfigLine."Source Field Caption"));
+        //     ImportConfigLine.Modify();
+        // end;
     end;
 
     local procedure CreateSourceFieldNamesDict(ImportConfigHeader: Record DMTImportConfigHeader) SourceFieldNames: Dictionary of [Integer, Text]
