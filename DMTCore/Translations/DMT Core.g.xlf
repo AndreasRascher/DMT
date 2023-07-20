@@ -1813,6 +1813,16 @@
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Quelldatei</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3763097529 - Method 1839390815 - NamedType 1393845160" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The source file %1 "%2" is currently assigned in import configurations. Continue?</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Die Quelldatei %1 "%2" ist Importkonfigurationen zugewiesen. Mit dem Löschen fortfahren?</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Method ConfirmDeleteIfSourceFileIsAssigned - NamedType DeleteSourceFileQst</note>
+        </trans-unit>
+        <trans-unit id="Table 3763097529 - Method 1839390815 - NamedType 546946400" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Process Canceled</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vorgang abgebrochen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Method ConfirmDeleteIfSourceFileIsAssigned - NamedType ProcessCanceldErr</note>
+        </trans-unit>
         <trans-unit id="Table 3763097529 - Field 3979136067 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Extension</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Dateiendung</note>
