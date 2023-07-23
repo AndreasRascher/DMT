@@ -7,6 +7,7 @@ codeunit 91008 DMTProcessRecord
 
     procedure Start()
     begin
+        Clear(CurrValueToAssignText);
         if RunMode = RunMode::FieldTransfer then begin
             if ProcessedFields.Count < TargetKeyFieldIDs.Count then
                 ProcessKeyFields();
@@ -28,7 +29,7 @@ codeunit 91008 DMTProcessRecord
         FieldWithTypeCorrectValueToValidate, TargetField : FieldRef;
         SourceField: FieldRef;
     begin
-        SourceField := SourceRef.Field(TempImportConfigLine."Source Field No." + GenBufferFieldNoOffSet);
+        SourceField := SourceRef.Field(TempImportConfigLine."Source Field No.");
         TargetField := TmpTargetRef.Field(TempImportConfigLine."Target Field No.");
         AssignValueToFieldRef(SourceRef, TempImportConfigLine, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
 
@@ -59,10 +60,10 @@ codeunit 91008 DMTProcessRecord
         FromField: FieldRef;
         EvaluateOptionValueAsNumber: Boolean;
     begin
-        FromField := SourceRecRef.Field(ImportConfigLine."Source Field No." + GenBufferFieldNoOffSet);
+        FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
         EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRecRef.Number);
         FieldWithTypeCorrectValueToValidate := TargetRecRef.Field(ImportConfigLine."Target Field No.");
-
+        CurrValueToAssignText := Format(FromField.Value); // Error Log Info
         case true of
             (ImportConfigLine."Processing Action" = ImportConfigLine."Processing Action"::FixedValue):
                 RefHelper.AssignFixedValueToFieldRef(FieldWithTypeCorrectValueToValidate, ImportConfigLine."Fixed Value");
@@ -148,8 +149,6 @@ codeunit 91008 DMTProcessRecord
         Replacement.getDefaultImplementation(IReplacementHandler);
         IReplacementHandler.InitBatchProcess(ImportConfigHeader);
         IReplacementHandler.InitProcess(_SourceRef);
-        if not ImportConfigHeader."Use Separate Buffer Table" then
-            GenBufferFieldNoOffSet := 1000;
     end;
 
     procedure InitInsert()
@@ -171,10 +170,10 @@ codeunit 91008 DMTProcessRecord
         ErrorItem.Add('GetLastErrorCallStack', GetLastErrorCallStack);
         ErrorItem.Add('GetLastErrorCode', GetLastErrorCode);
         ErrorItem.Add('GetLastErrorText', GetLastErrorText);
-        if CurrValueToAssign_IsInitialized then
-            ErrorItem.Add('ErrorValue', Format(CurrValueToAssign.Value))
-        else
-            ErrorItem.Add('ErrorValue', '');
+        // if CurrValueToAssign_IsInitialized then
+        ErrorItem.Add('ErrorValue', CurrValueToAssignText);
+        // else
+        // ErrorItem.Add('ErrorValue', '');
         ErrorLogDict.Add(CurrFieldToProcess, ErrorItem);
         ProcessedFields.Add(CurrFieldToProcess);
         // Check if this error should block the insert oder modify
@@ -259,6 +258,7 @@ codeunit 91008 DMTProcessRecord
         CurrFieldToProcess: RecordId;
         SourceRef, TargetRef_INIT, TmpTargetRef : RecordRef;
         CurrValueToAssign: FieldRef;
+        CurrValueToAssignText: Text;
         IReplacementHandler: Interface IReplacementHandler;
         CurrValueToAssign_IsInitialized: Boolean;
         SkipRecord, TargetRecordExists, HasNotIgnoredErrors : Boolean;
@@ -267,6 +267,4 @@ codeunit 91008 DMTProcessRecord
         TargetKeyFieldIDs: List of [Integer];
         ProcessedFields: List of [RecordId];
         RunMode: Option FieldTransfer,InsertRecord,ModifyRecord;
-        GenBufferFieldNoOffSet: Integer;
-
 }

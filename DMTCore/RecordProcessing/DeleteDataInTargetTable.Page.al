@@ -139,7 +139,7 @@ page 91015 DMTDeleteDataInTargetTable
         NotTransferedRecords: List of [RecordId];
         TargetRecordIDsToDelete: List of [RecordId];
     begin
-        ImportConfigHeader.CalcFields("Target Table Caption");
+
         // Create RecordID Mapping between Buffer and Target Table
         if sourceView <> '' then begin
             SourceToTargetRecordMapping := CreateSourceToTargetRecIDMapping(ImportConfigHeader, sourceView, NotTransferedRecords);
@@ -220,7 +220,6 @@ page 91015 DMTDeleteDataInTargetTable
     begin
         Log.InitNewProcess(Enum::DMTLogUsage::"Delete Record", ImportConfigHeader);
         MaxSteps := TargetRecordIDsToDelete.Count;
-        ImportConfigHeader.CalcFields("Target Table Caption");
         if ConfirmDeletion(MaxSteps, ImportConfigHeader."Target Table Caption") then begin
             DeleteRecordsWithErrorLog.DialogOpen(ImportConfigHeader."Target Table Caption" + ' @@@@@@@@@@@@@@@@@@1@\######2#\######3#');
             foreach RecID in TargetRecordIDsToDelete do begin

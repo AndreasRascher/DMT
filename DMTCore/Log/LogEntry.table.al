@@ -15,7 +15,7 @@ table 91008 DMTLogEntry
         field(30; "Target ID"; RecordId) { Caption = 'Target ID', Comment = 'de-DE=Ziel-ID'; }
         field(31; "Target ID (Text)"; Text[250]) { Caption = 'Target ID (Text)', Comment = 'de-DE=Ziel-ID (Text)'; }
         field(32; "Target Table ID"; Integer) { Caption = 'Target Table ID', Comment = 'de-DE=Zieltabellen ID'; }
-        field(33; "Target Field No."; Integer) { Caption = 'Target Field No.', Comment = 'de-De=Zielfeldnr.'; }
+        field(33; "Target Field No."; Integer) { Caption = 'Target Field No.', Comment = 'de-DEs=Zielfeldnr.'; }
         field(40; "Context Description"; Text[2048]) { Caption = 'Context Description', Comment = 'de-DE=Kontext Beschreibung'; }
         field(41; ErrorCode; Text[250]) { Caption = 'Error Code', Comment = 'de-DE=Fehler Code'; }
         field(42; "Error Call Stack"; Blob) { Caption = 'Error Callstack', Comment = 'de-DE=Fehler Aufrufliste'; }

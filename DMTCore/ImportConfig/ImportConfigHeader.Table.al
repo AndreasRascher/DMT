@@ -13,10 +13,10 @@ table 91003 DMTImportConfigHeader
         }
         field(11; "Target Table Caption"; Text[250])
         {
-            Caption = 'Target Table Caption', Comment = 'de-DE=Zieltabelle Bezeichnung';
-            FieldClass = FlowField;
-            CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Target Table ID")));
-            Editable = false;
+            Caption = 'Target Table', Comment = 'de-DE=Zieltabelle';
+            // FieldClass = FlowField;
+            // CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Target Table ID")));
+            // Editable = false;
         }
         field(20; "No.of Records in Buffer Table"; Integer) { Caption = 'No.of Records in Buffer Table', Comment = 'de-DE=Anz. Datensätze in Puffertabelle'; Editable = false; }
         field(40; "Use Separate Buffer Table"; Boolean)
@@ -66,6 +66,10 @@ table 91003 DMTImportConfigHeader
         key(PK; ID) { Clustered = true; }
     }
 
+    fieldgroups
+    {
+        fieldgroup(DropDown; ID, "Target Table Caption") { }
+    }
     trigger OnInsert()
     begin
         Rec.TestField("Data Layout ID");
@@ -73,13 +77,21 @@ table 91003 DMTImportConfigHeader
         Rec.ID := GetNextID();
     end;
 
+    trigger OnDelete()
+    var
+        ImportConfigLine: Record DMTImportConfigLine;
+    begin
+        if Rec.FilterRelated(ImportConfigLine) then
+            Rec.DeleteAll();
+    end;
+
     procedure GetNextID() NextID: Integer
     var
-        DataLayout: Record DMTDataLayout;
+        ImportConfigHeader: Record DMTImportConfigHeader;
     begin
         NextID := 1;
-        if DataLayout.FindLast() then
-            NextID += DataLayout.ID;
+        if ImportConfigHeader.FindLast() then
+            NextID += ImportConfigHeader.ID;
     end;
 
     internal procedure FilterRelated(var ImportConfigLine: Record DMTImportConfigLine) HasLinesInFilter: Boolean
@@ -221,6 +233,50 @@ table 91003 DMTImportConfigHeader
         Rec.Modify();
     end;
 
+    procedure TargetTableCaption_OnAfterLookup(var Selected: RecordRef)
+    var
+        AllObjWithCaption: Record AllObjWithCaption;
+    begin
+        Selected.SetTable(AllObjWithCaption);
+        Rec."Target Table Caption" := AllObjWithCaption."Object Caption";
+        Rec."Target Table ID" := AllObjWithCaption."Object ID";
+    end;
 
+    procedure TargetTableCaption_OnValidate()
+    var
+        AllObjWithCaption: Record AllObjWithCaption;
+        TypeHelper: Codeunit "Type Helper";
+        ObjectID: Integer;
+        SearchToken: Text;
+    begin
+        case true of
+            // Case 1 - Empty
+            (Rec."Target Table Caption" = ''):
+                begin
+                    Rec."Target Table ID" := 0;
+                    Rec."Target Table Caption" := '';
+                end;
+            // Case 2 - Table No.
+            (Rec."Target Table Caption" <> '') and TypeHelper.IsNumeric(Rec."Target Table Caption"):
+                begin
+                    Evaluate(ObjectID, Rec."Target Table Caption");
+                    AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, ObjectID);
+                    Rec."Target Table Caption" := AllObjWithCaption."Object Caption";
+                end;
+            // Case 3 - Search Term
+            (Rec."Target Table Caption" <> '') and not TypeHelper.IsNumeric(Rec."Target Table Caption"):
+                begin
+                    SearchToken := Rec."Target Table Caption";
+                    if not SearchToken.StartsWith('@') then
+                        SearchToken := '@' + SearchToken;
+                    if not SearchToken.EndsWith('*') then
+                        SearchToken := SearchToken + '*';
+                    AllObjWithCaption.SetFilter("Object Caption", SearchToken);
+                    AllObjWithCaption.FindFirst();
+                    Rec."Target Table ID" := AllObjWithCaption."Object ID";
+                    Rec."Target Table Caption" := AllObjWithCaption."Object Caption";
+                end;
+        end;
+    end;
 
 }

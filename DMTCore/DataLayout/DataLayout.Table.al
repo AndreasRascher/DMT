@@ -38,8 +38,8 @@ table 91002 DMTDataLayout
 
     trigger OnInsert()
     begin
-        if ID = 0 then
-            ID := GetNextID();
+        if Rec.ID = 0 then
+            Rec.ID := Rec.GetNextID();
     end;
 
     procedure filterDataLayoutLines(var DataLayoutLine: Record DMTDataLayoutLine) HasLinesInFilter: Boolean

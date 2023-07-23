@@ -283,7 +283,6 @@ codeunit 91014 DMTMigrate
         TimeRemainingLbl: Label 'Time Remaining', Comment = 'de-DE Verbleibende Zeit';
         ProgressBarTitle: Text;
     begin
-        ImportConfigHeader.CalcFields("Target Table Caption");
         ProgressBarTitle := ImportConfigHeader."Target Table Caption";
         MaxWith := 100 - 32;
         if StrLen(ProgressBarTitle) < MaxWith then begin
@@ -367,7 +366,7 @@ codeunit 91014 DMTMigrate
         ImportConfigLine.SetRange("Is Key Field(Target)", true);
         ImportConfigLine.SetFilter("Source Field No.", '<>0');
 
-        ImportConfigHeader.CalcFields("Target Table Caption");
+
         if ImportConfigLine.IsEmpty then
             Error(ImportConfigLineEmptyErr, ImportConfigHeader.TableCaption, ImportConfigHeader.ID);
     end;

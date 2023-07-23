@@ -348,8 +348,8 @@ table 91001 DMTGenBuffTable
             exit(false);
         end;
         RecRef.GetTable(GenBuffTable);
-        for FieldIndex := 1 to GenBuffTable."Column Count" do begin
-            BuffTableCaptions.Add(FieldIndex, Format(RecRef.Field(1000 + FieldIndex).Value));
+        for FieldIndex := 1001 to (1000 + GenBuffTable."Column Count") do begin
+            BuffTableCaptions.Add(FieldIndex, Format(RecRef.Field(FieldIndex).Value));
         end;
     end;
 

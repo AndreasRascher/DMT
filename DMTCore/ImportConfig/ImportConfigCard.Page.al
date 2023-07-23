@@ -18,6 +18,7 @@ page 91008 DMTImportConfigCard
 
                 field(ID; Rec.ID) { Visible = false; }
                 field(SourceFileID; Rec."Source File ID") { ShowMandatory = true; }
+
                 field("Data Layout Code"; Rec."Data Layout ID")
                 {
                     ShowMandatory = true;
@@ -27,8 +28,22 @@ page 91008 DMTImportConfigCard
                         CurrPage.LinePart.Page.DoUpdate(false);
                     end;
                 }
-                field("Target Table Caption"; Rec."Target Table Caption") { }
-                field("Target Table ID"; Rec."Target Table ID") { ShowMandatory = true; }
+                field("Target Table Caption"; Rec."Target Table Caption")
+                {
+                    ShowMandatory = true;
+                    TableRelation = AllObjWithCaption where("Object Type" = const(Table));
+
+                    trigger OnAfterLookup(Selected: RecordRef)
+                    begin
+                        Rec.TargetTableCaption_OnAfterLookup(Selected);
+                    end;
+
+                    trigger OnValidate()
+                    begin
+                        Rec.TargetTableCaption_OnValidate();
+                    end;
+                }
+                field("Target Table ID"; Rec."Target Table ID") { Visible = false; }
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { }
                 field("Import Only New Records"; Rec."Import Only New Records") { }
             }

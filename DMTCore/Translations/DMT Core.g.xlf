@@ -1424,8 +1424,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Source File Name - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 4040554107 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Target Table Caption</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Zieltabelle Bezeichnung</note>
+          <source>Target Table</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zieltabelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Target Table Caption - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 1666780894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1590,7 +1590,7 @@
         </trans-unit>
         <trans-unit id="Table 744607175 - Field 3323085680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Field No.</source>
-          <note from="Developer" annotates="general" priority="2">de-De=Zielfeldnr.</note>
+          <note from="Developer" annotates="general" priority="2">de-DEs=Zielfeldnr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Target Field No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 744607175 - Field 848768200 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

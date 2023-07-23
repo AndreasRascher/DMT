@@ -254,12 +254,13 @@ codeunit 91002 DMTImportConfigMgt
     local procedure AssignSourceToTargetFields(ImportConfigHeader: Record DMTImportConfigHeader)
     var
         ImportConfigLine: Record DMTImportConfigLine;
+        DMTSetup: Record DMTSetup;
         MigrationLib: Codeunit DMTMigrationLib;
-        SourceFieldNames, TargetFieldNames : Dictionary of [Integer, Text];
+        SourceFieldNamesFromBuffer, TargetFieldNames : Dictionary of [Integer, Text];
         ExistingFieldMappings: Dictionary of [Text, Text];
         FoundAtIndex: Integer;
         SourceFieldID, TargetFieldID : Integer;
-        NewFieldName, SourceFieldName : Text;
+        NewFieldName, SourceFieldName, TargetFieldName : Text;
     begin
         // Load Target Field Names
         TargetFieldNames := CreateTargetFieldNamesDict(ImportConfigHeader, true);
@@ -267,13 +268,24 @@ codeunit 91002 DMTImportConfigMgt
             exit;
 
         //Load Source Field Names
-        SourceFieldNames := CreateSourceFieldNamesDict(ImportConfigHeader);
-        if SourceFieldNames.Count = 0 then
-            exit;
+        SourceFieldNamesFromBuffer := CreateSourceFieldNamesDict(ImportConfigHeader);
+        // if SourceFieldNames.Count = 0 then
+        //     exit;
+
+        //Load Existing Mappings
+        ImportConfigLine.Reset();
+        ImportConfigLine.SetAutoCalcFields("Target Field Caption");
+        ImportConfigLine.SetFilter("Source Field Caption", '<>''''');
+        ImportConfigLine.SetFilter("Target Field Caption", '<>''''');
+        if ImportConfigLine.FindSet(false) then
+            repeat
+                ExistingFieldMappings.Set(ImportConfigLine."Source Field Caption", ImportConfigLine."Target Field Caption");
+            until ImportConfigLine.Next() = 0;
 
         //Match Fields by Name
-        foreach SourceFieldID in SourceFieldNames.Keys do begin
-            SourceFieldName := SourceFieldNames.Get(SourceFieldID);
+        foreach SourceFieldID in SourceFieldNamesFromBuffer.Keys do begin
+            SourceFieldName := SourceFieldNamesFromBuffer.Get(SourceFieldID);
+            SourceFieldName := SourceFieldName.TrimEnd(' '); // BC Felder haben keine Leerzeichen am Ende, für Matching entfernen
             FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName);
             // TargetField.SetFilter(FieldName, ConvertStr(BuffTableCaption, '@()&', '????'));
             if FoundAtIndex = 0 then
@@ -284,32 +296,33 @@ codeunit 91002 DMTImportConfigMgt
                 // SetSourceField
                 ImportConfigLine.Get(ImportConfigHeader.ID, TargetFieldID);
                 ImportConfigLine.Validate("Source Field No.", SourceFieldID); // Validate to update processing action
-                ImportConfigLine."Source Field Caption" := CopyStr(TargetFieldNames.Get(TargetFieldID), 1, MaxStrLen(ImportConfigLine."Source Field Caption"));
+                ImportConfigLine."Source Field Caption" := CopyStr(SourceFieldName, 1, MaxStrLen(ImportConfigLine."Source Field Caption"));
                 ImportConfigLine.Modify();
             end;
         end;
-
-        // //Load Existing Mappings
-        // ImportConfigLine.Reset();
-        // ImportConfigLine.SetAutoCalcFields("Target Field Caption");
-        // ImportConfigLine.SetFilter("Source Field Caption", '<>''''');
-        // ImportConfigLine.SetFilter("Target Field Caption", '<>''''');
-        // if ImportConfigLine.FindSet(false) then
-        //     repeat
-        //         ExistingFieldMappings.Set(ImportConfigLine."Source Field Caption", ImportConfigLine."Target Field Caption");
-        //     until ImportConfigLine.Next() = 0;
-
-        // foreach SourceFieldID in SourceFieldNames.Keys do begin
-        //     SourceFieldName := SourceFieldNames.Get(SourceFieldID);
-        //     FoundAtIndex := ExistingFieldMappings.Values.IndexOf(SourceFieldName);
-        //     // TargetField.SetFilter(FieldName, ConvertStr(BuffTableCaption, '@()&', '????'));
-        //     TargetFieldID := TargetFieldNames.Keys.Get(FoundAtIndex);
-        //     // SetSourceField
-        //     ImportConfigLine.Get(ImportConfigHeader.ID, TargetFieldID);
-        //     ImportConfigLine.Validate("Source Field No.", SourceFieldID); // Validate to update processing action
-        //     ImportConfigLine."Source Field Caption" := CopyStr(TargetFieldNames.Get(TargetFieldID), 1, MaxStrLen(ImportConfigLine."Source Field Caption"));
-        //     ImportConfigLine.Modify();
-        // end;
+        DMTSetup.InsertWhenEmpty();
+        DMTSetup.GetRecordOnce();
+        // Match Fields by existing Mappings
+        if DMTSetup."Use exist. mappings" then
+            foreach SourceFieldID in SourceFieldNamesFromBuffer.Keys do begin
+                // if fieldmapping contains sourcefieldname
+                SourceFieldName := SourceFieldNamesFromBuffer.Get(SourceFieldID);
+                FoundAtIndex := ExistingFieldMappings.Keys.IndexOf(SourceFieldName);
+                if FoundAtIndex <> 0 then begin
+                    // if target field name from mapping exists in import configuration
+                    TargetFieldName := ExistingFieldMappings.Values.Get(FoundAtIndex);
+                    if TargetFieldNames.Values.Contains(TargetFieldName) then begin
+                        FoundAtIndex := TargetFieldNames.Values.IndexOf(TargetFieldName);
+                        TargetFieldID := TargetFieldNames.Keys.Get(FoundAtIndex);
+                        ImportConfigLine.Get(ImportConfigHeader.ID, TargetFieldID);
+                        if ImportConfigLine."Source Field No." = 0 then begin
+                            ImportConfigLine.Validate("Source Field No.", SourceFieldID); // Validate to update processing action
+                            // ImportConfigLine."Source Field Caption" := CopyStr(, 1, MaxStrLen(ImportConfigLine."Source Field Caption"));
+                            ImportConfigLine.Modify();
+                        end;
+                    end;
+                end;
+            end;
     end;
 
     local procedure CreateSourceFieldNamesDict(ImportConfigHeader: Record DMTImportConfigHeader) SourceFieldNames: Dictionary of [Integer, Text]
@@ -330,7 +343,7 @@ codeunit 91002 DMTImportConfigMgt
         end else begin
             GenBuffTable.GetColCaptionForImportedFile(ImportConfigHeader, SourceFieldNames2);
             foreach FieldID in SourceFieldNames2.Keys do begin
-                SourceFieldNames.Add(FieldID + 1000, SourceFieldNames2.Get(FieldID));
+                SourceFieldNames.Add(FieldID, SourceFieldNames2.Get(FieldID));
             end;
         end;
     end;
