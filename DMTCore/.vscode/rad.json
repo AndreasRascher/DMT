@@ -1,1 +1,1 @@
-﻿{"Added":[],"Modified":[],"Removed":[]}
+﻿{"Added":[],"Modified":[{"Id":91014,"Kind":11,"Name":"DMTMigrate","PackagePath":"/src/RecordProcessing/Migrate.al"},{"Id":91000,"Kind":10,"Name":"DMTSetup","PackagePath":"/src/Setup/DMTSetup.Table.al"},{"Id":91000,"Kind":12,"Name":"DMT Setup","PackagePath":"/src/Setup/DMTSetup.Page.al"},{"Id":91008,"Kind":12,"Name":"DMTImportConfigCard","PackagePath":"/src/ImportConfig/ImportConfigCard.Page.al"},{"Id":91012,"Kind":12,"Name":"DMTFieldLookup","PackagePath":"/src/ImportConfig/FieldLookUp.Page.al"}],"Removed":[]}
