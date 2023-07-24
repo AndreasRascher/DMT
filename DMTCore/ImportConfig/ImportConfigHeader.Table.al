@@ -261,6 +261,7 @@ table 91003 DMTImportConfigHeader
                 begin
                     Evaluate(ObjectID, Rec."Target Table Caption");
                     AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, ObjectID);
+                    Rec."Target Table ID" := AllObjWithCaption."Object ID";
                     Rec."Target Table Caption" := AllObjWithCaption."Object Caption";
                 end;
             // Case 3 - Search Term
