@@ -29,12 +29,12 @@ page 91012 DMTFieldLookup
         DataLayout: Record DMTDataLayout;
         DataLayoutLine: Record DMTDataLayoutLine;
         TempDataLayoutLine: Record DMTDataLayoutLine temporary;
+        GenBuffTable: Record DMTGenBuffTable;
+        BuffTableCaptions: Dictionary of [Integer, Text];
+        FieldNo: Integer;
     // ImportConfigHeader : Record DMTImportConfigHeader;
     // TempFieldBuffer: Record DMTFieldBuffer temporary;
-    // GenBuffTable: Record DMTGenBuffTable;
     // Field: Record Field;
-    // BuffTableCaptions: Dictionary of [Integer, Text];
-    // FieldNo: Integer;
     begin
         if IsLoaded then exit;
         Rec.FilterGroup(4);
@@ -42,29 +42,23 @@ page 91012 DMTFieldLookup
             Rec.GetFilter("Data File ID Filter") <> '':
                 begin
                     ImportConfigHeader.Get(Rec.GetRangeMin("Data File ID Filter"));
-                    DataLayout.Get(ImportConfigHeader."Data Layout ID");
-                    DataLayoutLine.SetRange("Data Layout ID", DataLayout.ID);
-                    DataLayoutLine.CopyToTemp(TempDataLayoutLine);
-                    Rec.Copy(TempDataLayoutLine, true);
-                    ApplyFieldIdOffsetInGenBuffTableTo(TempDataLayoutLine);
+                    if not ImportConfigHeader."Use Separate Buffer Table" then begin
+                        GenBuffTable.GetColCaptionForImportedFile(ImportConfigHeader, BuffTableCaptions);
+                        foreach FieldNo in BuffTableCaptions.Keys do begin
+                            TempDataLayoutLine.Init();
+                            TempDataLayoutLine."Data Layout ID" := ImportConfigHeader."Data Layout ID";
+                            TempDataLayoutLine."Column No." := FieldNo;
+                            TempDataLayoutLine.ColumnName := CopyStr(BuffTableCaptions.Get(FieldNo), 1, MaxStrLen(TempDataLayoutLine.ColumnName));
+                            TempDataLayoutLine.Insert();
+                            Rec.Copy(TempDataLayoutLine, true);
+                        end;
+                    end;
                     IsLoaded := true;
                 end;
             else
                 Error('unhandled case');
         end;
         Rec.FilterGroup(0);
-    end;
-
-    /// <summary>
-    /// Field IDs in Gen. Buffer Table start from 1000
-    /// </summary>
-    /// <param name="TempDataLayoutLine"></param>
-    local procedure ApplyFieldIdOffsetInGenBuffTableTo(var TempDataLayoutLine: Record DMTDataLayoutLine temporary)
-    var
-        GenBufferFieldNoOffSet: Integer;
-    begin
-        GenBufferFieldNoOffSet := 1000;
-        TempDataLayoutLine."Column No." += GenBufferFieldNoOffSet;
     end;
 
     var

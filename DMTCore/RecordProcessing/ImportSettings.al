@@ -49,7 +49,7 @@ codeunit 91010 DMTImportSettings
 
     procedure ImportConfigHeader() ImportConfigHeader: Record DMTImportConfigHeader
     begin
-        ImportConfigHeader.CalcFields("Target Table Caption");
+
         exit(ImportConfigHeaderGlobal);
     end;
 

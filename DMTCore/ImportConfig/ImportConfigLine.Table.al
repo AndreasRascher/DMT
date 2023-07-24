@@ -112,19 +112,38 @@ table 91006 DMTImportConfigLine
     var
         DataLayoutLine: Record DMTDataLayoutLine;
         ImportConfigHeader: Record DMTImportConfigHeader;
+        genBuffTable: Record DMTGenBuffTable;
+        BuffTableCaptions: Dictionary of [Integer, Text];
     begin
         case FromFieldNo of
             Rec.FieldNo("Source Field No."):
                 begin
+                    // clear fields
+                    Clear(Rec."Source Field Caption");
+                    Clear(Rec."Processing Action");
+
+                    // Load Header
                     ImportConfigHeader.Get(Rec."Imp.Conf.Header ID");
-                    if DataLayoutLine.Get(ImportConfigHeader."Data Layout ID", Rec."Source Field No.") then begin
-                        Rec."Source Field Caption" := DataLayoutLine.ColumnName;
-                        Rec."Processing Action" := Rec."Processing Action"::Transfer;
-                    end else begin
-                        // clear fields
-                        Clear(Rec."Source Field Caption");
-                        Clear(Rec."Processing Action");
+
+                    //Read Captions from Buffer Table Fields
+                    if ImportConfigHeader."Use Separate Buffer Table" then begin
+                        Error('ToDo: Select Fieldnames from Buffer table');
                     end;
+
+                    //Read Captions from Gen. Buffer Table Heading Line
+                    if not ImportConfigHeader."Use Separate Buffer Table" then
+                        if genBuffTable.GetColCaptionForImportedFile(ImportConfigHeader, BuffTableCaptions) then
+                            if BuffTableCaptions.ContainsKey(Rec."Source Field No.") then begin
+                                Rec."Source Field Caption" := CopyStr(BuffTableCaptions.Get(Rec."Source Field No."), 1, MaxStrLen(Rec."Source Field Caption"));
+                                Rec."Processing Action" := Rec."Processing Action"::Transfer;
+                            end;
+
+                    // Read Captions from Data Layout
+                    if Rec."Source Field Caption" = '' then
+                        if DataLayoutLine.Get(ImportConfigHeader."Data Layout ID", Rec."Source Field No.") then begin
+                            Rec."Source Field Caption" := DataLayoutLine.ColumnName;
+                            Rec."Processing Action" := Rec."Processing Action"::Transfer;
+                        end;
                 end;
             else
                 Error('unhandled %1', FromFieldNo);

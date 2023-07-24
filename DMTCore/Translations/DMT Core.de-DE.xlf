@@ -1708,9 +1708,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Source File Name - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 4040554107 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Target Table Caption</source>
-          <target state="translated">Zieltabelle Bezeichnung</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Zieltabelle Bezeichnung</note>
+          <source>Target Table</source>
+          <target state="translated">Zieltabelle</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zieltabelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Target Table Caption - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 1666780894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1908,7 +1908,7 @@
         <trans-unit id="Table 744607175 - Field 3323085680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Field No.</source>
           <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2">de-De=Zielfeldnr.</note>
+          <note from="Developer" annotates="general" priority="2">de-DEs=Zielfeldnr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Target Field No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 744607175 - Field 848768200 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2169,6 +2169,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Primärschlüssel</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Primary Key - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 521254526 - Field 4139345547 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Propose matching fields - Use existing mappings</source>
+          <target state="translated">Feldzuordnung vorschlagen - Existierende Feld-Mappings verwenden</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Feldzuordnung vorschlagen - Existierende Feld-Mappings verwenden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Use exist. mappings - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3763097529 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Source File</source>
           <target state="translated">DMT Quelldatei</target>
@@ -2354,6 +2360,12 @@
           <target state="needs-translation"/>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control UserID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 425834526 - Control 2349991090 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Mapping fields</source>
+          <target state="translated">Mapping der Felder</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Mapping der Felder</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control Field Mapping - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Control 3157111635 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Migration Settings</source>
