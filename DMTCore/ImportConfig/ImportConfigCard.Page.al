@@ -17,17 +17,6 @@ page 91008 DMTImportConfigCard
                 Caption = 'General', Comment = 'de-DE=Allgemein';
 
                 field(ID; Rec.ID) { Visible = false; }
-                field(SourceFileID; Rec."Source File ID") { ShowMandatory = true; }
-
-                field("Data Layout Code"; Rec."Data Layout ID")
-                {
-                    ShowMandatory = true;
-                    trigger OnValidate()
-                    begin
-                        CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
-                        CurrPage.LinePart.Page.DoUpdate(false);
-                    end;
-                }
                 field("Target Table Caption"; Rec."Target Table Caption")
                 {
                     ShowMandatory = true;
@@ -41,6 +30,17 @@ page 91008 DMTImportConfigCard
                     trigger OnValidate()
                     begin
                         Rec.TargetTableCaption_OnValidate();
+                    end;
+                }
+                field(SourceFileID; Rec."Source File ID") { ShowMandatory = true; }
+
+                field("Data Layout Code"; Rec."Data Layout ID")
+                {
+                    ShowMandatory = true;
+                    trigger OnValidate()
+                    begin
+                        CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
+                        CurrPage.LinePart.Page.DoUpdate(false);
                     end;
                 }
                 field("Target Table ID"; Rec."Target Table ID") { Visible = false; }

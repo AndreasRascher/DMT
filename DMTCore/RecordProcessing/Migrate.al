@@ -124,6 +124,18 @@ codeunit 91014 DMTMigrate
                 until TempImportConfigLine_ProcessingPlanSettings.Next() = 0;
         end;
 
+        // Update From Field No From Index To Gen.Buff Field No
+        if not ImportConfigHeader."Use Separate Buffer Table" then begin
+            TempImportConfigLine.Reset();
+            if TempImportConfigLine.FindSet() then
+                repeat
+                    if TempImportConfigLine."Source Field No." < 1000 then begin
+                        TempImportConfigLine."Source Field No." += 1000;
+                        TempImportConfigLine.Modify();
+                    end;
+                until TempImportConfigLine.Next() = 0;
+        end;
+
         OK := TempImportConfigLine.FindFirst();
         DMTImportSettings.SetImportConfigLine(TempImportConfigLine);
     end;
