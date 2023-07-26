@@ -57,6 +57,53 @@ codeunit 91005 DMTExcelMgt implements ISourceFileImport
         IsExcelBufferLoaded := true;
     end;
 
+    internal procedure ReadSheetLine(SheetName: Text; LineNo: Integer)
+    var
+        ColumnList: List of [Integer];
+        RowList: List of [Integer];
+    begin
+        CheckHasExcelFileStream();
+        if SheetName = '' then
+            SheetName := SelectSheet();
+        tempExcelBufferGlobal.OpenBookStream(excelFileStreamGlobal, SheetName);
+        RowList.Add(LineNo);
+        tempExcelBufferGlobal.ReadSheetContinous(SheetName, true, ColumnList, RowList, LineNo);
+        IsExcelBufferLoaded := true;
+    end;
+
+    internal procedure ReadSheetInChunks(SheetName: Text; NoOfLinesPerChunk: Integer)
+    var
+        ColumnList: List of [Integer];
+        RowList: List of [Integer];
+        i: Integer;
+        offset: Integer;
+        DataTable: List of [List of [Text]];
+    begin
+        CheckHasExcelFileStream();
+        if SheetName = '' then
+            SheetName := SelectSheet();
+
+        for i := 1 to NoOfLinesPerChunk do begin
+            ColumnList.Add(i);
+        end;
+        offset := i;
+
+        tempExcelBufferGlobal.ReadSheetContinous(SheetName, true, ColumnList, RowList, 0);
+        while not tempExcelBufferGlobal.IsEmpty do begin
+            readExcelBufferToDictionary(DataTable, tempExcelBufferGlobal);
+            tempExcelBufferGlobal.DeleteAll();
+            tempExcelBufferGlobal.ReadSheetContinous(SheetName, true, ColumnList, RowList, 0);
+            Clear(ColumnList);
+            for i := offset to offset + NoOfLinesPerChunk do begin
+                ColumnList.Add(i);
+            end;
+            offset := i;
+        end;
+        tempExcelBufferGlobal.OpenBookStream(excelFileStreamGlobal, SheetName);
+
+        IsExcelBufferLoaded := true;
+    end;
+
     procedure ReadHeaderLine(headingRowNo: Integer) HeaderLine: Dictionary of [Text, Integer]
     var
         xl_ColNo: Integer;
@@ -208,6 +255,23 @@ codeunit 91005 DMTExcelMgt implements ISourceFileImport
             ColumnNumber += Power(26, Exponent) * Position;
             Exponent += 1;
         end;
+    end;
+
+    local procedure readExcelBufferToDictionary(var DataTable: List of [List of [Text]]; var tempExcelBuffer: Record "Excel Buffer" temporary)
+    var
+        tempExcelBuffer2: Record "Excel Buffer" temporary;
+        Line: List of [Text];
+    begin
+        tempExcelBuffer2.Copy(tempExcelBuffer, true);
+        tempExcelBuffer2.FindSet();
+        repeat
+            if not DataTable.Get(tempExcelBuffer2."Row No.", Line) then begin
+                Clear(Line);
+                Line.Set(tempExcelBuffer."Column No.", tempExcelBuffer."Cell Value as Text");
+                DataTable.Add(Line);
+            end else
+                DataTable.Get(tempExcelBuffer2."Row No.").Set(tempExcelBuffer."Column No.", tempExcelBuffer."Cell Value as Text");
+        until tempExcelBuffer2.Next() = 0;
     end;
 
     var

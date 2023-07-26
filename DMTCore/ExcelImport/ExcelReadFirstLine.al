@@ -36,4 +36,5 @@ codeunit 91018 DMTExcelReadFirstLine
         TempBlob: Codeunit "Temp Blob";
         HeaderLineNoGlobal: Integer;
         HeadlineColumnValuesGlobal: Dictionary of [Text, Integer];
+
 }

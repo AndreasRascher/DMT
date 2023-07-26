@@ -20,7 +20,7 @@ page 91008 DMTImportConfigCard
                 field("Target Table Caption"; Rec."Target Table Caption")
                 {
                     ShowMandatory = true;
-                    TableRelation = AllObjWithCaption where("Object Type" = const(Table));
+                    TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
 
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
