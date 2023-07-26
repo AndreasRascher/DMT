@@ -3,15 +3,19 @@ codeunit 91018 DMTExcelReadFirstLine
     EventSubscriberInstance = Manual;
     trigger OnRun()
     var
-        DMTExcelMgt: Codeunit DMTExcelMgt;
+        TempExcelBuffer: Record "Excel Buffer" temporary;
+        IStr: InStream;
+        ColumnList: List of [Integer];
+        RowList: List of [Integer];
     begin
-        DMTExcelMgt.InitFileStreamFromBlob(TempBlob, 'DummyName');
-        DMTExcelMgt.ReadSheet('');
+        TempBlobGlobal.CreateInStream(IStr);
+        TempExcelBuffer.OpenBookStream(IStr, '');
+        TempExcelBuffer.ReadSheetContinous('', true, ColumnList, RowList, 0);
     end;
 
     procedure Init(DMTSourceFileStorage: Record DMTSourceFileStorage; HeaderLineNo: integer)
     begin
-        DMTSourceFileStorage.GetFileAsTempBlob(TempBlob);
+        DMTSourceFileStorage.GetFileAsTempBlob(TempBlobGlobal);
         HeaderLineNoGlobal := HeaderLineNo;
     end;
 
@@ -19,22 +23,27 @@ codeunit 91018 DMTExcelReadFirstLine
     local procedure OnBeforeParseCellValue(var ExcelBuffer: Record "Excel Buffer"; var Value: Text; var FormatString: Text; var IsHandled: Boolean);
     begin
         IsHandled := true;
-        if ExcelBuffer."Row No." > HeaderLineNoGlobal then
-            Error(''); // stop reading
-        if ExcelBuffer."Row No." = HeaderLineNoGlobal then begin
-            HeadlineColumnValuesGlobal.Set(format(Value), ExcelBuffer."Column No.");
+        AddDataTableField(ExcelBuffer."Row No.", Value);
+    end;
+
+    local procedure AddDataTableField(lineNo: Integer; fieldContent: Text)
+    var
+        Line: List of [Text];
+    begin
+        if DataTable.Get(lineNo, Line) then begin
+            // append to existing line
+            Line.Add(fieldContent);
+            DataTable.Set(lineNo, Line);
+        end else begin
+            // new line
+            Line.Add(fieldContent);
+            DataTable.Add(Line);
         end;
     end;
 
-    procedure GetHeadlineColumnValues() HeadlineColumnValues: Dictionary of [Text, Integer];
-    begin
-        exit(HeadlineColumnValuesGlobal);
-    end;
-
-
     var
-        TempBlob: Codeunit "Temp Blob";
+        TempBlobGlobal: Codeunit "Temp Blob";
         HeaderLineNoGlobal: Integer;
-        HeadlineColumnValuesGlobal: Dictionary of [Text, Integer];
+        DataTable: List of [List of [Text]];
 
 }
