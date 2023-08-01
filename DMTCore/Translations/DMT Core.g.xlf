@@ -2568,6 +2568,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMT NAVFieldBufferImport - Control GetDatabaseNameCtrl - Property Caption</note>
         </trans-unit>
+        <trans-unit id="XmlPort 3796222322 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>GenBufferImport</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTCSVImport - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Enum 101561864 - EnumValue 3972427471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fixed Value</source>
           <note from="Developer" annotates="general" priority="2"></note>

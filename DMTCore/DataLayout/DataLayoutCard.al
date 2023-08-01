@@ -65,9 +65,9 @@ page 91011 DMTDataLayoutCard
                 var
                     dataLayoutLine: Record DMTDataLayoutLine;
                     sourceFileStorage: Record DMTSourceFileStorage;
+                    excelReader: Codeunit DMTExcelReader;
                     tempBlob: Codeunit "Temp Blob";
-                    excelReadFirstLine: Codeunit DMTExcelReadFirstLine;
-                    HeaderLine: Dictionary of [Text, Integer];
+                    HeaderLine: List of [Text];
                     ColumnName: Text;
                 begin
                     // select source
@@ -75,26 +75,37 @@ page 91011 DMTDataLayoutCard
                         exit;
                     sourceFileStorage.TestField(Name);
                     sourceFileStorage.GetFileAsTempBlob(tempBlob);
-                    BindSubscription(excelReadFirstLine);
-                    excelReadFirstLine.Init(sourceFileStorage, Rec.XLSHeadingRowNo);
-                    if excelReadFirstLine.Run() then;
+                    BindSubscription(excelReader);
+                    // read top 5 rows if undefined
+                    if Rec.XLSHeadingRowNo = 0 then
+                        excelReader.InitReadRows(sourceFileStorage, 1, 5)
+                    else
+                        excelReader.InitReadRows(sourceFileStorage, Rec.XLSHeadingRowNo, Rec.XLSHeadingRowNo);
+                    ClearLastError();
+                    excelReader.Run();
                     if GetLastErrorText() <> '' then
                         Error(GetLastErrorText());
-                    HeaderLine := excelReadFirstLine.GetHeadlineColumnValues();
+                    HeaderLine := excelReader.GetHeadlineColumnValues();
+                    if HeaderLine.Count = 0 then begin
+                        Message('Keine Daten gefunden in Zeile %1', rec.XLSHeadingRowNo);
+                    end;
 
                     if Rec.Name = '' then
                         Rec.Name := sourceFileStorage.Name;
                     if Rec.Name.EndsWith('.xlsx') and (Rec.SourceFileFormat = Rec.SourceFileFormat::" ") then
                         Rec.SourceFileFormat := Rec.SourceFileFormat::Excel;
+
                     CurrPage.Update(true);
-
-                    foreach ColumnName in HeaderLine.Keys do begin
+                    // clear existing lines
+                    dataLayoutLine.Reset();
+                    dataLayoutLine.SetRange("Data Layout ID", Rec.ID);
+                    dataLayoutLine.DeleteAll(true);
+                    // add lines
+                    foreach ColumnName in HeaderLine do begin
                         Clear(dataLayoutLine);
-
                         dataLayoutLine."Data Layout ID" := Rec.ID;
-                        dataLayoutLine."Column No." := HeaderLine.Get(ColumnName);
+                        dataLayoutLine."Column No." := HeaderLine.IndexOf(ColumnName);
                         dataLayoutLine.ColumnName := CopyStr(ColumnName, 1, MaxStrLen(dataLayoutLine.ColumnName));
-
                         dataLayoutLine.Insert(true);
                     end;
                 end;

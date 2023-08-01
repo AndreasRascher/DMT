@@ -13,7 +13,7 @@ table 91002 DMTDataLayout
         field(100; CSVFieldSeparator; Text[10]) { Caption = 'Field Separator', Comment = 'de-DE=Feldtrenner'; }
         field(101; CSVLineSeparator; Text[10]) { Caption = 'Line Separator', Comment = 'de-DE=Zeilentrenner'; }
         field(200; NAVTableID; Integer) { Caption = 'NAV TableID', Comment = 'de-DE=Tabellen ID'; Editable = false; }
-        field(300; "XLSHeadingRowNo"; Integer) { Caption = 'Heading Row no.', Comment = 'de-DE=Überschrift Zeilennr.'; InitValue = 1; }
+        field(300; "XLSHeadingRowNo"; Integer) { Caption = 'Heading Row no.', Comment = 'de-DE=Überschrift Zeilennr.'; }
         field(301; "XLSDefaultSheetName"; Text[250])
         {
             Caption = 'Default Excel Sheet', Comment = 'de-DE=Standard Excel Blatt';
