@@ -37,12 +37,7 @@ page 91011 DMTDataLayoutCard
                 Visible = Rec.SourceFileFormat = Rec.SourceFileFormat::Excel;
                 field(XLSHeadingRowNo; Rec.XLSHeadingRowNo) { }
                 field(XLSDefaultSheetName; Rec.XLSDefaultSheetName)
-                {
-                    trigger OnDrillDown()
-                    begin
-                        Rec.LookupDefaultExcelSheetName()
-                    end;
-                }
+                { }
             }
             part(DMTLayoutLinePart; DMTLayoutLinePart)
             {
@@ -94,7 +89,7 @@ page 91011 DMTDataLayoutCard
                         Rec.Name := sourceFileStorage.Name;
                     if Rec.Name.EndsWith('.xlsx') and (Rec.SourceFileFormat = Rec.SourceFileFormat::" ") then
                         Rec.SourceFileFormat := Rec.SourceFileFormat::Excel;
-
+                    rec.XLSDefaultSheetName := excelReader.GetSheetName();
                     CurrPage.Update(true);
                     // clear existing lines
                     dataLayoutLine.Reset();

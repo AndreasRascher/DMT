@@ -56,12 +56,4 @@ table 91002 DMTDataLayout
         if DataLayout.FindLast() then
             NextID += DataLayout.ID;
     end;
-
-    procedure LookupDefaultExcelSheetName()
-    var
-        excelMgt: Codeunit DMTExcelMgt;
-    begin
-        excelMgt.InitFileStreamFromUpload();
-        Rec.XLSDefaultSheetName := CopyStr(excelMgt.SelectSheet(), 1, MaxStrLen(rec.XLSDefaultSheetName));
-    end;
 }
