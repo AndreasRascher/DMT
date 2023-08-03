@@ -276,7 +276,7 @@ table 91001 DMTGenBuffTable
         GenBuffTable_CaptionLine.SetRange(IsCaptionLine, true);
         GenBuffTable_CaptionLine.SetRange("Import from Filename", GenBuffTable_First."Import from Filename");
         if not GenBuffTable_CaptionLine.FindFirst() then
-            Error('No lines found for %1', GenBuffTable_First."Import from Filename");
+            Error('No caption line found for %1', GenBuffTable_First."Import from Filename");
 
 
         DMTGenBufferFieldCaptions.DisposeCaptions();

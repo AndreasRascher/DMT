@@ -62,6 +62,7 @@ page 91011 DMTDataLayoutCard
                     sourceFileStorage: Record DMTSourceFileStorage;
                     excelReader: Codeunit DMTExcelReader;
                     tempBlob: Codeunit "Temp Blob";
+                    FirstRowWithValues: Integer;
                     HeaderLine: List of [Text];
                     ColumnName: Text;
                 begin
@@ -80,17 +81,22 @@ page 91011 DMTDataLayoutCard
                     excelReader.Run();
                     if GetLastErrorText() <> '' then
                         Error(GetLastErrorText());
-                    HeaderLine := excelReader.GetHeadlineColumnValues();
+                    HeaderLine := excelReader.GetHeadlineColumnValues(FirstRowWithValues);
                     if HeaderLine.Count = 0 then begin
                         Message('Keine Daten gefunden in Zeile %1', rec.XLSHeadingRowNo);
                     end;
+                    // Set first row with values as headlines
+                    if rec.XLSHeadingRowNo = 0 then
+                        rec.XLSHeadingRowNo := FirstRowWithValues;
 
                     if Rec.Name = '' then
                         Rec.Name := sourceFileStorage.Name;
+
                     if Rec.Name.EndsWith('.xlsx') and (Rec.SourceFileFormat = Rec.SourceFileFormat::" ") then
                         Rec.SourceFileFormat := Rec.SourceFileFormat::Excel;
+
                     rec.XLSDefaultSheetName := excelReader.GetSheetName();
-                    CurrPage.Update(true);
+                    CurrPage.Update(true); // save rec
                     // clear existing lines
                     dataLayoutLine.Reset();
                     dataLayoutLine.SetRange("Data Layout ID", Rec.ID);

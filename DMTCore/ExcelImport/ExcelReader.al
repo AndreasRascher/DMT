@@ -86,7 +86,7 @@ codeunit 91018 DMTExcelReader
     begin
         if rowNo > CurrLineNoGlobal then begin
             if CurrLineNoGlobal > 0 then
-                ImportLine(CurrentLineGlobal, rowNo = HeadLineRowNoGlobal, ImportFromFileNameGlobal);
+                ImportLine(CurrentLineGlobal, (rowNo - 1) = HeadLineRowNoGlobal, ImportFromFileNameGlobal);
             Progress_Update(rowNo);
             //start new line
             CurrLineNoGlobal := rowNo;
@@ -112,7 +112,8 @@ codeunit 91018 DMTExcelReader
         RecRef.GetTable(genBuffTable);
         foreach cellValue in currentLine do begin
             CurrColIndex += 1;
-            RecRef.Field(1000 + CurrColIndex).Value := cellValue;
+            //ToDo: Handle large Texts
+            RecRef.Field(1000 + CurrColIndex).Value := CopyStr(cellValue, 1, 250);
         end;
 
         RecRef.SetTable(genBuffTable);
@@ -121,13 +122,14 @@ codeunit 91018 DMTExcelReader
         genBuffTable.Insert();
     end;
 
-    internal procedure GetHeadlineColumnValues() HeadLine: List of [Text]
+    internal procedure GetHeadlineColumnValues(var FirstRowWithValues: Integer) HeadLine: List of [Text]
     begin
         if (DataTable.Count > 1) and (FirstRowWithValuesGlobal <> 0) then begin
             DataTable.Get(FirstRowWithValuesGlobal, HeadLine);
         end else begin
             HeadLine := DataTable.Get(1);
         end;
+        FirstRowWithValues := FirstRowWithValuesGlobal;
     end;
 
     internal procedure GetSheetName(): Text

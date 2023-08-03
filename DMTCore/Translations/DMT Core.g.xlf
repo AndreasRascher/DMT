@@ -1858,21 +1858,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Hochgeladen am</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Field UploadDateTime - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Codeunit 1497472904 - Method 2322919224 - NamedType 846745926" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Excel buffer not initialized.</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Excel Buffer wurde nicht in geladen.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTExcelMgt - Method CheckExcelBufferIsLoaded - NamedType excelBufferIsNotLoadedErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1497472904 - Method 692813595 - NamedType 3262115206" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No excel file has not been loaded.</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Keine Exceldatei wurde geladen.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTExcelMgt - Method CheckHasExcelFileStream - NamedType excelFilestreamNotLoadedErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1497472904 - Method 603686239 - NamedType 613393458" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Select an import file</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Importdatei auswählen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTExcelMgt - Method InitFileStreamFromUpload - NamedType selectAnImportFileLbl</note>
-        </trans-unit>
         <trans-unit id="Codeunit 4228541464 - Method 3234253707 - NamedType 2857577032" size-unit="char" translate="yes" xml:space="preserve">
           <source>All fields are already assigned. Overwrite existing assignment?</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?</note>
