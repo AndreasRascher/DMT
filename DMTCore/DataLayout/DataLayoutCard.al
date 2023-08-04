@@ -15,6 +15,7 @@ page 91011 DMTDataLayoutCard
                 Caption = 'General', Comment = 'de-De=Allgemein';
                 field(ID; Rec.ID) { Visible = false; }
                 field(Name; Rec.Name) { }
+                field(HeadingRowNo; Rec."HeadingRowNo") { }
                 field(SourceFileFormat; Rec.SourceFileFormat)
                 {
                     trigger OnValidate()
@@ -35,9 +36,29 @@ page 91011 DMTDataLayoutCard
             group(Excel)
             {
                 Visible = Rec.SourceFileFormat = Rec.SourceFileFormat::Excel;
-                field(XLSHeadingRowNo; Rec.XLSHeadingRowNo) { }
-                field(XLSDefaultSheetName; Rec.XLSDefaultSheetName)
-                { }
+                field(XLSDefaultSheetName; Rec.XLSDefaultSheetName) { }
+            }
+            group(CustomCSV)
+            {
+                Visible = Rec.SourceFileFormat = Rec.SourceFileFormat::"Custom CSV";
+                field(CSVFieldSeparator; Rec.CSVFieldSeparator) { }
+                field(CSVFieldDelimiter; Rec.CSVFieldDelimiter) { }
+                field(CSVLineSeparator; Rec.CSVLineSeparator)
+                {
+                    trigger OnAssistEdit()
+                    var
+                        Choice: Integer;
+                        Choices: List of [Text];
+                        ChoicesText: Text;
+                    begin
+                        ChoicesText := '<NewLine>,<CR>,<LF>';
+                        Choices := ChoicesText.Split(',');
+                        Choice := StrMenu(ChoicesText);
+                        if Choice <> 0 then
+                            Rec.CSVLineSeparator += Choices.Get(Choice);
+                    end;
+                }
+                field(CSVTextEncoding; Rec.CSVTextEncoding) { }
             }
             part(DMTLayoutLinePart; DMTLayoutLinePart)
             {
@@ -52,7 +73,8 @@ page 91011 DMTDataLayoutCard
         {
             action(ImportHeadLineAsColumnNames)
             {
-                Caption = 'Import column names from column headers', Comment = 'de-DE=Spaltennamen aus Spaltenüberschriften importieren';
+                Caption = 'Import column names', Comment = 'de-DE=Spaltenüberschriften importieren';
+                ToolTip = 'Import column names from column headers', Comment = 'de-DE=Spaltennamen aus Spaltenüberschriften importieren';
                 Image = ImportExcel;
                 ApplicationArea = All;
 
@@ -61,6 +83,7 @@ page 91011 DMTDataLayoutCard
                     dataLayoutLine: Record DMTDataLayoutLine;
                     sourceFileStorage: Record DMTSourceFileStorage;
                     excelReader: Codeunit DMTExcelReader;
+                    importCSVImpl: Codeunit DMTImportCSVImpl;
                     tempBlob: Codeunit "Temp Blob";
                     FirstRowWithValues: Integer;
                     HeaderLine: List of [Text];
@@ -71,31 +94,44 @@ page 91011 DMTDataLayoutCard
                         exit;
                     sourceFileStorage.TestField(Name);
                     sourceFileStorage.GetFileAsTempBlob(tempBlob);
-                    BindSubscription(excelReader);
-                    // read top 5 rows if undefined
-                    if Rec.XLSHeadingRowNo = 0 then
-                        excelReader.InitReadRows(sourceFileStorage, 1, 5)
-                    else
-                        excelReader.InitReadRows(sourceFileStorage, Rec.XLSHeadingRowNo, Rec.XLSHeadingRowNo);
-                    ClearLastError();
-                    excelReader.Run();
-                    if GetLastErrorText() <> '' then
-                        Error(GetLastErrorText());
-                    HeaderLine := excelReader.GetHeadlineColumnValues(FirstRowWithValues);
+
+                    if Rec.Name.EndsWith('.xlsx') and (Rec.SourceFileFormat = Rec.SourceFileFormat::" ") then begin
+                        Rec.SourceFileFormat := Rec.SourceFileFormat::Excel;
+                        rec.XLSDefaultSheetName := excelReader.GetSheetName();
+                    end;
+                    if Rec.Name.EndsWith('.csv') and (Rec.SourceFileFormat = Rec.SourceFileFormat::" ") then
+                        Rec.SourceFileFormat := Rec.SourceFileFormat::"Custom CSV";
+
+                    case rec.SourceFileFormat of
+                        rec.SourceFileFormat::Excel:
+                            begin
+                                BindSubscription(excelReader);
+                                // read top 5 rows if undefined
+                                if Rec."HeadingRowNo" = 0 then
+                                    excelReader.InitReadRows(sourceFileStorage, 1, 5)
+                                else
+                                    excelReader.InitReadRows(sourceFileStorage, Rec."HeadingRowNo", Rec."HeadingRowNo");
+                                ClearLastError();
+                                excelReader.Run();
+                                if GetLastErrorText() <> '' then
+                                    Error(GetLastErrorText());
+                                HeaderLine := excelReader.GetHeadlineColumnValues(FirstRowWithValues);
+                            end;
+                        rec.SourceFileFormat::"Custom CSV":
+                            begin
+                                importCSVImpl.ImportToBufferTable();
+                            end;
+                    end;
                     if HeaderLine.Count = 0 then begin
-                        Message('Keine Daten gefunden in Zeile %1', rec.XLSHeadingRowNo);
+                        Message('Keine Daten gefunden in Zeile %1', rec."HeadingRowNo");
                     end;
                     // Set first row with values as headlines
-                    if rec.XLSHeadingRowNo = 0 then
-                        rec.XLSHeadingRowNo := FirstRowWithValues;
+                    if rec."HeadingRowNo" = 0 then
+                        rec."HeadingRowNo" := FirstRowWithValues;
 
                     if Rec.Name = '' then
                         Rec.Name := sourceFileStorage.Name;
 
-                    if Rec.Name.EndsWith('.xlsx') and (Rec.SourceFileFormat = Rec.SourceFileFormat::" ") then
-                        Rec.SourceFileFormat := Rec.SourceFileFormat::Excel;
-
-                    rec.XLSDefaultSheetName := excelReader.GetSheetName();
                     CurrPage.Update(true); // save rec
                     // clear existing lines
                     dataLayoutLine.Reset();

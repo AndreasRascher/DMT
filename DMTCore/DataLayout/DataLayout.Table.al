@@ -10,10 +10,12 @@ table 91002 DMTDataLayout
         field(1; ID; Integer) { Caption = 'ID', Locked = true; }
         field(10; Name; Text[250]) { Caption = 'Name', Comment = 'de-DE=Name'; }
         field(11; SourceFileFormat; Enum DMTSourceFileFormat) { Caption = 'Source File Format', Comment = 'de-DE=Dateiformat'; }
-        field(100; CSVFieldSeparator; Text[10]) { Caption = 'Field Separator', Comment = 'de-DE=Feldtrenner'; }
-        field(101; CSVLineSeparator; Text[10]) { Caption = 'Line Separator', Comment = 'de-DE=Zeilentrenner'; }
+        field(100; CSVFieldSeparator; Text[50]) { Caption = 'Field Separator', Comment = 'de-DE=Feldtrenner'; InitValue = ';'; }
+        field(101; CSVLineSeparator; Text[50]) { Caption = 'Line Separator', Comment = 'de-DE=Zeilentrenner'; InitValue = '<NewLine>'; }
+        field(102; CSVFieldDelimiter; Text[50]) { Caption = 'Field Delimiter', Comment = 'de-DE=Feldbegrenzungszeichen'; InitValue = '"'; }
+        field(103; CSVTextEncoding; Option) { Caption = 'Text Encoding', Comment = 'de-DE=Text Encoding'; OptionMembers = MSDos,UTF8,UTF16,Windows; }
         field(200; NAVTableID; Integer) { Caption = 'NAV TableID', Comment = 'de-DE=Tabellen ID'; Editable = false; }
-        field(300; "XLSHeadingRowNo"; Integer) { Caption = 'Heading Row no.', Comment = 'de-DE=Überschrift Zeilennr.'; }
+        field(300; "HeadingRowNo"; Integer) { Caption = 'Heading Row no.', Comment = 'de-DE=Überschrift Zeilennr.'; }
         field(301; "XLSDefaultSheetName"; Text[250])
         {
             Caption = 'Default Excel Sheet', Comment = 'de-DE=Standard Excel Blatt';

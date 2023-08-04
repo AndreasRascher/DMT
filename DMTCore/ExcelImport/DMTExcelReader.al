@@ -177,17 +177,17 @@ codeunit 91018 DMTExcelReader
     end;
 
     var
-        ReadModeGlobal: Option ReadOnly,ImportToGenBuffer;
         TempBlobGlobal: Codeunit "Temp Blob";
-        DataTable: List of [List of [Text]];
-        CurrentLineGlobal: List of [Text];
-        RowListGlobal: List of [Integer];
+        Progress_IsActive: Boolean;
+        LastDialogUpdate: DateTime;
+        Progress: Dialog;
         CurrLineNoGlobal: Integer;
         FirstRowWithValuesGlobal: Integer;
         HeadLineRowNoGlobal: Integer;
-        Progress: Dialog;
-        Progress_IsActive: Boolean;
-        LastDialogUpdate: DateTime;
+        RowListGlobal: List of [Integer];
+        DataTable: List of [List of [Text]];
+        CurrentLineGlobal: List of [Text];
+        ReadModeGlobal: Option ReadOnly,ImportToGenBuffer;
         ImportFromFileNameGlobal: Text;
         SheetNameGlobal: Text;
 }

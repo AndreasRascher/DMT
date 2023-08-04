@@ -5,6 +5,7 @@ page 91005 SourceFiles
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTable = DMTSourceFileStorage;
+    Editable = false;
 
     layout
     {

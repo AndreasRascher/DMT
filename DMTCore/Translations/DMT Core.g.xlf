@@ -8,6 +8,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Datenlayout</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 4224547593 - Field 3909697905 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field Delimiter</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Feldbegrenzungszeichen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field CSVFieldDelimiter - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 4224547593 - Field 4031633515 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Field Separator</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Feldtrenner</note>
@@ -17,6 +22,16 @@
           <source>Line Separator</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilentrenner</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field CSVLineSeparator - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4224547593 - Field 2295026348 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Text Encoding</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Text Encoding</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field CSVTextEncoding - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4224547593 - Field 1876264317 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Heading Row no.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Überschrift Zeilennr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field HeadingRowNo - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 4224547593 - Field 2961552353 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Name</source>
@@ -52,11 +67,6 @@
           <source>Default Excel Sheet</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Standard Excel Blatt</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field XLSDefaultSheetName - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 4224547593 - Field 1029298360 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Heading Row no.</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Überschrift Zeilennr.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field XLSHeadingRowNo - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2231340739 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Layout Line</source>
@@ -2553,10 +2563,10 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMT NAVFieldBufferImport - Control GetDatabaseNameCtrl - Property Caption</note>
         </trans-unit>
-        <trans-unit id="XmlPort 3796222322 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="XmlPort 89294914 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>GenBufferImport</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTCSVImport - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTCSVReader - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 101561864 - EnumValue 3972427471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fixed Value</source>

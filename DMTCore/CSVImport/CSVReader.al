@@ -1,13 +1,13 @@
 /// <summary>
 /// Read CSV To List Of List
 /// </summary>
-xmlport 91001 DMTCSVImport
-
+xmlport 91001 DMTCSVReader
 {
     Caption = 'GenBufferImport';
     Direction = Import;
     FieldSeparator = ';';
     FieldDelimiter = '"';
+
     TextEncoding = UTF8;
     Format = VariableText;
     FormatEvaluate = Xml;
@@ -55,52 +55,25 @@ xmlport 91001 DMTCSVImport
 
     requestpage
     {
-        layout
-        {
-            area(Content)
-            {
-                // group(GroupName)
-                // {
-                //     field(Name; SourceExpression)
-                //     {
-                //     }
-                // }
-            }
-        }
-
-        actions
-        {
-        }
     }
 
     trigger OnPostXmlPort()
     begin
-        ReadDataExport(1);
     end;
 
-    local procedure ReadDataExport(HeaderLine: Integer)
-    var
-        Customer: Record Customer;
-        LineNo: Integer;
-        FieldValue: Text;
-        ColNo: Integer;
+    internal procedure InitImportToGenBuffer(sourceFileStorage: Record DMTSourceFileStorage; headLineRowNo: Integer)
     begin
-        for LineNo := HeaderLine + 1 to DataTable.Count do begin
-            ColNo := 2;
-            FieldValue := DataTable.get(LineNo).Get(ColNo);
-            if Customer.Get(FieldValue) then
-                FindContact(Customer."No.");
-        end;
-    end;
-
-    local procedure FindContact(CustomerNo: Code[20])
-    var
-        Contact: Record Contact;
-    begin
-        // To something...
+        sourceFileStorage.GetFileAsTempBlob(TempBlobGlobal);
+        HeadLineRowNoGlobal := headLineRowNo;
+        ImportFromFileNameGlobal := sourceFileStorage.Name;
+        ReadModeGlobal := ReadModeGlobal::ImportToGenBuffer;
     end;
 
     var
+        TempBlobGlobal: Codeunit "Temp Blob";
+        ReadModeGlobal: Option ReadOnly,ImportToGenBuffer;
+        ImportFromFileNameGlobal: Text;
+        HeadLineRowNoGlobal: Integer;
         CurrColIndex: Integer;
         LineNo: Integer;
         DataTable: List of [List of [Text]];
