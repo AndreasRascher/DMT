@@ -82,9 +82,9 @@ page 91011 DMTDataLayoutCard
                 var
                     dataLayoutLine: Record DMTDataLayoutLine;
                     sourceFileStorage: Record DMTSourceFileStorage;
-                    excelReader: Codeunit DMTExcelReader;
                     importCSVImpl: Codeunit DMTImportCSVImpl;
                     tempBlob: Codeunit "Temp Blob";
+                    ISourceFileImport: Interface ISourceFileImport;
                     FirstRowWithValues: Integer;
                     HeaderLine: List of [Text];
                     ColumnName: Text;
@@ -97,31 +97,14 @@ page 91011 DMTDataLayoutCard
 
                     if Rec.Name.EndsWith('.xlsx') and (Rec.SourceFileFormat = Rec.SourceFileFormat::" ") then begin
                         Rec.SourceFileFormat := Rec.SourceFileFormat::Excel;
-                        rec.XLSDefaultSheetName := excelReader.GetSheetName();
+                        // rec.XLSDefaultSheetName := excelReader.GetSheetName();
                     end;
+
                     if Rec.Name.EndsWith('.csv') and (Rec.SourceFileFormat = Rec.SourceFileFormat::" ") then
                         Rec.SourceFileFormat := Rec.SourceFileFormat::"Custom CSV";
 
-                    case rec.SourceFileFormat of
-                        rec.SourceFileFormat::Excel:
-                            begin
-                                BindSubscription(excelReader);
-                                // read top 5 rows if undefined
-                                if Rec."HeadingRowNo" = 0 then
-                                    excelReader.InitReadRows(sourceFileStorage, 1, 5)
-                                else
-                                    excelReader.InitReadRows(sourceFileStorage, Rec."HeadingRowNo", Rec."HeadingRowNo");
-                                ClearLastError();
-                                excelReader.Run();
-                                if GetLastErrorText() <> '' then
-                                    Error(GetLastErrorText());
-                                HeaderLine := excelReader.GetHeadlineColumnValues(FirstRowWithValues);
-                            end;
-                        rec.SourceFileFormat::"Custom CSV":
-                            begin
-                                importCSVImpl.ImportToBufferTable();
-                            end;
-                    end;
+                    ISourceFileImport := Rec.SourceFileFormat;
+                    ISourceFileImport.ReadHeadline(sourceFileStorage, rec, FirstRowWithValues, HeaderLine);
                     if HeaderLine.Count = 0 then begin
                         Message('Keine Daten gefunden in Zeile %1', rec."HeadingRowNo");
                     end;
@@ -159,4 +142,5 @@ page 91011 DMTDataLayoutCard
         CurrPage.DMTLayoutLinePart.Page.SetRepeaterVisibility(Rec);
         CurrPage.DMTLayoutLinePart.Page.DoUpdate(false);
     end;
+
 }

@@ -42,4 +42,9 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
         CSVReader.Import();
         ImportConfigHeader.UpdateBufferRecordCount();
     end;
+
+    procedure ReadHeadline(sourceFileStorage: Record DMTSourceFileStorage; dataLayout: Record DMTDataLayout; var FirstRowWithValues: Integer; var HeaderLine: List of [Text]);
+    begin
+
+    end;
 }

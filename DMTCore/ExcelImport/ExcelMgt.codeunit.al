@@ -22,4 +22,21 @@ codeunit 91005 DMTExcelMgt implements ISourceFileImport
         ImportConfigHeader.UpdateBufferRecordCount();
     end;
 
+    procedure ReadHeadline(sourceFileStorage: Record DMTSourceFileStorage; dataLayout: Record DMTDataLayout; var FirstRowWithValues: Integer; var HeaderLine: List of [Text])
+    var
+        excelReader: Codeunit DMTExcelReader;
+    begin
+        BindSubscription(excelReader);
+        // read top 5 rows if undefined
+        if dataLayout."HeadingRowNo" = 0 then
+            excelReader.InitReadRows(sourceFileStorage, 1, 5)
+        else
+            excelReader.InitReadRows(sourceFileStorage, dataLayout."HeadingRowNo", dataLayout."HeadingRowNo");
+        ClearLastError();
+        excelReader.Run();
+        if GetLastErrorText() <> '' then
+            Error(GetLastErrorText());
+        HeaderLine := excelReader.GetHeadlineColumnValues(FirstRowWithValues);
+    end;
+
 }

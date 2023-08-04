@@ -1,1 +1,1 @@
-﻿{"Added":[],"Modified":[],"Removed":[]}
+﻿{"Added":[],"Modified":[{"Id":91004,"Kind":11,"Name":"DMTDefaultSourceFileImportImpl","PackagePath":"/src/DataLayout/DefaultSourceFileImportImpl.al"},{"Id":91011,"Kind":12,"Name":"DMTDataLayoutCard","PackagePath":"/src/DataLayout/DataLayoutCard.al"},{"Id":91005,"Kind":11,"Name":"DMTExcelMgt","PackagePath":"/src/ExcelImport/ExcelMgt.codeunit.al"},{"Kind":25,"Name":"ISourceFileImport","PackagePath":"/src/ImportConfig/IImportFormat.Interface.al"}],"Removed":[]}
