@@ -2415,10 +2415,17 @@
           <note from="Developer" annotates="general" priority="2">de-De=Allgemein</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataLayoutCard - Control General - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1540911173 - Action 397043389 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1540911173 - Action 397043389 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import column names from column headers</source>
           <target state="translated">Spaltennamen aus Spaltenüberschriften importieren</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Spaltennamen aus Spaltenüberschriften importieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataLayoutCard - Action ImportHeadLineAsColumnNames - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1540911173 - Action 397043389 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import column names</source>
+          <target state="needs-adaptation">Spaltenüberschriften importieren</target>
+          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Spaltenüberschriften importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataLayoutCard - Action ImportHeadLineAsColumnNames - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 554782368 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

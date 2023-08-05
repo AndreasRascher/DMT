@@ -51,7 +51,7 @@ page 91011 DMTDataLayoutCard
                         Choices: List of [Text];
                         ChoicesText: Text;
                     begin
-                        ChoicesText := '<NewLine>,<CR>,<LF>';
+                        ChoicesText := '<None>,<NewLine>,<CR>,<LF>,<TAB>';
                         Choices := ChoicesText.Split(',');
                         Choice := StrMenu(ChoicesText);
                         if Choice <> 0 then
@@ -95,12 +95,12 @@ page 91011 DMTDataLayoutCard
                     sourceFileStorage.TestField(Name);
                     sourceFileStorage.GetFileAsTempBlob(tempBlob);
 
-                    if Rec.Name.EndsWith('.xlsx') and (Rec.SourceFileFormat = Rec.SourceFileFormat::" ") then begin
+                    if sourceFileStorage.Name.EndsWith('.xlsx') and (Rec.SourceFileFormat = Rec.SourceFileFormat::" ") then begin
                         Rec.SourceFileFormat := Rec.SourceFileFormat::Excel;
                         // rec.XLSDefaultSheetName := excelReader.GetSheetName();
                     end;
 
-                    if Rec.Name.EndsWith('.csv') and (Rec.SourceFileFormat = Rec.SourceFileFormat::" ") then
+                    if sourceFileStorage.Name.EndsWith('.csv') and (Rec.SourceFileFormat = Rec.SourceFileFormat::" ") then
                         Rec.SourceFileFormat := Rec.SourceFileFormat::"Custom CSV";
 
                     ISourceFileImport := Rec.SourceFileFormat;

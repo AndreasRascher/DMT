@@ -4,29 +4,60 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
     var
         genBuffTable: Record DMTGenBuffTable;
         SourceFileStorage: Record DMTSourceFileStorage;
-        dataLayout: Record DMTDataLayout;
-        TempBlob: Codeunit "Temp Blob";
         CSVReader: XmlPort DMTCSVReader;
-        InStr: InStream;
     begin
         // Delete existing lines
         if genBuffTable.FilterBy(ImportConfigHeader) then
             genBuffTable.DeleteAll();
 
-        // Read File Blob
         SourceFileStorage.Get(ImportConfigHeader."Source File ID");
-        SourceFileStorage.TestField(Name);
-        SourceFileStorage.GetFileAsTempBlob(TempBlob);
-        TempBlob.CreateInStream(InStr);
+        PrepareXMLPortWithCSVOptionsAndSourceFile(SourceFileStorage, ImportConfigHeader.GetDataLayout(), CSVReader);
+        CSVReader.InitImportToGenBuffer(SourceFileStorage, ImportConfigHeader.GetDataLayout().HeadingRowNo);
+        CSVReader.Import();
+        ImportConfigHeader.UpdateBufferRecordCount();
+    end;
 
-        dataLayout := ImportConfigHeader.GetDataLayout();
+    procedure ReadHeadline(sourceFileStorage: Record DMTSourceFileStorage; dataLayout: Record DMTDataLayout; var FirstRowWithValues: Integer; var HeaderLine: List of [Text]);
+    var
+        CSVReader: XmlPort DMTCSVReader;
+    begin
+        PrepareXMLPortWithCSVOptionsAndSourceFile(sourceFileStorage, dataLayout, CSVReader);
+        // read top 5 rows if undefined
+        if dataLayout."HeadingRowNo" = 0 then
+            CSVReader.InitReadRows(1, 5)
+        else
+            CSVReader.InitReadRows(dataLayout."HeadingRowNo", dataLayout."HeadingRowNo");
+        CSVReader.Import();
+        CSVReader.ProcessLineAfterReceivingLastField();
+        HeaderLine := CSVReader.GetHeadlineColumnValues(FirstRowWithValues);
+    end;
+
+    local procedure PrepareXMLPortWithCSVOptionsAndSourceFile(SourceFileStorage: Record DMTSourceFileStorage; dataLayout: Record DMTDataLayout; var CSVReader: XmlPort DMTCSVReader)
+    var
+        CRLF: Text[2];
+        TAB: Text[1];
+        lineSeperator: text;
+    begin
+        SourceFileStorage.TestField(Name);
+        SourceFileStorage.GetFileAsTempBlob(FileBlobGlobal);
+        FileBlobGlobal.CreateInStream(FileStreamGlobal);
+
         dataLayout.TestField(CSVFieldDelimiter);
         dataLayout.TestField(CSVFieldSeparator);
         dataLayout.TestField(CSVLineSeparator);
 
         CSVReader.FieldDelimiter := dataLayout.CSVFieldDelimiter;
         CSVReader.FieldSeparator := dataLayout.CSVFieldSeparator;
-        CSVReader.RecordSeparator := dataLayout.CSVLineSeparator;
+        lineSeperator := dataLayout.CSVLineSeparator;
+        CRLF[1] := 13;
+        CRLF[2] := 10;
+        TAB[1] := 9;
+        //<None>,<NewLine>,<CR>,<LF>,<TAB>
+        lineSeperator := lineSeperator.Replace('<CR>', CRLF[1]);
+        lineSeperator := lineSeperator.Replace('<LF>', CRLF[2]);
+        lineSeperator := lineSeperator.Replace('<NewLine>', CRLF);
+        lineSeperator := lineSeperator.Replace('<TAB>', TAB);
+        CSVReader.RecordSeparator := lineSeperator;
         case dataLayout.CSVTextEncoding of
             dataLayout.CSVTextEncoding::MSDos:
                 CSVReader.TextEncoding := TextEncoding::MSDos;
@@ -37,14 +68,10 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
             dataLayout.CSVTextEncoding::Windows:
                 CSVReader.TextEncoding := TextEncoding::Windows;
         end;
-        CSVReader.InitImportToGenBuffer(SourceFileStorage, dataLayout.HeadingRowNo);
-        CSVReader.SetSource(InStr);
-        CSVReader.Import();
-        ImportConfigHeader.UpdateBufferRecordCount();
+        CSVReader.SetSource(FileStreamGlobal);
     end;
 
-    procedure ReadHeadline(sourceFileStorage: Record DMTSourceFileStorage; dataLayout: Record DMTDataLayout; var FirstRowWithValues: Integer; var HeaderLine: List of [Text]);
-    begin
-
-    end;
+    var
+        FileStreamGlobal: InStream;
+        FileBlobGlobal: Codeunit "Temp Blob";
 }
