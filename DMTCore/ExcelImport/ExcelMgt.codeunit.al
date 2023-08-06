@@ -7,7 +7,6 @@ codeunit 91005 DMTExcelMgt implements ISourceFileImport
         genBuffTable: Record DMTGenBuffTable;
         SourceFileStorage: Record DMTSourceFileStorage;
         excelReader: Codeunit DMTExcelReader;
-        TempBlob: Codeunit "Temp Blob";
     begin
         // Delete existing lines
         if genBuffTable.FilterBy(ImportConfigHeader) then
@@ -15,9 +14,9 @@ codeunit 91005 DMTExcelMgt implements ISourceFileImport
         // Read File Blob
         SourceFileStorage.Get(ImportConfigHeader."Source File ID");
         SourceFileStorage.TestField(Name);
-        SourceFileStorage.GetFileAsTempBlob(TempBlob);
         BindSubscription(excelReader);
-        excelReader.InitImportToGenBuffer(SourceFileStorage, ImportConfigHeader.GetDataLayout()."HeadingRowNo");
+        excelReader.InitSourceFile(SourceFileStorage);
+        excelReader.InitImportToGenBuffer(SourceFileStorage, ImportConfigHeader);
         excelReader.Run();
         ImportConfigHeader.UpdateBufferRecordCount();
     end;

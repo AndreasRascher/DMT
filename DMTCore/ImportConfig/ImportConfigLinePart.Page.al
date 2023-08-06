@@ -19,7 +19,7 @@ page 91009 DMTImportConfigLinePart
             // }
             repeater(LineRepeater)
             {
-                Editable = HasDataLayoutAssigned;
+                // Editable = HasDataLayoutAssigned;
                 field("Processing Action"; Rec."Processing Action") { }
                 field("To Field No."; Rec."Target Field No.") { Visible = false; Editable = false; }
                 field("To Field Caption"; Rec."Target Field Caption") { StyleExpr = LineStyleExpr; Editable = false; }

@@ -50,6 +50,7 @@ codeunit 91001 DMTSourceFileMgt
         SourceFileStorage.UploadDateTime := CurrentDateTime;
         SourceFileStorage.Size := SourceFileStorage."File Blob".Length;
         AssignSourceFileFormat(SourceFileStorage);
+        AssignDefaultDataLayout(SourceFileStorage);
         SourceFileStorage.Insert();
     end;
 
@@ -84,6 +85,18 @@ codeunit 91001 DMTSourceFileMgt
 
         if sourceFileStorage.Name.EndsWith('.csv') and (sourceFileStorage.SourceFileFormat = sourceFileStorage.SourceFileFormat::" ") then
             sourceFileStorage.SourceFileFormat := sourceFileStorage.SourceFileFormat::"Custom CSV";
+    end;
+
+    local procedure AssignDefaultDataLayout(SourceFileStorage: Record DMTSourceFileStorage)
+    var
+        dataLayout: Record DMTDataLayout;
+    begin
+        if SourceFileStorage.SourceFileFormat = SourceFileStorage.SourceFileFormat::" " then
+            exit;
+        dataLayout.SetRange(SourceFileFormat, SourceFileStorage.SourceFileFormat);
+        dataLayout.SetRange(Default, true);
+        if dataLayout.FindFirst() then
+            SourceFileStorage.Validate("Data Layout ID", dataLayout.ID);
     end;
 
 

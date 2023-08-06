@@ -49,15 +49,12 @@ table 91003 DMTImportConfigHeader
         field(51; LastUsedFilter; Blob) { }
         field(52; "Use OnInsert Trigger"; Boolean) { Caption = 'Use OnInsert Trigger', Comment = 'de-DE=OnInsert Trigger verwenden'; InitValue = true; }
         field(53; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
-        field(55; "Source File Name"; Text[250])
+        field(100; "Source File ID"; Integer) { Caption = 'Source File ID', Comment = 'de-DE=Quell-Datei ID'; TableRelation = DMTSourceFileStorage; }
+        field(101; "Source File Name"; Text[250])
         {
             Caption = 'Source File Name', Comment = 'de-DE=Quelldatei';
-            FieldClass = FlowField;
-            CalcFormula = lookup(DMTSourceFileStorage.Name where("File ID" = field("Source File ID")));
-            Editable = false;
         }
         #endregion Import and Processing Options
-        field(100; "Source File ID"; Integer) { Caption = 'Source File ID', Comment = 'de-DE=Quell-Datei ID'; TableRelation = DMTSourceFileStorage; }
     }
 
     keys
@@ -84,6 +81,7 @@ table 91003 DMTImportConfigHeader
             ImportConfigLine.DeleteAll();
         if Rec.FilterRelated(LogEntry) then
             LogEntry.DeleteAll();
+        Rec.DeleteBufferData();
     end;
 
     procedure GetNextID() NextID: Integer
@@ -132,6 +130,64 @@ table 91003 DMTImportConfigHeader
         if not genBuffTable.FilterBy(Rec) then
             exit;
         genBuffTable.ShowBufferTable(Rec);
+    end;
+
+    internal procedure SourceFileName_OnAfterLookup(Selected: RecordRef)
+    var
+        sourceFileStorage: Record DMTSourceFileStorage;
+    begin
+        Selected.SetTable(sourceFileStorage);
+        Rec."Source File ID" := sourceFileStorage."File ID";
+        Rec."Source File Name" := sourceFileStorage.Name;
+    end;
+
+    internal procedure SourceFileName_OnValidate()
+    var
+        sourceFileStorage: Record DMTSourceFileStorage;
+        TypeHelper: Codeunit "Type Helper";
+        sourceFileID: Integer;
+        SearchToken: Text;
+    begin
+        case true of
+            // Case 1 - Empty
+            (Rec."Source File Name" = ''):
+                begin
+                    Rec."Source File ID" := 0;
+                    Rec."Source File Name" := '';
+                end;
+            // Case 2 - Table No.
+            (Rec."Source File Name" <> '') and TypeHelper.IsNumeric(Rec."Source File Name"):
+                begin
+                    Evaluate(sourceFileID, Rec."Source File Name");
+                    sourceFileStorage.Get(sourceFileID);
+                    Rec."Source File ID" := sourceFileStorage."File ID";
+                    Rec."Source File Name" := sourceFileStorage.Name;
+                end;
+            // Case 3 - Search Term
+            (Rec."Source File Name" <> '') and not TypeHelper.IsNumeric(Rec."Source File Name"):
+                begin
+                    SearchToken := Rec."Source File Name";
+                    if not SearchToken.StartsWith('@') then
+                        SearchToken := '@' + SearchToken;
+                    if not SearchToken.EndsWith('*') then
+                        SearchToken := SearchToken + '*';
+                    sourceFileStorage.SetFilter(Name, SearchToken);
+                    sourceFileStorage.FindFirst();
+                    Rec."Source File ID" := sourceFileStorage."File ID";
+                    Rec."Source File Name" := sourceFileStorage.Name;
+                end;
+        end;
+    end;
+
+    procedure DeleteBufferData()
+    var
+        genBuffTable: Record DMTGenBuffTable;
+    begin
+        if "Source File ID" = 0 then
+            exit;
+        genBuffTable.SetRange("Imp.Conf.Header ID", Rec.ID);
+        if not genBuffTable.IsEmpty then
+            genBuffTable.DeleteAll();
     end;
 
     procedure UpdateBufferRecordCount()
@@ -244,7 +300,7 @@ table 91003 DMTImportConfigHeader
         Rec.Modify();
     end;
 
-    procedure TargetTableCaption_OnAfterLookup(var Selected: RecordRef)
+    internal procedure TargetTableCaption_OnAfterLookup(var Selected: RecordRef)
     var
         AllObjWithCaption: Record AllObjWithCaption;
     begin
@@ -253,7 +309,7 @@ table 91003 DMTImportConfigHeader
         Rec."Target Table ID" := AllObjWithCaption."Object ID";
     end;
 
-    procedure TargetTableCaption_OnValidate()
+    internal procedure TargetTableCaption_OnValidate()
     var
         AllObjWithCaption: Record AllObjWithCaption;
         TypeHelper: Codeunit "Type Helper";

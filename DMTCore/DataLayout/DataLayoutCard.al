@@ -24,6 +24,7 @@ page 91011 DMTDataLayoutCard
                         CurrPage.DMTLayoutLinePart.Page.DoUpdate(false);
                     end;
                 }
+                field(Default; Rec.Default) { }
 
             }
             group(NAV)

@@ -12,7 +12,7 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
 
         SourceFileStorage.Get(ImportConfigHeader."Source File ID");
         PrepareXMLPortWithCSVOptionsAndSourceFile(SourceFileStorage, ImportConfigHeader.GetDataLayout(), CSVReader);
-        CSVReader.InitImportToGenBuffer(SourceFileStorage, ImportConfigHeader.GetDataLayout().HeadingRowNo);
+        CSVReader.InitImportToGenBuffer(SourceFileStorage, ImportConfigHeader);
         CSVReader.Import();
         ImportConfigHeader.UpdateBufferRecordCount();
     end;

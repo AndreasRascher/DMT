@@ -12,6 +12,20 @@ table 91002 DMTDataLayout
         field(11; SourceFileFormat; Enum DMTSourceFileFormat) { Caption = 'Source File Format', Comment = 'de-DE=Dateiformat'; }
         field(12; "Has Heading Row"; Boolean) { Caption = 'Has Heading Row', Comment = 'de-DE=Enthält Überschriftenzeile'; }
         field(13; "HeadingRowNo"; Integer) { Caption = 'Heading Row no.', Comment = 'de-DE=Überschrift Zeilennr.'; }
+        field(14; Default; Boolean)
+        {
+            Caption = 'Default', comment = 'de-DE=Standard';
+            trigger OnValidate()
+            var
+                dataLayout: Record DMTDataLayout;
+            begin
+                if Default then begin
+                    dataLayout.SetFilter(ID, '<>%1', rec.ID);
+                    dataLayout.SetRange(SourceFileFormat, rec.SourceFileFormat);
+                    dataLayout.ModifyAll(Default, false);
+                end;
+            end;
+        }
         field(100; CSVFieldSeparator; Text[50]) { Caption = 'Field Separator', Comment = 'de-DE=Feldtrenner'; InitValue = ';'; }
         field(101; CSVLineSeparator; Text[50]) { Caption = 'Line Separator', Comment = 'de-DE=Zeilentrenner'; InitValue = '<NewLine>'; }
         field(102; CSVFieldDelimiter; Text[50]) { Caption = 'Field Delimiter', Comment = 'de-DE=Feldbegrenzungszeichen'; InitValue = '"'; }

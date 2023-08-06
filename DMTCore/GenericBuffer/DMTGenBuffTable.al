@@ -6,7 +6,11 @@ table 91001 DMTGenBuffTable
     {
         field(1; "Entry No."; Integer) { }
         field(10; "Import from Filename"; Text[250]) { }
-        field(12; "Source ID"; RecordId) { }
+        field(11; "Imp.Conf.Header ID"; Integer)
+        {
+            Caption = 'Imp.Conf.Header ID', Comment = 'de=DE=Import Konfig. Kopf ID';
+            TableRelation = DMTImportConfigHeader;
+        }
         field(13; IsCaptionLine; Boolean) { }
         field(14; "Column Count"; Integer) { }
         field(1001; Fld001; Text[250]) { CaptionClass = GetFieldCaption(1001); }
@@ -293,16 +297,10 @@ table 91001 DMTGenBuffTable
     begin
         ImportConfigHeader.TestField("Source File ID");
         SourceFileStorage.Get(ImportConfigHeader."Source File ID");
+        Rec.SetRange("Imp.Conf.Header ID", ImportConfigHeader.ID);
         Rec.SetRange("Import from Filename", SourceFileStorage.Name);
         HasLinesInFilter := not Rec.IsEmpty;
     end;
-
-    // internal procedure FindSetLinesByFileNameWithoutCaptionLine(ImportConfigHeader : Record DMTImportConfigHeader) FindSetOK: Boolean
-    // begin
-    //     Rec.SetRange(IsCaptionLine, false);
-    //     Rec.FilterBy(ImportConfigHeader);
-    //     FindSetOK := Rec.FindSet(false, false);
-    // end;
 
     internal procedure LookUpFileNameFromGenBuffTable(CurrFileName: Text): Text
     var

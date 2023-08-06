@@ -44,10 +44,10 @@ codeunit 91018 DMTExcelReader
         toRowNoGlobal := toRowNo;
     end;
 
-    internal procedure InitImportToGenBuffer(sourceFileStorage: Record DMTSourceFileStorage; headLineRowNo: Integer)
+    internal procedure InitImportToGenBuffer(sourceFileStorage: Record DMTSourceFileStorage; importConfigHeader: Record DMTImportConfigHeader)
     begin
-        sourceFileStorage.GetFileAsTempBlob(TempBlobGlobal);
-        HeadLineRowNoGlobal := headLineRowNo;
+        HeadLineRowNoGlobal := importConfigHeader.GetDataLayout().HeadingRowNo;
+        ImportConfigHeaderIDGlobal := importConfigHeader.ID;
         ImportFromFileNameGlobal := sourceFileStorage.Name;
         ReadModeGlobal := ReadModeGlobal::ImportToGenBuffer;
     end;
@@ -128,6 +128,7 @@ codeunit 91018 DMTExcelReader
 
         RecRef.SetTable(genBuffTable);
         genBuffTable."Import from Filename" := CopyStr(ImportFromFileName, 1, MaxStrLen(genBuffTable."Import from Filename"));
+        genBuffTable."Imp.Conf.Header ID" := ImportConfigHeaderIDGlobal;
         genBuffTable."Column Count" := CurrColIndex;
         genBuffTable.Insert();
     end;
@@ -191,7 +192,7 @@ codeunit 91018 DMTExcelReader
         Progress_IsActive: Boolean;
         LastDialogUpdate: DateTime;
         Progress: Dialog;
-        CurrLineNoGlobal, FirstRowWithValuesGlobal, toRowNoGlobal : Integer;
+        CurrLineNoGlobal, FirstRowWithValuesGlobal, toRowNoGlobal, ImportConfigHeaderIDGlobal : Integer;
         HeadLineRowNoGlobal: Integer;
         RowListGlobal: List of [Integer];
         DataTable: List of [List of [Text]];

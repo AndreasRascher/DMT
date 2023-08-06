@@ -8,11 +8,11 @@ table 91005 DMTDataLayoutLine
         field(1; "Data Layout ID"; Integer) { Caption = 'Data Layout ID', Comment = 'de-DE= Datenlayout ID'; NotBlank = true; }
         field(2; "Column No."; Integer) { Caption = 'Column No.', Comment = 'de-DE=Spaltennr.'; }
         field(10; ColumnName; Text[50]) { Caption = 'Column Name', Comment = 'de-DE=Spaltenname'; }
-        field(11; DataType; Option)
-        {
-            Caption = 'Data Type', Comment = 'de-DE=Datentyp';
-            OptionMembers = Text,Date,Time,DateTime,Decimal,Boolean,Integer,GUID,BLOB;
-        }
+        // field(11; DataType; Option)
+        // {
+        //     Caption = 'Data Type', Comment = 'de-DE=Datentyp';
+        //     OptionMembers = Text,Date,Time,DateTime,Decimal,Boolean,Integer,GUID,BLOB;
+        // }
         #region NAVFieldInformation
         field(20; NAVDataType; Option)
         {

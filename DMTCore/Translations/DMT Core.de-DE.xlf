@@ -33,6 +33,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Text Encoding</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field CSVTextEncoding - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 4224547593 - Field 1383905037 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Default</source>
+          <target state="translated">Standard</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Standard</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field Default - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 4224547593 - Field 956310252 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Has Heading Row</source>
           <target state="translated">Enthält Überschriftenzeile</target>
@@ -110,12 +116,6 @@
           <target state="translated"> Datenlayout ID</target>
           <note from="Developer" annotates="general" priority="2">de-DE= Datenlayout ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field Data Layout ID - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2231340739 - Field 4065219740 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Data Type</source>
-          <target state="translated">Datentyp</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Datentyp</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field DataType - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2231340739 - Field 1820164459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Type</source>
@@ -1641,6 +1641,12 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld250 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 2144357174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Imp.Conf.Header ID</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">de=DE=Import Konfig. Kopf ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Imp.Conf.Header ID - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2840077126 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import from Filename</source>
           <target state="needs-translation"/>
@@ -1652,12 +1658,6 @@
           <target state="needs-translation"/>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field IsCaptionLine - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1296439604 - Field 345314420 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Source ID</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2"/>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Source ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Import Configuration Header</source>
@@ -2210,6 +2210,12 @@
           <target state="translated">Datenlayout ID</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Datenlayout ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Field Data Layout ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3763097529 - Field 897659751 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data Layout Name</source>
+          <target state="translated">Datenlayout Name</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Datenlayout Name</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Field Data Layout Name - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3763097529 - Field 3979136067 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Extension</source>
@@ -3051,11 +3057,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Quelldateien</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTSourceFiles - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 698368471 - Action 1263952573 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 698368471 - Action 1139572727 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Upload File</source>
           <target state="translated">Datei hochladen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Datei hochladen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSourceFiles - Action UploadFileToDefaultFolder - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSourceFiles - Action UploadFile - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 2995423981 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Field</source>

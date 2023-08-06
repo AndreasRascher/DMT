@@ -32,17 +32,21 @@ page 91008 DMTImportConfigCard
                         Rec.TargetTableCaption_OnValidate();
                     end;
                 }
-                field(SourceFileID; Rec."Source File ID") { ShowMandatory = true; }
+                field("Source File Name"; Rec."Source File Name")
+                {
+                    ShowMandatory = true;
+                    TableRelation = DMTSourceFileStorage;
 
-                // field("Data Layout Code"; Rec."Data Layout ID")
-                // {
-                //     ShowMandatory = true;
-                //     trigger OnValidate()
-                //     begin
-                //         CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
-                //         CurrPage.LinePart.Page.DoUpdate(false);
-                //     end;
-                // }
+                    trigger OnAfterLookup(Selected: RecordRef)
+                    begin
+                        Rec.SourceFileName_OnAfterLookup(Selected);
+                    end;
+
+                    trigger OnValidate()
+                    begin
+                        Rec.SourceFileName_OnValidate();
+                    end;
+                }
                 field("Target Table ID"; Rec."Target Table ID") { Visible = false; }
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { }
                 field("Import Only New Records"; Rec."Import Only New Records") { }

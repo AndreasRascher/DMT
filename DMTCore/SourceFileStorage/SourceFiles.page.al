@@ -18,7 +18,21 @@ page 91005 DMTSourceFiles
                 field(Size; Rec.Size) { Editable = false; }
                 field("DateTime"; Rec.UploadDateTime) { Editable = false; }
                 field(SourceFileFormat; Rec.SourceFileFormat) { }
-                field("Data Layout ID"; Rec."Data Layout ID") { }
+                field("Data Layout Name"; Rec."Data Layout Name")
+                {
+                    ShowMandatory = true;
+                    TableRelation = DMTDataLayout where(SourceFileFormat = field(SourceFileFormat));
+
+                    trigger OnAfterLookup(Selected: RecordRef)
+                    begin
+                        Rec.DataLayoutName_OnAfterLookup(Selected);
+                    end;
+
+                    trigger OnValidate()
+                    begin
+                        Rec.DataLayoutName_OnValidate();
+                    end;
+                }
             }
         }
         area(FactBoxes) { }
@@ -28,7 +42,7 @@ page 91005 DMTSourceFiles
     {
         area(Processing)
         {
-            action(UploadFileToDefaultFolder)
+            action(UploadFile)
             {
                 Image = MoveUp;
                 Caption = 'Upload File', Comment = 'de-DE=Datei hochladen';
@@ -43,7 +57,7 @@ page 91005 DMTSourceFiles
         }
         area(Promoted)
         {
-            actionref(Upload; UploadFileToDefaultFolder) { }
+            actionref(Upload; UploadFile) { }
         }
     }
 }

@@ -325,26 +325,46 @@ codeunit 91002 DMTImportConfigMgt
             end;
     end;
 
-    local procedure CreateSourceFieldNamesDict(ImportConfigHeader: Record DMTImportConfigHeader) SourceFieldNames: Dictionary of [Integer, Text]
+    local procedure CreateSourceFieldNamesDict(importConfigHeader: Record DMTImportConfigHeader) SourceFieldNames: Dictionary of [Integer, Text]
     var
-        GenBuffTable: Record DMTGenBuffTable;
+        dataLayout: Record DMTDataLayout;
+        genBuffTable: Record DMTGenBuffTable;
+        dataLayoutLine: Record DMTDataLayoutLine;
         Field: Record Field;
         SourceFieldNames2: Dictionary of [Integer, Text];
         FieldID: Integer;
     begin
-        if ImportConfigHeader."Use Separate Buffer Table" then begin
-            Field.SetRange(TableNo, ImportConfigHeader."Buffer Table ID");
-            Field.SetRange(Enabled, true);
-            Field.SetRange(Class, Field.Class::Normal);
-            Field.FindSet();
-            repeat
-                SourceFieldNames.Add(Field."No.", Field.FieldName);
-            until Field.Next() = 0;
-        end else begin
-            GenBuffTable.GetColCaptionForImportedFile(ImportConfigHeader, SourceFieldNames2);
-            foreach FieldID in SourceFieldNames2.Keys do begin
-                SourceFieldNames.Add(FieldID, SourceFieldNames2.Get(FieldID));
-            end;
+        dataLayout := importConfigHeader.GetDataLayout();
+        case true of
+            // seperate buffer table -> read field names
+            importConfigHeader."Use Separate Buffer Table":
+                begin
+                    Field.SetRange(TableNo, importConfigHeader."Buffer Table ID");
+                    Field.SetRange(Enabled, true);
+                    Field.SetRange(Class, Field.Class::Normal);
+                    Field.FindSet();
+                    repeat
+                        SourceFieldNames.Add(Field."No.", Field.FieldName);
+                    until Field.Next() = 0;
+                end;
+            // use genBuffer, file has heading line  -> read heading line from buffer
+            dataLayout."Has Heading Row":
+                begin
+                    genBuffTable.GetColCaptionForImportedFile(importConfigHeader, SourceFieldNames2);
+                    foreach FieldID in SourceFieldNames2.Keys do begin
+                        SourceFieldNames.Add(FieldID, SourceFieldNames2.Get(FieldID));
+                    end;
+                end;
+            // use genBuffer, file without heading line  -> read data layout line
+            not dataLayout."Has Heading Row":
+                begin
+                    dataLayoutLine.SetRange("Data Layout ID", dataLayout.ID);
+                    if dataLayoutLine.FindSet(false) then
+                        repeat
+                            dataLayoutLine.TestField(ColumnName);
+                            SourceFieldNames.Add(dataLayoutLine."Column No.", dataLayoutLine.ColumnName);
+                        until dataLayoutLine.Next() = 0;
+                end;
         end;
     end;
 

@@ -62,9 +62,10 @@ xmlport 91001 DMTCSVReader
     {
     }
 
-    internal procedure InitImportToGenBuffer(sourceFileStorage: Record DMTSourceFileStorage; headLineRowNo: Integer)
+    internal procedure InitImportToGenBuffer(sourceFileStorage: Record DMTSourceFileStorage; importConfigHeader: Record DMTImportConfigHeader)
     begin
-        HeadLineRowNoGlobal := headLineRowNo;
+        HeadLineRowNoGlobal := importConfigHeader.GetDataLayout().HeadingRowNo;
+        ImportConfigHeaderIDGlobal := importConfigHeader.ID;
         ImportFromFileNameGlobal := sourceFileStorage.Name;
         ReadModeGlobal := ReadModeGlobal::ImportToGenBuffer;
     end;
@@ -124,6 +125,7 @@ xmlport 91001 DMTCSVReader
 
         RecRef.SetTable(genBuffTable);
         genBuffTable."Import from Filename" := CopyStr(ImportFromFileName, 1, MaxStrLen(genBuffTable."Import from Filename"));
+        genBuffTable."Imp.Conf.Header ID" := ImportConfigHeaderIDGlobal;
         genBuffTable."Column Count" := CurrColIndex;
         genBuffTable.Insert();
     end;
@@ -140,7 +142,7 @@ xmlport 91001 DMTCSVReader
     var
         ReadModeGlobal: Option ReadOnly,ImportToGenBuffer;
         ImportFromFileNameGlobal: Text;
-        HeadLineRowNoGlobal, FirstRowWithValuesGlobal, CurrRowNoGlobal, toRowNoGlobal, NextEntryNoGlobal : Integer;
+        HeadLineRowNoGlobal, FirstRowWithValuesGlobal, CurrRowNoGlobal, toRowNoGlobal, NextEntryNoGlobal, ImportConfigHeaderIDGlobal : Integer;
         DataTable: List of [List of [Text]];
         CurrentLineGlobal: List of [Text];
         RowListGlobal: list of [Integer];
