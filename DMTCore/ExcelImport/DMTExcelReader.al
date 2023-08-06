@@ -29,14 +29,19 @@ codeunit 91018 DMTExcelReader
         SheetName := tempExcelBuffer.SelectSheetsNameStream(IStr);
     end;
 
-    internal procedure InitReadRows(sourceFileStorage: Record DMTSourceFileStorage; fromRowNo: integer; toRowNo: Integer)
+    internal procedure InitSourceFile(sourceFileStorage: Record DMTSourceFileStorage)
+    begin
+        sourceFileStorage.GetFileAsTempBlob(TempBlobGlobal);
+    end;
+
+    internal procedure InitReadRows(fromRowNo: integer; toRowNo: Integer)
     var
         rowNo: Integer;
     begin
-        sourceFileStorage.GetFileAsTempBlob(TempBlobGlobal);
         for rowNo := fromRowNo to toRowNo do
             RowListGlobal.Add(rowNo);
         ReadModeGlobal := ReadModeGlobal::ReadOnly;
+        toRowNoGlobal := toRowNo;
     end;
 
     internal procedure InitImportToGenBuffer(sourceFileStorage: Record DMTSourceFileStorage; headLineRowNo: Integer)
@@ -53,7 +58,12 @@ codeunit 91018 DMTExcelReader
         IsHandled := true;
         case ReadModeGlobal of
             ReadModeGlobal::ReadOnly:
-                SaveCellValuesToDataTable(ExcelBuffer."Row No.", Value);
+                begin
+                    SaveCellValuesToDataTable(ExcelBuffer."Row No.", Value);
+                    if toRowNoGlobal > 0 then
+                        if ExcelBuffer."Row No." > toRowNoGlobal then
+                            Error('');
+                end;
             ReadModeGlobal::ImportToGenBuffer:
                 CollectLineAndInsertIntoToGenBufferTable(ExcelBuffer."Row No.", Value)
         end;
@@ -181,8 +191,7 @@ codeunit 91018 DMTExcelReader
         Progress_IsActive: Boolean;
         LastDialogUpdate: DateTime;
         Progress: Dialog;
-        CurrLineNoGlobal: Integer;
-        FirstRowWithValuesGlobal: Integer;
+        CurrLineNoGlobal, FirstRowWithValuesGlobal, toRowNoGlobal : Integer;
         HeadLineRowNoGlobal: Integer;
         RowListGlobal: List of [Integer];
         DataTable: List of [List of [Text]];

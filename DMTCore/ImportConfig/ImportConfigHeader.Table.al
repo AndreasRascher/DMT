@@ -49,7 +49,6 @@ table 91003 DMTImportConfigHeader
         field(51; LastUsedFilter; Blob) { }
         field(52; "Use OnInsert Trigger"; Boolean) { Caption = 'Use OnInsert Trigger', Comment = 'de-DE=OnInsert Trigger verwenden'; InitValue = true; }
         field(53; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
-        field(54; "Data Layout ID"; Integer) { Caption = 'Data Layout ID', Comment = 'de-DE=Datenlayout ID'; TableRelation = DMTDataLayout; }
         field(55; "Source File Name"; Text[250])
         {
             Caption = 'Source File Name', Comment = 'de-DE=Quelldatei';
@@ -72,7 +71,6 @@ table 91003 DMTImportConfigHeader
     }
     trigger OnInsert()
     begin
-        Rec.TestField("Data Layout ID");
         Rec.TestField("Source File ID");
         Rec.ID := GetNextID();
     end;
@@ -80,9 +78,12 @@ table 91003 DMTImportConfigHeader
     trigger OnDelete()
     var
         ImportConfigLine: Record DMTImportConfigLine;
+        LogEntry: Record DMTLogEntry;
     begin
         if Rec.FilterRelated(ImportConfigLine) then
-            Rec.DeleteAll();
+            ImportConfigLine.DeleteAll();
+        if Rec.FilterRelated(LogEntry) then
+            LogEntry.DeleteAll();
     end;
 
     procedure GetNextID() NextID: Integer
@@ -98,6 +99,12 @@ table 91003 DMTImportConfigHeader
     begin
         ImportConfigLine.SetRange("Imp.Conf.Header ID", Rec.ID);
         HasLinesInFilter := not ImportConfigLine.IsEmpty;
+    end;
+
+    internal procedure FilterRelated(var LogEntry: Record DMTLogEntry) HasLinesInFilter: Boolean
+    begin
+        LogEntry.SetRange("Target Table ID", Rec."Target Table ID");
+        LogEntry.SetRange("Entry Type", LogEntry."Entry Type"::Summary);
     end;
 
     internal procedure ShowTableContent(TableID: Integer) OK: Boolean
@@ -179,10 +186,14 @@ table 91003 DMTImportConfigHeader
         OK := TempImportConfigLine.FindFirst();
     end;
 
-    procedure GetDataLayout() DataLayout: Record DMTDataLayout
+    procedure GetDataLayout() dataLayout: Record DMTDataLayout
+    var
+        sourceFileStorage: Record DMTSourceFileStorage;
     begin
-        Rec.TestField(Rec."Data Layout ID");
-        DataLayout.Get(Rec."Data Layout ID");
+        Rec.TestField("Source File ID");
+        sourceFileStorage.Get(Rec."Source File ID");
+        sourceFileStorage.TestField("Data Layout ID");
+        dataLayout.Get(sourceFileStorage."Data Layout ID");
     end;
 
     procedure GetSourceFileStorage() SourceFileStorage: Record DMTSourceFileStorage

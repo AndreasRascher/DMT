@@ -46,7 +46,7 @@ page 91012 DMTFieldLookup
                         GenBuffTable.GetColCaptionForImportedFile(ImportConfigHeader, BuffTableCaptions);
                         foreach FieldNo in BuffTableCaptions.Keys do begin
                             TempDataLayoutLine.Init();
-                            TempDataLayoutLine."Data Layout ID" := ImportConfigHeader."Data Layout ID";
+                            // TempDataLayoutLine."Data Layout ID" := ImportConfigHeader."Data Layout ID";
                             TempDataLayoutLine."Column No." := FieldNo;
                             TempDataLayoutLine.ColumnName := CopyStr(BuffTableCaptions.Get(FieldNo), 1, MaxStrLen(TempDataLayoutLine.ColumnName));
                             TempDataLayoutLine.Insert();

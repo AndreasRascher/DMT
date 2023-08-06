@@ -49,6 +49,7 @@ codeunit 91001 DMTSourceFileMgt
         SourceFileStorage.Extension := CopyStr(fileExtension, 1, MaxStrLen(SourceFileStorage.Extension));
         SourceFileStorage.UploadDateTime := CurrentDateTime;
         SourceFileStorage.Size := SourceFileStorage."File Blob".Length;
+        AssignSourceFileFormat(SourceFileStorage);
         SourceFileStorage.Insert();
     end;
 
@@ -73,6 +74,16 @@ codeunit 91001 DMTSourceFileMgt
             TempBlob.CreateInStream(IStr);
             AddFileToStorage(FileNameInArchive, IStr, true);
         end;
+    end;
+
+    local procedure AssignSourceFileFormat(var sourceFileStorage: Record DMTSourceFileStorage)
+    begin
+        if sourceFileStorage.Name.EndsWith('.xlsx') and (sourceFileStorage.SourceFileFormat = sourceFileStorage.SourceFileFormat::" ") then begin
+            sourceFileStorage.SourceFileFormat := sourceFileStorage.SourceFileFormat::Excel;
+        end;
+
+        if sourceFileStorage.Name.EndsWith('.csv') and (sourceFileStorage.SourceFileFormat = sourceFileStorage.SourceFileFormat::" ") then
+            sourceFileStorage.SourceFileFormat := sourceFileStorage.SourceFileFormat::"Custom CSV";
     end;
 
 

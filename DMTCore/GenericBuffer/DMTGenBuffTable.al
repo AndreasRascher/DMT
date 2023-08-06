@@ -332,12 +332,12 @@ table 91001 DMTGenBuffTable
     internal procedure GetColCaptionForImportedFile(ImportConfigHeader: Record DMTImportConfigHeader; var BuffTableCaptions: Dictionary of [Integer, Text]) OK: Boolean
     var
         GenBuffTable: Record DMTGenBuffTable;
-        DMTDataLayout: Record DMTDataLayout;
+        dataLayout: Record DMTDataLayout;
         RecRef: RecordRef;
         FieldIndex: Integer;
     begin
         OK := true;
-        DMTDataLayout.Get(ImportConfigHeader."Data Layout ID");
+        dataLayout := ImportConfigHeader.GetDataLayout();
         if not GenBuffTable.FilterBy(ImportConfigHeader) then begin
             Message('Keine Zeilen in der Puffertabelle gefunden (%1 - %2)', ImportConfigHeader.TableCaption, ImportConfigHeader.ID);
             exit(false);

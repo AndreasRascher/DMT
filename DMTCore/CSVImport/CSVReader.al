@@ -25,52 +25,34 @@ xmlport 91001 DMTCSVReader
                 {
                     Unbound = true;
                     trigger OnAfterAssignVariable()
-                    var
-                        Debug: Text;
-                        CharMap: List of [Text];
-                        i: Integer;
                     begin
-                        if RowListGlobal.Count > 0 then
-                            if not RowListGlobal.Contains(CurrRowNoGlobal) then
-                                currXMLport.Skip();
+                        if not shouldReadLine(CurrRowNoGlobal) then
+                            currXMLport.Skip();
 
-                        if FieldContent.Contains('volltextsuche') then begin
-                            for i := 1 to StrLen(FieldContent) do
-                                CharMap.Add(StrSubstNo('%1-%2', FieldContent[i], FieldContent[i] * 1));
-                            Debug := Format(currXMLport.FieldDelimiter);
-                            Debug := Format(currXMLport.FieldSeparator);
-                            Debug := Format(currXMLport.RecordSeparator);
-                            Debug := Format(currXMLport.TextEncoding);
-                        end;
-                        case ReadModeGlobal of
-                            ReadModeGlobal::ReadOnly:
-                                begin
-                                    CurrentLineGlobal.Add(fieldContent);
-                                    // save first line with values info to find headline row no
-                                    if FirstRowWithValuesGlobal = 0 then
-                                        if fieldContent <> '' then
-                                            FirstRowWithValuesGlobal := CurrRowNoGlobal;
-
-                                end;
-                            ReadModeGlobal::ImportToGenBuffer:
-                                CollectLineAndInsertIntoToGenBufferTable(CurrRowNoGlobal, FieldContent)
-                        end;
+                        CurrentLineGlobal.Add(fieldContent);
+                        // save first line with values info to find headline row no
+                        if FirstRowWithValuesGlobal = 0 then
+                            if fieldContent <> '' then
+                                FirstRowWithValuesGlobal := CurrRowNoGlobal;
                     end;
                 }
-
-                trigger OnBeforeInsertRecord()
-                begin
-                    ProcessLineAfterReceivingLastField();
-                end;
-
+                // Called when starting new line
                 trigger OnAfterInitRecord()
                 begin
                     CurrRowNoGlobal += 1;
-                    CurrColIndex := 0;
-
-                    if RowListGlobal.Count > 0 then
+                    Line.Number := CurrRowNoGlobal; // required to raise onBeforeInsertRecord
+                    if RowListGlobal.Count > 0 then begin
+                        if (toRowNoGlobal <> 0) and (CurrRowNoGlobal > toRowNoGlobal) then
+                            currXMLport.Break();
                         if not RowListGlobal.Contains(CurrRowNoGlobal) then
                             currXMLport.Skip();
+                    end;
+                    Clear(CurrentLineGlobal); // prepare new line
+                end;
+                // Called when finished line but only if dataitem key changed (TODO)
+                trigger OnBeforeInsertRecord()
+                begin
+                    ProcessLineAfterReceivingLastField();
                 end;
             }
         }
@@ -79,10 +61,6 @@ xmlport 91001 DMTCSVReader
     requestpage
     {
     }
-
-    trigger OnPostXmlPort()
-    begin
-    end;
 
     internal procedure InitImportToGenBuffer(sourceFileStorage: Record DMTSourceFileStorage; headLineRowNo: Integer)
     begin
@@ -98,6 +76,7 @@ xmlport 91001 DMTCSVReader
         for rowNo := fromRowNo to toRowNo do
             RowListGlobal.Add(rowNo);
         ReadModeGlobal := ReadModeGlobal::ReadOnly;
+        toRowNoGlobal := toRowNo;
     end;
 
     internal procedure GetHeadlineColumnValues(var FirstRowWithValues: Integer) HeadLine: List of [Text]
@@ -110,33 +89,31 @@ xmlport 91001 DMTCSVReader
         FirstRowWithValues := FirstRowWithValuesGlobal;
     end;
 
-    procedure ProcessLineAfterReceivingLastField()
+    local procedure ProcessLineAfterReceivingLastField()
     begin
-        if RowListGlobal.Count > 0 then
-            if RowListGlobal.Contains(CurrRowNoGlobal) then
-                case ReadModeGlobal of
-                    ReadModeGlobal::ReadOnly:
-                        begin
-                            DataTable.Add(CurrentLineGlobal);
-                            Clear(CurrentLineGlobal);
-                        end;
-                    ReadModeGlobal::ImportToGenBuffer:
-                        ImportLine(CurrentLineGlobal, false, ImportFromFileNameGlobal);
-                end;
+        if shouldReadLine(CurrRowNoGlobal) then
+            case ReadModeGlobal of
+                ReadModeGlobal::ReadOnly:
+                    DataTable.Add(CurrentLineGlobal);
+                ReadModeGlobal::ImportToGenBuffer:
+                    ImportLine(CurrentLineGlobal, (HeadLineRowNoGlobal = CurrRowNoGlobal), ImportFromFileNameGlobal);
+            end;
     end;
 
     local procedure ImportLine(currentLine: List of [Text]; IsColumnCaptionLine: Boolean; ImportFromFileName: Text);
     var
         genBuffTable: Record DMTGenBuffTable;
         RecRef: RecordRef;
-        NextEntryNo: Integer;
         CurrColIndex: Integer;
         cellValue: Text;
     begin
-        NextEntryNo := genBuffTable.GetNextEntryNo();
+        if NextEntryNoGlobal = 0 then
+            NextEntryNoGlobal := genBuffTable.GetNextEntryNo()
+        else
+            NextEntryNoGlobal += 1;
 
         genBuffTable.Init();
-        genBuffTable."Entry No." := NextEntryNo;
+        genBuffTable."Entry No." := NextEntryNoGlobal;
         genBuffTable.IsCaptionLine := IsColumnCaptionLine;
         RecRef.GetTable(genBuffTable);
         foreach cellValue in currentLine do begin
@@ -151,25 +128,19 @@ xmlport 91001 DMTCSVReader
         genBuffTable.Insert();
     end;
 
-    local procedure CollectLineAndInsertIntoToGenBufferTable(rowNo: Integer; cellValue: Text)
+    local procedure shouldReadLine(rowNo: Integer): Boolean
     begin
-        if rowNo > CurrRowNoGlobal then begin
-            if CurrRowNoGlobal > 0 then
-                ImportLine(CurrentLineGlobal, (rowNo - 1) = HeadLineRowNoGlobal, ImportFromFileNameGlobal);
-            // Progress_Update(rowNo);
-            //start new line
-            CurrRowNoGlobal := rowNo;
-            Clear(CurrentLineGlobal);
-        end;
-        CurrentLineGlobal.Add(cellValue);
+        if (RowListGlobal.Count = 0) then
+            exit(true);
+        if RowListGlobal.Contains(rowNo) then
+            exit(true);
+        exit(false);
     end;
-
 
     var
         ReadModeGlobal: Option ReadOnly,ImportToGenBuffer;
         ImportFromFileNameGlobal: Text;
-        HeadLineRowNoGlobal, FirstRowWithValuesGlobal, CurrRowNoGlobal : Integer;
-        CurrColIndex: Integer;
+        HeadLineRowNoGlobal, FirstRowWithValuesGlobal, CurrRowNoGlobal, toRowNoGlobal, NextEntryNoGlobal : Integer;
         DataTable: List of [List of [Text]];
         CurrentLineGlobal: List of [Text];
         RowListGlobal: list of [Integer];

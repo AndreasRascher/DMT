@@ -13,7 +13,7 @@ page 91010 DMTImportConfigList
         {
             repeater(Group)
             {
-                field("Data Layout Code"; Rec."Data Layout ID") { }
+                // field("Data Layout Code"; Rec."Data Layout ID") { }
                 field("Source File Name"; Rec."Source File Name") { }
                 field(ID; Rec.ID) { }
                 field("Target Table ID"; Rec."Target Table ID") { }

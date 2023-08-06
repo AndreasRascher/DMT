@@ -34,15 +34,15 @@ page 91008 DMTImportConfigCard
                 }
                 field(SourceFileID; Rec."Source File ID") { ShowMandatory = true; }
 
-                field("Data Layout Code"; Rec."Data Layout ID")
-                {
-                    ShowMandatory = true;
-                    trigger OnValidate()
-                    begin
-                        CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
-                        CurrPage.LinePart.Page.DoUpdate(false);
-                    end;
-                }
+                // field("Data Layout Code"; Rec."Data Layout ID")
+                // {
+                //     ShowMandatory = true;
+                //     trigger OnValidate()
+                //     begin
+                //         CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
+                //         CurrPage.LinePart.Page.DoUpdate(false);
+                //     end;
+                // }
                 field("Target Table ID"; Rec."Target Table ID") { Visible = false; }
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { }
                 field("Import Only New Records"; Rec."Import Only New Records") { }
@@ -306,7 +306,7 @@ page 91008 DMTImportConfigCard
 
     trigger OnAfterGetRecord()
     begin
-        CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
+        // CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
         CurrPage.LinePart.Page.DoUpdate(false);
     end;
 

@@ -28,7 +28,6 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
         else
             CSVReader.InitReadRows(dataLayout."HeadingRowNo", dataLayout."HeadingRowNo");
         CSVReader.Import();
-        CSVReader.ProcessLineAfterReceivingLastField();
         HeaderLine := CSVReader.GetHeadlineColumnValues(FirstRowWithValues);
     end;
 
@@ -52,10 +51,10 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
         CRLF[1] := 13;
         CRLF[2] := 10;
         TAB[1] := 9;
-        //<None>,<NewLine>,<CR>,<LF>,<TAB>
+        //<None>,<CR/LF>,<CR>,<LF>,<TAB>
         lineSeperator := lineSeperator.Replace('<CR>', CRLF[1]);
         lineSeperator := lineSeperator.Replace('<LF>', CRLF[2]);
-        lineSeperator := lineSeperator.Replace('<NewLine>', CRLF);
+        lineSeperator := lineSeperator.Replace('<CR/LF>', CRLF);
         lineSeperator := lineSeperator.Replace('<TAB>', TAB);
         CSVReader.RecordSeparator := lineSeperator;
         case dataLayout.CSVTextEncoding of

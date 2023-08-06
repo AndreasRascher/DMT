@@ -11,12 +11,12 @@ page 91009 DMTImportConfigLinePart
     {
         area(Content)
         {
-            label(AssignDataLayout)
-            {
-                Caption = 'Assign a data layout to assign fields.',
-                Comment = 'de-DE=Weisen Sie ein Datenlayout zu um eine Felderzuordnung einzurichten.';
-                Visible = not HasDataLayoutAssigned;
-            }
+            // label(AssignDataLayout)
+            // {
+            //     Caption = 'Assign a data layout to assign fields.',
+            //     Comment = 'de-DE=Weisen Sie ein Datenlayout zu um eine Felderzuordnung einzurichten.';
+            //     Visible = not HasDataLayoutAssigned;
+            // }
             repeater(LineRepeater)
             {
                 Editable = HasDataLayoutAssigned;
@@ -154,10 +154,6 @@ page 91009 DMTImportConfigLinePart
         }
     }
 
-    procedure SetRepeaterProperties(ImportConfigHeader: Record DMTImportConfigHeader)
-    begin
-        HasDataLayoutAssigned := ImportConfigHeader."Data Layout ID" <> 0;
-    end;
 
     procedure DoUpdate(SaveRecord: Boolean)
     begin

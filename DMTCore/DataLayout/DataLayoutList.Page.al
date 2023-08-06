@@ -24,4 +24,24 @@ page 91007 DMTDataLayouts
 
         }
     }
+    trigger OnOpenPage()
+    var
+        dataLayout: Record DMTDataLayout;
+    begin
+        if dataLayout.IsEmpty then
+            InsertPresetDataLayouts();
+    end;
+
+    local procedure InsertPresetDataLayouts()
+    var
+        dataLayout: Record DMTDataLayout;
+    begin
+        dataLayout.ID := dataLayout.GetNextID();
+        dataLayout.Name := 'CSV (MS-DOS)';
+        dataLayout.CSVFieldDelimiter := '"';
+        dataLayout.CSVTextEncoding := dataLayout.CSVTextEncoding::MSDos;
+        dataLayout.CSVLineSeparator := '<CR/LF>';
+        dataLayout.CSVFieldSeparator := '"';
+        dataLayout.Insert();
+    end;
 }

@@ -28,6 +28,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Text Encoding</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field CSVTextEncoding - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 4224547593 - Field 956310252 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Has Heading Row</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Enthält Überschriftenzeile</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field Has Heading Row - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 4224547593 - Field 1876264317 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Heading Row no.</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Überschrift Zeilennr.</note>
@@ -1393,11 +1398,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Puffertabelle ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Buffer Table ID - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 200502431 - Field 3893498913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Data Layout ID</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Datenlayout ID</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Data Layout ID - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 200502431 - Field 523320669 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Only New Records</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Nur neue Datensätze importieren</note>
@@ -1838,6 +1838,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Vorgang abgebrochen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Method ConfirmDeleteIfSourceFileIsAssigned - NamedType ProcessCanceldErr</note>
         </trans-unit>
+        <trans-unit id="Table 3763097529 - Field 3893498913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data Layout ID</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Datenlayout ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Field Data Layout ID - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3763097529 - Field 3979136067 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Extension</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Dateiendung</note>
@@ -1862,6 +1867,11 @@
           <source>Size</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Größe</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Field Size - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3763097529 - Field 1013576988 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source File Format</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Dateiformat</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Field SourceFileFormat - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3763097529 - Field 2620692110 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Uploaded at</source>
@@ -2228,11 +2238,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1011073045 - Control 3666579133 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Assign a data layout to assign fields.</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Weisen Sie ein Datenlayout zu um eine Felderzuordnung einzurichten.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Control AssignDataLayout - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 1011073045 - Control 4236431109 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ingore occuring field error and import data</source>
           <note from="Developer" annotates="general" priority="2">de-DE=VerarbeitungsfehlerDaten importieren auch</note>
@@ -2533,15 +2538,15 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Felder auswählen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectMultipleFields - Control SelectedFields - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1854940516 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 698368471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Source Files</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Quelldateien</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SourceFiles - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSourceFiles - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1854940516 - Action 1263952573 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 698368471 - Action 1263952573 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Upload File</source>
-          <note from="Developer" annotates="general" priority="2">de=DE=Datei hochladen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SourceFiles - Action UploadFileToDefaultFolder - Property Caption</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Datei hochladen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSourceFiles - Action UploadFileToDefaultFolder - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 2995423981 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Field</source>

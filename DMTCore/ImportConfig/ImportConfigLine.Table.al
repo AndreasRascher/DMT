@@ -138,12 +138,12 @@ table 91006 DMTImportConfigLine
                                 Rec."Processing Action" := Rec."Processing Action"::Transfer;
                             end;
 
-                    // Read Captions from Data Layout
-                    if Rec."Source Field Caption" = '' then
-                        if DataLayoutLine.Get(ImportConfigHeader."Data Layout ID", Rec."Source Field No.") then begin
-                            Rec."Source Field Caption" := DataLayoutLine.ColumnName;
-                            Rec."Processing Action" := Rec."Processing Action"::Transfer;
-                        end;
+                    // // Read Captions from Data Layout
+                    // if Rec."Source Field Caption" = '' then
+                    //     if DataLayoutLine.Get(ImportConfigHeader."Data Layout ID", Rec."Source Field No.") then begin
+                    //         Rec."Source Field Caption" := DataLayoutLine.ColumnName;
+                    //         Rec."Processing Action" := Rec."Processing Action"::Transfer;
+                    //     end;
                 end;
             else
                 Error('unhandled %1', FromFieldNo);
