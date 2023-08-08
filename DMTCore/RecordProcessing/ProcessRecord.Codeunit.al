@@ -8,6 +8,7 @@ codeunit 91008 DMTProcessRecord
     procedure Start()
     begin
         Clear(CurrValueToAssignText);
+        Clear(CurrTargetRecIDText);
         if RunMode = RunMode::FieldTransfer then begin
             if ProcessedFields.Count < TargetKeyFieldIDs.Count then
                 ProcessKeyFields();
@@ -130,6 +131,7 @@ codeunit 91008 DMTProcessRecord
                         SkipRecord := true;
                 end;
         end;
+        CurrTargetRecIDText := Format(TmpTargetRef.RecordId);
     end;
 
     procedure InitFieldTransfer(_SourceRef: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings)
@@ -172,16 +174,17 @@ codeunit 91008 DMTProcessRecord
         ErrorItem.Add('GetLastErrorText', GetLastErrorText);
         // if CurrValueToAssign_IsInitialized then
         ErrorItem.Add('ErrorValue', CurrValueToAssignText);
+        ErrorItem.Add('ErrorTargetRecID', CurrTargetRecIDText);
         // else
         // ErrorItem.Add('ErrorValue', '');
         ErrorLogDict.Add(CurrFieldToProcess, ErrorItem);
         ProcessedFields.Add(CurrFieldToProcess);
         // Check if this error should block the insert oder modify
         if RunMode = RunMode::FieldTransfer then
-            if not HasNotIgnoredErrors then begin
+            if not ErrorsOccuredThatShouldNotBeIngored then begin
                 TempImportConfigLine.Get(CurrFieldToProcess);
                 if not TempImportConfigLine."Ignore Validation Error" then
-                    HasNotIgnoredErrors := true;
+                    ErrorsOccuredThatShouldNotBeIngored := true;
             end;
 
         ClearLastError();
@@ -190,7 +193,7 @@ codeunit 91008 DMTProcessRecord
     local procedure SaveRecord() Success: Boolean
     begin
         Success := true;
-        if ErrorLogDict.Count > 0 then
+        if ErrorsOccuredThatShouldNotBeIngored then
             exit(false);
         ClearLastError();
         case RunMode of
@@ -237,12 +240,12 @@ codeunit 91008 DMTProcessRecord
         // - DS Verarbeitet
         //   - = DS aktualisiert + DS Ignoriert + DS mit Fehler
         case true of
-            (RunMode in [RunMode::FieldTransfer, RunMode::ModifyRecord, RunMode::InsertRecord]) and HasNotIgnoredErrors:
+            (RunMode in [RunMode::FieldTransfer, RunMode::ModifyRecord, RunMode::InsertRecord]) and ErrorsOccuredThatShouldNotBeIngored:
                 exit(ResultType::Error);
             (RunMode in [RunMode::ModifyRecord, RunMode::InsertRecord]) and SkipRecord:
                 exit(ResultType::Ignored);
             (RunMode in [RunMode::FieldTransfer, RunMode::ModifyRecord, RunMode::InsertRecord]) and
-            not HasNotIgnoredErrors and not SkipRecord:
+            not ErrorsOccuredThatShouldNotBeIngored and not SkipRecord:
                 exit(ResultType::ChangesApplied);
             else
                 Error('unhandled case');
@@ -258,10 +261,10 @@ codeunit 91008 DMTProcessRecord
         CurrFieldToProcess: RecordId;
         SourceRef, TargetRef_INIT, TmpTargetRef : RecordRef;
         CurrValueToAssign: FieldRef;
-        CurrValueToAssignText: Text;
+        CurrValueToAssignText, CurrTargetRecIDText : Text;
         IReplacementHandler: Interface IReplacementHandler;
         CurrValueToAssign_IsInitialized: Boolean;
-        SkipRecord, TargetRecordExists, HasNotIgnoredErrors : Boolean;
+        SkipRecord, TargetRecordExists, ErrorsOccuredThatShouldNotBeIngored : Boolean;
         UpdateFieldsInExistingRecordsOnly: Boolean;
         ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
         TargetKeyFieldIDs: List of [Integer];

@@ -30,6 +30,8 @@ page 91008 DMTImportConfigCard
                     trigger OnValidate()
                     begin
                         Rec.TargetTableCaption_OnValidate();
+                        CurrPage.TableInfoFactBox.Page.DoUpdate(Rec);
+                        CurrPage.LogFactBox.Page.DoUpdate(Rec);
                     end;
                 }
                 field("Source File Name"; Rec."Source File Name")
@@ -98,6 +100,8 @@ page 91008 DMTImportConfigCard
                     SourceFileImport := Rec.GetDataLayout().SourceFileFormat;
                     SourceFileImport.ImportToBufferTable(Rec);
                     Log.AddImportToBufferSummary(Rec, CurrentDateTime - Start);
+                    CurrPage.TableInfoFactBox.Page.DoUpdate(Rec);
+                    CurrPage.LogFactBox.Page.DoUpdate(Rec);
                 end;
             }
             action(DeleteRecordsInTargetTable)

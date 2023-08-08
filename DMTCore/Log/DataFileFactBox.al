@@ -82,6 +82,18 @@ page 91014 DMTImportConfigFactBox
         Rec.SetRecFilter();
     end;
 
+    procedure DoUpdate(importConfigHeader: Record DMTImportConfigHeader)
+    begin
+        CurrImportConfigHeader.Copy(importConfigHeader);
+
+        if ViewMode = ViewMode::Log then begin
+            Rec.SetRange("Target Table ID", importConfigHeader."Target Table ID");
+            Rec.SetRange("Entry Type", Rec."Entry Type"::Summary);
+        end;
+
+        CurrPage.Update(false);
+    end;
+
     var
         CurrImportConfigHeader: Record DMTImportConfigHeader;
         ViewMode: Option " ",Log,TableInfo;

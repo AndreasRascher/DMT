@@ -119,6 +119,8 @@ codeunit 91006 DMTLog
             LogEntry."Context Description" := CopyStr(ErrorItem.Get('GetLastErrorText'), 1, MaxStrLen(LogEntry."Context Description"));
             if ErrorItem.ContainsKey('ErrorValue') then
                 LogEntry."Error Field Value" := CopyStr(ErrorItem.Get('ErrorValue'), 1, MaxStrLen(LogEntry."Error Field Value"));
+            if ErrorItem.ContainsKey('ErrorTargetRecID') then
+                LogEntry."Target ID (Text)" := CopyStr(ErrorItem.Get('ErrorTargetRecID'), 1, MaxStrLen(LogEntry."Target ID (Text)"));
         end;
 
         LogEntry.Insert();

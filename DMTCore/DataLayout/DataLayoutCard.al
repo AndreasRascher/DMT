@@ -83,7 +83,6 @@ page 91011 DMTDataLayoutCard
                 var
                     dataLayoutLine: Record DMTDataLayoutLine;
                     sourceFileStorage: Record DMTSourceFileStorage;
-                    importCSVImpl: Codeunit DMTImportCSVImpl;
                     tempBlob: Codeunit "Temp Blob";
                     ISourceFileImport: Interface ISourceFileImport;
                     FirstRowWithValues: Integer;
