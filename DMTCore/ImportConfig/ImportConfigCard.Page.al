@@ -100,6 +100,7 @@ page 91008 DMTImportConfigCard
                     SourceFileImport := Rec.GetDataLayout().SourceFileFormat;
                     SourceFileImport.ImportToBufferTable(Rec);
                     Log.AddImportToBufferSummary(Rec, CurrentDateTime - Start);
+                    SourceFileImport.TooLargeValuesHaveBeenCutOffWarningIfRequired();
                     CurrPage.TableInfoFactBox.Page.DoUpdate(Rec);
                     CurrPage.LogFactBox.Page.DoUpdate(Rec);
                 end;

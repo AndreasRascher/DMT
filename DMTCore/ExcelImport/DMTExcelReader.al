@@ -123,6 +123,9 @@ codeunit 91018 DMTExcelReader
         foreach cellValue in currentLine do begin
             CurrColIndex += 1;
             //ToDo: Handle large Texts
+            if not HasToLargeTextValuesGlobal then
+                if Strlen(cellValue) > 250 then
+                    HasToLargeTextValuesGlobal := true;
             RecRef.Field(1000 + CurrColIndex).Value := CopyStr(cellValue, 1, 250);
         end;
 
@@ -186,6 +189,14 @@ codeunit 91018 DMTExcelReader
                 ImportLine(CurrentLineGlobal, false, ImportFromFileNameGlobal);
         end;
     end;
+
+    procedure HasTooLargeTextValues(): Boolean
+    begin
+        exit(HasToLargeTextValuesGlobal)
+    end;
+
+    var
+        HasToLargeTextValuesGlobal: Boolean;
 
     var
         TempBlobGlobal: Codeunit "Temp Blob";

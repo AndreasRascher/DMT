@@ -14,6 +14,7 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
         PrepareXMLPortWithCSVOptionsAndSourceFile(SourceFileStorage, ImportConfigHeader.GetDataLayout(), CSVReader);
         CSVReader.InitImportToGenBuffer(SourceFileStorage, ImportConfigHeader);
         CSVReader.Import();
+        HasToLargeTextValuesGlobal := CSVReader.HasTooLargeTextValues();
         ImportConfigHeader.UpdateBufferRecordCount();
     end;
 
@@ -70,7 +71,18 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
         CSVReader.SetSource(FileStreamGlobal);
     end;
 
+    procedure TooLargeValuesHaveBeenCutOffWarningIfRequired()
+    var
+        TooLargeValuesHaveBeenCutOffMsg: Label 'too large field values have been cut off. Max. string length is 250 chars',
+                                           Comment = 'de-DE=Zu lange Feldwerte wurden abgeschnitten. Max. Textlänge ist 250 Zeichen';
+
+    begin
+        if HasToLargeTextValuesGlobal then
+            Message(TooLargeValuesHaveBeenCutOffMsg);
+    end;
+
     var
         FileStreamGlobal: InStream;
         FileBlobGlobal: Codeunit "Temp Blob";
+        HasToLargeTextValuesGlobal: Boolean;
 }
