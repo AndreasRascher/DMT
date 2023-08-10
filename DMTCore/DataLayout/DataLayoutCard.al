@@ -15,6 +15,7 @@ page 91011 DMTDataLayoutCard
                 Caption = 'General', Comment = 'de-De=Allgemein';
                 field(ID; Rec.ID) { Visible = false; }
                 field(Name; Rec.Name) { }
+                field("Has Heading Row"; Rec."Has Heading Row") { }
                 field(HeadingRowNo; Rec."HeadingRowNo") { }
                 field(SourceFileFormat; Rec.SourceFileFormat)
                 {
@@ -64,6 +65,7 @@ page 91011 DMTDataLayoutCard
             part(DMTLayoutLinePart; DMTLayoutLinePart)
             {
                 SubPageLink = "Data Layout ID" = field(ID);
+                Enabled = not Rec."Has Heading Row";
             }
         }
     }
@@ -78,6 +80,7 @@ page 91011 DMTDataLayoutCard
                 ToolTip = 'Import column names from column headers', Comment = 'de-DE=Spaltennamen aus Spaltenüberschriften importieren';
                 Image = ImportExcel;
                 ApplicationArea = All;
+                Visible = Rec."Has Heading Row";
 
                 trigger OnAction()
                 var

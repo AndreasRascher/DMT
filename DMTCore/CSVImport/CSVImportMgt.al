@@ -74,8 +74,7 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
     procedure TooLargeValuesHaveBeenCutOffWarningIfRequired()
     var
         TooLargeValuesHaveBeenCutOffMsg: Label 'too large field values have been cut off. Max. string length is 250 chars',
-                                           Comment = 'de-DE=Zu lange Feldwerte wurden abgeschnitten. Max. Textlänge ist 250 Zeichen';
-
+                                           Comment = 'de-DE=Achtung, beim Import wurden zu lange Feldwerte abgeschnitten. Max. Textlänge ist 250 Zeichen';
     begin
         if HasToLargeTextValuesGlobal then
             Message(TooLargeValuesHaveBeenCutOffMsg);

@@ -18,6 +18,8 @@ page 91007 DMTDataLayouts
                 field(Name; Rec.Name) { }
                 field(SourceFileFormat; Rec.SourceFileFormat) { }
                 field(Default; Rec.Default) { }
+                field("Has Heading Row"; Rec."Has Heading Row") { }
+                field(HeadingRowNo; Rec.HeadingRowNo) { }
             }
         }
         area(FactBoxes)

@@ -1905,7 +1905,7 @@
         </trans-unit>
         <trans-unit id="Codeunit 3834207626 - Method 2420045186 - NamedType 1044229085" size-unit="char" translate="yes" xml:space="preserve">
           <source>too large field values have been cut off. Max. string length is 250 chars</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Zu lange Feldwerte wurden abgeschnitten. Max. Textlänge ist 250 Zeichen</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Achtung, beim Import wurden zu lange Feldwerte abgeschnitten. Max. Textlänge ist 250 Zeichen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportCSVImpl - Method TooLargeValuesHaveBeenCutOffWarningIfRequired - NamedType TooLargeValuesHaveBeenCutOffMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 3774911051 - Method 2653990749 - NamedType 1139369458" size-unit="char" translate="yes" xml:space="preserve">
