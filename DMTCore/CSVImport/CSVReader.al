@@ -49,7 +49,7 @@ xmlport 91001 DMTCSVReader
                     end;
                     Clear(CurrentLineGlobal); // prepare new line
                 end;
-                // Called when finished line but only if dataitem key changed (TODO)
+                // Called when finished line but only if dataitem key changed
                 trigger OnBeforeInsertRecord()
                 begin
                     ProcessLineAfterReceivingLastField();
@@ -97,11 +97,13 @@ xmlport 91001 DMTCSVReader
                 ReadModeGlobal::ReadOnly:
                     DataTable.Add(CurrentLineGlobal);
                 ReadModeGlobal::ImportToGenBuffer:
-                    ImportLine(CurrentLineGlobal, (HeadLineRowNoGlobal = CurrRowNoGlobal), ImportFromFileNameGlobal);
+                    begin
+                        ImportLine(CurrentLineGlobal, (HeadLineRowNoGlobal = CurrRowNoGlobal), ImportFromFileNameGlobal);
+                    end;
             end;
     end;
 
-    local procedure ImportLine(currentLine: List of [Text]; IsColumnCaptionLine: Boolean; ImportFromFileName: Text);
+    local procedure ImportLine(currentLine: List of [Text]; IsColumnCaptionLine: Boolean; ImportFromFileName: Text[250]);
     var
         genBuffTable: Record DMTGenBuffTable;
         RecRef: RecordRef;
@@ -120,14 +122,22 @@ xmlport 91001 DMTCSVReader
         foreach cellValue in currentLine do begin
             CurrColIndex += 1;
             //ToDo: Handle large Texts
+            if not HasToLargeTextValuesGlobal then
+                if Strlen(cellValue) > 250 then
+                    HasToLargeTextValuesGlobal := true;
             RecRef.Field(1000 + CurrColIndex).Value := CopyStr(cellValue, 1, 250);
         end;
 
         RecRef.SetTable(genBuffTable);
-        genBuffTable."Import from Filename" := CopyStr(ImportFromFileName, 1, MaxStrLen(genBuffTable."Import from Filename"));
+        genBuffTable."Import from Filename" := ImportFromFileName;
         genBuffTable."Imp.Conf.Header ID" := ImportConfigHeaderIDGlobal;
         genBuffTable."Column Count" := CurrColIndex;
         genBuffTable.Insert();
+    end;
+
+    procedure HasTooLargeTextValues(): Boolean
+    begin
+        exit(HasToLargeTextValuesGlobal)
     end;
 
     local procedure shouldReadLine(rowNo: Integer): Boolean
@@ -141,9 +151,10 @@ xmlport 91001 DMTCSVReader
 
     var
         ReadModeGlobal: Option ReadOnly,ImportToGenBuffer;
-        ImportFromFileNameGlobal: Text;
+        ImportFromFileNameGlobal: Text[250];
         HeadLineRowNoGlobal, FirstRowWithValuesGlobal, CurrRowNoGlobal, toRowNoGlobal, NextEntryNoGlobal, ImportConfigHeaderIDGlobal : Integer;
         DataTable: List of [List of [Text]];
         CurrentLineGlobal: List of [Text];
         RowListGlobal: list of [Integer];
+        HasToLargeTextValuesGlobal: Boolean;
 }

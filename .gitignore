@@ -1,2 +1,6 @@
-*.app
 rad.json
+.alpackages/*.app
+DMTOnPrem/*.app
+DMTCore/*.app
+DMTCodeGenerator/*.app
+DMTCore/.vscode/rad.json

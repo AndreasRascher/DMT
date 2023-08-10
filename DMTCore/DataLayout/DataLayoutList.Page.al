@@ -18,6 +18,8 @@ page 91007 DMTDataLayouts
                 field(Name; Rec.Name) { }
                 field(SourceFileFormat; Rec.SourceFileFormat) { }
                 field(Default; Rec.Default) { }
+                field("Has Heading Row"; Rec."Has Heading Row") { }
+                field(HeadingRowNo; Rec.HeadingRowNo) { }
             }
         }
         area(FactBoxes)
@@ -38,10 +40,10 @@ page 91007 DMTDataLayouts
         dataLayout: Record DMTDataLayout;
     begin
         dataLayout.ID := dataLayout.GetNextID();
-        dataLayout.Name := 'CSV (MS-DOS), Überschrift in Zeile 1';
+        dataLayout.Name := 'CSV (UTF-8), Überschrift in Zeile 1';
         dataLayout.SourceFileFormat := dataLayout.SourceFileFormat::"Custom CSV";
         dataLayout.CSVFieldDelimiter := '"';
-        dataLayout.CSVTextEncoding := dataLayout.CSVTextEncoding::MSDos;
+        dataLayout.CSVTextEncoding := dataLayout.CSVTextEncoding::UTF8;
         dataLayout.CSVLineSeparator := '<CR/LF>';
         dataLayout.CSVFieldSeparator := ';';
         dataLayout."Has Heading Row" := true;
