@@ -6,10 +6,7 @@ table 91009 DMTProcessingPlan
 
     fields
     {
-        field(1; "Line No."; Integer)
-        {
-            Caption = 'Line No.', Comment = 'de-DE=Zeilennr.';
-        }
+        field(1; "Line No."; Integer) { Caption = 'Line No.', Comment = 'de-DE=Zeilennr.'; }
         field(10; Type; Enum DMTProcessingPlanType)
         {
             Caption = 'Type', Comment = 'de-DE=Art';

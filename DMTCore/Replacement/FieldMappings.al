@@ -28,15 +28,10 @@ page 91023 DMTFieldMappings
                 field("Target Table Relation"; Rec."Target Table Relation") { }
             }
         }
-        area(Factboxes)
-        {
-
-        }
+        area(Factboxes) { }
     }
 
-    actions
-    {
-    }
+    actions { }
 
     trigger OnOpenPage()
     begin

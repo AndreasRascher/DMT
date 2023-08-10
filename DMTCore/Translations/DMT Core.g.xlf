@@ -2675,7 +2675,7 @@
         </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 3304607464 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Delete Record</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">DS Löschen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogUsage - EnumValue Delete Record - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 877342396 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2690,7 +2690,7 @@
         </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 601505679 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Doc. Migration</source>
-          <note from="Developer" annotates="general" priority="2">Beleg Migration</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Beleg Migration</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogUsage - EnumValue Process Buffer - Document Migration - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 1384793423 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
