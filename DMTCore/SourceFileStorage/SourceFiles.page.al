@@ -13,10 +13,10 @@ page 91005 DMTSourceFiles
             repeater(GroupName)
             {
                 field("File ID"; Rec."File ID") { Visible = false; Editable = false; }
-                field(Name; Rec.Name) { Editable = false; }
-                field(Extension; Rec.Extension) { Editable = false; }
-                field(Size; Rec.Size) { Editable = false; }
-                field("DateTime"; Rec.UploadDateTime) { Editable = false; }
+                field(Name; Rec.Name) { }
+                field(Extension; Rec.Extension) { }
+                field(SizeInKB; Rec.SizeInKB) { }
+                field("DateTime"; Rec.UploadDateTime) { }
                 field(SourceFileFormat; Rec.SourceFileFormat) { }
                 field("Data Layout Name"; Rec."Data Layout Name")
                 {

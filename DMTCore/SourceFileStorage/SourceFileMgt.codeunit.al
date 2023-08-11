@@ -13,18 +13,19 @@ codeunit 91001 DMTSourceFileMgt
             exit;
 
         if not GetFilesFromZipFile(FileName, IStr) then begin
-            AddFileToStorage(FileName, IStr, true);
+            AddFileToStorage(FileName, IStr);
         end;
         Message(ImportFinishedMsg);
     end;
 
-    local procedure AddFileToStorage(FileName: Text; IStr: InStream; ReplaceFilesWithSameName: Boolean)
+    local procedure AddFileToStorage(FileName: Text; IStr: InStream)
     var
         SourceFileStorage, SourceFileStorageExisting : Record DMTSourceFileStorage;
         FileManagement: Codeunit "File Management";
         NextFileID: Integer;
         OStr: OutStream;
         fileBaseName, fileExtension : Text;
+        IsUpdate: Boolean;
     begin
         NextFileID := 1;
         if SourceFileStorage.FindLast() then
@@ -33,25 +34,34 @@ codeunit 91001 DMTSourceFileMgt
         fileBaseName := FileManagement.GetFileName(FileName);
         fileExtension := FileManagement.GetExtension(FileName);
 
-        if ReplaceFilesWithSameName then begin
-            Clear(SourceFileStorageExisting);
-            SourceFileStorageExisting.SetRange(Name, fileBaseName);
-            SourceFileStorageExisting.SetRange(Extension, fileExtension);
-            if not SourceFileStorageExisting.IsEmpty then
-                SourceFileStorageExisting.DeleteAll();
+        Clear(SourceFileStorageExisting);
+        SourceFileStorageExisting.SetRange(Name, fileBaseName);
+        SourceFileStorageExisting.SetRange(Extension, fileExtension);
+        IsUpdate := SourceFileStorageExisting.FindFirst();
+
+        if IsUpdate then begin
+            SourceFileStorage := SourceFileStorageExisting;
+            Clear(SourceFileStorage."File Blob");
+        end else begin
+            Clear(SourceFileStorage);
+            SourceFileStorage."File ID" := NextFileID;
+            SourceFileStorage.Insert();
         end;
 
-        Clear(SourceFileStorage);
-        SourceFileStorage."File ID" := NextFileID;
+        // Save Filestream
         SourceFileStorage."File Blob".CreateOutStream(OStr);
         CopyStream(OStr, IStr);
+
+        // Save / Update File Properties
         SourceFileStorage.Name := CopyStr(fileBaseName, 1, MaxStrLen(SourceFileStorage.Name));
         SourceFileStorage.Extension := CopyStr(fileExtension, 1, MaxStrLen(SourceFileStorage.Extension));
         SourceFileStorage.UploadDateTime := CurrentDateTime;
-        SourceFileStorage.Size := SourceFileStorage."File Blob".Length;
-        AssignSourceFileFormat(SourceFileStorage);
-        AssignDefaultDataLayout(SourceFileStorage);
-        SourceFileStorage.Insert();
+        SourceFileStorage.Validate(Size, SourceFileStorage."File Blob".Length);
+        if not IsUpdate then begin
+            AssignSourceFileFormat(SourceFileStorage);
+            AssignDefaultDataLayout(SourceFileStorage);
+        end;
+        SourceFileStorage.Modify();
     end;
 
     local procedure GetFilesFromZipFile(FileName: Text; var InStr: InStream) OK: Boolean
@@ -73,7 +83,7 @@ codeunit 91001 DMTSourceFileMgt
             TempBlob.CreateOutStream(OStream);
             DataCompression.ExtractEntry(FileNameInArchive, OStream);
             TempBlob.CreateInStream(IStr);
-            AddFileToStorage(FileNameInArchive, IStr, true);
+            AddFileToStorage(FileNameInArchive, IStr);
         end;
     end;
 

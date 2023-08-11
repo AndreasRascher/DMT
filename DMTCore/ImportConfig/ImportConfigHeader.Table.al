@@ -14,9 +14,8 @@ table 91003 DMTImportConfigHeader
         field(11; "Target Table Caption"; Text[250])
         {
             Caption = 'Target Table', Comment = 'de-DE=Zieltabelle';
-            // FieldClass = FlowField;
-            // CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Target Table ID")));
-            // Editable = false;
+            TableRelation = AllObjWithCaption."Object Caption" where("Object Type" = const(Table));
+            ValidateTableRelation = false;
         }
         field(20; "No.of Records in Buffer Table"; Integer) { Caption = 'No.of Records in Buffer Table', Comment = 'de-DE=Anz. Datensätze in Puffertabelle'; Editable = false; }
         field(40; "Use Separate Buffer Table"; Boolean)
@@ -53,6 +52,8 @@ table 91003 DMTImportConfigHeader
         field(101; "Source File Name"; Text[250])
         {
             Caption = 'Source File Name', Comment = 'de-DE=Quelldatei';
+            TableRelation = DMTSourceFileStorage.Name;
+            ValidateTableRelation = false;
         }
         #endregion Import and Processing Options
     }
@@ -78,7 +79,7 @@ table 91003 DMTImportConfigHeader
         LogEntry: Record DMTLogEntry;
     begin
         if Rec.FilterRelated(ImportConfigLine) then
-            ImportConfigLine.DeleteAll();
+            ImportConfigLine.DeleteAll(true);
         if Rec.FilterRelated(LogEntry) then
             LogEntry.DeleteAll();
         Rec.DeleteBufferData();
@@ -147,6 +148,7 @@ table 91003 DMTImportConfigHeader
         TypeHelper: Codeunit "Type Helper";
         sourceFileID: Integer;
         SearchToken: Text;
+        ContinueSearch: Boolean;
     begin
         case true of
             // Case 1 - Empty
@@ -167,12 +169,18 @@ table 91003 DMTImportConfigHeader
             (Rec."Source File Name" <> '') and not TypeHelper.IsNumeric(Rec."Source File Name"):
                 begin
                     SearchToken := Rec."Source File Name";
+                    // Search 1: exact match, not case sensitive   
+                    SearchToken := ConvertStr(SearchToken, '()<>€', '?????');
                     if not SearchToken.StartsWith('@') then
                         SearchToken := '@' + SearchToken;
-                    if not SearchToken.EndsWith('*') then
-                        SearchToken := SearchToken + '*';
-                    sourceFileStorage.SetFilter(Name, SearchToken);
-                    sourceFileStorage.FindFirst();
+                    ContinueSearch := not sourceFileStorage.FindFirst();
+                    // Search 2: part of, not case sensitive   
+                    if ContinueSearch then begin
+                        if not SearchToken.EndsWith('*') then
+                            SearchToken := SearchToken + '*';
+                        sourceFileStorage.SetFilter(Name, SearchToken);
+                        sourceFileStorage.FindFirst();
+                    end;
                     Rec."Source File ID" := sourceFileStorage."File ID";
                     Rec."Source File Name" := sourceFileStorage.Name;
                 end;
@@ -315,6 +323,7 @@ table 91003 DMTImportConfigHeader
         TypeHelper: Codeunit "Type Helper";
         ObjectID: Integer;
         SearchToken: Text;
+        ContinueSearch: Boolean;
     begin
         case true of
             // Case 1 - Empty
@@ -334,15 +343,21 @@ table 91003 DMTImportConfigHeader
             // Case 3 - Search Term
             (Rec."Target Table Caption" <> '') and not TypeHelper.IsNumeric(Rec."Target Table Caption"):
                 begin
-                    SearchToken := Rec."Target Table Caption";
+                    SearchToken := Rec."Source File Name";
+                    // Search 1: exact match, not case sensitive   
+                    SearchToken := ConvertStr(SearchToken, '()<>€', '?????');
                     if not SearchToken.StartsWith('@') then
                         SearchToken := '@' + SearchToken;
-                    if not SearchToken.EndsWith('*') then
-                        SearchToken := SearchToken + '*';
-                    AllObjWithCaption.SetFilter("Object Caption", SearchToken);
-                    AllObjWithCaption.FindFirst();
-                    Rec."Target Table ID" := AllObjWithCaption."Object ID";
-                    Rec."Target Table Caption" := AllObjWithCaption."Object Caption";
+                    ContinueSearch := not AllObjWithCaption.FindFirst();
+                    // Search 2: part of, not case sensitive   
+                    if ContinueSearch then begin
+                        if not SearchToken.EndsWith('*') then
+                            SearchToken := SearchToken + '*';
+                        AllObjWithCaption.SetFilter("Object Caption", SearchToken);
+                        AllObjWithCaption.FindFirst();
+                    end;
+                    Rec."Source File ID" := AllObjWithCaption."Object ID";
+                    Rec."Source File Name" := AllObjWithCaption."Object Caption";
                 end;
         end;
     end;

@@ -15,13 +15,10 @@ page 91008 DMTImportConfigCard
             group(General)
             {
                 Caption = 'General', Comment = 'de-DE=Allgemein';
-
                 field(ID; Rec.ID) { Visible = false; }
                 field("Target Table Caption"; Rec."Target Table Caption")
                 {
                     ShowMandatory = true;
-                    TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
-
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.TargetTableCaption_OnAfterLookup(Selected);
@@ -37,7 +34,6 @@ page 91008 DMTImportConfigCard
                 field("Source File Name"; Rec."Source File Name")
                 {
                     ShowMandatory = true;
-                    TableRelation = DMTSourceFileStorage;
 
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
@@ -123,7 +119,7 @@ page 91008 DMTImportConfigCard
 
             action(CountLines)
             {
-                Caption = 'Count Lines in Target';
+                Caption = 'Count Lines in Target', Comment = 'de-DE=Zeilen zählen (Zieltab.)';
                 ApplicationArea = All;
                 Image = CalcWorkCenterCalendar;
                 trigger OnAction()
@@ -145,7 +141,7 @@ page 91008 DMTImportConfigCard
             }
             action(CountLinesInSource)
             {
-                Caption = 'Count Lines in Buffer';
+                Caption = 'Count Lines in Buffer', Comment = 'de-DE=Zeilen zählen (Puffertab.)';
                 ApplicationArea = All;
                 Image = CalcWorkCenterCalendar;
                 trigger OnAction()

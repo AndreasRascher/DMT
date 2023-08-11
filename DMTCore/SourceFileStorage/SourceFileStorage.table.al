@@ -9,16 +9,51 @@ table 91004 DMTSourceFileStorage
         field(1; "File ID"; Integer) { }
         field(10; "File Blob"; Blob) { }
         field(20; SourceFileFormat; Enum DMTSourceFileFormat) { Caption = 'Source File Format', Comment = 'de-DE=Dateiformat'; }
-        field(21; "Data Layout ID"; Integer) { Caption = 'Data Layout ID', Comment = 'de-DE=Datenlayout ID'; TableRelation = DMTDataLayout where(SourceFileFormat = field(SourceFileFormat)); }
-        field(22; "Data Layout Name"; Text[250]) { Caption = 'Data Layout Name', Comment = 'de-DE=Datenlayout Name'; TableRelation = DMTDataLayout where(SourceFileFormat = field(SourceFileFormat)); }
+        field(21; "Data Layout ID"; Integer)
+        {
+            Caption = 'Data Layout ID', Comment = 'de-DE=Datenlayout ID';
+            TableRelation = DMTDataLayout where(SourceFileFormat = field(SourceFileFormat));
+            trigger OnValidate()
+            var
+                dataLayout: Record DMTDataLayout;
+            begin
+                dataLayout.Get("Data Layout ID");
+                Rec."Data Layout Name" := dataLayout.Name;
+            end;
+        }
+        field(22; "Data Layout Name"; Text[250])
+        {
+            Caption = 'Data Layout Name', Comment = 'de-DE=Datenlayout Name';
+            TableRelation = DMTDataLayout.Name where(SourceFileFormat = field(SourceFileFormat));
+            ValidateTableRelation = false;
+        }
         field(100; Name; Text[99]) { Caption = 'Name', Comment = 'de-DE=Name'; Editable = false; }
         field(101; Extension; Text[10]) { Caption = 'Extension', Comment = 'de-DE=Dateiendung'; Editable = false; }
-        field(102; Size; Integer) { Caption = 'Size', Comment = 'de-DE=Größe'; Editable = false; }
-        field(103; UploadDateTime; DateTime) { Caption = 'Uploaded at', Comment = 'de-DE=Hochgeladen am'; Editable = false; }
+        field(102; Size; Integer)
+        {
+            Caption = 'Size(Byte)', Comment = 'de-DE=Größe(Byte)';
+            Editable = false;
+            trigger OnValidate()
+            begin
+                SizeInKB := Rec.Size / 1024;
+            end;
+        }
+        field(103; SizeInKB; Decimal)
+        {
+            Caption = 'Size', Comment = 'de-DE=Größe';
+            Editable = false;
+            AutoFormatType = 10;
+            AutoFormatExpression = '<precision, 1:1><standard format,0>KB';
+        }
+        field(104; UploadDateTime; DateTime) { Caption = 'Uploaded at', Comment = 'de-DE=Hochgeladen am'; Editable = false; }
     }
     keys
     {
         key(PK; "File ID") { Clustered = true; }
+    }
+    fieldgroups
+    {
+        fieldgroup(Brick; "Data Layout Name", Name, Size, Extension) { }
     }
 
     procedure GetFileAsTempBlob(var tempBlob: Codeunit "Temp Blob")

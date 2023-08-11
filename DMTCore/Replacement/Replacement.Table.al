@@ -30,7 +30,7 @@ table 91010 DMTReplacement
             OptionMembers = "1","2";
             OptionCaption = '1,2', Locked = true;
         }
-        field(210; "New Value 1"; Text[250]) { Caption = 'New Value 1', Comment = 'Neuer Wert 1'; CaptionClass = Rec.GetCaption(Rec.FieldNo("New Value 1")); }
+        field(210; "New Value 1"; Text[250]) { Caption = 'New Value 1', Comment = 'de-DE=Neuer Wert 1'; CaptionClass = Rec.GetCaption(Rec.FieldNo("New Value 1")); }
         field(211; "New Value 1 Caption"; Text[80]) { Caption = 'New Value 1 Caption', Comment = 'de-DE=Neuer Wert 1 Bezeichnung'; }
         field(212; "Rel.to Table ID (New Val.1)"; Integer)
         {
@@ -215,6 +215,29 @@ table 91010 DMTReplacement
         if Rec."Rel.to Table ID (New Val.2)" <> 0 then
             Filter += '|' + Format(Rec."Rel.to Table ID (New Val.2)");
         Filter := Filter.TrimStart('|');
+    end;
+
+    internal procedure contains(ReplacementCode: Code[100]; var tempImportConfigLine: Record DMTImportConfigLine temporary): Boolean
+    var
+        ReplacementAssignment: Record DMTReplacement;
+    begin
+        ReplacementAssignment.SetRange(Code, ReplacementCode);
+        ReplacementAssignment.SetRange("Line Type", ReplacementAssignment."Line Type"::Assignment);
+        ReplacementAssignment.SetRange("Imp.Conf.Header ID", tempImportConfigLine."Imp.Conf.Header ID");
+        ReplacementAssignment.SetRange("Target Table ID", tempImportConfigLine."Target Table ID");
+        ReplacementAssignment.SetRange("Compare Value 1 Field No.", tempImportConfigLine."Target Field No.");
+        exit(not ReplacementAssignment.IsEmpty);
+    end;
+
+    procedure getNextLineNo(ReplacementCode: Code[100]; LineType: Option) nextLineNo: Integer
+    var
+        replacement: Record DMTReplacement;
+    begin
+        replacement.SetRange(Code, ReplacementCode);
+        replacement.SetRange("Line Type", LineType);
+        nextLineNo := 10000;
+        if replacement.FindLast() then
+            nextLineNo += replacement."Line No.";
     end;
 
     procedure filterAssignmentFor(ImportConfigHeader: Record DMTImportConfigHeader) HasLines: Boolean;

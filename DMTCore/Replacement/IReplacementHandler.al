@@ -10,4 +10,5 @@ interface IReplacementHandler
     procedure InitProcess(var SourceRef: RecordRef)
     procedure HasReplacementsForTargetField(TargetFieldNo: Integer) HasReplacements: Boolean
     procedure GetReplacementValue(TargetFieldNo: Integer) TargetFieldValue: FieldRef
+    procedure RemoveAssignmentOnDelete(var ImportConfigLine: Record DMTImportConfigLine)
 }

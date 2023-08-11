@@ -198,7 +198,7 @@ codeunit 91013 DMTRefHelper
         end;  // end_CASE
     end;
 
-    internal procedure AssignFixedValueToFieldRef(var ToFieldRef: FieldRef; FixedValue: Text[250])
+    internal procedure AssignFixedValueToFieldRef(var ToFieldRef: FieldRef; FixedValue: Text)
     var
         RefHelper: Codeunit DMTRefHelper;
     begin

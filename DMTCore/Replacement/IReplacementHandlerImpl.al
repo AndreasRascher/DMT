@@ -32,8 +32,10 @@ codeunit 91019 ReplacementHandlerImpl implements IReplacementHandler
                 replacement.SetRange("Line Type", replacement."Line Type"::Rule);
                 if replacement.FindSet() then
                     repeat
-                        TempReplacementRule := replacement;
-                        TempReplacementRule.Insert(false);
+                        if not TempReplacementRule.get(replacement.RecordId) then begin
+                            TempReplacementRule := replacement;
+                            TempReplacementRule.Insert(false);
+                        end;
                     until replacement.Next() = 0;
             until TempReplacementGlobal.Next() = 0;
 
@@ -42,24 +44,53 @@ codeunit 91019 ReplacementHandlerImpl implements IReplacementHandler
         // - Anzahl Felder definieren
         // - Regeln definieren
         // - Felder auswählen
+        ImportConfigHeaderGlobal := ImportConfigHeader;
     end;
 
     procedure InitProcess(var SourceRef: RecordRef);
+    var
+        importConfigLine: Record DMTImportConfigLine;
+        FromValue: Text;
     begin
+        clear(ReplacementValues);
+        if TempReplacementAssignment.FindFirst() then begin
+            importConfigLine.get(TempReplacementAssignment."Imp.Conf.Header ID", TempReplacementAssignment."Compare Value 1 Field No.");
+            FromValue := SourceRef.Field(importConfigLine."Source Field No.").Value;
+            TempReplacementRule.Reset();
+            TempReplacementRule.SetRange("Comp.Value 1", FromValue);
+            if TempReplacementRule.FindFirst() then
+                ReplacementValues.Add(TempReplacementAssignment."Compare Value 1 Field No.", TempReplacementRule."New Value 1");
+        end;
     end;
 
     procedure HasReplacementsForTargetField(TargetFieldNo: Integer) HasReplacements: Boolean;
     begin
+        HasReplacements := ReplacementValues.ContainsKey(TargetFieldNo);
     end;
 
     procedure GetReplacementValue(TargetFieldNo: Integer) TargetFieldValue: FieldRef;
+    var
+        RefHelper: Codeunit DMTRefHelper;
+        rRef: RecordRef;
     begin
+        rRef.Open(ImportConfigHeaderGlobal."Target Table ID");
+        TargetFieldValue := rRef.Field(TargetFieldNo);
+        RefHelper.AssignFixedValueToFieldRef(TargetFieldValue, ReplacementValues.Get(TargetFieldNo));
     end;
 
     procedure RemoveAssignmentOnDelete(var ImportConfigLine: Record DMTImportConfigLine)
+    var
+        replacement: Record DMTReplacement;
     begin
+        replacement.SetRange("Line Type", replacement."Line Type"::Assignment);
+        replacement.SetRange("Imp.Conf.Header ID", ImportConfigLine."Imp.Conf.Header ID");
+        replacement.SetRange("Compare Value 1 Field No.", ImportConfigLine."Target Field No.");
+        if not replacement.IsEmpty then
+            replacement.DeleteAll(true);
     end;
 
     var
         TempReplacementGlobal, TempReplacementRule, TempReplacementAssignment : Record DMTReplacement temporary;
+        ImportConfigHeaderGlobal: Record DMTImportConfigHeader;
+        ReplacementValues: Dictionary of [Integer, Text];
 }

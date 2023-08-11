@@ -32,10 +32,13 @@ codeunit 91008 DMTProcessRecord
     begin
         SourceField := SourceRef.Field(TempImportConfigLine."Source Field No.");
         TargetField := TmpTargetRef.Field(TempImportConfigLine."Target Field No.");
-        AssignValueToFieldRef(SourceRef, TempImportConfigLine, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
 
         if IReplacementHandler.HasReplacementsForTargetField(TargetField.Number) then begin
+            //use value from replacement
             FieldWithTypeCorrectValueToValidate := IReplacementHandler.GetReplacementValue(TargetField.Number);
+        end else begin
+            //use values from buffer table field
+            AssignValueToFieldRef(SourceRef, TempImportConfigLine, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
         end;
         CurrValueToAssign := FieldWithTypeCorrectValueToValidate;
         CurrValueToAssign_IsInitialized := true;
@@ -149,7 +152,6 @@ codeunit 91008 DMTProcessRecord
         RunMode := RunMode::FieldTransfer;
         Clear(ErrorLogDict);
         Replacement.getDefaultImplementation(IReplacementHandler);
-        IReplacementHandler.InitBatchProcess(ImportConfigHeader);
         IReplacementHandler.InitProcess(_SourceRef);
     end;
 

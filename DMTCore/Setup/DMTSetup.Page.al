@@ -32,7 +32,7 @@ page 91000 "DMT Setup"
                 field(SessionID; SessionId())
                 {
                     ApplicationArea = All;
-                    Caption = 'SessionID';
+                    Caption = 'SessionID', Locked = true;
                     trigger OnAssistEdit()
                     var
                         activeSession: Record "Active Session";
@@ -74,7 +74,7 @@ page 91000 "DMT Setup"
                         end;
                     end;
                 }
-                field(UserID; UserId) { ApplicationArea = All; Caption = 'User ID'; }
+                field(UserID; UserId) { ApplicationArea = All; Caption = 'User ID', Locked = true; }
             }
             group("Field Mapping")
             {

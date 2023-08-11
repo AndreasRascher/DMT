@@ -333,6 +333,8 @@ codeunit 91002 DMTImportConfigMgt
         Field: Record Field;
         SourceFieldNames2: Dictionary of [Integer, Text];
         FieldID: Integer;
+        NoHeadlineInfoFoundInDataLayoutErr: Label 'You have to setup the column names in datalayout "%1"',
+                                  Comment = 'de-DE=Sie müssen die Spaltentitel im Datenlayout "%1" einrichten.';
     begin
         dataLayout := importConfigHeader.GetDataLayout();
         case true of
@@ -359,7 +361,9 @@ codeunit 91002 DMTImportConfigMgt
             not dataLayout."Has Heading Row":
                 begin
                     dataLayoutLine.SetRange("Data Layout ID", dataLayout.ID);
-                    if dataLayoutLine.FindSet(false) then
+                    if not dataLayoutLine.FindSet(false) then begin
+                        Error(NoHeadlineInfoFoundInDataLayoutErr, dataLayout.ID);
+                    end else
                         repeat
                             dataLayoutLine.TestField(ColumnName);
                             SourceFieldNames.Add(dataLayoutLine."Column No.", dataLayoutLine.ColumnName);
@@ -372,19 +376,16 @@ codeunit 91002 DMTImportConfigMgt
     var
         ImportConfigLine: Record DMTImportConfigLine;
         Field: Record Field;
-        ReplaceExistingMatchesQst: Label 'All fields are already assigned. Overwrite existing assignment?', Comment = 'de-DE=Alle Felder sind bereits zugewiesen. Bestehende Zuordnung überschreiben?';
+        overwrite, HasAssignments : Boolean;
     begin
+        overwrite := ConfirmOverwriteExistingAssignments(ImportConfigHeader, HasAssignments);
+        if HasAssignments and not overwrite then
+            ImportConfigLine.SetFilter("Source Field No.", '<>%1', 0);
+
         ImportConfigHeader.FilterRelated(ImportConfigLine);
-        ImportConfigLine.SetFilter("Source Field No.", '<>%1', 0);
-        if ImportConfigLine.FindFirst() then begin
-            if Confirm(ReplaceExistingMatchesQst) then begin
-                ImportConfigLine.SetRange("Source Field No.");
-            end;
-        end else begin
-            ImportConfigLine.SetRange("Source Field No."); // no fields assigned case
-        end;
         if not ImportConfigLine.FindSet() then
             exit;
+
         repeat
             Field.Get(ImportConfigLine."Target Table ID", ImportConfigLine."Target Field No.");
             if UseCaptionInstead then
@@ -394,6 +395,17 @@ codeunit 91002 DMTImportConfigMgt
         until ImportConfigLine.Next() = 0;
     end;
 
+    local procedure ConfirmOverwriteExistingAssignments(ImportConfigHeader: Record DMTImportConfigHeader; var HasAssignments: boolean) Result: Boolean
+    var
+        ImportConfigLine: Record DMTImportConfigLine;
+        OverwriteExistingAssignmentsQst: Label 'Overwrite existing field assignments?', Comment = 'de-DE=Vorhandene Zuordnung überschreiben?';
+    begin
+        ImportConfigHeader.FilterRelated(ImportConfigLine);
+        ImportConfigLine.SetFilter("Source Field No.", '<>%1', 0);
+        HasAssignments := not ImportConfigLine.IsEmpty;
+        if HasAssignments then
+            Result := Confirm(OverwriteExistingAssignmentsQst);
+    end;
 
     local procedure ProposeValidationRules(ImportConfigHeader: Record DMTImportConfigHeader): Boolean
     var
