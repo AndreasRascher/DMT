@@ -78,19 +78,18 @@ table 91004 DMTSourceFileStorage
     var
         DMTImportConfigHeader: Record DMTImportConfigHeader;
         DeleteSourceFileQst: Label 'The source file %1 "%2" is currently assigned in import configurations. Continue?', Comment = 'de-DE=Die Quelldatei %1 "%2" ist Importkonfigurationen zugewiesen. Mit dem Löschen fortfahren?';
-        ProcessCanceldErr: Label 'Process Canceled', Comment = 'de-DE=Vorgang abgebrochen';
+        ProcessCanceledErr: Label 'Process Canceled', Comment = 'de-DE=Vorgang abgebrochen';
     begin
         DMTImportConfigHeader.SetRange("Source File ID", rec."File ID");
         if not DMTImportConfigHeader.IsEmpty then
             if not Confirm(StrSubstNo(DeleteSourceFileQst, Rec."File ID", Rec.Name)) then begin
-                Error(ProcessCanceldErr);
+                Error(ProcessCanceledErr);
             end else begin
                 // remove references
                 DMTImportConfigHeader.Reset();
                 DMTImportConfigHeader.SetRange("Source File ID", rec."File ID");
                 DMTImportConfigHeader.ModifyAll("Source File ID", 0, false);
             end;
-
     end;
 
     trigger OnDelete()

@@ -2285,8 +2285,8 @@
         </trans-unit>
         <trans-unit id="Codeunit 3834207626 - Method 2420045186 - NamedType 1044229085" size-unit="char" translate="yes" xml:space="preserve">
           <source>too large field values have been cut off. Max. string length is 250 chars</source>
-          <target state="translated">Zu lange Feldwerte wurden abgeschnitten. Max. Textlänge ist 250 Zeichen</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Zu lange Feldwerte wurden abgeschnitten. Max. Textlänge ist 250 Zeichen</note>
+          <target state="translated">Achtung, beim Import wurden zu lange Feldwerte abgeschnitten. Max. Textlänge ist 250 Zeichen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Achtung, beim Import wurden zu lange Feldwerte abgeschnitten. Max. Textlänge ist 250 Zeichen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportCSVImpl - Method TooLargeValuesHaveBeenCutOffWarningIfRequired - NamedType TooLargeValuesHaveBeenCutOffMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 3774911051 - Method 2653990749 - NamedType 1139369458" size-unit="char" translate="yes" xml:space="preserve">
@@ -2441,8 +2441,8 @@
         </trans-unit>
         <trans-unit id="Page 1540911173 - Control 2445482498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>General</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2">de-De=Allgemein</note>
+          <target state="translated">Allgemein</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Allgemein</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataLayoutCard - Control General - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1540911173 - Action 397043389 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
@@ -3222,7 +3222,7 @@
         <trans-unit id="Enum 3409397984 - EnumValue 3304607464 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Delete Record</source>
           <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Developer" annotates="general" priority="2">DS Löschen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogUsage - EnumValue Delete Record - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 877342396 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -3239,8 +3239,8 @@
         </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 601505679 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Doc. Migration</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2">Beleg Migration</note>
+          <target state="translated">Beleg Migration</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Beleg Migration</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogUsage - EnumValue Process Buffer - Document Migration - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 1384793423 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

@@ -1833,10 +1833,10 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Die Quelldatei %1 "%2" ist Importkonfigurationen zugewiesen. Mit dem Löschen fortfahren?</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Method ConfirmDeleteIfSourceFileIsAssigned - NamedType DeleteSourceFileQst</note>
         </trans-unit>
-        <trans-unit id="Table 3763097529 - Method 1839390815 - NamedType 546946400" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 3763097529 - Method 1839390815 - NamedType 3221445947" size-unit="char" translate="yes" xml:space="preserve">
           <source>Process Canceled</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Vorgang abgebrochen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Method ConfirmDeleteIfSourceFileIsAssigned - NamedType ProcessCanceldErr</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Method ConfirmDeleteIfSourceFileIsAssigned - NamedType ProcessCanceledErr</note>
         </trans-unit>
         <trans-unit id="Table 3763097529 - Field 3893498913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Layout ID</source>
@@ -2035,7 +2035,7 @@
         </trans-unit>
         <trans-unit id="Page 1540911173 - Control 2445482498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>General</source>
-          <note from="Developer" annotates="general" priority="2">de-De=Allgemein</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Allgemein</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDataLayoutCard - Control General - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1540911173 - Action 397043389 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">

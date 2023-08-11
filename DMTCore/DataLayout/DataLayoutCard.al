@@ -12,7 +12,7 @@ page 91011 DMTDataLayoutCard
         {
             group(General)
             {
-                Caption = 'General', Comment = 'de-De=Allgemein';
+                Caption = 'General', Comment = 'de-DE=Allgemein';
                 field(ID; Rec.ID) { Visible = false; }
                 field(Name; Rec.Name) { }
                 field("Has Heading Row"; Rec."Has Heading Row") { }

@@ -54,6 +54,7 @@
 		"al.packageCachePath": [
 			"..\\.alpackages"
 		],
+		"al.snapshotOutputPath": "..\\.snapshots",
 		"al.enableCodeActions": true,
 		"al.enableCodeAnalysis": true,
 		"al.ruleSetPath": "..\\ruleSets\\DMTRuleSet.json",
