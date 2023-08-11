@@ -38,12 +38,19 @@ page 91023 DMTFieldMappings
         LoadLines();
     end;
 
+    procedure LoadOnlyAssignedFields()
+    begin
+        LoadOnlyAssignedFieldsGlobal := true;
+    end;
+
     procedure LoadLines()
     var
         importConfigLine: Record DMTImportConfigLine;
         tempImportConfigLine: Record DMTImportConfigLine temporary;
     begin
         importConfigLine.SetAutoCalcFields("Target Field Caption", "Target Field Name", "Target Table Relation");
+        if LoadOnlyAssignedFieldsGlobal then
+            importConfigLine.SetFilter("Source Field No.", '<>0');
         if importConfigLine.FindSet(false) then
             repeat
                 tempImportConfigLine := importConfigLine;
@@ -68,4 +75,7 @@ page 91023 DMTFieldMappings
         ImportConfigLine.CopyToTemp(ImportConfigLine_SELECTED);
         HasLines := ImportConfigLine_SELECTED.FindFirst();
     end;
+
+    var
+        LoadOnlyAssignedFieldsGlobal: Boolean;
 }

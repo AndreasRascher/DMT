@@ -102,15 +102,24 @@ table 91006 DMTImportConfigLine
 
     keys
     {
-        key(Key1; "Imp.Conf.Header ID", "Target Field No.")
+        key(Key1;
+        "Imp.Conf.Header ID", "Target Field No.")
         {
             Clustered = true;
         }
     }
 
+    trigger OnDelete()
+    var
+        replacement: Record DMTReplacement;
+        IReplacementHandler: Interface IReplacementHandler;
+    begin
+        replacement.getDefaultImplementation(IReplacementHandler);
+        IReplacementHandler.RemoveAssignmentOnDelete(Rec);
+    end;
+
     local procedure UpdateSourceFieldCaptionAndProcessingAction(FromFieldNo: Integer)
     var
-        DataLayoutLine: Record DMTDataLayoutLine;
         ImportConfigHeader: Record DMTImportConfigHeader;
         genBuffTable: Record DMTGenBuffTable;
         BuffTableCaptions: Dictionary of [Integer, Text];

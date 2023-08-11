@@ -188,7 +188,6 @@ codeunit 91014 DMTMigrate
             // Wenn beim Feldupdate ein Zieldatensatz nicht existiert, dann soll der als geskipped gekennzeichnet werden
             // Nur wenn ein Zieldatensatz existiert und kein Fehler auftreteten ist , dann ist das ok
             BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
-            iReplacementHandler.InitProcess(BufferRef2);
             ProcessSingleBufferRecord(BufferRef2, DMTImportSettings, Log, ResultType);
             UpdateLog(DMTImportSettings, Log, ResultType);
             UpdateProgress(DMTImportSettings, ProgressDialog, ResultType);

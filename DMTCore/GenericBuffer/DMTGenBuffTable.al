@@ -395,6 +395,26 @@ table 91001 DMTGenBuffTable
         end;
     end;
 
+    procedure GetUniqueColumnValues(importConfigLine: Record DMTImportConfigLine) uniqueValues: List of [Text]
+    var
+        genBuffTable: Record DMTGenBuffTable;
+        importConfigHeader: Record DMTImportConfigHeader;
+        RecRef: RecordRef;
+        valueAsText: Text;
+    begin
+        importConfigHeader.Get(importConfigLine."Imp.Conf.Header ID");
+        genBuffTable.FilterBy(importConfigHeader);
+        genBuffTable.SetRange(IsCaptionLine, false);
+        RecRef.GetTable(genBuffTable);
+        RecRef.SetLoadFields(importConfigLine."Source Field No.");
+        if RecRef.FindSet() then
+            repeat
+                valueAsText := format(RecRef.Field(importConfigLine."Source Field No.").Value);
+                if not uniqueValues.Contains(valueAsText) then
+                    uniqueValues.Add(valueAsText);
+            until RecRef.Next() = 0;
+    end;
+
     var
         DMTGenBufferFieldCaptions: Codeunit DMTSessionStorage;
 }

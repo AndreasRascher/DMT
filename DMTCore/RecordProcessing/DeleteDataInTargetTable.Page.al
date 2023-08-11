@@ -1,6 +1,6 @@
 page 91015 DMTDeleteDataInTargetTable
 {
-    Caption = 'Delete Data in Target Table', Comment = 'Daten in Zieltabelle löschen';
+    Caption = 'Delete Data in Target Table', Comment = 'de-DE=Daten in Zieltabelle löschen';
     PageType = Card;
     UsageCategory = None;
 
@@ -178,7 +178,7 @@ page 91015 DMTDeleteDataInTargetTable
     local procedure ConfirmDeletion(NoOfLinesToDelete: Integer; TableCaption: Text) OK: Boolean
     var
         DeleteAllRecordsInTargetTableWarningMsg: Label 'Warning! %1 Records in table "%2" (company "%3") will be deleted. Continue?',
-                                             Comment = 'Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?';
+                                             Comment = 'de-DE=Warnung! %1 Datensätze in Tabelle "%2" (Mandant "%3") werden gelöscht. Fortfahren?';
     begin
         OK := Confirm(StrSubstNo(DeleteAllRecordsInTargetTableWarningMsg, NoOfLinesToDelete, TableCaption, CompanyName), false);
     end;
