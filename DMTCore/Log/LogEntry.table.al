@@ -7,9 +7,10 @@ table 91008 DMTLogEntry
             Caption = 'Entry No.', Comment = 'de-DE=Lfd.Nr.';
             AutoIncrement = true;
         }
-        field(10; Usage; Enum DMTLogUsage) { Caption = 'Usage', Comment = 'de-DE=Verwendung'; }
-        field(11; "Process No."; Integer) { Caption = 'Process No.', Comment = 'de-DE=Vorgangsnr.'; }
-        field(12; "Entry Type"; Enum DMTLogEntryType) { Caption = 'Entry Type', Comment = 'de-DE=Postenart'; }
+        field(10; "Owner RecordID"; RecordId) { Caption = 'Owner ID', Locked = true; }
+        field(11; Usage; Enum DMTLogUsage) { Caption = 'Usage', Comment = 'de-DE=Verwendung'; }
+        field(12; "Process No."; Integer) { Caption = 'Process No.', Comment = 'de-DE=Vorgangsnr.'; }
+        field(13; "Entry Type"; Enum DMTLogEntryType) { Caption = 'Entry Type', Comment = 'de-DE=Postenart'; }
         field(20; "Source ID"; RecordId) { Caption = 'Source ID', Comment = 'de-DE=Herkunfts-ID'; }
         field(21; "Source ID (Text)"; Text[250]) { Caption = 'Source ID (Text)', Comment = 'de-DE=Herkunfts-ID (Text)'; }
         field(30; "Target ID"; RecordId) { Caption = 'Target ID', Comment = 'de-DE=Ziel-ID'; }
@@ -61,7 +62,7 @@ table 91008 DMTLogEntry
 
     internal procedure FilterFor(ImportConfigHeader: Record DMTImportConfigHeader) HasLinesInFilter: Boolean
     begin
-        Rec.SetRange("Target Table ID", ImportConfigHeader."Target Table ID");
+        Rec.SetRange("Owner RecordID", ImportConfigHeader.RecordId);
         Rec.SetRange(SourceFileName, ImportConfigHeader.GetSourceFileName());
         HasLinesInFilter := not Rec.IsEmpty;
     end;

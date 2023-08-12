@@ -29,6 +29,7 @@ codeunit 91006 DMTLog
         LogEntryTemplate."Process No." := LogEntry.GetNextProcessNo();
         LogEntryTemplate.Usage := LogUsage;
         if ImportConfigHeader.ID <> 0 then begin
+            LogEntryTemplate."Owner RecordID" := ImportConfigHeader.RecordId;
             LogEntryTemplate."Target Table ID" := ImportConfigHeader."Target Table ID";
             LogEntryTemplate.SourceFileName := ImportConfigHeader.GetSourceFileName();
         end;
@@ -126,28 +127,30 @@ codeunit 91006 DMTLog
         LogEntry.Insert();
     end;
 
-    procedure AddEntryForCurrentProcess(sourceRef: RecordRef; targetRef: RecordRef; ImportConfigLine: Record DMTImportConfigLine; errorItem: Dictionary of [Text, Text]);
-    var
-        LogEntry: Record DMTLogEntry;
-    begin
-        CheckIfProcessNoIsSet();
-        LogEntry := LogEntryTemplate;
+    // procedure AddEntryForCurrentProcess(sourceRef: RecordRef; targetRef: RecordRef; ImportConfigLine: Record DMTImportConfigLine; errorItem: Dictionary of [Text, Text]);
+    // var
+    //     LogEntry: Record DMTLogEntry;
+    //     ImportConfigHeader: Record DMTImportConfigHeader;
+    // begin
+    //     CheckIfProcessNoIsSet();
+    //     LogEntry := LogEntryTemplate;
 
-        LogEntry."Source ID" := sourceRef.RecordId;
-        LogEntry."Target ID" := targetRef.RecordId;
-        LogEntry."Source ID (Text)" := CopyStr(Format(LogEntry."Source ID"), 1, MaxStrLen(LogEntry."Source ID (Text)"));
-        LogEntry."Target ID (Text)" := CopyStr(Format(LogEntry."Target ID"), 1, MaxStrLen(LogEntry."Target ID (Text)"));
+    //     LogEntry."Source ID" := sourceRef.RecordId;
+    //     LogEntry."Target ID" := targetRef.RecordId;
+    //     LogEntry."Source ID (Text)" := CopyStr(Format(LogEntry."Source ID"), 1, MaxStrLen(LogEntry."Source ID (Text)"));
+    //     LogEntry."Target ID (Text)" := CopyStr(Format(LogEntry."Target ID"), 1, MaxStrLen(LogEntry."Target ID (Text)"));
+    //     ImportConfigHeader.Get(ImportConfigLine."Imp.Conf.Header ID");
+    //     // LogEntry."Target Table ID" := ImportConfigLine."Target Table ID";
+    //     LogEntry."Owner RecordID" := ImportConfigHeader.RecordId;
+    //     LogEntry."Target Field No." := ImportConfigLine."Target Field No.";
+    //     LogEntry."Ignore Error" := ImportConfigLine."Ignore Validation Error";
+    //     LogEntry."Context Description" := CopyStr(errorItem.Get('GetLastErrorText'), 1, MaxStrLen(LogEntry."Context Description"));
+    //     LogEntry.ErrorCode := CopyStr(errorItem.Get('GetLastErrorCode'), 1, MaxStrLen(LogEntry.ErrorCode));
+    //     LogEntry."Error Field Value" := CopyStr(errorItem.Get('ErrorValue'), 1, MaxStrLen(LogEntry."Error Field Value"));
+    //     LogEntry.SetErrorCallStack(errorItem.Get('GetLastErrorCallStack'));
 
-        LogEntry."Target Table ID" := ImportConfigLine."Target Table ID";
-        LogEntry."Target Field No." := ImportConfigLine."Target Field No.";
-        LogEntry."Ignore Error" := ImportConfigLine."Ignore Validation Error";
-        LogEntry."Context Description" := CopyStr(errorItem.Get('GetLastErrorText'), 1, MaxStrLen(LogEntry."Context Description"));
-        LogEntry.ErrorCode := CopyStr(errorItem.Get('GetLastErrorCode'), 1, MaxStrLen(LogEntry.ErrorCode));
-        LogEntry."Error Field Value" := CopyStr(errorItem.Get('ErrorValue'), 1, MaxStrLen(LogEntry."Error Field Value"));
-        LogEntry.SetErrorCallStack(errorItem.Get('GetLastErrorCallStack'));
-
-        LogEntry.Insert();
-    end;
+    //     LogEntry.Insert();
+    // end;
 
     internal procedure CreateErrorItem() ErrorItem: Dictionary of [Text, Text];
     begin
@@ -191,10 +194,10 @@ codeunit 91006 DMTLog
         logEntry.Usage := logEntry.Usage::"Import to Buffer Table";
         logEntry."Entry Type" := logEntry."Entry Type"::Summary;
         logEntry."Process No." := logEntry.GetNextProcessNo();
-        logEntry."Target Table ID" := ImportConfigHeader."Target Table ID";
         logEntry."Context Description" := StrSubstNo(durationLbl, duration);
         logEntry.SourceFileName := ImportConfigHeader.GetSourceFileName();
         logEntry."Target Table ID" := ImportConfigHeader."Target Table ID";
+        logEntry."Owner RecordID" := ImportConfigHeader.RecordId;
         logEntry.Insert();
     end;
 

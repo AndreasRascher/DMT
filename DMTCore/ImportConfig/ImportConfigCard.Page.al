@@ -27,6 +27,7 @@ page 91008 DMTImportConfigCard
                     trigger OnValidate()
                     begin
                         Rec.TargetTableCaption_OnValidate();
+                        SaveRecordIfMandatoryFieldsAreFilled();
                         CurrPage.TableInfoFactBox.Page.DoUpdate(Rec);
                         CurrPage.LogFactBox.Page.DoUpdate(Rec);
                     end;
@@ -43,6 +44,7 @@ page 91008 DMTImportConfigCard
                     trigger OnValidate()
                     begin
                         Rec.SourceFileName_OnValidate();
+                        SaveRecordIfMandatoryFieldsAreFilled();
                     end;
                 }
                 field("Target Table ID"; Rec."Target Table ID") { Visible = false; }
@@ -53,10 +55,6 @@ page 91008 DMTImportConfigCard
             {
                 SubPageLink = "Imp.Conf.Header ID" = field(ID);
             }
-            // part(Replacements; DMTReplacementAssigmentsPart)
-            // {
-            //     SubPageLink = "Imp.Conf.Header ID" = field(ID), "Target Table ID" = field("Target Table ID"), "Line Type" = const(Assignment);
-            // }
         }
         area(FactBoxes)
         {
@@ -321,6 +319,15 @@ page 91008 DMTImportConfigCard
         CurrPage.LogFactBox.Page.ShowAsLogAndUpdateOnAfterGetCurrRecord(Rec);
         //     CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
         //     CurrPage.LinePart.Page.DoUpdate(false);
+    end;
+
+    local procedure SaveRecordIfMandatoryFieldsAreFilled()
+    begin
+        if Rec.ID = 0 then
+            if (Rec."Source File ID" > 0) then
+                if (Rec."Target Table ID" > 0) then
+                    CurrPage.SaveRecord();
+
     end;
 
 }

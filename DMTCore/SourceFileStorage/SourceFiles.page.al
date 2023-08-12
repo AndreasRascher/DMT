@@ -5,6 +5,7 @@ page 91005 DMTSourceFiles
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTable = DMTSourceFileStorage;
+    SourceTableView = sorting(Name);
 
     layout
     {

@@ -232,6 +232,6 @@ page 91018 DMTSelectMultipleFields
         CurrImportConfigHeader: Record DMTImportConfigHeader;
         SelectedFieldsCaption: Text;
 
-        [InDataSet]
+        // [InDataSet]
         ShowSourceFieldInfo, ShowTargetFieldInfo : Boolean;
 }

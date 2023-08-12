@@ -102,7 +102,7 @@ table 91003 DMTImportConfigHeader
 
     internal procedure FilterRelated(var LogEntry: Record DMTLogEntry) HasLinesInFilter: Boolean
     begin
-        LogEntry.SetRange("Target Table ID", Rec."Target Table ID");
+        LogEntry.SetRange("Owner RecordID", Rec.RecordId);
         LogEntry.SetRange("Entry Type", LogEntry."Entry Type"::Summary);
     end;
 
@@ -150,6 +150,10 @@ table 91003 DMTImportConfigHeader
         SearchToken: Text;
         ContinueSearch: Boolean;
     begin
+        // exit if assigned from dropdown
+        if (Rec."Source File ID" <> 0) then
+            if sourceFileStorage.Get(Rec."Source File ID") and (sourceFileStorage.Name = Rec."Source File Name") then
+                exit;
         case true of
             // Case 1 - Empty
             (Rec."Source File Name" = ''):
@@ -255,8 +259,9 @@ table 91003 DMTImportConfigHeader
         sourceFileStorage: Record DMTSourceFileStorage;
     begin
         Rec.TestField("Source File ID");
-        sourceFileStorage.Get(Rec."Source File ID");
-        sourceFileStorage.TestField("Data Layout ID");
+        sourceFileStorage.Get(rec."Source File ID");
+        ThrowActionableErrorIfDataLayoutIsNotSet();
+        sourceFileStorage.get(sourceFileStorage.RecordId);
         dataLayout.Get(sourceFileStorage."Data Layout ID");
     end;
 
@@ -360,6 +365,23 @@ table 91003 DMTImportConfigHeader
                     Rec."Source File Name" := AllObjWithCaption."Object Caption";
                 end;
         end;
+    end;
+
+    local procedure ThrowActionableErrorIfDataLayoutIsNotSet()
+    var
+        sourceFileStorage: Record DMTSourceFileStorage;
+        DataLayoutMissingErrInfo: ErrorInfo;
+        AssignDataLayoutButtonCaptionLbl: Label 'Assign data layout', Comment = 'de-DE=Datenlayout zuweisen';
+        SourceFileHasNoDataLayoutErr: Label 'You have to assign a datalayout to the %1 "%2"',
+                                  Comment = 'de-DE=Sie müssen der %1 "%2" ein Datenlayout zuordnen';
+    begin
+        sourceFileStorage.Get(Rec."Source File ID");
+        if sourceFileStorage."Data Layout ID" <> 0 then
+            exit;
+        DataLayoutMissingErrInfo.AddAction(AssignDataLayoutButtonCaptionLbl, Codeunit::DMTSourceFileMgt, 'Test');//Method must be global and have an errorinfo parameter
+        DataLayoutMissingErrInfo.Message := StrSubstNo(SourceFileHasNoDataLayoutErr, sourceFileStorage.TableCaption, sourceFileStorage.Name);// no error shown if missing
+        DataLayoutMissingErrInfo.RecordId := sourceFileStorage.RecordId;
+        Error(DataLayoutMissingErrInfo);
     end;
 
 }

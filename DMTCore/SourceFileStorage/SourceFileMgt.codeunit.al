@@ -109,6 +109,15 @@ codeunit 91001 DMTSourceFileMgt
             SourceFileStorage.Validate("Data Layout ID", dataLayout.ID);
     end;
 
+    procedure Test(ErrorInfoDataLayout: ErrorInfo)
+    var
+        sourceFileStorage: Record DMTSourceFileStorage;
+    begin
+        sourceFileStorage.Get(ErrorInfoDataLayout.RecordId);
+        sourceFileStorage.SetRecFilter();
+        page.RunModal(0, sourceFileStorage);
+    end;
+
 
 
 }

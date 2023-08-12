@@ -50,6 +50,7 @@ table 91004 DMTSourceFileStorage
     keys
     {
         key(PK; "File ID") { Clustered = true; }
+        key(SortByName; Name) { }
     }
     fieldgroups
     {
@@ -78,6 +79,10 @@ table 91004 DMTSourceFileStorage
         dataLayoutID: Integer;
         SearchToken: Text;
     begin
+        // exit if assigned from dropdown
+        if (Rec."Data Layout ID" <> 0) then
+            if dataLayout.Get(Rec."Data Layout ID") and (dataLayout.Name = Rec."Data Layout Name") then
+                exit;
         case true of
             // Case 1 - Empty
             (Rec."Data Layout Name" = ''):

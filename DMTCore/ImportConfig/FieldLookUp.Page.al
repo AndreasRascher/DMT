@@ -26,8 +26,8 @@ page 91012 DMTFieldLookup
     procedure LoadLines()
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
-        DataLayout: Record DMTDataLayout;
-        DataLayoutLine: Record DMTDataLayoutLine;
+        // DataLayout: Record DMTDataLayout;
+        // DataLayoutLine: Record DMTDataLayoutLine;
         TempDataLayoutLine: Record DMTDataLayoutLine temporary;
         GenBuffTable: Record DMTGenBuffTable;
         BuffTableCaptions: Dictionary of [Integer, Text];
@@ -62,6 +62,6 @@ page 91012 DMTFieldLookup
     end;
 
     var
-        [InDataSet]
+        // [InDataSet]
         IsLoaded: Boolean;
 }

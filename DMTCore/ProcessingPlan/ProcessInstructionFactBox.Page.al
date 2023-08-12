@@ -165,7 +165,7 @@ page 91016 DMTProcessInstructionFactBox
 
     var
         CurrProcessingPlan: Record DMTProcessingPlan;
-        [InDataSet]
+        // [InDataSet]
         IsFixedValueView, IsSourceTableFilterView, IsUpdateSelectedFieldsView : Boolean;
         ActionAddFieldVisible, ActionResetSelectionVisible : Boolean;
 }

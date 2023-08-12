@@ -1393,6 +1393,16 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Eine Puffertabelle mit der ID %1 wurde nicht gefunden.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Method InitBufferRef - NamedType BufferTableMissingErr</note>
         </trans-unit>
+        <trans-unit id="Table 200502431 - Method 157426326 - NamedType 3929116107" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Assign data layout</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Datenlayout zuweisen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Method ThrowActionableErrorIfDataLayoutIsNotSet - NamedType AssignDataLayoutButtonCaptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Table 200502431 - Method 157426326 - NamedType 3909230697" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You have to assign a datalayout to the %1 "%2"</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Sie müssen der %1 "%2" ein Datenlayout zuordnen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Method ThrowActionableErrorIfDataLayoutIsNotSet - NamedType SourceFileHasNoDataLayoutErr</note>
+        </trans-unit>
         <trans-unit id="Table 200502431 - Field 3434788173 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffertable ID</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Puffertabelle ID</note>
@@ -2715,7 +2725,7 @@
         </trans-unit>
         <trans-unit id="Enum 4037377007 - EnumValue 739346273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Group</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Gruppe</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Group - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 4037377007 - EnumValue 286210954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

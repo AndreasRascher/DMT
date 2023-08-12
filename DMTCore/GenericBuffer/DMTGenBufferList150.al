@@ -502,7 +502,7 @@ page 91003 DMTGenBufferList150
 
     var
         DMTGenBufferFieldCaptions: Codeunit DMTSessionStorage;
-        [InDataSet]
+        // [InDataSet]
         Fld001Editable, Fld002Editable, Fld003Editable, Fld004Editable, Fld005Editable, Fld006Editable, Fld007Editable, Fld008Editable, Fld009Editable, Fld010Editable,
         Fld011Editable, Fld012Editable, Fld013Editable, Fld014Editable, Fld015Editable, Fld016Editable, Fld017Editable, Fld018Editable, Fld019Editable, Fld020Editable,
         Fld021Editable, Fld022Editable, Fld023Editable, Fld024Editable, Fld025Editable, Fld026Editable, Fld027Editable, Fld028Editable, Fld029Editable, Fld030Editable,
@@ -518,7 +518,7 @@ page 91003 DMTGenBufferList150
         Fld121Editable, Fld122Editable, Fld123Editable, Fld124Editable, Fld125Editable, Fld126Editable, Fld127Editable, Fld128Editable, Fld129Editable, Fld130Editable,
         Fld131Editable, Fld132Editable, Fld133Editable, Fld134Editable, Fld135Editable, Fld136Editable, Fld137Editable, Fld138Editable, Fld139Editable, Fld140Editable,
         Fld141Editable, Fld142Editable, Fld143Editable, Fld144Editable, Fld145Editable, Fld146Editable, Fld147Editable, Fld148Editable, Fld149Editable, Fld150Editable : Boolean;
-        [InDataSet]
+        // [InDataSet]
         Fld001Visible, Fld002Visible, Fld003Visible, Fld004Visible, Fld005Visible, Fld006Visible, Fld007Visible, Fld008Visible, Fld009Visible, Fld010Visible,
         Fld011Visible, Fld012Visible, Fld013Visible, Fld014Visible, Fld015Visible, Fld016Visible, Fld017Visible, Fld018Visible, Fld019Visible, Fld020Visible,
         Fld021Visible, Fld022Visible, Fld023Visible, Fld024Visible, Fld025Visible, Fld026Visible, Fld027Visible, Fld028Visible, Fld029Visible, Fld030Visible,

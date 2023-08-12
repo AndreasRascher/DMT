@@ -71,7 +71,7 @@ page 91014 DMTImportConfigFactBox
     begin
         ViewMode := ViewMode::Log;
         CurrImportConfigHeader.Copy(importConfigHeader);
-        Rec.SetRange("Target Table ID", importConfigHeader."Target Table ID");
+        Rec.SetRange("Owner RecordID", importConfigHeader.RecordId);
         Rec.SetRange("Entry Type", Rec."Entry Type"::Summary);
     end;
 
@@ -87,7 +87,7 @@ page 91014 DMTImportConfigFactBox
         CurrImportConfigHeader.Copy(importConfigHeader);
 
         if ViewMode = ViewMode::Log then begin
-            Rec.SetRange("Target Table ID", importConfigHeader."Target Table ID");
+            Rec.SetRange("Owner RecordID", importConfigHeader.RecordId);
             Rec.SetRange("Entry Type", Rec."Entry Type"::Summary);
         end;
 

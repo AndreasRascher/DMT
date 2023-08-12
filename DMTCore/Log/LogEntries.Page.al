@@ -110,7 +110,7 @@ page 91013 DMTLogEntries
 
     var
         CallStack, LineStyle : Text;
-        [InDataSet]
+        // [InDataSet]
         ShowIgnoredErrorLines: Boolean;
 }
 
