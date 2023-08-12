@@ -8,9 +8,14 @@
 - Replace values before import
 - Create a migration processing plan
 - Backup & Restore all mappings and settings
+- Log processing time & validation issues, the log can easy be exported to excel
+- retry migrating records with error
+- delete data in the target table with filters on the source data and/or filters on the target data
+- count lines in source and target tables to check your migration progress
 
 ## Limitations (by 12.8.23) ##
-- Max. fieldcontent size is 250 characters
+- max. fieldcontent size is 250 characters
+- no Blob fields
 
 ## Import Workflow (SAAS) ##
 1. Open the "DMT Source Files" page and upload your files

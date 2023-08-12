@@ -5,6 +5,7 @@ page 91009 DMTImportConfigLinePart
     ApplicationArea = All;
     UsageCategory = None;
     SourceTable = DMTImportConfigLine;
+    SourceTableView = sorting("Validation Order");
     InsertAllowed = false;
 
     layout
@@ -66,7 +67,7 @@ page 91009 DMTImportConfigLinePart
             }
             action(ProposeMatchingFields)
             {
-                Caption = 'Popose Matching Fields', Comment = 'de-DE=Feldzuordnung vorschlagen';
+                Caption = 'Propose Matching Fields', Comment = 'de-DE=Feldzuordnung vorschlagen';
                 ApplicationArea = All;
                 Image = SuggestField;
                 trigger OnAction()

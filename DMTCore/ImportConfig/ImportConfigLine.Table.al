@@ -102,11 +102,12 @@ table 91006 DMTImportConfigLine
 
     keys
     {
-        key(Key1;
-        "Imp.Conf.Header ID", "Target Field No.")
+        key(Key1; "Imp.Conf.Header ID", "Target Field No.")
         {
             Clustered = true;
         }
+        key(Key2; "Validation Order") { }
+
     }
 
     trigger OnDelete()

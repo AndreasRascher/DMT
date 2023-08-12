@@ -2776,8 +2776,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action ImportConfigLine_SetValidateFieldToAlways - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1011073045 - Action 3855411490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Popose Matching Fields</source>
-          <target state="translated">Feldzuordnung vorschlagen</target>
+          <source>Propose Matching Fields</source>
+          <target state="needs-adaptation">Feldzuordnung vorschlagen</target>
+          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
           <note from="Developer" annotates="general" priority="2">de-DE=Feldzuordnung vorschlagen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action ProposeMatchingFields - Property Caption</note>
         </trans-unit>
