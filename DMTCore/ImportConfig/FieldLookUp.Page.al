@@ -12,7 +12,6 @@ page 91012 DMTFieldLookup
         {
             repeater(fields)
             {
-                field(Caption; Rec.NAVFieldCaption) { ApplicationArea = All; }
                 field(Name; Rec.ColumnName) { ApplicationArea = All; }
             }
         }

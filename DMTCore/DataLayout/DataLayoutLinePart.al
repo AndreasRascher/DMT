@@ -21,9 +21,6 @@ page 91006 DMTLayoutLinePart
                 Visible = (RepeaterVisibilty = RepeaterVisibilty::"NAV CSV");
                 field(NAV_ColumnNo; Rec."Column No.") { }
                 field(NAV_ColumnName; Rec.ColumnName) { }
-                field(NAV_NAVDataType; Rec.NAVDataType) { }
-                field(NAV_NAVLen; Rec.NAVLen) { }
-                field(NAV_FieldCaption; Rec.NAVFieldCaption) { }
             }
             repeater(CustomCSV)
             {
