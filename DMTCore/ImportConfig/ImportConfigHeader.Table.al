@@ -177,6 +177,7 @@ table 91003 DMTImportConfigHeader
                     SearchToken := ConvertStr(SearchToken, '()<>€', '?????');
                     if not SearchToken.StartsWith('@') then
                         SearchToken := '@' + SearchToken;
+                    sourceFileStorage.SetFilter(Name, SearchToken);
                     ContinueSearch := not sourceFileStorage.FindFirst();
                     // Search 2: part of, not case sensitive   
                     if ContinueSearch then begin
@@ -330,6 +331,11 @@ table 91003 DMTImportConfigHeader
         SearchToken: Text;
         ContinueSearch: Boolean;
     begin
+        // exit if assigned from dropdown
+        if (Rec."Target Table ID" <> 0) then
+            if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, Rec."Target Table ID") then
+                if (AllObjWithCaption."Object Caption" = Rec."Target Table Caption") then
+                    exit;
         case true of
             // Case 1 - Empty
             (Rec."Target Table Caption" = ''):
@@ -348,11 +354,12 @@ table 91003 DMTImportConfigHeader
             // Case 3 - Search Term
             (Rec."Target Table Caption" <> '') and not TypeHelper.IsNumeric(Rec."Target Table Caption"):
                 begin
-                    SearchToken := Rec."Source File Name";
+                    SearchToken := Rec."Target Table Caption";
                     // Search 1: exact match, not case sensitive   
                     SearchToken := ConvertStr(SearchToken, '()<>€', '?????');
                     if not SearchToken.StartsWith('@') then
                         SearchToken := '@' + SearchToken;
+                    AllObjWithCaption.SetFilter("Object Caption", SearchToken);
                     ContinueSearch := not AllObjWithCaption.FindFirst();
                     // Search 2: part of, not case sensitive   
                     if ContinueSearch then begin
@@ -361,8 +368,8 @@ table 91003 DMTImportConfigHeader
                         AllObjWithCaption.SetFilter("Object Caption", SearchToken);
                         AllObjWithCaption.FindFirst();
                     end;
-                    Rec."Source File ID" := AllObjWithCaption."Object ID";
-                    Rec."Source File Name" := AllObjWithCaption."Object Caption";
+                    Rec."Target Table ID" := AllObjWithCaption."Object ID";
+                    Rec."Target Table Caption" := AllObjWithCaption."Object Caption";
                 end;
         end;
     end;
@@ -378,7 +385,7 @@ table 91003 DMTImportConfigHeader
         sourceFileStorage.Get(Rec."Source File ID");
         if sourceFileStorage."Data Layout ID" <> 0 then
             exit;
-        DataLayoutMissingErrInfo.AddAction(AssignDataLayoutButtonCaptionLbl, Codeunit::DMTSourceFileMgt, 'Test');//Method must be global and have an errorinfo parameter
+        DataLayoutMissingErrInfo.AddAction(AssignDataLayoutButtonCaptionLbl, Codeunit::DMTSourceFileMgt, 'ShowSourceFileStorageWithErrorIfno');//Method must be global and have an errorinfo parameter
         DataLayoutMissingErrInfo.Message := StrSubstNo(SourceFileHasNoDataLayoutErr, sourceFileStorage.TableCaption, sourceFileStorage.Name);// no error shown if missing
         DataLayoutMissingErrInfo.RecordId := sourceFileStorage.RecordId;
         Error(DataLayoutMissingErrInfo);

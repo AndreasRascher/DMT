@@ -101,13 +101,18 @@ table 91004 DMTSourceFileStorage
             // Case 3 - Search Term
             (Rec."Data Layout Name" <> '') and not TypeHelper.IsNumeric(Rec."Data Layout Name"):
                 begin
+                    // 1. search by name, case insensitive
                     SearchToken := Rec."Data Layout Name";
                     if not SearchToken.StartsWith('@') then
                         SearchToken := '@' + SearchToken;
-                    if not SearchToken.EndsWith('*') then
-                        SearchToken := SearchToken + '*';
                     dataLayout.SetFilter(Name, SearchToken);
-                    dataLayout.FindFirst();
+                    if not dataLayout.FindFirst() then begin
+                        // 2. search as part, case insensitive
+                        if not SearchToken.EndsWith('*') then
+                            SearchToken := SearchToken + '*';
+                        dataLayout.SetFilter(Name, SearchToken);
+                        dataLayout.FindFirst();
+                    end;
                     Rec."Data Layout ID" := dataLayout.ID;
                     Rec."Data Layout Name" := dataLayout.Name;
                 end;

@@ -18,7 +18,7 @@ codeunit 91001 DMTSourceFileMgt
         Message(ImportFinishedMsg);
     end;
 
-    local procedure AddFileToStorage(FileName: Text; IStr: InStream)
+    procedure AddFileToStorage(FileName: Text; IStr: InStream)
     var
         SourceFileStorage, SourceFileStorageExisting : Record DMTSourceFileStorage;
         FileManagement: Codeunit "File Management";
@@ -109,7 +109,7 @@ codeunit 91001 DMTSourceFileMgt
             SourceFileStorage.Validate("Data Layout ID", dataLayout.ID);
     end;
 
-    procedure Test(ErrorInfoDataLayout: ErrorInfo)
+    procedure ShowSourceFileStorageWithErrorIfno(ErrorInfoDataLayout: ErrorInfo)
     var
         sourceFileStorage: Record DMTSourceFileStorage;
     begin

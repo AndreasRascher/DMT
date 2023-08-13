@@ -1,5 +1,6 @@
-page 90008 "FileBrowser"
+page 90008 "DMTFileBrowser"
 {
+    Caption = 'File Browser', Comment = 'de-DE=Datei Explorer';
     PageType = Worksheet;
     UsageCategory = None;
     SourceTable = File;

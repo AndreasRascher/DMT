@@ -2,7 +2,7 @@ codeunit 90002 "DMTOnPremMgt"
 {
     procedure LookUpPath(CurrentPath: Text; LookUpFolder: Boolean) ResultPath: Text[250]
     var
-        FileBrowser: Page FileBrowser;
+        FileBrowser: Page "DMTFileBrowser";
     begin
         DMTSetup.GetRecordOnce();
         if CurrentPath = '' then
