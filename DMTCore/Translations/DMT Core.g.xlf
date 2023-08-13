@@ -1908,11 +1908,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Sie müssen die Spaltentitel im Datenlayout "%1" einrichten.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportConfigMgt - Method CreateSourceFieldNamesDict - NamedType NoHeadlineInfoFoundInDataLayoutErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 4228541464 - Method 1710761149 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import finished</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportConfigMgt - Method ImportNAVSchemaFile - NamedType ImportFinishedMsg</note>
-        </trans-unit>
         <trans-unit id="Codeunit 4228541464 - Method 4048901930 - NamedType 790268351" size-unit="char" translate="yes" xml:space="preserve">
           <source>No errors were found for retry</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Fehler zur erneuten Verbeitung gefunden</note>

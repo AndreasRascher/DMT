@@ -117,12 +117,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE= Datenlayout ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field Data Layout ID - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2231340739 - Field 1820164459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Data Type</source>
-          <target state="translated">NAV Datentyp</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=NAV Datentyp</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field NAVDataType - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 1296439604 - Method 777108172 - NamedType 2038427244" size-unit="char" translate="yes" xml:space="preserve">
           <source>the generic Buffer Table is empty</source>
           <target state="translated">Die generische Puffertabelle ist leer</target>
@@ -2295,12 +2289,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Sie müssen die Spaltentitel im Datenlayout "%1" einrichten.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportConfigMgt - Method CreateSourceFieldNamesDict - NamedType NoHeadlineInfoFoundInDataLayoutErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 4228541464 - Method 1710761149 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import finished</source>
-          <target state="translated">Import abgeschlossen</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportConfigMgt - Method ImportNAVSchemaFile - NamedType ImportFinishedMsg</note>
-        </trans-unit>
         <trans-unit id="Codeunit 4228541464 - Method 4048901930 - NamedType 790268351" size-unit="char" translate="yes" xml:space="preserve">
           <source>No errors were found for retry</source>
           <target state="translated">Es wurden keine Fehler zur erneuten Verbeitung gefunden</target>
@@ -2777,8 +2765,7 @@
         </trans-unit>
         <trans-unit id="Page 1011073045 - Action 3855411490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Propose Matching Fields</source>
-          <target state="needs-adaptation">Feldzuordnung vorschlagen</target>
-          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <target state="translated">Feldzuordnung vorschlagen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Feldzuordnung vorschlagen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action ProposeMatchingFields - Property Caption</note>
         </trans-unit>
