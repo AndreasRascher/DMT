@@ -2775,6 +2775,24 @@
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Importkonfigurationen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigList - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 215230028 - Action 1462139861 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Add File</source>
+          <target state="translated">Datei hinzufügen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Datei hinzufügen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigList - Action AddFromSelectedFiles - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 215230028 - Action 278110413 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Migration</source>
+          <target state="translated">Migration</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Migration</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigList - Action Category_New - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 215230028 - Action 3383493608 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Files</source>
+          <target state="translated">Dateien</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Dateien</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigList - Action Category_Process - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2711900234 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Lines</source>
           <target state="translated">Zeilen</target>

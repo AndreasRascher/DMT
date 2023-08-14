@@ -15,6 +15,7 @@ page 91000 "DMT Setup"
             group(MigrationSettings)
             {
                 Caption = 'Migration Settings', Comment = 'de-DE=Migration Einstellungen';
+                field(MigrationProfil; Rec.MigrationProfil) { }
             }
             group("Object Generator")
             {

@@ -57,6 +57,11 @@ table 91004 DMTSourceFileStorage
         fieldgroup(Brick; "Data Layout Name", Name, Size, Extension) { }
     }
 
+    trigger OnDelete()
+    begin
+        ConfirmDeleteIfSourceFileIsAssigned(Rec);
+    end;
+
     procedure GetFileAsTempBlob(var tempBlob: Codeunit "Temp Blob")
     begin
         Clear(tempBlob);
@@ -78,6 +83,7 @@ table 91004 DMTSourceFileStorage
         TypeHelper: Codeunit "Type Helper";
         dataLayoutID: Integer;
         SearchToken: Text;
+        ContinueSearch: Boolean;
     begin
         // exit if assigned from dropdown
         if (Rec."Data Layout ID" <> 0) then
@@ -101,13 +107,15 @@ table 91004 DMTSourceFileStorage
             // Case 3 - Search Term
             (Rec."Data Layout Name" <> '') and not TypeHelper.IsNumeric(Rec."Data Layout Name"):
                 begin
-                    // 1. search by name, case insensitive
                     SearchToken := Rec."Data Layout Name";
+                    // Search 1: exact match, not case sensitive   
+                    SearchToken := ConvertStr(SearchToken, '()<>€', '?????');
                     if not SearchToken.StartsWith('@') then
                         SearchToken := '@' + SearchToken;
                     dataLayout.SetFilter(Name, SearchToken);
-                    if not dataLayout.FindFirst() then begin
-                        // 2. search as part, case insensitive
+                    ContinueSearch := not dataLayout.FindFirst();
+                    // Search 2: part of, not case sensitive   
+                    if ContinueSearch then begin
                         if not SearchToken.EndsWith('*') then
                             SearchToken := SearchToken + '*';
                         dataLayout.SetFilter(Name, SearchToken);
@@ -137,8 +145,18 @@ table 91004 DMTSourceFileStorage
             end;
     end;
 
-    trigger OnDelete()
+    procedure CopyToTemp(var TempSourceFileStorage: Record DMTSourceFileStorage temporary) LineCount: Integer
+    var
+        SourceFileStorage: Record DMTSourceFileStorage;
+        TempSourceFileStorage2: Record DMTSourceFileStorage temporary;
     begin
-        ConfirmDeleteIfSourceFileIsAssigned(Rec);
+        SourceFileStorage.Copy(Rec);
+        if SourceFileStorage.FindSet(false) then
+            repeat
+                LineCount += 1;
+                TempSourceFileStorage2 := SourceFileStorage;
+                TempSourceFileStorage2.Insert(false);
+            until SourceFileStorage.Next() = 0;
+        TempSourceFileStorage.Copy(TempSourceFileStorage2, true);
     end;
 }

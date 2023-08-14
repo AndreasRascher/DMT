@@ -21,20 +21,20 @@ table 91005 DMTDataLayoutLine
         fieldgroup(DropDown; ColumnName, "Column No.") { }
     }
 
-    procedure CopyToTemp(var TempDataLayoutLine: Record DMTDataLayoutLine temporary) LineCount: Integer
-    var
-        DataLayoutLine: Record DMTDataLayoutLine;
-        TempDataLayoutLine2: Record DMTDataLayoutLine temporary;
-    begin
-        DataLayoutLine.Copy(Rec);
-        if DataLayoutLine.FindSet(false) then
-            repeat
-                LineCount += 1;
-                TempDataLayoutLine2 := DataLayoutLine;
-                TempDataLayoutLine2.Insert(false);
-            until DataLayoutLine.Next() = 0;
-        TempDataLayoutLine.Copy(TempDataLayoutLine2, true);
-    end;
+    // procedure CopyToTemp(var TempDataLayoutLine: Record DMTDataLayoutLine temporary) LineCount: Integer
+    // var
+    //     DataLayoutLine: Record DMTDataLayoutLine;
+    //     TempDataLayoutLine2: Record DMTDataLayoutLine temporary;
+    // begin
+    //     DataLayoutLine.Copy(Rec);
+    //     if DataLayoutLine.FindSet(false) then
+    //         repeat
+    //             LineCount += 1;
+    //             TempDataLayoutLine2 := DataLayoutLine;
+    //             TempDataLayoutLine2.Insert(false);
+    //         until DataLayoutLine.Next() = 0;
+    //     TempDataLayoutLine.Copy(TempDataLayoutLine2, true);
+    // end;
 
     trigger OnInsert()
     begin

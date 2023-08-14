@@ -61,4 +61,19 @@ page 91005 DMTSourceFiles
             actionref(Upload; UploadFile) { }
         }
     }
+
+    procedure GetSelection(var SourceFileStorage_SELECTED: Record DMTSourceFileStorage temporary) HasLines: Boolean
+    var
+        SourceFileStorage: Record DMTSourceFileStorage;
+        Debug: Integer;
+    begin
+        Clear(SourceFileStorage_SELECTED);
+        if SourceFileStorage_SELECTED.IsTemporary then SourceFileStorage_SELECTED.DeleteAll();
+        Debug := Rec.Count;
+        SourceFileStorage.Copy(Rec); // if all fields are selected, no filter is applied but the view is also not applied
+        CurrPage.SetSelectionFilter(SourceFileStorage);
+        Debug := SourceFileStorage.Count;
+        SourceFileStorage.CopyToTemp(SourceFileStorage_SELECTED);
+        HasLines := SourceFileStorage_SELECTED.FindFirst();
+    end;
 }

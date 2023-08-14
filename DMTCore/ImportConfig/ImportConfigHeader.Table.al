@@ -10,6 +10,13 @@ table 91003 DMTImportConfigHeader
         {
             Caption = 'Target Table ID', Comment = 'de-DE=Zieltabellen ID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table), "App Package ID" = field("Other App Packages ID Filter"));
+            trigger OnValidate()
+            var
+                TableMetadata: Record "Table Metadata";
+            begin
+                if TableMetadata.Get(Rec."Target Table ID") then
+                    Rec."Target Table Caption" := TableMetadata.Caption;
+            end;
         }
         field(11; "Target Table Caption"; Text[250])
         {
@@ -372,6 +379,12 @@ table 91003 DMTImportConfigHeader
                     Rec."Target Table Caption" := AllObjWithCaption."Object Caption";
                 end;
         end;
+    end;
+
+    internal procedure filterBy(var sourceFileStorage: Record DMTSourceFileStorage) HasLines: Boolean
+    begin
+        rec.SetRange("Source File ID", sourceFileStorage."File ID");
+        HasLines := not Rec.IsEmpty;
     end;
 
     local procedure ThrowActionableErrorIfDataLayoutIsNotSet()
