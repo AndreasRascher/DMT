@@ -2788,15 +2788,17 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigList - Action ImportSelectedToBuffer - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 215230028 - Action 2224783030 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Migration</source>
-          <target state="translated">Migration</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Migration</note>
+          <source>Files</source>
+          <target state="needs-adaptation">Dateien</target>
+          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Dateien</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigList - Action Category_Category5 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 215230028 - Action 311693179 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Files</source>
-          <target state="translated">Dateien</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Dateien</note>
+          <source>Migration</source>
+          <target state="needs-adaptation">Migration</target>
+          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Migration</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigList - Action Category_Category6 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2711900234 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

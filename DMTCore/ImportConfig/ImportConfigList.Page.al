@@ -18,6 +18,7 @@ page 91010 DMTImportConfigList
                 field(ID; Rec.ID) { }
                 field("Target Table ID"; Rec."Target Table ID") { }
                 field("Target Table Caption"; Rec."Target Table Caption") { }
+                field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { }
             }
         }
         area(FactBoxes)
@@ -42,16 +43,19 @@ page 91010 DMTImportConfigList
                     tempSourceFileStorage_SELECTED: Record DMTSourceFileStorage temporary;
                     ImportConfigMgt: Codeunit DMTImportConfigMgt;
                     sourceFiles: Page DMTSourceFiles;
-                    NAVExportFileNamesDictionary: Dictionary of [Integer, Text];
-                    PosNo: Integer;
+                    NAVExportFileNamesDictionary, NAVExportFileNamesDictionary_Renamed : Dictionary of [Integer, Text];
+                    migrationLib: Codeunit DMTMigrationLib;
+                    PosNo, TargetTableID : Integer;
                 begin
                     sourceFiles.LookupMode(true);
                     if sourceFiles.RunModal() <> Action::LookupOK then exit;
                     if not sourceFiles.GetSelection(tempSourceFileStorage_SELECTED) then
                         exit;
                     DMTSetup.GetRecordOnce();
-                    if DMTSetup.MigrationProfil = DMTSetup.MigrationProfil::"From NAV" then
+                    if DMTSetup.MigrationProfil = DMTSetup.MigrationProfil::"From NAV" then begin
                         CreateNAVExportFileNameDictionary(NAVExportFileNamesDictionary);
+                        migrationLib.CreateNAVExportFileNameDictionaryWithRenamedTableCaptions(NAVExportFileNamesDictionary_Renamed);
+                    end;
                     tempSourceFileStorage_SELECTED.FindSet();
                     repeat
                         if not importConfigHeader.filterBy(tempSourceFileStorage_SELECTED) then begin
@@ -63,11 +67,20 @@ page 91010 DMTImportConfigList
                             // Assign Target Table
                             if DMTSetup.MigrationProfil = DMTSetup.MigrationProfil::"From NAV" then begin
                                 PosNo := NAVExportFileNamesDictionary.Values.IndexOf(tempSourceFileStorage_SELECTED.Name);
-                                if PosNo > 0 then
-                                    importConfigHeader.Validate("Target Table ID", NAVExportFileNamesDictionary.Keys.Get(PosNo));
-                                importConfigHeader.Modify(true);
+                                if PosNo > 0 then begin
+                                    TargetTableID := NAVExportFileNamesDictionary.Keys.Get(PosNo);
+                                end else begin
+                                    PosNo := NAVExportFileNamesDictionary_Renamed.Values.IndexOf(tempSourceFileStorage_SELECTED.Name);
+                                    if PosNo > 0 then
+                                        TargetTableID := NAVExportFileNamesDictionary_Renamed.Keys.Get(PosNo);
+                                end;
                             end;
-                            if importConfigHeader."Target Table ID" <> 0 then begin
+
+                            if (DMTSetup.MigrationProfil = DMTSetup.MigrationProfil::"From NAV") and (TargetTableID <> 0) then
+                                TargetTableID := migrationLib.HandleObsoleteNAVTargetTable(TargetTableID);
+                            if TargetTableID <> 0 then begin
+                                importConfigHeader.Validate("Target Table ID");
+                                importConfigHeader.Modify(true);
                                 ImportConfigMgt.PageAction_InitImportConfigLine(importConfigHeader.ID);
                             end;
                         end;
@@ -82,13 +95,17 @@ page 91010 DMTImportConfigList
                 trigger OnAction()
                 var
                     TempImportConfigHeader: Record DMTImportConfigHeader temporary;
+                    progress: Dialog;
                 begin
                     if not GetSelection(TempImportConfigHeader) then
                         exit;
-                    if TempImportConfigHeader.FindSet() then
-                        repeat
-                            TempImportConfigHeader.ImportFileToBuffer();
-                        until TempImportConfigHeader.Next() = 0;
+                    TempImportConfigHeader.FindSet();
+                    progress.Open('######################################################1#');
+                    repeat
+                        progress.Update(1, TempImportConfigHeader."Source File Name");
+                        TempImportConfigHeader.ImportFileToBuffer();
+                    until TempImportConfigHeader.Next() = 0;
+                    progress.Close();
                 end;
             }
         }
@@ -96,14 +113,13 @@ page 91010 DMTImportConfigList
         {
             group(Category_Category5)
             {
-                Caption = 'Migration', Comment = 'de-DE=Migration';
-                actionref(ImportSelectedToBufferRef; ImportSelectedToBuffer) { }
+                Caption = 'Files', Comment = 'de-DE=Dateien';
+                actionref(AddFromSelectedFilesRef; AddFromSelectedFiles) { }
             }
             group(Category_Category6)
             {
-                Caption = 'Files', Comment = 'de-DE=Dateien';
-                ShowAs = SplitButton;
-                actionref(AddFromSelectedFilesRef; AddFromSelectedFiles) { }
+                Caption = 'Migration', Comment = 'de-DE=Migration';
+                actionref(ImportSelectedToBufferRef; ImportSelectedToBuffer) { }
             }
         }
     }

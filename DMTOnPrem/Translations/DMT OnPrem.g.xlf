@@ -53,6 +53,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Pfade</note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension DMTSetup - Control Paths - Property Caption</note>
         </trans-unit>
+        <trans-unit id="PageExtension 698368471 - Action 2392679920 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 698368471">
+          <source>Add File from Server</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Dateien vom Server laden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension DMTSourceFiles - Action AddFileFromServer - Property Caption</note>
+        </trans-unit>
         <trans-unit id="TableExtension 521254526 - Field 3332974040 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 521254526">
           <source>Default Export Folder</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Standard Export Ordnerpfad</note>

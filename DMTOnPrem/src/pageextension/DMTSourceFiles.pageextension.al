@@ -12,6 +12,7 @@ pageextension 90001 DMTSourceFiles extends "DMTSourceFiles"
         {
             action(AddFileFromServer)
             {
+                Caption = 'Add File from Server', Comment = 'de-DE=Dateien vom Server laden';
                 Image = Server;
                 ApplicationArea = All;
 
@@ -36,7 +37,10 @@ pageextension 90001 DMTSourceFiles extends "DMTSourceFiles"
                     sourceFileMgt.AddFileToStorage(fileMgt.GetFileName(File.Name), IStr);
                 end;
             }
-
+        }
+        addlast(Promoted)
+        {
+            actionref(addFileFromServerRef; AddFileFromServer) { }
         }
     }
 }

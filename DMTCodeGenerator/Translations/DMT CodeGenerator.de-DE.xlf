@@ -3,6 +3,12 @@
   <file datatype="xml" source-language="en-US" target-language="de-DE" original="DMT CodeGenerator">
     <body>
       <group id="body">
+        <trans-unit id="Codeunit 368545005 - Method 1710761149 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import finished</source>
+          <target state="translated">Import abgeschlossen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTCodeGenerator - Method ImportNAVSchemaFile - NamedType ImportFinishedMsg</note>
+        </trans-unit>
         <trans-unit id="Page 2911572108 - Control 1735507514 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Code</source>
           <target state="needs-translation"/>
@@ -20,6 +26,12 @@
           <target state="needs-translation"/>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCode - Control TargetRecVarName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2231340739 - Field 1820164459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2231340739">
+          <source>Data Type</source>
+          <target state="translated">NAV Datentyp</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=NAV Datentyp</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTDataLayoutLine - Field NAVDataType - Property Caption</note>
         </trans-unit>
       </group>
     </body>

@@ -192,4 +192,71 @@ codeunit 91003 DMTMigrationLib
                 ImportConfigHeader."Use OnInsert Trigger" := false;
         end;
     end;
+
+    procedure CreateNAVExportFileNameDictionaryWithRenamedTableCaptions(var NAVExportFileNamesDictionary: Dictionary of [Integer, Text])
+    var
+        FileNameFromCaption: Text;
+        tableID: Integer;
+    begin
+        NAVExportFileNamesDictionary.Add(225, 'PLZ-Code');
+        NAVExportFileNamesDictionary.Add(284, 'Bundesland');
+        NAVExportFileNamesDictionary.Add(315, 'Projekt Einrichtung');
+        NAVExportFileNamesDictionary.Add(5723, 'Produktgruppe');
+        NAVExportFileNamesDictionary.Add(5084, 'Team Mitarbeiter');
+        NAVExportFileNamesDictionary.Add(7602, 'Spezifische Kalenderänderung');
+        NAVExportFileNamesDictionary.Add(7603, 'Spezifische Kalenderposten');
+        // NAVExportFileNamesDictionary.Add(7602, 'Benutzerdefinierte Kalenderänderung');
+
+        foreach tableID in NAVExportFileNamesDictionary.Keys do begin
+            FileNameFromCaption := StrSubstNo('%1.csv', ConvertStr(NAVExportFileNamesDictionary.Get(tableID), '<>*\/|"', '_______'));
+            NAVExportFileNamesDictionary.Set(tableID, FileNameFromCaption);
+        end;
+    end;
+
+    procedure HandleObsoleteNAVTargetTable(NAVTableID: Integer) TargetTableID: Integer
+    var
+        FeatureKey: Record "Feature Key";
+        TableMetadata: Record "Table Metadata";
+    begin
+        // Feature: If Target Table Obsolete, switch to alternative
+        if TableMetadata.Get(NAVTableID) then begin
+            if not (TableMetadata.ObsoleteState in [TableMetadata.ObsoleteState::Removed, TableMetadata.ObsoleteState::Pending]) then begin
+                TargetTableID := TableMetadata.ID;
+            end else begin
+                case NAVTableID of
+                    5105: // Customer Template
+                        TargetTableID := Database::"Customer Templ.";
+                    5717: //Item Cross Reference
+                        TargetTableID := Database::"Item Reference";
+                    7002,// Sales Price - 'Replaced by the new implementation (V16) of price calculation: table Price List Line'
+                    7004,// Sales Line Discount - 'Replaced by the new implementation (V16) of price calculation: table Price List Line'
+                    7012,// Purchase Price - 'Replaced by the new implementation (V16) of price calculation: table Price List Line'
+                    7014:// Purchase Line Discount - 'Replaced by the new implementation (V16) of price calculation: table Price List Line'
+                        begin
+                            if FeatureKey.Get('SalesPrices') and (FeatureKey.Enabled = FeatureKey.Enabled::"All Users") then
+                                TargetTableID := Database::"Price List Line"
+                            else
+                                TargetTableID := NAVTableID;
+                        end;
+                    //5005350 "Phys. Inventory Order Header"
+                    //5875 "Phys. Invt. Order Header
+                    5005350:
+                        TargetTableID := 5875; //5875
+                    // 5005351 "Phys. Inventory Order Line"
+                    // 5876 "Phys. Invt. Order Line"
+                    5005351:
+                        TargetTableID := 5876; // 5876
+                    // 5005361 "Expect. Phys. Inv. Track. Line"
+                    // 5886 "Exp. Phys. Invt. Tracking"
+                    5005361:
+                        TargetTableID := 5886; //5886 
+                    5723: // Product Group -> Item Category
+                        TargetTableID := 5722;
+                    else
+                        Message('unhandled obsolete Table %1', NAVTableID);
+                end;
+            end;
+        end;
+    end;
+
 }
