@@ -59,6 +59,7 @@ codeunit 91009 DMTProcessStorage
     var
         EventSubscription: Record "Event Subscription";
     begin
+        EventSubscription.SetRange("Publisher Object Type", EventSubscription."Publisher Object Type"::Codeunit);
         EventSubscription.SetRange(EventSubscription."Publisher Object ID", Codeunit::DMTProcessStorage);
         EventSubscription.FindFirst();
         exit(EventSubscription.Active);
