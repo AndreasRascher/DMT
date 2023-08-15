@@ -44,8 +44,7 @@ page 91011 DMTDataLayoutCard
             {
                 Visible = Rec.SourceFileFormat = Rec.SourceFileFormat::"Custom CSV";
                 field(CSVFieldSeparator; Rec.CSVFieldSeparator) { }
-                field(CSVFieldDelimiter; Rec.CSVFieldDelimiter) { }
-                field(CSVLineSeparator; Rec.CSVLineSeparator)
+                field(CSVFieldDelimiter; Rec.CSVFieldDelimiter)
                 {
                     trigger OnAssistEdit()
                     var
@@ -53,15 +52,31 @@ page 91011 DMTDataLayoutCard
                         Choices: List of [Text];
                         ChoicesText: Text;
                     begin
-                        ChoicesText := '<None>,<CR/LF>,<CR>,<LF>,<TAB>';
+                        ChoicesText := '<None>,<TAB>';
                         Choices := ChoicesText.Split(',');
                         Choice := StrMenu(ChoicesText);
                         if Choice <> 0 then
-                            Rec.CSVLineSeparator += Choices.Get(Choice);
+                            Rec.CSVFieldDelimiter += Choices.Get(Choice);
                     end;
                 }
-                field(CSVTextEncoding; Rec.CSVTextEncoding) { }
             }
+            field(CSVLineSeparator; Rec.CSVLineSeparator)
+            {
+                trigger OnAssistEdit()
+                var
+                    Choice: Integer;
+                    Choices: List of [Text];
+                    ChoicesText: Text;
+                begin
+                    ChoicesText := '<None>,<CR/LF>,<CR>,<LF>,<TAB>';
+                    Choices := ChoicesText.Split(',');
+                    Choice := StrMenu(ChoicesText);
+                    if Choice <> 0 then
+                        Rec.CSVLineSeparator += Choices.Get(Choice);
+                end;
+            }
+            field(CSVTextEncoding; Rec.CSVTextEncoding) { }
+
             part(DMTLayoutLinePart; DMTLayoutLinePart)
             {
                 SubPageLink = "Data Layout ID" = field(ID);

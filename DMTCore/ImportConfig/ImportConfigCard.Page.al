@@ -85,16 +85,8 @@ page 91008 DMTImportConfigCard
                 PromotedIsBig = true;
                 PromotedCategory = Process;
                 trigger OnAction()
-                var
-                    Log: Codeunit DMTLog;
-                    Start: DateTime;
-                    SourceFileImport: Interface ISourceFileImport;
                 begin
-                    Start := CurrentDateTime;
-                    SourceFileImport := Rec.GetDataLayout().SourceFileFormat;
-                    SourceFileImport.ImportToBufferTable(Rec);
-                    Log.AddImportToBufferSummary(Rec, CurrentDateTime - Start);
-                    SourceFileImport.TooLargeValuesHaveBeenCutOffWarningIfRequired();
+                    Rec.ImportFileToBuffer();
                     CurrPage.TableInfoFactBox.Page.DoUpdate(Rec);
                     CurrPage.LogFactBox.Page.DoUpdate(Rec);
                 end;
@@ -329,5 +321,4 @@ page 91008 DMTImportConfigCard
                     CurrPage.SaveRecord();
 
     end;
-
 }

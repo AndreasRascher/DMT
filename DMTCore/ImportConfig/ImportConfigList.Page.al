@@ -40,10 +40,10 @@ page 91010 DMTImportConfigList
                     importConfigHeader: Record DMTImportConfigHeader;
                     DMTSetup: Record DMTSetup;
                     tempSourceFileStorage_SELECTED: Record DMTSourceFileStorage temporary;
+                    ImportConfigMgt: Codeunit DMTImportConfigMgt;
                     sourceFiles: Page DMTSourceFiles;
                     NAVExportFileNamesDictionary: Dictionary of [Integer, Text];
                     PosNo: Integer;
-                    ImportConfigMgt: Codeunit DMTImportConfigMgt;
                 begin
                     sourceFiles.LookupMode(true);
                     if sourceFiles.RunModal() <> Action::LookupOK then exit;
@@ -74,14 +74,32 @@ page 91010 DMTImportConfigList
                     until tempSourceFileStorage_SELECTED.Next() = 0;
                 end;
             }
+            action(ImportSelectedToBuffer)
+            {
+                Caption = 'Import to buffer table', Comment = 'de-DE=In Puffertab. importieren';
+                Image = Import;
+                ApplicationArea = All;
+                trigger OnAction()
+                var
+                    TempImportConfigHeader: Record DMTImportConfigHeader temporary;
+                begin
+                    if not GetSelection(TempImportConfigHeader) then
+                        exit;
+                    if TempImportConfigHeader.FindSet() then
+                        repeat
+                            TempImportConfigHeader.ImportFileToBuffer();
+                        until TempImportConfigHeader.Next() = 0;
+                end;
+            }
         }
         area(Promoted)
         {
-            group(Category_New)
+            group(Category_Category5)
             {
                 Caption = 'Migration', Comment = 'de-DE=Migration';
+                actionref(ImportSelectedToBufferRef; ImportSelectedToBuffer) { }
             }
-            group(Category_Process)
+            group(Category_Category6)
             {
                 Caption = 'Files', Comment = 'de-DE=Dateien';
                 ShowAs = SplitButton;
@@ -101,5 +119,20 @@ page 91010 DMTImportConfigList
             FileNameFromCaption := StrSubstNo('%1.csv', ConvertStr(tableMetadata.Caption, '<>*\/|"', '_______'));
             NAVExportFileNamesDictionary.Add(tableMetadata.ID, FileNameFromCaption);
         until tableMetadata.Next() = 0;
+    end;
+
+    procedure GetSelection(var ImportConfigHeader_SELECTED: Record DMTImportConfigHeader temporary) HasLines: Boolean
+    var
+        ImportConfigHeader: Record DMTImportConfigHeader;
+        Debug: Integer;
+    begin
+        Clear(ImportConfigHeader_SELECTED);
+        if ImportConfigHeader_SELECTED.IsTemporary then ImportConfigHeader_SELECTED.DeleteAll();
+        Debug := Rec.Count;
+        ImportConfigHeader.Copy(Rec); // if all fields are selected, no filter is applied but the view is also not applied
+        CurrPage.SetSelectionFilter(ImportConfigHeader);
+        Debug := ImportConfigHeader.Count;
+        ImportConfigHeader.CopyToTemp(ImportConfigHeader_SELECTED);
+        HasLines := ImportConfigHeader_SELECTED.FindFirst();
     end;
 }

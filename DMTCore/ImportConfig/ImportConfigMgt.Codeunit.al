@@ -191,7 +191,11 @@ codeunit 91002 DMTImportConfigMgt
         NewFieldName, SourceFieldName, TargetFieldName : Text;
     begin
         // Load Target Field Names
-        TargetFieldNames := CreateTargetFieldNamesDict(ImportConfigHeader, true);
+        DMTSetup.GetRecordOnce();
+        if DMTSetup.MigrationProfil = DMTSetup.MigrationProfil::"From NAV" then
+            TargetFieldNames := CreateTargetFieldNamesDict(ImportConfigHeader, false)  // Names
+        else
+            TargetFieldNames := CreateTargetFieldNamesDict(ImportConfigHeader, true);  // Captions
         if TargetFieldNames.Count = 0 then
             exit;
 

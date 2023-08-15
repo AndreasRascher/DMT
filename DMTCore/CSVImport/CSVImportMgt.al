@@ -33,10 +33,6 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
     end;
 
     local procedure PrepareXMLPortWithCSVOptionsAndSourceFile(SourceFileStorage: Record DMTSourceFileStorage; dataLayout: Record DMTDataLayout; var CSVReader: XmlPort DMTCSVReader)
-    var
-        CRLF: Text[2];
-        TAB: Text[1];
-        lineSeperator: text;
     begin
         SourceFileStorage.TestField(Name);
         SourceFileStorage.GetFileAsTempBlob(FileBlobGlobal);
@@ -47,17 +43,8 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
         dataLayout.TestField(CSVLineSeparator);
 
         CSVReader.FieldDelimiter := dataLayout.CSVFieldDelimiter;
-        CSVReader.FieldSeparator := dataLayout.CSVFieldSeparator;
-        lineSeperator := dataLayout.CSVLineSeparator;
-        CRLF[1] := 13;
-        CRLF[2] := 10;
-        TAB[1] := 9;
-        //<None>,<CR/LF>,<CR>,<LF>,<TAB>
-        lineSeperator := lineSeperator.Replace('<CR>', CRLF[1]);
-        lineSeperator := lineSeperator.Replace('<LF>', CRLF[2]);
-        lineSeperator := lineSeperator.Replace('<CR/LF>', CRLF);
-        lineSeperator := lineSeperator.Replace('<TAB>', TAB);
-        CSVReader.RecordSeparator := lineSeperator;
+        CSVReader.FieldSeparator := ReplacePlaceHolder(dataLayout.CSVFieldSeparator);
+        CSVReader.RecordSeparator := ReplacePlaceHolder(dataLayout.CSVLineSeparator);
         case dataLayout.CSVTextEncoding of
             dataLayout.CSVTextEncoding::MSDos:
                 CSVReader.TextEncoding := TextEncoding::MSDos;
@@ -69,6 +56,23 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
                 CSVReader.TextEncoding := TextEncoding::Windows;
         end;
         CSVReader.SetSource(FileStreamGlobal);
+    end;
+
+    local procedure ReplacePlaceHolder(textWithPlaceholders: text) Result: Text
+    var
+        CRLF: Text[2];
+        TAB: Text[1];
+    begin
+        CRLF[1] := 13;
+        CRLF[2] := 10;
+        TAB[1] := 9;
+        //<None>,<CR/LF>,<CR>,<LF>,<TAB>
+        Result := textWithPlaceholders;
+        Result := Result.Replace('<CR>', CRLF[1]);
+        Result := Result.Replace('<LF>', CRLF[2]);
+        Result := Result.Replace('<CR/LF>', CRLF);
+        Result := Result.Replace('<TAB>', TAB);
+        Result := Result.Replace('<None>', '');
     end;
 
     procedure TooLargeValuesHaveBeenCutOffWarningIfRequired()

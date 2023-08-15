@@ -404,4 +404,32 @@ table 91003 DMTImportConfigHeader
         Error(DataLayoutMissingErrInfo);
     end;
 
+    procedure CopyToTemp(var TempImportConfigHeader: Record DMTImportConfigHeader temporary) LineCount: Integer
+    var
+        ImportConfigHeader: Record DMTImportConfigHeader;
+        TempImportConfigHeader2: Record DMTImportConfigHeader temporary;
+    begin
+        ImportConfigHeader.Copy(Rec);
+        if ImportConfigHeader.FindSet(false) then
+            repeat
+                LineCount += 1;
+                TempImportConfigHeader2 := ImportConfigHeader;
+                TempImportConfigHeader2.Insert(false);
+            until ImportConfigHeader.Next() = 0;
+        TempImportConfigHeader.Copy(TempImportConfigHeader2, true);
+    end;
+
+    procedure ImportFileToBuffer()
+    var
+        Log: Codeunit DMTLog;
+        Start: DateTime;
+        SourceFileImport: Interface ISourceFileImport;
+    begin
+        Start := CurrentDateTime;
+        SourceFileImport := Rec.GetDataLayout().SourceFileFormat;
+        SourceFileImport.ImportToBufferTable(Rec);
+        Log.AddImportToBufferSummary(Rec, CurrentDateTime - Start);
+        SourceFileImport.TooLargeValuesHaveBeenCutOffWarningIfRequired();
+    end;
+
 }

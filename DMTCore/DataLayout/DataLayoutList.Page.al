@@ -51,6 +51,18 @@ page 91007 DMTDataLayouts
         dataLayout.Insert();
 
         dataLayout.ID := dataLayout.GetNextID();
+        dataLayout.Name := 'DMT NAV CSV Export';
+        dataLayout.SourceFileFormat := dataLayout.SourceFileFormat::"Custom CSV";
+        dataLayout.CSVFieldDelimiter := '"';
+        dataLayout.CSVTextEncoding := dataLayout.CSVTextEncoding::UTF8;
+        dataLayout.CSVLineSeparator := '<CR/LF>';
+        dataLayout.CSVFieldSeparator := '<TAB>';
+        dataLayout.CSVFieldDelimiter := '<None>';
+        dataLayout."Has Heading Row" := true;
+        dataLayout.HeadingRowNo := 1;
+        dataLayout.Insert();
+
+        dataLayout.ID := dataLayout.GetNextID();
         dataLayout.Name := 'XLSX, Überschrift in Zeile 1';
         dataLayout.SourceFileFormat := dataLayout.SourceFileFormat::Excel;
         dataLayout."Has Heading Row" := true;
