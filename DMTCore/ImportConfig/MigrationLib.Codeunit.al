@@ -193,24 +193,30 @@ codeunit 91003 DMTMigrationLib
         end;
     end;
 
-    procedure CreateNAVExportFileNameDictionaryWithRenamedTableCaptions(var NAVExportFileNamesDictionary: Dictionary of [Integer, Text])
+    procedure CreateNAVExportFileNameDictionary(var NAVExportFileNamesDict: Dictionary of [Text, Integer])
     var
+        tableMetadata: Record "Table Metadata";
         FileNameFromCaption: Text;
-        tableID: Integer;
     begin
-        NAVExportFileNamesDictionary.Add(225, 'PLZ-Code');
-        NAVExportFileNamesDictionary.Add(284, 'Bundesland');
-        NAVExportFileNamesDictionary.Add(315, 'Projekt Einrichtung');
-        NAVExportFileNamesDictionary.Add(5723, 'Produktgruppe');
-        NAVExportFileNamesDictionary.Add(5084, 'Team Mitarbeiter');
-        NAVExportFileNamesDictionary.Add(7602, 'Spezifische Kalenderänderung');
-        NAVExportFileNamesDictionary.Add(7603, 'Spezifische Kalenderposten');
-        // NAVExportFileNamesDictionary.Add(7602, 'Benutzerdefinierte Kalenderänderung');
+        // From existing table captions
+        tableMetadata.SetRange(ID, 0, 2000000000);
+        tableMetadata.FindSet();
+        repeat
+            NAVExportFileNamesDict.Add(createNAVExportFileName(tableMetadata.Caption), tableMetadata.ID);
+        until tableMetadata.Next() = 0;
+        // Known renamed tables
+        NAVExportFileNamesDict.Add(createNAVExportFileName('PLZ-Code'), 225);
+        NAVExportFileNamesDict.Add(createNAVExportFileName('Bundesland'), 284);
+        NAVExportFileNamesDict.Add(createNAVExportFileName('Projekt Einrichtung'), 315);
+        NAVExportFileNamesDict.Add(createNAVExportFileName('Produktgruppe'), 5723);
+        NAVExportFileNamesDict.Add(createNAVExportFileName('Team Mitarbeiter'), 5084);
+        NAVExportFileNamesDict.Add(createNAVExportFileName('Spezifische Kalenderänderung'), 7602);
+        NAVExportFileNamesDict.Add(createNAVExportFileName('Spezifische Kalenderposten'), 7603);
+    end;
 
-        foreach tableID in NAVExportFileNamesDictionary.Keys do begin
-            FileNameFromCaption := StrSubstNo('%1.csv', ConvertStr(NAVExportFileNamesDictionary.Get(tableID), '<>*\/|"', '_______'));
-            NAVExportFileNamesDictionary.Set(tableID, FileNameFromCaption);
-        end;
+    procedure createNAVExportFileName(tableCaption: Text) ExportCSVFileName: Text
+    begin
+        ExportCSVFileName := StrSubstNo('%1.csv', ConvertStr(tableCaption, '<>*\/|"', '_______'));
     end;
 
     procedure HandleObsoleteNAVTargetTable(NAVTableID: Integer) TargetTableID: Integer
