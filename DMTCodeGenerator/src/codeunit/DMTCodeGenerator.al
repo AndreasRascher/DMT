@@ -354,76 +354,76 @@ codeunit 90000 DMTCodeGenerator
             MaskedFieldName := '"' + FieldName + '"';
     end;
 
-    procedure ImportNAVSchemaFile()
-    var
-        TempBlob: Codeunit "Temp Blob";
-        FieldImport: XmlPort "DMT NAVFieldBufferImport";
-        InStr: InStream;
-        ImportFinishedMsg: Label 'Import finished', Comment = 'de-DE=Import abgeschlossen';
-        FileName: Text;
-    begin
-        TempBlob.CreateInStream(InStr);
-        if not UploadIntoStream('Select a Schema.csv file', '', Format(Enum::DMTFileFilter::CSV), FileName, InStr) then begin
-            exit;
-        end;
-        FieldImport.SetSource(InStr);
-        FieldImport.Import();
+    // procedure ImportNAVSchemaFile()
+    // var
+    //     TempBlob: Codeunit "Temp Blob";
+    //     FieldImport: XmlPort "DMT NAVFieldBufferImport";
+    //     InStr: InStream;
+    //     ImportFinishedMsg: Label 'Import finished', Comment = 'de-DE=Import abgeschlossen';
+    //     FileName: Text;
+    // begin
+    //     TempBlob.CreateInStream(InStr);
+    //     if not UploadIntoStream('Select a Schema.csv file', '', Format(Enum::DMTFileFilter::CSV), FileName, InStr) then begin
+    //         exit;
+    //     end;
+    //     FieldImport.SetSource(InStr);
+    //     FieldImport.Import();
 
-        migrateNAVSchemaToDataLayout();
+    //     migrateNAVSchemaToDataLayout();
 
-        Message(ImportFinishedMsg);
-    end;
+    //     Message(ImportFinishedMsg);
+    // end;
 
-    local procedure migrateNAVSchemaToDataLayout()
-    var
-        dataLayout: Record DMTDataLayout;
-        dataLayoutLine: Record DMTDataLayoutLine;
-        NAVFieldBuffer: Record "DMT NAVFieldBuffer";
-        TableIDs: List of [Integer];
-        TableID: Integer;
-    begin
-        if NAVFieldBuffer.IsEmpty then exit;
-        while NAVFieldBuffer.FindFirst() do begin
-            TableIDs.Add(NAVFieldBuffer.TableNo);
-            NAVFieldBuffer.SetFilter(TableNo, StrSubstNo('>%1', NAVFieldBuffer.TableNo));
-        end;
-        foreach TableID in TableIDs do begin
-            // delete old
-            dataLayout.Reset();
-            dataLayout.SetRange(NAVTableID, TableID);
-            if dataLayout.FindFirst() then
-                dataLayout.DeleteAll(true);
-            // load fields
-            NAVFieldBuffer.Reset();
-            NAVFieldBuffer.FindSet(false);
-            NAVFieldBuffer.SetRange(TableNo, TableID);
-            NAVFieldBuffer.FindSet();
-            // add header
-            Clear(dataLayout);
-            dataLayout.Name := NAVFieldBuffer.TableName;
-            dataLayout.SourceFileFormat := dataLayout.SourceFileFormat::"NAV CSV Export";
-            dataLayout.NAVTableID := NAVFieldBuffer.TableNo;
-            dataLayout.NAVNoOfRecords := NAVFieldBuffer."No. of Records";
-            dataLayout.NAVPrimaryKey := NAVFieldBuffer."Primary Key";
-            dataLayout.NAVTableCaption := NAVFieldBuffer."Table Caption";
-            dataLayout.Insert(true);
-            repeat
-                Clear(dataLayoutLine);
+    // local procedure migrateNAVSchemaToDataLayout()
+    // var
+    //     dataLayout: Record DMTDataLayout;
+    //     dataLayoutLine: Record DMTDataLayoutLine;
+    //     NAVFieldBuffer: Record "DMT NAVFieldBuffer";
+    //     TableIDs: List of [Integer];
+    //     TableID: Integer;
+    // begin
+    //     if NAVFieldBuffer.IsEmpty then exit;
+    //     while NAVFieldBuffer.FindFirst() do begin
+    //         TableIDs.Add(NAVFieldBuffer.TableNo);
+    //         NAVFieldBuffer.SetFilter(TableNo, StrSubstNo('>%1', NAVFieldBuffer.TableNo));
+    //     end;
+    //     foreach TableID in TableIDs do begin
+    //         // delete old
+    //         dataLayout.Reset();
+    //         dataLayout.SetRange(NAVTableID, TableID);
+    //         if dataLayout.FindFirst() then
+    //             dataLayout.DeleteAll(true);
+    //         // load fields
+    //         NAVFieldBuffer.Reset();
+    //         NAVFieldBuffer.FindSet(false);
+    //         NAVFieldBuffer.SetRange(TableNo, TableID);
+    //         NAVFieldBuffer.FindSet();
+    //         // add header
+    //         Clear(dataLayout);
+    //         dataLayout.Name := NAVFieldBuffer.TableName;
+    //         dataLayout.SourceFileFormat := dataLayout.SourceFileFormat::"NAV CSV Export";
+    //         dataLayout.NAVTableID := NAVFieldBuffer.TableNo;
+    //         dataLayout.NAVNoOfRecords := NAVFieldBuffer."No. of Records";
+    //         dataLayout.NAVPrimaryKey := NAVFieldBuffer."Primary Key";
+    //         dataLayout.NAVTableCaption := NAVFieldBuffer."Table Caption";
+    //         dataLayout.Insert(true);
+    //         repeat
+    //             Clear(dataLayoutLine);
 
-                dataLayoutLine."Data Layout ID" := dataLayout.ID;
-                dataLayoutLine."Column No." := NAVFieldBuffer."No.";
-                dataLayoutLine.ColumnName := NAVFieldBuffer.FieldName;
-                dataLayoutLine.NAVFieldCaption := NAVFieldBuffer."Field Caption";
-                dataLayoutLine."NAV Primary Key" := NAVFieldBuffer."Primary Key";
-                dataLayoutLine."NAV Table Caption" := NAVFieldBuffer."Table Caption";
-                dataLayoutLine.NAVClass := NAVFieldBuffer.Class;
-                dataLayoutLine.NAVDataType := NAVFieldBuffer.Type;
-                dataLayoutLine.NAVEnabled := NAVFieldBuffer.Enabled;
-                dataLayoutLine.NAVLen := NAVFieldBuffer.Len;
+    //             dataLayoutLine."Data Layout ID" := dataLayout.ID;
+    //             dataLayoutLine."Column No." := NAVFieldBuffer."No.";
+    //             dataLayoutLine.ColumnName := NAVFieldBuffer.FieldName;
+    //             dataLayoutLine.NAVFieldCaption := NAVFieldBuffer."Field Caption";
+    //             dataLayoutLine."NAV Primary Key" := NAVFieldBuffer."Primary Key";
+    //             dataLayoutLine."NAV Table Caption" := NAVFieldBuffer."Table Caption";
+    //             dataLayoutLine.NAVClass := NAVFieldBuffer.Class;
+    //             dataLayoutLine.NAVDataType := NAVFieldBuffer.Type;
+    //             dataLayoutLine.NAVEnabled := NAVFieldBuffer.Enabled;
+    //             dataLayoutLine.NAVLen := NAVFieldBuffer.Len;
 
-                dataLayoutLine.Insert(true);
-            until NAVFieldBuffer.Next() = 0;
-        end;
-    end;
+    //             dataLayoutLine.Insert(true);
+    //         until NAVFieldBuffer.Next() = 0;
+    //     end;
+    // end;
 
 }

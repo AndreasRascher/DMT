@@ -75,7 +75,7 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
         Result := Result.Replace('<None>', '');
     end;
 
-    procedure TooLargeValuesHaveBeenCutOffWarningIfRequired()
+    procedure TooLargeValuesHaveBeenCutOffWarningIfRequired(ColCaptionList: List of [Text])
     var
         TooLargeValuesHaveBeenCutOffMsg: Label 'too large field values have been cut off. Max. string length is 250 chars',
                                            Comment = 'de-DE=Achtung, beim Import wurden zu lange Feldwerte abgeschnitten. Max. Textlänge ist 250 Zeichen';
@@ -85,7 +85,7 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
     end;
 
     var
-        FileStreamGlobal: InStream;
         FileBlobGlobal: Codeunit "Temp Blob";
         HasToLargeTextValuesGlobal: Boolean;
+        FileStreamGlobal: InStream;
 }

@@ -196,14 +196,29 @@ codeunit 91003 DMTMigrationLib
     procedure CreateNAVExportFileNameDictionary(var NAVExportFileNamesDict: Dictionary of [Text, Integer])
     var
         tableMetadata: Record "Table Metadata";
-        FileNameFromCaption: Text;
+        FeatureKey: Record "Feature Key";
+        fileNameFromCaption: Text;
     begin
         // From existing table captions
         tableMetadata.SetRange(ID, 0, 2000000000);
+        tableMetadata.SetRange(ObsoleteState, tableMetadata.ObsoleteState::No);
+        tableMetadata.SetFilter(ID, '<>49&<>55&<>600&<>601&<>1570&<>1571');
+        tableMetadata.SetRange(DataIsExternal, false);
         tableMetadata.FindSet();
         repeat
-            NAVExportFileNamesDict.Add(createNAVExportFileName(tableMetadata.Caption), tableMetadata.ID);
+            fileNameFromCaption := createNAVExportFileName(tableMetadata.Caption);
+            if not NAVExportFileNamesDict.ContainsKey(fileNameFromCaption) then
+                NAVExportFileNamesDict.Add(fileNameFromCaption, tableMetadata.ID);
         until tableMetadata.Next() = 0;
+
+        //FeatureKey: ReplaceIntrastat
+        if FeatureKey.Get('ReplaceIntrastat') and (FeatureKey.Enabled <> FeatureKey.Enabled::"All Users") then begin
+            tableMetadata.Get(261);
+            NAVExportFileNamesDict.Add(createNAVExportFileName(tableMetadata.Caption), tableMetadata.ID);
+            tableMetadata.Get(262);
+            NAVExportFileNamesDict.Add(createNAVExportFileName(tableMetadata.Caption), tableMetadata.ID);
+        end;
+
         // Known renamed tables
         NAVExportFileNamesDict.Add(createNAVExportFileName('PLZ-Code'), 225);
         NAVExportFileNamesDict.Add(createNAVExportFileName('Bundesland'), 284);
@@ -230,6 +245,13 @@ codeunit 91003 DMTMigrationLib
                 TargetTableID := TableMetadata.ID;
             end else begin
                 case NAVTableID of
+                    261, 262:
+                        begin
+                            if FeatureKey.Get('ReplaceIntrastat') and (FeatureKey.Enabled <> FeatureKey.Enabled::"All Users") then
+                                exit(NAVTableID)
+                            else
+                                Message('ToDo - Find new TableID for 261,262 (ReplaceIntrastat)');
+                        end;
                     5105: // Customer Template
                         TargetTableID := Database::"Customer Templ.";
                     5717: //Item Cross Reference

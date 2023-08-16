@@ -2568,31 +2568,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Datei hochladen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTSourceFiles - Action UploadFile - Property Caption</note>
         </trans-unit>
-        <trans-unit id="XmlPort 2995423981 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Field</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMT NAVFieldBufferImport - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="XmlPort 2995423981 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
-          <source>%1 Buffer\%2 lines imported</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMT NAVFieldBufferImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
-        </trans-unit>
-        <trans-unit id="XmlPort 2995423981 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Environment</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMT NAVFieldBufferImport - Control Umgebung - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="XmlPort 2995423981 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Company</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMT NAVFieldBufferImport - Control COMPANYNAME - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="XmlPort 2995423981 - Control 520131415 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Database</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMT NAVFieldBufferImport - Control GetDatabaseNameCtrl - Property Caption</note>
-        </trans-unit>
         <trans-unit id="XmlPort 89294914 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>GenBufferImport</source>
           <note from="Developer" annotates="general" priority="2"></note>

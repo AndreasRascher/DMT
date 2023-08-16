@@ -122,10 +122,16 @@ codeunit 91018 DMTExcelReader
         RecRef.GetTable(genBuffTable);
         foreach cellValue in currentLine do begin
             CurrColIndex += 1;
-            //ToDo: Handle large Texts
-            if not HasToLargeTextValuesGlobal then
+            if IsColumnCaptionLine then
+                ColCaptionsGlobal.add(CurrColIndex, cellValue);
+
+            //Handle large Texts
+            if IsColumnCaptionLine then
+                ColCaptionsGlobal.add(CurrColIndex, cellValue);
+            if not IsColumnCaptionLine then
                 if Strlen(cellValue) > 250 then
-                    HasToLargeTextValuesGlobal := true;
+                    LargeTextColCaptionGlobal.Set(CurrColIndex, ColCaptionsGlobal.Get(CurrColIndex));
+
             RecRef.Field(1000 + CurrColIndex).Value := CopyStr(cellValue, 1, 250);
         end;
 
@@ -190,13 +196,10 @@ codeunit 91018 DMTExcelReader
         end;
     end;
 
-    procedure HasTooLargeTextValues(): Boolean
+    procedure LargeTextColCaptions(): Dictionary of [Integer, Text];
     begin
-        exit(HasToLargeTextValuesGlobal)
+        exit(LargeTextColCaptionGlobal);
     end;
-
-    var
-        HasToLargeTextValuesGlobal: Boolean;
 
     var
         TempBlobGlobal: Codeunit "Temp Blob";
@@ -211,4 +214,6 @@ codeunit 91018 DMTExcelReader
         ReadModeGlobal: Option ReadOnly,ImportToGenBuffer;
         ImportFromFileNameGlobal: Text;
         SheetNameGlobal: Text;
+        ColCaptionsGlobal: Dictionary of [Integer, Text];
+        LargeTextColCaptionGlobal: Dictionary of [Integer, Text];
 }

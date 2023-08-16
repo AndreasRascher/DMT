@@ -121,10 +121,14 @@ xmlport 91001 DMTCSVReader
         RecRef.GetTable(genBuffTable);
         foreach cellValue in currentLine do begin
             CurrColIndex += 1;
-            //ToDo: Handle large Texts
-            if not HasToLargeTextValuesGlobal then
+
+            //Handle large Texts
+            if IsColumnCaptionLine then
+                ColCaptionsGlobal.add(CurrColIndex, cellValue);
+            if not IsColumnCaptionLine then
                 if Strlen(cellValue) > 250 then
-                    HasToLargeTextValuesGlobal := true;
+                    LargeTextColCaptionGlobal.Set(CurrColIndex, ColCaptionsGlobal.Get(CurrColIndex));
+
             RecRef.Field(1000 + CurrColIndex).Value := CopyStr(cellValue, 1, 250);
         end;
 
@@ -135,9 +139,9 @@ xmlport 91001 DMTCSVReader
         genBuffTable.Insert();
     end;
 
-    procedure HasTooLargeTextValues(): Boolean
+    procedure LargeTextColCaptions(): Dictionary of [Integer, Text];
     begin
-        exit(HasToLargeTextValuesGlobal)
+        exit(LargeTextColCaptionGlobal);
     end;
 
     local procedure shouldReadLine(rowNo: Integer): Boolean
@@ -156,5 +160,7 @@ xmlport 91001 DMTCSVReader
         DataTable: List of [List of [Text]];
         CurrentLineGlobal: List of [Text];
         RowListGlobal: list of [Integer];
-        HasToLargeTextValuesGlobal: Boolean;
+        LargeTextColCaptionList: List of [Text];
+        ColCaptionsGlobal: Dictionary of [Integer, Text];
+        LargeTextColCaptionGlobal: Dictionary of [Integer, Text];
 }

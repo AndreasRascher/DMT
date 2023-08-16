@@ -10,7 +10,7 @@ codeunit 91004 DMTDefaultSourceFileImportImpl implements ISourceFileImport
         Error('ISourceFileImport "ReadHeadline" not implemented. Data Layout Type "%1"', dataLayout.SourceFileFormat);
     end;
 
-    procedure TooLargeValuesHaveBeenCutOffWarningIfRequired()
+    procedure TooLargeValuesHaveBeenCutOffWarningIfRequired(ColCaptionList: List of [Text])
     begin
         Error('ISourceFileImport "TooLargeValuesHaveBeenCutOffWarningIfRequired" not implemented.');
     end;

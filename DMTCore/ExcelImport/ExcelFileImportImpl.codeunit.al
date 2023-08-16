@@ -17,7 +17,7 @@ codeunit 91005 DMTExcelFileImportImpl implements ISourceFileImport
         BindSubscription(excelReader);
         excelReader.InitSourceFile(SourceFileStorage);
         excelReader.InitImportToGenBuffer(SourceFileStorage, ImportConfigHeader);
-        HasToLargeTextValuesGlobal := excelReader.HasTooLargeTextValues();
+        LargeTextColCaptionGlobal := excelReader.LargeTextColCaptions();
         excelReader.Run();
         ImportConfigHeader.UpdateBufferRecordCount();
     end;
@@ -44,17 +44,16 @@ codeunit 91005 DMTExcelFileImportImpl implements ISourceFileImport
     var
         TooLargeValuesHaveBeenCutOffMsg: Label 'too large field values have been cut off. Max. string length is 250 chars',
                                            Comment = 'de-DE=Zu lange Feldwerte wurden abgeschnitten. Max. Textlänge ist 250 Zeichen';
-
+        ColCaption, ColCaptionsList : Text;
     begin
-        if HasToLargeTextValuesGlobal then
-            Message(TooLargeValuesHaveBeenCutOffMsg);
-    end;
-
-    procedure HasTooLargeTextValues(): Boolean
-    begin
-        exit(HasToLargeTextValuesGlobal)
+        foreach ColCaption in LargeTextColCaptionGlobal.Values do begin
+            ColCaptionsList += ',' + ColCaption;
+        end;
+        ColCaptionsList := ColCaptionsList.TrimStart(',');
+        if ColCaptionsList <> '' then
+            Message(TooLargeValuesHaveBeenCutOffMsg + '\' + ColCaptionsList);
     end;
 
     var
-        HasToLargeTextValuesGlobal: Boolean;
+        LargeTextColCaptionGlobal: Dictionary of [Integer, Text];
 }
