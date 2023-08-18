@@ -4,7 +4,9 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
     var
         genBuffTable: Record DMTGenBuffTable;
         SourceFileStorage: Record DMTSourceFileStorage;
+        defaultSourceFileImportImpl: Codeunit DMTDefaultSourceFileImportImpl;
         CSVReader: XmlPort DMTCSVReader;
+        largeTextColCaptions: Dictionary of [Integer, Text];
     begin
         // Delete existing lines
         if genBuffTable.FilterBy(ImportConfigHeader) then
@@ -14,7 +16,8 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
         PrepareXMLPortWithCSVOptionsAndSourceFile(SourceFileStorage, ImportConfigHeader.GetDataLayout(), CSVReader);
         CSVReader.InitImportToGenBuffer(SourceFileStorage, ImportConfigHeader);
         CSVReader.Import();
-        HasToLargeTextValuesGlobal := CSVReader.HasTooLargeTextValues();
+        largeTextColCaptions := CSVReader.LargeTextColCaptions();
+        defaultSourceFileImportImpl.ShowTooLargeValuesHaveBeenCutOffWarningIfRequired(SourceFileStorage, largeTextColCaptions);
         ImportConfigHeader.UpdateBufferRecordCount();
     end;
 
@@ -75,17 +78,7 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
         Result := Result.Replace('<None>', '');
     end;
 
-    procedure TooLargeValuesHaveBeenCutOffWarningIfRequired(ColCaptionList: List of [Text])
-    var
-        TooLargeValuesHaveBeenCutOffMsg: Label 'too large field values have been cut off. Max. string length is 250 chars',
-                                           Comment = 'de-DE=Achtung, beim Import wurden zu lange Feldwerte abgeschnitten. Max. Textlänge ist 250 Zeichen';
-    begin
-        if HasToLargeTextValuesGlobal then
-            Message(TooLargeValuesHaveBeenCutOffMsg);
-    end;
-
     var
         FileBlobGlobal: Codeunit "Temp Blob";
-        HasToLargeTextValuesGlobal: Boolean;
         FileStreamGlobal: InStream;
 }

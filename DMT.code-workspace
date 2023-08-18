@@ -65,6 +65,7 @@
 		"al.codeAnalyzers": ["${PerTenantExtensionCop}","${CodeCop}","${UICop}"],
 		"al.inlayhints.functionReturnTypes.enabled": true,
 		"al.inlayhints.parameterNames.enabled": true,
+		"editor.inlayHints.enabled": "offUnlessPressed",
 		"CRS.FileNamePattern": "<ObjectNameShort>.al",
 		"CRS.ExtensionObjectNamePattern": "<BaseNameShort>",
 		"CRS.FileNamePatternExtensions": "<BaseNameShort>.<ObjectType>.al",

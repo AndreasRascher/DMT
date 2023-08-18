@@ -429,7 +429,6 @@ table 91003 DMTImportConfigHeader
         SourceFileImport := Rec.GetDataLayout().SourceFileFormat;
         SourceFileImport.ImportToBufferTable(Rec);
         Log.AddImportToBufferSummary(Rec, CurrentDateTime - Start);
-        SourceFileImport.TooLargeValuesHaveBeenCutOffWarningIfRequired();
     end;
 
 }

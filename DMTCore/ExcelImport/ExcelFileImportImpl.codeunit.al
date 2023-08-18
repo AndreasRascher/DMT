@@ -6,7 +6,9 @@ codeunit 91005 DMTExcelFileImportImpl implements ISourceFileImport
     var
         genBuffTable: Record DMTGenBuffTable;
         SourceFileStorage: Record DMTSourceFileStorage;
+        defaultSourceFileImportImpl: Codeunit DMTDefaultSourceFileImportImpl;
         excelReader: Codeunit DMTExcelReader;
+        largeTextColCaptions: Dictionary of [Integer, Text];
     begin
         // Delete existing lines
         if genBuffTable.FilterBy(ImportConfigHeader) then
@@ -17,8 +19,10 @@ codeunit 91005 DMTExcelFileImportImpl implements ISourceFileImport
         BindSubscription(excelReader);
         excelReader.InitSourceFile(SourceFileStorage);
         excelReader.InitImportToGenBuffer(SourceFileStorage, ImportConfigHeader);
-        LargeTextColCaptionGlobal := excelReader.LargeTextColCaptions();
+        largeTextColCaptions := excelReader.LargeTextColCaptions();
         excelReader.Run();
+        largeTextColCaptions := excelReader.LargeTextColCaptions();
+        defaultSourceFileImportImpl.ShowTooLargeValuesHaveBeenCutOffWarningIfRequired(SourceFileStorage, largeTextColCaptions);
         ImportConfigHeader.UpdateBufferRecordCount();
     end;
 
@@ -39,21 +43,4 @@ codeunit 91005 DMTExcelFileImportImpl implements ISourceFileImport
             Error(GetLastErrorText());
         HeaderLine := excelReader.GetHeadlineColumnValues(FirstRowWithValues);
     end;
-
-    procedure TooLargeValuesHaveBeenCutOffWarningIfRequired()
-    var
-        TooLargeValuesHaveBeenCutOffMsg: Label 'too large field values have been cut off. Max. string length is 250 chars',
-                                           Comment = 'de-DE=Zu lange Feldwerte wurden abgeschnitten. Max. Textlänge ist 250 Zeichen';
-        ColCaption, ColCaptionsList : Text;
-    begin
-        foreach ColCaption in LargeTextColCaptionGlobal.Values do begin
-            ColCaptionsList += ',' + ColCaption;
-        end;
-        ColCaptionsList := ColCaptionsList.TrimStart(',');
-        if ColCaptionsList <> '' then
-            Message(TooLargeValuesHaveBeenCutOffMsg + '\' + ColCaptionsList);
-    end;
-
-    var
-        LargeTextColCaptionGlobal: Dictionary of [Integer, Text];
 }
