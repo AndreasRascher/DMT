@@ -2087,8 +2087,8 @@
         </trans-unit>
         <trans-unit id="Table 1747667157 - Field 3871241703 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>New Value 2 Caption</source>
-          <target state="translated">Neuer Wert 2 Bezeichnung</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Neuer Wert 2 Bezeichnung</note>
+          <target state="translated">Neuer Wert 2</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Neuer Wert 2</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field New Value 2 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1747667157 - Field 3112951621 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2273,8 +2273,7 @@
         </trans-unit>
         <trans-unit id="Codeunit 484048500 - Method 2689460527 - NamedType 1044229085" size-unit="char" translate="yes" xml:space="preserve">
           <source>too large field values have been cut off. Max. string length is 250 chars.\Filename: "%1"\Columns: "%2."</source>
-          <target state="needs-adaptation">Zu lange Feldwerte wurden abgeschnitten. Max. Textlänge ist 250 Zeichen.\Dateiname: "%1"\Betroffene Spalten: "%2."</target>
-          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <target state="translated">Zu lange Feldwerte wurden abgeschnitten. Max. Textlänge ist 250 Zeichen.\Dateiname: "%1"\Betroffene Spalten: "%2."</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Zu lange Feldwerte wurden abgeschnitten. Max. Textlänge ist 250 Zeichen.\Dateiname: "%1"\Betroffene Spalten: "%2."</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDefaultSourceFileImportImpl - Method ShowTooLargeValuesHaveBeenCutOffWarningIfRequired - NamedType TooLargeValuesHaveBeenCutOffMsg</note>
         </trans-unit>

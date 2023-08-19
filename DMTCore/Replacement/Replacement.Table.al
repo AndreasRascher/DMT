@@ -49,7 +49,7 @@ table 91010 DMTReplacement
             CalcFormula = lookup("Table Metadata".Caption where(ID = field("Rel.to Table ID (New Val.1)")));
             Editable = false;
         }
-        field(220; "New Value 2"; Text[80]) { Caption = 'New Value 2 Caption', Comment = 'de-DE=Neuer Wert 2 Bezeichnung'; CaptionClass = Rec.GetCaption(Rec.FieldNo("New Value 2")); }
+        field(220; "New Value 2"; Text[80]) { Caption = 'New Value 2 Caption', Comment = 'de-DE=Neuer Wert 2'; CaptionClass = Rec.GetCaption(Rec.FieldNo("New Value 2")); }
         field(221; "New Value 2 Caption"; Text[80]) { Caption = 'New Value 2 Caption', Comment = 'de-DE=Neuer Wert 2 Bezeichnung'; }
         field(222; "Rel.to Table ID (New Val.2)"; Integer)
         {

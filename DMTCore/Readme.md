@@ -15,6 +15,7 @@
 
 ## Limitations (by 12.8.23) ##
 - max. fieldcontent size is 250 characters
+- max. No. of Columns is 300
 - no Blob fields
 
 ## Import Workflow (SAAS) ##

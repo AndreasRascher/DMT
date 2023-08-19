@@ -38,7 +38,6 @@ page 91020 DMTReplacementCard
                                 trigger OnValidate()
                                 begin
                                     EnableControls(xRec, Rec);
-                                    // UpdatePageParts(xRec, Rec);
                                 end;
                             }
                         }
@@ -52,7 +51,6 @@ page 91020 DMTReplacementCard
                                 trigger OnValidate()
                                 begin
                                     EnableControls(xRec, Rec);
-                                    // UpdatePageParts(xRec, Rec);
                                 end;
                             }
                         }
@@ -95,7 +93,6 @@ page 91020 DMTReplacementCard
                             field("New Value 2 Caption"; Rec."New Value 2 Caption") { ApplicationArea = All; ShowCaption = false; }
                             field("Rel.to Table ID (New Val.2)"; Rec."Rel.to Table ID (New Val.2)") { ApplicationArea = All; ShowCaption = false; }
                             field("Rel.to Table Cpt.(New Val.2)"; Rec."Rel.to Table Cpt.(New Val.2)") { ApplicationArea = All; ShowCaption = false; }
-
                         }
                     }
                 }
@@ -114,29 +111,7 @@ page 91020 DMTReplacementCard
     }
 
     actions
-    {
-        area(Processing)
-        {
-            action(ProposeAssignments)
-            {
-                // ApplicationArea = All;
-                // Image = Suggest;
-                // Promoted = true;
-                // PromotedCategory = Process;
-                // PromotedOnly = true;
-                // Caption = 'Propose Assignments', Comment = 'de-DE=Zuordnung vorschlagen';
-                // trigger OnAction()
-                // var
-                //     ReplacementsMgt: Codeunit DMTReplacementsMgt;
-                // begin
-                //     if Rec."Replacement Code" <> '' then
-                //         CurrPage.SaveRecord();
-                //     ReplacementsMgt.proposeAssignments(Rec);
-                //     CurrPage.Update(false);
-                // end;
-            }
-        }
-    }
+    { }
 
     internal procedure EnableControls(ReplacementOld: Record DMTReplacement; Replacement: Record DMTReplacement)
     begin
@@ -150,19 +125,12 @@ page 91020 DMTReplacementCard
     begin
         CompareValue2_Visible := ReplacementHeader."No. of Compare Values" in [ReplacementHeader."No. of Compare Values"::"2"];
         NewValue2_Visible := ReplacementHeader."No. of Values to modify" in [ReplacementHeader."No. of Values to modify"::"2"];
+        CurrPage.Rules.Page.EnableControls(Rec);
     end;
-
-    // internal procedure UpdatePageParts(ReplacementOld: Record DMTReplacement; Replacement: Record DMTReplacement)
-    // begin
-    //     CurrPage.Assignments.Page.InitializeAsAssignmentPerReplacement();
-    //     if not Replacement.IsEqual(ReplacementOld) then
-    //         CurrPage.Rules.Page.EnableControls(Rec);
-    // end;
 
     trigger OnAfterGetRecord()
     begin
         EnableControls(xRec, Rec);
-        // UpdatePageParts(xRec, Rec);
     end;
 
     var

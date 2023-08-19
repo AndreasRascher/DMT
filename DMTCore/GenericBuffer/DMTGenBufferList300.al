@@ -263,6 +263,56 @@ page 91004 DMTGenBufferList250
                 field(F248; Rec.Fld248) { ApplicationArea = All; Visible = Fld248Visible; Editable = Fld248Editable; }
                 field(F249; Rec.Fld249) { ApplicationArea = All; Visible = Fld249Visible; Editable = Fld249Editable; }
                 field(F250; Rec.Fld250) { ApplicationArea = All; Visible = Fld250Visible; Editable = Fld250Editable; }
+                field(F251; Rec.Fld251) { ApplicationArea = All; Visible = Fld251Visible; Editable = Fld251Editable; }
+                field(F252; Rec.Fld252) { ApplicationArea = All; Visible = Fld252Visible; Editable = Fld252Editable; }
+                field(F253; Rec.Fld253) { ApplicationArea = All; Visible = Fld253Visible; Editable = Fld253Editable; }
+                field(F254; Rec.Fld254) { ApplicationArea = All; Visible = Fld254Visible; Editable = Fld254Editable; }
+                field(F255; Rec.Fld255) { ApplicationArea = All; Visible = Fld255Visible; Editable = Fld255Editable; }
+                field(F256; Rec.Fld256) { ApplicationArea = All; Visible = Fld256Visible; Editable = Fld256Editable; }
+                field(F257; Rec.Fld257) { ApplicationArea = All; Visible = Fld257Visible; Editable = Fld257Editable; }
+                field(F258; Rec.Fld258) { ApplicationArea = All; Visible = Fld258Visible; Editable = Fld258Editable; }
+                field(F259; Rec.Fld259) { ApplicationArea = All; Visible = Fld259Visible; Editable = Fld259Editable; }
+                field(F260; Rec.Fld260) { ApplicationArea = All; Visible = Fld260Visible; Editable = Fld260Editable; }
+                field(F261; Rec.Fld261) { ApplicationArea = All; Visible = Fld261Visible; Editable = Fld261Editable; }
+                field(F262; Rec.Fld262) { ApplicationArea = All; Visible = Fld262Visible; Editable = Fld262Editable; }
+                field(F263; Rec.Fld263) { ApplicationArea = All; Visible = Fld263Visible; Editable = Fld263Editable; }
+                field(F264; Rec.Fld264) { ApplicationArea = All; Visible = Fld264Visible; Editable = Fld264Editable; }
+                field(F265; Rec.Fld265) { ApplicationArea = All; Visible = Fld265Visible; Editable = Fld265Editable; }
+                field(F266; Rec.Fld266) { ApplicationArea = All; Visible = Fld266Visible; Editable = Fld266Editable; }
+                field(F267; Rec.Fld267) { ApplicationArea = All; Visible = Fld267Visible; Editable = Fld267Editable; }
+                field(F268; Rec.Fld268) { ApplicationArea = All; Visible = Fld268Visible; Editable = Fld268Editable; }
+                field(F269; Rec.Fld269) { ApplicationArea = All; Visible = Fld269Visible; Editable = Fld269Editable; }
+                field(F270; Rec.Fld270) { ApplicationArea = All; Visible = Fld270Visible; Editable = Fld270Editable; }
+                field(F271; Rec.Fld271) { ApplicationArea = All; Visible = Fld271Visible; Editable = Fld271Editable; }
+                field(F272; Rec.Fld272) { ApplicationArea = All; Visible = Fld272Visible; Editable = Fld272Editable; }
+                field(F273; Rec.Fld273) { ApplicationArea = All; Visible = Fld273Visible; Editable = Fld273Editable; }
+                field(F274; Rec.Fld274) { ApplicationArea = All; Visible = Fld274Visible; Editable = Fld274Editable; }
+                field(F275; Rec.Fld275) { ApplicationArea = All; Visible = Fld275Visible; Editable = Fld275Editable; }
+                field(F276; Rec.Fld276) { ApplicationArea = All; Visible = Fld276Visible; Editable = Fld276Editable; }
+                field(F277; Rec.Fld277) { ApplicationArea = All; Visible = Fld277Visible; Editable = Fld277Editable; }
+                field(F278; Rec.Fld278) { ApplicationArea = All; Visible = Fld278Visible; Editable = Fld278Editable; }
+                field(F279; Rec.Fld279) { ApplicationArea = All; Visible = Fld279Visible; Editable = Fld279Editable; }
+                field(F280; Rec.Fld280) { ApplicationArea = All; Visible = Fld280Visible; Editable = Fld280Editable; }
+                field(F281; Rec.Fld281) { ApplicationArea = All; Visible = Fld281Visible; Editable = Fld281Editable; }
+                field(F282; Rec.Fld282) { ApplicationArea = All; Visible = Fld282Visible; Editable = Fld282Editable; }
+                field(F283; Rec.Fld283) { ApplicationArea = All; Visible = Fld283Visible; Editable = Fld283Editable; }
+                field(F284; Rec.Fld284) { ApplicationArea = All; Visible = Fld284Visible; Editable = Fld284Editable; }
+                field(F285; Rec.Fld285) { ApplicationArea = All; Visible = Fld285Visible; Editable = Fld285Editable; }
+                field(F286; Rec.Fld286) { ApplicationArea = All; Visible = Fld286Visible; Editable = Fld286Editable; }
+                field(F287; Rec.Fld287) { ApplicationArea = All; Visible = Fld287Visible; Editable = Fld287Editable; }
+                field(F288; Rec.Fld288) { ApplicationArea = All; Visible = Fld288Visible; Editable = Fld288Editable; }
+                field(F289; Rec.Fld289) { ApplicationArea = All; Visible = Fld289Visible; Editable = Fld289Editable; }
+                field(F290; Rec.Fld290) { ApplicationArea = All; Visible = Fld290Visible; Editable = Fld290Editable; }
+                field(F291; Rec.Fld291) { ApplicationArea = All; Visible = Fld291Visible; Editable = Fld291Editable; }
+                field(F292; Rec.Fld292) { ApplicationArea = All; Visible = Fld292Visible; Editable = Fld292Editable; }
+                field(F293; Rec.Fld293) { ApplicationArea = All; Visible = Fld293Visible; Editable = Fld293Editable; }
+                field(F294; Rec.Fld294) { ApplicationArea = All; Visible = Fld294Visible; Editable = Fld294Editable; }
+                field(F295; Rec.Fld295) { ApplicationArea = All; Visible = Fld295Visible; Editable = Fld295Editable; }
+                field(F296; Rec.Fld296) { ApplicationArea = All; Visible = Fld296Visible; Editable = Fld296Editable; }
+                field(F297; Rec.Fld297) { ApplicationArea = All; Visible = Fld297Visible; Editable = Fld297Editable; }
+                field(F298; Rec.Fld298) { ApplicationArea = All; Visible = Fld298Visible; Editable = Fld298Editable; }
+                field(F299; Rec.Fld299) { ApplicationArea = All; Visible = Fld299Visible; Editable = Fld299Editable; }
+                field(F300; Rec.Fld300) { ApplicationArea = All; Visible = Fld300Visible; Editable = Fld300Editable; }
             }
         }
     }
@@ -529,7 +579,62 @@ page 91004 DMTGenBufferList250
         Fld247Editable := GetEditable(Rec.FieldNo(Fld247));
         Fld248Editable := GetEditable(Rec.FieldNo(Fld248));
         Fld249Editable := GetEditable(Rec.FieldNo(Fld249));
+
         Fld250Editable := GetEditable(Rec.FieldNo(Fld250));
+        Fld251Editable := GetEditable(Rec.FieldNo(Fld251));
+        Fld252Editable := GetEditable(Rec.FieldNo(Fld252));
+        Fld253Editable := GetEditable(Rec.FieldNo(Fld253));
+        Fld254Editable := GetEditable(Rec.FieldNo(Fld254));
+        Fld255Editable := GetEditable(Rec.FieldNo(Fld255));
+        Fld256Editable := GetEditable(Rec.FieldNo(Fld256));
+        Fld257Editable := GetEditable(Rec.FieldNo(Fld257));
+        Fld258Editable := GetEditable(Rec.FieldNo(Fld258));
+        Fld259Editable := GetEditable(Rec.FieldNo(Fld259));
+
+        Fld260Editable := GetEditable(Rec.FieldNo(Fld260));
+        Fld261Editable := GetEditable(Rec.FieldNo(Fld261));
+        Fld262Editable := GetEditable(Rec.FieldNo(Fld262));
+        Fld263Editable := GetEditable(Rec.FieldNo(Fld263));
+        Fld264Editable := GetEditable(Rec.FieldNo(Fld264));
+        Fld265Editable := GetEditable(Rec.FieldNo(Fld265));
+        Fld266Editable := GetEditable(Rec.FieldNo(Fld266));
+        Fld267Editable := GetEditable(Rec.FieldNo(Fld267));
+        Fld268Editable := GetEditable(Rec.FieldNo(Fld268));
+        Fld269Editable := GetEditable(Rec.FieldNo(Fld269));
+
+        Fld270Editable := GetEditable(Rec.FieldNo(Fld270));
+        Fld271Editable := GetEditable(Rec.FieldNo(Fld271));
+        Fld272Editable := GetEditable(Rec.FieldNo(Fld272));
+        Fld273Editable := GetEditable(Rec.FieldNo(Fld273));
+        Fld274Editable := GetEditable(Rec.FieldNo(Fld274));
+        Fld275Editable := GetEditable(Rec.FieldNo(Fld275));
+        Fld276Editable := GetEditable(Rec.FieldNo(Fld276));
+        Fld277Editable := GetEditable(Rec.FieldNo(Fld277));
+        Fld278Editable := GetEditable(Rec.FieldNo(Fld278));
+        Fld279Editable := GetEditable(Rec.FieldNo(Fld279));
+
+        Fld280Editable := GetEditable(Rec.FieldNo(Fld280));
+        Fld281Editable := GetEditable(Rec.FieldNo(Fld281));
+        Fld282Editable := GetEditable(Rec.FieldNo(Fld282));
+        Fld283Editable := GetEditable(Rec.FieldNo(Fld283));
+        Fld284Editable := GetEditable(Rec.FieldNo(Fld284));
+        Fld285Editable := GetEditable(Rec.FieldNo(Fld285));
+        Fld286Editable := GetEditable(Rec.FieldNo(Fld286));
+        Fld287Editable := GetEditable(Rec.FieldNo(Fld287));
+        Fld288Editable := GetEditable(Rec.FieldNo(Fld288));
+        Fld289Editable := GetEditable(Rec.FieldNo(Fld289));
+
+        Fld290Editable := GetEditable(Rec.FieldNo(Fld290));
+        Fld291Editable := GetEditable(Rec.FieldNo(Fld291));
+        Fld292Editable := GetEditable(Rec.FieldNo(Fld292));
+        Fld293Editable := GetEditable(Rec.FieldNo(Fld293));
+        Fld294Editable := GetEditable(Rec.FieldNo(Fld294));
+        Fld295Editable := GetEditable(Rec.FieldNo(Fld295));
+        Fld296Editable := GetEditable(Rec.FieldNo(Fld296));
+        Fld297Editable := GetEditable(Rec.FieldNo(Fld297));
+        Fld298Editable := GetEditable(Rec.FieldNo(Fld298));
+        Fld299Editable := GetEditable(Rec.FieldNo(Fld299));
+        Fld300Editable := GetEditable(Rec.FieldNo(Fld300));
     end;
 
     local procedure InitVisibility()
@@ -584,7 +689,6 @@ page 91004 DMTGenBufferList250
         Fld048Visible := GetVisibility(Rec.FieldNo(Fld048));
         Fld049Visible := GetVisibility(Rec.FieldNo(Fld049));
         Fld050Visible := GetVisibility(Rec.FieldNo(Fld050));
-
         Fld051Visible := GetVisibility(Rec.FieldNo(Fld051));
         Fld052Visible := GetVisibility(Rec.FieldNo(Fld052));
         Fld053Visible := GetVisibility(Rec.FieldNo(Fld053));
@@ -785,6 +889,56 @@ page 91004 DMTGenBufferList250
         Fld248Visible := GetVisibility(Rec.FieldNo(Fld248));
         Fld249Visible := GetVisibility(Rec.FieldNo(Fld249));
         Fld250Visible := GetVisibility(Rec.FieldNo(Fld250));
+        Fld251Visible := GetVisibility(Rec.FieldNo(Fld251));
+        Fld252Visible := GetVisibility(Rec.FieldNo(Fld252));
+        Fld253Visible := GetVisibility(Rec.FieldNo(Fld253));
+        Fld254Visible := GetVisibility(Rec.FieldNo(Fld254));
+        Fld255Visible := GetVisibility(Rec.FieldNo(Fld255));
+        Fld256Visible := GetVisibility(Rec.FieldNo(Fld256));
+        Fld257Visible := GetVisibility(Rec.FieldNo(Fld257));
+        Fld258Visible := GetVisibility(Rec.FieldNo(Fld258));
+        Fld259Visible := GetVisibility(Rec.FieldNo(Fld259));
+        Fld260Visible := GetVisibility(Rec.FieldNo(Fld260));
+        Fld261Visible := GetVisibility(Rec.FieldNo(Fld261));
+        Fld262Visible := GetVisibility(Rec.FieldNo(Fld262));
+        Fld263Visible := GetVisibility(Rec.FieldNo(Fld263));
+        Fld264Visible := GetVisibility(Rec.FieldNo(Fld264));
+        Fld265Visible := GetVisibility(Rec.FieldNo(Fld265));
+        Fld266Visible := GetVisibility(Rec.FieldNo(Fld266));
+        Fld267Visible := GetVisibility(Rec.FieldNo(Fld267));
+        Fld268Visible := GetVisibility(Rec.FieldNo(Fld268));
+        Fld269Visible := GetVisibility(Rec.FieldNo(Fld269));
+        Fld270Visible := GetVisibility(Rec.FieldNo(Fld270));
+        Fld271Visible := GetVisibility(Rec.FieldNo(Fld271));
+        Fld272Visible := GetVisibility(Rec.FieldNo(Fld272));
+        Fld273Visible := GetVisibility(Rec.FieldNo(Fld273));
+        Fld274Visible := GetVisibility(Rec.FieldNo(Fld274));
+        Fld275Visible := GetVisibility(Rec.FieldNo(Fld275));
+        Fld276Visible := GetVisibility(Rec.FieldNo(Fld276));
+        Fld277Visible := GetVisibility(Rec.FieldNo(Fld277));
+        Fld278Visible := GetVisibility(Rec.FieldNo(Fld278));
+        Fld279Visible := GetVisibility(Rec.FieldNo(Fld279));
+        Fld280Visible := GetVisibility(Rec.FieldNo(Fld280));
+        Fld281Visible := GetVisibility(Rec.FieldNo(Fld281));
+        Fld282Visible := GetVisibility(Rec.FieldNo(Fld282));
+        Fld283Visible := GetVisibility(Rec.FieldNo(Fld283));
+        Fld284Visible := GetVisibility(Rec.FieldNo(Fld284));
+        Fld285Visible := GetVisibility(Rec.FieldNo(Fld285));
+        Fld286Visible := GetVisibility(Rec.FieldNo(Fld286));
+        Fld287Visible := GetVisibility(Rec.FieldNo(Fld287));
+        Fld288Visible := GetVisibility(Rec.FieldNo(Fld288));
+        Fld289Visible := GetVisibility(Rec.FieldNo(Fld289));
+        Fld290Visible := GetVisibility(Rec.FieldNo(Fld290));
+        Fld291Visible := GetVisibility(Rec.FieldNo(Fld291));
+        Fld292Visible := GetVisibility(Rec.FieldNo(Fld292));
+        Fld293Visible := GetVisibility(Rec.FieldNo(Fld293));
+        Fld294Visible := GetVisibility(Rec.FieldNo(Fld294));
+        Fld295Visible := GetVisibility(Rec.FieldNo(Fld295));
+        Fld296Visible := GetVisibility(Rec.FieldNo(Fld296));
+        Fld297Visible := GetVisibility(Rec.FieldNo(Fld297));
+        Fld298Visible := GetVisibility(Rec.FieldNo(Fld298));
+        Fld299Visible := GetVisibility(Rec.FieldNo(Fld299));
+        Fld300Visible := GetVisibility(Rec.FieldNo(Fld300));
     end;
 
     procedure GetEditable(FieldNo: Integer) IsEditable: Boolean
@@ -826,8 +980,12 @@ page 91004 DMTGenBufferList250
         Fld211Editable, Fld212Editable, Fld213Editable, Fld214Editable, Fld215Editable, Fld216Editable, Fld217Editable, Fld218Editable, Fld219Editable, Fld220Editable,
         Fld221Editable, Fld222Editable, Fld223Editable, Fld224Editable, Fld225Editable, Fld226Editable, Fld227Editable, Fld228Editable, Fld229Editable, Fld230Editable,
         Fld231Editable, Fld232Editable, Fld233Editable, Fld234Editable, Fld235Editable, Fld236Editable, Fld237Editable, Fld238Editable, Fld239Editable, Fld240Editable,
-        Fld241Editable, Fld242Editable, Fld243Editable, Fld244Editable, Fld245Editable, Fld246Editable, Fld247Editable, Fld248Editable, Fld249Editable, Fld250Editable : Boolean;
-
+        Fld241Editable, Fld242Editable, Fld243Editable, Fld244Editable, Fld245Editable, Fld246Editable, Fld247Editable, Fld248Editable, Fld249Editable, Fld250Editable,
+        Fld251Editable, Fld252Editable, Fld253Editable, Fld254Editable, Fld255Editable, Fld256Editable, Fld257Editable, Fld258Editable, Fld259Editable, Fld260Editable,
+        Fld261Editable, Fld262Editable, Fld263Editable, Fld264Editable, Fld265Editable, Fld266Editable, Fld267Editable, Fld268Editable, Fld269Editable, Fld270Editable,
+        Fld271Editable, Fld272Editable, Fld273Editable, Fld274Editable, Fld275Editable, Fld276Editable, Fld277Editable, Fld278Editable, Fld279Editable, Fld280Editable,
+        Fld281Editable, Fld282Editable, Fld283Editable, Fld284Editable, Fld285Editable, Fld286Editable, Fld287Editable, Fld288Editable, Fld289Editable, Fld290Editable,
+        Fld291Editable, Fld292Editable, Fld293Editable, Fld294Editable, Fld295Editable, Fld296Editable, Fld297Editable, Fld298Editable, Fld299Editable, Fld300Editable : Boolean;
         // [InDataSet]
         Fld001Visible, Fld002Visible, Fld003Visible, Fld004Visible, Fld005Visible, Fld006Visible, Fld007Visible, Fld008Visible, Fld009Visible, Fld010Visible,
         Fld011Visible, Fld012Visible, Fld013Visible, Fld014Visible, Fld015Visible, Fld016Visible, Fld017Visible, Fld018Visible, Fld019Visible, Fld020Visible,
@@ -853,5 +1011,10 @@ page 91004 DMTGenBufferList250
         Fld211Visible, Fld212Visible, Fld213Visible, Fld214Visible, Fld215Visible, Fld216Visible, Fld217Visible, Fld218Visible, Fld219Visible, Fld220Visible,
         Fld221Visible, Fld222Visible, Fld223Visible, Fld224Visible, Fld225Visible, Fld226Visible, Fld227Visible, Fld228Visible, Fld229Visible, Fld230Visible,
         Fld231Visible, Fld232Visible, Fld233Visible, Fld234Visible, Fld235Visible, Fld236Visible, Fld237Visible, Fld238Visible, Fld239Visible, Fld240Visible,
-        Fld241Visible, Fld242Visible, Fld243Visible, Fld244Visible, Fld245Visible, Fld246Visible, Fld247Visible, Fld248Visible, Fld249Visible, Fld250Visible : Boolean;
+        Fld241Visible, Fld242Visible, Fld243Visible, Fld244Visible, Fld245Visible, Fld246Visible, Fld247Visible, Fld248Visible, Fld249Visible, Fld250Visible,
+        Fld251Visible, Fld252Visible, Fld253Visible, Fld254Visible, Fld255Visible, Fld256Visible, Fld257Visible, Fld258Visible, Fld259Visible, Fld260Visible,
+        Fld261Visible, Fld262Visible, Fld263Visible, Fld264Visible, Fld265Visible, Fld266Visible, Fld267Visible, Fld268Visible, Fld269Visible, Fld270Visible,
+        Fld271Visible, Fld272Visible, Fld273Visible, Fld274Visible, Fld275Visible, Fld276Visible, Fld277Visible, Fld278Visible, Fld279Visible, Fld280Visible,
+        Fld281Visible, Fld282Visible, Fld283Visible, Fld284Visible, Fld285Visible, Fld286Visible, Fld287Visible, Fld288Visible, Fld289Visible, Fld290Visible,
+        Fld291Visible, Fld292Visible, Fld293Visible, Fld294Visible, Fld295Visible, Fld296Visible, Fld297Visible, Fld298Visible, Fld299Visible, Fld300Visible : Boolean;
 }
