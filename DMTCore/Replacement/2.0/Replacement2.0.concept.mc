@@ -22,3 +22,11 @@ Enitäten
 LoadToTemp_Replacement(Header,Rule,Assignment)
 SetLookUpFilters
 GetAssignmentStatus : option "inconmplete","complete"
+
+TODO:
+- Anbinden an Replacement Interface
+- Logik für mehrere Vergleichsfelder
+- Fehlerbehandlung bei Typkonflikten (z.B. Neuer Wert ist Text in Boolean)
+- ShowMandatory in allen benötigten Spalten anzeigen (Source1-2, Target 1-2)
+- Status / Kennzeichen wenn noch ungültiges Assignment
+- Rules Part anlegen
