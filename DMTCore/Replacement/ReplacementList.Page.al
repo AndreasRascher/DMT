@@ -4,9 +4,8 @@ page 91022 DMTReplacementList
     PageType = List;
     UsageCategory = Lists;
     ApplicationArea = All;
-    SourceTable = DMTReplacement;
+    SourceTable = DMTReplacementHeader;
     CardPageId = DMTReplacementCard;
-    SourceTableView = where("Line Type" = const(Replacement));
     DataCaptionFields = Code, Description;
 
     layout

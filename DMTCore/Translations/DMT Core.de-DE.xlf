@@ -1635,6 +1635,306 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld250 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 1320902596 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld251</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld251 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 1958599213 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld252</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld252 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 2596295830 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld253</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld253 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 2427386807 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld254</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld254 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 3065083424 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld255</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld255 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 3702780041 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld256</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld256 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 45509362 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld257</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld257 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 4171567635 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld258</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld258 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 514296956 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld259</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld259 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 423469710 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld260</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld260 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 4080740389 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld261</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld261 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 3443043772 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld262</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld262 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 2805347155 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld263</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld263 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 2167650538 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld264</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld264 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 1529953921 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld265</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld265 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 892257304 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld266</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld266 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 254560687 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld267</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld267 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 1230075350 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld268</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld268 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 592378733 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld269</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld269 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 146937437 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld270</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld270 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 784634054 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld271</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld271 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 3166511499 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld272</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld272 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 3804208116 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld273</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld273 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 1891118265 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld274</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld274 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 2528814882 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld275</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld275 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 615725031 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld276</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld276 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 1253421648 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld277</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld277 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 3635299093 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld278</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld278 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 4272995710 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld279</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld279 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 3067228064 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld280</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld280 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 2429531447 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld281</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld281 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 47654002 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld282</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld282 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 3704924681 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld283</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld283 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 1323047236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld284</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld284 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 685350619 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld285</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld285 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 2598440470 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld286</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld286 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 1960743853 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld287</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld287 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 2260622424 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld288</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld288 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 1622925807 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld289</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld289 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 3859240527 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld290</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld290 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 201969848 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld291</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld291 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 839666465 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld292</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld292 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 1477363082 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld293</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld293 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 2115059699 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld294</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld294 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 2752756316 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld295</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld295 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 3390452933 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld296</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld296 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 4028149550 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld297</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld297 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 370878871 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld298</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld298 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 1008575488 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld299</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld299 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 818834415 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fld300</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Fld300 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2144357174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Imp.Conf.Header ID</source>
           <target state="needs-translation"/>
@@ -2150,6 +2450,168 @@
           <target state="translated">Ziel Tabellen ID</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Ziel Tabellen ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacement - Field Target Table ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 2769288159 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Field 1 Caption</source>
+          <target state="translated">Vgl.-Wert 1 Bezeichnung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vgl.-Wert 1 Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Comp.Val.1 Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 884246890 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Field 2 Caption</source>
+          <target state="translated">Vgl.-Wert 2 Bezeichnung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vgl.-Wert 2 Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Comp.Val.2 Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <target state="translated">Beschreibung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Beschreibung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 1400066348 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value 1 Caption</source>
+          <target state="translated">Neuer Wert 1 Bezeichnung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Neuer Wert 1 Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field New Value 1 Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 3112951621 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value 2 Caption</source>
+          <target state="translated">Neuer Wert 2 Bezeichnung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Neuer Wert 2 Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field New Value 2 Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 2791789901 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Rules</source>
+          <target state="translated">Anzahl Regeln</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anzahl Regeln</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field No. of Rules - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 1320997245 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Compare Values</source>
+          <target state="translated">Anz. Vergleichswerte</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anz. Vergleichswerte</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field No. of Source Values - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 3827651487 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Values to modify</source>
+          <target state="translated">Anz. zu ändernder Werte</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anz. zu ändernder Werte</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field No. of Values to modify - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 925334572 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Related Table Caption (New Val.1)</source>
+          <target state="translated">Relation zu Tabelle (Neu 1)</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Relation zu Tabelle (Neu 1)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Rel.to Table Cpt.(New Val.1) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 1003416349 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Related Table Caption (New Val.2)</source>
+          <target state="translated">Relation zu Tabelle (Neu 2)</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Relation zu Tabelle (Neu 2)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Rel.to Table Cpt.(New Val.2) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 1434945624 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Related to Table ID (New.Fld.1)</source>
+          <target state="translated">Tabellenrelation ID (Neu 1)</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Tabellenrelation ID (Neu 1)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Rel.to Table ID (New Val.1) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 1513027401 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Related to Table ID (New Val.2)</source>
+          <target state="translated">Tabellenrelation ID (Neu 2)</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Tabellenrelation ID (Neu 2)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Rel.to Table ID (New Val.2) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 2144357174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Imp.Conf.Header ID</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">de=DE=Import Konfig. Kopf ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Imp.Conf.Header ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line No.</source>
+          <target state="translated">Zeilennr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zeilennr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Line No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 158172202 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line Type</source>
+          <target state="translated">Zeilenart</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zeilenart</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Line Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 1489364258 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value 1 Caption</source>
+          <target state="translated">Neuer Wert 1</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Neuer Wert 1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field New Value 1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 3871241703 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value 2 Caption</source>
+          <target state="translated">Neuer Wert 2</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Neuer Wert 2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field New Value 2 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 1634282205 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Replacement Code</source>
+          <target state="translated">Ersetzungscode</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ersetzungscode</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Replacement Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 2920484868 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source 1 Field Caption</source>
+          <target state="translated">Herkunftsfeld 1</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Herkunftsfeld 1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Source 1 Field Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 1872236707 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Field 1 No.</source>
+          <target state="translated">Herkunftsfeld 1 Nr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Herkunftsfeld 1 Nr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Source 1 Field No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 1716804797 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source 2 Field Caption</source>
+          <target state="translated">Herkunftsfeld 2</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Herkunftsfeld 2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Source 2 Field Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 1026691582 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source 2 Field No.</source>
+          <target state="translated">Herkunftsfeld 2 Nr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Herkunftsfeld 2 Nr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Source 2 Field No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 2079597112 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Field 1 Caption</source>
+          <target state="translated">Zielfeld 1</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zielfeld 1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Target 1 Field Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 893537783 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target 1 Field No.</source>
+          <target state="translated">Ziel 1 Feldnr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ziel 1 Feldnr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Target 1 Field No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 3370706545 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Field 2 Caption</source>
+          <target state="translated">Zielfeld 2</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zielfeld 2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Target 2 Field Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 3499087538 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target 2 Field No.</source>
+          <target state="translated">Ziel 2 Feldnr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ziel 2 Feldnr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Target 2 Field No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 1666780894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table ID</source>
+          <target state="translated">Zieltabellen ID</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zieltabellen ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Target Table ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 521254526 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Setup</source>

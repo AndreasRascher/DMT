@@ -307,14 +307,18 @@ codeunit 91002 DMTImportConfigMgt
     local procedure CreateTargetFieldNamesDict(ImportConfigHeader: Record DMTImportConfigHeader; UseCaptionInstead: Boolean) TargetFieldNames: Dictionary of [Integer, Text]
     var
         ImportConfigLine: Record DMTImportConfigLine;
-        Field: Record Field;
         overwrite, HasAssignments : Boolean;
     begin
         overwrite := ConfirmOverwriteExistingAssignments(ImportConfigHeader, HasAssignments);
         if HasAssignments and not overwrite then
             ImportConfigLine.SetFilter("Source Field No.", '<>%1', 0);
+        TargetFieldNames := CreateTargetFieldNamesDict(ImportConfigLine, UseCaptionInstead);
+    end;
 
-        ImportConfigHeader.FilterRelated(ImportConfigLine);
+    procedure CreateTargetFieldNamesDict(var ImportConfigLine: Record DMTImportConfigLine; UseCaptionInstead: Boolean) TargetFieldNames: Dictionary of [Integer, Text]
+    var
+        Field: Record Field;
+    begin
         if not ImportConfigLine.FindSet() then
             exit;
 

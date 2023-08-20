@@ -24,28 +24,27 @@ page 91012 DMTFieldLookup
 
     procedure LoadLines()
     var
-        ImportConfigHeader: Record DMTImportConfigHeader;
-        // DataLayout: Record DMTDataLayout;
-        // DataLayoutLine: Record DMTDataLayoutLine;
         TempDataLayoutLine: Record DMTDataLayoutLine temporary;
         GenBuffTable: Record DMTGenBuffTable;
+        ImportConfigHeader: Record DMTImportConfigHeader;
+        ImportConfigLine: Record DMTImportConfigLine;
+        importConfigMgt: Codeunit DMTImportConfigMgt;
         BuffTableCaptions: Dictionary of [Integer, Text];
         FieldNo: Integer;
-    // ImportConfigHeader : Record DMTImportConfigHeader;
-    // TempFieldBuffer: Record DMTFieldBuffer temporary;
-    // Field: Record Field;
+        importConfigID: Integer;
+        FieldLookUpMode: Option "Look Up Source","Look Up Target";
+        TargetFieldNames: Dictionary of [Integer, Text];
     begin
         if IsLoaded then exit;
-        Rec.FilterGroup(4);
+        ReadImportConfigIDFromTableRelationFilter(importConfigID, FieldLookUpMode);
         case true of
-            Rec.GetFilter("Data File ID Filter") <> '':
+            (importConfigID <> 0) and (FieldLookUpMode = FieldLookUpMode::"Look Up Source"):
                 begin
-                    ImportConfigHeader.Get(Rec.GetRangeMin("Data File ID Filter"));
+                    ImportConfigHeader.Get(importConfigID);
                     if not ImportConfigHeader."Use Separate Buffer Table" then begin
                         GenBuffTable.GetColCaptionForImportedFile(ImportConfigHeader, BuffTableCaptions);
                         foreach FieldNo in BuffTableCaptions.Keys do begin
                             TempDataLayoutLine.Init();
-                            // TempDataLayoutLine."Data Layout ID" := ImportConfigHeader."Data Layout ID";
                             TempDataLayoutLine."Column No." := FieldNo;
                             TempDataLayoutLine.ColumnName := CopyStr(BuffTableCaptions.Get(FieldNo), 1, MaxStrLen(TempDataLayoutLine.ColumnName));
                             TempDataLayoutLine.Insert();
@@ -54,13 +53,45 @@ page 91012 DMTFieldLookup
                     end;
                     IsLoaded := true;
                 end;
+            (importConfigID <> 0) and (FieldLookUpMode = FieldLookUpMode::"Look Up Target"):
+                begin
+                    ImportConfigHeader.Get(importConfigID);
+                    ImportConfigLine.SetRange("Imp.Conf.Header ID", importConfigID);
+                    TargetFieldNames := importConfigMgt.CreateTargetFieldNamesDict(ImportConfigLine, false);
+                    foreach FieldNo in TargetFieldNames.Keys do begin
+                        TempDataLayoutLine.Init();
+                        TempDataLayoutLine."Column No." := FieldNo;
+                        TempDataLayoutLine.ColumnName := CopyStr(TargetFieldNames.Get(FieldNo), 1, MaxStrLen(TempDataLayoutLine.ColumnName));
+                        TempDataLayoutLine.Insert();
+                        Rec.Copy(TempDataLayoutLine, true);
+                    end;
+                    IsLoaded := true;
+                end;
             else
                 Error('unhandled case');
         end;
-        Rec.FilterGroup(0);
+    end;
+
+    local procedure ReadImportConfigIDFromTableRelationFilter(var ImportConfigID: Integer; var FieldLookUpMode: Option "Look Up Source","Look Up Target");
+    var
+        dataLayoutLine: Record DMTDataLayoutLine;
+    begin
+        dataLayoutLine.Copy(Rec);
+        if (dataLayoutLine.GetFilter("Import Config. ID Filter") <> '') then
+            ImportConfigID := dataLayoutLine.GetRangeMin("Import Config. ID Filter");
+        if (dataLayoutLine.GetFilter("Field Look Mode Filter") <> '') then
+            FieldLookUpMode := dataLayoutLine.GetRangeMin("Field Look Mode Filter");
+
+        if ImportConfigID <> 0 then
+            exit;
+
+        dataLayoutLine.FilterGroup(4);
+        if (dataLayoutLine.GetFilter("Import Config. ID Filter") <> '') then
+            ImportConfigID := dataLayoutLine.GetRangeMin("Import Config. ID Filter");
+        if (dataLayoutLine.GetFilter("Field Look Mode Filter") <> '') then
+            FieldLookUpMode := dataLayoutLine.GetRangeMin("Field Look Mode Filter");
     end;
 
     var
-        // [InDataSet]
         IsLoaded: Boolean;
 }

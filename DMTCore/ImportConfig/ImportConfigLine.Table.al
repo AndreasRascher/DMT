@@ -45,7 +45,7 @@ table 91006 DMTImportConfigLine
         field(20; "Source Field No."; Integer)
         {
             Caption = 'Source Field No.', Comment = 'de-DE=Herkunftsfeld Nr.';
-            TableRelation = DMTDataLayoutLine."Column No." where("Data File ID Filter" = field("Imp.Conf.Header ID"));
+            TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
             ValidateTableRelation = false;
             BlankZero = true;
             trigger OnValidate()
