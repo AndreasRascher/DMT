@@ -2523,6 +2523,18 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Tabellenrelation ID (Neu 2)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Rel.to Table ID (New Val.2) - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 663034807 - Field 455746087 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Value 1</source>
+          <target state="translated">Vgl.-Wert 1</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vgl.-Wert 1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Comp.Value 1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 2368835938 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Compare Value 2</source>
+          <target state="translated">Vgl.-Wert 2</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vgl.-Wert 2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Comp.Value 2 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 663034807 - Field 2144357174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Imp.Conf.Header ID</source>
           <target state="needs-translation"/>
@@ -3417,23 +3429,23 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Auswahl zurücksetzen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Action ResetSelection - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3164644726 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1429333779 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Assignments</source>
           <target state="translated">Zuordnung</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Zuordnung</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentsPart - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3164644726 - Action 3237253257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1429333779 - Action 3237253257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Add Field Mapping</source>
           <target state="translated">Feldmapping hinzufügen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Feldmapping hinzufügen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentsPart - Action AddFieldMapping - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Action AddFieldMapping - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3164644726 - Action 1630718602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1429333779 - Action 1630718602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import column values</source>
           <target state="translated">Spaltenwerte importieren</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Spaltenwerte importieren</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentsPart - Action LoadListOfUniqueValues - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Action LoadListOfUniqueValues - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 43196361 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Replacement Card</source>
@@ -3500,6 +3512,12 @@
           <target state="translated">DMT Ersetzungen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Ersetzungen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 813548198 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Rules</source>
+          <target state="translated">Regeln</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Regeln</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementRulePart - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 747257115 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Mapping</source>

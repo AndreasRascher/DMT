@@ -36,7 +36,7 @@ page 91024 DMTReplacementCard
                                 Importance = Promoted;
                                 trigger OnValidate()
                                 begin
-                                    UpdateAssignmentPart();
+                                    UpdateLineParts();
                                 end;
                             }
                         }
@@ -49,7 +49,7 @@ page 91024 DMTReplacementCard
                                 Importance = Promoted;
                                 trigger OnValidate()
                                 begin
-                                    UpdateAssignmentPart();
+                                    UpdateLineParts();
                                 end;
                             }
                         }
@@ -96,16 +96,19 @@ page 91024 DMTReplacementCard
                     }
                 }
             }
-            part(ReplacementAssigments; DMTReplacementAssigmentsPart)
+            part(ReplacementRulePart; DMTReplacementRulePart)
             {
                 SubPageLink = "Replacement Code" = field(Code);
+                UpdatePropagation = SubPart;
+            }
+            part(ReplacementAssigments; DMTReplacementAssigmentPart)
+            {
+                SubPageLink = "Replacement Code" = field(Code);
+                UpdatePropagation = SubPart;
             }
         }
 
-        area(Factboxes)
-        {
-
-        }
+        area(Factboxes) { }
     }
 
     actions
@@ -114,11 +117,14 @@ page 91024 DMTReplacementCard
 
     trigger OnAfterGetRecord()
     begin
-        UpdateAssignmentPart();
+        UpdateLineParts();
     end;
 
-    procedure UpdateAssignmentPart()
+    procedure UpdateLineParts()
     begin
-        CurrPage.ReplacementAssigments.Page.EnableControls(Rec);
+        CurrPage.ReplacementAssigments.Page.SetVisibility(Rec);
+        CurrPage.ReplacementAssigments.Page.Update();
+        CurrPage.ReplacementRulePart.Page.SetVisibility(Rec);
+        CurrPage.ReplacementRulePart.Page.Update();
     end;
 }

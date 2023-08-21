@@ -1,4 +1,4 @@
-page 91019 DMTReplacementAssigmentsPart
+page 91019 DMTReplacementAssigmentPart
 {
     Caption = 'Assignments', Comment = 'de-DE=Zuordnung';
     PageType = ListPart;
@@ -72,7 +72,7 @@ page 91019 DMTReplacementAssigmentsPart
                 field("Target 2 Field Caption"; Rec."Target 2 Field Caption")
                 {
                     ApplicationArea = All;
-                    Enabled = Target1Enabled;
+                    Enabled = Target2Enabled;
                     Visible = Target2Visible;
                     LookupPageId = DMTFieldLookup;
                     trigger OnAfterLookup(Selected: RecordRef)
@@ -136,11 +136,11 @@ page 91019 DMTReplacementAssigmentsPart
         EnableControls();
     end;
 
-    procedure EnableControls(DMTReplacementHeader: Record DMTReplacementHeader)
+    procedure SetVisibility(DMTReplacementHeader: Record DMTReplacementHeader)
     begin
         Source2Visible := DMTReplacementHeader."No. of Source Values" = DMTReplacementHeader."No. of Source Values"::"2";
         Target2Visible := DMTReplacementHeader."No. of Values to modify" = DMTReplacementHeader."No. of Values to modify"::"2";
-        CurrPage.Update(false);
+        // CurrPage.Update(false);
     end;
 
     procedure EnableControls()

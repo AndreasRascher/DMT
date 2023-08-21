@@ -77,9 +77,10 @@ table 91012 DMTReplacementLine
             ValidateTableRelation = false;
         }
 
-        field(200; "New Value 1"; Text[80]) { Caption = 'New Value 1 Caption', Comment = 'de-DE=Neuer Wert 1'; }
-        field(201; "New Value 2"; Text[80]) { Caption = 'New Value 2 Caption', Comment = 'de-DE=Neuer Wert 2'; }
-
+        field(200; "Comp.Value 1"; Text[80]) { Caption = 'Compare Value 1', Comment = 'de-DE=Vgl.-Wert 1'; }
+        field(201; "Comp.Value 2"; Text[80]) { Caption = 'Compare Value 2', Comment = 'de-DE=Vgl.-Wert 2'; }
+        field(300; "New Value 1"; Text[80]) { Caption = 'New Value 1 Caption', Comment = 'de-DE=Neuer Wert 1'; }
+        field(301; "New Value 2"; Text[80]) { Caption = 'New Value 2 Caption', Comment = 'de-DE=Neuer Wert 2'; }
     }
 
     keys
