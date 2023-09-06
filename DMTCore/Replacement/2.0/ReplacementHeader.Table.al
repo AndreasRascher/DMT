@@ -65,7 +65,7 @@ table 91011 DMTReplacementHeader
             Description = 'Show No. of Rules in List';
             Caption = 'No. of Rules', Comment = 'de-DE=Anzahl Regeln';
             FieldClass = FlowField;
-            CalcFormula = count(DMTReplacement where("Line Type" = const(Rule), Code = field(Code)));
+            CalcFormula = count(DMTReplacementLine where("Line Type" = const(Rule), "Replacement Code" = field(Code)));
             Editable = false;
         }
     }

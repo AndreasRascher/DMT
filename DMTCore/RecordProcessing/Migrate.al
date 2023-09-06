@@ -143,7 +143,6 @@ codeunit 91014 DMTMigrate
     local procedure ProcessFullBuffer(var DMTImportSettings: Codeunit DMTImportSettings)
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
-        replacement: Record DMTReplacement;
         DMTSetup: Record DMTSetup;
         APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
         Log: Codeunit DMTLog;
