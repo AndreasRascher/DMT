@@ -445,23 +445,46 @@ table 91001 DMTGenBuffTable
         end;
     end;
 
-    procedure GetUniqueColumnValues(importConfigLine: Record DMTImportConfigLine) uniqueValues: List of [Text]
+    /// <summary>
+    /// Returns all unique value combinations for a set of fields
+    /// </summary>
+    /// <param name="importConfigHeaderID">Import Config Header ID with the related buffer data</param>
+    /// <param name="FieldIDs">list of field ids to process</param>
+    /// <returns>list of list of text with all unique combinations</returns>
+    procedure GetUniqueColumnValues(importConfigHeaderID: integer; FieldIDs: List of [Integer]) uniqueValues: List of [List of [Text]]
     var
         genBuffTable: Record DMTGenBuffTable;
         importConfigHeader: Record DMTImportConfigHeader;
         RecRef: RecordRef;
         valueAsText: Text;
+        UnitSeparator: Char;
+        fieldID: integer;
+        token: text;
+        firstFieldID: integer;
+        uniqueToken, lineValues : List of [Text];
     begin
-        importConfigHeader.Get(importConfigLine."Imp.Conf.Header ID");
+        UnitSeparator := '▼';
+        importConfigHeader.Get(importConfigHeaderID);
         genBuffTable.FilterBy(importConfigHeader);
         genBuffTable.SetRange(IsCaptionLine, false);
         RecRef.GetTable(genBuffTable);
-        RecRef.SetLoadFields(importConfigLine."Source Field No.");
+        foreach fieldID in FieldIDs do
+            RecRef.AddLoadFields(fieldID);
+        firstFieldID := FieldIDs.Get(1);
         if RecRef.FindSet() then
             repeat
-                valueAsText := format(RecRef.Field(importConfigLine."Source Field No.").Value);
-                if not uniqueValues.Contains(valueAsText) then
-                    uniqueValues.Add(valueAsText);
+                Clear(token);
+                foreach fieldID in FieldIDs do begin
+                    if fieldID <> firstFieldID then
+                        token += UnitSeparator;
+                    valueAsText := format(RecRef.Field(fieldID).Value);
+                    token += valueAsText;
+                end;
+                if not uniqueToken.Contains(token) then begin
+                    uniqueToken.Add(token);
+                    lineValues := token.Split(UnitSeparator);
+                    uniqueValues.Add(lineValues);
+                end;
             until RecRef.Next() = 0;
     end;
 

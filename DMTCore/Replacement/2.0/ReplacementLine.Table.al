@@ -179,4 +179,36 @@ table 91012 DMTReplacementLine
         end;
         Clear(currDataLayoutLine);
     end;
+
+    internal procedure FindReplacementHeaderForPageRec(var replacementHeader: Record DMTReplacementHeader) Found: Boolean
+    var
+        replacementLine: Record DMTReplacementLine;
+    begin
+        Clear(replacementHeader);
+        replacementLine.Copy(Rec);
+        // Source: Table Relation
+        if replacementLine."Replacement Code" <> '' then
+            if replacementHeader.Get(replacementLine."Replacement Code") then
+                exit(true);
+        // Source: Filter
+        if (replacementLine.GetFilter("Replacement Code") <> '') then
+            if replacementHeader.Get(replacementLine.GetRangeMin("Replacement Code")) then
+                exit(true);
+        // Source: SubPageLink
+        replacementLine.FilterGroup(4);
+        if (replacementLine.GetFilter("Replacement Code") <> '') then
+            if replacementHeader.Get(replacementLine.GetRangeMin("Replacement Code")) then
+                exit(true);
+    end;
+
+    internal procedure GetNextLineNo(replacmentCode: Code[100]; LineType: Option) nextLineNo: Integer
+    var
+        replacementLine: Record DMTReplacementLine;
+    begin
+        nextLineNo := 10000;
+        replacementLine.SetRange("Replacement Code", replacmentCode);
+        replacementLine.SetRange("Line Type", LineType);
+        if replacementLine.FindLast() then
+            nextLineNo += replacementLine."Line No.";
+    end;
 }

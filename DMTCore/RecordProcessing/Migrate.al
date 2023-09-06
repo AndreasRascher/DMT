@@ -143,6 +143,8 @@ codeunit 91014 DMTMigrate
     local procedure ProcessFullBuffer(var DMTImportSettings: Codeunit DMTImportSettings)
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
+        replacement: Record DMTReplacement;
+        DMTSetup: Record DMTSetup;
         APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
         Log: Codeunit DMTLog;
         MigrationLib: Codeunit DMTMigrationLib;
@@ -150,9 +152,8 @@ codeunit 91014 DMTMigrate
         BufferRef, BufferRef2 : RecordRef;
         Start: DateTime;
         ResultType: Enum DMTProcessingResultType;
-        NoBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filter: "%1"', Comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"';
-        replacement: Record DMTReplacement;
         iReplacementHandler: Interface IReplacementHandler;
+        NoBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filter: "%1"', Comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"';
     begin
         Start := CurrentDateTime;
         APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
@@ -174,7 +175,7 @@ codeunit 91014 DMTMigrate
         ProgressDialog.Open();
         ProgressDialog.UpdateFieldControl('Filter', ConvertStr(BufferRef.GetFilters, '@', '_'));
 
-        replacement.getDefaultImplementation(iReplacementHandler);
+        DMTSetup.getDefaultReplacementImplementation(iReplacementHandler);
         iReplacementHandler.InitBatchProcess(ImportConfigHeader);
 
         if DMTImportSettings.UpdateFieldsFilter() <> '' then

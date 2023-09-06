@@ -252,11 +252,4 @@ table 91010 DMTReplacement
     begin
         exit(Format(Rec) = Format(DMTReplacement));
     end;
-
-    procedure getDefaultImplementation(var IReplacementHandler: Interface IReplacementHandler)
-    var
-        ReplacementHandlerImpl: codeunit ReplacementHandlerImpl;
-    begin
-        IReplacementHandler := ReplacementHandlerImpl;
-    end;
 }

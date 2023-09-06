@@ -36,6 +36,15 @@ table 91000 DMTSetup
         RecordHasBeenRead := true;
     end;
 
+    procedure getDefaultReplacementImplementation(var IReplacementHandler: Interface IReplacementHandler)
+    var
+        // ReplacementHandlerImpl: codeunit ReplacementHandlerImpl;
+        ReplacementHandlerImpl: codeunit ReplacementHandlerImpl2;
+    begin
+        IReplacementHandler := ReplacementHandlerImpl;
+    end;
+
+
     var
         RecordHasBeenRead: Boolean;
 }

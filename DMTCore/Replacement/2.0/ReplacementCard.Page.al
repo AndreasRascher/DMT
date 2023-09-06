@@ -14,8 +14,8 @@ page 91024 DMTReplacementCard
             group(General)
             {
                 Caption = 'General', Comment = 'de-DE=Allgemein';
-                field(Code; Rec.Code) { ApplicationArea = All; }
-                field(Description; Rec.Description) { ApplicationArea = All; Importance = Promoted; }
+                field(Code; Rec.Code) { }
+                field(Description; Rec.Description) { Importance = Promoted; }
             }
             group("Field Setup")
             {
@@ -32,7 +32,6 @@ page 91024 DMTReplacementCard
                             ShowCaption = false;
                             field("No. of Compare Values"; Rec."No. of Source Values")
                             {
-                                ApplicationArea = All;
                                 Importance = Promoted;
                                 trigger OnValidate()
                                 begin
@@ -45,7 +44,6 @@ page 91024 DMTReplacementCard
                             ShowCaption = false;
                             field("No. of fields to modify"; Rec."No. of Values to modify")
                             {
-                                ApplicationArea = All;
                                 Importance = Promoted;
                                 trigger OnValidate()
                                 begin
@@ -68,30 +66,28 @@ page 91024 DMTReplacementCard
                         group(FromField1Group)
                         {
                             Caption = 'Compare Value 1', Comment = 'de-DE=Vergleichswert 1';
-                            field("Comp.Fld.1 Caption"; Rec."Comp.Val.1 Caption") { ApplicationArea = All; ShowCaption = false; }
-
+                            field("Comp.Fld.1 Caption"; Rec."Comp.Val.1 Caption") { ShowCaption = false; }
                         }
                         group(FromField2Group)
                         {
                             Caption = 'Compare Value 2', Comment = 'de-DE=Vergleichswert 2';
-                            // Visible = CompareValue2_Visible;
-                            field("Comp.Fld.2 Caption"; Rec."Comp.Val.2 Caption") { ApplicationArea = All; ShowCaption = false; }
+                            Visible = (Rec."No. of Source Values" = Rec."No. of Source Values"::"2");
+                            field("Comp.Fld.2 Caption"; Rec."Comp.Val.2 Caption") { ShowCaption = false; }
                         }
                         group(ToFieldGroup1)
                         {
                             Caption = 'New Value 1', Comment = 'de-DE=Neuer Wert 1';
-                            field("New Value 1 Caption"; Rec."New Value 1 Caption") { ApplicationArea = All; ShowCaption = false; }
-                            field("Rel.to Table ID (New Val.1)"; Rec."Rel.to Table ID (New Val.1)") { ApplicationArea = All; ShowCaption = false; }
-                            field("Rel.to Table Cpt.(New Val.1)"; Rec."Rel.to Table Cpt.(New Val.1)") { ApplicationArea = All; ShowCaption = false; }
+                            field("New Value 1 Caption"; Rec."New Value 1 Caption") { ShowCaption = false; }
+                            field("Rel.to Table ID (New Val.1)"; Rec."Rel.to Table ID (New Val.1)") { ShowCaption = false; }
+                            field("Rel.to Table Cpt.(New Val.1)"; Rec."Rel.to Table Cpt.(New Val.1)") { ShowCaption = false; }
                         }
                         group(ToFieldGroup2)
                         {
-                            // Visible = NewValue2_Visible;
+                            Visible = (Rec."No. of Values to modify" = Rec."No. of Values to modify"::"2");
                             Caption = 'New Value 2', Comment = 'de-DE=Neuer Wert 2';
-                            ;
-                            field("New Value 2 Caption"; Rec."New Value 2 Caption") { ApplicationArea = All; ShowCaption = false; }
-                            field("Rel.to Table ID (New Val.2)"; Rec."Rel.to Table ID (New Val.2)") { ApplicationArea = All; ShowCaption = false; }
-                            field("Rel.to Table Cpt.(New Val.2)"; Rec."Rel.to Table Cpt.(New Val.2)") { ApplicationArea = All; ShowCaption = false; }
+                            field("New Value 2 Caption"; Rec."New Value 2 Caption") { ShowCaption = false; }
+                            field("Rel.to Table ID (New Val.2)"; Rec."Rel.to Table ID (New Val.2)") { ShowCaption = false; }
+                            field("Rel.to Table Cpt.(New Val.2)"; Rec."Rel.to Table Cpt.(New Val.2)") { ShowCaption = false; }
                         }
                     }
                 }
@@ -99,12 +95,10 @@ page 91024 DMTReplacementCard
             part(ReplacementRulePart; DMTReplacementRulePart)
             {
                 SubPageLink = "Replacement Code" = field(Code);
-                UpdatePropagation = SubPart;
             }
             part(ReplacementAssigments; DMTReplacementAssigmentPart)
             {
                 SubPageLink = "Replacement Code" = field(Code);
-                UpdatePropagation = SubPart;
             }
         }
 
@@ -122,9 +116,7 @@ page 91024 DMTReplacementCard
 
     procedure UpdateLineParts()
     begin
-        CurrPage.ReplacementAssigments.Page.SetVisibility(Rec);
-        CurrPage.ReplacementAssigments.Page.Update();
         CurrPage.ReplacementRulePart.Page.SetVisibility(Rec);
-        CurrPage.ReplacementRulePart.Page.Update();
+        CurrPage.ReplacementAssigments.Page.SetVisibility(Rec);
     end;
 }

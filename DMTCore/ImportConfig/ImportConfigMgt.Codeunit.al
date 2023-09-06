@@ -310,6 +310,7 @@ codeunit 91002 DMTImportConfigMgt
         overwrite, HasAssignments : Boolean;
     begin
         overwrite := ConfirmOverwriteExistingAssignments(ImportConfigHeader, HasAssignments);
+        ImportConfigHeader.FilterRelated(ImportConfigLine);
         if HasAssignments and not overwrite then
             ImportConfigLine.SetFilter("Source Field No.", '<>%1', 0);
         TargetFieldNames := CreateTargetFieldNamesDict(ImportConfigLine, UseCaptionInstead);

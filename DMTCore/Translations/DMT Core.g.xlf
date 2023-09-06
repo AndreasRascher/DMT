@@ -2933,11 +2933,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Regeln</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementRulePart - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 747257115 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Mapping</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementRulesPart - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 783956376 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Select multiple fields</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Mehrere Felder auswählen</note>

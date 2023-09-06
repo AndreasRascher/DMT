@@ -112,10 +112,10 @@ table 91006 DMTImportConfigLine
 
     trigger OnDelete()
     var
-        replacement: Record DMTReplacement;
+        DMTSetup: Record DMTSetup;
         IReplacementHandler: Interface IReplacementHandler;
     begin
-        replacement.getDefaultImplementation(IReplacementHandler);
+        DMTSetup.getDefaultReplacementImplementation(IReplacementHandler);
         IReplacementHandler.RemoveAssignmentOnDelete(Rec);
     end;
 

@@ -139,7 +139,7 @@ codeunit 91008 DMTProcessRecord
 
     procedure InitFieldTransfer(_SourceRef: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings)
     var
-        Replacement: Record DMTReplacement;
+        DMTSetup: Record "DMTSetup";
     begin
         ImportConfigHeader := DMTImportSettings.ImportConfigHeader();
         SourceRef := _SourceRef;
@@ -151,7 +151,7 @@ codeunit 91008 DMTProcessRecord
         TargetRef_INIT.Init();
         RunMode := RunMode::FieldTransfer;
         Clear(ErrorLogDict);
-        Replacement.getDefaultImplementation(IReplacementHandler);
+        DMTSetup.getDefaultReplacementImplementation(IReplacementHandler);
         IReplacementHandler.InitProcess(_SourceRef);
     end;
 
