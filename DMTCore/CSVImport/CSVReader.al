@@ -1,13 +1,7 @@
-/// <summary>
-/// Read CSV To List Of List
-/// </summary>
 xmlport 91001 DMTCSVReader
 {
     Caption = 'GenBufferImport';
     Direction = Import;
-    // FieldSeparator = ';';
-    // FieldDelimiter = '"';
-    // TextEncoding = UTF8;
     Format = VariableText;
     FormatEvaluate = Xml;
     TableSeparator = '<None>';

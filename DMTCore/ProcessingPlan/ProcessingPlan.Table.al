@@ -114,7 +114,7 @@ table 91009 DMTProcessingPlan
         CurrView := ReadDefaultValuesView();
         if CurrView <> '' then
             TargetRef.SetView(CurrView);
-        if FPBuilder.RunModal(TargetRef, ImportConfigHeader, true) then begin
+        if FPBuilder.RunModal(TargetRef, true) then begin
             SaveDefaultValuesView(TargetRef.GetView());
         end;
     end;
@@ -253,12 +253,15 @@ table 91009 DMTProcessingPlan
     procedure ConvertDefaultValuesViewToFieldLines(var TmpImportConfigLine: Record DMTImportConfigLine temporary) LineCount: Integer
     var
         TempImportConfigLine2: Record DMTImportConfigLine temporary;
+        ImportConfigHeader: Record DMTImportConfigHeader;
         ImportConfigLine: Record DMTImportConfigLine;
         RecRef: RecordRef;
         FieldIndexNo: Integer;
         CurrView: Text;
     begin
-        if not Rec.CreateSourceTableRef(RecRef) then exit;
+        // if not Rec.CreateSourceTableRef(RecRef) then exit;
+        ImportConfigHeader.Get(Rec.ID);
+        RecRef.Open(ImportConfigHeader."Target Table ID");
         CurrView := Rec.ReadDefaultValuesView();
         if CurrView <> '' then begin
             RecRef.SetView(CurrView);
