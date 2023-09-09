@@ -5,7 +5,7 @@ table 91001 DMTGenBuffTable
     fields
     {
         field(1; "Entry No."; Integer) { }
-        field(10; "Import from Filename"; Text[250]) { }
+        field(10; "Import from Filename"; Text[250]) { Caption = 'Import from Filename', Comment = 'de=DE=Import Dateiname'; }
         field(11; "Imp.Conf.Header ID"; Integer)
         {
             Caption = 'Imp.Conf.Header ID', Comment = 'de=DE=Import Konfig. Kopf ID';
@@ -13,6 +13,8 @@ table 91001 DMTGenBuffTable
         }
         field(13; IsCaptionLine; Boolean) { }
         field(14; "Column Count"; Integer) { }
+        field(20; Imported; Boolean) { Caption = 'Imported', comment = 'de-DE=Importiert'; }
+        field(21; "RecId (Imported)"; RecordId) { Caption = 'Record ID (Imported)', comment = 'de-DE=Datensatz-ID (Importiert)'; }
         field(1001; Fld001; Text[250]) { CaptionClass = GetFieldCaption(1001); }
         field(1002; Fld002; Text[250]) { CaptionClass = GetFieldCaption(1002); }
         field(1003; Fld003; Text[250]) { CaptionClass = GetFieldCaption(1003); }

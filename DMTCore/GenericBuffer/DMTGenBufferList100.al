@@ -3,6 +3,7 @@ page 91002 DMTGenBufferList100
     Caption = 'DMT GenBufferList', Comment = 'de-DE=DMT Generischer Puffer Übersicht';
     PageType = List;
     SourceTable = DMTGenBuffTable;
+    ApplicationArea = All;
     UsageCategory = None;
 
     layout
@@ -12,108 +13,109 @@ page 91002 DMTGenBufferList100
             repeater(General)
             {
 
-                field("Entry No."; Rec."Entry No.") { ApplicationArea = All; }
-                field("Import from Filename"; Rec."Import from Filename") { ApplicationArea = All; }
-                field(F001; Rec.Fld001) { ApplicationArea = All; Visible = Fld001Visible; Editable = Fld001Editable; }
-                field(F002; Rec.Fld002) { ApplicationArea = All; Visible = Fld002Visible; Editable = Fld002Editable; }
-                field(F003; Rec.Fld003) { ApplicationArea = All; Visible = Fld003Visible; Editable = Fld003Editable; }
-                field(F004; Rec.Fld004) { ApplicationArea = All; Visible = Fld004Visible; Editable = Fld004Editable; }
-                field(F005; Rec.Fld005) { ApplicationArea = All; Visible = Fld005Visible; Editable = Fld005Editable; }
-                field(F006; Rec.Fld006) { ApplicationArea = All; Visible = Fld006Visible; Editable = Fld006Editable; }
-                field(F007; Rec.Fld007) { ApplicationArea = All; Visible = Fld007Visible; Editable = Fld007Editable; }
-                field(F008; Rec.Fld008) { ApplicationArea = All; Visible = Fld008Visible; Editable = Fld008Editable; }
-                field(F009; Rec.Fld009) { ApplicationArea = All; Visible = Fld009Visible; Editable = Fld009Editable; }
-                field(F010; Rec.Fld010) { ApplicationArea = All; Visible = Fld010Visible; Editable = Fld010Editable; }
-                field(F011; Rec.Fld011) { ApplicationArea = All; Visible = Fld011Visible; Editable = Fld011Editable; }
-                field(F012; Rec.Fld012) { ApplicationArea = All; Visible = Fld012Visible; Editable = Fld012Editable; }
-                field(F013; Rec.Fld013) { ApplicationArea = All; Visible = Fld013Visible; Editable = Fld013Editable; }
-                field(F014; Rec.Fld014) { ApplicationArea = All; Visible = Fld014Visible; Editable = Fld014Editable; }
-                field(F015; Rec.Fld015) { ApplicationArea = All; Visible = Fld015Visible; Editable = Fld015Editable; }
-                field(F016; Rec.Fld016) { ApplicationArea = All; Visible = Fld016Visible; Editable = Fld016Editable; }
-                field(F017; Rec.Fld017) { ApplicationArea = All; Visible = Fld017Visible; Editable = Fld017Editable; }
-                field(F018; Rec.Fld018) { ApplicationArea = All; Visible = Fld018Visible; Editable = Fld018Editable; }
-                field(F019; Rec.Fld019) { ApplicationArea = All; Visible = Fld019Visible; Editable = Fld019Editable; }
-                field(F020; Rec.Fld020) { ApplicationArea = All; Visible = Fld020Visible; Editable = Fld020Editable; }
-                field(F021; Rec.Fld021) { ApplicationArea = All; Visible = Fld021Visible; Editable = Fld021Editable; }
-                field(F022; Rec.Fld022) { ApplicationArea = All; Visible = Fld022Visible; Editable = Fld022Editable; }
-                field(F023; Rec.Fld023) { ApplicationArea = All; Visible = Fld023Visible; Editable = Fld023Editable; }
-                field(F024; Rec.Fld024) { ApplicationArea = All; Visible = Fld024Visible; Editable = Fld024Editable; }
-                field(F025; Rec.Fld025) { ApplicationArea = All; Visible = Fld025Visible; Editable = Fld025Editable; }
-                field(F026; Rec.Fld026) { ApplicationArea = All; Visible = Fld026Visible; Editable = Fld026Editable; }
-                field(F027; Rec.Fld027) { ApplicationArea = All; Visible = Fld027Visible; Editable = Fld027Editable; }
-                field(F028; Rec.Fld028) { ApplicationArea = All; Visible = Fld028Visible; Editable = Fld028Editable; }
-                field(F029; Rec.Fld029) { ApplicationArea = All; Visible = Fld029Visible; Editable = Fld029Editable; }
-                field(F030; Rec.Fld030) { ApplicationArea = All; Visible = Fld030Visible; Editable = Fld030Editable; }
-                field(F031; Rec.Fld031) { ApplicationArea = All; Visible = Fld031Visible; Editable = Fld031Editable; }
-                field(F032; Rec.Fld032) { ApplicationArea = All; Visible = Fld032Visible; Editable = Fld032Editable; }
-                field(F033; Rec.Fld033) { ApplicationArea = All; Visible = Fld033Visible; Editable = Fld033Editable; }
-                field(F034; Rec.Fld034) { ApplicationArea = All; Visible = Fld034Visible; Editable = Fld034Editable; }
-                field(F035; Rec.Fld035) { ApplicationArea = All; Visible = Fld035Visible; Editable = Fld035Editable; }
-                field(F036; Rec.Fld036) { ApplicationArea = All; Visible = Fld036Visible; Editable = Fld036Editable; }
-                field(F037; Rec.Fld037) { ApplicationArea = All; Visible = Fld037Visible; Editable = Fld037Editable; }
-                field(F038; Rec.Fld038) { ApplicationArea = All; Visible = Fld038Visible; Editable = Fld038Editable; }
-                field(F039; Rec.Fld039) { ApplicationArea = All; Visible = Fld039Visible; Editable = Fld039Editable; }
-                field(F040; Rec.Fld040) { ApplicationArea = All; Visible = Fld040Visible; Editable = Fld040Editable; }
-                field(F041; Rec.Fld041) { ApplicationArea = All; Visible = Fld041Visible; Editable = Fld041Editable; }
-                field(F042; Rec.Fld042) { ApplicationArea = All; Visible = Fld042Visible; Editable = Fld042Editable; }
-                field(F043; Rec.Fld043) { ApplicationArea = All; Visible = Fld043Visible; Editable = Fld043Editable; }
-                field(F044; Rec.Fld044) { ApplicationArea = All; Visible = Fld044Visible; Editable = Fld044Editable; }
-                field(F045; Rec.Fld045) { ApplicationArea = All; Visible = Fld045Visible; Editable = Fld045Editable; }
-                field(F046; Rec.Fld046) { ApplicationArea = All; Visible = Fld046Visible; Editable = Fld046Editable; }
-                field(F047; Rec.Fld047) { ApplicationArea = All; Visible = Fld047Visible; Editable = Fld047Editable; }
-                field(F048; Rec.Fld048) { ApplicationArea = All; Visible = Fld048Visible; Editable = Fld048Editable; }
-                field(F049; Rec.Fld049) { ApplicationArea = All; Visible = Fld049Visible; Editable = Fld049Editable; }
-                field(F050; Rec.Fld050) { ApplicationArea = All; Visible = Fld050Visible; Editable = Fld050Editable; }
-                field(F051; Rec.Fld051) { ApplicationArea = All; Visible = Fld051Visible; Editable = Fld051Editable; }
-                field(F052; Rec.Fld052) { ApplicationArea = All; Visible = Fld052Visible; Editable = Fld052Editable; }
-                field(F053; Rec.Fld053) { ApplicationArea = All; Visible = Fld053Visible; Editable = Fld053Editable; }
-                field(F054; Rec.Fld054) { ApplicationArea = All; Visible = Fld054Visible; Editable = Fld054Editable; }
-                field(F055; Rec.Fld055) { ApplicationArea = All; Visible = Fld055Visible; Editable = Fld055Editable; }
-                field(F056; Rec.Fld056) { ApplicationArea = All; Visible = Fld056Visible; Editable = Fld056Editable; }
-                field(F057; Rec.Fld057) { ApplicationArea = All; Visible = Fld057Visible; Editable = Fld057Editable; }
-                field(F058; Rec.Fld058) { ApplicationArea = All; Visible = Fld058Visible; Editable = Fld058Editable; }
-                field(F059; Rec.Fld059) { ApplicationArea = All; Visible = Fld059Visible; Editable = Fld059Editable; }
-                field(F060; Rec.Fld060) { ApplicationArea = All; Visible = Fld060Visible; Editable = Fld060Editable; }
-                field(F061; Rec.Fld061) { ApplicationArea = All; Visible = Fld061Visible; Editable = Fld061Editable; }
-                field(F062; Rec.Fld062) { ApplicationArea = All; Visible = Fld062Visible; Editable = Fld062Editable; }
-                field(F063; Rec.Fld063) { ApplicationArea = All; Visible = Fld063Visible; Editable = Fld063Editable; }
-                field(F064; Rec.Fld064) { ApplicationArea = All; Visible = Fld064Visible; Editable = Fld064Editable; }
-                field(F065; Rec.Fld065) { ApplicationArea = All; Visible = Fld065Visible; Editable = Fld065Editable; }
-                field(F066; Rec.Fld066) { ApplicationArea = All; Visible = Fld066Visible; Editable = Fld066Editable; }
-                field(F067; Rec.Fld067) { ApplicationArea = All; Visible = Fld067Visible; Editable = Fld067Editable; }
-                field(F068; Rec.Fld068) { ApplicationArea = All; Visible = Fld068Visible; Editable = Fld068Editable; }
-                field(F069; Rec.Fld069) { ApplicationArea = All; Visible = Fld069Visible; Editable = Fld069Editable; }
-                field(F070; Rec.Fld070) { ApplicationArea = All; Visible = Fld070Visible; Editable = Fld070Editable; }
-                field(F071; Rec.Fld071) { ApplicationArea = All; Visible = Fld071Visible; Editable = Fld071Editable; }
-                field(F072; Rec.Fld072) { ApplicationArea = All; Visible = Fld072Visible; Editable = Fld072Editable; }
-                field(F073; Rec.Fld073) { ApplicationArea = All; Visible = Fld073Visible; Editable = Fld073Editable; }
-                field(F074; Rec.Fld074) { ApplicationArea = All; Visible = Fld074Visible; Editable = Fld074Editable; }
-                field(F075; Rec.Fld075) { ApplicationArea = All; Visible = Fld075Visible; Editable = Fld075Editable; }
-                field(F076; Rec.Fld076) { ApplicationArea = All; Visible = Fld076Visible; Editable = Fld076Editable; }
-                field(F077; Rec.Fld077) { ApplicationArea = All; Visible = Fld077Visible; Editable = Fld077Editable; }
-                field(F078; Rec.Fld078) { ApplicationArea = All; Visible = Fld078Visible; Editable = Fld078Editable; }
-                field(F079; Rec.Fld079) { ApplicationArea = All; Visible = Fld079Visible; Editable = Fld079Editable; }
-                field(F080; Rec.Fld080) { ApplicationArea = All; Visible = Fld080Visible; Editable = Fld080Editable; }
-                field(F081; Rec.Fld081) { ApplicationArea = All; Visible = Fld081Visible; Editable = Fld081Editable; }
-                field(F082; Rec.Fld082) { ApplicationArea = All; Visible = Fld082Visible; Editable = Fld082Editable; }
-                field(F083; Rec.Fld083) { ApplicationArea = All; Visible = Fld083Visible; Editable = Fld083Editable; }
-                field(F084; Rec.Fld084) { ApplicationArea = All; Visible = Fld084Visible; Editable = Fld084Editable; }
-                field(F085; Rec.Fld085) { ApplicationArea = All; Visible = Fld085Visible; Editable = Fld085Editable; }
-                field(F086; Rec.Fld086) { ApplicationArea = All; Visible = Fld086Visible; Editable = Fld086Editable; }
-                field(F087; Rec.Fld087) { ApplicationArea = All; Visible = Fld087Visible; Editable = Fld087Editable; }
-                field(F088; Rec.Fld088) { ApplicationArea = All; Visible = Fld088Visible; Editable = Fld088Editable; }
-                field(F089; Rec.Fld089) { ApplicationArea = All; Visible = Fld089Visible; Editable = Fld089Editable; }
-                field(F090; Rec.Fld090) { ApplicationArea = All; Visible = Fld090Visible; Editable = Fld090Editable; }
-                field(F091; Rec.Fld091) { ApplicationArea = All; Visible = Fld091Visible; Editable = Fld091Editable; }
-                field(F092; Rec.Fld092) { ApplicationArea = All; Visible = Fld092Visible; Editable = Fld092Editable; }
-                field(F093; Rec.Fld093) { ApplicationArea = All; Visible = Fld093Visible; Editable = Fld093Editable; }
-                field(F094; Rec.Fld094) { ApplicationArea = All; Visible = Fld094Visible; Editable = Fld094Editable; }
-                field(F095; Rec.Fld095) { ApplicationArea = All; Visible = Fld095Visible; Editable = Fld095Editable; }
-                field(F096; Rec.Fld096) { ApplicationArea = All; Visible = Fld096Visible; Editable = Fld096Editable; }
-                field(F097; Rec.Fld097) { ApplicationArea = All; Visible = Fld097Visible; Editable = Fld097Editable; }
-                field(F098; Rec.Fld098) { ApplicationArea = All; Visible = Fld098Visible; Editable = Fld098Editable; }
-                field(F099; Rec.Fld099) { ApplicationArea = All; Visible = Fld099Visible; Editable = Fld099Editable; }
-                field(F100; Rec.Fld100) { ApplicationArea = All; Visible = Fld100Visible; Editable = Fld100Editable; }
+                field("Entry No."; Rec."Entry No.") { Visible = false; }
+                field("Import from Filename"; Rec."Import from Filename") { }
+                field(Imported; Rec.Imported) { }
+                field(F001; Rec.Fld001) { Visible = Fld001Visible; Editable = Fld001Editable; }
+                field(F002; Rec.Fld002) { Visible = Fld002Visible; Editable = Fld002Editable; }
+                field(F003; Rec.Fld003) { Visible = Fld003Visible; Editable = Fld003Editable; }
+                field(F004; Rec.Fld004) { Visible = Fld004Visible; Editable = Fld004Editable; }
+                field(F005; Rec.Fld005) { Visible = Fld005Visible; Editable = Fld005Editable; }
+                field(F006; Rec.Fld006) { Visible = Fld006Visible; Editable = Fld006Editable; }
+                field(F007; Rec.Fld007) { Visible = Fld007Visible; Editable = Fld007Editable; }
+                field(F008; Rec.Fld008) { Visible = Fld008Visible; Editable = Fld008Editable; }
+                field(F009; Rec.Fld009) { Visible = Fld009Visible; Editable = Fld009Editable; }
+                field(F010; Rec.Fld010) { Visible = Fld010Visible; Editable = Fld010Editable; }
+                field(F011; Rec.Fld011) { Visible = Fld011Visible; Editable = Fld011Editable; }
+                field(F012; Rec.Fld012) { Visible = Fld012Visible; Editable = Fld012Editable; }
+                field(F013; Rec.Fld013) { Visible = Fld013Visible; Editable = Fld013Editable; }
+                field(F014; Rec.Fld014) { Visible = Fld014Visible; Editable = Fld014Editable; }
+                field(F015; Rec.Fld015) { Visible = Fld015Visible; Editable = Fld015Editable; }
+                field(F016; Rec.Fld016) { Visible = Fld016Visible; Editable = Fld016Editable; }
+                field(F017; Rec.Fld017) { Visible = Fld017Visible; Editable = Fld017Editable; }
+                field(F018; Rec.Fld018) { Visible = Fld018Visible; Editable = Fld018Editable; }
+                field(F019; Rec.Fld019) { Visible = Fld019Visible; Editable = Fld019Editable; }
+                field(F020; Rec.Fld020) { Visible = Fld020Visible; Editable = Fld020Editable; }
+                field(F021; Rec.Fld021) { Visible = Fld021Visible; Editable = Fld021Editable; }
+                field(F022; Rec.Fld022) { Visible = Fld022Visible; Editable = Fld022Editable; }
+                field(F023; Rec.Fld023) { Visible = Fld023Visible; Editable = Fld023Editable; }
+                field(F024; Rec.Fld024) { Visible = Fld024Visible; Editable = Fld024Editable; }
+                field(F025; Rec.Fld025) { Visible = Fld025Visible; Editable = Fld025Editable; }
+                field(F026; Rec.Fld026) { Visible = Fld026Visible; Editable = Fld026Editable; }
+                field(F027; Rec.Fld027) { Visible = Fld027Visible; Editable = Fld027Editable; }
+                field(F028; Rec.Fld028) { Visible = Fld028Visible; Editable = Fld028Editable; }
+                field(F029; Rec.Fld029) { Visible = Fld029Visible; Editable = Fld029Editable; }
+                field(F030; Rec.Fld030) { Visible = Fld030Visible; Editable = Fld030Editable; }
+                field(F031; Rec.Fld031) { Visible = Fld031Visible; Editable = Fld031Editable; }
+                field(F032; Rec.Fld032) { Visible = Fld032Visible; Editable = Fld032Editable; }
+                field(F033; Rec.Fld033) { Visible = Fld033Visible; Editable = Fld033Editable; }
+                field(F034; Rec.Fld034) { Visible = Fld034Visible; Editable = Fld034Editable; }
+                field(F035; Rec.Fld035) { Visible = Fld035Visible; Editable = Fld035Editable; }
+                field(F036; Rec.Fld036) { Visible = Fld036Visible; Editable = Fld036Editable; }
+                field(F037; Rec.Fld037) { Visible = Fld037Visible; Editable = Fld037Editable; }
+                field(F038; Rec.Fld038) { Visible = Fld038Visible; Editable = Fld038Editable; }
+                field(F039; Rec.Fld039) { Visible = Fld039Visible; Editable = Fld039Editable; }
+                field(F040; Rec.Fld040) { Visible = Fld040Visible; Editable = Fld040Editable; }
+                field(F041; Rec.Fld041) { Visible = Fld041Visible; Editable = Fld041Editable; }
+                field(F042; Rec.Fld042) { Visible = Fld042Visible; Editable = Fld042Editable; }
+                field(F043; Rec.Fld043) { Visible = Fld043Visible; Editable = Fld043Editable; }
+                field(F044; Rec.Fld044) { Visible = Fld044Visible; Editable = Fld044Editable; }
+                field(F045; Rec.Fld045) { Visible = Fld045Visible; Editable = Fld045Editable; }
+                field(F046; Rec.Fld046) { Visible = Fld046Visible; Editable = Fld046Editable; }
+                field(F047; Rec.Fld047) { Visible = Fld047Visible; Editable = Fld047Editable; }
+                field(F048; Rec.Fld048) { Visible = Fld048Visible; Editable = Fld048Editable; }
+                field(F049; Rec.Fld049) { Visible = Fld049Visible; Editable = Fld049Editable; }
+                field(F050; Rec.Fld050) { Visible = Fld050Visible; Editable = Fld050Editable; }
+                field(F051; Rec.Fld051) { Visible = Fld051Visible; Editable = Fld051Editable; }
+                field(F052; Rec.Fld052) { Visible = Fld052Visible; Editable = Fld052Editable; }
+                field(F053; Rec.Fld053) { Visible = Fld053Visible; Editable = Fld053Editable; }
+                field(F054; Rec.Fld054) { Visible = Fld054Visible; Editable = Fld054Editable; }
+                field(F055; Rec.Fld055) { Visible = Fld055Visible; Editable = Fld055Editable; }
+                field(F056; Rec.Fld056) { Visible = Fld056Visible; Editable = Fld056Editable; }
+                field(F057; Rec.Fld057) { Visible = Fld057Visible; Editable = Fld057Editable; }
+                field(F058; Rec.Fld058) { Visible = Fld058Visible; Editable = Fld058Editable; }
+                field(F059; Rec.Fld059) { Visible = Fld059Visible; Editable = Fld059Editable; }
+                field(F060; Rec.Fld060) { Visible = Fld060Visible; Editable = Fld060Editable; }
+                field(F061; Rec.Fld061) { Visible = Fld061Visible; Editable = Fld061Editable; }
+                field(F062; Rec.Fld062) { Visible = Fld062Visible; Editable = Fld062Editable; }
+                field(F063; Rec.Fld063) { Visible = Fld063Visible; Editable = Fld063Editable; }
+                field(F064; Rec.Fld064) { Visible = Fld064Visible; Editable = Fld064Editable; }
+                field(F065; Rec.Fld065) { Visible = Fld065Visible; Editable = Fld065Editable; }
+                field(F066; Rec.Fld066) { Visible = Fld066Visible; Editable = Fld066Editable; }
+                field(F067; Rec.Fld067) { Visible = Fld067Visible; Editable = Fld067Editable; }
+                field(F068; Rec.Fld068) { Visible = Fld068Visible; Editable = Fld068Editable; }
+                field(F069; Rec.Fld069) { Visible = Fld069Visible; Editable = Fld069Editable; }
+                field(F070; Rec.Fld070) { Visible = Fld070Visible; Editable = Fld070Editable; }
+                field(F071; Rec.Fld071) { Visible = Fld071Visible; Editable = Fld071Editable; }
+                field(F072; Rec.Fld072) { Visible = Fld072Visible; Editable = Fld072Editable; }
+                field(F073; Rec.Fld073) { Visible = Fld073Visible; Editable = Fld073Editable; }
+                field(F074; Rec.Fld074) { Visible = Fld074Visible; Editable = Fld074Editable; }
+                field(F075; Rec.Fld075) { Visible = Fld075Visible; Editable = Fld075Editable; }
+                field(F076; Rec.Fld076) { Visible = Fld076Visible; Editable = Fld076Editable; }
+                field(F077; Rec.Fld077) { Visible = Fld077Visible; Editable = Fld077Editable; }
+                field(F078; Rec.Fld078) { Visible = Fld078Visible; Editable = Fld078Editable; }
+                field(F079; Rec.Fld079) { Visible = Fld079Visible; Editable = Fld079Editable; }
+                field(F080; Rec.Fld080) { Visible = Fld080Visible; Editable = Fld080Editable; }
+                field(F081; Rec.Fld081) { Visible = Fld081Visible; Editable = Fld081Editable; }
+                field(F082; Rec.Fld082) { Visible = Fld082Visible; Editable = Fld082Editable; }
+                field(F083; Rec.Fld083) { Visible = Fld083Visible; Editable = Fld083Editable; }
+                field(F084; Rec.Fld084) { Visible = Fld084Visible; Editable = Fld084Editable; }
+                field(F085; Rec.Fld085) { Visible = Fld085Visible; Editable = Fld085Editable; }
+                field(F086; Rec.Fld086) { Visible = Fld086Visible; Editable = Fld086Editable; }
+                field(F087; Rec.Fld087) { Visible = Fld087Visible; Editable = Fld087Editable; }
+                field(F088; Rec.Fld088) { Visible = Fld088Visible; Editable = Fld088Editable; }
+                field(F089; Rec.Fld089) { Visible = Fld089Visible; Editable = Fld089Editable; }
+                field(F090; Rec.Fld090) { Visible = Fld090Visible; Editable = Fld090Editable; }
+                field(F091; Rec.Fld091) { Visible = Fld091Visible; Editable = Fld091Editable; }
+                field(F092; Rec.Fld092) { Visible = Fld092Visible; Editable = Fld092Editable; }
+                field(F093; Rec.Fld093) { Visible = Fld093Visible; Editable = Fld093Editable; }
+                field(F094; Rec.Fld094) { Visible = Fld094Visible; Editable = Fld094Editable; }
+                field(F095; Rec.Fld095) { Visible = Fld095Visible; Editable = Fld095Editable; }
+                field(F096; Rec.Fld096) { Visible = Fld096Visible; Editable = Fld096Editable; }
+                field(F097; Rec.Fld097) { Visible = Fld097Visible; Editable = Fld097Editable; }
+                field(F098; Rec.Fld098) { Visible = Fld098Visible; Editable = Fld098Editable; }
+                field(F099; Rec.Fld099) { Visible = Fld099Visible; Editable = Fld099Editable; }
+                field(F100; Rec.Fld100) { Visible = Fld100Visible; Editable = Fld100Editable; }
             }
         }
     }

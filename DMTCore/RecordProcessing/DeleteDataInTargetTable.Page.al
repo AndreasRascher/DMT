@@ -239,7 +239,6 @@ page 91015 DMTDeleteDataInTargetTable
         DeleteRecordsWithErrorLog: Codeunit DMTDeleteRecordsWithErrorLog;
     begin
         DeleteRecordsWithErrorLog.InitRecordToDelete(recID, useOnDeleteTrigger);
-        log.IncNoOfProcessedRecords();
         if DeleteRecordsWithErrorLog.Run() then begin
             log.AddTargetSuccessEntry(recID, ImportConfigHeader);
             log.IncNoOfSuccessfullyProcessedRecords();

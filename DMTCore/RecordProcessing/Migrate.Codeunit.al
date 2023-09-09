@@ -209,21 +209,25 @@ codeunit 91014 DMTMigrate
         Clear(ResultType);
         Log.DeleteExistingLogFor(BufferRef2);
         ProcessRecord.InitFieldTransfer(BufferRef2, DMTImportSettings);
+        // apply field values to target record
         Commit();
         while not ProcessRecord.Run() do begin
             ProcessRecord.LogLastError();
         end;
-
+        // do modify on existing records
         if DMTImportSettings.UpdateExistingRecordsOnly() then begin
             ProcessRecord.InitModify();
             Commit();
             if not ProcessRecord.Run() then
                 ProcessRecord.LogLastError();
         end else begin
+            // insert new records
             ProcessRecord.InitInsert();
             Commit();
             if not ProcessRecord.Run() then
-                ProcessRecord.LogLastError();
+                ProcessRecord.LogLastError()
+            else
+                ProcessRecord.SaveTargetRefInfosInBuffertable();
         end;
         ProcessRecord.SaveErrorLog(Log);
         ResultType := ProcessRecord.GetProcessingResultType();

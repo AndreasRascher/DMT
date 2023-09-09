@@ -1947,11 +1947,23 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Import from Filename - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 281352744 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Imported</source>
+          <target state="translated">Importiert</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Importiert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Imported - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1187664494 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>IsCaptionLine</source>
           <target state="needs-translation"/>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field IsCaptionLine - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 220700360 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Record ID (Imported)</source>
+          <target state="translated">Datensatz-ID (Importiert)</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Datensatz-ID (Importiert)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field RecId (Imported) - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Import Configuration Header</source>

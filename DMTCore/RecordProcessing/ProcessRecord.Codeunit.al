@@ -8,7 +8,6 @@ codeunit 91008 DMTProcessRecord
     procedure Start()
     begin
         Clear(CurrValueToAssignText);
-        Clear(CurrTargetRecIDText);
         if RunMode = RunMode::FieldTransfer then begin
             if ProcessedFields.Count < TargetKeyFieldIDs.Count then
                 ProcessKeyFields();
@@ -141,6 +140,7 @@ codeunit 91008 DMTProcessRecord
     var
         DMTSetup: Record "DMTSetup";
     begin
+        Clear(CurrTargetRecIDText); // only once, not for every field
         ImportConfigHeader := DMTImportSettings.ImportConfigHeader();
         SourceRef := _SourceRef;
         UpdateFieldsInExistingRecordsOnly := DMTImportSettings.UpdateExistingRecordsOnly();
@@ -162,6 +162,7 @@ codeunit 91008 DMTProcessRecord
 
     procedure InitModify()
     begin
+        Clear(CurrTargetRecIDText); // only once, not for every field
         RunMode := RunMode::ModifyRecord;
     end;
 
@@ -252,6 +253,20 @@ codeunit 91008 DMTProcessRecord
             else
                 Error('unhandled case');
         end;
+    end;
+
+    internal procedure SaveTargetRefInfosInBuffertable()
+    var
+        genBuffTable: Record DMTGenBuffTable;
+        targetRef: RecordRef;
+    begin
+        if (CurrTargetRecIDText <> '') then
+            if SourceRef.Number = Database::DMTGenBuffTable then begin
+                SourceRef.SetTable(genBuffTable);
+                genBuffTable."RecId (Imported)" := TmpTargetRef.RecordId;
+                genBuffTable.Imported := targetRef.Get(TmpTargetRef.RecordId);
+                genBuffTable.Modify();
+            end;
     end;
 
 
