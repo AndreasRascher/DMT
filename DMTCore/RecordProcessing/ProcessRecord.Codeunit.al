@@ -269,7 +269,6 @@ codeunit 91008 DMTProcessRecord
             end;
     end;
 
-
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
         TempImportConfigLine: Record DMTImportConfigLine temporary;

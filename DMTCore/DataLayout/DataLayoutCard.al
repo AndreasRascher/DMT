@@ -16,7 +16,7 @@ page 91011 DMTDataLayoutCard
                 field(ID; Rec.ID) { Visible = false; }
                 field(Name; Rec.Name) { }
                 field("Has Heading Row"; Rec."Has Heading Row") { }
-                field(HeadingRowNo; Rec."HeadingRowNo") { }
+                field(HeadingRowNo; Rec.HeadingRowNo) { }
                 field(SourceFileFormat; Rec.SourceFileFormat)
                 {
                     trigger OnValidate()
@@ -116,11 +116,11 @@ page 91011 DMTDataLayoutCard
                     ISourceFileImport := Rec.SourceFileFormat;
                     ISourceFileImport.ReadHeadline(sourceFileStorage, rec, FirstRowWithValues, HeaderLine);
                     if HeaderLine.Count = 0 then begin
-                        Message('Keine Daten gefunden in Zeile %1', rec."HeadingRowNo");
+                        Message('Keine Daten gefunden in Zeile %1', rec.HeadingRowNo);
                     end;
                     // Set first row with values as headlines
-                    if rec."HeadingRowNo" = 0 then
-                        rec."HeadingRowNo" := FirstRowWithValues;
+                    if rec.HeadingRowNo = 0 then
+                        rec.HeadingRowNo := FirstRowWithValues;
 
                     if Rec.Name = '' then
                         Rec.Name := sourceFileStorage.Name;

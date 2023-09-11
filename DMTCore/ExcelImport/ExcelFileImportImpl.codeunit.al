@@ -33,10 +33,10 @@ codeunit 91005 DMTExcelFileImportImpl implements ISourceFileImport
         BindSubscription(excelReader);
         // read top 5 rows if undefined
         excelReader.InitSourceFile(sourceFileStorage);
-        if dataLayout."HeadingRowNo" = 0 then
+        if dataLayout.HeadingRowNo = 0 then
             excelReader.InitReadRows(1, 5)
         else
-            excelReader.InitReadRows(dataLayout."HeadingRowNo", dataLayout."HeadingRowNo");
+            excelReader.InitReadRows(dataLayout.HeadingRowNo, dataLayout.HeadingRowNo);
         ClearLastError();
         excelReader.Run();
         if GetLastErrorText() <> '' then

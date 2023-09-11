@@ -63,6 +63,10 @@ table 91003 DMTImportConfigHeader
             ValidateTableRelation = false;
         }
         #endregion Import and Processing Options
+        #region Processing Info
+        field(110; ImportToTargetPercentage; Decimal) { Caption = 'Migrated %', Comment = 'de-DE=Migriert %'; Editable = false; AutoFormatExpression = '<precision, 1:1><standard format,0>%'; }
+        field(111; ImportToTargetPercentageStyle; Text[15]) { Caption = 'ImportToTargetPercentageStyle', Locked = true; }
+        #endregion Processing Info
     }
 
     keys

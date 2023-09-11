@@ -19,6 +19,7 @@ page 91010 DMTImportConfigList
                 field("Target Table ID"; Rec."Target Table ID") { }
                 field("Target Table Caption"; Rec."Target Table Caption") { }
                 field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { }
+                field(ImportToTargetPercentage; Rec.ImportToTargetPercentage) { StyleExpr = Rec.ImportToTargetPercentageStyle; }
             }
         }
         area(FactBoxes)

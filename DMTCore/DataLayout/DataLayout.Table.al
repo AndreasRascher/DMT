@@ -11,7 +11,7 @@ table 91002 DMTDataLayout
         field(10; Name; Text[250]) { Caption = 'Name', Comment = 'de-DE=Name'; }
         field(11; SourceFileFormat; Enum DMTSourceFileFormat) { Caption = 'Source File Format', Comment = 'de-DE=Dateiformat'; }
         field(12; "Has Heading Row"; Boolean) { Caption = 'Has Heading Row', Comment = 'de-DE=Enthält Überschriftenzeile'; }
-        field(13; "HeadingRowNo"; Integer) { Caption = 'Heading Row no.', Comment = 'de-DE=Überschrift Zeilennr.'; }
+        field(13; HeadingRowNo; Integer) { Caption = 'Heading Row no.', Comment = 'de-DE=Überschrift Zeilennr.'; }
         field(14; Default; Boolean)
         {
             Caption = 'Default', comment = 'de-DE=Standard';
@@ -31,7 +31,7 @@ table 91002 DMTDataLayout
         field(102; CSVFieldDelimiter; Text[50]) { Caption = 'Field Delimiter', Comment = 'de-DE=Feldbegrenzungszeichen'; InitValue = '"'; }
         field(103; CSVTextEncoding; Option) { Caption = 'Text Encoding', Comment = 'de-DE=Text Encoding'; OptionMembers = MSDos,UTF8,UTF16,Windows; }
         field(200; NAVTableID; Integer) { Caption = 'NAV TableID', Comment = 'de-DE=Tabellen ID'; Editable = false; }
-        field(302; "XLSDefaultSheetName"; Text[250])
+        field(302; XLSDefaultSheetName; Text[250])
         {
             Caption = 'Default Excel Sheet', Comment = 'de-DE=Standard Excel Blatt';
             Editable = false;

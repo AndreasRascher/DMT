@@ -98,11 +98,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE= Datenlayout ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field Data Layout ID - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1296439604 - Method 777108172 - NamedType 2038427244" size-unit="char" translate="yes" xml:space="preserve">
-          <source>the generic Buffer Table is empty</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Die generische Puffertabelle ist leer</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Method LookUpFileNameFromGenBuffTable - NamedType GenBufferTableIsEmptyErr</note>
-        </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1278776511 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Column Count</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1672,6 +1667,11 @@
           <source>Import XMLPortID</source>
           <note from="Developer" annotates="general" priority="2">de-DE=XMLPort ID für Import</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Import XMLPort ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 200502431 - Field 234557873 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Migrated %</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Migriert %</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field ImportToTargetPercentage - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 1409273199 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>LastUsedFilter</source>

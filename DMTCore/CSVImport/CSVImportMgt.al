@@ -27,10 +27,10 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
     begin
         PrepareXMLPortWithCSVOptionsAndSourceFile(sourceFileStorage, dataLayout, CSVReader);
         // read top 5 rows if undefined
-        if dataLayout."HeadingRowNo" = 0 then
+        if dataLayout.HeadingRowNo = 0 then
             CSVReader.InitReadRows(1, 5)
         else
-            CSVReader.InitReadRows(dataLayout."HeadingRowNo", dataLayout."HeadingRowNo");
+            CSVReader.InitReadRows(dataLayout.HeadingRowNo, dataLayout.HeadingRowNo);
         CSVReader.Import();
         HeaderLine := CSVReader.GetHeadlineColumnValues(FirstRowWithValues);
     end;

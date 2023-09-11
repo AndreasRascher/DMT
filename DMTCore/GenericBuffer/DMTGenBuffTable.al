@@ -354,31 +354,6 @@ table 91001 DMTGenBuffTable
         HasLinesInFilter := not Rec.IsEmpty;
     end;
 
-    internal procedure LookUpFileNameFromGenBuffTable(CurrFileName: Text): Text
-    var
-        GenBuffTableQry: Query DMTGenBuffTableQry;
-        Choice: Integer;
-        FileList: List of [Text];
-        Choices: Text;
-        FileName: Text;
-        GenBufferTableIsEmptyErr: Label 'the generic Buffer Table is empty', Comment = 'de-DE=Die generische Puffertabelle ist leer';
-    begin
-        GenBuffTableQry.Open();
-        while GenBuffTableQry.Read() do begin
-            FileList.Add(GenBuffTableQry.Import_from_Filename);
-        end;
-        if FileList.Count = 0 then
-            Error(GenBufferTableIsEmptyErr);
-        foreach FileName in FileList do
-            Choices += ',' + FileName;
-        Choices := Choices.TrimStart(',');
-        Choice := StrMenu(Choices);
-        if Choice = 0 then
-            exit(CurrFileName)
-        else
-            exit(Choices.Split(',').Get(Choice));
-    end;
-
     internal procedure GetColCaptionForImportedFile(ImportConfigHeader: Record DMTImportConfigHeader; var BuffTableCaptions: Dictionary of [Integer, Text]) OK: Boolean
     var
         GenBuffTable: Record DMTGenBuffTable;

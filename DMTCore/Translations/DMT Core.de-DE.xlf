@@ -117,12 +117,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE= Datenlayout ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field Data Layout ID - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1296439604 - Method 777108172 - NamedType 2038427244" size-unit="char" translate="yes" xml:space="preserve">
-          <source>the generic Buffer Table is empty</source>
-          <target state="translated">Die generische Puffertabelle ist leer</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Die generische Puffertabelle ist leer</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Method LookUpFileNameFromGenBuffTable - NamedType GenBufferTableIsEmptyErr</note>
-        </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1278776511 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Column Count</source>
           <target state="needs-translation"/>
@@ -1944,7 +1938,7 @@
         <trans-unit id="Table 1296439604 - Field 2840077126 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import from Filename</source>
           <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Developer" annotates="general" priority="2">de=DE=Import Dateiname</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Import from Filename - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 281352744 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2006,6 +2000,12 @@
           <target state="translated">XMLPort ID für Import</target>
           <note from="Developer" annotates="general" priority="2">de-DE=XMLPort ID für Import</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Import XMLPort ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 200502431 - Field 234557873 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Migrated %</source>
+          <target state="translated">Migriert %</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Migriert %</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field ImportToTargetPercentage - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 1409273199 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>LastUsedFilter</source>
