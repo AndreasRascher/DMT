@@ -158,13 +158,14 @@ codeunit 91014 DMTMigrate
         APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
         ImportConfigHeader := DMTImportSettings.ImportConfigHeader();
 
+        CheckMappedFieldsExist(ImportConfigHeader);
+        CheckBufferTableIsNotEmpty(ImportConfigHeader);
+
         // Show Filter Dialog
         ImportConfigHeader.InitBufferRef(BufferRef);
         Commit(); // Runmodal Dialog in Edit View
         if not EditView(BufferRef, DMTImportSettings) then
             exit;
-        CheckMappedFieldsExist(ImportConfigHeader);
-        CheckBufferTableIsNotEmpty(ImportConfigHeader);
 
         //Prepare Progress Bar
         if not BufferRef.FindSet() then
@@ -381,7 +382,6 @@ codeunit 91014 DMTMigrate
         ImportConfigLine.SetFilter("Processing Action", '<>%1', ImportConfigLine."Processing Action"::Ignore);
         ImportConfigLine.SetRange("Is Key Field(Target)", true);
         ImportConfigLine.SetFilter("Source Field No.", '<>0');
-
 
         if ImportConfigLine.IsEmpty then
             Error(ImportConfigLineEmptyErr, ImportConfigHeader.TableCaption, ImportConfigHeader.ID);

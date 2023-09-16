@@ -9,7 +9,7 @@ table 91012 DMTReplacementLine
         field(3; "Line No."; Integer) { Caption = 'Line No.', Comment = 'de-DE=Zeilennr.'; }
         field(20; "Imp.Conf.Header ID"; Integer)
         {
-            Caption = 'Imp.Conf.Header ID', Comment = 'de=DE=Import Konfig. Kopf ID';
+            Caption = 'Imp.Conf.Header ID', Comment = 'de-DE=Import Konfig. Kopf ID';
             TableRelation = DMTImportConfigHeader;
             trigger OnValidate()
             var

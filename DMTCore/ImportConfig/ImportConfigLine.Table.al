@@ -5,7 +5,7 @@ table 91006 DMTImportConfigLine
     {
         field(1; "Imp.Conf.Header ID"; Integer)
         {
-            Caption = 'Imp.Conf.Header ID', Comment = 'de=DE=Import Konfig. Kopf ID';
+            Caption = 'Imp.Conf.Header ID', Comment = 'de-DE=Import Konfig. Kopf ID';
             TableRelation = DMTImportConfigHeader;
         }
         field(10; "Target Table ID"; Integer)

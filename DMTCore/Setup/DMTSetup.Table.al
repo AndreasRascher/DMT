@@ -44,6 +44,12 @@ table 91000 DMTSetup
         IReplacementHandler := ReplacementHandlerImpl;
     end;
 
+    procedure IsNAVExport(): Boolean
+    begin
+        if not RecordHasBeenRead then
+            Rec.get();
+        exit(rec.MigrationProfil = rec.MigrationProfil::"From NAV");
+    end;
 
     var
         RecordHasBeenRead: Boolean;

@@ -46,7 +46,14 @@ codeunit 91012 DMTFPBuilder
                     if GenBuffTable.FilterBy(ImportConfigHeader) then
                         if GenBuffTable.FindFirst() then
                             GenBuffTable.InitFirstLineAsCaptions(GenBuffTable);
+                    // Keep Captions alive, one line per key. Required so the request page has the dynamic captions
                     Debug := GenBuffTable.FieldCaption(Fld001);
+                    Debug := GenBuffTable.FieldCaption(Fld002);
+                    Debug := GenBuffTable.FieldCaption(Fld003);
+                    Debug := GenBuffTable.FieldCaption(Fld004);
+                    Debug := GenBuffTable.FieldCaption(Fld005);
+                    Debug := GenBuffTable.FieldCaption(Fld006);
+                    Debug := GenBuffTable.FieldCaption(Fld007);
                     ImportConfigLine.SetRange("Is Key Field(Target)", true);
                     if ImportConfigLine.FindSet() then
                         repeat

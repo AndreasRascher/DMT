@@ -30,7 +30,7 @@ page 91011 DMTDataLayoutCard
             }
             group(NAV)
             {
-                Visible = Rec.SourceFileFormat = Rec.SourceFileFormat::"NAV CSV Export";
+                Visible = IsNAVExport;
                 field(NAVTableID; Rec.NAVTableID) { }
                 field(NAVTableCaption; Rec.NAVTableCaption) { }
                 field(NAVNoOfRecords; Rec.NAVNoOfRecords) { }
@@ -149,8 +149,12 @@ page 91011 DMTDataLayoutCard
     }
     trigger OnAfterGetCurrRecord()
     begin
+        IsNAVExport := setup.IsNAVExport();
         CurrPage.DMTLayoutLinePart.Page.SetRepeaterVisibility(Rec);
         CurrPage.DMTLayoutLinePart.Page.DoUpdate(false);
     end;
 
+    var
+        setup: Record DMTSetup;
+        IsNAVExport: Boolean;
 }

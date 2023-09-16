@@ -5,10 +5,10 @@ table 91001 DMTGenBuffTable
     fields
     {
         field(1; "Entry No."; Integer) { }
-        field(10; "Import from Filename"; Text[250]) { Caption = 'Import from Filename', Comment = 'de=DE=Import Dateiname'; }
+        field(10; "Import from Filename"; Text[250]) { Caption = 'Import from Filename', Comment = 'de-DE=Import Dateiname'; }
         field(11; "Imp.Conf.Header ID"; Integer)
         {
-            Caption = 'Imp.Conf.Header ID', Comment = 'de=DE=Import Konfig. Kopf ID';
+            Caption = 'Imp.Conf.Header ID', Comment = 'de-DE=Import Konfig. Kopf ID';
             TableRelation = DMTImportConfigHeader;
         }
         field(13; IsCaptionLine; Boolean) { }

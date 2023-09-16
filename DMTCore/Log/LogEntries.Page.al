@@ -1,6 +1,6 @@
 page 91013 DMTLogEntries
 {
-    Caption = 'DMT Log Entries', Comment = 'de=DE=DMT Protokollposten';
+    Caption = 'DMT Log Entries', Comment = 'de-DE=DMT Protokollposten';
     DeleteAllowed = false;
     Editable = false;
     InsertAllowed = false;

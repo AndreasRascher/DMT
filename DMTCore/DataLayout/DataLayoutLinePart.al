@@ -49,11 +49,11 @@ page 91006 DMTLayoutLinePart
         case DataLayout.SourceFileFormat of
             DMTSourceFileFormat::"Custom CSV":
                 RepeaterVisibilty := RepeaterVisibilty::"Custom CSV";
-            DMTSourceFileFormat::"NAV CSV Export":
-                RepeaterVisibilty := RepeaterVisibilty::"NAV CSV";
             DMTSourceFileFormat::Excel:
                 RepeaterVisibilty := RepeaterVisibilty::Excel;
         end;
+        if Setup.IsNAVExport() then
+            RepeaterVisibilty := RepeaterVisibilty::"NAV CSV";
     end;
 
     procedure DoUpdate(SaveRecord: Boolean)
@@ -62,6 +62,7 @@ page 91006 DMTLayoutLinePart
     end;
 
     var
+        Setup: Record DMTSetup;
         RepeaterVisibilty: Option Default,"NAV CSV","Custom CSV",Excel;
 
 }

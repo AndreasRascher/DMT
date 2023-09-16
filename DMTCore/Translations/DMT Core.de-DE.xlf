@@ -1931,14 +1931,14 @@
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2144357174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Imp.Conf.Header ID</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2">de=DE=Import Konfig. Kopf ID</note>
+          <target state="translated">Import Konfig. Kopf ID</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import Konfig. Kopf ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Imp.Conf.Header ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 2840077126 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import from Filename</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2">de=DE=Import Dateiname</note>
+          <target state="translated">Import Dateiname</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import Dateiname</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Import from Filename - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1296439604 - Field 281352744 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2081,8 +2081,8 @@
         </trans-unit>
         <trans-unit id="Table 3570477496 - Field 2144357174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Imp.Conf.Header ID</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2">de=DE=Import Konfig. Kopf ID</note>
+          <target state="translated">Import Konfig. Kopf ID</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import Konfig. Kopf ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Imp.Conf.Header ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3570477496 - Field 3492171417 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2399,8 +2399,8 @@
         </trans-unit>
         <trans-unit id="Table 663034807 - Field 2144357174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Imp.Conf.Header ID</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2">de=DE=Import Konfig. Kopf ID</note>
+          <target state="translated">Import Konfig. Kopf ID</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import Konfig. Kopf ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Imp.Conf.Header ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 663034807 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -3131,8 +3131,8 @@
         </trans-unit>
         <trans-unit id="Page 4199531365 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Log Entries</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2">de=DE=DMT Protokollposten</note>
+          <target state="translated">DMT Protokollposten</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=DMT Protokollposten</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTLogEntries - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 4199531365 - Control 80436336 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
