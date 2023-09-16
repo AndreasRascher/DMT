@@ -18,6 +18,31 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCode - Control TargetRecVarName - Property Caption</note>
         </trans-unit>
+        <trans-unit id="XmlPort 242798494 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 242798494 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 242798494 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 242798494 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 242798494 - Control 520131415 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Control GetDatabaseNameCtrl - Property Caption</note>
+        </trans-unit>
         <trans-unit id="TableExtension 2231340739 - Field 1820164459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2231340739">
           <source>Data Type</source>
           <note from="Developer" annotates="general" priority="2">de-DE=NAV Datentyp</note>
