@@ -19,7 +19,7 @@ pageextension 90001 DMTDataLayouts extends DMTDataLayouts
                 var
                     CodeGenerator: Codeunit DMTCodeGenerator;
                 begin
-                    // CodeGenerator.ImportNAVSchemaFile();
+                    CodeGenerator.ImportNAVSchemaFile();
                 end;
             }
         }

@@ -37,57 +37,61 @@ page 91007 DMTDataLayouts
 
     local procedure InsertPresetDataLayouts()
     var
-        dataLayout: Record DMTDataLayout;
+        setup: Record DMTSetup;
+        isDefaultLayout: Boolean;
     begin
-        dataLayout.ID := dataLayout.GetNextID();
-        dataLayout.Name := 'CSV (UTF-8), Überschrift in Zeile 1';
-        dataLayout.SourceFileFormat := dataLayout.SourceFileFormat::"Custom CSV";
-        dataLayout.CSVFieldDelimiter := '"';
-        dataLayout.CSVTextEncoding := dataLayout.CSVTextEncoding::UTF8;
-        dataLayout.CSVLineSeparator := '<CR/LF>';
-        dataLayout.CSVFieldSeparator := ';';
-        dataLayout."Has Heading Row" := true;
-        dataLayout.HeadingRowNo := 1;
-        dataLayout.Insert();
-
-        AddPreset_NAVCSVExportDataLayout(dataLayout);
-
-        dataLayout.ID := dataLayout.GetNextID();
-        dataLayout.Name := 'XLSX, Überschrift in Zeile 1';
-        dataLayout.SourceFileFormat := dataLayout.SourceFileFormat::Excel;
-        dataLayout."Has Heading Row" := true;
-        dataLayout.HeadingRowNo := 1;
-        dataLayout.Insert();
+        isDefaultLayout := setup.IsNAVExport();
+        AddCustomCSVPreset('DMT NAV CSV Export', enum::DMTTextEncoding::UTF8, '<CR/LF>', '<TAB>', '<None>', 1, isDefaultLayout);
+        AddCustomCSVPreset('CSV (UTF-8), Überschrift in Zeile 1', enum::DMTTextEncoding::UTF8, '<CR/LF>', ';', '"', 1, false);
+        AddExcelPreset('XLSX, Überschrift in Zeile 1', 1);
     end;
 
-    local procedure AddPreset_NAVCSVExportDataLayout(var dataLayout: Record DMTDataLayout)
-    begin
-        dataLayout.ID := dataLayout.GetNextID();
-        dataLayout.Name := 'DMT NAV CSV Export';
-        dataLayout.SourceFileFormat := dataLayout.SourceFileFormat::"Custom CSV";
-        dataLayout.CSVTextEncoding := dataLayout.CSVTextEncoding::UTF8;
-        dataLayout.CSVLineSeparator := '<CR/LF>';
-        dataLayout.CSVFieldSeparator := '<TAB>';
-        dataLayout.CSVFieldDelimiter := '<None>';
-        dataLayout."Has Heading Row" := true;
-        dataLayout.HeadingRowNo := 1;
-        dataLayout.Preset := true;
-        dataLayout.Insert();
-    end;
-
-    local procedure AddPreset(name: Text; sourceFileFormat: Enum DMTSourceFileFormat; Encoding: enum dmtenco FieldDelimiter: Text; LineSeparator: Text; FieldSeparator: Text)
+    local procedure AddCustomCSVPreset(dataLayoutName: Text[250]; csvEncoding: enum DMTTextEncoding; csvLineSeparator: Text;
+                                                                                   csvFieldSeparator: Text;
+                                                                                   csvFieldDelimiter: Text;
+                                                                                   headingRowNoNew: Integer;
+                                                                                   IsDefaultLayout: boolean);
     var
         dataLayout: Record DMTDataLayout;
     begin
+        dataLayout.Name := dataLayoutName;
+        dataLayout.SourceFileFormat := Enum::DMTSourceFileFormat::"Custom CSV";
+        dataLayout.CSVTextEncoding := csvEncoding;
+        dataLayout.CSVLineSeparator := CopyStr(csvLineSeparator, 1, MaxStrLen(dataLayout.CSVLineSeparator));
+        dataLayout.CSVFieldSeparator := CopyStr(csvFieldSeparator, 1, MaxStrLen(dataLayout.CSVFieldSeparator));
+        dataLayout.CSVFieldDelimiter := CopyStr(csvFieldDelimiter, 1, MaxStrLen(dataLayout.CSVFieldDelimiter));
+        dataLayout."Has Heading Row" := headingRowNoNew <> 0;
+        dataLayout.HeadingRowNo := headingRowNoNew;
+        insertPresetIfMissing(dataLayout);
+    end;
+
+    local procedure AddExcelPreset(dataLayoutName: Text[250]; headingRowNoNew: Integer)
+    var
+        dataLayout: Record DMTDataLayout;
+    begin
+        dataLayout.Name := dataLayoutName;
+        dataLayout.SourceFileFormat := Enum::DMTSourceFileFormat::Excel;
+        dataLayout."Has Heading Row" := headingRowNoNew <> 0;
+        dataLayout.HeadingRowNo := headingRowNoNew;
+        insertPresetIfMissing(dataLayout);
+    end;
+
+    local procedure insertPresetIfMissing(var dataLayout: Record DMTDataLayout)
+    var
+        existingPreset: Record DMTDataLayout;
+    begin
+        // Check if preset with same scope and name exists
+        existingPreset.SetRange(SourceFileFormat, dataLayout.SourceFileFormat);
+        existingPreset.SetRange(Name, dataLayout.Name);
+        existingPreset.SetRange(Preset, true);
+        if not existingPreset.IsEmpty then
+            exit;
+        // if default exists, keep it
+        existingPreset.Reset();
+        existingPreset.SetRange(Default, true);
+        if not existingPreset.IsEmpty then
+            clear(dataLayout.Preset);
         dataLayout.ID := dataLayout.GetNextID();
-        dataLayout.Name := name;
-        dataLayout.SourceFileFormat := sourceFileFormat;
-        dataLayout.CSVTextEncoding := ;
-        dataLayout.CSVLineSeparator := '<CR/LF>';
-        dataLayout.CSVFieldSeparator := '<TAB>';
-        dataLayout.CSVFieldDelimiter := '<None>';
-        dataLayout."Has Heading Row" := true;
-        dataLayout.HeadingRowNo := 1;
         dataLayout.Preset := true;
         dataLayout.Insert();
     end;

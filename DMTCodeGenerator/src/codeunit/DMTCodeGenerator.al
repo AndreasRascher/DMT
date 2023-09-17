@@ -400,12 +400,21 @@ codeunit 90000 DMTCodeGenerator
             NAVFieldBuffer.FindSet();
             // add header
             Clear(dataLayout);
+            //AddCustomCSVPreset('CSV (UTF-8), Überschrift in Zeile 1', enum::DMTTextEncoding::UTF8, '<CR/LF>', ';', '"', 1, false);
             dataLayout.Name := NAVFieldBuffer.TableName;
             dataLayout.SourceFileFormat := dataLayout.SourceFileFormat::"Custom CSV";
+            dataLayout.CSVTextEncoding := Enum::DMTTextEncoding::UTF8;
+            dataLayout.CSVLineSeparator := '<CR/LF>';
+            dataLayout.CSVFieldDelimiter := '<None>';
+            dataLayout.CSVFieldSeparator := '<TAB>';
+            dataLayout."Has Heading Row" := true;
+            dataLayout.HeadingRowNo := 1;
+
             dataLayout.NAVTableID := NAVFieldBuffer.TableNo;
             dataLayout.NAVNoOfRecords := NAVFieldBuffer."No. of Records";
             dataLayout.NAVPrimaryKey := NAVFieldBuffer."Primary Key";
             dataLayout.NAVTableCaption := NAVFieldBuffer."Table Caption";
+
             dataLayout.Insert(true);
             repeat
                 Clear(dataLayoutLine);

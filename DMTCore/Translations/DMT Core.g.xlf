@@ -68,6 +68,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Tabellen ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field NAVTableID - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 4224547593 - Field 2357355287 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Preset</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Voreinstellung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field Preset - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 4224547593 - Field 1013576988 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source File Format</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Dateiformat</note>
