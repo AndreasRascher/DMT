@@ -50,23 +50,45 @@ page 91007 DMTDataLayouts
         dataLayout.HeadingRowNo := 1;
         dataLayout.Insert();
 
-        dataLayout.ID := dataLayout.GetNextID();
-        dataLayout.Name := 'DMT NAV CSV Export';
-        dataLayout.SourceFileFormat := dataLayout.SourceFileFormat::"Custom CSV";
-        dataLayout.CSVFieldDelimiter := '"';
-        dataLayout.CSVTextEncoding := dataLayout.CSVTextEncoding::UTF8;
-        dataLayout.CSVLineSeparator := '<CR/LF>';
-        dataLayout.CSVFieldSeparator := '<TAB>';
-        dataLayout.CSVFieldDelimiter := '<None>';
-        dataLayout."Has Heading Row" := true;
-        dataLayout.HeadingRowNo := 1;
-        dataLayout.Insert();
+        AddPreset_NAVCSVExportDataLayout(dataLayout);
 
         dataLayout.ID := dataLayout.GetNextID();
         dataLayout.Name := 'XLSX, Überschrift in Zeile 1';
         dataLayout.SourceFileFormat := dataLayout.SourceFileFormat::Excel;
         dataLayout."Has Heading Row" := true;
         dataLayout.HeadingRowNo := 1;
+        dataLayout.Insert();
+    end;
+
+    local procedure AddPreset_NAVCSVExportDataLayout(var dataLayout: Record DMTDataLayout)
+    begin
+        dataLayout.ID := dataLayout.GetNextID();
+        dataLayout.Name := 'DMT NAV CSV Export';
+        dataLayout.SourceFileFormat := dataLayout.SourceFileFormat::"Custom CSV";
+        dataLayout.CSVTextEncoding := dataLayout.CSVTextEncoding::UTF8;
+        dataLayout.CSVLineSeparator := '<CR/LF>';
+        dataLayout.CSVFieldSeparator := '<TAB>';
+        dataLayout.CSVFieldDelimiter := '<None>';
+        dataLayout."Has Heading Row" := true;
+        dataLayout.HeadingRowNo := 1;
+        dataLayout.Preset := true;
+        dataLayout.Insert();
+    end;
+
+    local procedure AddPreset(name: Text; sourceFileFormat: Enum DMTSourceFileFormat; Encoding: enum dmtenco FieldDelimiter: Text; LineSeparator: Text; FieldSeparator: Text)
+    var
+        dataLayout: Record DMTDataLayout;
+    begin
+        dataLayout.ID := dataLayout.GetNextID();
+        dataLayout.Name := name;
+        dataLayout.SourceFileFormat := sourceFileFormat;
+        dataLayout.CSVTextEncoding := ;
+        dataLayout.CSVLineSeparator := '<CR/LF>';
+        dataLayout.CSVFieldSeparator := '<TAB>';
+        dataLayout.CSVFieldDelimiter := '<None>';
+        dataLayout."Has Heading Row" := true;
+        dataLayout.HeadingRowNo := 1;
+        dataLayout.Preset := true;
         dataLayout.Insert();
     end;
 }

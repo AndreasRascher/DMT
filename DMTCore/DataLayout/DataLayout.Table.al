@@ -26,6 +26,7 @@ table 91002 DMTDataLayout
                 end;
             end;
         }
+        field(15; Preset; Boolean) { Caption = 'Preset', Comment = 'de-DE=Voreinstellung'; }
         field(100; CSVFieldSeparator; Text[50]) { Caption = 'Field Separator', Comment = 'de-DE=Feldtrenner'; InitValue = ';'; }
         field(101; CSVLineSeparator; Text[50]) { Caption = 'Line Separator', Comment = 'de-DE=Zeilentrenner'; InitValue = '<NewLine>'; }
         field(102; CSVFieldDelimiter; Text[50]) { Caption = 'Field Delimiter', Comment = 'de-DE=Feldbegrenzungszeichen'; InitValue = '"'; }
