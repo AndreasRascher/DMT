@@ -435,4 +435,46 @@ table 91003 DMTImportConfigHeader
         Log.AddImportToBufferSummary(Rec, CurrentDateTime - Start);
     end;
 
+    internal procedure updateImportToTargetPercentage()
+    var
+        genBuffTable: Record DMTGenBuffTable;
+        recRef: RecordRef;
+        noOfRecords, noOfRecordsMigrated : Integer;
+        IsImported: Boolean;
+        importConfigHeader: Record DMTImportConfigHeader;
+    begin
+        importConfigHeader.get(Rec.RecordId); // update
+        if not genBuffTable.FilterBy(Rec) then
+            exit;
+        genBuffTable.SetRange(IsCaptionLine, false);
+        if genBuffTable.IsEmpty then
+            exit;
+        genBuffTable.SetLoadFields("Entry No.", "Import from Filename", Imported, "RecId (Imported)");
+        genBuffTable.FindSet();
+        repeat
+            noOfRecords += 1;
+            IsImported := recRef.Get(genBuffTable."RecId (Imported)");
+            if IsImported then
+                noOfRecordsMigrated += 1;
+
+            if genBuffTable.Imported <> IsImported then begin
+                genBuffTable.Imported := IsImported;
+                if not IsImported then
+                    Clear(genBuffTable."RecId (Imported)");
+                genBuffTable.Modify();
+            end;
+        until genBuffTable.Next() = 0;
+        importConfigHeader.ImportToTargetPercentage := (noOfRecordsMigrated / noOfRecords) * 100;
+        case importConfigHeader.ImportToTargetPercentage of
+            100:
+                importConfigHeader.ImportToTargetPercentageStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+            0:
+                importConfigHeader.ImportToTargetPercentageStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+            else
+                importConfigHeader.ImportToTargetPercentageStyle := Format(Enum::DMTFieldStyle::Yellow);
+        end;
+        importConfigHeader.Modify();
+    end;
+
+
 }

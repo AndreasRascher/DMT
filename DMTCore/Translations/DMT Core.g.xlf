@@ -2438,20 +2438,10 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CountLinesInSource - Method OnAction - NamedType NoOfLinesInFilterLbl</note>
         </trans-unit>
-        <trans-unit id="Page 809130730 - Action 3711327542 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Create Buffer Table</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Puffertabelle erstellen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CreateBufferTable - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 809130730 - Action 3448018027 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create AL Mapping Code</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Mapping AL Code erstellen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CreateCode - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 809130730 - Action 2778232640 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Create XMLPort</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=XMLPort erstellen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CreateXMLPort - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 809130730 - Action 116037593 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Delete Records In Target Table</source>
@@ -2597,6 +2587,11 @@
           <source>Import to buffer table</source>
           <note from="Developer" annotates="general" priority="2">de-DE=In Puffertab. importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigList - Action ImportSelectedToBuffer - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 215230028 - Action 1177438431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Update Migrated % (Selected Lines)</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Migriert % aktualiseren (markierte Zeilen)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigList - Action updateImportToTargetPercentageInSelectedLines - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 215230028 - Action 2224783030 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Files</source>

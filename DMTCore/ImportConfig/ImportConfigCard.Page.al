@@ -103,7 +103,8 @@ page 91008 DMTImportConfigCard
                     ChangeRecordWithPerm: Codeunit DMTChangeRecordWithPerm;
                 begin
                     ChangeRecordWithPerm.DeleteRecordsInTargetTable(Rec);
-                    Rec.UpdateBufferRecordCount();
+                    // Rec.UpdateBufferRecordCount();
+                    CurrPage.TableInfoFactBox.Page.Update(false);
                 end;
             }
 
@@ -195,7 +196,6 @@ page 91008 DMTImportConfigCard
                 PromotedOnly = true;
                 PromotedIsBig = true;
                 PromotedCategory = Process;
-
                 trigger OnAction()
                 var
                     importConfigMgt: Codeunit DMTImportConfigMgt;
@@ -220,28 +220,28 @@ page 91008 DMTImportConfigCard
                     Log.ShowLogEntriesFor(Rec);
                 end;
             }
-            action(CreateXMLPort)
-            {
-                ApplicationArea = All;
-                Image = XMLSetup;
-                Caption = 'Create XMLPort', Comment = 'de-DE=XMLPort erstellen';
+            // action(CreateXMLPort)
+            // {
+            //     ApplicationArea = All;
+            //     Image = XMLSetup;
+            //     Caption = 'Create XMLPort', Comment = 'de-DE=XMLPort erstellen';
 
-                trigger OnAction()
-                begin
-                    //     PageActions.DownloadALXMLPort(Rec);
-                end;
-            }
-            action(CreateBufferTable)
-            {
-                ApplicationArea = All;
-                Image = Table;
-                Caption = 'Create Buffer Table', Comment = 'de-DE=Puffertabelle erstellen';
+            //     trigger OnAction()
+            //     begin
+            //         //     PageActions.DownloadALXMLPort(Rec);
+            //     end;
+            // }
+            // action(CreateBufferTable)
+            // {
+            //     ApplicationArea = All;
+            //     Image = Table;
+            //     Caption = 'Create Buffer Table', Comment = 'de-DE=Puffertabelle erstellen';
 
-                trigger OnAction()
-                begin
-                    //     PageActions.DownloadALBufferTableFile(Rec);
-                end;
-            }
+            //     trigger OnAction()
+            //     begin
+            //         //     PageActions.DownloadALBufferTableFile(Rec);
+            //     end;
+            // }
             action(CheckTransferedRecords)
             {
                 ApplicationArea = All;

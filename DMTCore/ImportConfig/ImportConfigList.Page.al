@@ -103,6 +103,29 @@ page 91010 DMTImportConfigList
                     progress.Close();
                 end;
             }
+            action(updateImportToTargetPercentageInSelectedLines)
+            {
+                Caption = 'Update Migrated % (Selected Lines)', Comment = 'de-DE=Migriert % aktualiseren (markierte Zeilen)';
+                Image = Import;
+                ApplicationArea = All;
+                trigger OnAction()
+                var
+                    TempImportConfigHeader: Record DMTImportConfigHeader temporary;
+                    progress: Dialog;
+                begin
+                    if not GetSelection(TempImportConfigHeader) then
+                        exit;
+                    TempImportConfigHeader.FindSet();
+                    progress.Open('######################################################1#');
+                    repeat
+                        progress.Update(1, TempImportConfigHeader."Source File Name");
+                        TempImportConfigHeader.updateImportToTargetPercentage();
+                    until TempImportConfigHeader.Next() = 0;
+                    progress.Close();
+                    if rec.get(rec.RecordId) then;
+                end;
+
+            }
         }
         area(Promoted)
         {
