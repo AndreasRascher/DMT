@@ -24,11 +24,11 @@
 		"launch": {
 			"version": "0.2.0",
 			"configurations": [{
-				"name": "BC22",
+				"name": "https://bctest.sauter-feinmechanik.com/TEST_MC/",
 				"type": "al",
 				"request": "launch",
 				"environmentType": "OnPrem",
-				"server": "https://localhost/",
+				"server": "https://bctest.sauter-feinmechanik.com",
 				"serverInstance": "TEST_MC",
 				"authentication": "UserPassword",
 				"startupObjectType": "Page",
