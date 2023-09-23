@@ -50,6 +50,14 @@ page 91008 DMTImportConfigCard
                 field("Target Table ID"; Rec."Target Table ID") { Visible = false; }
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { }
                 field("Import Only New Records"; Rec."Import Only New Records") { }
+                field("Use Separate Buffer Table"; Rec."Use Separate Buffer Table") { }
+                group(SeperateBufferObjects)
+                {
+                    Caption = 'Buffer Table Objects', Comment = 'de-DE=Puffertabellen Objekte';
+                    Visible = Rec."Use Separate Buffer Table";
+                    field("Buffer Table ID"; Rec."Buffer Table ID") { StyleExpr = Rec.BufferTableIDStyle; }
+                    field("Import XMLPort ID"; Rec."Import XMLPort ID") { StyleExpr = Rec.ImportXMLPortIDStyle; }
+                }
             }
             part(LinePart; DMTImportConfigLinePart)
             {
@@ -303,6 +311,7 @@ page 91008 DMTImportConfigCard
     begin
         // CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
         CurrPage.LinePart.Page.DoUpdate(false);
+        Rec.UpdateIndicators();
     end;
 
     trigger OnAfterGetCurrRecord()

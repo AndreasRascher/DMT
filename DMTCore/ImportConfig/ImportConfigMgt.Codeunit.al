@@ -5,6 +5,7 @@ codeunit 91002 DMTImportConfigMgt
         ImportConfigHeader: Record DMTImportConfigHeader;
         ImportConfigLine, ImportConfigLine_NEW : Record DMTImportConfigLine;
         TargetRecRef: RecordRef;
+        refHelper: Codeunit DMTRefHelper;
         i: Integer;
         KeyFieldIDsList: List of [Integer];
     begin
@@ -13,7 +14,7 @@ codeunit 91002 DMTImportConfigMgt
         if ImportConfigHeader."Target Table ID" = 0 then
             exit(false);
         TargetRecRef.Open(ImportConfigHeader."Target Table ID");
-        KeyFieldIDsList := GetListOfKeyFieldIDs(TargetRecRef);
+        KeyFieldIDsList := refHelper.GetListOfKeyFieldIDs(TargetRecRef);
         for i := 1 to TargetRecRef.FieldCount do begin
             if TargetRecRef.FieldIndex(i).Active then
                 if (TargetRecRef.FieldIndex(i).Class = TargetRecRef.FieldIndex(i).Class::Normal) then begin
@@ -359,19 +360,4 @@ codeunit 91002 DMTImportConfigMgt
                     ImportConfigLine.Modify()
             until ImportConfigLine.Next() = 0;
     end;
-
-
-    local procedure GetListOfKeyFieldIDs(var recRef: RecordRef) keyFieldIDsList: List of [Integer];
-    var
-        fieldRef: FieldRef;
-        _keyIndex: Integer;
-        keyRef: KeyRef;
-    begin
-        keyRef := recRef.KeyIndex(1);
-        for _keyIndex := 1 to keyRef.FieldCount do begin
-            fieldRef := keyRef.FieldIndex(_keyIndex);
-            keyFieldIDsList.Add(fieldRef.Number);
-        end;
-    end;
-
 }

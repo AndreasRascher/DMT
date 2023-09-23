@@ -1,4 +1,4 @@
-pageextension 90001 DMTDataLayouts extends DMTDataLayouts
+pageextension 90014 DMTSetup extends "DMT Setup"
 {
     layout
     {
@@ -10,10 +10,15 @@ pageextension 90001 DMTDataLayouts extends DMTDataLayouts
         // Add changes to page actions here
         addlast(Processing)
         {
-            action(ImportNAVSchemaFile)
+            action(ImportNAVSchema)
             {
+                Caption = 'Import Schema.csv', comment = 'NAV Schema.csv importieren';
                 ApplicationArea = All;
-                Image = Import;
+                Image = DataEntry;
+                Promoted = true;
+                PromotedOnly = true;
+                PromotedIsBig = true;
+                PromotedCategory = New;
 
                 trigger OnAction()
                 var

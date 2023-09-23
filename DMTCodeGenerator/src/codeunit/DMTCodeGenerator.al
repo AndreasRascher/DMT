@@ -1,28 +1,28 @@
-codeunit 90000 DMTCodeGenerator
+codeunit 90011 DMTCodeGenerator
 {
 
     procedure CreateALXMLPort(ImportConfigHeader: Record DMTImportConfigHeader) C: TextBuilder
     begin
         ImportConfigHeader.TestField("Import XMLPort ID");
-        ImportConfigHeader.GetDataLayout().TestField(NAVTableID);
-        ImportConfigHeader.GetDataLayout().TestField(NAVTableCaption);
-        C := CreateALXMLPort(ImportConfigHeader."Import XMLPort ID", ImportConfigHeader.GetDataLayout(), ImportConfigHeader.GetDataLayout().NAVTableID, ImportConfigHeader.GetDataLayout().NAVTableCaption);
+        ImportConfigHeader.TestField("NAV Src.Table No.");
+        ImportConfigHeader.TestField("NAV Src.Table Caption");
+        C := CreateALXMLPort(ImportConfigHeader."Import XMLPort ID", ImportConfigHeader."NAV Src.Table No.", ImportConfigHeader."NAV Src.Table Caption");
     end;
 
-    local procedure CreateALXMLPort(ImportXMLPortID: Integer; dataLayout: Record DMTDataLayout; NAVTableID: Integer; NAVSrcTableCaption: Text) C: TextBuilder
+    local procedure CreateALXMLPort(ImportXMLPortID: Integer; NAVSrcTableNo: Integer; NAVSrcTableCaption: Text) C: TextBuilder
     var
-        DMTDataLayoutLine: Record DMTDataLayoutLine;
+        DMTFieldBuffer: Record DMTFieldBuffer;
         DMTSetup: Record DMTSetup;
         HasFieldsInFilter: Boolean;
     begin
-        HasFieldsInFilter := FilterFields(DMTDataLayoutLine, dataLayout, false, DMTSetup."Import with FlowFields", false);
-        C.AppendLine('xmlport ' + Format(ImportXMLPortID) + ' T' + Format(dataLayout.NAVTableID) + 'Import');
+        HasFieldsInFilter := FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, DMTSetup."Import with FlowFields", false);
+        C.AppendLine('xmlport ' + Format(ImportXMLPortID) + ' T' + Format(NAVSrcTableNo) + 'Import');
         C.AppendLine('{');
         DMTSetup.Get();
         if DMTSetup."Import with FlowFields" then
-            C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + 'FlowField' + ''', ENU = ''' + DMTDataLayoutLine.TableName + '(DMT)' + ''';')
+            C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + 'FlowField' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';')
         else
-            C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + ''', ENU = ''' + DMTDataLayoutLine.TableName + '(DMT)' + ''';');
+            C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
         C.AppendLine('    Direction = Import;');
         C.AppendLine('    FieldSeparator = ''<TAB>'';');
         C.AppendLine('    FieldDelimiter = ''<None>'';');
@@ -36,13 +36,13 @@ codeunit 90000 DMTCodeGenerator
         C.AppendLine('        {');
 
         if HasFieldsInFilter then begin
-            C.AppendLine('            tableelement(' + GetCleanTableName(DMTDataLayoutLine) + '; ' + StrSubstNo('T%1Buffer', dataLayout.NAVTableID) + ')');
+            C.AppendLine('            tableelement(' + GetCleanTableName(DMTFieldBuffer) + '; ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + ')');
             C.AppendLine('            {');
-            C.AppendLine('                XmlName = ''' + GetCleanTableName(DMTDataLayoutLine) + ''';');
-            DMTDataLayoutLine.FindSet();
+            C.AppendLine('                XmlName = ''' + GetCleanTableName(DMTFieldBuffer) + ''';');
+            DMTFieldBuffer.FindSet();
             repeat
-                C.AppendLine('                fieldelement("' + GetCleanFieldName(DMTDataLayoutLine) + '"; ' + GetCleanTableName(DMTDataLayoutLine) + '."' + DMTDataLayoutLine.ColumnName + '") { FieldValidate = No; MinOccurs = Zero; }');
-            until DMTDataLayoutLine.Next() = 0;
+                C.AppendLine('                fieldelement("' + GetCleanFieldName(DMTFieldBuffer) + '"; ' + GetCleanTableName(DMTFieldBuffer) + '."' + DMTFieldBuffer.FieldName + '") { FieldValidate = No; MinOccurs = Zero; }');
+            until DMTFieldBuffer.Next() = 0;
         end;
 
         C.AppendLine('                trigger OnBeforeInsertRecord()');
@@ -79,18 +79,18 @@ codeunit 90000 DMTCodeGenerator
         C.AppendLine('');
         C.AppendLine('    trigger OnPostXmlPort()');
         C.AppendLine('    var');
-        C.AppendLine('        ' + StrSubstNo('T%1Buffer', dataLayout.NAVTableID) + ': Record ' + StrSubstNo('T%1Buffer', dataLayout.NAVTableID) + ';');
+        C.AppendLine('        ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + ': Record ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + ';');
         C.AppendLine('        LinesProcessedMsg: Label ''%1 Buffer\%2 lines imported'',locked=true;');
         C.AppendLine('    begin');
         C.AppendLine('        IF currXMLport.Filename <> '''' then //only for manual excecution');
-        C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + StrSubstNo('T%1Buffer', dataLayout.NAVTableID) + '.TABLECAPTION, ReceivedLinesCount);');
+        C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + '.TABLECAPTION, ReceivedLinesCount);');
         C.AppendLine('    end;');
         C.AppendLine('');
         C.AppendLine('    trigger OnPreXmlPort()');
         C.AppendLine('    var');
-        C.AppendLine('        ' + StrSubstNo('T%1Buffer', dataLayout.NAVTableID) + ': Record ' + StrSubstNo('T%1Buffer', dataLayout.NAVTableID) + ';');
+        C.AppendLine('        ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + ': Record ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + ';');
         C.AppendLine('    begin');
-        C.AppendLine('        ClearBufferBeforeImportTable(' + StrSubstNo('T%1Buffer', dataLayout.NAVTableID) + '.RECORDID.TABLENO);');
+        C.AppendLine('        ClearBufferBeforeImportTable(' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + '.RECORDID.TABLENO);');
         C.AppendLine('        FileHasHeader := true;');
         C.AppendLine('    end;');
         C.AppendLine('');
@@ -147,54 +147,54 @@ codeunit 90000 DMTCodeGenerator
         C.AppendLine('}');
     end;
 
-    procedure CreateALTable(ImportConfigHeader: Record DMtImportConfigHeader) C: TextBuilder
+    procedure CreateALTable(ImportConfigHeader: Record DMTImportConfigHeader) C: TextBuilder
     begin
         ImportConfigHeader.TestField("Buffer Table ID");
-        ImportConfigHeader.GetDataLayout().TestField(NAVTableID);
-        ImportConfigHeader.GetDataLayout().TestField(NAVTableCaption);
-        C := CreateALTable(ImportConfigHeader."Target Table ID", ImportConfigHeader."Buffer Table ID", ImportConfigHeader.GetDataLayout(), ImportConfigHeader.GetDataLayout().NAVTableCaption);
+        ImportConfigHeader.TestField("NAV Src.Table No.");
+        ImportConfigHeader.TestField("NAV Src.Table Caption");
+        C := CreateALTable(ImportConfigHeader."Target Table ID", ImportConfigHeader."Buffer Table ID", ImportConfigHeader."NAV Src.Table No.", ImportConfigHeader."NAV Src.Table Caption");
     end;
 
-    local procedure CreateALTable(TargetTableID: Integer; BufferTableID: Integer; dataLayout: Record DMTDataLayout; NAVSrcTableCaption: Text) C: TextBuilder
+    local procedure CreateALTable(TargetTableID: Integer; BufferTableID: Integer; NAVSrcTableNo: Integer; NAVSrcTableCaption: Text) C: TextBuilder
     var
-        dataLayoutLine: Record DMTDataLayoutLine;
+        DMTFieldBuffer: Record DMTFieldBuffer;
         DMTSetup: Record DMTSetup;
         _FieldTypeText: Text;
     begin
         DMTSetup.Get();
-        FilterFields(dataLayoutLine, dataLayout, false, true, false);
-        C.AppendLine('table ' + Format(BufferTableID) + ' ' + StrSubstNo('T%1Buffer', dataLayout.NAVTableID));
+        FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, true, false);
+        C.AppendLine('table ' + Format(BufferTableID) + ' ' + StrSubstNo('T%1Buffer', NAVSrcTableNo));
         C.AppendLine('{');
-        C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + ''', ENU = ''' + dataLayoutLine.TableName + '(DMT)' + ''';');
+        C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
         C.AppendLine('  fields {');
-        if FilterFields(dataLayoutLine, dataLayout, false, DMTSetup."Import with FlowFields", false) then
+        if FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, DMTSetup."Import with FlowFields", false) then
             repeat
-                case dataLayoutLine.NAVDataType of
-                    dataLayoutLine.NAVDataType::RecordID:
+                case DMTFieldBuffer.Type of
+                    DMTFieldBuffer.Type::RecordID:
                         _FieldTypeText := 'Text[250]'; // Import recordIDs as text to avoid validation issues on import
-                    dataLayoutLine.NAVDataType::Code, dataLayoutLine.NAVDataType::Text:
-                        _FieldTypeText := StrSubstNo('%1[%2]', dataLayoutLine.NAVDataType, dataLayoutLine.NAVLen);
+                    DMTFieldBuffer.Type::Code, DMTFieldBuffer.Type::Text:
+                        _FieldTypeText := StrSubstNo('%1[%2]', DMTFieldBuffer.Type, DMTFieldBuffer.Len);
                     else
-                        _FieldTypeText := Format(dataLayoutLine.NAVDataType);
+                        _FieldTypeText := Format(DMTFieldBuffer.Type);
                 end;
-                C.AppendLine(StrSubstNo('        field(%1; "%2"; %3)', dataLayoutLine."Column No.", dataLayoutLine.ColumnName, _FieldTypeText));
+                C.AppendLine(StrSubstNo('        field(%1; "%2"; %3)', DMTFieldBuffer."No.", DMTFieldBuffer.FieldName, _FieldTypeText));
                 // field(1; "No."; Code[20])
                 C.AppendLine('        {');
-                C.AppendLine(StrSubstNo('            CaptionML = ENU = ''%1'', DEU = ''%2'';', dataLayoutLine.ColumnName, dataLayoutLine.ColumnName));
+                C.AppendLine(StrSubstNo('            CaptionML = ENU = ''%1'', DEU = ''%2'';', DMTFieldBuffer.FieldName, DMTFieldBuffer."Field Caption"));
 
-                if dataLayoutLine.NAVDataType = dataLayoutLine.NAVDataType::Option then begin
-                    C.AppendLine('            OptionMembers = ' + dataLayoutLine.NAVOptionString + ';');
-                    C.AppendLine(StrSubstNo('            OptionCaptionML = ENU = ''%1'', DEU = ''%2'';', DelChr(dataLayoutLine.NAVOptionString, '=', '"'), DelChr(dataLayoutLine.NAVOptionCaption, '=', '"')));
+                if DMTFieldBuffer.Type = DMTFieldBuffer.Type::Option then begin
+                    C.AppendLine('            OptionMembers = ' + DMTFieldBuffer.OptionString + ';');
+                    C.AppendLine(StrSubstNo('            OptionCaptionML = ENU = ''%1'', DEU = ''%2'';', DelChr(DMTFieldBuffer.OptionString, '=', '"'), DelChr(DMTFieldBuffer.OptionCaption, '=', '"')));
                 end;
 
                 C.AppendLine('        }');
 
-            until dataLayoutLine.Next() = 0;
-        AddTargetRecordExistsFlowField(TargetTableID, dataLayout, dataLayoutLine, C);
+            until DMTFieldBuffer.Next() = 0;
+        AddTargetRecordExistsFlowField(TargetTableID, BufferTableID, DMTFieldBuffer, C);
         C.AppendLine('  }');
         C.AppendLine('    keys');
         C.AppendLine('    {');
-        C.AppendLine('        key(Key1; ' + BuildKeyFieldsString(dataLayout.NAVTableID) + ')');
+        C.AppendLine('        key(Key1; ' + BuildKeyFieldsString(NAVSrcTableNo) + ')');
         C.AppendLine('        {');
         C.AppendLine('            Clustered = true;');
         C.AppendLine('        }');
@@ -219,55 +219,54 @@ codeunit 90000 DMTCodeGenerator
         DownloadFromStream(iStr, 'Download', 'ToFolder', Format(Enum::DMTFileFilter::All), toFileName);
     end;
 
-    local procedure GetCleanFieldName(var Field: Record DMTDataLayoutLine) CleanFieldName: Text
+    local procedure GetCleanFieldName(var Field: Record DMTFieldBuffer) CleanFieldName: Text
     begin
-        CleanFieldName := DelChr(Field.ColumnName, '=', '#&-%/\(),. ');
+        CleanFieldName := DelChr(Field.FieldName, '=', '#&-%/\(),. ');
         // XMLPort Fieldelements cannot start with numbers
         if CleanFieldName <> '' then
             if CopyStr(CleanFieldName, 1, 1) in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] then
                 CleanFieldName := '_' + CleanFieldName;
     end;
 
-    local procedure GetCleanTableName(Field: Record DMTDataLayoutLine) CleanFieldName: Text
+    local procedure GetCleanTableName(Field: Record DMTFieldBuffer) CleanFieldName: Text
     begin
         CleanFieldName := ConvertStr(Field.TableName, '&-%/\(),. ', '__________');
     end;
 
-    procedure FilterFields(var DataLayoutLine_FOUND: Record DMTDataLayoutLine; DataLayout: Record DMTDataLayout; includeDisabled: Boolean; IncludeFlowFields: Boolean; IncludeBlob: Boolean) hasFields: Boolean
+    procedure FilterFields(var fieldBuffer_FOUND: Record DMTFieldBuffer; tableNo: Integer; includeDisabled: Boolean; IncludeFlowFields: Boolean; IncludeBlob: Boolean) hasFields: Boolean
     var
         Debug: Integer;
     begin
         //* FilterField({TableNo}False{IncludeEnabled},False{IncludeFlowFields},False{IncludeBlob});
-        Clear(DataLayoutLine_FOUND);
-        DataLayoutLine_FOUND.SetRange("Data Layout ID", DataLayout.ID);
-        Debug := DataLayoutLine_FOUND.Count;
+        Clear(fieldBuffer_FOUND);
+        fieldBuffer_FOUND.SetRange(TableNo, tableNo);
+        Debug := fieldBuffer_FOUND.Count;
         if not includeDisabled then
-            DataLayoutLine_FOUND.SetRange(NAVEnabled, true);
-        Debug := DataLayoutLine_FOUND.Count;
-        DataLayoutLine_FOUND.SetFilter(NAVClass, '%1|%2', DataLayoutLine_FOUND.NAVClass::Normal, DataLayoutLine_FOUND.NAVClass::FlowField);
+            fieldBuffer_FOUND.SetRange(Enabled, true);
+        Debug := fieldBuffer_FOUND.Count;
+        fieldBuffer_FOUND.SetFilter(Class, '%1|%2', fieldBuffer_FOUND.Class::Normal, fieldBuffer_FOUND.Class::FlowField);
         if not IncludeFlowFields then
-            DataLayoutLine_FOUND.SetRange(NAVClass, DataLayoutLine_FOUND.NAVClass::Normal);
+            fieldBuffer_FOUND.SetRange(Class, fieldBuffer_FOUND.Class::Normal);
         if not IncludeBlob then
-            DataLayoutLine_FOUND.SetFilter(NAVDataType, '<>%1', DataLayoutLine_FOUND.NAVDataType::BLOB);
+            fieldBuffer_FOUND.SetFilter(Type, '<>%1', fieldBuffer_FOUND.Type::BLOB);
         // Fields_Found.SetRange(FieldName, 'Picture');
         // if Fields_Found.FindFirst() then;
-        Debug := DataLayoutLine_FOUND.Count;
-        DataLayoutLine_FOUND.SetRange(ColumnName);
-        hasFields := DataLayoutLine_FOUND.FindFirst();
+        Debug := fieldBuffer_FOUND.Count;
+        fieldBuffer_FOUND.SetRange(FieldName);
+        hasFields := fieldBuffer_FOUND.FindFirst();
     end;
 
     local procedure BuildKeyFieldsString(TableIDInNAV: Integer) KeyString: Text
     var
-        DataLayoutLine: Record DMTDataLayoutLine;
-        DataLayout: record DMTDataLayout;
+        FieldBuffer: Record DMTFieldBuffer;
         FieldID: Integer;
         FieldIds: List of [Text];
         FieldIDText: Text;
         OrderedKeyFieldNos: Text;
     begin
-        DataLayout.SetRange(NAVTableID, TableIDInNAV);
-        DataLayout.FindFirst();
-        OrderedKeyFieldNos := DataLayout.NAVPrimaryKey;
+        FieldBuffer.SetRange(TableNo, TableIDInNAV);
+        FieldBuffer.FindFirst();
+        OrderedKeyFieldNos := FieldBuffer."Primary Key";
         if OrderedKeyFieldNos.Contains(',') then begin
             FieldIds := OrderedKeyFieldNos.Split(',');
         end else begin
@@ -276,35 +275,34 @@ codeunit 90000 DMTCodeGenerator
 
         foreach FieldIDText in FieldIds do begin
             Evaluate(FieldID, FieldIDText);
-            DataLayoutLine.Get(TableIDInNAV, FieldID);
-            KeyString += GetALFieldNameWithMasking(DataLayoutLine.ColumnName) + ',';
+            FieldBuffer.Get(TableIDInNAV, FieldID);
+            KeyString += GetALFieldNameWithMasking(FieldBuffer.FieldName) + ',';
         end;
         KeyString := DelChr(KeyString, '>', ',');
     end;
 
-    local procedure AddTargetRecordExistsFlowField(TargetTableID: Integer; DataLayout: Record DMTDataLayout; var DataLayoutLine: Record DMTDataLayoutLine; var C: TextBuilder)
+    local procedure AddTargetRecordExistsFlowField(TargetTableID: Integer; BufferTableNo: Integer; var FieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
     var
-        RefHelper: Codeunit DMTRefHelper;
+        refHelper: Codeunit DMTRefHelper;
         TargetRef: RecordRef;
         TargetTableName: Text;
         BufferKeyFieldNames, TargetKeyFieldNames : List of [Text];
         KeyFieldIndex: Integer;
         f: TextBuilder;
     begin
-
-        // FieldNoIsReservedForNewField
-        if DataLayoutLine.Get(DataLayout.ID, 59999) then
+        // FieldNoIsUsed
+        if FieldBuffer.Get(BufferTableNo, 59999) then
             exit;
         // FindTargetTableKeyInfo
         TargetRef.Open(TargetTableID);
         TargetTableName := QuoteValue(TargetRef.Name);
-        for KeyFieldIndex := 1 to RefHelper.GetListOfKeyFieldIDs(TargetRef).Count do
+        for KeyFieldIndex := 1 to refHelper.GetListOfKeyFieldIDs(TargetRef).Count do
             TargetKeyFieldNames.Add(QuoteValue(TargetRef.KeyIndex(1).FieldIndex(KeyFieldIndex).Name));
         // FindSourceTableKeyInfo
-        DataLayoutLine.FindFirst();
-        for KeyFieldIndex := 1 to DataLayout.NAVPrimaryKey.Split(',').Count do
-            if DataLayoutLine.Get(DataLayout.NAVTableID, DataLayout.NAVPrimaryKey.Split(',').Get(KeyFieldIndex)) then
-                BufferKeyFieldNames.Add(QuoteValue(DataLayoutLine.ColumnName));
+        FieldBuffer.FindFirst();
+        for KeyFieldIndex := 1 to FieldBuffer."Primary Key".Split(',').Count do
+            if FieldBuffer.Get(FieldBuffer.TableNo, FieldBuffer."Primary Key".Split(',').Get(KeyFieldIndex)) then
+                BufferKeyFieldNames.Add(QuoteValue(FieldBuffer.FieldName));
 
         if TargetKeyFieldNames.Count <> BufferKeyFieldNames.Count then
             exit;
@@ -312,7 +310,7 @@ codeunit 90000 DMTCodeGenerator
         f.AppendLine('        field(59999; "DMT Target Record Exists"; Boolean)');
         f.AppendLine('        {');
         f.AppendLine('            CaptionML = ENU = ''DMT target record exists'', DEU = ''DMT Zieldatensatz vorhanden'';');
-        f.AppendLine('            FieldNAVClass = FlowField;');
+        f.AppendLine('            FieldClass = FlowField;');
 
         for KeyFieldIndex := 1 to TargetKeyFieldNames.Count do begin
             if KeyFieldIndex = 1 then
@@ -369,70 +367,55 @@ codeunit 90000 DMTCodeGenerator
         FieldImport.SetSource(InStr);
         FieldImport.Import();
 
-        migrateNAVSchemaToDataLayout();
-
         Message(ImportFinishedMsg);
     end;
 
-    local procedure migrateNAVSchemaToDataLayout()
-    var
-        dataLayout: Record DMTDataLayout;
-        dataLayoutLine: Record DMTDataLayoutLine;
-        NAVFieldBuffer: Record DMTFieldBuffer;
-        TableIDs: List of [Integer];
-        TableID: Integer;
+    local procedure GetALBufferTableName(importConfigHeader: Record DMTImportConfigHeader) Name: Text;
     begin
-        if NAVFieldBuffer.IsEmpty then exit;
-        while NAVFieldBuffer.FindFirst() do begin
-            TableIDs.Add(NAVFieldBuffer.TableNo);
-            NAVFieldBuffer.SetFilter(TableNo, StrSubstNo('>%1', NAVFieldBuffer.TableNo));
-        end;
-        foreach TableID in TableIDs do begin
-            // delete old
-            dataLayout.Reset();
-            dataLayout.SetRange(NAVTableID, TableID);
-            if dataLayout.FindFirst() then
-                dataLayout.DeleteAll(true);
-            // load fields
-            NAVFieldBuffer.Reset();
-            NAVFieldBuffer.FindSet(false);
-            NAVFieldBuffer.SetRange(TableNo, TableID);
-            NAVFieldBuffer.FindSet();
-            // add header
-            Clear(dataLayout);
-            //AddCustomCSVPreset('CSV (UTF-8), Überschrift in Zeile 1', enum::DMTTextEncoding::UTF8, '<CR/LF>', ';', '"', 1, false);
-            dataLayout.Name := NAVFieldBuffer.TableName;
-            dataLayout.SourceFileFormat := dataLayout.SourceFileFormat::"Custom CSV";
-            dataLayout.CSVTextEncoding := Enum::DMTTextEncoding::UTF8;
-            dataLayout.CSVLineSeparator := '<CR/LF>';
-            dataLayout.CSVFieldDelimiter := '<None>';
-            dataLayout.CSVFieldSeparator := '<TAB>';
-            dataLayout."Has Heading Row" := true;
-            dataLayout.HeadingRowNo := 1;
+        Name := StrSubstNo('TABLE %1 - T%2Buffer.al', importConfigHeader."Buffer Table ID", importConfigHeader."NAV Src.Table No.");
+    end;
 
-            dataLayout.NAVTableID := NAVFieldBuffer.TableNo;
-            dataLayout.NAVNoOfRecords := NAVFieldBuffer."No. of Records";
-            dataLayout.NAVPrimaryKey := NAVFieldBuffer."Primary Key";
-            dataLayout.NAVTableCaption := NAVFieldBuffer."Table Caption";
+    local procedure GetALXMLPortName(importConfigHeader: Record DMTImportConfigHeader) Name: Text;
+    begin
+        Name := StrSubstNo('XMLPORT %1 - T%2Import.al', importConfigHeader."Import XMLPort ID", importConfigHeader."NAV Src.Table No.");
+    end;
 
-            dataLayout.Insert(true);
+    procedure DownloadAllALDataMigrationObjects()
+    var
+        importConfigHeader: Record DMTImportConfigHeader;
+        DataCompression: Codeunit "Data Compression";
+        ObjGen: Codeunit DMTCodeGenerator;
+        FileBlob: Codeunit "Temp Blob";
+        IStr: InStream;
+        OStr: OutStream;
+        toFileName: Text;
+        DefaultTextEncoding: TextEncoding;
+    begin
+        DefaultTextEncoding := TextEncoding::UTF8;
+        importConfigHeader.SetRange("Use Separate Buffer Table", true);
+        if importConfigHeader.FindSet() then begin
+            DataCompression.CreateZipArchive();
             repeat
-                Clear(dataLayoutLine);
-
-                dataLayoutLine."Data Layout ID" := dataLayout.ID;
-                dataLayoutLine."Column No." := NAVFieldBuffer."No.";
-                dataLayoutLine.ColumnName := NAVFieldBuffer.FieldName;
-                dataLayoutLine.NAVFieldCaption := NAVFieldBuffer."Field Caption";
-                dataLayoutLine."NAV Primary Key" := NAVFieldBuffer."Primary Key";
-                dataLayoutLine."NAV Table Caption" := NAVFieldBuffer."Table Caption";
-                dataLayoutLine.NAVClass := NAVFieldBuffer.Class;
-                dataLayoutLine.NAVDataType := NAVFieldBuffer.Type;
-                dataLayoutLine.NAVEnabled := NAVFieldBuffer.Enabled;
-                dataLayoutLine.NAVLen := NAVFieldBuffer.Len;
-
-                dataLayoutLine.Insert(true);
-            until NAVFieldBuffer.Next() = 0;
+                //Table
+                Clear(FileBlob);
+                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+                OStr.WriteText(ObjGen.CreateALTable(importConfigHeader).ToText());
+                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
+                DataCompression.AddEntry(IStr, GetALBufferTableName(importConfigHeader));
+                //XMLPort
+                Clear(FileBlob);
+                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+                OStr.WriteText(ObjGen.CreateALXMLPort(importConfigHeader).ToText());
+                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
+                DataCompression.AddEntry(IStr, GetALXMLPortName(importConfigHeader));
+            until importConfigHeader.Next() = 0;
         end;
+        Clear(FileBlob);
+        FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+        DataCompression.SaveZipArchive(OStr);
+        FileBlob.CreateInStream(IStr, DefaultTextEncoding);
+        toFileName := 'BufferTablesAndXMLPorts.zip';
+        DownloadFromStream(IStr, 'Download', 'ToFolder', Format(Enum::DMTFileFilter::ZIP), toFileName);
     end;
 
 }

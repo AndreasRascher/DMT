@@ -138,9 +138,15 @@ page 91010 DMTImportConfigList
             {
                 Caption = 'Migration', Comment = 'de-DE=Migration';
                 actionref(ImportSelectedToBufferRef; ImportSelectedToBuffer) { }
+                actionref(updateImportToTargetPercentageInSelectedLinesRef; updateImportToTargetPercentageInSelectedLines) { }
             }
         }
     }
+
+    trigger OnAfterGetRecord()
+    begin
+        Rec.UpdateIndicators();
+    end;
 
     procedure GetSelection(var ImportConfigHeader_SELECTED: Record DMTImportConfigHeader temporary) HasLines: Boolean
     var
