@@ -159,10 +159,10 @@ codeunit 91014 DMTMigrate
         ImportConfigHeader := DMTImportSettings.ImportConfigHeader();
 
         CheckMappedFieldsExist(ImportConfigHeader);
-        CheckBufferTableIsNotEmpty(ImportConfigHeader);
+        ImportConfigHeader.BufferTableMgt().CheckBufferTableIsNotEmpty();
 
         // Show Filter Dialog
-        ImportConfigHeader.InitBufferRef(BufferRef);
+        ImportConfigHeader.BufferTableMgt().InitBufferRef(BufferRef);
         Commit(); // Runmodal Dialog in Edit View
         if not EditView(BufferRef, DMTImportSettings) then
             exit;
@@ -385,21 +385,6 @@ codeunit 91014 DMTMigrate
 
         if ImportConfigLine.IsEmpty then
             Error(ImportConfigLineEmptyErr, ImportConfigHeader.TableCaption, ImportConfigHeader.ID);
-    end;
-
-    procedure CheckBufferTableIsNotEmpty(ImportConfigHeader: Record DMTImportConfigHeader)
-    var
-        GenBuffTable: Record DMTGenBuffTable;
-        refHelper: Codeunit DMTRefHelper;
-        bufferTableEmptyErr: Label 'The buffer table is empty for %1:%2', Comment = 'de-DE=Die Puffertable entält keine Zeilen für %1:%2';
-    begin
-        if ImportConfigHeader."Use Separate Buffer Table" then begin
-            if refHelper.IsTableEmpty(ImportConfigHeader."Buffer Table ID") then
-                Error(bufferTableEmptyErr, ImportConfigHeader.TableCaption, ImportConfigHeader.ID);
-        end else begin
-            if not GenBuffTable.FilterBy(ImportConfigHeader) then
-                Error(bufferTableEmptyErr, ImportConfigHeader.TableCaption, ImportConfigHeader.ID);
-        end;
     end;
 
     procedure ListOfBufferRecIDsInner(var RecIdToProcessList: List of [RecordId]; var Log: Codeunit DMTLog; ImportSettings: Codeunit DMTImportSettings) IsFullyProcessed: Boolean

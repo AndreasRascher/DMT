@@ -99,7 +99,7 @@ table 91003 DMTImportConfigHeader
         Rec.DeleteBufferData();
     end;
 
-    procedure GetNextID() NextID: Integer
+    internal procedure GetNextID() NextID: Integer
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
     begin
@@ -238,37 +238,6 @@ table 91003 DMTImportConfigHeader
         exit(RecRef.Count);
     end;
 
-    internal procedure InitBufferRef(var BufferRef: RecordRef)
-    var
-        GenBuffTable: Record DMTGenBuffTable;
-        TableMetadata: Record "Table Metadata";
-        BufferTableMissingErr: Label 'Buffer Table %1 not found', Comment = 'de-DE=Eine Puffertabelle mit der ID %1 wurde nicht gefunden.';
-    begin
-        if not Rec."Use Separate Buffer Table" then begin
-            GenBuffTable.FilterGroup(2);
-            GenBuffTable.SetRange(IsCaptionLine, false);
-            GenBuffTable.FilterBy(Rec);
-            GenBuffTable.FilterGroup(0);
-            BufferRef.GetTable(GenBuffTable);
-        end else begin
-            if not TableMetadata.Get(Rec."Buffer Table ID") then
-                Error(BufferTableMissingErr, Rec."Buffer Table ID");
-            BufferRef.Open(Rec."Buffer Table ID");
-        end;
-    end;
-
-    internal procedure LoadImportConfigLines(var TempImportConfigLine: Record DMTImportConfigLine temporary) OK: Boolean
-    var
-        ImportConfigLine: Record DMTImportConfigLine;
-    begin
-        Rec.FilterRelated(ImportConfigLine);
-        ImportConfigLine.SetFilter("Processing Action", '<>%1', ImportConfigLine."Processing Action"::Ignore);
-        if Rec."Use Separate Buffer Table" then
-            ImportConfigLine.SetFilter("Source Field No.", '<>0');
-        ImportConfigLine.CopyToTemp(TempImportConfigLine);
-        OK := TempImportConfigLine.FindFirst();
-    end;
-
     internal procedure GetDataLayout() dataLayout: Record DMTDataLayout
     var
         sourceFileStorage: Record DMTSourceFileStorage;
@@ -392,6 +361,18 @@ table 91003 DMTImportConfigHeader
     begin
         rec.SetRange("Source File ID", sourceFileStorage."File ID");
         HasLines := not Rec.IsEmpty;
+    end;
+
+    internal procedure BufferTableMgt() IBufferTableMgt: Interface IBufferTableMgt
+    var
+        genericBuffertTableMgtImpl: Codeunit DMTGenericBuffertTableMgtImpl;
+        separateBufferTableMgtImpl: Codeunit DMTSeparateBufferTableMgtImpl;
+    begin
+        if Rec."Use Separate Buffer Table" then
+            IBufferTableMgt := separateBufferTableMgtImpl
+        else
+            IBufferTableMgt := genericBuffertTableMgtImpl;
+        IBufferTableMgt.setImportConfigHeader(Rec);
     end;
 
     local procedure ThrowActionableErrorIfDataLayoutIsNotSet()

@@ -66,7 +66,7 @@ page 91015 DMTDeleteDataInTargetTable
         FPBuilder: Codeunit DMTFPBuilder;
         BufferRef: RecordRef;
     begin
-        ImportConfigHeader.InitBufferRef(BufferRef);
+        ImportConfigHeader.BufferTableMgt().InitBufferRef(BufferRef);
         if sourceView <> '' then
             BufferRef.SetView(sourceView);
         if not FPBuilder.RunModal(BufferRef, ImportConfigHeader, true) then
@@ -99,7 +99,7 @@ page 91015 DMTDeleteDataInTargetTable
         Clear(NotTransferedRecords);
         Clear(RecordMapping);
 
-        ImportConfigHeader.LoadImportConfigLines(TempImportConfigLine);
+        ImportConfigHeader.BufferTableMgt().LoadImportConfigLines(TempImportConfigLine);
         // FindSourceRef - GenBuffer
         if not ImportConfigHeader."Use Separate Buffer Table" then begin
             GenBuffTable.Reset();

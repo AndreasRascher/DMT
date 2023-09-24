@@ -41,16 +41,7 @@ page 91012 DMTFieldLookup
             (importConfigID <> 0) and (FieldLookUpMode = FieldLookUpMode::"Look Up Source"):
                 begin
                     ImportConfigHeader.Get(importConfigID);
-                    if not ImportConfigHeader."Use Separate Buffer Table" then begin
-                        GenBuffTable.GetColCaptionForImportedFile(ImportConfigHeader, BuffTableCaptions);
-                        foreach FieldNo in BuffTableCaptions.Keys do begin
-                            TempDataLayoutLine.Init();
-                            TempDataLayoutLine."Column No." := FieldNo;
-                            TempDataLayoutLine.ColumnName := CopyStr(BuffTableCaptions.Get(FieldNo), 1, MaxStrLen(TempDataLayoutLine.ColumnName));
-                            TempDataLayoutLine.Insert();
-                            Rec.Copy(TempDataLayoutLine, true);
-                        end;
-                    end;
+                    BuffTableCaptions := ImportConfigHeader.BufferTableMgt().ReadBufferTableColumnCaptions();
                     IsLoaded := true;
                 end;
             (importConfigID <> 0) and (FieldLookUpMode = FieldLookUpMode::"Look Up Target"):

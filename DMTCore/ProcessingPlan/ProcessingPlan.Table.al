@@ -90,7 +90,7 @@ table 91009 DMTProcessingPlan
             // ImportConfigHeader.BufferTableType := ImportConfigHeader.BufferTableType::"Seperate Buffer Table per CSV";
         end else begin
             ImportConfigHeader.Get(Rec.ID);
-            ImportConfigHeader.InitBufferRef(BufferRef);
+            ImportConfigHeader.BufferTableMgt().InitBufferRef(BufferRef);
         end;
         CurrView := ReadSourceTableView();
         if CurrView <> '' then
@@ -104,12 +104,11 @@ table 91009 DMTProcessingPlan
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
         FPBuilder: Codeunit DMTFPBuilder;
-        Migrate: Codeunit DMTMigrate;
         TargetRef: RecordRef;
         CurrView: Text;
     begin
         ImportConfigHeader.Get(Rec.ID);
-        Migrate.CheckBufferTableIsNotEmpty(ImportConfigHeader);
+        ImportConfigHeader.BufferTableMgt().CheckBufferTableIsNotEmpty();
         TargetRef.Open(ImportConfigHeader."Target Table ID");
         CurrView := ReadDefaultValuesView();
         if CurrView <> '' then

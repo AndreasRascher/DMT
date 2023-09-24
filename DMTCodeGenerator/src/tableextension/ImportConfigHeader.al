@@ -7,13 +7,74 @@ tableextension 90011 DMTImportConfigHeader extends DMTImportConfigHeader
         {
             Caption = 'NAV Src.Table No.', Comment = 'de-DE=NAV Tabellennr.';
             trigger OnValidate()
-            var
-            // ObjMgt: Codeunit DMTObjMgt;
             begin
-                // ObjMgt.SetNAVTableCaptionAndTableName("NAV Src.Table No.", Rec."NAV Src.Table Caption", Rec."NAV Src.Table Name");
+                updateNAVTableFromTableNo();
             end;
         }
         field(90001; "NAV Src.Table Name"; Text[250]) { Caption = 'NAV Source Table Name'; Editable = false; }
         field(90002; "NAV Src.Table Caption"; Text[250]) { Caption = 'NAV Source Table Caption'; Editable = false; }
     }
+
+    local procedure updateNAVTableFromTableNo()
+    var
+        fieldBuffer: Record DMTFieldBuffer;
+    begin
+        if "NAV Src.Table No." = 0 then exit;
+        Clear("NAV Src.Table Name");
+        Clear("NAV Src.Table Caption");
+        fieldBuffer.SetRange(TableNo, "NAV Src.Table No.");
+        fieldBuffer.SetLoadFields(TableNo, "Table Caption", TableName);
+        if fieldBuffer.FindFirst() then begin
+            "NAV Src.Table Caption" := fieldBuffer."Table Caption";
+            "NAV Src.Table Name" := fieldBuffer.TableName;
+        end;
+    end;
+
+    procedure SetNAVTableByFileName(fileName: text)
+    var
+        fieldBuffer: Record DMTFieldBuffer;
+        NAVTableID: Integer;
+    begin
+        LoadFileNameMapping();
+        if FileNameTableCaptionMapping.Get(fileName, NAVTableID) then begin
+            fieldBuffer.SetRange(TableNo, NAVTableID);
+            if fieldBuffer.FindFirst() then begin
+                Rec."NAV Src.Table No." := fieldBuffer.TableNo;
+                Rec."NAV Src.Table Name" := fieldBuffer.TableName;
+                Rec."NAV Src.Table Caption" := fieldBuffer."Table Caption";
+                Rec.Modify()
+            end;
+        end;
+    end;
+
+    local procedure LoadFileNameMapping()
+    var
+        fieldBuffer: Record DMTFieldBuffer;
+        fileNameFromCaption: Text;
+    begin
+        if FileNameTableCaptionMapping.Count > 0 then exit;
+        fieldBuffer.SetLoadFields(TableNo, "Table Caption");
+        fieldBuffer.SetFilter(TableNo, '1..49999|100000..');
+        if fieldBuffer.FindSet(false) then
+            repeat
+                //Land/Region -> Land_Region
+                fileNameFromCaption := StrSubstNo('%1.csv', ConvertStr(fieldBuffer."Table Caption", '<>*\/|"', '_______'));
+                // TODO: Doppelte Captions im Standard
+                if not FileNameTableCaptionMapping.ContainsKey(fileNameFromCaption) then
+                    FileNameTableCaptionMapping.Add(fileNameFromCaption, fieldBuffer.TableNo);
+            until fieldBuffer.Next() = 0;
+
+        // ignore Custom Tables with duplicate captions
+        fieldBuffer.SetFilter(TableNo, '50000..99999');
+        if fieldBuffer.FindSet(false) then
+            repeat
+                fileNameFromCaption := StrSubstNo('%1.csv', ConvertStr(fieldBuffer."Table Caption", '<>*\/|"', '_______'));
+                if not FileNameTableCaptionMapping.ContainsKey(fileNameFromCaption) then
+                    FileNameTableCaptionMapping.Add(fileNameFromCaption, fieldBuffer.TableNo);
+            until fieldBuffer.Next() = 0;
+    end;
+
+    var
+        FileNameTableCaptionMapping: Dictionary of [Text, Integer];
+
 }

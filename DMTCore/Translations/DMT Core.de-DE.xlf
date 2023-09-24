@@ -2499,29 +2499,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Einrichtung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 521254526 - Field 2204498840 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Create Buffer Tables with Flowfields</source>
-          <target state="translated">Puffertabellen mit Flowfields generieren</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Puffertabellen mit Flowfields generieren</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Import with FlowFields - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 521254526 - Field 451378894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Migration Profil</source>
           <target state="translated">Migrationsprofil</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Migrationsprofil</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field MigrationProfil - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 521254526 - Field 2593167842 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Obj. ID Range Buffer Tables</source>
-          <target state="translated">Objekt ID Bereich für Puffertabellen</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Objekt ID Bereich für Puffertabellen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Obj. ID Range Buffer Tables - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 521254526 - Field 1138059172 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Obj. ID Range XMLPorts (Import)</source>
-          <target state="translated">Objekt ID Bereich für XMLPorts (Import)</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Objekt ID Bereich für XMLPorts (Import)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Obj. ID Range XMLPorts - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 521254526 - Field 1663593181 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Primary Key</source>
@@ -2697,12 +2679,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Wählen Sie eine Datei zum Hochladen aus</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTSourceFileMgt - Method UploadFileIntoFileStorage - NamedType UploadFileMsg</note>
         </trans-unit>
-        <trans-unit id="Page 425834526 - Property 2019332006" size-unit="char" translate="yes" xml:space="preserve">
-          <source>NAV,Backup,Lists,,</source>
-          <target state="translated">NAV,Backup,Listen,,</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=NAV,Backup,Listen,,</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Property PromotedActionCategories</note>
-        </trans-unit>
         <trans-unit id="Page 425834526 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Migration Tool Setup</source>
           <target state="translated">Data Migration Tool Einrichtung</target>
@@ -2733,18 +2709,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Migration Einstellungen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control MigrationSettings - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 425834526 - Control 2950689218 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Object Generator</source>
-          <target state="translated">Objekte generieren</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Objekte generieren</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control Object Generator - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 425834526 - Control 3424858197 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Object IDs</source>
-          <target state="translated">Objekt IDs</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Objekt IDs</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control ObjectIDs - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 425834526 - Action 866183911 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create Backup</source>
           <target state="translated">Backup erstellen</target>
@@ -2756,6 +2720,12 @@
           <target state="translated">Backup importieren</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Backup importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action XMLImport - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 425834526 - Action 1569466922 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Administration</source>
+          <target state="translated">Verwaltung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Verwaltung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action Administration - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Action 3714397591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Delete Gen. Buffer Table Lines</source>
@@ -2882,6 +2852,12 @@
           <target state="translated">Allgemein</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Allgemein</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control General - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Control 2362813729 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer Table Objects</source>
+          <target state="translated">Puffertabellen Objekte</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Puffertabellen Objekte</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control SeperateBufferObjects - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 809130730 - Control 1510032611 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Log</source>

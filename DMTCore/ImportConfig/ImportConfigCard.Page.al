@@ -150,7 +150,7 @@ page 91008 DMTImportConfigCard
                     NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', Comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
                     TargetTableFilter, TargetTableView : Text;
                 begin
-                    Rec.InitBufferRef(RecRef);
+                    Rec.BufferTableMgt().InitBufferRef(RecRef);
                     if TargetTableView <> '' then
                         RecRef.SetView(TargetTableView);
                     if FPBuilder.RunModal(RecRef, true) then begin

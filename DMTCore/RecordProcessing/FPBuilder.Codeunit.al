@@ -121,7 +121,7 @@ codeunit 91012 DMTFPBuilder
         ImportConfigHeader: Record DMTImportConfigHeader;
     begin
         ImportConfigHeader.Get(ImportConfigHeaderID);
-        ImportConfigHeader.InitBufferRef(recRef);
+        ImportConfigHeader.BufferTableMgt().InitBufferRef(recRef);
         RestorFiltersForRecRef(recRef, FilterDetailsJSON, true);
     end;
 
