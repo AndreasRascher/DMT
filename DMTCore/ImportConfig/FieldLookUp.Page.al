@@ -41,7 +41,7 @@ page 91012 DMTFieldLookup
             (importConfigID <> 0) and (FieldLookUpMode = FieldLookUpMode::"Look Up Source"):
                 begin
                     ImportConfigHeader.Get(importConfigID);
-                    BuffTableCaptions := ImportConfigHeader.BufferTableMgt().ReadBufferTableColumnCaptions();
+                    ImportConfigHeader.BufferTableMgt().ReadBufferTableColumnCaptions(BuffTableCaptions);
                     IsLoaded := true;
                 end;
             (importConfigID <> 0) and (FieldLookUpMode = FieldLookUpMode::"Look Up Target"):
