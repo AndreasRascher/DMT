@@ -6,7 +6,9 @@ interface IBufferTableMgt
     procedure LoadImportConfigLines(var tempImportConfigLine: Record DMTImportConfigLine temporary) OK: Boolean
     procedure CheckBufferTableIsNotEmpty()
     procedure ReadBufferTableColumnCaptions(var BuffTableCaptions: Dictionary of [Integer, Text]) OK: Boolean
-    procedure InitKeyFieldFilter(var BufferRef: RecordRef) FilterFields: Dictionary of [Integer/*FieldNo*/, Text/*TableCaption*/]
+    procedure CountRecordsInBufferTable() NoOfRecords: Integer
+    procedure ShowBufferTable() OK: Boolean
+    procedure DeleteAllBufferData()
 }
 
 

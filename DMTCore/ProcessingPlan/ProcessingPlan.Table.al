@@ -215,10 +215,7 @@ table 91009 DMTProcessingPlan
                     exit(true);
                 end;
         end;
-        if not ImportConfigHeader.Get(Rec.ID) then exit;
-        if (ImportConfigHeader."Buffer Table ID" = 0) and (not ImportConfigHeader."Use Separate Buffer Table") then
-            ImportConfigHeader."Buffer Table ID" := Database::DMTGenBuffTable;
-        SourceRef.Open(ImportConfigHeader."Buffer Table ID", false);
+        ImportConfigHeader.BufferTableMgt().InitBufferRef(SourceRef);
         exit(true)
     end;
 

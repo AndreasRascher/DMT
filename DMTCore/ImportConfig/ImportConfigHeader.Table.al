@@ -96,7 +96,7 @@ table 91003 DMTImportConfigHeader
             ImportConfigLine.DeleteAll(true);
         if Rec.FilterRelated(LogEntry) then
             LogEntry.DeleteAll();
-        Rec.DeleteBufferData();
+        Rec.BufferTableMgt().DeleteAllBufferData();
     end;
 
     internal procedure GetNextID() NextID: Integer
@@ -120,13 +120,10 @@ table 91003 DMTImportConfigHeader
         LogEntry.SetRange("Entry Type", LogEntry."Entry Type"::Summary);
     end;
 
-    internal procedure ShowTableContent(TableID: Integer) OK: Boolean
-    var
-        TableMeta: Record "Table Metadata";
+    internal procedure UpdateBufferRecordCount()
     begin
-        OK := TableMeta.Get(TableID);
-        if OK then
-            Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, TableID));
+        Rec."No.of Records in Buffer Table" := Rec.BufferTableMgt().CountRecordsInBufferTable();
+        Rec.Modify();
     end;
 
     internal procedure GetSourceFileName(): Text[250]
@@ -136,15 +133,6 @@ table 91003 DMTImportConfigHeader
         SourceFileStorage.Get(Rec."Source File ID");
         SourceFileStorage.TestField(Name);
         exit(SourceFileStorage.Name);
-    end;
-
-    internal procedure ShowBufferTable()
-    var
-        genBuffTable: Record DMTGenBuffTable;
-    begin
-        if not genBuffTable.FilterBy(Rec) then
-            exit;
-        genBuffTable.ShowBufferTable(Rec);
     end;
 
     internal procedure SourceFileName_OnAfterLookup(Selected: RecordRef)
@@ -206,26 +194,13 @@ table 91003 DMTImportConfigHeader
         end;
     end;
 
-    internal procedure DeleteBufferData()
+    internal procedure ShowTableContent(tableID: Integer) OK: Boolean
     var
-        genBuffTable: Record DMTGenBuffTable;
+        TableMeta: Record "Table Metadata";
     begin
-        if "Source File ID" = 0 then
-            exit;
-        genBuffTable.SetRange("Imp.Conf.Header ID", Rec.ID);
-        if not genBuffTable.IsEmpty then
-            genBuffTable.DeleteAll();
-    end;
-
-    internal procedure UpdateBufferRecordCount()
-    var
-        GenBuffTable: Record DMTGenBuffTable;
-    begin
-        GenBuffTable.Reset();
-        GenBuffTable.FilterBy(Rec);
-        GenBuffTable.SetRange(IsCaptionLine, false); // don't count header line
-        Rec."No.of Records in Buffer Table" := GenBuffTable.Count;
-        Rec.Modify();
+        OK := TableMeta.Get(tableID);
+        if OK then
+            Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, tableID));
     end;
 
     internal procedure GetNoOfRecordsInTrgtTable(): Integer

@@ -2,23 +2,36 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
 {
     procedure ImportToBufferTable(ImportConfigHeader: Record DMTImportConfigHeader);
     var
-        genBuffTable: Record DMTGenBuffTable;
         SourceFileStorage: Record DMTSourceFileStorage;
         defaultSourceFileImportImpl: Codeunit DMTDefaultSourceFileImportImpl;
         CSVReader: XmlPort DMTCSVReader;
         largeTextColCaptions: Dictionary of [Integer, Text];
     begin
         // Delete existing lines
-        if genBuffTable.FilterBy(ImportConfigHeader) then
-            genBuffTable.DeleteAll();
-
-        SourceFileStorage.Get(ImportConfigHeader."Source File ID");
-        PrepareXMLPortWithCSVOptionsAndSourceFile(SourceFileStorage, ImportConfigHeader.GetDataLayout(), CSVReader);
-        CSVReader.InitImportToGenBuffer(SourceFileStorage, ImportConfigHeader);
-        CSVReader.Import();
-        largeTextColCaptions := CSVReader.LargeTextColCaptions();
-        defaultSourceFileImportImpl.ShowTooLargeValuesHaveBeenCutOffWarningIfRequired(SourceFileStorage, largeTextColCaptions);
+        ImportConfigHeader.BufferTableMgt().DeleteAllBufferData();
+        if not ImportViaSeparateXMLPort(ImportConfigHeader) then begin
+            SourceFileStorage.Get(ImportConfigHeader."Source File ID");
+            PrepareXMLPortWithCSVOptionsAndSourceFile(SourceFileStorage, ImportConfigHeader.GetDataLayout(), CSVReader);
+            CSVReader.InitImportToGenBuffer(SourceFileStorage, ImportConfigHeader);
+            CSVReader.Import();
+            largeTextColCaptions := CSVReader.LargeTextColCaptions();
+            defaultSourceFileImportImpl.ShowTooLargeValuesHaveBeenCutOffWarningIfRequired(SourceFileStorage, largeTextColCaptions);
+        end;
         ImportConfigHeader.UpdateBufferRecordCount();
+    end;
+
+    local procedure ImportViaSeparateXMLPort(importConfigHeader: Record DMTImportConfigHeader) HasBeenImported: Boolean
+    var
+        sourceFileStorage: Record DMTSourceFileStorage;
+    begin
+        if not importConfigHeader."Use Separate Buffer Table" then exit(false);
+        if importConfigHeader."Import XMLPort ID" = 0 then exit(false);
+        sourceFileStorage.Get(ImportConfigHeader."Source File ID");
+        sourceFileStorage.TestField(Name);
+        sourceFileStorage.GetFileAsTempBlob(FileBlobGlobal);
+        FileBlobGlobal.CreateInStream(FileStreamGlobal);
+        Xmlport.Import(importConfigHeader."Import XMLPort ID", FileStreamGlobal);
+        HasBeenImported := true;
     end;
 
     procedure ReadHeadline(sourceFileStorage: Record DMTSourceFileStorage; dataLayout: Record DMTDataLayout; var FirstRowWithValues: Integer; var HeaderLine: List of [Text]);

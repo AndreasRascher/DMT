@@ -44,16 +44,47 @@ codeunit 91022 DMTSeparateBufferTableMgtImpl implements IBufferTableMgt
     end;
 
     procedure ReadBufferTableColumnCaptions(var BuffTableCaptions: Dictionary of [Integer, Text]) OK: Boolean
+    var
+        field: Record field;
     begin
         checkHeaderIsSet();
-        //ToDO
+        ImportConfigHeaderGlobal.TestField("Target Table ID");
+        field.SetRange(TableNo, ImportConfigHeaderGlobal."Target Table ID");
+        field.SetFilter("No.", '<2000000000'); // exclude system fields
+        field.SetRange(Enabled, true);
+        field.SetRange(Class, Field.Class::Normal);
+        if field.FindSet(false) then
+            repeat
+                BuffTableCaptions.Add(field."No.", field."Field Caption");
+            until field.Next() = 0;
     end;
 
-    procedure InitKeyFieldFilter(var BufferRef: RecordRef) FilterFields: Dictionary of [Integer, Text];
+    procedure CountRecordsInBufferTable() NoOfRecords: Integer;
+    var
+        recRef: RecordRef;
     begin
-        checkHeaderIsSet();
+        InitBufferRef(recRef);
+        NoOfRecords := recRef.Count;
+    end;
+
+    internal procedure ShowBufferTable() OK: Boolean
+    begin
+        OK := ImportConfigHeaderGlobal.ShowTableContent(ImportConfigHeaderGlobal."Buffer Table ID");
     end;
 
     var
         ImportConfigHeaderGlobal: record DMTImportConfigHeader;
+
+    procedure DeleteAllBufferData();
+    var
+        TableMetadata: Record "Table Metadata";
+        bufferRef: RecordRef;
+    begin
+        if ImportConfigHeaderGlobal."Buffer Table ID" = 0 then
+            exit;
+        if not TableMetadata.Get(ImportConfigHeaderGlobal."Buffer Table ID") then
+            exit;
+        InitBufferRef(bufferRef);
+        bufferRef.DeleteAll();
+    end;
 }

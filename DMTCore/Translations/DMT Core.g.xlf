@@ -1643,11 +1643,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Import Konfiguration Kopf</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 200502431 - Method 705889565 - NamedType 935989145" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Buffer Table %1 not found</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Eine Puffertabelle mit der ID %1 wurde nicht gefunden.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Method InitBufferRef - NamedType BufferTableMissingErr</note>
-        </trans-unit>
         <trans-unit id="Table 200502431 - Method 157426326 - NamedType 3929116107" size-unit="char" translate="yes" xml:space="preserve">
           <source>Assign data layout</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Datenlayout zuweisen</note>
@@ -2168,6 +2163,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Zu lange Feldwerte wurden abgeschnitten. Max. Textlänge ist 250 Zeichen.\Dateiname: "%1"\Betroffene Spalten: "%2."</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDefaultSourceFileImportImpl - Method ShowTooLargeValuesHaveBeenCutOffWarningIfRequired - NamedType TooLargeValuesHaveBeenCutOffMsg</note>
         </trans-unit>
+        <trans-unit id="Codeunit 4084131636 - Method 1479878862 - NamedType 1097618994" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The buffer table is empty for %1:%2</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Die Puffertable entält keine Zeilen für %1:%2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTGenericBuffertTableMgtImpl - Method CheckBufferTableIsNotEmpty - NamedType bufferTableEmptyErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 4228541464 - Method 2979514558 - NamedType 2402786010" size-unit="char" translate="yes" xml:space="preserve">
           <source>Overwrite existing field assignments?</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Vorhandene Zuordnung überschreiben?</note>
@@ -2187,11 +2187,6 @@
           <source>Process number has not been initialized</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLog - Method CheckIfProcessNoIsSet - NamedType ProcessNoNotInitializedErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - Method 1479878862 - NamedType 1097618994" size-unit="char" translate="yes" xml:space="preserve">
-          <source>The buffer table is empty for %1:%2</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Die Puffertable entält keine Zeilen für %1:%2</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method CheckBufferTableIsNotEmpty - NamedType bufferTableEmptyErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 623866352 - Method 1507708651 - NamedType 4003859195" size-unit="char" translate="yes" xml:space="preserve">
           <source>No field mapping found for %1 "%2"</source>
@@ -2222,6 +2217,16 @@
           <source>"%1" is not a valid %2 value.</source>
           <note from="Developer" annotates="general" priority="2">de-DE="%1" ist kein gültiger %2 Wert</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTRefHelper - Method EvaluateFieldRef - NamedType InvalidValueForTypeErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 107245564 - Method 1479878862 - NamedType 1097618994" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The buffer table is empty for %1:%2</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Die Puffertable entält keine Zeilen für %1:%2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTSeparateBufferTableMgtImpl - Method CheckBufferTableIsNotEmpty - NamedType bufferTableEmptyErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 107245564 - Method 705889565 - NamedType 935989145" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer Table %1 not found</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Eine Puffertabelle mit der ID %1 wurde nicht gefunden.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTSeparateBufferTableMgtImpl - Method InitBufferRef - NamedType BufferTableMissingErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3371792372 - Method 3508704786 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import finished</source>

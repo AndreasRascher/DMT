@@ -51,11 +51,36 @@ codeunit 91019 DMTGenericBuffertTableMgtImpl implements IBufferTableMgt
         OK := genBuffTable.GetColCaptionForImportedFile(ImportConfigHeaderGlobal, BuffTableCaptions);
     end;
 
-    procedure InitKeyFieldFilter(var BufferRef: RecordRef) FilterFields: Dictionary of [Integer, Text];
-    begin
-        checkHeaderIsSet();
-    end;
-
     var
         ImportConfigHeaderGlobal: record DMTImportConfigHeader;
+
+    procedure CountRecordsInBufferTable() NoOfRecords: Integer;
+    var
+        GenBuffTable: Record DMTGenBuffTable;
+    begin
+        checkHeaderIsSet();
+        GenBuffTable.Reset();
+        GenBuffTable.FilterBy(ImportConfigHeaderGlobal);
+        GenBuffTable.SetRange(IsCaptionLine, false); // don't count header line
+        NoOfRecords := GenBuffTable.Count;
+    end;
+
+    internal procedure ShowBufferTable() OK: Boolean
+    var
+        genBuffTable: Record DMTGenBuffTable;
+    begin
+        OK := genBuffTable.FilterBy(ImportConfigHeaderGlobal);
+        if OK then
+            genBuffTable.ShowBufferTable(ImportConfigHeaderGlobal);
+    end;
+
+    internal procedure DeleteAllBufferData()
+    var
+        genBuffTable: Record DMTGenBuffTable;
+    begin
+        if ImportConfigHeaderGlobal."Source File ID" = 0 then
+            exit;
+        if genBuffTable.FilterBy(ImportConfigHeaderGlobal) then
+            genBuffTable.DeleteAll();
+    end;
 }

@@ -273,23 +273,10 @@ codeunit 91002 DMTImportConfigMgt
         case true of
             // seperate buffer table -> read field names
             importConfigHeader."Use Separate Buffer Table":
-                begin
-                    Field.SetRange(TableNo, importConfigHeader."Buffer Table ID");
-                    Field.SetRange(Enabled, true);
-                    Field.SetRange(Class, Field.Class::Normal);
-                    Field.FindSet();
-                    repeat
-                        SourceFieldNames.Add(Field."No.", Field.FieldName);
-                    until Field.Next() = 0;
-                end;
+                importConfigHeader.BufferTableMgt().ReadBufferTableColumnCaptions(SourceFieldNames);
             // use genBuffer, file has heading line  -> read heading line from buffer
             dataLayout."Has Heading Row":
-                begin
-                    genBuffTable.GetColCaptionForImportedFile(importConfigHeader, SourceFieldNames2);
-                    foreach FieldID in SourceFieldNames2.Keys do begin
-                        SourceFieldNames.Add(FieldID, SourceFieldNames2.Get(FieldID));
-                    end;
-                end;
+                importConfigHeader.BufferTableMgt().ReadBufferTableColumnCaptions(SourceFieldNames);
             // use genBuffer, file without heading line  -> read data layout line
             not dataLayout."Has Heading Row":
                 begin

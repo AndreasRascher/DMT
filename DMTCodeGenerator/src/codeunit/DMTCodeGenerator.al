@@ -290,6 +290,14 @@ codeunit 90011 DMTCodeGenerator
         KeyFieldIndex: Integer;
         f: TextBuilder;
     begin
+        HIER FELDER EINBAUEN
+                field(20;
+        Imported;
+        Boolean) { Caption = 'Imported', comment = 'de-DE=Importiert'; }
+        field(21; "RecId (Imported)"; RecordId) { Caption = 'Record ID (Imported)', comment = 'de-DE=Datensatz-ID (Importiert)'; }
+
+        */
+
         // FieldNoIsUsed
         if FieldBuffer.Get(BufferTableNo, 59999) then
             exit;
@@ -356,8 +364,8 @@ codeunit 90011 DMTCodeGenerator
     var
         TempBlob: Codeunit "Temp Blob";
         FieldImport: XmlPort "DMTFieldBufferImport";
-        InStr: InStream;
-        ImportFinishedMsg: Label 'Import finished', Comment = 'de-DE=Import abgeschlossen';
+                         InStr: InStream;
+                         ImportFinishedMsg: Label 'Import finished', Comment = 'de-DE=Import abgeschlossen';
         FileName: Text;
     begin
         TempBlob.CreateInStream(InStr);
