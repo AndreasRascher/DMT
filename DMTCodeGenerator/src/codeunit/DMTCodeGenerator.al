@@ -190,7 +190,10 @@ codeunit 90011 DMTCodeGenerator
                 C.AppendLine('        }');
 
             until DMTFieldBuffer.Next() = 0;
+
         AddTargetRecordExistsFlowField(TargetTableID, BufferTableID, DMTFieldBuffer, C);
+        AddImportStatusFields(BufferTableID, DMTFieldBuffer, C);
+
         C.AppendLine('  }');
         C.AppendLine('    keys');
         C.AppendLine('    {');
@@ -290,14 +293,6 @@ codeunit 90011 DMTCodeGenerator
         KeyFieldIndex: Integer;
         f: TextBuilder;
     begin
-        HIER FELDER EINBAUEN
-                field(20;
-        Imported;
-        Boolean) { Caption = 'Imported', comment = 'de-DE=Importiert'; }
-        field(21; "RecId (Imported)"; RecordId) { Caption = 'Record ID (Imported)', comment = 'de-DE=Datensatz-ID (Importiert)'; }
-
-        */
-
         // FieldNoIsUsed
         if FieldBuffer.Get(BufferTableNo, 59999) then
             exit;
@@ -338,6 +333,17 @@ codeunit 90011 DMTCodeGenerator
         C.Append(f.ToText());
     end;
 
+    local procedure AddImportStatusFields(BufferTableNo: Integer; var FieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
+    var
+        f: TextBuilder;
+    begin
+        if not FieldBuffer.Get(BufferTableNo, 59997) then
+            f.AppendLine('        field(59997; Imported;Boolean) { CaptionML = ENU =''Imported'', DEU = ''Importiert''; }');
+        if not FieldBuffer.Get(BufferTableNo, 59998) then
+            f.AppendLine('        field(59998; "RecId (Imported)"; RecordId) { CaptionML = ENU = ''Record ID (Imported)'', DEU = ''Datensatz-ID (Importiert)''; }');
+        C.Append(f.ToText());
+    end;
+
     local procedure QuoteValue(TextValue: Text): Text
     var
         DummyText: Text;
@@ -364,8 +370,8 @@ codeunit 90011 DMTCodeGenerator
     var
         TempBlob: Codeunit "Temp Blob";
         FieldImport: XmlPort "DMTFieldBufferImport";
-                         InStr: InStream;
-                         ImportFinishedMsg: Label 'Import finished', Comment = 'de-DE=Import abgeschlossen';
+        InStr: InStream;
+        ImportFinishedMsg: Label 'Import finished', Comment = 'de-DE=Import abgeschlossen';
         FileName: Text;
     begin
         TempBlob.CreateInStream(InStr);
