@@ -36,11 +36,11 @@ codeunit 91019 DMTGenericBuffertTableMgtImpl implements IBufferTableMgt
     procedure CheckBufferTableIsNotEmpty()
     var
         genBuffTable: Record DMTGenBuffTable;
-        bufferTableEmptyErr: Label 'The buffer table is empty for %1:%2', Comment = 'de-DE=Die Puffertable entält keine Zeilen für %1:%2';
+        bufferTableEmptyErr: Label 'The buffer table is empty. Filename: "%1"', Comment = 'de-DE=Die Puffertable entält keine Zeilen. Dateiname: "%1"';
     begin
         checkHeaderIsSet();
         if not genBuffTable.FilterBy(ImportConfigHeaderGlobal) then
-            Error(bufferTableEmptyErr, ImportConfigHeaderGlobal.TableCaption, ImportConfigHeaderGlobal.ID);
+            Error(bufferTableEmptyErr, ImportConfigHeaderGlobal."Source File Name");
     end;
 
     procedure ReadBufferTableColumnCaptions(var BuffTableCaptions: Dictionary of [Integer, Text]) OK: Boolean

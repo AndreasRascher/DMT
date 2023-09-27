@@ -402,6 +402,9 @@ table 91003 DMTImportConfigHeader
         IsImported: Boolean;
         importConfigHeader: Record DMTImportConfigHeader;
     begin
+        Hier weitermachen:
+         - muss für beide Tabellenarten gehen
+        - evtl.das speichern der Info(in ProcessRecord) auch hinter interface packen
         importConfigHeader.get(Rec.RecordId); // update
         if not genBuffTable.FilterBy(Rec) then
             exit;

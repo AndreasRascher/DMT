@@ -142,65 +142,65 @@ codeunit 91014 DMTMigrate
 
     local procedure ProcessFullBuffer(var DMTImportSettings: Codeunit DMTImportSettings)
     var
-        ImportConfigHeader: Record DMTImportConfigHeader;
+        importConfigHeader: Record DMTImportConfigHeader;
         DMTSetup: Record DMTSetup;
         APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
-        Log: Codeunit DMTLog;
-        MigrationLib: Codeunit DMTMigrationLib;
-        ProgressDialog: Codeunit DMTProgressDialog;
-        BufferRef, BufferRef2 : RecordRef;
-        Start: DateTime;
-        ResultType: Enum DMTProcessingResultType;
+        log: Codeunit DMTLog;
+        migrationLib: Codeunit DMTMigrationLib;
+        progressDialog: Codeunit DMTProgressDialog;
+        bufferRef, bufferRef2 : RecordRef;
+        start: DateTime;
+        resultType: Enum DMTProcessingResultType;
         iReplacementHandler: Interface IReplacementHandler;
-        NoBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filter: "%1"', Comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"';
+        noBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filter: "%1"', Comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"';
     begin
-        Start := CurrentDateTime;
+        start := CurrentDateTime;
         APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
-        ImportConfigHeader := DMTImportSettings.ImportConfigHeader();
+        importConfigHeader := DMTImportSettings.ImportConfigHeader();
 
-        CheckMappedFieldsExist(ImportConfigHeader);
-        ImportConfigHeader.BufferTableMgt().CheckBufferTableIsNotEmpty();
+        CheckMappedFieldsExist(importConfigHeader);
+        importConfigHeader.BufferTableMgt().CheckBufferTableIsNotEmpty();
 
         // Show Filter Dialog
-        ImportConfigHeader.BufferTableMgt().InitBufferRef(BufferRef);
+        importConfigHeader.BufferTableMgt().InitBufferRef(bufferRef);
         Commit(); // Runmodal Dialog in Edit View
-        if not EditView(BufferRef, DMTImportSettings) then
+        if not EditView(bufferRef, DMTImportSettings) then
             exit;
 
         //Prepare Progress Bar
-        if not BufferRef.FindSet() then
-            Error(NoBufferTableRecorsInFilterErr, BufferRef.GetFilters);
+        if not bufferRef.FindSet() then
+            Error(noBufferTableRecorsInFilterErr, bufferRef.GetFilters);
 
-        PrepareProgressBar(ProgressDialog, ImportConfigHeader, BufferRef);
-        ProgressDialog.Open();
-        ProgressDialog.UpdateFieldControl('Filter', ConvertStr(BufferRef.GetFilters, '@', '_'));
+        PrepareProgressBar(progressDialog, importConfigHeader, bufferRef);
+        progressDialog.Open();
+        progressDialog.UpdateFieldControl('Filter', ConvertStr(bufferRef.GetFilters, '@', '_'));
 
         DMTSetup.getDefaultReplacementImplementation(iReplacementHandler);
-        iReplacementHandler.InitBatchProcess(ImportConfigHeader);
+        iReplacementHandler.InitBatchProcess(importConfigHeader);
 
         if DMTImportSettings.UpdateFieldsFilter() <> '' then
-            Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Field Update", ImportConfigHeader)
+            log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Field Update", importConfigHeader)
         else
-            Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", ImportConfigHeader);
+            log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", importConfigHeader);
 
 
         repeat
             // hier weiter machen:
             // Wenn beim Feldupdate ein Zieldatensatz nicht existiert, dann soll der als geskipped gekennzeichnet werden
             // Nur wenn ein Zieldatensatz existiert und kein Fehler auftreteten ist , dann ist das ok
-            BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
-            ProcessSingleBufferRecord(BufferRef2, DMTImportSettings, Log, ResultType);
-            UpdateLog(DMTImportSettings, Log, ResultType);
-            UpdateProgress(DMTImportSettings, ProgressDialog, ResultType);
-            if ProgressDialog.GetStep('Process') mod 50 = 0 then
+            bufferRef2 := bufferRef.Duplicate(); // Variant + Events = Call By Reference 
+            ProcessSingleBufferRecord(bufferRef2, DMTImportSettings, log, resultType);
+            UpdateLog(DMTImportSettings, log, resultType);
+            UpdateProgress(DMTImportSettings, progressDialog, resultType);
+            if progressDialog.GetStep('Process') mod 50 = 0 then
                 Commit();
-        until BufferRef.Next() = 0;
-        MigrationLib.RunPostProcessingFor(ImportConfigHeader);
-        ImportConfigHeader.updateImportToTargetPercentage();
-        ProgressDialog.Close();
-        Log.CreateSummary();
-        Log.ShowLogForCurrentProcess();
-        ShowResultDialog(ProgressDialog);
+        until bufferRef.Next() = 0;
+        migrationLib.RunPostProcessingFor(importConfigHeader);
+        importConfigHeader.updateImportToTargetPercentage();
+        progressDialog.Close();
+        log.CreateSummary();
+        log.ShowLogForCurrentProcess();
+        ShowResultDialog(progressDialog);
     end;
 
     local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings; var Log: Codeunit DMTLog; var ResultType: Enum DMTProcessingResultType)

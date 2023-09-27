@@ -2164,8 +2164,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTDefaultSourceFileImportImpl - Method ShowTooLargeValuesHaveBeenCutOffWarningIfRequired - NamedType TooLargeValuesHaveBeenCutOffMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 4084131636 - Method 1479878862 - NamedType 1097618994" size-unit="char" translate="yes" xml:space="preserve">
-          <source>The buffer table is empty for %1:%2</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Die Puffertable entält keine Zeilen für %1:%2</note>
+          <source>The buffer table is empty. Filename: "%1"</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Die Puffertable entält keine Zeilen. Dateiname: "%1"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTGenericBuffertTableMgtImpl - Method CheckBufferTableIsNotEmpty - NamedType bufferTableEmptyErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 4228541464 - Method 2979514558 - NamedType 2402786010" size-unit="char" translate="yes" xml:space="preserve">
@@ -2203,10 +2203,10 @@
           <note from="Developer" annotates="general" priority="2">de-DE Verbleibende Zeit</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method PrepareProgressBar - NamedType TimeRemainingLbl</note>
         </trans-unit>
-        <trans-unit id="Codeunit 623866352 - Method 984899932 - NamedType 4071086809" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 623866352 - Method 984899932 - NamedType 2737554361" size-unit="char" translate="yes" xml:space="preserve">
           <source>No buffer table records match the filter.\ Filter: "%1"</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method ProcessFullBuffer - NamedType NoBufferTableRecorsInFilterErr</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method ProcessFullBuffer - NamedType noBufferTableRecorsInFilterErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 623866352 - Method 771327502 - NamedType 1000503204" size-unit="char" translate="yes" xml:space="preserve">
           <source>No. of Records..\processed: %1\imported: %2\With Error: %3\Processing Time:%4</source>
@@ -2219,8 +2219,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTRefHelper - Method EvaluateFieldRef - NamedType InvalidValueForTypeErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 107245564 - Method 1479878862 - NamedType 1097618994" size-unit="char" translate="yes" xml:space="preserve">
-          <source>The buffer table is empty for %1:%2</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Die Puffertable entält keine Zeilen für %1:%2</note>
+          <source>The buffer table is empty. Filename: "%1"</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Die Puffertable entält keine Zeilen. Dateiname: "%1"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTSeparateBufferTableMgtImpl - Method CheckBufferTableIsNotEmpty - NamedType bufferTableEmptyErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 107245564 - Method 705889565 - NamedType 935989145" size-unit="char" translate="yes" xml:space="preserve">

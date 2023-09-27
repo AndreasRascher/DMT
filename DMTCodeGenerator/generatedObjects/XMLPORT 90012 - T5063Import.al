@@ -1,6 +1,6 @@
 xmlport 90012 T5063Import
 {
-    CaptionML = DEU = 'Aktivitätengruppe(DMT)', ENU = 'Interaction Group(DMT)';
+    CaptionML= DEU = 'Aktivitätengruppe(DMT)', ENU = 'Interaction Group(DMT)';
     Direction = Import;
     FieldSeparator = '<TAB>';
     FieldDelimiter = '<None>';
@@ -41,9 +41,9 @@ xmlport 90012 T5063Import
             {
                 group(Umgebung)
                 {
-                    Caption = 'Environment', locked = true;
-                    field(DatabaseName; GetDatabaseName()) { Caption = 'Database', locked = true; ApplicationArea = all; }
-                    field(COMPANYNAME; COMPANYNAME) { Caption = 'Company', locked = true; ApplicationArea = all; }
+                    Caption = 'Environment',locked=true;
+                    field(DatabaseName; GetDatabaseName()) { Caption = 'Database',locked=true; ApplicationArea = all; }
+                    field(COMPANYNAME; COMPANYNAME) { Caption = 'Company',locked=true; ApplicationArea = all; }
                 }
             }
         }
@@ -52,7 +52,7 @@ xmlport 90012 T5063Import
     trigger OnPostXmlPort()
     var
         T5063Buffer: Record T5063Buffer;
-        LinesProcessedMsg: Label '%1 Buffer\%2 lines imported', locked = true;
+        LinesProcessedMsg: Label '%1 Buffer\%2 lines imported',locked=true;
     begin
         IF currXMLport.Filename <> '' then //only for manual excecution
             MESSAGE(LinesProcessedMsg, T5063Buffer.TABLECAPTION, ReceivedLinesCount);

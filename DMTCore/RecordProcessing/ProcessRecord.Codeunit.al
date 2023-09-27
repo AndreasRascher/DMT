@@ -258,6 +258,7 @@ codeunit 91008 DMTProcessRecord
     internal procedure SaveTargetRefInfosInBuffertable()
     var
         genBuffTable: Record DMTGenBuffTable;
+        bufferFields: Record Field;
         targetRef: RecordRef;
     begin
         if (CurrTargetRecIDText <> '') then
@@ -267,6 +268,16 @@ codeunit 91008 DMTProcessRecord
                 genBuffTable.Imported := targetRef.Get(TmpTargetRef.RecordId);
                 genBuffTable.Modify();
             end;
+        if ImportConfigHeader."Use Separate Buffer Table" and (ImportConfigHeader."Buffer Table ID" <> 0) then begin
+            bufferFields.SetRange(TableNo, ImportConfigHeader."Buffer Table ID");
+            bufferFields.SetRange(FieldName, 'DMT RecId (Imported)');
+            if bufferFields.FindFirst() then
+                SourceRef.Field(bufferFields."No.").Value := TmpTargetRef.RecordId;
+            bufferFields.SetRange(FieldName, 'DMT Imported');
+            if bufferFields.FindFirst() then
+                SourceRef.Field(bufferFields."No.").Value := targetRef.Get(TmpTargetRef.RecordId);
+            SourceRef.Modify();
+        end;
     end;
 
     var

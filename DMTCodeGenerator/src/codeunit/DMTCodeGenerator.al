@@ -336,11 +336,22 @@ codeunit 90011 DMTCodeGenerator
     local procedure AddImportStatusFields(BufferTableNo: Integer; var FieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
     var
         f: TextBuilder;
+        freeFieldNos: List of [Text];
+        fieldNoCandidate: Integer;
     begin
-        if not FieldBuffer.Get(BufferTableNo, 59997) then
-            f.AppendLine('        field(59997; Imported;Boolean) { CaptionML = ENU =''Imported'', DEU = ''Importiert''; }');
-        if not FieldBuffer.Get(BufferTableNo, 59998) then
-            f.AppendLine('        field(59998; "RecId (Imported)"; RecordId) { CaptionML = ENU = ''Record ID (Imported)'', DEU = ''Datensatz-ID (Importiert)''; }');
+        for fieldNoCandidate := 51000 to 59999 do begin
+            if not FieldBuffer.Get(BufferTableNo, fieldNoCandidate) then begin
+                freeFieldNos.Add(format(fieldNoCandidate));
+                if freeFieldNos.Count = 2 then
+                    break;
+            end;
+        end;
+        if freeFieldNos.Count < 2 then begin
+            Message('No free field numbers found in table %1', BufferTableNo);
+            exit;
+        end;
+        f.AppendLine('        field(' + freeFieldNos.Get(1) + ';"DMT Imported";Boolean) { CaptionML = ENU =''DMT Imported'', DEU = ''Importiert''; }');
+        f.AppendLine('        field(' + freeFieldNos.Get(2) + '; "DMT RecId (Imported)"; RecordId) { CaptionML = ENU = ''DMT Record ID (Imported)'', DEU = ''Datensatz-ID (Importiert)''; }');
         C.Append(f.ToText());
     end;
 
