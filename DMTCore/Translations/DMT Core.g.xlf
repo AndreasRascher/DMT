@@ -2765,12 +2765,12 @@
         </trans-unit>
         <trans-unit id="Page 43196361 - Control 1178234503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Rel.to Table ID</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Rel. zu Tab.ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementCard - Control Rel.to Table ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 43196361 - Control 1024374337 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Rel.to Table</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Rel. zu Tabelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementCard - Control Rel.to Table Name - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 43196361 - Control 3857107201 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

@@ -9,6 +9,9 @@ interface IBufferTableMgt
     procedure CountRecordsInBufferTable() NoOfRecords: Integer
     procedure ShowBufferTable() OK: Boolean
     procedure DeleteAllBufferData()
+    procedure FindDMTFieldNosInBufferTable(var TargetRecIDFieldNo: Integer; var TargetRecIsImportedFieldNo: Integer) Found: Boolean
+    procedure SetDMTImportFields(var SourceRef: RecordRef; CurrTargetRecIDText: Text)
+    procedure updateImportToTargetPercentage()
 }
 
 

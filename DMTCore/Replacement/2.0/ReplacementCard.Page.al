@@ -60,8 +60,8 @@ page 91024 DMTReplacementCard
                         {
                             Caption = ' ', Locked = true;
                             label(FieldCaption) { Caption = 'Caption'; }
-                            label("Rel.to Table ID") { Caption = 'Rel.to Table ID'; }
-                            label("Rel.to Table Name") { Caption = 'Rel.to Table'; }
+                            label("Rel.to Table ID") { Caption = 'Rel.to Table ID', Comment = 'de-DE=Rel. zu Tab.ID'; }
+                            label("Rel.to Table Name") { Caption = 'Rel.to Table', Comment = 'de-DE=Rel. zu Tabelle'; }
                         }
                         group(FromField1Group)
                         {

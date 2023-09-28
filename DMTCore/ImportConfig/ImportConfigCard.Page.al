@@ -309,7 +309,6 @@ page 91008 DMTImportConfigCard
 
     trigger OnAfterGetRecord()
     begin
-        // CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
         CurrPage.LinePart.Page.DoUpdate(false);
         Rec.UpdateIndicators();
     end;
@@ -317,9 +316,9 @@ page 91008 DMTImportConfigCard
     trigger OnAfterGetCurrRecord()
     begin
         CurrPage.TableInfoFactBox.Page.ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(Rec);
+        CurrPage.TableInfoFactBox.Page.Update(false);
         CurrPage.LogFactBox.Page.ShowAsLogAndUpdateOnAfterGetCurrRecord(Rec);
-        //     CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
-        //     CurrPage.LinePart.Page.DoUpdate(false);
+        CurrPage.LogFactBox.Page.Update(false);
     end;
 
     local procedure SaveRecordIfMandatoryFieldsAreFilled()

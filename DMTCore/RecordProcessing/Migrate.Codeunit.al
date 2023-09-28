@@ -196,7 +196,7 @@ codeunit 91014 DMTMigrate
                 Commit();
         until bufferRef.Next() = 0;
         migrationLib.RunPostProcessingFor(importConfigHeader);
-        importConfigHeader.updateImportToTargetPercentage();
+        importConfigHeader.BufferTableMgt().updateImportToTargetPercentage();
         progressDialog.Close();
         log.CreateSummary();
         log.ShowLogForCurrentProcess();

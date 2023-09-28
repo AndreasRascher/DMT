@@ -323,13 +323,16 @@ table 91001 DMTGenBuffTable
         key(Key1; "Entry No.") { Clustered = true; }
     }
 
-    procedure InitFirstLineAsCaptions(GenBuffTable_First: Record DMTGenBuffTable) NoOfCols: Integer
+    procedure InitFirstLineAsCaptions(var GenBuffTable_First: Record DMTGenBuffTable) NoOfCols: Integer
     var
         GenBuffTable_CaptionLine: Record DMTGenBuffTable;
         RecRef: RecordRef;
         FieldIndex: Integer;
     begin
+        if (GenBuffTable_First."Entry No." = 0) then
+            if GenBuffTable_First.FindFirst() then;
         GenBuffTable_CaptionLine.SetRange(IsCaptionLine, true);
+        GenBuffTable_CaptionLine.SetRange("Imp.Conf.Header ID", GenBuffTable_First."Imp.Conf.Header ID");
         GenBuffTable_CaptionLine.SetRange("Import from Filename", GenBuffTable_First."Import from Filename");
         if not GenBuffTable_CaptionLine.FindFirst() then
             Error('No caption line found for %1', GenBuffTable_First."Import from Filename");

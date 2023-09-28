@@ -15,10 +15,8 @@ codeunit 91019 DMTGenericBuffertTableMgtImpl implements IBufferTableMgt
         GenBuffTable: Record DMTGenBuffTable;
     begin
         checkHeaderIsSet();
-        GenBuffTable.FilterGroup(2);
-        GenBuffTable.SetRange(IsCaptionLine, false);
+        // GenBuffTable.SetRange(IsCaptionLine, false);
         GenBuffTable.FilterBy(ImportConfigHeaderGlobal);
-        GenBuffTable.FilterGroup(0);
         BufferRef.GetTable(GenBuffTable);
     end;
 
@@ -37,9 +35,12 @@ codeunit 91019 DMTGenericBuffertTableMgtImpl implements IBufferTableMgt
     var
         genBuffTable: Record DMTGenBuffTable;
         bufferTableEmptyErr: Label 'The buffer table is empty. Filename: "%1"', Comment = 'de-DE=Die Puffertable entält keine Zeilen. Dateiname: "%1"';
+        hasCaptionLine: Boolean;
     begin
         checkHeaderIsSet();
-        if not genBuffTable.FilterBy(ImportConfigHeaderGlobal) then
+        hasCaptionLine := genBuffTable.FilterBy(ImportConfigHeaderGlobal);
+        genBuffTable.SetRange(IsCaptionLine, false);
+        if genBuffTable.IsEmpty then
             Error(bufferTableEmptyErr, ImportConfigHeaderGlobal."Source File Name");
     end;
 
@@ -83,4 +84,80 @@ codeunit 91019 DMTGenericBuffertTableMgtImpl implements IBufferTableMgt
         if genBuffTable.FilterBy(ImportConfigHeaderGlobal) then
             genBuffTable.DeleteAll();
     end;
+
+    internal procedure updateImportToTargetPercentage()
+    var
+        genBuffTable: Record DMTGenBuffTable;
+        recRef: RecordRef;
+        noOfRecords, noOfRecordsMigrated : Integer;
+        IsImported: Boolean;
+    begin
+        if not genBuffTable.FilterBy(ImportConfigHeaderGlobal) then
+            exit;
+
+        ImportConfigHeaderGlobal.get(ImportConfigHeaderGlobal.RecordId); // update
+        genBuffTable.SetRange(IsCaptionLine, false);
+        if genBuffTable.IsEmpty then begin
+            Clear(ImportConfigHeaderGlobal.ImportToTargetPercentage);
+            Clear(ImportConfigHeaderGlobal.ImportToTargetPercentage);
+            ImportConfigHeaderGlobal.Modify();
+            exit;
+        end;
+
+        genBuffTable.SetLoadFields("Entry No.", "Import from Filename", Imported, "RecId (Imported)");
+        genBuffTable.FindSet();
+        repeat
+            noOfRecords += 1;
+            IsImported := recRef.Get(genBuffTable."RecId (Imported)");
+            if IsImported then
+                noOfRecordsMigrated += 1;
+
+            if genBuffTable.Imported <> IsImported then begin
+                genBuffTable.Imported := IsImported;
+                if not IsImported then
+                    Clear(genBuffTable."RecId (Imported)");
+                genBuffTable.Modify();
+            end;
+        until genBuffTable.Next() = 0;
+
+
+        ImportConfigHeaderGlobal.ImportToTargetPercentage := (noOfRecordsMigrated / noOfRecords) * 100;
+        case ImportConfigHeaderGlobal.ImportToTargetPercentage of
+            100:
+                ImportConfigHeaderGlobal.ImportToTargetPercentageStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+            0:
+                ImportConfigHeaderGlobal.ImportToTargetPercentageStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+            else
+                ImportConfigHeaderGlobal.ImportToTargetPercentageStyle := Format(Enum::DMTFieldStyle::Yellow);
+        end;
+        ImportConfigHeaderGlobal.Modify();
+    end;
+
+    procedure FindDMTFieldNosInBufferTable(var TargetRecIDFieldNo: Integer; var TargetRecIsImportedFieldNo: Integer) Found: Boolean
+    var
+        genBuffTable: Record DMTGenBuffTable;
+    begin
+        TargetRecIDFieldNo := genBuffTable.FieldNo("RecId (Imported)");
+        TargetRecIsImportedFieldNo := genBuffTable.FieldNo(Imported);
+        Found := (TargetRecIDFieldNo <> 0) and (TargetRecIsImportedFieldNo <> 0);
+    end;
+
+    procedure SetDMTImportFields(var SourceRef: RecordRef; CurrTargetRecIDText: Text)
+    var
+        genBuffTable: Record DMTGenBuffTable;
+        TargetRecID: RecordId;
+        targetRef: RecordRef;
+    begin
+        checkHeaderIsSet();
+        SourceRef.SetTable(genBuffTable);
+        if Evaluate(TargetRecID, CurrTargetRecIDText) then begin
+            genBuffTable."RecId (Imported)" := TargetRecID;
+            genBuffTable.Imported := targetRef.Get(TargetRecID);
+        end else begin
+            genBuffTable."RecId (Imported)" := TargetRecID;
+            genBuffTable.Imported := false;
+        end;
+        genBuffTable.Modify();
+    end;
+
 }

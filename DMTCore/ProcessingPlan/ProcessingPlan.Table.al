@@ -214,20 +214,32 @@ table 91009 DMTProcessingPlan
                     SourceRef.Open(Rec."Source Table No.", false);
                     exit(true);
                 end;
+            else begin
+                ImportConfigHeader.Get(Rec.ID);
+                ImportConfigHeader.BufferTableMgt().InitBufferRef(SourceRef);
+                exit(true)
+            end;
         end;
-        ImportConfigHeader.BufferTableMgt().InitBufferRef(SourceRef);
-        exit(true)
     end;
 
     procedure ConvertSourceTableFilterToFieldLines(var TmpImportConfigLine: Record DMTImportConfigLine temporary)
     var
+        genBuffTable: Record DMTGenBuffTable;
         TempImportConfigLine2: Record DMTImportConfigLine temporary;
         RecRef: RecordRef;
         FieldIndexNo: Integer;
         CurrView: Text;
     begin
+        if not (rec.Type in [rec.Type::"Buffer + Target", Rec.Type::"Import To Target", rec.Type::"Update Field", rec.Type::"Run Codeunit"]) then
+            exit;
+        if rec.ID = 0 then exit;
         if not Rec.CreateSourceTableRef(RecRef) then
             exit;
+        if RecRef.Name = genBuffTable.TableName then begin
+            RecRef.SetTable(genBuffTable);
+            genBuffTable.InitFirstLineAsCaptions(genBuffTable); // init column caption single instance codeunit
+            RecRef.GetTable(genBuffTable);
+        end;
         CurrView := Rec.ReadSourceTableView();
         if CurrView <> '' then begin
             RecRef.SetView(CurrView);
@@ -237,7 +249,7 @@ table 91009 DMTProcessingPlan
                         TempImportConfigLine2."Imp.Conf.Header ID" := Rec.ID;
                         TempImportConfigLine2."Target Field No." := RecRef.FieldIndex(FieldIndexNo).Number;
                         TempImportConfigLine2."Source Field Caption" := CopyStr(RecRef.FieldIndex(FieldIndexNo).Caption, 1, MaxStrLen(TempImportConfigLine2."Source Field Caption"));
-                        // TempImportConfigLine2.Comment := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempImportConfigLine2.Comment));
+                        TempImportConfigLine2."Fixed Value" := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempImportConfigLine2."Fixed Value"));
                         TempImportConfigLine2.Insert();
                     end;
                 end;
@@ -255,7 +267,6 @@ table 91009 DMTProcessingPlan
         FieldIndexNo: Integer;
         CurrView: Text;
     begin
-        // if not Rec.CreateSourceTableRef(RecRef) then exit;
         ImportConfigHeader.Get(Rec.ID);
         RecRef.Open(ImportConfigHeader."Target Table ID");
         CurrView := Rec.ReadDefaultValuesView();

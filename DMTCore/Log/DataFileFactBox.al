@@ -3,6 +3,8 @@ page 91014 DMTImportConfigFactBox
     Caption = 'ImportConfig FactBox';
     PageType = ListPart;
     SourceTable = DMTLogEntry;
+    InsertAllowed = false;
+    ModifyAllowed = false;
 
     layout
     {

@@ -119,7 +119,7 @@ page 91010 DMTImportConfigList
                     progress.Open('######################################################1#');
                     repeat
                         progress.Update(1, TempImportConfigHeader."Source File Name");
-                        TempImportConfigHeader.updateImportToTargetPercentage();
+                        TempImportConfigHeader.BufferTableMgt().updateImportToTargetPercentage();
                     until TempImportConfigHeader.Next() = 0;
                     progress.Close();
                     if rec.get(rec.RecordId) then;
