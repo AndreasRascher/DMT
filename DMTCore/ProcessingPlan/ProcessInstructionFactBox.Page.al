@@ -17,7 +17,7 @@ page 91016 DMTProcessInstructionFactBox
                 Caption = 'Filter', Comment = 'de-DE=Filter';
                 Visible = IsSourceTableFilterView;
                 field(FieldCaption; Rec."Source Field Caption") { ApplicationArea = All; }
-                field(FilterValue; Rec."Fixed Value") { ApplicationArea = All; }
+                field(FilterValue; Rec."Fixed Value") { ApplicationArea = All; Caption = 'Filter', Locked = true; }
             }
 
             repeater(FixedValuesList)
