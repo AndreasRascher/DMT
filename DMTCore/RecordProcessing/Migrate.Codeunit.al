@@ -162,7 +162,7 @@ codeunit 91014 DMTMigrate
         importConfigHeader.BufferTableMgt().CheckBufferTableIsNotEmpty();
 
         // Show Filter Dialog
-        importConfigHeader.BufferTableMgt().InitBufferRef(bufferRef);
+        importConfigHeader.BufferTableMgt().InitBufferRef(bufferRef, true);
         Commit(); // Runmodal Dialog in Edit View
         if not EditView(bufferRef, DMTImportSettings) then
             exit;
@@ -239,11 +239,21 @@ codeunit 91014 DMTMigrate
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
         FPBuilder: Codeunit DMTFPBuilder;
+        Filters, Filters2 : List of [Text];
     begin
         Continue := true; // Canceling the dialog should stop th process
 
-        if DMTImportSettings.SourceTableView() <> '' then
+        if DMTImportSettings.SourceTableView() <> '' then begin
+            BufferRef.FilterGroup(2);
+            Filters.Add(BufferRef.GetFilters);
+            BufferRef.FilterGroup(0);
+            Filters.Add(BufferRef.GetFilters);
             BufferRef.SetView(DMTImportSettings.SourceTableView());
+            BufferRef.FilterGroup(2);
+            Filters2.Add(BufferRef.GetFilters);
+            BufferRef.FilterGroup(0);
+            Filters2.Add(BufferRef.GetFilters);
+        end;
 
         if DMTImportSettings.NoUserInteraction() then begin
             exit(Continue);

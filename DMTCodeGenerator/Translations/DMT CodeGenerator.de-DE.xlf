@@ -71,8 +71,7 @@
         </trans-unit>
         <trans-unit id="PageExtension 521254526 - Control 3424858197 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 425834526">
           <source>ID Ranges for ...</source>
-          <target state="needs-adaptation">ID Bereiche für ...</target>
-          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <target state="translated">ID Bereiche für ...</target>
           <note from="Developer" annotates="general" priority="2">de-DE=ID Bereiche für ...</note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension DMTSetup - Control ObjectIDs - Property Caption</note>
         </trans-unit>

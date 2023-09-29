@@ -2303,8 +2303,8 @@
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 513339096 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
           <source> ,In Progress</source>
-          <target state="translated"> ,in Arbeit</target>
-          <note from="Developer" annotates="general" priority="2">de-DE= ,in Arbeit</note>
+          <target state="translated"> ,in Arbeit, Abgeschlossen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE= ,in Arbeit, Abgeschlossen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Status - Property OptionCaption</note>
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 1878130204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

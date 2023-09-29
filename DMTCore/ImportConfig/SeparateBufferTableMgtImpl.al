@@ -21,6 +21,12 @@ codeunit 91022 DMTSeparateBufferTableMgtImpl implements IBufferTableMgt
         BufferRef.Open(ImportConfigHeaderGlobal."Buffer Table ID");
     end;
 
+    procedure InitBufferRef(var BufferRef: RecordRef; HideGenBufferFilters: Boolean);
+    begin
+        InitBufferRef(BufferRef);
+    end;
+
+
     internal procedure LoadImportConfigLines(var tempImportConfigLine: Record DMTImportConfigLine temporary) OK: Boolean
     var
         importConfigLine: Record DMTImportConfigLine;

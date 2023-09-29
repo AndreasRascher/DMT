@@ -11,12 +11,22 @@ codeunit 91019 DMTGenericBuffertTableMgtImpl implements IBufferTableMgt
     end;
 
     procedure InitBufferRef(var BufferRef: RecordRef);
+    begin
+        InitBufferRef(BufferRef, false);
+    end;
+
+    procedure InitBufferRef(var BufferRef: RecordRef; HideGenBufferFilters: Boolean);
     var
         GenBuffTable: Record DMTGenBuffTable;
     begin
         checkHeaderIsSet();
-        // GenBuffTable.SetRange(IsCaptionLine, false);
+        if HideGenBufferFilters then begin
+            GenBuffTable.FilterGroup(2);        // keep in group 2 to hide in filterpage and protect from setview
+            GenBuffTable.SetRange(IsCaptionLine, false);
+        end;
         GenBuffTable.FilterBy(ImportConfigHeaderGlobal);
+        if HideGenBufferFilters then
+            GenBuffTable.FilterGroup(0);
         BufferRef.GetTable(GenBuffTable);
     end;
 
@@ -159,5 +169,4 @@ codeunit 91019 DMTGenericBuffertTableMgtImpl implements IBufferTableMgt
         end;
         genBuffTable.Modify();
     end;
-
 }
