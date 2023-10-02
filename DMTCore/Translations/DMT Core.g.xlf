@@ -1989,18 +1989,18 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Rel.to Table ID (New Val.2) - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 663034807 - Field 455746087 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Compare Value 1</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Vgl.-Wert 1</note>
+          <source>Old Value 1</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Alter Wert 1</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Comp.Value 1 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 663034807 - Field 2368835938 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Compare Value 2</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Vgl.-Wert 2</note>
+          <source>Old Value 2</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Alter Wert 2</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Comp.Value 2 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 663034807 - Field 2144357174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Imp.Conf.Header ID</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Import Konfig. Kopf ID</note>
+          <source>Imp.Config. ID</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import Konfig. ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Imp.Conf.Header ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 663034807 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2047,6 +2047,11 @@
           <source>Source 2 Field No.</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Herkunftsfeld 2 Nr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Source 2 Field No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 3920905560 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source File Name</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Quelldatei</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Source File Name - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 663034807 - Field 2079597112 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Field 1 Caption</source>

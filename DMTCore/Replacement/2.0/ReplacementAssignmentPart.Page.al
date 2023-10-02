@@ -14,14 +14,8 @@ page 91019 DMTReplacementAssigmentPart
             repeater(Repeater_1_1)
             {
                 Visible = not Source2Visible and not Target2Visible;
-                field(ImpConfHeaderID_1_1; Rec."Imp.Conf.Header ID")
-                {
-                    ShowMandatory = true;
-                    trigger OnValidate()
-                    begin
-                        EnableControls();
-                    end;
-                }
+                field("Imp.Conf.Header ID"; Rec."Imp.Conf.Header ID") { }
+                field(SourceFileName_1_1; Rec."Source File Name") { }
                 field(Source1FieldCaption_1_1; Rec."Source 1 Field Caption")
                 {
                     LookupPageId = DMTFieldLookup;
