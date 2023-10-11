@@ -23,8 +23,8 @@ pageextension 90014 DMTSetup extends "DMT Setup"
                         ApplicationArea = All;
                         ShowMandatory = true;
                     }
+                    field("Import with FlowFields"; Rec."Import with FlowFields") { ApplicationArea = All; }
                 }
-                field("Import with FlowFields"; Rec."Import with FlowFields") { ApplicationArea = All; }
             }
         }
     }

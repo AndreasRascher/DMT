@@ -43,6 +43,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Datei Explorer</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTFileBrowser - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 952284981 - Action 1070320543 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show License Information</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Lizenz Informationen anzeigen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFreeObjectsInLicense - Action LicenseInfo - Property Caption</note>
+        </trans-unit>
         <trans-unit id="PageExtension 521254526 - Control 4138548914 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 425834526">
           <source>OnPrem Settings</source>
           <note from="Developer" annotates="general" priority="2">de-DE=OnPrem Einstellungen</note>

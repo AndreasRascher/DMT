@@ -14,7 +14,7 @@ page 91000 "DMT Setup"
             group(MigrationSettings)
             {
                 Caption = 'Migration Settings', Comment = 'de-DE=Migration Einstellungen';
-                field(MigrationProfil; Rec.MigrationProfil) { }
+                field(MigrationProfil; Rec.MigrationProfil) { ToolTipML = DEU = 'Aus NAV: Felder Mapping auf Basis bekannter NAV Feldnamen. Tabellen-ID Mapping auf Basis bekannter NAV zu BC Tabellenänderungen'; }
             }
             group(Debugging)
             {
@@ -29,6 +29,7 @@ page 91000 "DMT Setup"
                         NoOfChoices: Integer;
                         SessionListID: Integer;
                         StopSessionInstructionLbl: Label 'Select which session to stop:\<Session ID> - <User ID> - <Client Type>- <Login Datetime>', Comment = 'de-DE=Wählen Sie eine Session zum Beenden aus:\<Session ID> - <User ID> - <Client Type> - <Login Datetime>';
+                        StopAllOtherSessions: Label 'Stop all other sessions', Comment = 'de-DE=Alle anderen Sessions stoppen';
                         SessionList: List of [Integer];
                         Choices: Text;
                     begin

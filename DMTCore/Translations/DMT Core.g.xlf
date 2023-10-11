@@ -2258,6 +2258,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Wählen Sie eine Session zum Beenden aus:\&lt;Session ID&gt; - &lt;User ID&gt; - &lt;Client Type&gt; - &lt;Login Datetime&gt;</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control SessionID - Method OnAssistEdit - NamedType StopSessionInstructionLbl</note>
         </trans-unit>
+        <trans-unit id="Page 425834526 - Control 2293317941 - Method 2699620902 - NamedType 1746033980" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Stop all other sessions</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Alle anderen Sessions stoppen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control SessionID - Method OnAssistEdit - NamedType StopAllOtherSessions</note>
+        </trans-unit>
         <trans-unit id="Page 425834526 - Control 2349991090 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Mapping fields</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Mapping der Felder</note>
