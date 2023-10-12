@@ -25,32 +25,24 @@ page 91012 DMTFieldLookup
     procedure LoadLines()
     var
         TempDataLayoutLine: Record DMTDataLayoutLine temporary;
-        GenBuffTable: Record DMTGenBuffTable;
         ImportConfigHeader: Record DMTImportConfigHeader;
         ImportConfigLine: Record DMTImportConfigLine;
         importConfigMgt: Codeunit DMTImportConfigMgt;
         BuffTableCaptions: Dictionary of [Integer, Text];
-        FieldNo: Integer;
         importConfigID: Integer;
         FieldLookUpMode: Option "Look Up Source","Look Up Target";
         TargetFieldNames: Dictionary of [Integer, Text];
     begin
         if IsLoaded then exit;
+        Clear(BuffTableCaptions);
         ReadImportConfigIDFromTableRelationFilter(importConfigID, FieldLookUpMode);
         case true of
             (importConfigID <> 0) and (FieldLookUpMode = FieldLookUpMode::"Look Up Source"):
                 begin
                     ImportConfigHeader.Get(importConfigID);
-                    if not ImportConfigHeader."Use Separate Buffer Table" then begin
-                        GenBuffTable.GetColCaptionForImportedFile(ImportConfigHeader, BuffTableCaptions);
-                        foreach FieldNo in BuffTableCaptions.Keys do begin
-                            TempDataLayoutLine.Init();
-                            TempDataLayoutLine."Column No." := FieldNo;
-                            TempDataLayoutLine.ColumnName := CopyStr(BuffTableCaptions.Get(FieldNo), 1, MaxStrLen(TempDataLayoutLine.ColumnName));
-                            TempDataLayoutLine.Insert();
-                            Rec.Copy(TempDataLayoutLine, true);
-                        end;
-                    end;
+                    ImportConfigHeader.BufferTableMgt().ReadBufferTableColumnCaptions(BuffTableCaptions);
+                    CopyColumnCaptionsToTempDataLayoutLine(TempDataLayoutLine, BuffTableCaptions);
+                    Rec.Copy(TempDataLayoutLine, true);
                     IsLoaded := true;
                 end;
             (importConfigID <> 0) and (FieldLookUpMode = FieldLookUpMode::"Look Up Target"):
@@ -58,17 +50,27 @@ page 91012 DMTFieldLookup
                     ImportConfigHeader.Get(importConfigID);
                     ImportConfigLine.SetRange("Imp.Conf.Header ID", importConfigID);
                     TargetFieldNames := importConfigMgt.CreateTargetFieldNamesDict(ImportConfigLine, false);
-                    foreach FieldNo in TargetFieldNames.Keys do begin
-                        TempDataLayoutLine.Init();
-                        TempDataLayoutLine."Column No." := FieldNo;
-                        TempDataLayoutLine.ColumnName := CopyStr(TargetFieldNames.Get(FieldNo), 1, MaxStrLen(TempDataLayoutLine.ColumnName));
-                        TempDataLayoutLine.Insert();
-                        Rec.Copy(TempDataLayoutLine, true);
-                    end;
+                    CopyColumnCaptionsToTempDataLayoutLine(TempDataLayoutLine, TargetFieldNames);
+                    Rec.Copy(TempDataLayoutLine, true);
                     IsLoaded := true;
                 end;
             else
                 Error('unhandled case');
+        end;
+    end;
+
+    local procedure CopyColumnCaptionsToTempDataLayoutLine(var tempDataLayoutLine: Record DMTDataLayoutLine temporary; fieldCaptions: Dictionary of [Integer, Text])
+    var
+        fieldNo: Integer;
+    begin
+        clear(tempDataLayoutLine);
+        if tempDataLayoutLine.IsTemporary then
+            tempDataLayoutLine.DeleteAll();
+        foreach FieldNo in fieldCaptions.Keys do begin
+            tempDataLayoutLine.Init();
+            tempDataLayoutLine."Column No." := FieldNo;
+            tempDataLayoutLine.ColumnName := CopyStr(fieldCaptions.Get(FieldNo), 1, MaxStrLen(tempDataLayoutLine.ColumnName));
+            tempDataLayoutLine.Insert();
         end;
     end;
 

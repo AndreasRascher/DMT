@@ -1,0 +1,825 @@
+OBJECT Dataport 50009 DMTExport
+{
+  OBJECT-PROPERTIES
+  {
+    Date=21.09.23;
+    Time=11:46:28;
+    Modified=Yes;
+    Version List=DMT;
+  }
+  PROPERTIES
+  {
+    Import=No;
+    OnInitDataport=BEGIN
+
+
+                     CurrDataport.FILENAME := TEMPORARYPATH+'1.txt';// Avoid Error On Run
+                     IF ERASE(CurrDataport.FILENAME) THEN;
+
+                     ExportWithTitleLine := TRUE;
+                   END;
+
+  }
+  DATAITEMS
+  {
+  }
+  REQUESTFORM
+  {
+    PROPERTIES
+    {
+      Width=11220;
+      Height=4730;
+      SaveValues=Yes;
+      SourceTable=Table2000000058;
+      OnOpenForm=BEGIN
+                   THIS_OnOpenForm
+                 END;
+
+      OnCloseForm=BEGIN
+                    THIS_OnCloseForm
+                  END;
+
+    }
+    CONTROLS
+    {
+      { 1000000002;Label  ;0    ;0    ;0    ;0    ;InPage=-1;
+                                                   InColumnHeading=Yes }
+      { 1000000006;Label  ;0    ;0    ;0    ;0    ;InPage=-1;
+                                                   InColumnHeading=Yes }
+      { 1000000004;Label  ;0    ;0    ;0    ;0    ;InPage=-1;
+                                                   InColumnHeading=Yes }
+      { 1000000000;TextBox;330  ;770  ;10670;440  ;Name=ExportFolderPathCtrl;
+                                                   HorzGlue=Both;
+                                                   InPage=-1;
+                                                   CaptionML=[DEU=Ordner fuer Exportdateien;
+                                                              ENU=Folder for export files];
+                                                   SourceExpr=ExportToFolderPath;
+                                                   OnValidate=BEGIN
+                                                                CheckFolderPath_CC(ExportToFolderPath);
+                                                              END;
+                                                               }
+      { 1000000092;Label  ;330  ;220  ;10670;440  ;HorzGlue=Both;
+                                                   ParentControl=1000000000;
+                                                   InPage=-1 }
+      { 1000000001;TextBox;330  ;2860 ;10670;440  ;Name=ExportObjectIDFilterCtrl;
+                                                   HorzGlue=Both;
+                                                   AssistEdit=Yes;
+                                                   CaptionML=[DEU=Tabellen-ID Filter fuer Export;
+                                                              ENU=Table ID Filter for Export];
+                                                   SourceExpr=ExportTableIDFilter;
+                                                   OnAssistEdit=BEGIN
+                                                                  LookUpObjIDFilter
+                                                                END;
+                                                                 }
+      { 1000000003;Label  ;330  ;2310 ;10670;440  ;ParentControl=1000000001;
+                                                   InPage=-1 }
+      { 1000000005;CommandButton;330;4180;4180;550;Name=ExportCtrl;
+                                                   CaptionML=[DEU=Tabellendaten exportieren;
+                                                              ENU=Export Data];
+                                                   OnPush=BEGIN
+                                                            StartTableExport
+                                                          END;
+                                                           }
+      { 1000000007;CommandButton;330;1430;4180;550;Name=ExportCtrl;
+                                                   InPage=-1;
+                                                   CaptionML=[DEU=Tabellenschema exportieren;
+                                                              ENU=Export table schema];
+                                                   OnPush=BEGIN
+                                                            StartSchemaDefinitionExport;
+                                                          END;
+                                                           }
+      { 1000000008;CheckBox;3740;3520 ;440  ;440  ;Name=ExportFlowFieldsCtrl;
+                                                   ShowCaption=No;
+                                                   CaptionML=[DEU=FlowFields exportieren (langsamer!);
+                                                              ENU=Export FlowFields (slower!)];
+                                                   SourceExpr=ExportFlowFields }
+      { 1000000009;Label  ;330  ;3520 ;3300 ;440  ;ParentControl=1000000008;
+                                                   InPage=-1 }
+    }
+  }
+  CODE
+  {
+    VAR
+      ExportToFolderPath@1000000000 : Text[1024];
+      ExportTableIDFilter@1000000001 : Text[1024];
+      ExportWithTitleLine@1109900000 : Boolean;
+      ExportFlowFields@1000000002 : Boolean;
+      FieldSeparator@1000000004 : Text[1];
+      ADOStream@1000000003 : Automation "{B691E011-1797-432E-907A-4D8C69339129} 6.0:{00000566-0000-0010-8000-00AA006D2EA4}:'Microsoft ActiveX Data Objects 6.0 Library'.Stream";
+      TempTableInfo@1000000005 : TEMPORARY Record 2000000028;
+      TEST@1000000006 : Text[1024];
+
+    PROCEDURE ExportTable@1109900001(ExportToFilePath@1000000001 : Text[1024];ExportTableID@1000000004 : Integer;VAR ExportDuration@1000000003 : Duration;TableView@1000000011 : Text[1024]);
+    VAR
+      UseBigText@1109900000 : Boolean;
+      _Start@1000000000 : DateTime;
+      _LastFieldNo@1000000002 : Integer;
+      _ExportFieldBuffer@1000000005 : TEMPORARY Record 2000000041;
+      _ExportRecRef@1000000006 : RecordRef;
+      _NewFilePath@1000000008 : Text[1024];
+      _Progress@1000000012 : Dialog;
+      _TotalLines@1000000013 : Integer;
+      _Step@1000000014 : Integer;
+      _LastUpdate@1000000015 : DateTime;
+      _FileCounter@1109900001 : Integer;
+    BEGIN
+      CLEAR(ExportDuration);
+
+      IF ExportTableID = 0 THEN
+       ERROR('ExportTableID not defined');
+      IF ExportToFilePath = '' THEN
+        ERROR('ExportToFilename not defined');
+      _Start := CURRENTDATETIME;
+
+      InitExport;
+      LoadFieldList(_ExportFieldBuffer,ExportTableID);
+      UseBigText := ExportTableID = DATABASE::Field;
+      _ExportFieldBuffer.FINDLAST;
+      _LastFieldNo := _ExportFieldBuffer."No.";
+      _ExportRecRef.OPEN(ExportTableID,FALSE);
+      _TotalLines := _ExportRecRef.COUNT;
+      _Progress.OPEN(STRSUBSTNO('Export %1\@@@@@@@@@@@@@@@@@@@@@@1@\Tabelle %2 - %3 Zeilen',
+                                 CONVERTSTR(ExportToFilePath,'\','/'),
+                                 _ExportRecRef.CAPTION,
+                                 _TotalLines));
+
+      IF TableView <> '' THEN
+        _ExportRecRef.SETVIEW(TableView);
+      IF NOT _ExportRecRef.FINDSET(FALSE,FALSE) THEN EXIT;
+      IF ExportWithTitleLine THEN
+        CreateHeaderLine(_ExportFieldBuffer,_LastFieldNo,FieldSeparator); // Header
+      // Lines
+      _LastUpdate := CURRENTDATETIME + 500;
+      _FileCounter := 1;
+      REPEAT
+        IF UseBigText THEN BEGIN
+          // Required for extra columns
+          EXPORT_ExportSingleTableRecBT(_ExportRecRef,_ExportFieldBuffer,_LastFieldNo,FieldSeparator);
+        END ELSE BEGIN
+          // Faster without BigText (BT)
+          EXPORT_ExportSingleTableRec(_ExportRecRef,_ExportFieldBuffer,_LastFieldNo,FieldSeparator);
+        END;
+        IF SizeLimitReached() THEN BEGIN
+          AddCounterToFilePath(ExportToFilePath,_FileCounter);
+          ADOStream.SaveToFile(ExportToFilePath,2);
+          ADOStream.Close;
+          CLEAR(ADOStream);
+          InitExport;
+          _FileCounter += 1;
+          AddCounterToFilePath(ExportToFilePath,_FileCounter);
+        END;
+        _Step += 1;
+        IF ABS(CURRENTDATETIME-_LastUpdate) > 500 THEN BEGIN
+          _Progress.UPDATE(1,(10000*(_Step/_TotalLines)) DIV 1);
+          _LastUpdate := CURRENTDATETIME;
+        END;
+      UNTIL _ExportRecRef.NEXT = 0;
+
+      ADOStream.SaveToFile(ExportToFilePath,2); // 2- Overwrite, 1- Default
+      ADOStream.Close;
+      CLEAR(ADOStream);
+
+      ExportDuration := CURRENTDATETIME - _Start;
+
+      _Progress.CLOSE;
+    END;
+
+    PROCEDURE GetListOfOptionString@1000000032(_FieldRef@1000000000 : FieldRef;VAR _Result@1000000006 : Text[1024]);
+    VAR
+      Letters@1000000005 : TextConst 'DEU=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      _OptionCounter@1000000001 : Integer;
+      _OptionString@1000000002 : Text[1024];
+      i@1000000003 : Integer;
+      _OptionElement@1000000004 : Text[1024];
+      _SubStr@1000000007 : Text[30];
+    BEGIN
+      //* Returns a list ob all option values with masked values (e.g. for spaces)
+      _OptionString := _FieldRef.OPTIONSTRING;
+      _OptionCounter := 1;
+      FOR i := 1 TO STRLEN(_OptionString) DO BEGIN
+        IF _OptionString[i] = ',' THEN
+          _OptionCounter += 1;
+      END;
+
+      FOR i := 1 TO _OptionCounter DO BEGIN
+        //_OptionElement := SELECTSTR(i,_OptionString);
+        _OptionElement := STRING_GetSplitValue(_OptionString,',',i);
+        IF (DELCHR(_OptionElement,'=',Letters) = '') THEN BEGIN // ContainsOnlyLetters
+          _Result += STRSUBSTNO('%1,',_OptionElement);
+        END ELSE BEGIN
+          _Result += STRSUBSTNO('"%1",',_OptionElement);
+        END;
+      END;
+      // remove last
+      _Result := DELCHR(_Result,'>',',');
+    END;
+
+    PROCEDURE GetListOfOptionStringBT@1000000021(_FieldRef@1000000000 : FieldRef;VAR _Result@1000000006 : BigText);
+    VAR
+      Letters@1000000005 : TextConst 'DEU=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      _OptionCounter@1000000001 : Integer;
+      _OptionString@1000000002 : Text[1024];
+      i@1000000003 : Integer;
+      _OptionElement@1000000004 : Text[1024];
+      _SubStr@1000000007 : Text[30];
+    BEGIN
+      _OptionString := _FieldRef.OPTIONSTRING;
+      _OptionCounter := 1;
+      FOR i := 1 TO STRLEN(_OptionString) DO BEGIN
+        IF _OptionString[i] = ',' THEN
+          _OptionCounter += 1;
+      END;
+
+      FOR i := 1 TO _OptionCounter DO BEGIN
+        //_OptionElement := SELECTSTR(i,_OptionString);
+        _OptionElement := STRING_GetSplitValue(_OptionString,',',i);
+        IF (DELCHR(_OptionElement,'=',Letters) = '') THEN BEGIN // ContainsOnlyLetters
+          _Result.ADDTEXT(STRSUBSTNO('%1,',_OptionElement));
+        END ELSE BEGIN
+          _Result.ADDTEXT(STRSUBSTNO('"%1",',_OptionElement));
+        END;
+      END;
+      IF _Result.LENGTH > 0 THEN
+        _Result.GETSUBTEXT(_SubStr,_Result.LENGTH,1);
+      IF _SubStr = ',' THEN
+        _Result.GETSUBTEXT(_Result,1,_Result.LENGTH-1);
+    END;
+
+    PROCEDURE RemoveSpecialCharsBT@1000000022(VAR Text@1109900000 : BigText);
+    VAR
+      CharArray@1109900001 : Text[30];
+      Chunk@1000000000 : Text[1];
+      TextOLD@1000000001 : BigText;
+      i@1000000002 : Integer;
+    BEGIN
+      Text.GETSUBTEXT(TextOLD,1,Text.LENGTH);
+      CLEAR(Text);
+      FOR i := 1 TO TextOLD.LENGTH DO BEGIN
+        TextOLD.GETSUBTEXT(Chunk,i,1);
+        Text.ADDTEXT(RemoveSpecialChars(Chunk));
+      END;
+    END;
+
+    PROCEDURE CheckFolderPath_CC@1000000000(FolderPathToCheck@1000000000 : Text[1024]);
+    VAR
+      FSO@1000000001 : Automation "{420B2830-E718-11CF-893D-00A0C9054228} 1.0:{0D43FE01-F093-11CF-8940-00A0C9054228}:'Microsoft Scripting Runtime'.FileSystemObject";
+    BEGIN
+      IF ISCLEAR(FSO) THEN
+        CREATE(FSO);
+      IF NOT FSO.FolderExists(FolderPathToCheck) THEN
+       ERROR(STRSUBSTNO('Ungueltiger Ordnerpfad: %1',FolderPathToCheck));
+      IF ExportToFolderPath[STRLEN(ExportToFolderPath)]<>'\' THEN
+        ExportToFolderPath += '\';
+    END;
+
+    PROCEDURE LookUpObjIDFilter@1000000009();
+    VAR
+      AllObj@1000000000 : Record 2000000038;
+    BEGIN
+      AllObj.SETRANGE("Object Type",AllObj."Object Type"::Table);
+      IF FORM.RUNMODAL(0,AllObj) = ACTION::LookupOK THEN BEGIN
+        IF ExportTableIDFilter = '' THEN
+           ExportTableIDFilter += FORMAT(AllObj."Object ID")
+         ELSE
+           ExportTableIDFilter += '|' + FORMAT(AllObj."Object ID");
+      END;
+    END;
+
+    PROCEDURE EXPORT_ExportSingleTableRec@1000000014(VAR _RecRef@1000000000 : RecordRef;VAR _ExportFieldBuffer@1000000002 : TEMPORARY Record 2000000041;_LastFieldNo@1000000001 : Integer;_FieldSeparator@1000000004 : Text[1]);
+    VAR
+      _ValueAsText@1000000003 : Text[1024];
+      _CurrTableRef@1000000005 : RecordRef;
+      _CurrFldRef@1000000009 : FieldRef;
+      _Field@1000000010 : Record 2000000041;
+      _TableNo@1000000006 : Integer;
+      _FieldNo@1000000008 : Integer;
+      _LineText@1000000007 : Text[1024];
+    BEGIN
+      //IF IsExportAllowed(ExportRecRef) THEN BEGIN
+        _ExportFieldBuffer.FINDSET;
+        REPEAT
+          CLEAR(_ValueAsText);
+          // Format Field in XML Format, Zero numbers are empty (Save Space)
+          CASE TRUE OF
+            (_ExportFieldBuffer.TableNo = DATABASE::Field) AND (_ExportFieldBuffer."No."=50000): BEGIN
+              CLEAR(_CurrTableRef);
+              _TableNo := _RecRef.FIELD(1).VALUE;
+              _CurrTableRef.OPEN(_TableNo,FALSE);
+              _ValueAsText := _CurrTableRef.CAPTION;
+            // KeyFieldIDs
+            END;
+            (_ExportFieldBuffer.TableNo = DATABASE::Field) AND (_ExportFieldBuffer."No."=50001): BEGIN
+              _TableNo := _RecRef.FIELD(1).VALUE;
+              CLEAR(_CurrTableRef);
+              _CurrTableRef.OPEN(_TableNo,FALSE);
+              _ValueAsText := GetListOfKeyFieldIDs(_CurrTableRef.NUMBER);
+            END;
+            // OptionString
+            (_ExportFieldBuffer.TableNo = DATABASE::Field) AND (_ExportFieldBuffer."No."=50002): BEGIN
+              _RecRef.SETTABLE(_Field);
+              IF _Field.Type = _Field.Type::Option THEN BEGIN
+                CLEAR(_CurrTableRef);
+                _CurrTableRef.OPEN(_Field.TableNo,FALSE);
+                _CurrFldRef := _CurrTableRef.FIELD(_Field."No.");
+                GetListOfOptionString(_CurrFldRef,_ValueAsText);
+              END;
+            END;
+            // OptionCaption
+            (_ExportFieldBuffer.TableNo = DATABASE::Field) AND (_ExportFieldBuffer."No."=50003): BEGIN
+              _RecRef.SETTABLE(_Field);
+              IF _Field.Type = _Field.Type::Option THEN BEGIN
+                CLEAR(_CurrTableRef);
+                _CurrTableRef.OPEN(_Field.TableNo,FALSE);
+                _CurrFldRef := _CurrTableRef.FIELD(_Field."No.");
+                //mask leading "
+                IF (STRLEN(_CurrFldRef.OPTIONCAPTION) > 1) AND (COPYSTR(_CurrFldRef.OPTIONCAPTION,1,2)=' ,') THEN BEGIN
+                  _ValueAsText := '" "'+COPYSTR(_CurrFldRef.OPTIONCAPTION,2);
+                END ELSE BEGIN
+                  _ValueAsText := _CurrFldRef.OPTIONCAPTION;
+                END;
+              END;
+            END;
+            // No of Records
+            (_ExportFieldBuffer.TableNo = DATABASE::Field) AND (_ExportFieldBuffer."No."=50004): BEGIN
+              _RecRef.SETTABLE(_Field);
+              _ValueAsText := GetNoOfRecordsInTable(_Field);
+            END;
+            ELSE _ValueAsText := GetFormattedFieldValue(_RecRef,_ExportFieldBuffer."No.");
+          END; // END_CASE
+
+          // Remove FieldSeparator from Value
+          //_ValueAsText := ReplaceStr(_ValueAsText,_FieldSeparator,'');
+          _ValueAsText := RemoveSpecialChars(_ValueAsText);
+          ADOStream.WriteText(_ValueAsText,0{LineBreak});
+          IF _LastFieldNo = _ExportFieldBuffer."No." THEN
+                ADOStream.WriteText('',1{LineBreak})
+          ELSE
+                ADOStream.WriteText(_FieldSeparator,0);
+
+        UNTIL _ExportFieldBuffer.NEXT = 0;
+    END;
+
+    PROCEDURE EXPORT_ExportSingleTableRecBT@1000000017(VAR _RecRef@1000000000 : RecordRef;VAR _ExportFieldBuffer@1000000002 : TEMPORARY Record 2000000041;_LastFieldNo@1000000001 : Integer;_FieldSeparator@1000000004 : Text[1]);
+    VAR
+      _ValueAsText@1000000003 : BigText;
+      _CurrTableRef@1000000005 : RecordRef;
+      _CurrFldRef@1000000009 : FieldRef;
+      _Field@1000000010 : Record 2000000041;
+      _TableNo@1000000006 : Integer;
+      _FieldNo@1000000008 : Integer;
+      _LineText@1000000007 : Text[1024];
+    BEGIN
+      //IF IsExportAllowed(ExportRecRef) THEN BEGIN
+        _ExportFieldBuffer.FINDSET;
+        REPEAT
+          CLEAR(_ValueAsText);
+          // Format Field in XML Format, Zero numbers are empty (Save Space)
+          CASE TRUE OF
+            (_ExportFieldBuffer.TableNo = DATABASE::Field) AND (_ExportFieldBuffer."No."=50000): BEGIN
+              CLEAR(_CurrTableRef);
+              _TableNo := _RecRef.FIELD(1).VALUE;
+              _CurrTableRef.OPEN(_TableNo,FALSE);
+              _ValueAsText.ADDTEXT(_CurrTableRef.CAPTION);
+            END;
+            (_ExportFieldBuffer.TableNo = DATABASE::Field) AND (_ExportFieldBuffer."No."=50001): BEGIN
+              _TableNo := _RecRef.FIELD(1).VALUE;
+              CLEAR(_CurrTableRef);
+              _CurrTableRef.OPEN(_TableNo,FALSE);
+              _ValueAsText.ADDTEXT(GetListOfKeyFieldIDs(_CurrTableRef.NUMBER));
+            END;
+            //OptionString
+            (_ExportFieldBuffer.TableNo = DATABASE::Field) AND (_ExportFieldBuffer."No."=50002): BEGIN
+              _RecRef.SETTABLE(_Field);
+              IF _Field.Type = _Field.Type::Option THEN BEGIN
+                CLEAR(_CurrTableRef);
+                _CurrTableRef.OPEN(_Field.TableNo,FALSE);
+                _CurrFldRef := _CurrTableRef.FIELD(_Field."No.");
+                GetListOfOptionStringBT(_CurrFldRef,_ValueAsText);
+              END;
+            END;
+            (_ExportFieldBuffer.TableNo = DATABASE::Field) AND (_ExportFieldBuffer."No."=50003): BEGIN
+              _RecRef.SETTABLE(_Field);
+              IF _Field.Type = _Field.Type::Option THEN BEGIN
+                CLEAR(_CurrTableRef);
+                _CurrTableRef.OPEN(_Field.TableNo,FALSE);
+                _CurrFldRef := _CurrTableRef.FIELD(_Field."No.");
+                //mask leading "
+                IF (STRLEN(_CurrFldRef.OPTIONCAPTION)>1) AND (COPYSTR(_CurrFldRef.OPTIONCAPTION,1,2)=' ,') THEN BEGIN
+                  _ValueAsText.ADDTEXT('" "'+COPYSTR(_CurrFldRef.OPTIONCAPTION,2));
+                END ELSE BEGIN
+                  _ValueAsText.ADDTEXT(_CurrFldRef.OPTIONCAPTION);
+                END;
+              END;
+            END;
+            // No of Records
+            (_ExportFieldBuffer.TableNo = DATABASE::Field) AND (_ExportFieldBuffer."No."=50004): BEGIN
+              _RecRef.SETTABLE(_Field);
+              _ValueAsText.ADDTEXT(GetNoOfRecordsInTable(_Field));
+            END;
+            ELSE _ValueAsText.ADDTEXT(GetFormattedFieldValue(_RecRef,_ExportFieldBuffer."No."));
+          END; // END_CASE
+
+          // Remove FieldSeparator from Value
+          //_ValueAsText := ReplaceStr(_ValueAsText,_FieldSeparator,'');
+          RemoveSpecialCharsBT(_ValueAsText);
+          AddBigTextToADOStream(_ValueAsText);
+          IF _LastFieldNo = _ExportFieldBuffer."No." THEN
+                ADOStream.WriteText('',1{LineBreak})
+          ELSE
+                ADOStream.WriteText(_FieldSeparator,0);
+
+        UNTIL _ExportFieldBuffer.NEXT = 0;
+    END;
+
+    PROCEDURE InitExport@1000000012();
+    BEGIN
+      CLEAR(ADOStream);
+      CREATE(ADOStream);
+      // [LINEFieldSeparatorENUM LineFieldSeparator]
+      // adCR    13  Indicates carriage return.
+      // adCRLF  -1  Default. Indicates carriage return line feed.
+      // adLF    10  Indicates line feed.
+      ADOStream.LineSeparator(-1);
+
+      ADOStream.Open;
+      //ADOStream.Charset('iso-8859-1'); //UTF-8, default is unicode
+      ADOStream.Charset('utf-8');
+      FieldSeparator[1] := 9; // TAB
+      ExportWithTitleLine := TRUE;
+    END;
+
+    PROCEDURE AddBigTextToADOStream@1000000020(Content@1000000000 : BigText);
+    VAR
+      Pos@1000000002 : Integer;
+      Chunk@1000000001 : Text[1024];
+    BEGIN
+      Pos:=1;
+      WHILE Pos <= Content.LENGTH DO BEGIN
+        Pos += Content.GETSUBTEXT(Chunk,Pos,1024);
+        ADOStream.WriteText(Chunk,0{LineBreak});
+      END;
+    END;
+
+    PROCEDURE THIS_OnOpenForm@1000000004();
+    BEGIN
+    END;
+
+    PROCEDURE THIS_OnCloseForm@1000000005();
+    BEGIN
+      CurrDataport.QUIT;
+    END;
+
+    PROCEDURE "----- Actions START -----"@1000000006();
+    BEGIN
+    END;
+
+    PROCEDURE StartTableExport@1000000002();
+    VAR
+      AllObjWithCaption@1000000000 : Record 2000000058;
+      ExportToPath@1000000001 : Text[1024];
+      ExportDuration@1000000002 : Duration;
+      Progress@1000000003 : Dialog;
+      ReadyMsgArray@1000000006 : ARRAY [100] OF Text[1024];
+      TAB@1000000005 : Text[1];
+      Index@1000000007 : Integer;
+    BEGIN
+      IF ExportTableIDFilter = '' THEN ERROR('Es wurde kein Tabellenfilter angegeben.');
+      CheckFolderPath_CC(ExportToFolderPath);
+
+      AllObjWithCaption.SETRANGE("Object Type",AllObjWithCaption."Object Type"::TableData);
+      AllObjWithCaption.SETFILTER("Object ID",ExportTableIDFilter);
+      IF NOT AllObjWithCaption.FINDSET THEN EXIT;
+
+      REPEAT
+        IF NOT IsTableInLicense(AllObjWithCaption."Object ID") THEN
+        MESSAGE('Achtung: Tabelle %1 - %2 ist nicht in der Lizenz.',AllObjWithCaption."Object ID",AllObjWithCaption."Object Caption");
+      UNTIL AllObjWithCaption.NEXT = 0;
+
+      TAB[1] := 9; // TAB
+      AllObjWithCaption.FINDSET;
+      Index := 0;
+      REPEAT
+        ExportToPath := ExportToFolderPath + CONVERTSTR(AllObjWithCaption."Object Caption",'<>*\/|"','_______') +'.csv';
+        ExportTable(ExportToPath,AllObjWithCaption."Object ID",ExportDuration,'');
+        Index += 1;
+        ReadyMsgArray[Index] := STRSUBSTNO('\%1:%2%3',AllObjWithCaption."Object Caption",TAB,ExportDuration);
+      UNTIL AllObjWithCaption.NEXT = 0;
+
+      MESSAGE('Export abgeschlossen:'+
+               ReadyMsgArray[ 1] + ReadyMsgArray[ 2] + ReadyMsgArray[ 3] + ReadyMsgArray[ 4] + ReadyMsgArray[ 5] +
+               ReadyMsgArray[ 6] + ReadyMsgArray[ 7] + ReadyMsgArray[ 8] + ReadyMsgArray[ 9] +
+               ReadyMsgArray[10] + ReadyMsgArray[11] + ReadyMsgArray[12] + ReadyMsgArray[13] + ReadyMsgArray[14] +
+               ReadyMsgArray[15] + ReadyMsgArray[16] + ReadyMsgArray[17] + ReadyMsgArray[18] + ReadyMsgArray[19] +
+               ReadyMsgArray[20] + ReadyMsgArray[21] + ReadyMsgArray[22] + ReadyMsgArray[23] + ReadyMsgArray[24] +
+               ReadyMsgArray[25] + ReadyMsgArray[26] + ReadyMsgArray[27] + ReadyMsgArray[28] + ReadyMsgArray[29] +
+               ReadyMsgArray[30] + ReadyMsgArray[31] + ReadyMsgArray[32] + ReadyMsgArray[33] + ReadyMsgArray[34] +
+               ReadyMsgArray[35] + ReadyMsgArray[36] + ReadyMsgArray[37] + ReadyMsgArray[38] + ReadyMsgArray[39] +
+               ReadyMsgArray[40] + ReadyMsgArray[41] + ReadyMsgArray[42] + ReadyMsgArray[43] + ReadyMsgArray[44] +
+               ReadyMsgArray[45] + ReadyMsgArray[46] + ReadyMsgArray[47] + ReadyMsgArray[48] + ReadyMsgArray[49] +
+               ReadyMsgArray[50] + ReadyMsgArray[51] + ReadyMsgArray[52] + ReadyMsgArray[53] + ReadyMsgArray[54] +
+               ReadyMsgArray[55] + ReadyMsgArray[56] + ReadyMsgArray[57] + ReadyMsgArray[58] + ReadyMsgArray[59] +
+               ReadyMsgArray[60] + ReadyMsgArray[61] + ReadyMsgArray[62] + ReadyMsgArray[63] + ReadyMsgArray[64] +
+               ReadyMsgArray[65] + ReadyMsgArray[66] + ReadyMsgArray[67] + ReadyMsgArray[68] + ReadyMsgArray[69] +
+               ReadyMsgArray[70] + ReadyMsgArray[71] + ReadyMsgArray[72] + ReadyMsgArray[73] + ReadyMsgArray[74] +
+               ReadyMsgArray[75] + ReadyMsgArray[76] + ReadyMsgArray[77] + ReadyMsgArray[78] + ReadyMsgArray[79] +
+               ReadyMsgArray[80] + ReadyMsgArray[81] + ReadyMsgArray[82] + ReadyMsgArray[83] + ReadyMsgArray[84] +
+               ReadyMsgArray[85] + ReadyMsgArray[86] + ReadyMsgArray[87] + ReadyMsgArray[88] + ReadyMsgArray[89] +
+               ReadyMsgArray[90] + ReadyMsgArray[91] + ReadyMsgArray[92] + ReadyMsgArray[93] + ReadyMsgArray[94] +
+               ReadyMsgArray[95] + ReadyMsgArray[96] + ReadyMsgArray[97] + ReadyMsgArray[98] + ReadyMsgArray[99]
+               );
+    END;
+
+    PROCEDURE StartSchemaDefinitionExport@1000000016();
+    VAR
+      ReadyMsg@1109900000 : Text[1024];
+      ExportToPath@1109900003 : Text[1024];
+      ExportDuration@1109900002 : Duration;
+      AllObjWithCaption@1109900001 : Record 2000000058;
+    BEGIN
+      //* export all data needed to recreate the C/AL table in al
+      CheckFolderPath_CC(ExportToFolderPath);
+
+      ReadyMsg:='Export finished:';
+      ExportToPath := ExportToFolderPath + 'Schema.csv';
+
+      //* export all data needed to recreate the C/AL table in al
+      ReadyMsg:='Export finished:';
+      ExportToPath := ExportToFolderPath + 'Schema.csv';
+      ExportTable(ExportToPath,DATABASE::Field,ExportDuration,'');
+      AllObjWithCaption.GET(AllObjWithCaption."Object Type"::Table,DATABASE::Field);
+      ReadyMsg += STRSUBSTNO('\%1: %2',AllObjWithCaption."Object Caption",ExportDuration);
+      MESSAGE(ReadyMsg);
+    END;
+
+    PROCEDURE "----- Actions END -----"@1000000007();
+    BEGIN
+    END;
+
+    PROCEDURE RemoveSpecialChars@1109900000(Text@1109900000 : Text[1024]) ResultText : Text[1024];
+    VAR
+      CharArray@1109900001 : Text[30];
+      Chunk@1000000000 : Text[1];
+      TextOLD@1000000001 : BigText;
+      i@1000000002 : Integer;
+    BEGIN
+      CharArray[1] := 3; // End of Text
+      CharArray[2] := 9; // TAB
+      CharArray[3] := 10; // LF
+      CharArray[4] := 13; // CR
+      ResultText := DELCHR(Text,'=',CharArray);
+    END;
+
+    LOCAL PROCEDURE GetFormattedFieldValue@1000000010(VAR recRef@1000000008 : RecordRef;fieldNo@1000000009 : Integer) _Result : Text[1024];
+    VAR
+      fieldRef@1000000000 : FieldRef;
+      _Value@1000000007 : Variant;
+      _Integer@1000000002 : Integer;
+      _Text@1000000003 : Text[1024];
+      _Decimal@1000000004 : Decimal;
+      _Date@1000000005 : Date;
+      _Time@1000000001 : Time;
+      _Boolean@1000000006 : Boolean;
+      _Field@1000000010 : Record 2000000041;
+    BEGIN
+      //* returns values in xmlformat, handles problems with field.type optionstring bug
+      fieldRef := recRef.FIELD(fieldNo);
+      IF LOWERCASE(FORMAT(fieldRef.CLASS)) = 'flowfield' THEN
+        fieldRef.CALCFIELD();
+      fieldRef.VALUE := fieldRef.VALUE;
+      CASE UPPERCASE(FORMAT(fieldRef.TYPE)) OF
+        'BOOLEAN': BEGIN; _Boolean := fieldRef.VALUE; _Result  := '0';   IF _Boolean THEN      _Result := '1'; END;
+        'INTEGER': BEGIN; _Integer := fieldRef.VALUE; IF _Integer <> 0 THEN _Result := FORMAT(_Integer,0,9); END;
+        'OPTION':  BEGIN; _Integer := fieldRef.VALUE; _Result := FORMAT(_Integer,0,9); END;
+        'DECIMAL': BEGIN; _Decimal := fieldRef.VALUE; IF _Decimal <> 0 THEN _Result := FORMAT(_Decimal,0,9); END;
+        'DATE':    BEGIN; _Date    := fieldRef.VALUE; IF _Date <> 0D THEN   _Result := FORMAT(_Date,0,9);    END;
+        'TIME':    BEGIN; _Time := fieldRef.VALUE;    IF _Time <> 0T THEN   _Result := FORMAT(_Time,0,9);    END;
+        'CHAR','TEXT','CODE':   _Result := fieldRef.VALUE;
+        ELSE _Result := FORMAT(fieldRef.VALUE,0,9);
+      END; // END_CASE
+
+      IF (recRef.NUMBER = DATABASE::Field) AND (fieldNo = _Field.FIELDNO(Type))THEN BEGIN
+        recRef.SETTABLE(_Field);
+        IF (fieldRef.NUMBER=_Field.FIELDNO(Type)) THEN
+          CASE _Field.Type OF
+            _Field.Type::TableFilter: _Result := '0';
+            _Field.Type::RecordID   : _Result := '1';
+            _Field.Type::Text       : _Result := '2';
+            _Field.Type::Date       : _Result := '3';
+            _Field.Type::Time       : _Result := '4';
+            _Field.Type::DateFormula: _Result := '5';
+            _Field.Type::Decimal    : _Result := '6';
+            _Field.Type::Binary     : _Result := '7';
+            _Field.Type::BLOB       : _Result := '8';
+            _Field.Type::Boolean    : _Result := '9';
+            _Field.Type::Integer    : _Result := '10';
+            _Field.Type::Code       : _Result := '11';
+            _Field.Type::Option     : _Result := '12';
+            _Field.Type::BigInteger : _Result := '13';
+            _Field.Type::Duration   : _Result := '14';
+            _Field.Type::GUID       : _Result := '15';
+            _Field.Type::DateTime   : _Result := '16';
+          END;
+      END;
+    END;
+
+    PROCEDURE IsTableInLicense@1000000018(ObjectID@1000000000 : Integer) : Boolean;
+    VAR
+      _LicensePermission@1000000001 : Record 2000000043;
+    BEGIN
+      IF NOT _LicensePermission.GET(_LicensePermission."Object Type"::Table,ObjectID) THEN
+        EXIT(FALSE);
+      EXIT(_LicensePermission."Execute Permission"<>_LicensePermission."Execute Permission"::" ");
+    END;
+
+    PROCEDURE GetListOfKeyFieldIDs@1109900003(TableNo@1109900000 : Integer) KeyFieldsList : Text[1024];
+    VAR
+      Key@1109900001 : Record 2000000063;
+      RecRef@1000000001 : RecordRef;
+      KeyRef@1000000002 : KeyRef;
+      FldRef@1000000003 : FieldRef;
+      i@1000000004 : Integer;
+    BEGIN
+      RecRef.OPEN(TableNo);
+      KeyRef := RecRef.KEYINDEX(1);
+      FOR i := 1 TO KeyRef.FIELDCOUNT DO BEGIN
+        FldRef := KeyRef.FIELDINDEX(i);
+        KeyFieldsList += FORMAT(FldRef.NUMBER) + ',';
+      END;
+      KeyFieldsList := DELCHR(KeyFieldsList,'>',',');
+    END;
+
+    PROCEDURE ReplaceStr@1000000015(_Text@1000000000 : Text[1024];_FindWhat@1000000001 : Text[1024];_ReplaceWith@1000000002 : Text[1024]) _NewText : Text[1024];
+    BEGIN
+      WHILE STRPOS(_Text,_FindWhat) > 0 DO
+        _Text := DELSTR(_Text,STRPOS(_Text,_FindWhat)) +
+                  _ReplaceWith +
+                  COPYSTR(_Text,STRPOS(_Text,_FindWhat)+STRLEN(_FindWhat));
+      _NewText := _Text;
+    END;
+
+    PROCEDURE LoadFieldList@1000000011(VAR _ExportFields_FOUND@1000000001 : TEMPORARY Record 2000000041;_ExportTableID@1000000003 : Integer) NoOfFields : Integer;
+    VAR
+      _fields@1000000000 : Record 2000000041;
+      _exportFieldBuffer@1000000002 : TEMPORARY Record 2000000041;
+    BEGIN
+      //* create a list ob columns to export
+      IF _ExportTableID <> 0 THEN
+        _fields.SETRANGE(TableNo,_ExportTableID);
+      _fields.SETFILTER(Type,'<>%1',_fields.Type::BLOB);
+      IF ExportFlowFields THEN
+        _fields.SETFILTER(Class,'%1|%2',_fields.Class::Normal,_fields.Class::FlowField)
+      ELSE
+        _fields.SETFILTER(Class,'%1',_fields.Class::Normal);
+      _fields.SETRANGE(Enabled,TRUE);
+      //SetObsoleteFieldFilter(_fields);
+      _fields.FINDSET;
+      REPEAT
+        _exportFieldBuffer := _fields;
+        _exportFieldBuffer.INSERT;
+      UNTIL _fields.NEXT = 0;
+
+      IF _ExportTableID = DATABASE::Field THEN BEGIN
+        _exportFieldBuffer.INIT;
+
+        _exportFieldBuffer.TableNo := DATABASE::Field;
+        _exportFieldBuffer."No." := 50000;
+        _exportFieldBuffer.FieldName := 'Table Caption';
+        _exportFieldBuffer."Field Caption" := 'Tabellenbezeichnung';
+        _exportFieldBuffer.Type := _exportFieldBuffer.Type::Text;
+        _exportFieldBuffer.Len := 250;
+        _exportFieldBuffer.INSERT;
+
+        _exportFieldBuffer."No." := 50001;
+        _exportFieldBuffer.FieldName := 'Primary Key';
+        _exportFieldBuffer."Field Caption" := 'Prim?rschl?ssel';
+        _exportFieldBuffer.INSERT;
+
+        _exportFieldBuffer."No." := 50002;
+        _exportFieldBuffer.FieldName := 'OptionString';
+        _exportFieldBuffer."Field Caption" := 'OptionString';
+        _exportFieldBuffer.INSERT;
+
+        _exportFieldBuffer."No." := 50003;
+        _exportFieldBuffer.FieldName := 'OptionCaption';
+        _exportFieldBuffer."Field Caption" := 'OptionCaption';
+        _exportFieldBuffer.INSERT;
+
+        _exportFieldBuffer."No." := 50004;
+        _exportFieldBuffer.FieldName := 'No. of Records';
+        _exportFieldBuffer."Field Caption" := 'Anz. Datens?tze';
+        _exportFieldBuffer.INSERT;
+
+      END;
+      NoOfFields := _ExportFields_FOUND.COUNT;
+      _ExportFields_FOUND.COPY(_exportFieldBuffer,TRUE);
+      NoOfFields := _ExportFields_FOUND.COUNT;
+    END;
+
+    PROCEDURE CreateHeaderLine@1000000013(VAR _ExportFieldBuffer@1000000001 : TEMPORARY Record 2000000041;_LastFieldNo@1000000000 : Integer;_FieldSeparator@1000000003 : Text[1]);
+    VAR
+      _ValueAsText@1000000002 : Text[1024];
+    BEGIN
+      IF NOT ExportWithTitleLine THEN EXIT;
+
+      _ExportFieldBuffer.FINDSET;
+      REPEAT
+        _ValueAsText := ReplaceStr(_ExportFieldBuffer.FieldName,_FieldSeparator,'');  // Remove FieldSeparator from Value
+        ADOStream.WriteText(_ValueAsText,0);  // Write
+        IF _LastFieldNo <> _ExportFieldBuffer."No." THEN
+          ADOStream.WriteText(_FieldSeparator,0)  // Write
+      UNTIL _ExportFieldBuffer.NEXT = 0;
+      ADOStream.WriteText('',1); // Write with LineBreak
+    END;
+
+    PROCEDURE GetNoOfRecordsInTable@1000000008(VAR _ExportFieldBuffer@1000000001 : TEMPORARY Record 2000000041) NoOfRecordsText : Text[30];
+    VAR
+      _TableInfo@1000000000 : Record 2000000028;
+    BEGIN
+      IF TempTableInfo.GET(COMPANYNAME,_ExportFieldBuffer.TableNo) THEN
+        EXIT(FORMAT(TempTableInfo."No. of Records"));
+      IF TempTableInfo.GET('',_ExportFieldBuffer.TableNo) THEN
+        EXIT(FORMAT(TempTableInfo."No. of Records"));
+
+      IF NOT _TableInfo.GET(COMPANYNAME,_ExportFieldBuffer.TableNo) THEN
+        IF NOT _TableInfo.GET('',_ExportFieldBuffer.TableNo)  THEN
+          EXIT('');
+      TempTableInfo := _TableInfo;
+      TempTableInfo.INSERT(FALSE);
+      NoOfRecordsText := FORMAT(TempTableInfo."No. of Records");
+    END;
+
+    PROCEDURE AddCounterToFilePath@1109900002(VAR _CurrFilePath@1109900000 : Text[1024];_FileCounter@1109900001 : Integer);
+    VAR
+      _FileName@1109900002 : Text[1024];
+      _FileBaseName@1109900004 : Text[1024];
+      _FileExtension@1109900003 : Text[1024];
+      _NumberText@1109900005 : Text[30];
+    BEGIN
+      IF STRPOS(_CurrFilePath,'.csv') = 0 THEN ERROR('File extension csv expected');
+      _FileName := COPYSTR(_CurrFilePath,1,STRPOS(LOWERCASE(_CurrFilePath),'.csv')-1);
+
+      // remove existing number
+      _FileBaseName := _FileName;
+      _NumberText := COPYSTR(_FileName,STRLEN(_FileName)-1);
+      _NumberText := DELCHR(_NumberText,'=','0123456789');
+      IF _NumberText = '' THEN
+        _FileBaseName := COPYSTR(_FileName,1,STRLEN(_FileName)-3);
+
+      // add new number
+      CASE _FileCounter OF
+        0..9 : _CurrFilePath := _FileBaseName + '_0'+FORMAT(_FileCounter) + '.csv';
+        10..99 : _CurrFilePath := _FileBaseName + '_'+FORMAT(_FileCounter) + '.csv';
+      END;
+    END;
+
+    PROCEDURE SizeLimitReached@1109900004() IsLimitReached : Boolean;
+    VAR
+      FileSizeInBytes@1109900000 : Integer;
+    BEGIN
+      FileSizeInBytes := ADOStream.Size();
+      //Cloud Limit 350 MB = 367,001,600 Bytes
+      IsLimitReached := FileSizeInBytes >= 349 * 1024 * 1024; // 1 MB less for safety
+      //IsLimitReached := FileSizeInBytes >= 5*1024*1024;
+    END;
+
+    PROCEDURE STRING_GetSplitValue@1109900005(String@1109900000 : Text[1024];SplitCharacter@1109900001 : Text[1];ElementPosition@1109900002 : Integer) Result : Text[1024];
+    VAR
+      SplitCounter@1109900003 : Integer;
+      LastPos@1109900004 : Integer;
+      NextPos@1109900005 : Integer;
+      Found@1109900006 : Boolean;
+      IndexCursor@1109900007 : Integer;
+    BEGIN
+      IF String ='' THEN EXIT('');
+      SplitCounter := 1;
+      LastPos      := 0;
+      NextPos      := STRPOS(String,SplitCharacter);
+      Found        := FALSE;
+      IndexCursor      := 0;
+      WHILE NOT Found AND (IndexCursor < STRLEN(String)) DO BEGIN
+        IndexCursor += 1;
+        NextPos := IndexCursor + STRPOS(COPYSTR(String,IndexCursor + 1),SplitCharacter);
+        IF (ElementPosition <= 1) THEN BEGIN
+          IF (NextPos <> 0) THEN
+            EXIT(COPYSTR(String,1,NextPos -1))
+          ELSE
+            EXIT(String);
+        END;
+        IF FORMAT(String[IndexCursor]) = SplitCharacter THEN BEGIN
+          LastPos      := IndexCursor;
+          SplitCounter += 1;
+        END;
+        NextPos := IndexCursor + STRPOS(COPYSTR(String,IndexCursor+1),SplitCharacter);
+        IF SplitCounter = ElementPosition THEN
+          IF (NextPos = 0) OR (LastPos = NextPos) THEN
+            EXIT(COPYSTR(String,LastPos + 1))
+          ELSE
+            EXIT(COPYSTR(String,LastPos + 1,NextPos - LastPos - 1));
+      END;
+    END;
+
+    BEGIN
+    END.
+  }
+}
+

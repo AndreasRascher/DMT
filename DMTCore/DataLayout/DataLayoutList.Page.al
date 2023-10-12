@@ -35,7 +35,7 @@ page 91007 DMTDataLayouts
             InsertPresetDataLayouts();
     end;
 
-    local procedure InsertPresetDataLayouts()
+    procedure InsertPresetDataLayouts()
     var
         setup: Record DMTSetup;
         isDefaultLayout: Boolean;
@@ -62,6 +62,7 @@ page 91007 DMTDataLayouts
         dataLayout.CSVFieldDelimiter := CopyStr(csvFieldDelimiter, 1, MaxStrLen(dataLayout.CSVFieldDelimiter));
         dataLayout."Has Heading Row" := headingRowNoNew <> 0;
         dataLayout.HeadingRowNo := headingRowNoNew;
+        dataLayout.Default := IsDefaultLayout;
         insertPresetIfMissing(dataLayout);
     end;
 

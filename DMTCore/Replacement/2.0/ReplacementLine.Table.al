@@ -9,7 +9,7 @@ table 91012 DMTReplacementLine
         field(3; "Line No."; Integer) { Caption = 'Line No.', Comment = 'de-DE=Zeilennr.'; }
         field(20; "Imp.Conf.Header ID"; Integer)
         {
-            Caption = 'Imp.Conf.Header ID', Comment = 'de-DE=Import Konfig. Kopf ID';
+            Caption = 'Imp.Config. ID', Comment = 'de-DE=Import Konfig. ID';
             TableRelation = DMTImportConfigHeader;
             trigger OnValidate()
             var
@@ -19,8 +19,14 @@ table 91012 DMTReplacementLine
                     Init()
                 else begin
                     "Target Table ID" := importConfigHeader."Target Table ID";
+                    "Source File Name" := importConfigHeader."Source File Name";
                 end;
             end;
+        }
+        field(21; "Source File Name"; Text[250])
+        {
+            Caption = 'Source File Name', Comment = 'de-DE=Quelldatei';
+            Editable = false;
         }
         field(22; "Target Table ID"; Integer)
         {
@@ -77,8 +83,8 @@ table 91012 DMTReplacementLine
             ValidateTableRelation = false;
         }
 
-        field(200; "Comp.Value 1"; Text[80]) { Caption = 'Compare Value 1', Comment = 'de-DE=Vgl.-Wert 1'; }
-        field(201; "Comp.Value 2"; Text[80]) { Caption = 'Compare Value 2', Comment = 'de-DE=Vgl.-Wert 2'; }
+        field(200; "Comp.Value 1"; Text[80]) { Caption = 'Old Value 1', Comment = 'de-DE=Alter Wert 1'; }
+        field(201; "Comp.Value 2"; Text[80]) { Caption = 'Old Value 2', Comment = 'de-DE=Alter Wert 2'; }
         field(300; "New Value 1"; Text[80]) { Caption = 'New Value 1 Caption', Comment = 'de-DE=Neuer Wert 1'; }
         field(301; "New Value 2"; Text[80]) { Caption = 'New Value 2 Caption', Comment = 'de-DE=Neuer Wert 2'; }
     }
@@ -116,29 +122,33 @@ table 91012 DMTReplacementLine
     internal procedure OnAfterLookUpField(var Selected: RecordRef; fromFieldNo: Integer; var currDataLayoutLine: Record DMTDataLayoutLine)
     var
         dataLayoutLineSelected: Record DMTDataLayoutLine;
+        importConfigHeaderSelected: Record DMTImportConfigHeader;
     begin
-        Selected.SetTable(dataLayoutLineSelected);
         case fromFieldNo of
             Rec.FieldNo("Target 1 Field Caption"):
                 begin
+                    Selected.SetTable(dataLayoutLineSelected);
                     Rec."Target 1 Field No." := dataLayoutLineSelected."Column No.";
                     Rec."Target 1 Field Caption" := dataLayoutLineSelected.ColumnName;
                     currDataLayoutLine := dataLayoutLineSelected;
                 end;
             Rec.FieldNo("Target 2 Field Caption"):
                 begin
+                    Selected.SetTable(dataLayoutLineSelected);
                     Rec."Target 2 Field No." := dataLayoutLineSelected."Column No.";
                     Rec."Target 2 Field Caption" := dataLayoutLineSelected.ColumnName;
                     currDataLayoutLine := dataLayoutLineSelected;
                 end;
             Rec.FieldNo("Source 1 Field Caption"):
                 begin
+                    Selected.SetTable(dataLayoutLineSelected);
                     Rec."Source 1 Field No." := dataLayoutLineSelected."Column No.";
                     Rec."Source 1 Field Caption" := dataLayoutLineSelected.ColumnName;
                     currDataLayoutLine := dataLayoutLineSelected;
                 end;
             Rec.FieldNo("Source 2 Field Caption"):
                 begin
+                    Selected.SetTable(dataLayoutLineSelected);
                     Rec."Source 2 Field No." := dataLayoutLineSelected."Column No.";
                     Rec."Source 2 Field Caption" := dataLayoutLineSelected.ColumnName;
                     currDataLayoutLine := dataLayoutLineSelected;
@@ -150,27 +160,32 @@ table 91012 DMTReplacementLine
 
     internal procedure OnValidateOnAfterLookUp(fromFieldNo: Integer; var currDataLayoutLine: Record DMTDataLayoutLine)
     begin
-        if currDataLayoutLine.ColumnName = '' then
-            exit;
-
         case fromFieldNo of
             Rec.FieldNo("Target 1 Field Caption"):
                 begin
+                    if (currDataLayoutLine.ColumnName = '') then
+                        exit;
                     Rec."Target 1 Field No." := currDataLayoutLine."Column No.";
                     Rec."Target 1 Field Caption" := currDataLayoutLine.ColumnName;
                 end;
             Rec.FieldNo("Target 2 Field Caption"):
                 begin
+                    if (currDataLayoutLine.ColumnName = '') then
+                        exit;
                     Rec."Target 2 Field No." := currDataLayoutLine."Column No.";
                     Rec."Target 2 Field Caption" := currDataLayoutLine.ColumnName;
                 end;
             Rec.FieldNo("Source 1 Field Caption"):
                 begin
+                    if (currDataLayoutLine.ColumnName = '') then
+                        exit;
                     Rec."Source 1 Field No." := currDataLayoutLine."Column No.";
                     Rec."Source 1 Field Caption" := currDataLayoutLine.ColumnName;
                 end;
             Rec.FieldNo("Source 2 Field Caption"):
                 begin
+                    if (currDataLayoutLine.ColumnName = '') then
+                        exit;
                     Rec."Source 2 Field No." := currDataLayoutLine."Column No.";
                     Rec."Source 2 Field Caption" := currDataLayoutLine.ColumnName;
                 end;

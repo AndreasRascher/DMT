@@ -1,6 +1,8 @@
 table 91003 DMTImportConfigHeader
 {
     Caption = 'DMT Import Configuration Header', Comment = 'de-DE=Import Konfiguration Kopf';
+    LookupPageId = DMTImportConfigList;
+    DrillDownPageId = DMTImportConfigList;
     fields
     {
         field(1; ID; Integer) { Caption = 'ID', Locked = true; }
@@ -43,13 +45,16 @@ table 91003 DMTImportConfigHeader
             ValidateTableRelation = false;
             BlankZero = true;
         }
-        field(42; "Buffer Table ID"; Integer)
+        field(42; ImportXMLPortIDStyle; Text[15]) { Caption = 'ImportXMLPortIDStyle', Locked = true; Editable = false; }
+
+        field(43; "Buffer Table ID"; Integer)
         {
             Caption = 'Buffertable ID', Comment = 'de-DE=Puffertabelle ID';
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table), "App Package ID" = field("Current App Package ID Filter"));
             ValidateTableRelation = false;
             BlankZero = true;
         }
+        field(44; BufferTableIDStyle; Text[15]) { Caption = 'BufferTableIDStyle', Locked = true; Editable = false; }
         #region Import and Processing Options
         field(50; LastUsedUpdateFieldsSelection; Blob) { }
         field(51; LastUsedFilter; Blob) { }
@@ -93,10 +98,10 @@ table 91003 DMTImportConfigHeader
             ImportConfigLine.DeleteAll(true);
         if Rec.FilterRelated(LogEntry) then
             LogEntry.DeleteAll();
-        Rec.DeleteBufferData();
+        Rec.BufferTableMgt().DeleteAllBufferData();
     end;
 
-    procedure GetNextID() NextID: Integer
+    internal procedure GetNextID() NextID: Integer
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
     begin
@@ -117,13 +122,10 @@ table 91003 DMTImportConfigHeader
         LogEntry.SetRange("Entry Type", LogEntry."Entry Type"::Summary);
     end;
 
-    internal procedure ShowTableContent(TableID: Integer) OK: Boolean
-    var
-        TableMeta: Record "Table Metadata";
+    internal procedure UpdateBufferRecordCount()
     begin
-        OK := TableMeta.Get(TableID);
-        if OK then
-            Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, TableID));
+        Rec."No.of Records in Buffer Table" := Rec.BufferTableMgt().CountRecordsInBufferTable();
+        Rec.Modify();
     end;
 
     internal procedure GetSourceFileName(): Text[250]
@@ -133,15 +135,6 @@ table 91003 DMTImportConfigHeader
         SourceFileStorage.Get(Rec."Source File ID");
         SourceFileStorage.TestField(Name);
         exit(SourceFileStorage.Name);
-    end;
-
-    internal procedure ShowBufferTable()
-    var
-        genBuffTable: Record DMTGenBuffTable;
-    begin
-        if not genBuffTable.FilterBy(Rec) then
-            exit;
-        genBuffTable.ShowBufferTable(Rec);
     end;
 
     internal procedure SourceFileName_OnAfterLookup(Selected: RecordRef)
@@ -203,29 +196,16 @@ table 91003 DMTImportConfigHeader
         end;
     end;
 
-    procedure DeleteBufferData()
+    internal procedure ShowTableContent(tableID: Integer) OK: Boolean
     var
-        genBuffTable: Record DMTGenBuffTable;
+        TableMeta: Record "Table Metadata";
     begin
-        if "Source File ID" = 0 then
-            exit;
-        genBuffTable.SetRange("Imp.Conf.Header ID", Rec.ID);
-        if not genBuffTable.IsEmpty then
-            genBuffTable.DeleteAll();
+        OK := TableMeta.Get(tableID);
+        if OK then
+            Hyperlink(GetUrl(CurrentClientType, CompanyName, ObjectType::Table, tableID));
     end;
 
-    procedure UpdateBufferRecordCount()
-    var
-        GenBuffTable: Record DMTGenBuffTable;
-    begin
-        GenBuffTable.Reset();
-        GenBuffTable.FilterBy(Rec);
-        GenBuffTable.SetRange(IsCaptionLine, false); // don't count header line
-        Rec."No.of Records in Buffer Table" := GenBuffTable.Count;
-        Rec.Modify();
-    end;
-
-    procedure GetNoOfRecordsInTrgtTable(): Integer
+    internal procedure GetNoOfRecordsInTrgtTable(): Integer
     var
         TableMetadata: Record "Table Metadata";
         RecRef: RecordRef;
@@ -235,38 +215,7 @@ table 91003 DMTImportConfigHeader
         exit(RecRef.Count);
     end;
 
-    procedure InitBufferRef(var BufferRef: RecordRef)
-    var
-        GenBuffTable: Record DMTGenBuffTable;
-        TableMetadata: Record "Table Metadata";
-        BufferTableMissingErr: Label 'Buffer Table %1 not found', Comment = 'de-DE=Eine Puffertabelle mit der ID %1 wurde nicht gefunden.';
-    begin
-        if not Rec."Use Separate Buffer Table" then begin
-            GenBuffTable.FilterGroup(2);
-            GenBuffTable.SetRange(IsCaptionLine, false);
-            GenBuffTable.FilterBy(Rec);
-            GenBuffTable.FilterGroup(0);
-            BufferRef.GetTable(GenBuffTable);
-        end else begin
-            if not TableMetadata.Get(Rec."Buffer Table ID") then
-                Error(BufferTableMissingErr, Rec."Buffer Table ID");
-            BufferRef.Open(Rec."Buffer Table ID");
-        end;
-    end;
-
-    procedure LoadImportConfigLines(var TempImportConfigLine: Record DMTImportConfigLine temporary) OK: Boolean
-    var
-        ImportConfigLine: Record DMTImportConfigLine;
-    begin
-        Rec.FilterRelated(ImportConfigLine);
-        ImportConfigLine.SetFilter("Processing Action", '<>%1', ImportConfigLine."Processing Action"::Ignore);
-        if Rec."Use Separate Buffer Table" then
-            ImportConfigLine.SetFilter("Source Field No.", '<>0');
-        ImportConfigLine.CopyToTemp(TempImportConfigLine);
-        OK := TempImportConfigLine.FindFirst();
-    end;
-
-    procedure GetDataLayout() dataLayout: Record DMTDataLayout
+    internal procedure GetDataLayout() dataLayout: Record DMTDataLayout
     var
         sourceFileStorage: Record DMTSourceFileStorage;
     begin
@@ -277,13 +226,13 @@ table 91003 DMTImportConfigHeader
         dataLayout.Get(sourceFileStorage."Data Layout ID");
     end;
 
-    procedure GetSourceFileStorage() SourceFileStorage: Record DMTSourceFileStorage
+    internal procedure GetSourceFileStorage() SourceFileStorage: Record DMTSourceFileStorage
     begin
         Rec.TestField(Rec."Source File ID");
         SourceFileStorage.Get(Rec."Source File ID");
     end;
 
-    procedure ReadLastFieldUpdateSelection() LastFieldUpdateSelectionAsText: Text
+    internal procedure ReadLastFieldUpdateSelection() LastFieldUpdateSelectionAsText: Text
     var
         IStr: InStream;
     begin
@@ -293,7 +242,7 @@ table 91003 DMTImportConfigHeader
         IStr.ReadText(LastFieldUpdateSelectionAsText);
     end;
 
-    procedure WriteLastFieldUpdateSelection(LastFieldUpdateSelectionAsText: Text)
+    internal procedure WriteLastFieldUpdateSelection(LastFieldUpdateSelectionAsText: Text)
     var
         OStr: OutStream;
     begin
@@ -304,7 +253,7 @@ table 91003 DMTImportConfigHeader
         Rec.Modify();
     end;
 
-    procedure ReadLastUsedSourceTableView() TableView: Text
+    internal procedure ReadLastUsedSourceTableView() TableView: Text
     var
         IStr: InStream;
     begin
@@ -314,7 +263,7 @@ table 91003 DMTImportConfigHeader
         IStr.ReadText(TableView);
     end;
 
-    procedure WriteSourceTableView(TableView: Text)
+    internal procedure WriteSourceTableView(TableView: Text)
     var
         OStr: OutStream;
     begin
@@ -391,6 +340,18 @@ table 91003 DMTImportConfigHeader
         HasLines := not Rec.IsEmpty;
     end;
 
+    internal procedure BufferTableMgt() IBufferTableMgt: Interface IBufferTableMgt
+    var
+        genericBuffertTableMgtImpl: Codeunit DMTGenericBuffertTableMgtImpl;
+        separateBufferTableMgtImpl: Codeunit DMTSeparateBufferTableMgtImpl;
+    begin
+        if Rec."Use Separate Buffer Table" then
+            IBufferTableMgt := separateBufferTableMgtImpl
+        else
+            IBufferTableMgt := genericBuffertTableMgtImpl;
+        IBufferTableMgt.setImportConfigHeader(Rec);
+    end;
+
     local procedure ThrowActionableErrorIfDataLayoutIsNotSet()
     var
         sourceFileStorage: Record DMTSourceFileStorage;
@@ -435,4 +396,29 @@ table 91003 DMTImportConfigHeader
         Log.AddImportToBufferSummary(Rec, CurrentDateTime - Start);
     end;
 
+    procedure UpdateIndicators()
+    var
+        AllObjWithCaption: Record AllObjWithCaption;
+    begin
+        // DataFileExistsStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+        // if Rec.FindFileRec(FileRec) then begin
+        //     Rec.DataFileExistsStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+        //     Rec.CopyFrom(FileRec);
+        // end;
+
+        // Generated Objects exist
+        if not rec."Use Separate Buffer Table" then begin
+            Clear(Rec.ImportXMLPortIDStyle);
+            Clear(Rec.BufferTableIDStyle);
+        end else begin
+            Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+            if (Rec."Buffer Table ID" <> 0) then
+                if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, Rec."Buffer Table ID") then
+                    Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+            Rec.ImportXMLPortIDStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+            if (Rec."Import XMLPort ID" <> 0) then
+                if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::XMLport, Rec."Import XMLPort ID") then
+                    Rec.ImportXMLPortIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+        end;
+    end;
 }

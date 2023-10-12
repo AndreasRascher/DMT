@@ -81,7 +81,8 @@ codeunit 91003 DMTMigrationLib
             IsMatch(TargetField, Database::"Item Unit of Measure", 'Qty. per Unit of Measure'),
             IsMatch(TargetField, Database::"Routing Header", 'Status'),
             IsMatch(TargetField, Database::"Extended Text Header", 'Language Code'), /* Possible in old version to have Language Code + All Language */
-            IsMatch(TargetField, Database::"Extended Text Header", 'All Language Codes'): /* Possible in old version to have Language Code + All Language */
+            IsMatch(TargetField, Database::"Extended Text Header", 'All Language Codes'), /* Possible in old version to have Language Code + All Language */
+            IsMatch(TargetField, Database::"Interaction Template", 'Language Code (Default)'): /* Avoid confirm */
                 KnownValidationType := KnownValidationType::AssignWithoutValidate;
             else
                 Found := false;

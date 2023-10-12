@@ -50,6 +50,14 @@ page 91008 DMTImportConfigCard
                 field("Target Table ID"; Rec."Target Table ID") { Visible = false; }
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { }
                 field("Import Only New Records"; Rec."Import Only New Records") { }
+                field("Use Separate Buffer Table"; Rec."Use Separate Buffer Table") { }
+                group(SeperateBufferObjects)
+                {
+                    Caption = 'Buffer Table Objects', Comment = 'de-DE=Puffertabellen Objekte';
+                    Visible = Rec."Use Separate Buffer Table";
+                    field("Buffer Table ID"; Rec."Buffer Table ID") { StyleExpr = Rec.BufferTableIDStyle; }
+                    field("Import XMLPort ID"; Rec."Import XMLPort ID") { StyleExpr = Rec.ImportXMLPortIDStyle; }
+                }
             }
             part(LinePart; DMTImportConfigLinePart)
             {
@@ -103,7 +111,8 @@ page 91008 DMTImportConfigCard
                     ChangeRecordWithPerm: Codeunit DMTChangeRecordWithPerm;
                 begin
                     ChangeRecordWithPerm.DeleteRecordsInTargetTable(Rec);
-                    Rec.UpdateBufferRecordCount();
+                    // Rec.UpdateBufferRecordCount();
+                    CurrPage.TableInfoFactBox.Page.Update(false);
                 end;
             }
 
@@ -141,7 +150,7 @@ page 91008 DMTImportConfigCard
                     NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', Comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
                     TargetTableFilter, TargetTableView : Text;
                 begin
-                    Rec.InitBufferRef(RecRef);
+                    Rec.BufferTableMgt().InitBufferRef(RecRef);
                     if TargetTableView <> '' then
                         RecRef.SetView(TargetTableView);
                     if FPBuilder.RunModal(RecRef, true) then begin
@@ -195,7 +204,6 @@ page 91008 DMTImportConfigCard
                 PromotedOnly = true;
                 PromotedIsBig = true;
                 PromotedCategory = Process;
-
                 trigger OnAction()
                 var
                     importConfigMgt: Codeunit DMTImportConfigMgt;
@@ -220,28 +228,28 @@ page 91008 DMTImportConfigCard
                     Log.ShowLogEntriesFor(Rec);
                 end;
             }
-            action(CreateXMLPort)
-            {
-                ApplicationArea = All;
-                Image = XMLSetup;
-                Caption = 'Create XMLPort', Comment = 'de-DE=XMLPort erstellen';
+            // action(CreateXMLPort)
+            // {
+            //     ApplicationArea = All;
+            //     Image = XMLSetup;
+            //     Caption = 'Create XMLPort', Comment = 'de-DE=XMLPort erstellen';
 
-                trigger OnAction()
-                begin
-                    //     PageActions.DownloadALXMLPort(Rec);
-                end;
-            }
-            action(CreateBufferTable)
-            {
-                ApplicationArea = All;
-                Image = Table;
-                Caption = 'Create Buffer Table', Comment = 'de-DE=Puffertabelle erstellen';
+            //     trigger OnAction()
+            //     begin
+            //         //     PageActions.DownloadALXMLPort(Rec);
+            //     end;
+            // }
+            // action(CreateBufferTable)
+            // {
+            //     ApplicationArea = All;
+            //     Image = Table;
+            //     Caption = 'Create Buffer Table', Comment = 'de-DE=Puffertabelle erstellen';
 
-                trigger OnAction()
-                begin
-                    //     PageActions.DownloadALBufferTableFile(Rec);
-                end;
-            }
+            //     trigger OnAction()
+            //     begin
+            //         //     PageActions.DownloadALBufferTableFile(Rec);
+            //     end;
+            // }
             action(CheckTransferedRecords)
             {
                 ApplicationArea = All;
@@ -301,16 +309,16 @@ page 91008 DMTImportConfigCard
 
     trigger OnAfterGetRecord()
     begin
-        // CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
         CurrPage.LinePart.Page.DoUpdate(false);
+        Rec.UpdateIndicators();
     end;
 
     trigger OnAfterGetCurrRecord()
     begin
         CurrPage.TableInfoFactBox.Page.ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(Rec);
+        CurrPage.TableInfoFactBox.Page.Update(false);
         CurrPage.LogFactBox.Page.ShowAsLogAndUpdateOnAfterGetCurrRecord(Rec);
-        //     CurrPage.LinePart.Page.SetRepeaterProperties(Rec);
-        //     CurrPage.LinePart.Page.DoUpdate(false);
+        CurrPage.LogFactBox.Page.Update(false);
     end;
 
     local procedure SaveRecordIfMandatoryFieldsAreFilled()

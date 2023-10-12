@@ -28,13 +28,13 @@ page 91011 DMTDataLayoutCard
                 field(Default; Rec.Default) { }
 
             }
-            group(NAV)
-            {
-                Visible = IsNAVExport;
-                field(NAVTableID; Rec.NAVTableID) { }
-                field(NAVTableCaption; Rec.NAVTableCaption) { }
-                field(NAVNoOfRecords; Rec.NAVNoOfRecords) { }
-            }
+            // group(NAV)
+            // {
+            //     Visible = IsNAVExport;
+            //     field(NAVTableID; Rec.NAVTableID) { }
+            //     field(NAVTableCaption; Rec.NAVTableCaption) { }
+            //     field(NAVNoOfRecords; Rec.NAVNoOfRecords) { }
+            // }
             group(Excel)
             {
                 Visible = Rec.SourceFileFormat = Rec.SourceFileFormat::Excel;

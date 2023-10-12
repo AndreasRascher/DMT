@@ -5,6 +5,7 @@ codeunit 91002 DMTImportConfigMgt
         ImportConfigHeader: Record DMTImportConfigHeader;
         ImportConfigLine, ImportConfigLine_NEW : Record DMTImportConfigLine;
         TargetRecRef: RecordRef;
+        refHelper: Codeunit DMTRefHelper;
         i: Integer;
         KeyFieldIDsList: List of [Integer];
     begin
@@ -13,7 +14,7 @@ codeunit 91002 DMTImportConfigMgt
         if ImportConfigHeader."Target Table ID" = 0 then
             exit(false);
         TargetRecRef.Open(ImportConfigHeader."Target Table ID");
-        KeyFieldIDsList := GetListOfKeyFieldIDs(TargetRecRef);
+        KeyFieldIDsList := refHelper.GetListOfKeyFieldIDs(TargetRecRef);
         for i := 1 to TargetRecRef.FieldCount do begin
             if TargetRecRef.FieldIndex(i).Active then
                 if (TargetRecRef.FieldIndex(i).Class = TargetRecRef.FieldIndex(i).Class::Normal) then begin
@@ -272,23 +273,10 @@ codeunit 91002 DMTImportConfigMgt
         case true of
             // seperate buffer table -> read field names
             importConfigHeader."Use Separate Buffer Table":
-                begin
-                    Field.SetRange(TableNo, importConfigHeader."Buffer Table ID");
-                    Field.SetRange(Enabled, true);
-                    Field.SetRange(Class, Field.Class::Normal);
-                    Field.FindSet();
-                    repeat
-                        SourceFieldNames.Add(Field."No.", Field.FieldName);
-                    until Field.Next() = 0;
-                end;
+                importConfigHeader.BufferTableMgt().ReadBufferTableColumnCaptions(SourceFieldNames);
             // use genBuffer, file has heading line  -> read heading line from buffer
             dataLayout."Has Heading Row":
-                begin
-                    genBuffTable.GetColCaptionForImportedFile(importConfigHeader, SourceFieldNames2);
-                    foreach FieldID in SourceFieldNames2.Keys do begin
-                        SourceFieldNames.Add(FieldID, SourceFieldNames2.Get(FieldID));
-                    end;
-                end;
+                importConfigHeader.BufferTableMgt().ReadBufferTableColumnCaptions(SourceFieldNames);
             // use genBuffer, file without heading line  -> read data layout line
             not dataLayout."Has Heading Row":
                 begin
@@ -359,19 +347,4 @@ codeunit 91002 DMTImportConfigMgt
                     ImportConfigLine.Modify()
             until ImportConfigLine.Next() = 0;
     end;
-
-
-    local procedure GetListOfKeyFieldIDs(var recRef: RecordRef) keyFieldIDsList: List of [Integer];
-    var
-        fieldRef: FieldRef;
-        _keyIndex: Integer;
-        keyRef: KeyRef;
-    begin
-        keyRef := recRef.KeyIndex(1);
-        for _keyIndex := 1 to keyRef.FieldCount do begin
-            fieldRef := keyRef.FieldIndex(_keyIndex);
-            keyFieldIDsList.Add(fieldRef.Number);
-        end;
-    end;
-
 }

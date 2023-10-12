@@ -99,6 +99,11 @@ page 91013 DMTLogEntries
         }
     }
 
+    trigger OnInit()
+    begin
+        ShowIgnoredErrorLines := true;
+    end;
+
     trigger OnAfterGetRecord()
     begin
         CallStack := Rec.GetErrorCallStack();

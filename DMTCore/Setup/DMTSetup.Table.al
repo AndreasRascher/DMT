@@ -6,10 +6,18 @@ table 91000 DMTSetup
     fields
     {
         field(1; "Primary Key"; Code[10]) { Caption = 'Primary Key', Comment = 'de-DE=Primärschlüssel'; }
-        field(10; MigrationProfil; Enum DMTMigrationProfile) { Caption = 'Migration Profil', Comment = 'de-DE=Migrationsprofil'; }
-        field(20; "Obj. ID Range Buffer Tables"; Text[250]) { Caption = 'Obj. ID Range Buffer Tables', Comment = 'de-DE=Objekt ID Bereich für Puffertabellen'; }
-        field(21; "Obj. ID Range XMLPorts"; Text[250]) { Caption = 'Obj. ID Range XMLPorts (Import)', Comment = 'de-DE=Objekt ID Bereich für XMLPorts (Import)'; }
-        field(22; "Import with FlowFields"; Boolean) { Caption = 'Create Buffer Tables with Flowfields', Comment = 'de-DE=Puffertabellen mit Flowfields generieren'; }
+        field(10; MigrationProfil; Enum DMTMigrationProfile)
+        {
+            Caption = 'Migration Profil', Comment = 'de-DE=Migrationsprofil';
+            trigger OnValidate()
+            var
+                DMTDataLayouts: Page DMTDataLayouts;
+            begin
+                Modify();
+                if Rec.IsNAVExport() then
+                    DMTDataLayouts.InsertPresetDataLayouts();
+            end;
+        }
         field(23; "Use exist. mappings"; Boolean) { Caption = 'Propose matching fields - Use existing mappings', Comment = 'de-DE=Feldzuordnung vorschlagen - Existierende Feld-Mappings verwenden'; InitValue = true; }
 
     }
@@ -48,7 +56,7 @@ table 91000 DMTSetup
     begin
         if not RecordHasBeenRead then
             Rec.get();
-        exit(rec.MigrationProfil = rec.MigrationProfil::"From NAV");
+        exit(Rec.MigrationProfil = Rec.MigrationProfil::"From NAV");
     end;
 
     var

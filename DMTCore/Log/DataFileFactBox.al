@@ -3,6 +3,8 @@ page 91014 DMTImportConfigFactBox
     Caption = 'ImportConfig FactBox';
     PageType = ListPart;
     SourceTable = DMTLogEntry;
+    InsertAllowed = false;
+    ModifyAllowed = false;
 
     layout
     {
@@ -31,7 +33,7 @@ page 91014 DMTImportConfigFactBox
                         trigger OnDrillDown()
                         begin
                             CurrImportConfigHeader.find('='); // update if changes on main page have not been read
-                            CurrImportConfigHeader.ShowBufferTable();
+                            CurrImportConfigHeader.BufferTableMgt().ShowBufferTable();
                         end;
                     }
                 }

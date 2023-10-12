@@ -146,6 +146,16 @@ page 90000 DMTFreeObjectsInLicense
                     LoadAppObj();
                 end;
             }
+            action(LicenseInfo)
+            {
+                Caption = 'Show License Information', Comment = 'de-DE=Lizenz Informationen anzeigen';
+                ApplicationArea = All;
+                Image = Info;
+                trigger OnAction()
+                begin
+                    ShowLicenseInformation();
+                end;
+            }
         }
     }
     trigger OnOpenPage()
@@ -196,17 +206,21 @@ page 90000 DMTFreeObjectsInLicense
         Rec.DeleteAll();
         Rec := AllObjWithCaption;
 
-        Progress.Open('Gefundene Objekte #######1#');
+        Progress.Open('Ermittle ID Bereiche');
 
-        FindObjectRangesOfRIMDXObjects();
+        if not TryFindObjectRangesOfRIMDXObjects() then
+            TryParseLicPerm();
+        Progress.Close();
 
+        Progress.Open('Freie Nummern in den ID Bereichen: #######1#');
         foreach TypeNo in ObjInLicenseFilters.Keys do begin
             Int.SetFilter(Number, ObjInLicenseFilters.Get(TypeNo));
-            if Int.FindSet() then
-                repeat
-                    if not AllObjWithCaption.Get(TypeNo, Int.Number) then
-                        AddObjectToCollection(TypeNo, Int.Number);
-                until Int.Next() = 0;
+            if Int.HasFilter then
+                if Int.FindSet() then
+                    repeat
+                        if not AllObjWithCaption.Get(TypeNo, Int.Number) then
+                            AddObjectToCollection(TypeNo, Int.Number);
+                    until Int.Next() = 0;
             if (CurrentDateTime - LastUpdate) > 500 then begin
                 Progress.Update(1, Rec.Count);
                 LastUpdate := CurrentDateTime;
@@ -217,6 +231,88 @@ page 90000 DMTFreeObjectsInLicense
 
         if Rec.FindFirst() then;
         IsLoaded := true;
+    end;
+
+    procedure TryParseLicPerm()
+    var
+        licPerm: Record "License Permission";
+        allObjWithCaption: Record AllObjWithCaption;
+        permRange: Record "Permission Range";
+        numbers: Record Integer;
+        SelectionFilterManagement: Codeunit SelectionFilterManagement;
+        recRef: RecordRef;
+        ObjectIDFilter: Text;
+        i, ObjIndex1, ObjIndex2, ObjIndex3 : Integer;
+    begin
+        //Table|Report|Codeunit|XMLport|Page|Query|Enum
+        for i := 1 to 7 do begin
+            case i of
+                1:
+                    begin
+                        ObjIndex1 := licPerm."Object Type"::Page;
+                        ObjIndex2 := allObjWithCaption."Object Type"::Page;
+                        ObjIndex3 := permRange."Object Type"::Page;
+                    end;
+                2:
+                    begin
+                        ObjIndex1 := licPerm."Object Type"::Table;
+                        ObjIndex2 := allObjWithCaption."Object Type"::Table;
+                        ObjIndex3 := permRange."Object Type"::Table;
+                    end;
+                3:
+                    begin
+                        ObjIndex1 := licPerm."Object Type"::Report;
+                        ObjIndex2 := allObjWithCaption."Object Type"::Report;
+                        ObjIndex3 := permRange."Object Type"::Report;
+                    end;
+                4:
+                    begin
+                        ObjIndex1 := licPerm."Object Type"::Codeunit;
+                        ObjIndex2 := allObjWithCaption."Object Type"::Codeunit;
+                        ObjIndex3 := permRange."Object Type"::Codeunit;
+                    end;
+                5:
+                    begin
+                        ObjIndex1 := licPerm."Object Type"::XMLport;
+                        ObjIndex2 := allObjWithCaption."Object Type"::XMLport;
+                        ObjIndex3 := permRange."Object Type"::XMLport;
+                    end;
+                6:
+                    begin
+                        ObjIndex1 := licPerm."Object Type"::Query;
+                        ObjIndex2 := allObjWithCaption."Object Type"::Query;
+                        ObjIndex3 := permRange."Object Type"::Query;
+                    end;
+                7:
+                    begin
+                        ObjIndex1 := licPerm."Object Type"::Enum;
+                        ObjIndex2 := allObjWithCaption."Object Type"::Enum;
+                        ObjIndex3 := permRange."Object Type"::Enum;
+                    end;
+            end;
+            Clear(numbers);
+            if GlobalObjectRangeFilter = '' then
+                numbers.SetRange(number, 0, 2000000000);
+            numbers.SetFilter(number, GlobalObjectRangeFilter);
+            if numbers.FindSet() then
+                repeat
+                    if licPerm.Get(ObjIndex1, numbers.Number) then begin
+                        if (licPerm."Read Permission" = licPerm."Read Permission"::Yes) and
+                           (licPerm."Insert Permission" = licPerm."Insert Permission"::Yes) and
+                           (licPerm."Delete Permission" = licPerm."Delete Permission"::Yes) and
+                           (licPerm."Execute Permission" = licPerm."Execute Permission"::Yes) then begin
+                            numbers.Mark(true);
+                        end;
+                    end else
+                        // Enum is not covered
+                        if (permRange."Object Type"::Enum = ObjIndex3) then
+                            numbers.Mark(true);
+                until numbers.Next() = 0;
+            numbers.MarkedOnly(true);
+            recRef.GetTable(numbers);
+            ObjectIDFilter := SelectionFilterManagement.GetSelectionFilter(recRef, numbers.FieldNo(Number));
+            ObjInLicenseFilters.Add(ObjIndex3, ObjectIDFilter);
+        end;
     end;
 
     procedure LoadAppObj()
@@ -240,14 +336,14 @@ page 90000 DMTFreeObjectsInLicense
 
     procedure GetMaxObjectType(): Integer
     begin
-        exit(10);
+        exit(16);
     end;
 
     procedure CountObjectsFound();
     var
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
         i: Integer;
-    begin
+    begin        
         TempAllObjWithCaption.Copy(Rec, true);
         for i := 1 to GetMaxObjectType() do begin
             TempAllObjWithCaption."Object Type" := i;
@@ -266,7 +362,7 @@ page 90000 DMTFreeObjectsInLicense
                 TempAllObjWithCaption."Object Type"::XMLport:
                     NoOfXMLports := Rec.Count;
                 TempAllObjWithCaption."Object Type"::Enum:
-                    NoOfEnums := Rec.Count;
+                    NoOfEnums := Rec.Count;                
             end; // end_CASE
         end;
         Rec.Reset();
@@ -293,12 +389,25 @@ page 90000 DMTFreeObjectsInLicense
                  (LicPerm."Execute Permission" = LicPerm."Execute Permission"::Yes);
     end;
 
-    local procedure FindObjectRangesOfRIMDXObjects()
+    local procedure ShowLicenseInformation()
+    var
+        LicenseInformation: Record "License Information";
+        LicInfo: TextBuilder;
+    begin
+        if LicenseInformation.FindSet() then
+            repeat
+                LicInfo.AppendLine(LicenseInformation.Text);
+            until LicenseInformation.Next() = 0;
+        Message(LicInfo.ToText());
+    end;
+
+    local procedure TryFindObjectRangesOfRIMDXObjects() OK: Boolean
     var
         PermRange: Record "Permission Range";
     begin
+        OK := true;
         if ObjInLicenseFilters.Count > 0 then
-            exit;
+            exit(false);
         PermRange.Reset();
         PermRange.SetFilter("Object Type", 'Table|Report|Codeunit|XMLport|Page|Query|Enum');
         PermRange.SetRange("Read Permission", PermRange."Read Permission"::Yes);
@@ -310,7 +419,8 @@ page 90000 DMTFreeObjectsInLicense
             PermRange.SetFilter(From, GlobalObjectRangeFilter);
             PermRange.SetFilter("To", GlobalObjectRangeFilter);
         end;
-        PermRange.FindSet();
+        if not PermRange.FindSet() then
+            exit(false);
         repeat
             if not ObjInLicenseFilters.ContainsKey(PermRange."Object Type") then begin
                 ObjInLicenseFilters.Add(PermRange."Object Type", StrSubstNo('%1..%2', PermRange.From, PermRange."To"))

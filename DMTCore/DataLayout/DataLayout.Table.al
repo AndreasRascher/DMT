@@ -31,15 +31,15 @@ table 91002 DMTDataLayout
         field(101; CSVLineSeparator; Text[50]) { Caption = 'Line Separator', Comment = 'de-DE=Zeilentrenner'; InitValue = '<NewLine>'; }
         field(102; CSVFieldDelimiter; Text[50]) { Caption = 'Field Delimiter', Comment = 'de-DE=Feldbegrenzungszeichen'; InitValue = '"'; }
         field(103; CSVTextEncoding; Enum DMTTextEncoding) { Caption = 'Text Encoding', Comment = 'de-DE=Text Encoding'; }
-        field(200; NAVTableID; Integer) { Caption = 'NAV TableID', Comment = 'de-DE=Tabellen ID'; Editable = false; }
+        // field(200; NAVTableID; Integer) { Caption = 'NAV TableID', Comment = 'de-DE=Tabellen ID'; Editable = false; }
         field(302; XLSDefaultSheetName; Text[250])
         {
             Caption = 'Default Excel Sheet', Comment = 'de-DE=Standard Excel Blatt';
             Editable = false;
         }
-        field(50000; NAVTableCaption; Text[80]) { Caption = 'Table Caption', Comment = 'de-DE=Tabellenbezeichnung'; Editable = false; }
-        field(50001; NAVPrimaryKey; Text[250]) { Caption = 'Primary Key', Comment = 'de-DE=Primärschlüssel Felder'; Editable = false; }
-        field(50004; NAVNoOfRecords; Integer) { Caption = 'No. of Records', Comment = 'de-DE=Anz. Datensätze'; Editable = false; }
+        // field(50000; NAVTableCaption; Text[80]) { Caption = 'Table Caption', Comment = 'de-DE=Tabellenbezeichnung'; Editable = false; }
+        // field(50001; NAVPrimaryKey; Text[250]) { Caption = 'Primary Key', Comment = 'de-DE=Primärschlüssel Felder'; Editable = false; }
+        // field(50004; NAVNoOfRecords; Integer) { Caption = 'No. of Records', Comment = 'de-DE=Anz. Datensätze'; Editable = false; }
     }
 
     keys

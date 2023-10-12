@@ -54,7 +54,7 @@ page 91010 DMTImportConfigList
                         exit;
 
                     DMTSetup.GetRecordOnce();
-                    if DMTSetup.MigrationProfil = DMTSetup.MigrationProfil::"From NAV" then
+                    if DMTSetup.IsNAVExport() then
                         migrationLib.CreateNAVExportFileNameDictionary(NAVExportFileNamesDict);
 
                     tempSourceFileStorage_SELECTED.FindSet();
@@ -66,12 +66,12 @@ page 91010 DMTImportConfigList
                             importConfigHeader."Source File Name" := tempSourceFileStorage_SELECTED.Name;
                             importConfigHeader.Insert(true);
                             // Assign Target Table
-                            if DMTSetup.MigrationProfil = DMTSetup.MigrationProfil::"From NAV" then
+                            if DMTSetup.IsNAVExport() then
                                 if not NAVExportFileNamesDict.Get(tempSourceFileStorage_SELECTED.Name, TargetTableID) then
                                     Clear(TargetTableID);
                         end;
 
-                        if (DMTSetup.MigrationProfil = DMTSetup.MigrationProfil::"From NAV") and (TargetTableID <> 0) then
+                        if DMTSetup.IsNAVExport() and (TargetTableID <> 0) then
                             TargetTableID := migrationLib.HandleObsoleteNAVTargetTable(TargetTableID);
 
                         if TargetTableID <> 0 then begin
@@ -103,6 +103,29 @@ page 91010 DMTImportConfigList
                     progress.Close();
                 end;
             }
+            action(updateImportToTargetPercentageInSelectedLines)
+            {
+                Caption = 'Update Migrated % (Selected Lines)', Comment = 'de-DE=Migriert % aktualiseren (markierte Zeilen)';
+                Image = Import;
+                ApplicationArea = All;
+                trigger OnAction()
+                var
+                    TempImportConfigHeader: Record DMTImportConfigHeader temporary;
+                    progress: Dialog;
+                begin
+                    if not GetSelection(TempImportConfigHeader) then
+                        exit;
+                    TempImportConfigHeader.FindSet();
+                    progress.Open('######################################################1#');
+                    repeat
+                        progress.Update(1, TempImportConfigHeader."Source File Name");
+                        TempImportConfigHeader.BufferTableMgt().updateImportToTargetPercentage();
+                    until TempImportConfigHeader.Next() = 0;
+                    progress.Close();
+                    if rec.get(rec.RecordId) then;
+                end;
+
+            }
         }
         area(Promoted)
         {
@@ -115,9 +138,15 @@ page 91010 DMTImportConfigList
             {
                 Caption = 'Migration', Comment = 'de-DE=Migration';
                 actionref(ImportSelectedToBufferRef; ImportSelectedToBuffer) { }
+                actionref(updateImportToTargetPercentageInSelectedLinesRef; updateImportToTargetPercentageInSelectedLines) { }
             }
         }
     }
+
+    trigger OnAfterGetRecord()
+    begin
+        Rec.UpdateIndicators();
+    end;
 
     procedure GetSelection(var ImportConfigHeader_SELECTED: Record DMTImportConfigHeader temporary) HasLines: Boolean
     var

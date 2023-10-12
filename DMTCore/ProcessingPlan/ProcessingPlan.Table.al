@@ -66,7 +66,7 @@ table 91009 DMTProcessingPlan
         field(32; "Source Table Filter"; Blob) { Caption = 'Source Table Filter Blob', Locked = true; }
         field(33; "Update Fields Filter"; Blob) { Caption = 'Update Fields Filter', Locked = true; }
         field(34; "Default Field Values"; Blob) { Caption = 'Default Field Values', Locked = true; }
-        field(40; Status; Option) { Caption = 'Status', Locked = true; OptionMembers = " ","In Progress",Finished; OptionCaption = ' ,In Progress', comment = 'de-DE= ,in Arbeit'; Editable = false; }
+        field(40; Status; Option) { Caption = 'Status', Locked = true; OptionMembers = " ","In Progress",Finished; OptionCaption = ' ,In Progress', comment = 'de-DE= ,in Arbeit, Abgeschlossen'; Editable = false; }
         field(41; StartTime; DateTime) { Caption = 'Start Time'; Editable = false; }
         field(42; "Processing Duration"; Duration) { Caption = 'Processing Duration', Comment = 'de-DE=Verarbeitungszeit'; Editable = false; }
         field(50; Indentation; Integer) { Caption = 'Indentation', Comment = 'de-DE=Einrückung'; Editable = false; }
@@ -90,7 +90,7 @@ table 91009 DMTProcessingPlan
             // ImportConfigHeader.BufferTableType := ImportConfigHeader.BufferTableType::"Seperate Buffer Table per CSV";
         end else begin
             ImportConfigHeader.Get(Rec.ID);
-            ImportConfigHeader.InitBufferRef(BufferRef);
+            ImportConfigHeader.BufferTableMgt().InitBufferRef(BufferRef);
         end;
         CurrView := ReadSourceTableView();
         if CurrView <> '' then
@@ -104,12 +104,11 @@ table 91009 DMTProcessingPlan
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
         FPBuilder: Codeunit DMTFPBuilder;
-        Migrate: Codeunit DMTMigrate;
         TargetRef: RecordRef;
         CurrView: Text;
     begin
         ImportConfigHeader.Get(Rec.ID);
-        Migrate.CheckBufferTableIsNotEmpty(ImportConfigHeader);
+        ImportConfigHeader.BufferTableMgt().CheckBufferTableIsNotEmpty();
         TargetRef.Open(ImportConfigHeader."Target Table ID");
         CurrView := ReadDefaultValuesView();
         if CurrView <> '' then
@@ -215,23 +214,32 @@ table 91009 DMTProcessingPlan
                     SourceRef.Open(Rec."Source Table No.", false);
                     exit(true);
                 end;
+            else begin
+                ImportConfigHeader.Get(Rec.ID);
+                ImportConfigHeader.BufferTableMgt().InitBufferRef(SourceRef);
+                exit(true)
+            end;
         end;
-        if not ImportConfigHeader.Get(Rec.ID) then exit;
-        if (ImportConfigHeader."Buffer Table ID" = 0) and (not ImportConfigHeader."Use Separate Buffer Table") then
-            ImportConfigHeader."Buffer Table ID" := Database::DMTGenBuffTable;
-        SourceRef.Open(ImportConfigHeader."Buffer Table ID", false);
-        exit(true)
     end;
 
     procedure ConvertSourceTableFilterToFieldLines(var TmpImportConfigLine: Record DMTImportConfigLine temporary)
     var
+        genBuffTable: Record DMTGenBuffTable;
         TempImportConfigLine2: Record DMTImportConfigLine temporary;
         RecRef: RecordRef;
         FieldIndexNo: Integer;
         CurrView: Text;
     begin
+        if not (rec.Type in [rec.Type::"Buffer + Target", Rec.Type::"Import To Target", rec.Type::"Update Field", rec.Type::"Run Codeunit"]) then
+            exit;
+        if rec.ID = 0 then exit;
         if not Rec.CreateSourceTableRef(RecRef) then
             exit;
+        if RecRef.Name = genBuffTable.TableName then begin
+            RecRef.SetTable(genBuffTable);
+            genBuffTable.InitFirstLineAsCaptions(genBuffTable); // init column caption single instance codeunit
+            RecRef.GetTable(genBuffTable);
+        end;
         CurrView := Rec.ReadSourceTableView();
         if CurrView <> '' then begin
             RecRef.SetView(CurrView);
@@ -241,7 +249,7 @@ table 91009 DMTProcessingPlan
                         TempImportConfigLine2."Imp.Conf.Header ID" := Rec.ID;
                         TempImportConfigLine2."Target Field No." := RecRef.FieldIndex(FieldIndexNo).Number;
                         TempImportConfigLine2."Source Field Caption" := CopyStr(RecRef.FieldIndex(FieldIndexNo).Caption, 1, MaxStrLen(TempImportConfigLine2."Source Field Caption"));
-                        // TempImportConfigLine2.Comment := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempImportConfigLine2.Comment));
+                        TempImportConfigLine2."Fixed Value" := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempImportConfigLine2."Fixed Value"));
                         TempImportConfigLine2.Insert();
                     end;
                 end;
@@ -259,7 +267,6 @@ table 91009 DMTProcessingPlan
         FieldIndexNo: Integer;
         CurrView: Text;
     begin
-        // if not Rec.CreateSourceTableRef(RecRef) then exit;
         ImportConfigHeader.Get(Rec.ID);
         RecRef.Open(ImportConfigHeader."Target Table ID");
         CurrView := Rec.ReadDefaultValuesView();

@@ -6,7 +6,6 @@ page 91000 "DMT Setup"
     ApplicationArea = All;
     UsageCategory = Administration;
     SourceTable = DMTSetup;
-    PromotedActionCategories = 'NAV,Backup,Lists,,', Comment = 'de-DE=NAV,Backup,Listen,,';
 
     layout
     {
@@ -15,18 +14,7 @@ page 91000 "DMT Setup"
             group(MigrationSettings)
             {
                 Caption = 'Migration Settings', Comment = 'de-DE=Migration Einstellungen';
-                field(MigrationProfil; Rec.MigrationProfil) { }
-            }
-            group("Object Generator")
-            {
-                Caption = 'Object Generator', Comment = 'de-DE=Objekte generieren';
-                group(ObjectIDs)
-                {
-                    Caption = 'Object IDs', Comment = 'de-DE=Objekt IDs';
-                    field("Obj. ID Range Buffer Tables"; Rec."Obj. ID Range Buffer Tables") { ApplicationArea = All; ShowMandatory = true; }
-                    field("Obj. ID Range XMLPorts"; Rec."Obj. ID Range XMLPorts") { ApplicationArea = All; ShowMandatory = true; }
-                }
-                field("Import with FlowFields"; Rec."Import with FlowFields") { ApplicationArea = All; }
+                field(MigrationProfil; Rec.MigrationProfil) { ToolTipML = DEU = 'Aus NAV: ''DMT NAV CSV Export'' als Standard Datenlayout. Felder Mapping auf Basis bekannter NAV Feldnamen. Tabellen-ID Mapping auf Basis bekannter NAV zu BC Tabellenänderungen.'; }
             }
             group(Debugging)
             {
@@ -41,6 +29,7 @@ page 91000 "DMT Setup"
                         NoOfChoices: Integer;
                         SessionListID: Integer;
                         StopSessionInstructionLbl: Label 'Select which session to stop:\<Session ID> - <User ID> - <Client Type>- <Login Datetime>', Comment = 'de-DE=Wählen Sie eine Session zum Beenden aus:\<Session ID> - <User ID> - <Client Type> - <Login Datetime>';
+                        StopAllOtherSessionsLbl: Label 'Stop all other sessions', Comment = 'de-DE=Alle anderen Sessions stoppen';
                         SessionList: List of [Integer];
                         Choices: Text;
                     begin
@@ -50,7 +39,7 @@ page 91000 "DMT Setup"
                                 NoOfChoices += 1;
                                 SessionList.Add(activeSession."Session ID");
                             until activeSession.Next() = 0;
-                        Choices += 'StopAllOtherSessions,';
+                        Choices += StopAllOtherSessionsLbl + ',';
                         Choices += 'Cancel';
                         Choice := StrMenu(Choices, NoOfChoices + 2, StopSessionInstructionLbl);
                         if Choice <> 0 then
@@ -94,10 +83,6 @@ page 91000 "DMT Setup"
                 Caption = 'Delete Gen. Buffer Table Lines', Comment = 'de-DE=Alle Zeilen in gen. Puffertabelle löschen';
                 ApplicationArea = All;
                 Image = ListPage;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = Report;
                 trigger OnAction()
                 var
                     DMTGenBuffTable: Record DMTGenBuffTable;
@@ -115,10 +100,6 @@ page 91000 "DMT Setup"
                 Caption = 'Create Backup', Comment = 'de-DE=Backup erstellen';
                 ApplicationArea = All;
                 Image = CreateXMLFile;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = Process;
 
                 trigger OnAction()
                 var
@@ -132,10 +113,6 @@ page 91000 "DMT Setup"
                 Caption = 'Import Backup', Comment = 'de-DE=Backup importieren';
                 ApplicationArea = All;
                 Image = ImportCodes;
-                Promoted = true;
-                PromotedOnly = true;
-                PromotedIsBig = true;
-                PromotedCategory = Process;
 
                 trigger OnAction()
                 var
@@ -149,6 +126,20 @@ page 91000 "DMT Setup"
                             ImportConfigHeader.UpdateBufferRecordCount();
                         until ImportConfigHeader.Next() = 0;
                 end;
+            }
+        }
+        area(Promoted)
+        {
+            group(Administration)
+            {
+                Caption = 'Administration', Comment = 'de-DE=Verwaltung';
+                actionref(ClearGenBufferRef; ClearGenBuffer) { }
+            }
+            group(Backup)
+            {
+                Caption = 'Backup', Locked = true;
+                actionref(XMLImportRef; XMLImport) { }
+                actionref(XMLExportRef; XMLExport) { }
             }
         }
 

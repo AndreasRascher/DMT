@@ -39,18 +39,6 @@ codeunit 91014 DMTMigrate
         ProcessFullBuffer(DMTImportSettings);
     end;
     /// <summary>
-    /// Process buffer records with field selection
-    /// </summary>
-    procedure AllFieldsWithoutDialogFrom(ImportConfigHeader: Record DMTImportConfigHeader)
-    var
-        DMTImportSettings: Codeunit DMTImportSettings;
-    begin
-        DMTImportSettings.ImportConfigHeader(ImportConfigHeader);
-        DMTImportSettings.NoUserInteraction(true);
-        LoadImportConfigLine(DMTImportSettings);
-        ProcessFullBuffer(DMTImportSettings);
-    end;
-    /// <summary>
     /// Process buffer records
     /// </summary>
     procedure SelectedFieldsFrom(ImportConfigHeader: Record DMTImportConfigHeader)
@@ -72,6 +60,7 @@ codeunit 91014 DMTMigrate
         ImportConfigHeader: Record DMTImportConfigHeader;
         DMTImportSettings: Codeunit DMTImportSettings;
     begin
+        DMTImportSettings.NoUserInteraction(true);
         DMTImportSettings.ProcessingPlan(ProcessingPlan);
         ImportConfigHeader.Get(ProcessingPlan.ID);
         DMTImportSettings.ImportConfigHeader(ImportConfigHeader);
@@ -142,65 +131,67 @@ codeunit 91014 DMTMigrate
 
     local procedure ProcessFullBuffer(var DMTImportSettings: Codeunit DMTImportSettings)
     var
-        ImportConfigHeader: Record DMTImportConfigHeader;
+        importConfigHeader: Record DMTImportConfigHeader;
         DMTSetup: Record DMTSetup;
         APIUpdRefFieldsBinder: Codeunit "API - Upd. Ref. Fields Binder";
-        Log: Codeunit DMTLog;
-        MigrationLib: Codeunit DMTMigrationLib;
-        ProgressDialog: Codeunit DMTProgressDialog;
-        BufferRef, BufferRef2 : RecordRef;
-        Start: DateTime;
-        ResultType: Enum DMTProcessingResultType;
+        log: Codeunit DMTLog;
+        migrationLib: Codeunit DMTMigrationLib;
+        progressDialog: Codeunit DMTProgressDialog;
+        bufferRef, bufferRef2 : RecordRef;
+        start: DateTime;
+        resultType: Enum DMTProcessingResultType;
         iReplacementHandler: Interface IReplacementHandler;
-        NoBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filter: "%1"', Comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"';
+        noBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filter: "%1"', Comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"';
     begin
-        Start := CurrentDateTime;
+        start := CurrentDateTime;
         APIUpdRefFieldsBinder.UnBindApiUpdateRefFields();
-        ImportConfigHeader := DMTImportSettings.ImportConfigHeader();
+        importConfigHeader := DMTImportSettings.ImportConfigHeader();
 
-        CheckMappedFieldsExist(ImportConfigHeader);
-        CheckBufferTableIsNotEmpty(ImportConfigHeader);
+        CheckMappedFieldsExist(importConfigHeader);
+        importConfigHeader.BufferTableMgt().CheckBufferTableIsNotEmpty();
 
         // Show Filter Dialog
-        ImportConfigHeader.InitBufferRef(BufferRef);
+        importConfigHeader.BufferTableMgt().InitBufferRef(bufferRef, true);
         Commit(); // Runmodal Dialog in Edit View
-        if not EditView(BufferRef, DMTImportSettings) then
+        if not EditView(bufferRef, DMTImportSettings) then
             exit;
 
         //Prepare Progress Bar
-        if not BufferRef.FindSet() then
-            Error(NoBufferTableRecorsInFilterErr, BufferRef.GetFilters);
+        if not bufferRef.FindSet() then
+            Error(noBufferTableRecorsInFilterErr, bufferRef.GetFilters);
 
-        PrepareProgressBar(ProgressDialog, ImportConfigHeader, BufferRef);
-        ProgressDialog.Open();
-        ProgressDialog.UpdateFieldControl('Filter', ConvertStr(BufferRef.GetFilters, '@', '_'));
+        PrepareProgressBar(progressDialog, importConfigHeader, bufferRef);
+        progressDialog.Open();
+        progressDialog.UpdateFieldControl('Filter', ConvertStr(bufferRef.GetFilters, '@', '_'));
 
         DMTSetup.getDefaultReplacementImplementation(iReplacementHandler);
-        iReplacementHandler.InitBatchProcess(ImportConfigHeader);
+        iReplacementHandler.InitBatchProcess(importConfigHeader);
 
         if DMTImportSettings.UpdateFieldsFilter() <> '' then
-            Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Field Update", ImportConfigHeader)
+            log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Field Update", importConfigHeader)
         else
-            Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", ImportConfigHeader);
+            log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", importConfigHeader);
 
 
         repeat
             // hier weiter machen:
             // Wenn beim Feldupdate ein Zieldatensatz nicht existiert, dann soll der als geskipped gekennzeichnet werden
             // Nur wenn ein Zieldatensatz existiert und kein Fehler auftreteten ist , dann ist das ok
-            BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
-            ProcessSingleBufferRecord(BufferRef2, DMTImportSettings, Log, ResultType);
-            UpdateLog(DMTImportSettings, Log, ResultType);
-            UpdateProgress(DMTImportSettings, ProgressDialog, ResultType);
-            if ProgressDialog.GetStep('Process') mod 50 = 0 then
+            bufferRef2 := bufferRef.Duplicate(); // Variant + Events = Call By Reference 
+            ProcessSingleBufferRecord(bufferRef2, DMTImportSettings, log, resultType);
+            UpdateLog(DMTImportSettings, log, resultType);
+            UpdateProgress(DMTImportSettings, progressDialog, resultType);
+            if progressDialog.GetStep('Process') mod 50 = 0 then
                 Commit();
-        until BufferRef.Next() = 0;
-        MigrationLib.RunPostProcessingFor(ImportConfigHeader);
-        updateImportToTargetPercentage(ImportConfigHeader);
-        ProgressDialog.Close();
-        Log.CreateSummary();
-        Log.ShowLogForCurrentProcess();
-        ShowResultDialog(ProgressDialog);
+        until bufferRef.Next() = 0;
+        migrationLib.RunPostProcessingFor(importConfigHeader);
+        importConfigHeader.BufferTableMgt().updateImportToTargetPercentage();
+        progressDialog.Close();
+        log.CreateSummary();
+        if not DMTImportSettings.NoUserInteraction() then begin
+            log.ShowLogForCurrentProcess();
+            ShowResultDialog(progressDialog);
+        end;
     end;
 
     local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings; var Log: Codeunit DMTLog; var ResultType: Enum DMTProcessingResultType)
@@ -239,11 +230,21 @@ codeunit 91014 DMTMigrate
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
         FPBuilder: Codeunit DMTFPBuilder;
+        Filters, Filters2 : List of [Text];
     begin
         Continue := true; // Canceling the dialog should stop th process
 
-        if DMTImportSettings.SourceTableView() <> '' then
+        if DMTImportSettings.SourceTableView() <> '' then begin
+            BufferRef.FilterGroup(2);
+            Filters.Add(BufferRef.GetFilters);
+            BufferRef.FilterGroup(0);
+            Filters.Add(BufferRef.GetFilters);
             BufferRef.SetView(DMTImportSettings.SourceTableView());
+            BufferRef.FilterGroup(2);
+            Filters2.Add(BufferRef.GetFilters);
+            BufferRef.FilterGroup(0);
+            Filters2.Add(BufferRef.GetFilters);
+        end;
 
         if DMTImportSettings.NoUserInteraction() then begin
             exit(Continue);
@@ -301,7 +302,7 @@ codeunit 91014 DMTMigrate
         ProgressBarTitle: Text;
     begin
         ProgressBarTitle := ImportConfigHeader."Target Table Caption";
-        MaxWith := 100 - 32;
+        MaxWith := 100 - 40;
         if StrLen(ProgressBarTitle) < MaxWith then begin
             ProgressBarTitle := PadStr('', (MaxWith - StrLen(ProgressBarTitle)) div 2, '_') +
                                 ProgressBarTitle +
@@ -387,21 +388,6 @@ codeunit 91014 DMTMigrate
             Error(ImportConfigLineEmptyErr, ImportConfigHeader.TableCaption, ImportConfigHeader.ID);
     end;
 
-    procedure CheckBufferTableIsNotEmpty(ImportConfigHeader: Record DMTImportConfigHeader)
-    var
-        GenBuffTable: Record DMTGenBuffTable;
-        refHelper: Codeunit DMTRefHelper;
-        bufferTableEmptyErr: Label 'The buffer table is empty for %1:%2', Comment = 'de-DE=Die Puffertable entält keine Zeilen für %1:%2';
-    begin
-        if ImportConfigHeader."Use Separate Buffer Table" then begin
-            if refHelper.IsTableEmpty(ImportConfigHeader."Buffer Table ID") then
-                Error(bufferTableEmptyErr, ImportConfigHeader.TableCaption, ImportConfigHeader.ID);
-        end else begin
-            if not GenBuffTable.FilterBy(ImportConfigHeader) then
-                Error(bufferTableEmptyErr, ImportConfigHeader.TableCaption, ImportConfigHeader.ID);
-        end;
-    end;
-
     procedure ListOfBufferRecIDsInner(var RecIdToProcessList: List of [RecordId]; var Log: Codeunit DMTLog; ImportSettings: Codeunit DMTImportSettings) IsFullyProcessed: Boolean
     var
         // DMTErrorLog: Record DMTErrorLog;
@@ -460,45 +446,4 @@ codeunit 91014 DMTMigrate
         if DoModify then
             TargetRef.Modify();
     end;
-
-    internal procedure updateImportToTargetPercentage(importConfigHeader: Record DMTImportConfigHeader)
-    var
-        genBuffTable: Record DMTGenBuffTable;
-        recRef: RecordRef;
-        noOfRecords, noOfRecordsMigrated : Integer;
-        IsImported: Boolean;
-    begin
-        importConfigHeader.get(importConfigHeader.RecordId); // update
-        if not genBuffTable.FilterBy(importConfigHeader) then
-            exit;
-        genBuffTable.SetRange(IsCaptionLine, false);
-        if genBuffTable.IsEmpty then
-            exit;
-        genBuffTable.SetLoadFields("Entry No.", "Import from Filename", Imported, "RecId (Imported)");
-        genBuffTable.FindSet();
-        repeat
-            noOfRecords += 1;
-            IsImported := recRef.Get(genBuffTable."RecId (Imported)");
-            if IsImported then
-                noOfRecordsMigrated += 1;
-
-            if genBuffTable.Imported <> IsImported then begin
-                genBuffTable.Imported := IsImported;
-                if not IsImported then
-                    Clear(genBuffTable."RecId (Imported)");
-                genBuffTable.Modify();
-            end;
-        until genBuffTable.Next() = 0;
-        importConfigHeader.ImportToTargetPercentage := (noOfRecordsMigrated / noOfRecords) * 100;
-        case importConfigHeader.ImportToTargetPercentage of
-            100:
-                importConfigHeader.ImportToTargetPercentageStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
-            0:
-                importConfigHeader.ImportToTargetPercentageStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
-            else
-                importConfigHeader.ImportToTargetPercentageStyle := Format(Enum::DMTFieldStyle::Yellow);
-        end;
-        importConfigHeader.Modify();
-    end;
-
 }

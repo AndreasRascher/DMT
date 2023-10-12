@@ -3,6 +3,12 @@
   <file datatype="xml" source-language="en-US" target-language="de-DE" original="DMT CodeGenerator">
     <body>
       <group id="body">
+        <trans-unit id="Codeunit 368545005 - Method 1710761149 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import finished</source>
+          <target state="translated">Import abgeschlossen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTCodeGenerator - Method ImportNAVSchemaFile - NamedType ImportFinishedMsg</note>
+        </trans-unit>
         <trans-unit id="Page 2911572108 - Control 1735507514 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Code</source>
           <target state="needs-translation"/>
@@ -21,11 +27,107 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCode - Control TargetRecVarName - Property Caption</note>
         </trans-unit>
-        <trans-unit id="TableExtension 2231340739 - Field 1820164459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2231340739">
-          <source>Data Type</source>
-          <target state="translated">NAV Datentyp</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=NAV Datentyp</note>
-          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTDataLayoutLine - Field NAVDataType - Property Caption</note>
+        <trans-unit id="XmlPort 242798494 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 242798494 - Method 1908907723 - NamedType 3416246770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 Buffer\%2 lines imported</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Method OnPostXmlPort - NamedType LinesProcessedMsg</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 242798494 - Control 1124624704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Environment</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Control Umgebung - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 242798494 - Control 394468492 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Control COMPANYNAME - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 242798494 - Control 520131415 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Database</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTFieldBufferImport - Control GetDatabaseNameCtrl - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 521254526 - Action 1428180855 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 425834526">
+          <source>Import Schema.csv</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">NAV Schema.csv importieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension DMTSetup - Action ImportNAVSchema - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 521254526 - Control 2950689218 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 425834526">
+          <source>Object Generator</source>
+          <target state="translated">Objekte generieren</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Objekte generieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension DMTSetup - Control Object Generator - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 521254526 - Control 3424858197 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 425834526">
+          <source>ID Ranges for ...</source>
+          <target state="translated">ID Bereiche für ...</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=ID Bereiche für ...</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension DMTSetup - Control ObjectIDs - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 521254526 - Control 2593167842 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 425834526">
+          <source>Buffer Tables</source>
+          <target state="translated">Puffertabellen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Puffertabellen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension DMTSetup - Control Obj. ID Range Buffer Tables - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 521254526 - Control 1138059172 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 425834526">
+          <source>XMLPorts (Import)</source>
+          <target state="translated">XMLPorts (Import)</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=XMLPorts (Import)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension DMTSetup - Control Obj. ID Range XMLPorts - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 14426887 - Action 4244410473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 215230028">
+          <source>Download buffer table objects</source>
+          <target state="translated">Puffertabellen Objekte runterladen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Puffertabellen Objekte runterladen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension ImportConfigList - Action ExportALObjects - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 200502431 - Field 755414655 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 200502431">
+          <source>NAV Source Table Caption</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTImportConfigHeader - Field NAV Src.Table Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 200502431 - Field 3239065560 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 200502431">
+          <source>NAV Source Table Name</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTImportConfigHeader - Field NAV Src.Table Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 200502431 - Field 2211706144 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 200502431">
+          <source>NAV Src.Table No.</source>
+          <target state="translated">NAV Tabellennr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=NAV Tabellennr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTImportConfigHeader - Field NAV Src.Table No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 521254526 - Field 2204498840 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 521254526">
+          <source>Create Buffer Tables with Flowfields</source>
+          <target state="translated">Puffertabellen mit Flowfields generieren</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Puffertabellen mit Flowfields generieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTSetup - Field Import with FlowFields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 521254526 - Field 2593167842 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 521254526">
+          <source>Obj. ID Range Buffer Tables</source>
+          <target state="translated">Objekt ID Bereich für Puffertabellen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Objekt ID Bereich für Puffertabellen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTSetup - Field Obj. ID Range Buffer Tables - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 521254526 - Field 1138059172 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 521254526">
+          <source>Obj. ID Range XMLPorts (Import)</source>
+          <target state="translated">Objekt ID Bereich für XMLPorts (Import)</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Objekt ID Bereich für XMLPorts (Import)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTSetup - Field Obj. ID Range XMLPorts - Property Caption</note>
         </trans-unit>
       </group>
     </body>
