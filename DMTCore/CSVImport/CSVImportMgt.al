@@ -8,10 +8,8 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
         CSVReader: XmlPort DMTCSVReader;
         largeTextColCaptions: Dictionary of [Integer, Text];
     begin
-        // Delete existing lines
-        ImportConfigHeader.BufferTableMgt().DeleteAllBufferData();
-        // Delete Error Log because it references the old autoincr. Line IDs
-        if DMTLogEntry.FilterFor(ImportConfigHeader) then
+        ImportConfigHeader.BufferTableMgt().DeleteAllBufferData(); // Delete existing lines
+        if DMTLogEntry.FilterFor(ImportConfigHeader) then // Delete Error Log because it references the old autoincr. Line IDs
             DMTLogEntry.DeleteAll();
         if not ImportViaSeparateXMLPort(ImportConfigHeader) then begin
             SourceFileStorage.Get(ImportConfigHeader."Source File ID");
