@@ -289,6 +289,7 @@ page 91017 DMTProcessingPlan
         ProcessStorage: Codeunit DMTProcessStorage;
         Success: Boolean;
     begin
+        ProcessingPlan_SELECTED.SetFilter(Type, '<>%1&<>%2', ProcessingPlan_SELECTED.Type::Group, ProcessingPlan_SELECTED.Type::" ");
         if not ProcessingPlan_SELECTED.FindSet() then exit;
         repeat
             ProcessingPlan.Get(ProcessingPlan_SELECTED.RecordId);

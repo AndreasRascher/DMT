@@ -1,6 +1,8 @@
 table 91003 DMTImportConfigHeader
 {
     Caption = 'DMT Import Configuration Header', Comment = 'de-DE=Import Konfiguration Kopf';
+    LookupPageId = DMTImportConfigList;
+    DrillDownPageId = DMTImportConfigList;
     fields
     {
         field(1; ID; Integer) { Caption = 'ID', Locked = true; }

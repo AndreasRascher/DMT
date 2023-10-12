@@ -4,6 +4,7 @@ codeunit 91007 DMTXMLBackup
     procedure Export();
     begin
         MarkAllRecordsForExport();
+        ExcludeFieldsFromExport();
         ExportXML('');
     end;
 
@@ -107,7 +108,7 @@ codeunit 91007 DMTXMLBackup
         // ROOT
         rootNode := XmlElement.Create('DMT').AsXmlNode();
         XDoc.Add(rootNode);
-        AddAttribute(rootNode, 'Version', '1.1');
+        AddAttribute(rootNode, 'Version', '2.0');
 
         // Table Loop
         CreateTableIDList(TablesList);
@@ -180,14 +181,15 @@ codeunit 91007 DMTXMLBackup
                 // Add Fields with Value
                 for i := 1 to recRef.FieldCount do begin
                     fldRef := recRef.FieldIndex(i);
-                    if not FldRefIsEmpty(fldRef) then begin
-                        fieldNode := XmlElement.Create('FIELD').AsXmlNode();
-                        recordNode.AsXmlElement().Add(fieldNode);
-                        AddAttribute(fieldNode, 'ID', Format(fldRef.Number));
-                        fieldValueAsText := GetFldRefValueAsText(fldRef);
-                        textNode := XmlText.Create(fieldValueAsText);
-                        fieldNode.AsXmlElement().Add(textNode);
-                    end;
+                    if not IsFieldExcluded(fldRef) then
+                        if not FldRefIsEmpty(fldRef) then begin
+                            fieldNode := XmlElement.Create('FIELD').AsXmlNode();
+                            recordNode.AsXmlElement().Add(fieldNode);
+                            AddAttribute(fieldNode, 'ID', Format(fldRef.Number));
+                            fieldValueAsText := GetFldRefValueAsText(fldRef);
+                            textNode := XmlText.Create(fieldValueAsText);
+                            fieldNode.AsXmlElement().Add(textNode);
+                        end;
                 end;
             end;
         end;
@@ -430,6 +432,8 @@ codeunit 91007 DMTXMLBackup
         TablesToExport.Add(Database::DMTDataLayoutLine);
         TablesToExport.Add(Database::DMTImportConfigHeader);
         TablesToExport.Add(Database::DMTImportConfigLine);
+        TablesToExport.Add(Database::DMTSourceFileStorage);
+        TablesToExport.Add(Database::DMTProcessingPlan);
         TablesToExport.Add(Database::DMTSetup);
         foreach TableID in TablesToExport do begin
             _RecRef.Open(TableID);
@@ -439,8 +443,51 @@ codeunit 91007 DMTXMLBackup
                         RecordIDList.Add(_RecRef.RecordId);
                 until _RecRef.Next() = 0;
             _RecRef.Close();
-
         end;
+    end;
+
+    local procedure ExcludeFieldsFromExport();
+    var
+        sourceFileStorage: Record DMTSourceFileStorage;
+        importConfigHeader: Record DMTImportConfigHeader;
+        processingPlan: Record DMTProcessingPlan;
+    begin
+        AddFieldToExcludeList(importConfigHeader.RecordId.TableNo, importConfigHeader.FieldNo("No.of Records in Buffer Table"));
+        AddFieldToExcludeList(importConfigHeader.RecordId.TableNo, importConfigHeader.FieldNo(ImportToTargetPercentage));
+        AddFieldToExcludeList(importConfigHeader.RecordId.TableNo, importConfigHeader.FieldNo(ImportToTargetPercentageStyle));
+        AddFieldToExcludeList(sourceFileStorage.RecordId.TableNo, sourceFileStorage.FieldNo("File Blob"));
+        AddFieldToExcludeList(sourceFileStorage.RecordId.TableNo, sourceFileStorage.FieldNo(Size));
+        AddFieldToExcludeList(sourceFileStorage.RecordId.TableNo, sourceFileStorage.FieldNo(SizeInKB));
+        AddFieldToExcludeList(sourceFileStorage.RecordId.TableNo, sourceFileStorage.FieldNo(UploadDateTime));
+        AddFieldToExcludeList(processingPlan.RecordId.TableNo, processingPlan.FieldNo(StartTime));
+        AddFieldToExcludeList(processingPlan.RecordId.TableNo, processingPlan.FieldNo("Processing Duration"));
+        AddFieldToExcludeList(processingPlan.RecordId.TableNo, processingPlan.FieldNo(Status));
+    end;
+
+    local procedure AddFieldToExcludeList(TableNo: Integer; FieldNo: Integer)
+    var
+        FieldList: List of [Integer];
+    begin
+        if not ExcludedFields.ContainsKey(TableNo) then begin
+            ExcludedFields.Add(TableNo, FieldList);
+        end;
+        if ExcludedFields.Get(TableNo, FieldList) then begin
+            if not FieldList.Contains(FieldNo) then begin
+                FieldList.Add(FieldNo);
+                ExcludedFields.Set(TableNo, FieldList);
+            end;
+        end;
+    end;
+
+    local procedure IsFieldExcluded(var fldRef: FieldRef) IsExcluded: Boolean
+    var
+        FieldList: List of [Integer];
+    begin
+        IsExcluded := true;
+        if not ExcludedFields.Get(fldRef.Record().Number, FieldList) then
+            exit(false);
+        if not FieldList.Contains(fldRef.Number) then
+            exit(false);
     end;
 
     procedure MarkSelected(TablesToExport: List of [Integer]);
@@ -545,5 +592,6 @@ codeunit 91007 DMTXMLBackup
     var
         TablesList: List of [Integer];
         RecordIDList: List of [RecordId];
+        ExcludedFields: Dictionary of [Integer, List of [Integer]];
         XDoc: XmlDocument;
 }

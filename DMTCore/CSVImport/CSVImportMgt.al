@@ -3,12 +3,16 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
     procedure ImportToBufferTable(ImportConfigHeader: Record DMTImportConfigHeader);
     var
         SourceFileStorage: Record DMTSourceFileStorage;
+        DMTLogEntry: Record DMTLogEntry;
         defaultSourceFileImportImpl: Codeunit DMTDefaultSourceFileImportImpl;
         CSVReader: XmlPort DMTCSVReader;
         largeTextColCaptions: Dictionary of [Integer, Text];
     begin
         // Delete existing lines
         ImportConfigHeader.BufferTableMgt().DeleteAllBufferData();
+        // Delete Error Log because it references the old autoincr. Line IDs
+        if DMTLogEntry.FilterFor(ImportConfigHeader) then
+            DMTLogEntry.DeleteAll();
         if not ImportViaSeparateXMLPort(ImportConfigHeader) then begin
             SourceFileStorage.Get(ImportConfigHeader."Source File ID");
             PrepareXMLPortWithCSVOptionsAndSourceFile(SourceFileStorage, ImportConfigHeader.GetDataLayout(), CSVReader);

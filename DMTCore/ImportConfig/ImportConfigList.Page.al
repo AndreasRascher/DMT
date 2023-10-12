@@ -54,7 +54,7 @@ page 91010 DMTImportConfigList
                         exit;
 
                     DMTSetup.GetRecordOnce();
-                    if DMTSetup.MigrationProfil = DMTSetup.MigrationProfil::"From NAV" then
+                    if DMTSetup.IsNAVExport() then
                         migrationLib.CreateNAVExportFileNameDictionary(NAVExportFileNamesDict);
 
                     tempSourceFileStorage_SELECTED.FindSet();
@@ -66,12 +66,12 @@ page 91010 DMTImportConfigList
                             importConfigHeader."Source File Name" := tempSourceFileStorage_SELECTED.Name;
                             importConfigHeader.Insert(true);
                             // Assign Target Table
-                            if DMTSetup.MigrationProfil = DMTSetup.MigrationProfil::"From NAV" then
+                            if DMTSetup.IsNAVExport() then
                                 if not NAVExportFileNamesDict.Get(tempSourceFileStorage_SELECTED.Name, TargetTableID) then
                                     Clear(TargetTableID);
                         end;
 
-                        if (DMTSetup.MigrationProfil = DMTSetup.MigrationProfil::"From NAV") and (TargetTableID <> 0) then
+                        if DMTSetup.IsNAVExport() and (TargetTableID <> 0) then
                             TargetTableID := migrationLib.HandleObsoleteNAVTargetTable(TargetTableID);
 
                         if TargetTableID <> 0 then begin

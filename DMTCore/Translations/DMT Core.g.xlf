@@ -48,26 +48,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Name</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field Name - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 4224547593 - Field 1555203657 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No. of Records</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field NAVNoOfRecords - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 4224547593 - Field 2720846982 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Primary Key</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Primärschlüssel Felder</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field NAVPrimaryKey - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 4224547593 - Field 3361606907 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Table Caption</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Tabellenbezeichnung</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field NAVTableCaption - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 4224547593 - Field 2503397726 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>NAV TableID</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Tabellen ID</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field NAVTableID - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 4224547593 - Field 2357355287 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Preset</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Voreinstellung</note>
@@ -2258,10 +2238,10 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Wählen Sie eine Session zum Beenden aus:\&lt;Session ID&gt; - &lt;User ID&gt; - &lt;Client Type&gt; - &lt;Login Datetime&gt;</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control SessionID - Method OnAssistEdit - NamedType StopSessionInstructionLbl</note>
         </trans-unit>
-        <trans-unit id="Page 425834526 - Control 2293317941 - Method 2699620902 - NamedType 1746033980" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 425834526 - Control 2293317941 - Method 2699620902 - NamedType 1472696310" size-unit="char" translate="yes" xml:space="preserve">
           <source>Stop all other sessions</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Alle anderen Sessions stoppen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control SessionID - Method OnAssistEdit - NamedType StopAllOtherSessions</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control SessionID - Method OnAssistEdit - NamedType StopAllOtherSessionsLbl</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Control 2349991090 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Mapping fields</source>

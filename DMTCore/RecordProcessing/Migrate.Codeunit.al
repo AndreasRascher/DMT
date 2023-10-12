@@ -39,18 +39,6 @@ codeunit 91014 DMTMigrate
         ProcessFullBuffer(DMTImportSettings);
     end;
     /// <summary>
-    /// Process buffer records with field selection
-    /// </summary>
-    procedure AllFieldsWithoutDialogFrom(ImportConfigHeader: Record DMTImportConfigHeader)
-    var
-        DMTImportSettings: Codeunit DMTImportSettings;
-    begin
-        DMTImportSettings.ImportConfigHeader(ImportConfigHeader);
-        DMTImportSettings.NoUserInteraction(true);
-        LoadImportConfigLine(DMTImportSettings);
-        ProcessFullBuffer(DMTImportSettings);
-    end;
-    /// <summary>
     /// Process buffer records
     /// </summary>
     procedure SelectedFieldsFrom(ImportConfigHeader: Record DMTImportConfigHeader)
@@ -72,6 +60,7 @@ codeunit 91014 DMTMigrate
         ImportConfigHeader: Record DMTImportConfigHeader;
         DMTImportSettings: Codeunit DMTImportSettings;
     begin
+        DMTImportSettings.NoUserInteraction(true);
         DMTImportSettings.ProcessingPlan(ProcessingPlan);
         ImportConfigHeader.Get(ProcessingPlan.ID);
         DMTImportSettings.ImportConfigHeader(ImportConfigHeader);
@@ -199,8 +188,10 @@ codeunit 91014 DMTMigrate
         importConfigHeader.BufferTableMgt().updateImportToTargetPercentage();
         progressDialog.Close();
         log.CreateSummary();
-        log.ShowLogForCurrentProcess();
-        ShowResultDialog(progressDialog);
+        if not DMTImportSettings.NoUserInteraction() then begin
+            log.ShowLogForCurrentProcess();
+            ShowResultDialog(progressDialog);
+        end;
     end;
 
     local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings; var Log: Codeunit DMTLog; var ResultType: Enum DMTProcessingResultType)
@@ -311,7 +302,7 @@ codeunit 91014 DMTMigrate
         ProgressBarTitle: Text;
     begin
         ProgressBarTitle := ImportConfigHeader."Target Table Caption";
-        MaxWith := 100 - 32;
+        MaxWith := 100 - 40;
         if StrLen(ProgressBarTitle) < MaxWith then begin
             ProgressBarTitle := PadStr('', (MaxWith - StrLen(ProgressBarTitle)) div 2, '_') +
                                 ProgressBarTitle +
