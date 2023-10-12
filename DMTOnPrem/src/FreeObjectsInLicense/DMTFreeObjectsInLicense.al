@@ -343,7 +343,7 @@ page 90000 DMTFreeObjectsInLicense
     var
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
         i: Integer;
-    begin
+    begin        
         TempAllObjWithCaption.Copy(Rec, true);
         for i := 1 to GetMaxObjectType() do begin
             TempAllObjWithCaption."Object Type" := i;
@@ -362,7 +362,7 @@ page 90000 DMTFreeObjectsInLicense
                 TempAllObjWithCaption."Object Type"::XMLport:
                     NoOfXMLports := Rec.Count;
                 TempAllObjWithCaption."Object Type"::Enum:
-                    NoOfEnums := Rec.Count;
+                    NoOfEnums := Rec.Count;                
             end; // end_CASE
         end;
         Rec.Reset();
