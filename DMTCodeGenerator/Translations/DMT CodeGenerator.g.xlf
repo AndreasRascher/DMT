@@ -78,6 +78,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Puffertabellen Objekte runterladen</note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension ImportConfigList - Action ExportALObjects - Property Caption</note>
         </trans-unit>
+        <trans-unit id="TableExtension 200502431 - Method 3628817529 - NamedType 2192461025" size-unit="char" translate="yes" xml:space="preserve" al-object-target="TableExtension 200502431">
+          <source>You have to import the Schema.csv.</source>
+          <note from="Developer" annotates="general" priority="2">de-De=Sie müssen die Schema.csv importieren.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTImportConfigHeader - Method updateNAVTableFromTableNo - NamedType SchemaIsNotImportedErr</note>
+        </trans-unit>
         <trans-unit id="TableExtension 200502431 - Field 755414655 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 200502431">
           <source>NAV Source Table Caption</source>
           <note from="Developer" annotates="general" priority="2"></note>
