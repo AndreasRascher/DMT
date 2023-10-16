@@ -228,14 +228,15 @@ page 91019 DMTReplacementAssigmentPart
     {
         area(Processing)
         {
-            action(AddFieldMapping)
-            {
-                Caption = 'Add Field Mapping', Comment = 'de-DE=Feldmapping hinzufügen';
-                Image = Add;
-                trigger OnAction()
-                begin
-                end;
-            }
+            // ToDo
+            // action(AddFieldMapping)
+            // {
+            //     Caption = 'Add Field Mapping', Comment = 'de-DE=Feldmapping hinzufügen';
+            //     Image = Add;
+            //     trigger OnAction()
+            //     begin
+            //     end;
+            // }
             action(LoadListOfUniqueValues)
             {
                 Caption = 'Import column values', comment = 'de-DE=Spaltenwerte importieren';

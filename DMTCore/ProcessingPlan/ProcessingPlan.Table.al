@@ -90,7 +90,8 @@ table 91009 DMTProcessingPlan
             // ImportConfigHeader.BufferTableType := ImportConfigHeader.BufferTableType::"Seperate Buffer Table per CSV";
         end else begin
             ImportConfigHeader.Get(Rec.ID);
-            ImportConfigHeader.BufferTableMgt().InitBufferRef(BufferRef);
+            ImportConfigHeader.BufferTableMgt().CheckBufferTableIsNotEmpty();
+            ImportConfigHeader.BufferTableMgt().InitBufferRef(BufferRef, true);
         end;
         CurrView := ReadSourceTableView();
         if CurrView <> '' then
@@ -237,6 +238,10 @@ table 91009 DMTProcessingPlan
             exit;
         if RecRef.Name = genBuffTable.TableName then begin
             RecRef.SetTable(genBuffTable);
+            if not genBuffTable.HasCaptionLine(genBuffTable."Imp.Conf.Header ID") then begin
+                TmpImportConfigLine.Copy(TempImportConfigLine2, true);
+                exit;
+            end;
             genBuffTable.InitFirstLineAsCaptions(genBuffTable); // init column caption single instance codeunit
             RecRef.GetTable(genBuffTable);
         end;
@@ -267,7 +272,7 @@ table 91009 DMTProcessingPlan
         FieldIndexNo: Integer;
         CurrView: Text;
     begin
-        ImportConfigHeader.Get(Rec.ID);
+        if not ImportConfigHeader.Get(Rec.ID) then exit; // ID can be zero
         RecRef.Open(ImportConfigHeader."Target Table ID");
         CurrView := Rec.ReadDefaultValuesView();
         if CurrView <> '' then begin
