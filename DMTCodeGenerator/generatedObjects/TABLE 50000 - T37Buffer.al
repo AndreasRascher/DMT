@@ -961,15 +961,6 @@ table 90012 T37Buffer
         {
             CaptionML = ENU = 'Customer Line Reference', DEU = 'Debitorzeilenreferenz';
         }
-        field(59999; "DMT Target Record Exists"; Boolean)
-        {
-            CaptionML = ENU = 'DMT target record exists', DEU = 'DMT Zieldatensatz vorhanden';
-            FieldClass = FlowField;
-            CalcFormula = exist("Sales Line" where("Document Type" = field("Document Type"),
-                                                     "Document No." = field("Document No."),
-                                                     "Line No." = field("Line No.")));
-            Editable = false;
-        }
         field(51000; "DMT Imported"; Boolean) { CaptionML = ENU = 'DMT Imported', DEU = 'Importiert'; }
         field(51001; "DMT RecId (Imported)"; RecordId) { CaptionML = ENU = 'DMT Record ID (Imported)', DEU = 'Datensatz-ID (Importiert)'; }
     }

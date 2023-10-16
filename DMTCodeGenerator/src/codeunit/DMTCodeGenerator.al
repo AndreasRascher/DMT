@@ -191,7 +191,7 @@ codeunit 90011 DMTCodeGenerator
 
             until DMTFieldBuffer.Next() = 0;
 
-        AddTargetRecordExistsFlowField(TargetTableID, BufferTableID, DMTFieldBuffer, C);
+        // AddTargetRecordExistsFlowField(TargetTableID, NAVSrcTableNo, DMTFieldBuffer, C);
         AddImportStatusFields(BufferTableID, DMTFieldBuffer, C);
 
         C.AppendLine('  }');
@@ -284,54 +284,54 @@ codeunit 90011 DMTCodeGenerator
         KeyString := DelChr(KeyString, '>', ',');
     end;
 
-    local procedure AddTargetRecordExistsFlowField(TargetTableID: Integer; BufferTableNo: Integer; var FieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
-    var
-        refHelper: Codeunit DMTRefHelper;
-        TargetRef: RecordRef;
-        TargetTableName: Text;
-        BufferKeyFieldNames, TargetKeyFieldNames : List of [Text];
-        KeyFieldIndex: Integer;
-        f: TextBuilder;
-    begin
-        // FieldNoIsUsed
-        if FieldBuffer.Get(BufferTableNo, 59999) then
-            exit;
-        // FindTargetTableKeyInfo
-        TargetRef.Open(TargetTableID);
-        TargetTableName := QuoteValue(TargetRef.Name);
-        for KeyFieldIndex := 1 to refHelper.GetListOfKeyFieldIDs(TargetRef).Count do
-            TargetKeyFieldNames.Add(QuoteValue(TargetRef.KeyIndex(1).FieldIndex(KeyFieldIndex).Name));
-        // FindSourceTableKeyInfo
-        FieldBuffer.FindFirst();
-        for KeyFieldIndex := 1 to FieldBuffer."Primary Key".Split(',').Count do
-            if FieldBuffer.Get(FieldBuffer.TableNo, FieldBuffer."Primary Key".Split(',').Get(KeyFieldIndex)) then
-                BufferKeyFieldNames.Add(QuoteValue(FieldBuffer.FieldName));
+    // local procedure AddTargetRecordExistsFlowField(TargetTableID: Integer; NAVSrcTableNo: Integer; var FieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
+    // var
+    //     refHelper: Codeunit DMTRefHelper;
+    //     TargetRef: RecordRef;
+    //     TargetTableName: Text;
+    //     BufferKeyFieldNames, TargetKeyFieldNames : List of [Text];
+    //     KeyFieldIndex: Integer;
+    //     f: TextBuilder;
+    // begin
+    //     // FieldNoIsUsed
+    //     if FieldBuffer.Get(NAVSrcTableNo, 59999) then
+    //         exit;
+    //     // FindTargetTableKeyInfo
+    //     TargetRef.Open(TargetTableID);
+    //     TargetTableName := QuoteValue(TargetRef.Name);
+    //     for KeyFieldIndex := 1 to refHelper.GetListOfKeyFieldIDs(TargetRef).Count do
+    //         TargetKeyFieldNames.Add(QuoteValue(TargetRef.KeyIndex(1).FieldIndex(KeyFieldIndex).Name));
+    //     // FindSourceTableKeyInfo
+    //     FieldBuffer.FindFirst();
+    //     for KeyFieldIndex := 1 to FieldBuffer."Primary Key".Split(',').Count do
+    //         if FieldBuffer.Get(FieldBuffer.TableNo, FieldBuffer."Primary Key".Split(',').Get(KeyFieldIndex)) then
+    //             BufferKeyFieldNames.Add(QuoteValue(FieldBuffer.FieldName));
 
-        if TargetKeyFieldNames.Count <> BufferKeyFieldNames.Count then
-            exit;
+    //     if TargetKeyFieldNames.Count <> BufferKeyFieldNames.Count then
+    //         exit;
 
-        f.AppendLine('        field(59999; "DMT Target Record Exists"; Boolean)');
-        f.AppendLine('        {');
-        f.AppendLine('            CaptionML = ENU = ''DMT target record exists'', DEU = ''DMT Zieldatensatz vorhanden'';');
-        f.AppendLine('            FieldClass = FlowField;');
+    //     f.AppendLine('        field(59999; "DMT Target Record Exists"; Boolean)');
+    //     f.AppendLine('        {');
+    //     f.AppendLine('            CaptionML = ENU = ''DMT target record exists'', DEU = ''DMT Zieldatensatz vorhanden'';');
+    //     f.AppendLine('            FieldClass = FlowField;');
 
-        for KeyFieldIndex := 1 to TargetKeyFieldNames.Count do begin
-            if KeyFieldIndex = 1 then
-                f.Append('            CalcFormula = exist(' + TargetTableName + ' where(' + TargetKeyFieldNames.Get(KeyFieldIndex) + '= field(' + BufferKeyFieldNames.Get(KeyFieldIndex) + ')')
-            else begin
-                f.AppendLine('');
-                f.Append('                                                     ' + TargetKeyFieldNames.Get(KeyFieldIndex) + '= field(' + BufferKeyFieldNames.Get(KeyFieldIndex) + ')');
-            end;
-            if KeyFieldIndex = TargetKeyFieldNames.Count then
-                f.AppendLine('));')
-            else
-                f.Append(',')
-        end;
+    //     for KeyFieldIndex := 1 to TargetKeyFieldNames.Count do begin
+    //         if KeyFieldIndex = 1 then
+    //             f.Append('            CalcFormula = exist(' + TargetTableName + ' where(' + TargetKeyFieldNames.Get(KeyFieldIndex) + '= field(' + BufferKeyFieldNames.Get(KeyFieldIndex) + ')')
+    //         else begin
+    //             f.AppendLine('');
+    //             f.Append('                                                     ' + TargetKeyFieldNames.Get(KeyFieldIndex) + '= field(' + BufferKeyFieldNames.Get(KeyFieldIndex) + ')');
+    //         end;
+    //         if KeyFieldIndex = TargetKeyFieldNames.Count then
+    //             f.AppendLine('));')
+    //         else
+    //             f.Append(',')
+    //     end;
 
-        f.AppendLine('            Editable = false;');
-        f.AppendLine('        }');
-        C.Append(f.ToText());
-    end;
+    //     f.AppendLine('            Editable = false;');
+    //     f.AppendLine('        }');
+    //     C.Append(f.ToText());
+    // end;
 
     local procedure AddImportStatusFields(BufferTableNo: Integer; var FieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
     var
