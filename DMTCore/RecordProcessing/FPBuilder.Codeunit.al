@@ -57,7 +57,8 @@ codeunit 91012 DMTFPBuilder
                     ImportConfigLine.SetRange("Is Key Field(Target)", true);
                     if ImportConfigLine.FindSet() then
                         repeat
-                            FilterFields.Add(ImportConfigLine."Source Field No.", GenBuffTable.TableCaption);
+                            if (ImportConfigLine."Source Field No." <> 0) then // when field list is initialized but not assigned
+                                FilterFields.Add(ImportConfigLine."Source Field No.", GenBuffTable.TableCaption);
                         until ImportConfigLine.Next() = 0;
                 end;
             // Other

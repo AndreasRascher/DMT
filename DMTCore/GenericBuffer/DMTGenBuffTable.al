@@ -322,6 +322,19 @@ table 91001 DMTGenBuffTable
     {
         key(Key1; "Entry No.") { Clustered = true; }
     }
+    /// <summary>Check if file has header line</summary>
+    procedure HasCaptionLine(ImportConfigID: Integer) Result: Boolean
+    var
+        importConfigHeader: Record DMTImportConfigHeader;
+        GenBuffTable_CaptionLine: Record DMTGenBuffTable;
+    begin
+        if not importConfigHeader.Get(ImportConfigID) then
+            exit(false);
+        GenBuffTable_CaptionLine.SetRange(IsCaptionLine, true);
+        GenBuffTable_CaptionLine.SetRange("Imp.Conf.Header ID", ImportConfigID);
+        GenBuffTable_CaptionLine.SetRange("Import from Filename", importConfigHeader."Source File Name");
+        Result := not GenBuffTable_CaptionLine.IsEmpty();
+    end;
 
     procedure InitFirstLineAsCaptions(var GenBuffTable_First: Record DMTGenBuffTable) NoOfCols: Integer
     var
