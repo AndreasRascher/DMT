@@ -24,11 +24,11 @@
 		"launch": {
 			"version": "0.2.0",
 			"configurations": [{
-				"name": "BC22",
+				"name": "BC23",
 				"type": "al",
 				"request": "launch",
 				"environmentType": "OnPrem",
-				"server": "http://bc22/",
+				"server": "http://bc23/",
 				"serverInstance": "BC",
 				"authentication": "UserPassword",
 				"startupObjectType": "Page",
