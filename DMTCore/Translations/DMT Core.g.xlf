@@ -2718,11 +2718,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Zuordnung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1429333779 - Action 3237253257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Add Field Mapping</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Feldmapping hinzufügen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Action AddFieldMapping - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 1429333779 - Action 1630718602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import column values</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Spaltenwerte importieren</note>
