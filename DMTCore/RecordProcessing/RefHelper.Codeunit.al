@@ -49,6 +49,7 @@ codeunit 91013 DMTRefHelper
         _DateTime: DateTime;
         _Decimal: Decimal;
         _Integer: Integer;
+        _Guid: Guid;
         NoOfOptions: Integer;
         OptionIndex: Integer;
         InvalidValueForTypeErr: Label '"%1" is not a valid %2 value.', Comment = 'de-DE="%1" ist kein gültiger %2 Wert';
@@ -192,6 +193,14 @@ codeunit 91013 DMTRefHelper
                         exit(true);
                     end else
                         if ThrowError then Evaluate(_DateFormula, FromText, 9);
+                end;
+            'GUID':
+                begin
+                    if Evaluate(_Guid, FromText, 9) then begin
+                        FieldRef_TO.Value := _Guid;
+                        exit(true);
+                    end else
+                        if ThrowError then Evaluate(_Guid, FromText, 9);
                 end;
             else
                 Message('Funktion "EvaluateFieldRef" - nicht behandelter Datentyp %1', Format(FieldRef_TO.Type));
