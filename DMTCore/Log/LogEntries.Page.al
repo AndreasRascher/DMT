@@ -8,6 +8,7 @@ page 91013 DMTLogEntries
     ModifyAllowed = false;
     PageType = List;
     SourceTable = DMTLogEntry;
+    ApplicationArea = All;
     UsageCategory = None;
 
     layout
@@ -16,28 +17,29 @@ page 91013 DMTLogEntries
         {
             repeater(Group)
             {
-                field(Usage; Rec.Usage) { ApplicationArea = All; }
-                field("Entry Type"; Rec."Entry Type") { ApplicationArea = All; }
-                field("Entry No."; Rec."Entry No.") { ApplicationArea = All; Visible = false; }
-                field("Process No."; Rec."Process No.") { ApplicationArea = All; Visible = false; }
-                field("Source ID (Text)"; Rec."Source ID (Text)") { ApplicationArea = All; StyleExpr = LineStyle; }
-                field(Errortext; Rec."Context Description") { ApplicationArea = All; StyleExpr = LineStyle; }
+                field(Usage; Rec.Usage) { }
+                field("Entry Type"; Rec."Entry Type") { }
+                field("Entry No."; Rec."Entry No.") { Visible = false; }
+                field("Process No."; Rec."Process No.") { Visible = false; }
+                field("Source ID (Text)"; Rec."Source ID (Text)") { StyleExpr = LineStyle; }
+                field(Errortext; Rec."Context Description") { StyleExpr = LineStyle; }
                 field(CallStack; CallStack)
                 {
                     Caption = 'Error Call Stack';
-                    ApplicationArea = All;
+
                     trigger OnDrillDown()
                     begin
                         Message(Rec.GetErrorCallStack());
                     end;
                 }
-                field("Error Field Value"; Rec."Error Field Value") { ApplicationArea = All; }
-                field(ErrorCode; Rec.ErrorCode) { ApplicationArea = All; }
-                field("Ignore Error"; Rec."Ignore Error") { ApplicationArea = All; }
-                field(SystemCreatedAt; Rec.SystemCreatedAt) { ApplicationArea = All; }
-                field("Target Field No."; Rec."Target Field No.") { ApplicationArea = All; }
-                field("Target ID (Text)"; Rec."Target ID (Text)") { ApplicationArea = All; }
-                field("Target Table No."; Rec."Target Table ID") { ApplicationArea = All; }
+                field("Error Field Value"; Rec."Error Field Value") { }
+                field(ErrorCode; Rec.ErrorCode) { }
+                field("Ignore Error"; Rec."Ignore Error") { }
+                field(SystemCreatedAt; Rec.SystemCreatedAt) { }
+                field("Target Field Caption"; Rec."Target Field Caption") { }
+                field("Target Field No."; Rec."Target Field No.") { }
+                field("Target ID (Text)"; Rec."Target ID (Text)") { }
+                field("Target Table No."; Rec."Target Table ID") { }
             }
         }
     }
@@ -48,7 +50,6 @@ page 91013 DMTLogEntries
             action(HideIgnored)
             {
                 Caption = 'Hide ignored Errors', Comment = 'de-DE=Ignorierte Fehler ausblenden';
-                ApplicationArea = All;
                 Image = ShowList;
                 Promoted = true;
                 PromotedIsBig = true;
@@ -65,7 +66,6 @@ page 91013 DMTLogEntries
             action(ShowIgnored)
             {
                 Caption = 'Show ignored Errors', Comment = 'de-DE=Ignorierte Fehler anzeigen';
-                ApplicationArea = All;
                 Image = ShowList;
                 Promoted = true;
                 PromotedIsBig = true;
@@ -82,7 +82,6 @@ page 91013 DMTLogEntries
             action(DeleteFilteredLines)
             {
                 Caption = 'Delete filtered lines', Comment = 'de-DE=Gefilterte Zeilen löschen';
-                ApplicationArea = All;
                 Image = Delete;
                 Promoted = true;
                 PromotedIsBig = true;

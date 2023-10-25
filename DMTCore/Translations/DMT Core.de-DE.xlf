@@ -57,30 +57,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Name</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field Name - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 4224547593 - Field 1555203657 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No. of Records</source>
-          <target state="translated">Anz. Datensätze</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field NAVNoOfRecords - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 4224547593 - Field 2720846982 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Primary Key</source>
-          <target state="translated">Primärschlüssel Felder</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Primärschlüssel Felder</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field NAVPrimaryKey - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 4224547593 - Field 3361606907 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Table Caption</source>
-          <target state="translated">Tabellenbezeichnung</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Tabellenbezeichnung</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field NAVTableCaption - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 4224547593 - Field 2503397726 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>NAV TableID</source>
-          <target state="translated">Tabellen ID</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Tabellen ID</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayout - Field NAVTableID - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 4224547593 - Field 2357355287 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Preset</source>
           <target state="translated">Voreinstellung</target>
@@ -2235,10 +2211,16 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Quelldatei Name</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field SourceFileName - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 744607175 - Field 1870234639 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Field Caption</source>
+          <target state="translated">Zielfeld Bezeichnung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zielfeld Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Target Field Caption - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 744607175 - Field 3323085680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Field No.</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2">de-DEs=Zielfeldnr.</note>
+          <target state="translated">Zielfeldnr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zielfeldnr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Target Field No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 744607175 - Field 848768200 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2709,11 +2691,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Wählen Sie eine Session zum Beenden aus:\&lt;Session ID&gt; - &lt;User ID&gt; - &lt;Client Type&gt; - &lt;Login Datetime&gt;</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control SessionID - Method OnAssistEdit - NamedType StopSessionInstructionLbl</note>
         </trans-unit>
-        <trans-unit id="Page 425834526 - Control 2293317941 - Method 2699620902 - NamedType 1746033980" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 425834526 - Control 2293317941 - Method 2699620902 - NamedType 1472696310" size-unit="char" translate="yes" xml:space="preserve">
           <source>Stop all other sessions</source>
           <target state="translated">Alle anderen Sessions stoppen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Alle anderen Sessions stoppen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control SessionID - Method OnAssistEdit - NamedType StopAllOtherSessions</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Control SessionID - Method OnAssistEdit - NamedType StopAllOtherSessionsLbl</note>
         </trans-unit>
         <trans-unit id="Page 425834526 - Control 2349991090 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Mapping fields</source>
@@ -3284,12 +3266,6 @@
           <target state="translated">Zuordnung</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Zuordnung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1429333779 - Action 3237253257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Add Field Mapping</source>
-          <target state="translated">Feldmapping hinzufügen</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Feldmapping hinzufügen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Action AddFieldMapping - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1429333779 - Action 1630718602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import column values</source>

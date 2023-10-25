@@ -1843,9 +1843,14 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Quelldatei Name</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field SourceFileName - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 744607175 - Field 1870234639 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Field Caption</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zielfeld Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Target Field Caption - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 744607175 - Field 3323085680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Field No.</source>
-          <note from="Developer" annotates="general" priority="2">de-DEs=Zielfeldnr.</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zielfeldnr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Target Field No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 744607175 - Field 848768200 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
