@@ -228,9 +228,11 @@ codeunit 91002 DMTImportConfigMgt
                 TargetFieldID := TargetFieldNames.Keys.Get(FoundAtIndex);
                 // SetSourceField
                 ImportConfigLine.Get(ImportConfigHeader.ID, TargetFieldID);
-                ImportConfigLine.Validate("Source Field No.", SourceFieldID); // Validate to update processing action
-                ImportConfigLine."Source Field Caption" := CopyStr(SourceFieldName, 1, MaxStrLen(ImportConfigLine."Source Field Caption"));
-                ImportConfigLine.Modify();
+                if IsSupportedTargetFieldType(ImportConfigLine) then begin
+                    ImportConfigLine.Validate("Source Field No.", SourceFieldID); // Validate to update processing action
+                    ImportConfigLine."Source Field Caption" := CopyStr(SourceFieldName, 1, MaxStrLen(ImportConfigLine."Source Field Caption"));
+                    ImportConfigLine.Modify();
+                end;
             end;
         end;
         DMTSetup.InsertWhenEmpty();
@@ -346,5 +348,17 @@ codeunit 91002 DMTImportConfigMgt
                 if Format(ImportConfigLine2) <> Format(ImportConfigLine) then
                     ImportConfigLine.Modify()
             until ImportConfigLine.Next() = 0;
+    end;
+
+    local procedure IsSupportedTargetFieldType(ImportConfigLine: Record DMTImportConfigLine) OK: Boolean
+    var
+        Field: Record Field;
+    begin
+        OK := true;
+        if not field.Get(ImportConfigLine."Target Table ID", ImportConfigLine."Target Field No.") then
+            exit(false);
+        if Field.FieldName = 'Image' then
+            if Field.FieldName = 'Image' then;
+        if Field.Type IN [Field.Type::Media, Field.Type::MediaSet] then exit(false);
     end;
 }
