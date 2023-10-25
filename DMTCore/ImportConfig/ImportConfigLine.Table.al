@@ -25,7 +25,6 @@ table 91006 DMTImportConfigLine
             Editable = false;
             CalcFormula = lookup(Field.FieldName where(TableNo = field("Target Table ID"), "No." = field("Target Field No.")));
         }
-
         field(13; "Target Field Caption"; Text[80])
         {
             Caption = 'Target Field Caption', Comment = 'de-DE=Zielfeld Bezeichnung';
@@ -42,6 +41,14 @@ table 91006 DMTImportConfigLine
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
         }
         field(15; "Is Key Field(Target)"; Boolean) { Caption = 'Key Field', Comment = 'de-DE=Schlüsselfeld'; Editable = false; }
+        field(16; "Target Table Caption"; Text[250])
+        {
+            Caption = 'Target Table', Comment = 'de-DE=Zieltabelle';
+            FieldClass = FlowField;
+            Editable = false;
+            CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Target Table ID")));
+            TableRelation = AllObjWithCaption."Object Caption" where("Object Type" = const(Table));
+        }
         field(20; "Source Field No."; Integer)
         {
             Caption = 'Source Field No.', Comment = 'de-DE=Herkunftsfeld Nr.';

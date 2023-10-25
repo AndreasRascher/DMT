@@ -229,14 +229,21 @@ page 91019 DMTReplacementAssigmentPart
         area(Processing)
         {
             // ToDo
-            // action(AddFieldMapping)
-            // {
-            //     Caption = 'Add Field Mapping', Comment = 'de-DE=Feldmapping hinzufügen';
-            //     Image = Add;
-            //     trigger OnAction()
-            //     begin
-            //     end;
-            // }
+            action(SelectFieldMapping)
+            {
+                Caption = 'Select Field Mapping', Comment = 'de-DE=Feldmapping auswählen';
+                Image = Add;
+                trigger OnAction()
+                var
+                    importConfigLines: Page DMTImportConfigLines;
+                begin
+                    if importConfigLines.RunModal() = Action::LookupOK then begin
+                        if importConfigLines.GetSelection(TempImportConfigLine_Selected) then begin
+                            
+                        end;
+                    end;
+                end;
+            }
             action(LoadListOfUniqueValues)
             {
                 Caption = 'Import column values', comment = 'de-DE=Spaltenwerte importieren';
@@ -296,6 +303,7 @@ page 91019 DMTReplacementAssigmentPart
     end;
 
     var
+        TempImportConfigLine_Selected: Record DMTImportConfigLine temporary;
         DataLayoutLineGlobal: Record DMTDataLayoutLine;
         Source1Enabled, Source2Enabled, Target1Enabled, Target2Enabled : Boolean;
         Source2Visible, Target2Visible : Boolean;
