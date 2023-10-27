@@ -1768,6 +1768,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Ziel Feldnr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Target Field No. - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 4040554107 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zieltabelle</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Target Table Caption - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3570477496 - Field 1666780894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Table ID</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Ziel Tabellen ID</note>
@@ -2553,6 +2558,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Feldzuordnung vorschlagen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action ProposeMatchingFields - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1195927513 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import Config Lines</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import Konfiguration Zeilen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLines - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 215230028 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Import Config List</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Importkonfigurationen</note>
@@ -2727,6 +2737,11 @@
           <source>Import column values</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Spaltenwerte importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Action LoadListOfUniqueValues - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1429333779 - Action 2108323986 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Select Field Mapping</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Feldmapping auswählen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Action SelectFieldMapping - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 43196361 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Replacement Card</source>

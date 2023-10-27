@@ -232,15 +232,36 @@ page 91019 DMTReplacementAssigmentPart
             action(SelectFieldMapping)
             {
                 Caption = 'Select Field Mapping', Comment = 'de-DE=Feldmapping auswählen';
+                Visible = Is1To1Assignment;
                 Image = Add;
                 trigger OnAction()
                 var
+                    replacementHeader: Record DMTReplacementHeader;
+                    replacementLine: Record DMTReplacementLine;
+                    importConfigLine: Record DMTImportConfigLine;
                     importConfigLines: Page DMTImportConfigLines;
                 begin
+                    if not Rec.FindReplacementHeaderForPageRec(replacementHeader) then
+                        Error('Replacement Header not found');
+                    importConfigLines.Editable(false);
+                    importConfigLines.LookupMode(true);
+                    if replacementHeader."Rel.to Table ID (New Val.1)" <> 0 then
+                        importConfigLine.SetRange("Target Table Relation", replacementHeader."Rel.to Table ID (New Val.1)");
                     if importConfigLines.RunModal() = Action::LookupOK then begin
-                        if importConfigLines.GetSelection(TempImportConfigLine_Selected) then begin
-                            
-                        end;
+                        if importConfigLines.GetSelection(TempImportConfigLine_Selected) then
+                            repeat
+                                replacementLine.init();
+                                replacementLine.Validate("Imp.Conf.Header ID", TempImportConfigLine_Selected."Imp.Conf.Header ID");
+                                replacementLine."Replacement Code" := replacementHeader.Code;
+                                replacementLine."Line Type" := replacementLine."Line Type"::Assignment;
+                                replacementLine."Line No." := replacementLine.GetNextLineNo(replacementHeader.Code, replacementLine."Line Type"::Assignment);
+                                replacementLine."Source 1 Field No." := TempImportConfigLine_Selected."Source Field No.";
+                                replacementLine."Source 1 Field Caption" := TempImportConfigLine_Selected."Source Field Caption";
+                                replacementLine."Target 1 Field No." := TempImportConfigLine_Selected."Target Field No.";
+                                TempImportConfigLine_Selected.CalcFields("Target Field Caption");
+                                replacementLine."Target 1 Field Caption" := TempImportConfigLine_Selected."Target Field Caption";
+                                replacementLine.Insert();
+                            until TempImportConfigLine_Selected.Next() = 0;
                     end;
                 end;
             }
@@ -299,6 +320,7 @@ page 91019 DMTReplacementAssigmentPart
     begin
         Source2Visible := replacementHeader."No. of Source Values" = replacementHeader."No. of Source Values"::"2";
         Target2Visible := replacementHeader."No. of Values to modify" = replacementHeader."No. of Values to modify"::"2";
+        Is1To1Assignment := replacementHeader.IsMapping(1, 1);
         CurrPage.Update(Rec."Replacement Code" <> '');
     end;
 
@@ -307,4 +329,5 @@ page 91019 DMTReplacementAssigmentPart
         DataLayoutLineGlobal: Record DMTDataLayoutLine;
         Source1Enabled, Source2Enabled, Target1Enabled, Target2Enabled : Boolean;
         Source2Visible, Target2Visible : Boolean;
+        Is1To1Assignment: Boolean;
 }
