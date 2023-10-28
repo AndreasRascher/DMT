@@ -400,6 +400,7 @@ table 91001 DMTGenBuffTable
     begin
         NextEntryNo := 1;
         GenBuffTable.Reset();
+        GenBuffTable.SetLoadFields("Entry No.");
         if GenBuffTable.FindLast() then begin
             NextEntryNo += GenBuffTable."Entry No.";
         end;

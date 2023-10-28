@@ -189,7 +189,7 @@ codeunit 91002 DMTImportConfigMgt
         ExistingFieldMappings: Dictionary of [Text, Text];
         FoundAtIndex: Integer;
         SourceFieldID, TargetFieldID : Integer;
-        NewFieldName, SourceFieldName, TargetFieldName : Text;
+        NewFieldName, SourceFieldName, SourceFieldName2, TargetFieldName : Text;
     begin
         // Load Target Field Names
         DMTSetup.GetRecordOnce();
@@ -224,6 +224,14 @@ codeunit 91002 DMTImportConfigMgt
             if FoundAtIndex = 0 then
                 if MigrationLib.FindFieldNameInOldVersion(SourceFieldName, ImportConfigHeader."Target Table ID", NewFieldName) then
                     FoundAtIndex := TargetFieldNames.Values.IndexOf(NewFieldName);
+            if FoundAtIndex = 0 then begin
+                // Base64 Fields
+                if SourceFieldName.EndsWith('[Base64]') then begin
+                    // SourceFieldName2 - original field name, SourceFieldName - field name from File
+                    SourceFieldName2 := SourceFieldName.Remove(StrLen(SourceFieldName) - StrLen('[Base64]') + 1);
+                    FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName2);
+                end;
+            end;
             if FoundAtIndex <> 0 then begin
                 TargetFieldID := TargetFieldNames.Keys.Get(FoundAtIndex);
                 // SetSourceField
@@ -359,6 +367,6 @@ codeunit 91002 DMTImportConfigMgt
             exit(false);
         if Field.FieldName = 'Image' then
             if Field.FieldName = 'Image' then;
-        if Field.Type IN [Field.Type::Media, Field.Type::MediaSet] then exit(false);
+        if Field.Type in [Field.Type::Media, Field.Type::MediaSet] then exit(false);
     end;
 }
