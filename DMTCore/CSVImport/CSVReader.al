@@ -58,10 +58,8 @@ xmlport 91001 DMTCSVReader
 
     internal procedure InitImportToGenBuffer(sourceFileStorage: Record DMTSourceFileStorage; importConfigHeader: Record DMTImportConfigHeader)
     begin
-        HeadLineRowNoGlobal := importConfigHeader.GetDataLayout().HeadingRowNo;
-        ImportConfigHeaderIDGlobal := importConfigHeader.ID;
-        ImportFromFileNameGlobal := sourceFileStorage.Name;
         ReadModeGlobal := ReadModeGlobal::ImportToGenBuffer;
+        genBuffAccessMgt.InitImportToGenBuffer(importConfigHeader);
     end;
 
     internal procedure InitReadRows(fromRowNo: integer; toRowNo: Integer)
@@ -91,52 +89,15 @@ xmlport 91001 DMTCSVReader
                 ReadModeGlobal::ReadOnly:
                     DataTable.Add(CurrentLineGlobal);
                 ReadModeGlobal::ImportToGenBuffer:
-                    begin
-                        ImportLine(CurrentLineGlobal, (HeadLineRowNoGlobal = CurrRowNoGlobal), ImportFromFileNameGlobal);
-                    end;
+                    genBuffAccessMgt.ImportLine(CurrentLineGlobal, CurrRowNoGlobal);
             end;
-    end;
-
-    local procedure ImportLine(currentLine: List of [Text]; IsColumnCaptionLine: Boolean; ImportFromFileName: Text[250]);
-    var
-        genBuffTable: Record DMTGenBuffTable;
-        RecRef: RecordRef;
-        CurrColIndex: Integer;
-        cellValue: Text;
-    begin
-        if NextEntryNoGlobal = 0 then
-            NextEntryNoGlobal := genBuffTable.GetNextEntryNo()
-        else
-            NextEntryNoGlobal += 1;
-
-        genBuffTable.Init();
-        genBuffTable."Entry No." := NextEntryNoGlobal;
-        genBuffTable.IsCaptionLine := IsColumnCaptionLine;
-        RecRef.GetTable(genBuffTable);
-        foreach cellValue in currentLine do begin
-            CurrColIndex += 1;
-
-            //Handle large Texts
-            if IsColumnCaptionLine then
-                ColCaptionsGlobal.add(CurrColIndex, cellValue);
-            if not IsColumnCaptionLine then
-                if Strlen(cellValue) > 250 then
-                    LargeTextColCaptionGlobal.Set(CurrColIndex, ColCaptionsGlobal.Get(CurrColIndex));
-
-            RecRef.Field(1000 + CurrColIndex).Value := CopyStr(cellValue, 1, 250);
-        end;
-
-        RecRef.SetTable(genBuffTable);
-        genBuffTable."Import from Filename" := ImportFromFileName;
-        genBuffTable."Imp.Conf.Header ID" := ImportConfigHeaderIDGlobal;
-        genBuffTable."Column Count" := CurrColIndex;
-        genBuffTable.Insert();
     end;
 
     procedure LargeTextColCaptions(): Dictionary of [Integer, Text];
     begin
-        exit(LargeTextColCaptionGlobal);
+        exit(genBuffAccessMgt.LargeTextColCaptions());
     end;
+
 
     local procedure shouldReadLine(rowNo: Integer): Boolean
     begin
@@ -148,13 +109,10 @@ xmlport 91001 DMTCSVReader
     end;
 
     var
+        genBuffAccessMgt: Codeunit DMTGenBuffAccessMgt;
         ReadModeGlobal: Option ReadOnly,ImportToGenBuffer;
-        ImportFromFileNameGlobal: Text[250];
-        HeadLineRowNoGlobal, FirstRowWithValuesGlobal, CurrRowNoGlobal, toRowNoGlobal, NextEntryNoGlobal, ImportConfigHeaderIDGlobal : Integer;
+        FirstRowWithValuesGlobal, CurrRowNoGlobal, toRowNoGlobal : Integer;
         DataTable: List of [List of [Text]];
         CurrentLineGlobal: List of [Text];
         RowListGlobal: list of [Integer];
-        LargeTextColCaptionList: List of [Text];
-        ColCaptionsGlobal: Dictionary of [Integer, Text];
-        LargeTextColCaptionGlobal: Dictionary of [Integer, Text];
 }

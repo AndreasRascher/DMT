@@ -1,7 +1,6 @@
 table 91001 DMTGenBuffTable
 {
-    DataClassification = ToBeClassified;
-
+    Access = Internal;
     fields
     {
         field(1; "Entry No."; Integer) { }
@@ -15,6 +14,14 @@ table 91001 DMTGenBuffTable
         field(14; "Column Count"; Integer) { }
         field(20; Imported; Boolean) { Caption = 'Imported', comment = 'de-DE=Importiert'; }
         field(21; "RecId (Imported)"; RecordId) { Caption = 'Record ID (Imported)', comment = 'de-DE=Datensatz-ID (Importiert)'; }
+        field(30; "Blob Content Count"; Integer)
+        {
+            Caption = 'BLOB Contents', comment = 'de-DE=Blob Inhalte';
+            BlankZero = true;
+            FieldClass = FlowField;
+            CalcFormula = count(DMTBlobStorage where("Gen. Buffer Table Entry No." = field("Entry No."),"Imp.Conf.Header ID"=field("Imp.Conf.Header ID")));
+            Editable = false;
+        }
         field(1001; Fld001; Text[250]) { CaptionClass = GetFieldCaption(1001); }
         field(1002; Fld002; Text[250]) { CaptionClass = GetFieldCaption(1002); }
         field(1003; Fld003; Text[250]) { CaptionClass = GetFieldCaption(1003); }
@@ -317,11 +324,19 @@ table 91001 DMTGenBuffTable
         field(1300; Fld300; Text[250]) { CaptionClass = GetFieldCaption(1300); }
     }
 
-
     keys
     {
         key(Key1; "Entry No.") { Clustered = true; }
     }
+
+    trigger OnDelete()
+    var
+        DMTBlobStorage: Record DMTBlobStorage;
+    begin
+        if DMTBlobStorage.filterBy(Rec) then
+            DMTBlobStorage.DeleteAll();
+    end;
+
     /// <summary>Check if file has header line</summary>
     procedure HasCaptionLine(ImportConfigID: Integer) Result: Boolean
     var
@@ -404,6 +419,22 @@ table 91001 DMTGenBuffTable
         if GenBuffTable.FindLast() then begin
             NextEntryNo += GenBuffTable."Entry No.";
         end;
+    end;
+
+    internal procedure LookUpBlobContent()
+    var
+        blobStorage: Record DMTBlobStorage;
+        mlText: TextBuilder;
+    begin
+        if not blobStorage.filterBy(Rec) then
+            exit;
+        blobStorage.FindSet(false);
+        repeat
+            blobStorage.CalcFields(Blob);
+            mlText.AppendLine('Field: ' + blobStorage."Source Field Caption");
+            mlText.AppendLine(blobStorage.getContentAsText());
+        until blobStorage.Next() = 0;
+        Message(mlText.ToText());
     end;
 
     local procedure GetFieldCaption(FieldNo: Integer) FieldCaption: Text

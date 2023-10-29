@@ -85,11 +85,14 @@ page 91000 "DMT Setup"
                 Image = ListPage;
                 trigger OnAction()
                 var
-                    DMTGenBuffTable: Record DMTGenBuffTable;
+                    genBuffTable: Record DMTGenBuffTable;
+                    blobStorage: Record DMTBlobStorage;
                     deleteGenBufferLinesQst: Label 'Delete all lines in Gen. Buffer Table?', Comment = 'de-DE=Alle Zeilen in gen. Puffertabelle löschen?';
                 begin
-                    if Confirm(deleteGenBufferLinesQst) then
-                        DMTGenBuffTable.DeleteAll();
+                    if Confirm(deleteGenBufferLinesQst) then begin
+                        genBuffTable.DeleteAll(true);
+                        blobStorage.DeleteAll(true);
+                    end;
                 end;
             }
         }

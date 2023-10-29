@@ -118,6 +118,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE= Datenlayout ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field Data Layout ID - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 403186059 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BLOB Contents</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Blob Inhalte</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field Blob Content Count - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1278776511 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Column Count</source>
           <note from="Developer" annotates="general" priority="2"></note>

@@ -228,7 +228,7 @@ codeunit 91003 DMTMigrationLib
         NAVExportFileNamesDict.Add(createNAVExportFileName('Team Mitarbeiter'), 5084);
         NAVExportFileNamesDict.Add(createNAVExportFileName('Spezifische Kalenderänderung'), 7602);
         NAVExportFileNamesDict.Add(createNAVExportFileName('Spezifische Kalenderposten'), 7603);
-        NAVExportFileNamesDict.Add(createNAVExportFileName('Datensatz (Verknüpfung)'), 2000000068);
+        NAVExportFileNamesDict.Add(createNAVExportFileName('Datensatzverknüpfung'), 2000000068);
     end;
 
     procedure createNAVExportFileName(tableCaption: Text) ExportCSVFileName: Text

@@ -28,6 +28,12 @@ table 91007 DMTBlobStorage
         HasLines := not Rec.IsEmpty;
     end;
 
+    procedure filterBy(importConfigHeader: Record DMTImportConfigHeader) HasLines: Boolean
+    begin
+        Rec.SetRange("Imp.Conf.Header ID", importConfigHeader.ID);
+        HasLines := not Rec.IsEmpty;
+    end;
+
     procedure ReadFromGenBuffTable(var genBuffTable: Record DMTGenBuffTable)
     begin
         Rec."Gen. Buffer Table Entry No." := genBuffTable."Entry No.";
@@ -35,26 +41,24 @@ table 91007 DMTBlobStorage
         Rec."Imp.Conf.Header ID" := genBuffTable."Imp.Conf.Header ID";
     end;
 
-    procedure ReadFromImportConfigLine(var importConfigLine: Record DMTImportConfigLine)
-    begin
-        Rec."Imp.Conf.Header ID" := importConfigLine."Imp.Conf.Header ID";
-        Rec."Source Field No." := importConfigLine."Source Field No.";
-        Rec."Source Field Caption" := importConfigLine."Source Field Caption";
-    end;
-
-    procedure SaveFieldValue(genBuffTable: Record DMTGenBuffTable; importConfigLine: Record DMTImportConfigLine; base64FieldContent: Text)
+    procedure SaveFieldValue(genBuffTable: Record DMTGenBuffTable; ColumnIndex: Integer; ColumnCaption: Text; base64FieldContent: Text)
     var
         blobStorage: Record DMTBlobStorage;
         base64Convert: Codeunit "Base64 Convert";
+        base64decoded: text;
         OStream: OutStream;
     begin
         if base64FieldContent = '' then exit;
         blobStorage."Primary Key" := GetNextEntryNo();
         blobStorage.ReadFromGenBuffTable(genBuffTable);
-        blobStorage.ReadFromImportConfigLine(importConfigLine);
+        blobStorage."Source Field Caption" := CopyStr(ColumnCaption, 1, MaxStrLen("Source Field Caption"));
+        blobStorage."Source Field No." := 1000 + ColumnIndex;
+        Clear(blobStorage.Blob);
         blobStorage.Blob.CreateOutStream(OStream);
-        base64Convert.FromBase64(base64FieldContent, OStream);
+        base64decoded := base64Convert.FromBase64(base64FieldContent);
+        OStream.Write(base64decoded);
         blobStorage.Insert();
+        blobStorage.CalcFields(Blob);
     end;
 
     internal procedure GetNextEntryNo() NextEntryNo: Integer
@@ -67,6 +71,16 @@ table 91007 DMTBlobStorage
         if BlobStorage.FindLast() then begin
             NextEntryNo += BlobStorage."Primary Key";
         end;
+    end;
+
+    internal procedure getContentAsText() Content: Text
+    var
+        IStream: InStream;
+    begin
+        Rec.CalcFields(Blob);
+        if not rec.Blob.HasValue then exit('');
+        Rec.Blob.CreateInStream(IStream);
+        IStream.ReadText(Content);
     end;
 }
 

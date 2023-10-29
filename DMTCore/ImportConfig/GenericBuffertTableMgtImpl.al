@@ -88,11 +88,14 @@ codeunit 91019 DMTGenericBuffertTableMgtImpl implements IBufferTableMgt
     internal procedure DeleteAllBufferData()
     var
         genBuffTable: Record DMTGenBuffTable;
+        blobStorage: Record DMTBlobStorage;
     begin
         if ImportConfigHeaderGlobal."Source File ID" = 0 then
             exit;
         if genBuffTable.FilterBy(ImportConfigHeaderGlobal) then
             genBuffTable.DeleteAll();
+        if blobStorage.filterBy(ImportConfigHeaderGlobal) then
+            blobStorage.DeleteAll();
     end;
 
     internal procedure updateImportToTargetPercentage()

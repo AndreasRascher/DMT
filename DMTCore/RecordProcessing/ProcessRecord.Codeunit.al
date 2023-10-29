@@ -29,8 +29,10 @@ codeunit 91008 DMTProcessRecord
         FieldWithTypeCorrectValueToValidate, TargetField : FieldRef;
         SourceField: FieldRef;
     begin
-        SourceField := SourceRef.Field(TempImportConfigLine."Source Field No.");
         TargetField := TmpTargetRef.Field(TempImportConfigLine."Target Field No.");
+        if HandleBase64ToBlobTransferfromGenBuffTable(TargetField, TempImportConfigLine, SourceRef) then
+            exit;
+        SourceField := SourceRef.Field(TempImportConfigLine."Source Field No.");
 
         if IReplacementHandler.HasReplacementsForTargetField(TargetField.Number) then begin
             //use value from replacement
@@ -63,7 +65,8 @@ codeunit 91008 DMTProcessRecord
         FromField: FieldRef;
         EvaluateOptionValueAsNumber: Boolean;
     begin
-        FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
+        if not HandleBase64ToBlobTransferfromGenBuffTable(FromField, ImportConfigLine, SourceRecRef) then
+            FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
         EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRecRef.Number);
         FieldWithTypeCorrectValueToValidate := TargetRecRef.Field(ImportConfigLine."Target Field No.");
         CurrValueToAssignText := Format(FromField.Value); // Error Log Info
@@ -79,6 +82,39 @@ codeunit 91008 DMTProcessRecord
                 Error('unhandled TODO %1', FromField.Type);
         end;
     end;
+
+    local procedure HandleBase64ToBlobTransferfromGenBuffTable(var targetField: FieldRef; importConfigLine: Record DMTImportConfigLine; var sourceRef: RecordRef) OK: Boolean
+    var
+        blobStorage: Record DMTBlobStorage;
+        genBuffTable: Record DMTGenBuffTable;
+        field: Record Field;
+        Base64Convert: Codeunit "Base64 Convert";
+        TempBlob: Codeunit "Temp Blob";
+        IStream: InStream;
+        OStream: OutStream;
+        Base64Text: Text;
+    begin
+        OK := true;
+        if sourceRef.Number <> genBuffTable.RecordId.TableNo then
+            exit(false);
+        if field.Get(importConfigLine."Target Table ID", importConfigLine."Target Field No.") then
+            if field.Type <> field.Type::BLOB then
+                exit(false);
+
+        sourceRef.SetTable(genBuffTable);
+        blobStorage.SetRange("Gen. Buffer Table Entry No.", genBuffTable."Entry No.");
+        blobStorage.SetRange("Source Field No.", importConfigLine."Source Field No.");
+        if blobStorage.IsEmpty() then
+            exit(false);
+
+        blobStorage.FindFirst();
+        blobStorage.Blob.CreateInStream(IStream);
+        IStream.ReadText(Base64Text);
+        TempBlob.CreateOutStream(OStream);
+        Base64Convert.FromBase64(Base64Text, OStream);
+        TempBlob.ToFieldRef(targetField);
+    end;
+
 
     local procedure ProcessNonKeyFields()
     begin
