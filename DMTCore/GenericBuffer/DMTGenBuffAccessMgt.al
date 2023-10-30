@@ -29,6 +29,7 @@ codeunit 91023 DMTGenBuffAccessMgt
         genBuffTable.IsCaptionLine := IsColumnCaptionLine;
         genBuffTable."Import from Filename" := ImportFromFileNameGlobal;
         genBuffTable."Imp.Conf.Header ID" := ImportConfigHeaderIDGlobal;
+        genBuffTable.CalcFields("No. of Blob Contents");
         RecRef.GetTable(genBuffTable);
 
         foreach cellValue in currLine do begin

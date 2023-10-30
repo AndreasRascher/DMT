@@ -14,12 +14,12 @@ table 91001 DMTGenBuffTable
         field(14; "Column Count"; Integer) { }
         field(20; Imported; Boolean) { Caption = 'Imported', comment = 'de-DE=Importiert'; }
         field(21; "RecId (Imported)"; RecordId) { Caption = 'Record ID (Imported)', comment = 'de-DE=Datensatz-ID (Importiert)'; }
-        field(30; "Blob Content Count"; Integer)
+        field(30; "No. of Blob Contents"; Integer)
         {
             Caption = 'BLOB Contents', comment = 'de-DE=Blob Inhalte';
             BlankZero = true;
             FieldClass = FlowField;
-            CalcFormula = count(DMTBlobStorage where("Gen. Buffer Table Entry No." = field("Entry No."),"Imp.Conf.Header ID"=field("Imp.Conf.Header ID")));
+            CalcFormula = count(DMTBlobStorage where("Gen. Buffer Table Entry No." = field("Entry No."), "Imp.Conf.Header ID" = field("Imp.Conf.Header ID")));
             Editable = false;
         }
         field(1001; Fld001; Text[250]) { CaptionClass = GetFieldCaption(1001); }

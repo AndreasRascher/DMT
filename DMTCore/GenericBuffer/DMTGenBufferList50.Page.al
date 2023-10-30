@@ -15,7 +15,7 @@ page 91001 DMTGenBufferList50
                 field("Entry No."; Rec."Entry No.") { Visible = false; }
                 field("Import from Filename"; Rec."Import from Filename") { }
                 field(Imported; Rec.Imported) { }
-                field("Blob Content Count"; Rec."Blob Content Count")
+                field("Blob Content Count"; Rec."No. of Blob Contents")
                 {
                     trigger OnAssistEdit()
                     begin

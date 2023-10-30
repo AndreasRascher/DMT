@@ -16,6 +16,13 @@ page 91002 DMTGenBufferList100
                 field("Entry No."; Rec."Entry No.") { Visible = false; }
                 field("Import from Filename"; Rec."Import from Filename") { }
                 field(Imported; Rec.Imported) { }
+                field("Blob Content Count"; Rec."No. of Blob Contents")
+                {
+                    trigger OnAssistEdit()
+                    begin
+                        Rec.LookUpBlobContent();
+                    end;
+                }
                 field(F001; Rec.Fld001) { Visible = Fld001Visible; Editable = Fld001Editable; }
                 field(F002; Rec.Fld002) { Visible = Fld002Visible; Editable = Fld002Editable; }
                 field(F003; Rec.Fld003) { Visible = Fld003Visible; Editable = Fld003Editable; }
