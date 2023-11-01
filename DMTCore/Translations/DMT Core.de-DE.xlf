@@ -3,6 +3,48 @@
   <file datatype="xml" source-language="en-US" target-language="de-DE" original="DMT Core">
     <body>
       <group id="body">
+        <trans-unit id="Table 365532593 - Field 3926698677 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Blob</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTBlobStorage - Field Blob - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 365532593 - Field 3230443473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Gen. Buffer Table Entry No.</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTBlobStorage - Field Gen. Buffer Table Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 365532593 - Field 2144357174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Imp.Conf.Header ID</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTBlobStorage - Field Imp.Conf.Header ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 365532593 - Field 2840077126 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import from Filename</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTBlobStorage - Field Import from Filename - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 365532593 - Field 1663593181 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Primary Key</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTBlobStorage - Field Primary Key - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 365532593 - Field 4163973499 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Field Caption</source>
+          <target state="translated">Herkunftsfeld Bezeichnung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Herkunftsfeld Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTBlobStorage - Field Source Field Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 365532593 - Field 3160832348 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Field No.</source>
+          <target state="translated">Herkunftsfeld Nr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Herkunftsfeld Nr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTBlobStorage - Field Source Field No. - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 4224547593 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Layout</source>
           <target state="translated">Datenlayout</target>
@@ -1935,6 +1977,12 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field IsCaptionLine - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 3326488793 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BLOB Contents</source>
+          <target state="translated">Blob Inhalte</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Blob Inhalte</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field No. of Blob Contents - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1296439604 - Field 220700360 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Record ID (Imported)</source>
           <target state="translated">Datensatz-ID (Importiert)</target>
@@ -2120,6 +2168,12 @@
           <target state="translated">Ziel Feldnr.</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Ziel Feldnr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Target Field No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 4040554107 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table</source>
+          <target state="translated">Zieltabelle</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zieltabelle</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Target Table Caption - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3570477496 - Field 1666780894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Table ID</source>
@@ -2396,6 +2450,12 @@
           <target state="translated">Zeilenart</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilenart</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Line Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 663034807 - Field 158172202 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Rule,Assignment</source>
+          <target state="translated">Regel,Zuordnung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Regel,Zuordnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Line Type - Property OptionCaption</note>
         </trans-unit>
         <trans-unit id="Table 663034807 - Field 1489364258 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>New Value 1 Caption</source>
@@ -3063,6 +3123,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Feldzuordnung vorschlagen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLinePart - Action ProposeMatchingFields - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1195927513 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import Config Lines</source>
+          <target state="translated">Import Konfiguration Zeilen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import Konfiguration Zeilen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigLines - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 215230028 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Import Config List</source>
           <target state="translated">DMT Importkonfigurationen</target>
@@ -3272,6 +3338,12 @@
           <target state="translated">Spaltenwerte importieren</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Spaltenwerte importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Action LoadListOfUniqueValues - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1429333779 - Action 2108323986 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Select Field Mapping</source>
+          <target state="translated">Feldmapping auswählen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Feldmapping auswählen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Action SelectFieldMapping - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 43196361 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Replacement Card</source>

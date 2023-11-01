@@ -5,7 +5,7 @@ table 91012 DMTReplacementLine
     fields
     {
         field(1; "Replacement Code"; Code[100]) { Caption = 'Replacement Code', Comment = 'de-DE=Ersetzungscode'; NotBlank = true; }
-        field(2; "Line Type"; Option) { Caption = 'Line Type', Comment = 'de-DE=Zeilenart'; OptionMembers = Rule,Assignment; }
+        field(2; "Line Type"; Option) { Caption = 'Line Type', Comment = 'de-DE=Zeilenart'; OptionMembers = Rule,Assignment; OptionCaption = 'Rule,Assignment', comment = 'de-DE=Regel,Zuordnung'; ; }
         field(3; "Line No."; Integer) { Caption = 'Line No.', Comment = 'de-DE=Zeilennr.'; }
         field(20; "Imp.Conf.Header ID"; Integer)
         {

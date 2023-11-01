@@ -282,23 +282,26 @@ page 91019 DMTReplacementAssigmentPart
                 begin
                     if not Rec.FindReplacementHeaderForPageRec(replacementHeader) then
                         Error('Replacement Header not found');
+                    rec.TestField("Imp.Conf.Header ID");
                     importConfigHeader.Get(rec."Imp.Conf.Header ID");
                     importConfigLine.Get(importConfigHeader.ID, rec."Target 1 Field No.");
                     FieldIDs.Add(rec."Source 1 Field No.");
                     if replacementHeader."No. of Source Values" = replacementHeader."No. of Source Values"::"2" then
                         FieldIDs.Add(rec."Source 2 Field No.");
 
+                    importConfigHeader.BufferTableMgt().CheckBufferTableIsNotEmpty();
                     uniqueCombinationList := genBuffTable.GetUniqueColumnValues(rec."Imp.Conf.Header ID", FieldIDs);
-                    foreach uniqueCombination in uniqueCombinationList do begin
-                        replacementLine.init();
-                        replacementLine."Replacement Code" := replacementHeader.Code;
-                        replacementLine."Line Type" := replacementLine."Line Type"::Rule;
-                        replacementLine."Line No." := replacementLine.GetNextLineNo(replacementHeader.Code, replacementLine."Line Type"::Rule);
-                        replacementLine."Comp.Value 1" := CopyStr(uniqueCombination.Get(1), 1, MaxStrLen(rec."Comp.Value 1"));
-                        if FieldIDs.Count > 1 then
-                            replacementLine."Comp.Value 2" := CopyStr(uniqueCombination.Get(2), 1, MaxStrLen(rec."Comp.Value 2"));
-                        replacementLine.Insert();
-                    end;
+                    if uniqueCombinationList.Count = 0 then
+                        foreach uniqueCombination in uniqueCombinationList do begin
+                            replacementLine.init();
+                            replacementLine."Replacement Code" := replacementHeader.Code;
+                            replacementLine."Line Type" := replacementLine."Line Type"::Rule;
+                            replacementLine."Line No." := replacementLine.GetNextLineNo(replacementHeader.Code, replacementLine."Line Type"::Rule);
+                            replacementLine."Comp.Value 1" := CopyStr(uniqueCombination.Get(1), 1, MaxStrLen(rec."Comp.Value 1"));
+                            if FieldIDs.Count > 1 then
+                                replacementLine."Comp.Value 2" := CopyStr(uniqueCombination.Get(2), 1, MaxStrLen(rec."Comp.Value 2"));
+                            replacementLine.Insert();
+                        end;
                 end;
             }
         }

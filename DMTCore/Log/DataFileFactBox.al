@@ -5,6 +5,7 @@ page 91014 DMTImportConfigFactBox
     SourceTable = DMTLogEntry;
     InsertAllowed = false;
     ModifyAllowed = false;
+    LinksAllowed = false;
 
     layout
     {
@@ -58,6 +59,7 @@ page 91014 DMTImportConfigFactBox
                 Scope = Repeater;
                 Image = Log;
                 Caption = 'Show Log', Comment = 'de-DE=Protoll öffnen';
+                Visible = ViewMode = ViewMode::Log;
 
                 trigger OnAction()
                 var

@@ -2043,6 +2043,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilenart</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Line Type - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 663034807 - Field 158172202 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Rule,Assignment</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Regel,Zuordnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Line Type - Property OptionCaption</note>
+        </trans-unit>
         <trans-unit id="Table 663034807 - Field 1489364258 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>New Value 1 Caption</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Neuer Wert 1</note>
