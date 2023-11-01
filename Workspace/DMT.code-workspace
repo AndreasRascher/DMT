@@ -1,22 +1,18 @@
 {
 	"folders": [
 		{
-			"path": ".alpackages",
-			"name": ".alpackages"
+			"path": "..\\Workspace"
 		},
 		{
-			"path": "ruleSets"
-		},
-		{
-			"path": "DMTCore",
+			"path": "..\\DMTCore",
 			"name": "APP Core"
 		},
 		{
-			"path": "DMTOnPrem",
+			"path": "..\\DMTOnPrem",
 			"name": "APP OnPrem"
 		},
 		{
-			"path": "DMTCodeGenerator",
+			"path": "..\\DMTCodeGenerator",
 			"name": "APP CodeGenerator"
 		}
 	],
@@ -53,12 +49,12 @@
 			"editor.semanticHighlighting.enabled": true
 		},
 		"al.packageCachePath": [
-			"..\\.alpackages"
+			"..\\Workspace\\.alpackages"
 		],
-		"al.snapshotOutputPath": "..\\.snapshots",
+		"al.snapshotOutputPath": "..\\Workspace\\.snapshots",
 		"al.enableCodeActions": true,
 		"al.enableCodeAnalysis": true,
-		"al.ruleSetPath": "..\\ruleSets\\DMTRuleSet.json",
+		"al.ruleSetPath": "..\\Workspace\\ruleSets\\DMTRuleSet.json",
 		"al.compilationOptions": {
 			"maxDegreeOfParallelism": 4
 		},
