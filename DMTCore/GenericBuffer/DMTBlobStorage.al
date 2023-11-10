@@ -72,6 +72,7 @@ table 91007 DMTBlobStorage
     begin
         TODO: BLOB Felder mit führendem "±base64±" und Media Felder mit führendem "±JSON±" exportieren
         TODO: Media Felder werden entweder nicht exportiert oder nicht importiert :-/
+        TODO: Matching Strategie: By Caption, By Name
         if base64FieldContent.Length = 0 then exit;
         blobStorage."Primary Key" := GetNextEntryNo();
         blobStorage.ReadFromGenBuffTable(genBuffTable);
