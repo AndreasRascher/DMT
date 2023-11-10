@@ -152,10 +152,10 @@ codeunit 90011 DMTCodeGenerator
         ImportConfigHeader.TestField("Buffer Table ID");
         ImportConfigHeader.TestField("NAV Src.Table No.");
         ImportConfigHeader.TestField("NAV Src.Table Caption");
-        C := CreateALTable(ImportConfigHeader."Target Table ID", ImportConfigHeader."Buffer Table ID", ImportConfigHeader."NAV Src.Table No.", ImportConfigHeader."NAV Src.Table Caption");
+        C := CreateALTable(ImportConfigHeader."Buffer Table ID", ImportConfigHeader."NAV Src.Table No.", ImportConfigHeader."NAV Src.Table Caption");
     end;
 
-    local procedure CreateALTable(TargetTableID: Integer; BufferTableID: Integer; NAVSrcTableNo: Integer; NAVSrcTableCaption: Text) C: TextBuilder
+    local procedure CreateALTable(BufferTableID: Integer; NAVSrcTableNo: Integer; NAVSrcTableCaption: Text) C: TextBuilder
     var
         DMTFieldBuffer: Record DMTFieldBuffer;
         DMTSetup: Record DMTSetup;
@@ -284,55 +284,6 @@ codeunit 90011 DMTCodeGenerator
         KeyString := DelChr(KeyString, '>', ',');
     end;
 
-    // local procedure AddTargetRecordExistsFlowField(TargetTableID: Integer; NAVSrcTableNo: Integer; var FieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
-    // var
-    //     refHelper: Codeunit DMTRefHelper;
-    //     TargetRef: RecordRef;
-    //     TargetTableName: Text;
-    //     BufferKeyFieldNames, TargetKeyFieldNames : List of [Text];
-    //     KeyFieldIndex: Integer;
-    //     f: TextBuilder;
-    // begin
-    //     // FieldNoIsUsed
-    //     if FieldBuffer.Get(NAVSrcTableNo, 59999) then
-    //         exit;
-    //     // FindTargetTableKeyInfo
-    //     TargetRef.Open(TargetTableID);
-    //     TargetTableName := QuoteValue(TargetRef.Name);
-    //     for KeyFieldIndex := 1 to refHelper.GetListOfKeyFieldIDs(TargetRef).Count do
-    //         TargetKeyFieldNames.Add(QuoteValue(TargetRef.KeyIndex(1).FieldIndex(KeyFieldIndex).Name));
-    //     // FindSourceTableKeyInfo
-    //     FieldBuffer.FindFirst();
-    //     for KeyFieldIndex := 1 to FieldBuffer."Primary Key".Split(',').Count do
-    //         if FieldBuffer.Get(FieldBuffer.TableNo, FieldBuffer."Primary Key".Split(',').Get(KeyFieldIndex)) then
-    //             BufferKeyFieldNames.Add(QuoteValue(FieldBuffer.FieldName));
-
-    //     if TargetKeyFieldNames.Count <> BufferKeyFieldNames.Count then
-    //         exit;
-
-    //     f.AppendLine('        field(59999; "DMT Target Record Exists"; Boolean)');
-    //     f.AppendLine('        {');
-    //     f.AppendLine('            CaptionML = ENU = ''DMT target record exists'', DEU = ''DMT Zieldatensatz vorhanden'';');
-    //     f.AppendLine('            FieldClass = FlowField;');
-
-    //     for KeyFieldIndex := 1 to TargetKeyFieldNames.Count do begin
-    //         if KeyFieldIndex = 1 then
-    //             f.Append('            CalcFormula = exist(' + TargetTableName + ' where(' + TargetKeyFieldNames.Get(KeyFieldIndex) + '= field(' + BufferKeyFieldNames.Get(KeyFieldIndex) + ')')
-    //         else begin
-    //             f.AppendLine('');
-    //             f.Append('                                                     ' + TargetKeyFieldNames.Get(KeyFieldIndex) + '= field(' + BufferKeyFieldNames.Get(KeyFieldIndex) + ')');
-    //         end;
-    //         if KeyFieldIndex = TargetKeyFieldNames.Count then
-    //             f.AppendLine('));')
-    //         else
-    //             f.Append(',')
-    //     end;
-
-    //     f.AppendLine('            Editable = false;');
-    //     f.AppendLine('        }');
-    //     C.Append(f.ToText());
-    // end;
-
     local procedure AddImportStatusFields(BufferTableNo: Integer; var FieldBuffer: Record DMTFieldBuffer; var C: TextBuilder)
     var
         f: TextBuilder;
@@ -353,18 +304,6 @@ codeunit 90011 DMTCodeGenerator
         f.AppendLine('        field(' + freeFieldNos.Get(1) + ';"DMT Imported";Boolean) { CaptionML = ENU =''DMT Imported'', DEU = ''Importiert''; }');
         f.AppendLine('        field(' + freeFieldNos.Get(2) + '; "DMT RecId (Imported)"; RecordId) { CaptionML = ENU = ''DMT Record ID (Imported)'', DEU = ''Datensatz-ID (Importiert)''; }');
         C.Append(f.ToText());
-    end;
-
-    local procedure QuoteValue(TextValue: Text): Text
-    var
-        DummyText: Text;
-    begin
-        DummyText := DelChr(TextValue.ToLower(), '=', 'abcdefghijklmnopqrstuvwxyz');
-        DummyText := DelChr(DummyText, '=', '0123456789');
-        if DummyText <> '' then
-            exit('"' + TextValue + '"')
-        else
-            exit(TextValue);
     end;
 
     procedure GetALFieldNameWithMasking(FieldName: Text) MaskedFieldName: Text
