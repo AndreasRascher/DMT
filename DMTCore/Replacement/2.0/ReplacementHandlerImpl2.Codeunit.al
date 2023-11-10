@@ -62,17 +62,20 @@ codeunit 91021 ReplacementHandlerImpl2 implements IReplacementHandler
             case true of
                 tempReplacementHeaderGlobal.IsMapping(1, 1), tempReplacementHeaderGlobal.IsMapping(1, 2):
                     begin
-                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");  // hier Fehlermeldung
+                        checkAssignmentIsValid(TempAssignmentGlobal);
+                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
                         FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
                         TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
                     end;
                 tempReplacementHeaderGlobal.IsMapping(2, 1), tempReplacementHeaderGlobal.IsMapping(2, 2):
                     begin
-                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No."); // hier Fehlermeldung
+                        if not importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.") then
+                            Error(InvalidAssignmentErr, TempAssignmentGlobal."Replacement Code", TempAssignmentGlobal."Imp.Conf.Header ID");
                         FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
                         TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
 
-                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 2 Field No."); // hier Fehlermeldung
+                        if not importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 2 Field No.") then
+                            Error(InvalidAssignmentErr, TempAssignmentGlobal."Replacement Code", TempAssignmentGlobal."Imp.Conf.Header ID");
                         FromValue2 := SourceRef.Field(importConfigLine."Source Field No.").Value;
                         TempReplacementRule.SetRange("Comp.Value 2", FromValue2);
                     end;
@@ -117,6 +120,27 @@ codeunit 91021 ReplacementHandlerImpl2 implements IReplacementHandler
         replacementLine.SetRange("Target 2 Field No.", ImportConfigLine."Target Field No.");
         if not replacementLine.IsEmpty then
             replacementLine.DeleteAll();
+    end;
+
+    local procedure checkAssignmentIsValid(TempAssignment: Record DMTReplacementLine temporary)
+    var
+        importConfigHeader: Record DMTImportConfigHeader;
+        importConfigLine: Record DMTImportConfigLine;
+        InvalidHeaderAssignmentErr: Label 'Invalid assignment in replacement "%1". An import configuration with the ID %2 does not exist.',
+                            Comment = 'de-DE=Ungültige Zuordnung in Ersetzung "%1". Eine Importkonfiguration mit der ID %2 ist nicht verhanden.';
+        InvalidFieldAssignmentErr: Label 'Invalid assignment in replacement "%1". An import configuration "%2" with the field ID "%3" does not exist.',
+                            Comment = 'de-DE=Ungültige Zuordnung in Ersetzung "%1". Eine Importkonfiguration "%2" mit der Feld ID "%3" ist nicht verhanden.';
+    begin
+        if not importConfigHeader.Get(TempAssignment."Imp.Conf.Header ID") then
+            Error(InvalidHeaderAssignmentErr, TempAssignment."Replacement Code", TempAssignment."Imp.Conf.Header ID");
+
+        if not importConfigLine.get(TempAssignment."Imp.Conf.Header ID", TempAssignment."Target 1 Field No.") then
+            Error(InvalidFieldAssignmentErr, TempAssignment."Replacement Code", TempAssignment."Imp.Conf.Header ID", TempAssignment."Target 1 Field No.");
+
+        if true in [tempReplacementHeaderGlobal.IsMapping(2, 1), tempReplacementHeaderGlobal.IsMapping(2, 2)] then begin
+            if not importConfigLine.get(TempAssignment."Imp.Conf.Header ID", TempAssignment."Target 2 Field No.") then
+                Error(InvalidFieldAssignmentErr, TempAssignment."Replacement Code", TempAssignment."Imp.Conf.Header ID", TempAssignment."Target 2 Field No.");
+        end;
     end;
 
     var
