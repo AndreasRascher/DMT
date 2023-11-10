@@ -134,6 +134,8 @@ xmlport 91002 DMTCSVWriter
         _Guid: Guid;
         JObj: JsonObject;
         fieldNo: Integer;
+        char177: text[1];
+        recRef: RecordRef;
     begin
         _tab := 9;
         fieldNo := ExportFieldListGlobal.Keys.Get(fieldIndex);
@@ -191,7 +193,8 @@ xmlport 91002 DMTCSVWriter
                     if not _tempBlob.HasValue() then
                         exit('');
                     _tempBlob.CreateInStream(_iStream);
-                    _result := base64Convert.ToBase64(_iStream);
+                    char177[1] := 177;
+                    _result := 'base64:' + char177[1] + base64Convert.ToBase64(_iStream) + char177[1];
                 end;
             FieldType::Media:
                 begin
@@ -203,16 +206,24 @@ xmlport 91002 DMTCSVWriter
                     tenantMedia.CalcFields(Content);
                     if not tenantMedia.Content.HasValue() then
                         exit('');
+                    recRef.GetTable(tenantMedia);
+                    for _integer := 1 to recRef.FieldCount() do begin
+                        fRef := recRef.FieldIndex(_integer);
+                        if fRef.Class = FieldClass::Normal then begin
+                            if fRef.Type = fRef.Type::Blob then begin
+                                _tempBlob.FromFieldRef(fRef);
+                                _tempBlob.CreateInStream(_iStream);
+                                _result := base64Convert.ToBase64(_iStream);
+                                JObj.Add(fRef.Name, _result);
+                            end else begin
+                                JObj.Add(fRef.Name, format(fRef.Value));
+                            end;
+                        end;
+                    end;
 
-                    tenantMedia.Content.CreateInStream(_iStream);
-                    _result := base64Convert.ToBase64(_iStream);
-                    if tenantMedia."File Name" <> '' then
-                        JObj.Add(tenantMedia.FieldName("File Name"), tenantMedia."File Name");
-                    if _result <> '' then
-                        JObj.Add(tenantMedia.FieldName(Content), _result);
-                    if tenantMedia."Mime Type" <> '' then
-                        JObj.Add(tenantMedia.FieldName("Mime Type"), tenantMedia."Mime Type");
                     JObj.WriteTo(_result);
+                    char177[1] := 177;
+                    _result := 'JSON:' + char177[1] + _result + char177[1];
                 end;
             else
                 _result := Format(fRef.Value, 0, 9);
