@@ -62,17 +62,17 @@ codeunit 91021 ReplacementHandlerImpl2 implements IReplacementHandler
             case true of
                 tempReplacementHeaderGlobal.IsMapping(1, 1), tempReplacementHeaderGlobal.IsMapping(1, 2):
                     begin
-                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
+                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");  // hier Fehlermeldung
                         FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
                         TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
                     end;
                 tempReplacementHeaderGlobal.IsMapping(2, 1), tempReplacementHeaderGlobal.IsMapping(2, 2):
                     begin
-                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
+                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No."); // hier Fehlermeldung
                         FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
                         TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
 
-                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 2 Field No.");
+                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 2 Field No."); // hier Fehlermeldung
                         FromValue2 := SourceRef.Field(importConfigLine."Source Field No.").Value;
                         TempReplacementRule.SetRange("Comp.Value 2", FromValue2);
                     end;

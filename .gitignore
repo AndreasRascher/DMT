@@ -3,3 +3,5 @@ DMTCore/*.app
 DMTCodeGenerator/*.app
 DMTCore/.vscode/rad.json
 Workspace/.alpackages/*
+Workspace/*.app
+DMTCodeGenerator/.vscode/rad.json
