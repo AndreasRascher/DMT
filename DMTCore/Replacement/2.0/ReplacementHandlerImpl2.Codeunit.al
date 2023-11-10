@@ -69,13 +69,12 @@ codeunit 91021 ReplacementHandlerImpl2 implements IReplacementHandler
                     end;
                 tempReplacementHeaderGlobal.IsMapping(2, 1), tempReplacementHeaderGlobal.IsMapping(2, 2):
                     begin
-                        if not importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.") then
-                            Error(InvalidAssignmentErr, TempAssignmentGlobal."Replacement Code", TempAssignmentGlobal."Imp.Conf.Header ID");
+                        checkAssignmentIsValid(TempAssignmentGlobal);
+                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
                         FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
                         TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
 
-                        if not importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 2 Field No.") then
-                            Error(InvalidAssignmentErr, TempAssignmentGlobal."Replacement Code", TempAssignmentGlobal."Imp.Conf.Header ID");
+                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 2 Field No.");
                         FromValue2 := SourceRef.Field(importConfigLine."Source Field No.").Value;
                         TempReplacementRule.SetRange("Comp.Value 2", FromValue2);
                     end;
