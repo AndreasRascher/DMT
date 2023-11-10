@@ -2118,6 +2118,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Einrichtung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 521254526 - Field 2974596716 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Exports include Flowfields</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Exportdateien enthalten FlowFields</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTSetup - Field Exports include FlowFields - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 521254526 - Field 451378894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Migration Profil</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Migrationsprofil</note>
@@ -2492,11 +2497,6 @@
           <source>Log</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Protokoll</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action OpenLog - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 809130730 - Action 4075396280 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>PreviewCSV</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action PreviewCSV - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 809130730 - Action 1016274576 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Retry Records With Error</source>
@@ -2878,6 +2878,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTCSVReader - Property Caption</note>
         </trans-unit>
+        <trans-unit id="XmlPort 888029680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CSVExport</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTCSVWriter - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Enum 101561864 - EnumValue 3972427471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fixed Value</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2909,17 +2914,17 @@
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFieldValidationType - EnumValue ValidateOnlyIfNotEmpty - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 3703598467 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>All Files (*.*)|*.*</source>
+          <source>All-Files (*.*)|*.*</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Alle Dateien (*.*)|*.*</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue All - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 487643378 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>CSV Files (*.csv)|*.csv</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=CSV Dateien (*.csv)|*.csv</note>
+          <source>CSV-Files (*.csv)|*.csv</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=CSV-Dateien (*.csv)|*.csv</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue CSV - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 1819335129 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Excel Files (*.xlsx)|*.xlsx</source>
+          <source>Excel-Files (*.xlsx)|*.xlsx</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Excel-Dateien (*.xlsx)|*.xlsx</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue Excel - Property Caption</note>
         </trans-unit>
@@ -2929,17 +2934,17 @@
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue RDL - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 3766960612 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Text Files (*.txt)|*.txt</source>
+          <source>Text-Files (*.txt)|*.txt</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Textdateien (*.txt)|*.txt</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue Txt - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 429697219 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>XML Files (*.xml)|*.xml</source>
+          <source>XML-Files (*.xml)|*.xml</source>
           <note from="Developer" annotates="general" priority="2">de-DE=XML-Dateien (*.xml)|*.xml</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue Xml - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 2814408493 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>ZIP Files (*.zip)|*.zip</source>
+          <source>ZIP-Files (*.zip)|*.zip</source>
           <note from="Developer" annotates="general" priority="2">de-DE=ZIP-Dateien (*.zip)|*.zip</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue ZIP - Property Caption</note>
         </trans-unit>

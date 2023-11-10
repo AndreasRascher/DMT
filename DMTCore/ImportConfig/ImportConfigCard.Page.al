@@ -228,28 +228,6 @@ page 91008 DMTImportConfigCard
                     Log.ShowLogEntriesFor(Rec);
                 end;
             }
-            // action(CreateXMLPort)
-            // {
-            //     ApplicationArea = All;
-            //     Image = XMLSetup;
-            //     Caption = 'Create XMLPort', Comment = 'de-DE=XMLPort erstellen';
-
-            //     trigger OnAction()
-            //     begin
-            //         //     PageActions.DownloadALXMLPort(Rec);
-            //     end;
-            // }
-            // action(CreateBufferTable)
-            // {
-            //     ApplicationArea = All;
-            //     Image = Table;
-            //     Caption = 'Create Buffer Table', Comment = 'de-DE=Puffertabelle erstellen';
-
-            //     trigger OnAction()
-            //     begin
-            //         //     PageActions.DownloadALBufferTableFile(Rec);
-            //     end;
-            // }
             action(CheckTransferedRecords)
             {
                 ApplicationArea = All;
@@ -287,23 +265,13 @@ page 91008 DMTImportConfigCard
                 Caption = 'Export target table to CSV', Comment = 'de-DE=Zieltabelle als CSV exportieren';
                 ApplicationArea = All;
                 Image = CodesList;
-                // trigger OnAction()
-                // begin
-                //     PageActions.ExportTargetTableToCSV(Rec);
-                // end;
+                trigger OnAction()
+                var
+                    csvWriter: XmlPort DMTCSVWriter;
+                begin
+                    csvWriter.ExportTargetTableAsCSV(Rec);
+                end;
             }
-            action(PreviewCSV)
-            {
-                Caption = 'PreviewCSV';
-                ApplicationArea = All;
-                //     trigger OnAction()
-                //     var
-                //         ImportFileMgt: Codeunit DMTImportFileMgt;
-                //     begin
-                //         ImportFileMgt.ImportPreviewFromFilePath(Rec, 1, 3);
-                //     end;
-            }
-
         }
     }
 

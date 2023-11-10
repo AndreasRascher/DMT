@@ -56,8 +56,7 @@
 		"al.enableCodeAnalysis": true,
 		"al.ruleSetPath": "..\\Workspace\\ruleSets\\DMTRuleSet.json",
 		"al.compilationOptions": {
-			"maxDegreeOfParallelism": 4,
-			"outFolder": "..\\Workspace\\"
+			"maxDegreeOfParallelism": 4
 		},
 		"al.codeAnalyzers": ["${PerTenantExtensionCop}","${CodeCop}","${UICop}"],
 		"al.inlayhints.functionReturnTypes.enabled": true,

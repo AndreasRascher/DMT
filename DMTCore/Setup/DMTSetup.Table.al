@@ -19,6 +19,7 @@ table 91000 DMTSetup
             end;
         }
         field(23; "Use exist. mappings"; Boolean) { Caption = 'Propose matching fields - Use existing mappings', Comment = 'de-DE=Feldzuordnung vorschlagen - Existierende Feld-Mappings verwenden'; InitValue = true; }
+        field(30; "Exports include FlowFields"; Boolean) { Caption = 'Exports include Flowfields', Comment = 'de-DE=Exportdateien enthalten FlowFields'; }
 
     }
     keys

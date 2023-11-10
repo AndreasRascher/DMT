@@ -424,14 +424,15 @@ table 91001 DMTGenBuffTable
     internal procedure LookUpBlobContent()
     var
         blobStorage: Record DMTBlobStorage;
+        TempBlob: Codeunit "Temp Blob";
         mlText: TextBuilder;
     begin
         if not blobStorage.filterBy(Rec) then
             exit;
         blobStorage.FindSet(false);
         repeat
-            blobStorage.CalcFields(Blob);
-            mlText.AppendLine('Field: ' + blobStorage."Source Field Caption");
+            TempBlob.FromRecord(blobStorage, blobStorage.fieldNo(Blob));
+            mlText.AppendLine('Field: ' + blobStorage."Source Field Caption" + ' Size:' + Format(TempBlob.Length()));
             mlText.AppendLine(blobStorage.getContentAsText());
         until blobStorage.Next() = 0;
         Message(mlText.ToText());

@@ -2991,12 +2991,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Protokoll</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action OpenLog - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 809130730 - Action 4075396280 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>PreviewCSV</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2"/>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action PreviewCSV - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 809130730 - Action 1016274576 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Retry Records With Error</source>
           <target state="translated">Fehler erneut verarbeiten</target>
@@ -3453,6 +3447,12 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTCSVReader - Property Caption</note>
         </trans-unit>
+        <trans-unit id="XmlPort 888029680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CSVExport</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTCSVWriter - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Enum 101561864 - EnumValue 3972427471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fixed Value</source>
           <target state="needs-translation"/>
@@ -3496,9 +3496,10 @@
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue All - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 487643378 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>CSV Files (*.csv)|*.csv</source>
-          <target state="translated">CSV Dateien (*.csv)|*.csv</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=CSV Dateien (*.csv)|*.csv</note>
+          <source>CSV-Files (*.csv)|*.csv</source>
+          <target state="needs-adaptation">CSV-Dateien (*.csv)|*.csv</target>
+          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=CSV-Dateien (*.csv)|*.csv</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue CSV - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 1819335129 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

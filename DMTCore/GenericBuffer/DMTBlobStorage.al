@@ -61,6 +61,39 @@ table 91007 DMTBlobStorage
         blobStorage.CalcFields(Blob);
     end;
 
+    procedure SaveFieldValue(genBuffTable: Record DMTGenBuffTable; ColumnIndex: Integer; ColumnCaption: Text; base64FieldContent: BigText)
+    var
+        blobStorage: Record DMTBlobStorage;
+        base64Convert: Codeunit "Base64 Convert";
+        base64decoded: text;
+        OStream: OutStream;
+        first, last : Text;
+        JObj: JsonObject;
+    begin
+        TODO: BLOB Felder mit führendem "±base64±" und Media Felder mit führendem "±JSON±" exportieren
+        TODO: Media Felder werden entweder nicht exportiert oder nicht importiert :-/
+        if base64FieldContent.Length = 0 then exit;
+        blobStorage."Primary Key" := GetNextEntryNo();
+        blobStorage.ReadFromGenBuffTable(genBuffTable);
+        blobStorage."Source Field Caption" := CopyStr(ColumnCaption, 1, MaxStrLen("Source Field Caption"));
+        blobStorage."Source Field No." := 1000 + ColumnIndex;
+        Clear(blobStorage.Blob);
+        blobStorage.Blob.CreateOutStream(OStream);
+        // test for JSON
+        base64FieldContent.GetSubText(first, 1, 1);
+        base64FieldContent.GetSubText(last, base64FieldContent.Length, 1);
+        if (first = '{') and (last = '}') then begin
+            OStream.Write(base64decoded);
+            blobStorage.Insert();
+            blobStorage.CalcFields(Blob);
+        end else begin
+            base64decoded := base64Convert.FromBase64(format(base64FieldContent));
+            OStream.Write(base64decoded);
+            blobStorage.Insert();
+            blobStorage.CalcFields(Blob);
+        end;
+    end;
+
     internal procedure GetNextEntryNo() NextEntryNo: Integer
     var
         BlobStorage: Record DMTBlobStorage;

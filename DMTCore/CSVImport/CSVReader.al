@@ -18,6 +18,7 @@ xmlport 91001 DMTCSVReader
                 textelement(FieldContent)
                 {
                     Unbound = true;
+                    TextType = BigText;
                     trigger OnAfterAssignVariable()
                     begin
                         if not shouldReadLine(CurrRowNoGlobal) then
@@ -26,7 +27,7 @@ xmlport 91001 DMTCSVReader
                         CurrentLineGlobal.Add(fieldContent);
                         // save first line with values info to find headline row no
                         if FirstRowWithValuesGlobal = 0 then
-                            if fieldContent <> '' then
+                            if fieldContent.Length <> 0 then
                                 FirstRowWithValuesGlobal := CurrRowNoGlobal;
                     end;
                 }
@@ -73,11 +74,18 @@ xmlport 91001 DMTCSVReader
     end;
 
     internal procedure GetHeadlineColumnValues(var FirstRowWithValues: Integer) HeadLine: List of [Text]
+    var
+        HeadLineBigText: List of [BigText];
+        columnCaption: BigText;
     begin
         if (DataTable.Count > 1) and (FirstRowWithValuesGlobal <> 0) then begin
-            DataTable.Get(FirstRowWithValuesGlobal, HeadLine);
+            DataTable.Get(FirstRowWithValuesGlobal, HeadLineBigText);
         end else begin
-            HeadLine := DataTable.Get(1);
+            HeadLineBigText := DataTable.Get(1);
+        end;
+        // assumption: Columncaption is not larger than 49180 chars
+        foreach columnCaption in HeadLineBigText do begin
+            HeadLine.Add(Format(columnCaption));
         end;
         FirstRowWithValues := FirstRowWithValuesGlobal;
     end;
@@ -112,7 +120,7 @@ xmlport 91001 DMTCSVReader
         genBuffAccessMgt: Codeunit DMTGenBuffAccessMgt;
         ReadModeGlobal: Option ReadOnly,ImportToGenBuffer;
         FirstRowWithValuesGlobal, CurrRowNoGlobal, toRowNoGlobal : Integer;
-        DataTable: List of [List of [Text]];
-        CurrentLineGlobal: List of [Text];
+        DataTable: List of [List of [BigText]];
+        CurrentLineGlobal: List of [BigText];
         RowListGlobal: list of [Integer];
 }

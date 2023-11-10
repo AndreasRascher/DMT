@@ -15,11 +15,11 @@ codeunit 90011 DMTCodeGenerator
         DMTSetup: Record DMTSetup;
         HasFieldsInFilter: Boolean;
     begin
-        HasFieldsInFilter := FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, DMTSetup."Import with FlowFields", false);
+        HasFieldsInFilter := FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, DMTSetup."Exports include FlowFields", false);
         C.AppendLine('xmlport ' + Format(ImportXMLPortID) + ' T' + Format(NAVSrcTableNo) + 'Import');
         C.AppendLine('{');
         DMTSetup.Get();
-        if DMTSetup."Import with FlowFields" then
+        if DMTSetup."Exports include FlowFields" then
             C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + 'FlowField' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';')
         else
             C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
@@ -167,7 +167,7 @@ codeunit 90011 DMTCodeGenerator
         C.AppendLine('{');
         C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
         C.AppendLine('  fields {');
-        if FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, DMTSetup."Import with FlowFields", false) then
+        if FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, DMTSetup."Exports include FlowFields", false) then
             repeat
                 case DMTFieldBuffer.Type of
                     DMTFieldBuffer.Type::RecordID:

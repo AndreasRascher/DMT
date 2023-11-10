@@ -87,18 +87,20 @@ codeunit 91008 DMTProcessRecord
     var
         blobStorage: Record DMTBlobStorage;
         genBuffTable: Record DMTGenBuffTable;
+        TenantMedia: Record "Tenant Media";
         field: Record Field;
         Base64Convert: Codeunit "Base64 Convert";
         TempBlob: Codeunit "Temp Blob";
         IStream: InStream;
         OStream: OutStream;
         Base64Text: Text;
+        recRef: RecordRef;
     begin
         OK := true;
         if sourceRef.Number <> genBuffTable.RecordId.TableNo then
             exit(false);
         if field.Get(importConfigLine."Target Table ID", importConfigLine."Target Field No.") then
-            if field.Type <> field.Type::BLOB then
+            if not (field.Type in [field.Type::BLOB, field.Type::Media]) then
                 exit(false);
 
         sourceRef.SetTable(genBuffTable);
@@ -107,12 +109,35 @@ codeunit 91008 DMTProcessRecord
         if blobStorage.IsEmpty() then
             exit(false);
 
-        blobStorage.FindFirst();
-        blobStorage.Blob.CreateInStream(IStream);
-        IStream.ReadText(Base64Text);
-        TempBlob.CreateOutStream(OStream);
-        Base64Convert.FromBase64(Base64Text, OStream);
-        TempBlob.ToFieldRef(targetField);
+        case true of
+            (targetField.Type = FieldType::Blob):
+                begin
+                    blobStorage.FindFirst();
+                    blobStorage.CalcFields(Blob);
+                    blobStorage.Blob.CreateInStream(IStream);
+                    IStream.ReadText(Base64Text);
+                    TempBlob.CreateOutStream(OStream);
+                    Base64Convert.FromBase64(Base64Text, OStream);
+                    TempBlob.ToFieldRef(targetField);
+                end;
+            (targetField.Type = FieldType::Media):
+                begin
+                    blobStorage.FindFirst();
+                    blobStorage.CalcFields(Blob);
+                    blobStorage.Blob.CreateInStream(IStream);
+                    IStream.ReadText(Base64Text);
+                    TempBlob.CreateOutStream(OStream);
+                    Base64Convert.FromBase64(Base64Text, OStream);
+
+                    Clear(TenantMedia);
+                    TenantMedia.ID := CreateGuid();
+                    TenantMedia."Company Name" := CompanyName();
+                    recRef.GetTable(TenantMedia);
+                    TempBlob.ToRecordRef(recRef, TenantMedia.FieldNo(Content));
+                    recRef.Insert();
+                    targetField.Value(TenantMedia.ID);
+                end;
+        end;
     end;
 
 

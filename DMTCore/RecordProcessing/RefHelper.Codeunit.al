@@ -41,6 +41,8 @@ codeunit 91013 DMTRefHelper
     procedure EvaluateFieldRef(var FieldRef_TO: FieldRef; FromText: Text; EvaluateOptionValueAsNumber: Boolean; ThrowError: Boolean): Boolean
     var
         TempBlob: Record "Tenant Media" temporary;
+        dummyVendor: Record Vendor temporary;
+        tenantMedia: Record "Tenant Media";
         _DateFormula: DateFormula;
         _RecordID: RecordId;
         _BigInteger: BigInteger;
@@ -54,6 +56,7 @@ codeunit 91013 DMTRefHelper
         OptionIndex: Integer;
         InvalidValueForTypeErr: Label '"%1" is not a valid %2 value.', Comment = 'de-DE="%1" ist kein gültiger %2 Wert';
         _OutStream: OutStream;
+        _InStream: InStream;
         OptionElement: Text;
         _Time: Time;
     begin
@@ -66,7 +69,6 @@ codeunit 91013 DMTRefHelper
                     end;
             end;
         case UpperCase(Format(FieldRef_TO.Type)) of
-
             'INTEGER':
                 begin
                     case true of
@@ -196,11 +198,33 @@ codeunit 91013 DMTRefHelper
                 end;
             'GUID':
                 begin
+                    if FromText = '' then begin
+                        Clear(_Guid);
+                        FieldRef_TO.Value := _Guid;
+                        exit(true);
+                    end;
                     if Evaluate(_Guid, FromText, 9) then begin
                         FieldRef_TO.Value := _Guid;
                         exit(true);
                     end else
                         if ThrowError then Evaluate(_Guid, FromText, 9);
+                end;
+            'MEDIA':
+                begin
+                    if FromText = '' then begin
+                        Clear(_Guid);
+                        FieldRef_TO.Value(_Guid);
+                        exit(true);
+                    end;
+                    TempBlob.DeleteAll();
+                    TempBlob.Content.CreateOutStream(_OutStream);
+                    _OutStream.WriteText(FromText);
+                    TempBlob.Insert();
+                    TempBlob.CalcFields(Content);
+                    TempBlob.Content.CreateInStream(_InStream);
+                    _Guid := dummyVendor.Image.ImportStream(_InStream, '');
+                    FieldRef_TO.Value(_Guid);
+                    exit(true);
                 end;
             else
                 Message('Funktion "EvaluateFieldRef" - nicht behandelter Datentyp %1', Format(FieldRef_TO.Type));
