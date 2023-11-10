@@ -1,4 +1,4 @@
-page 91019 DMTReplacementAssigmentPart
+page 91019 DMTReplacementAssignmentPart
 {
     Caption = 'Assignments', Comment = 'de-DE=Zuordnung';
     PageType = ListPart;

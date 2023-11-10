@@ -2783,20 +2783,20 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Auswahl zurücksetzen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Action ResetSelection - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1429333779 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1356061521 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Assignments</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Zuordnung</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssignmentPart - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1429333779 - Action 1630718602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1356061521 - Action 1630718602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import column values</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Spaltenwerte importieren</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Action LoadListOfUniqueValues - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssignmentPart - Action LoadListOfUniqueValues - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1429333779 - Action 2108323986 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1356061521 - Action 2108323986 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Select Field Mapping</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Feldmapping auswählen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Action SelectFieldMapping - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssignmentPart - Action SelectFieldMapping - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 43196361 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Replacement Card</source>

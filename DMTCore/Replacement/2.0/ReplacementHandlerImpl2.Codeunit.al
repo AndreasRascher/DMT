@@ -142,6 +142,18 @@ codeunit 91021 ReplacementHandlerImpl2 implements IReplacementHandler
         end;
     end;
 
+    [EventSubscriber(ObjectType::Table, Database::DMTImportConfigHeader, OnAfterDeleteEvent, '', false, false)]
+    local procedure DMTReplacementLine_OnAfterDeleteEvent(var Rec: Record DMTImportConfigHeader; RunTrigger: Boolean)
+    var
+        replacementLine: Record DMTReplacementLine;
+    begin
+        if true in [Rec.IsTemporary, (Rec.ID = 0), (not RunTrigger)] then
+            exit;
+        replacementLine.SetRange("Imp.Conf.Header ID", rec.ID);
+        if not replacementLine.IsEmpty() then
+            replacementLine.DeleteAll(true);
+    end;
+
     var
         TempAssignmentGlobal, TempReplacementRule : Record DMTReplacementLine temporary;
         tempReplacementHeaderGlobal: Record DMTReplacementHeader temporary;
