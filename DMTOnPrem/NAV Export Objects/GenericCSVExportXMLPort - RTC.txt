@@ -2,8 +2,8 @@ OBJECT XMLport 50049 DMT Export
 {
   OBJECT-PROPERTIES
   {
-    Date=27.10.23;
-    Time=20:36:49;
+    Date=11.11.23;
+    Time=22:53:10;
     Modified=Yes;
     Version List=DMT;
   }
@@ -54,7 +54,7 @@ OBJECT XMLport 50049 DMT Export
                                                   SourceTableView=SORTING(Field1)
                                                                   WHERE(Field1=FILTER(1..));
                                                   Export::OnPreXMLItem=BEGIN
-                                                                         Lines.SETRANGE(Number,1,8);  // debug
+                                                                         //Lines.SETRANGE(Number,1,8);  // debug
                                                                        END;
 
                                                   Export::OnAfterGetRecord=VAR
@@ -2531,6 +2531,21 @@ OBJECT XMLport 50049 DMT Export
                                                                                END;
                                                                                 }
 
+    { [{F86C7658-7F87-4F5F-B9CC-4C9018ADB8E9}];2 ;Blob001             ;Element ;Text    ;
+                                                  TextType=BigText }
+
+    { [{26FD1597-2D63-4ED3-9C71-F3DB368E2E0D}];2 ;Blob002             ;Element ;Text    ;
+                                                  TextType=BigText }
+
+    { [{025DF76F-1B34-4DEB-8D7E-E753CDBCD525}];2 ;Blob003             ;Element ;Text    ;
+                                                  TextType=BigText }
+
+    { [{0DE3207A-E784-4FBE-8C89-0D67C98A9EEE}];2 ;Blob004             ;Element ;Text    ;
+                                                  TextType=BigText }
+
+    { [{A2DA0FB2-4B7C-40BB-AF29-75B65680A1B4}];2 ;Blob005             ;Element ;Text    ;
+                                                  TextType=BigText }
+
   }
   EVENTS
   {
@@ -2654,6 +2669,7 @@ OBJECT XMLport 50049 DMT Export
       ExportRecRef@1000000005 : RecordRef;
       ExportTableID@1000000006 : Integer;
       ExportFieldBuffer@1000000007 : TEMPORARY Record 2000000041;
+      ExportBlobAndMediaFieldBuffer@55001 : TEMPORARY Record 2000000041;
       LastFieldNo@1000000008 : Integer;
       MaxNoOfFields@1000000009 : Integer;
       ExportFinished@1000000011 : TextConst 'DEU=Export abgeschlossen;ENU=Export finished';
@@ -2920,6 +2936,30 @@ OBJECT XMLport 50049 DMT Export
       NoOfFields := _ExportFields_FOUND.COUNT;
     END;
 
+    LOCAL PROCEDURE LoadBlobAndMediaFieldList@55002(VAR _ExportFields_FOUND@55001 : TEMPORARY Record 2000000041;_ExportTableID@55000 : Integer) NoOfFields : Integer;
+    VAR
+      _fields@55003 : Record 2000000041;
+      _exportFieldBuffer@55002 : TEMPORARY Record 2000000041;
+      _TypeAsInt@55004 : Integer;
+    BEGIN
+      //* create a list ob columns to export
+      IF _ExportTableID <> 0 THEN
+        _fields.SETRANGE(TableNo,_ExportTableID);
+      _fields.SETFILTER(Class,'%1',_fields.Class::Normal);
+      _fields.SETRANGE(Enabled,TRUE);
+      SetObsoleteFieldFilter(_fields);
+      //_fields.SETFILTER(Type,'BLOB|Media'); //26207{Media}|33793{Blob}
+      _fields.SETFILTER(Type,'%1|%2',26207{Media},33793{Blob}); //26207{Media}|33793{Blob}
+      _fields.FINDSET;
+      REPEAT
+          _TypeAsInt := _fields.Type;
+          _exportFieldBuffer := _fields;
+          _exportFieldBuffer.INSERT;
+      UNTIL _fields.NEXT = 0;
+      _ExportFields_FOUND.COPY(_exportFieldBuffer,TRUE);
+      NoOfFields := _ExportFields_FOUND.COUNT;
+    END;
+
     LOCAL PROCEDURE IsTableInLicense@1000000007(ObjectID@1000000000 : Integer) : Boolean;
     VAR
       _LicensePermission@1000000001 : Record 2000000043;
@@ -2959,6 +2999,7 @@ OBJECT XMLport 50049 DMT Export
       END;
 
       LoadFieldList(ExportFieldBuffer,ExportTableID);
+      LoadBlobAndMediaFieldList(ExportBlobAndMediaFieldBuffer,ExportTableID);
 
       IF ExportFieldBuffer.FINDLAST THEN
         LastFieldNo := ExportFieldBuffer."No.";
@@ -3280,4 +3321,3 @@ OBJECT XMLport 50049 DMT Export
     END.
   }
 }
-
