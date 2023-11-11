@@ -6,6 +6,7 @@ page 91005 DMTSourceFiles
     UsageCategory = Lists;
     SourceTable = DMTSourceFileStorage;
     SourceTableView = sorting(Name);
+    InsertAllowed = false;
 
     layout
     {

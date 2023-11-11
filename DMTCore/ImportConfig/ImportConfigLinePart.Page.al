@@ -12,12 +12,6 @@ page 91009 DMTImportConfigLinePart
     {
         area(Content)
         {
-            // label(AssignDataLayout)
-            // {
-            //     Caption = 'Assign a data layout to assign fields.',
-            //     Comment = 'de-DE=Weisen Sie ein Datenlayout zu um eine Felderzuordnung einzurichten.';
-            //     Visible = not HasDataLayoutAssigned;
-            // }
             repeater(LineRepeater)
             {
                 // Editable = HasDataLayoutAssigned;

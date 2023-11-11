@@ -92,7 +92,7 @@ page 91024 DMTReplacementCard
                     }
                 }
             }
-            part(ReplacementAssigments; DMTReplacementAssigmentPart)
+            part(ReplacementAssigments; DMTReplacementAssignmentPart)
             {
                 SubPageLink = "Replacement Code" = field(Code);
             }

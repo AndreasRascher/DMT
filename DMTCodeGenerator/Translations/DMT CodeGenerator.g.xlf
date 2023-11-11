@@ -98,11 +98,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=NAV Tabellennr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTImportConfigHeader - Field NAV Src.Table No. - Property Caption</note>
         </trans-unit>
-        <trans-unit id="TableExtension 521254526 - Field 2204498840 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 521254526">
-          <source>Create Buffer Tables with Flowfields</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Puffertabellen mit Flowfields generieren</note>
-          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTSetup - Field Import with FlowFields - Property Caption</note>
-        </trans-unit>
         <trans-unit id="TableExtension 521254526 - Field 2593167842 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 521254526">
           <source>Obj. ID Range Buffer Tables</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Objekt ID Bereich für Puffertabellen</note>

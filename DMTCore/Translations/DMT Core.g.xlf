@@ -2283,6 +2283,16 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Wählen Sie eine Datei zum Hochladen aus</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTSourceFileMgt - Method UploadFileIntoFileStorage - NamedType UploadFileMsg</note>
         </trans-unit>
+        <trans-unit id="Codeunit 2940556576 - Method 3472600955 - NamedType 2829063540" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Invalid assignment in replacement "%1". An import configuration with the ID %2 does not exist.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ungültige Zuordnung in Ersetzung "%1". Eine Importkonfiguration mit der ID %2 ist nicht verhanden.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit ReplacementHandlerImpl2 - Method checkAssignmentIsValid - NamedType InvalidHeaderAssignmentErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 2940556576 - Method 3472600955 - NamedType 371279487" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Invalid assignment in replacement "%1". An import configuration "%2" with the field ID "%3" does not exist.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ungültige Zuordnung in Ersetzung "%1". Eine Importkonfiguration "%2" mit der Feld ID "%3" ist nicht verhanden.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit ReplacementHandlerImpl2 - Method checkAssignmentIsValid - NamedType InvalidFieldAssignmentErr</note>
+        </trans-unit>
         <trans-unit id="Page 425834526 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Migration Tool Setup</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Data Migration Tool Einrichtung</note>
@@ -2773,20 +2783,20 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Auswahl zurücksetzen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Action ResetSelection - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1429333779 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1356061521 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Assignments</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Zuordnung</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssignmentPart - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1429333779 - Action 1630718602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1356061521 - Action 1630718602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import column values</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Spaltenwerte importieren</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Action LoadListOfUniqueValues - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssignmentPart - Action LoadListOfUniqueValues - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1429333779 - Action 2108323986 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1356061521 - Action 2108323986 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Select Field Mapping</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Feldmapping auswählen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssigmentPart - Action SelectFieldMapping - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementAssignmentPart - Action SelectFieldMapping - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 43196361 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Replacement Card</source>

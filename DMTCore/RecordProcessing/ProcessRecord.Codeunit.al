@@ -93,8 +93,11 @@ codeunit 91008 DMTProcessRecord
         TempBlob: Codeunit "Temp Blob";
         IStream: InStream;
         OStream: OutStream;
-        Base64Text: Text;
+        fieldContent: Text;
         recRef: RecordRef;
+        jObj: JsonObject;
+        jToken: JsonToken;
+        char177: Text[1];
     begin
         OK := true;
         if sourceRef.Number <> genBuffTable.RecordId.TableNo then
@@ -115,9 +118,9 @@ codeunit 91008 DMTProcessRecord
                     blobStorage.FindFirst();
                     blobStorage.CalcFields(Blob);
                     blobStorage.Blob.CreateInStream(IStream);
-                    IStream.ReadText(Base64Text);
+                    IStream.ReadText(fieldContent);
                     TempBlob.CreateOutStream(OStream);
-                    Base64Convert.FromBase64(Base64Text, OStream);
+                    Base64Convert.FromBase64(fieldContent, OStream);
                     TempBlob.ToFieldRef(targetField);
                 end;
             (targetField.Type = FieldType::Media):
@@ -125,17 +128,29 @@ codeunit 91008 DMTProcessRecord
                     blobStorage.FindFirst();
                     blobStorage.CalcFields(Blob);
                     blobStorage.Blob.CreateInStream(IStream);
-                    IStream.ReadText(Base64Text);
-                    TempBlob.CreateOutStream(OStream);
-                    Base64Convert.FromBase64(Base64Text, OStream);
-
-                    Clear(TenantMedia);
-                    TenantMedia.ID := CreateGuid();
-                    TenantMedia."Company Name" := CompanyName();
-                    recRef.GetTable(TenantMedia);
-                    TempBlob.ToRecordRef(recRef, TenantMedia.FieldNo(Content));
-                    recRef.Insert();
-                    targetField.Value(TenantMedia.ID);
+                    IStream.ReadText(fieldContent);
+                    if fieldContent.StartsWith('JSON:') then begin
+                        fieldContent := fieldContent.TrimStart('JSON:');
+                        char177[1] := 177;
+                        fieldContent := DelChr(fieldContent, '<>', char177);
+                        jObj.ReadFrom(fieldContent);
+                        Clear(TenantMedia);
+                        TenantMedia.ID := CreateGuid();
+                        TenantMedia."Company Name" := CopyStr(CompanyName(), 1, MaxStrLen(TenantMedia."Company Name"));
+                        if jObj.Get(TenantMedia.FieldName("Mime Type"), jToken) then
+                            TenantMedia."Mime Type" := CopyStr(jToken.AsValue().AsText(), 1, MaxStrLen(TenantMedia."Mime Type"));
+                        if jObj.Get(TenantMedia.FieldName("File Name"), jToken) then
+                            TenantMedia."File Name" := CopyStr(jToken.AsValue().AsText(), 1, MaxStrLen(TenantMedia."File Name"));
+                        if jObj.Get(TenantMedia.FieldName(Content), jToken) then begin
+                            fieldContent := jToken.AsValue().AsText();
+                            TempBlob.CreateOutStream(OStream);
+                            Base64Convert.FromBase64(fieldContent, OStream);
+                            recRef.GetTable(TenantMedia);
+                            TempBlob.ToRecordRef(recRef, TenantMedia.FieldNo(Content));
+                            recRef.Insert();
+                            targetField.Value(TenantMedia.ID);
+                        end;
+                    end;
                 end;
         end;
     end;
