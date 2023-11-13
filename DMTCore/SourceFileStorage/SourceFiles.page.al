@@ -56,6 +56,18 @@ page 91005 DMTSourceFiles
                     SourceFileMgt.UploadFileIntoFileStorage();
                 end;
             }
+            action(DownloadFile)
+            {
+                Image = Download;
+                Caption = 'Download File', Comment = 'de-DE=Datei runterladen';
+                ApplicationArea = All;
+                trigger OnAction()
+                var
+                    SourceFileMgt: Codeunit DMTSourceFileMgt;
+                begin
+                    SourceFileMgt.DownloadSourceFile(Rec);
+                end;
+            }
         }
         area(Promoted)
         {

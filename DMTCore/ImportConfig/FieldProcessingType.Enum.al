@@ -2,7 +2,7 @@ enum 91003 DMTFieldProcessingType
 {
     Extensible = false;
 
-    value(0; Ignore) { Caption = 'Ignore'; }
-    value(1; Transfer) { Caption = 'Transfer'; }
-    value(2; FixedValue) { Caption = 'Fixed Value'; }
+    value(0; Ignore) { Caption = 'Ignore', Comment = 'de-DE=Ignorieren'; }
+    value(1; Transfer) { Caption = 'Transfer', Comment = 'de-DE=Transfer'; }
+    value(2; FixedValue) { Caption = 'Fixed Value', Comment = 'de-DE=Fixwert'; }
 }

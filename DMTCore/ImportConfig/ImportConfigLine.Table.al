@@ -63,7 +63,17 @@ table 91006 DMTImportConfigLine
         field(21; "Source Field Caption"; Text[80]) { Caption = 'Source Field Caption', Comment = 'de-DE=Herkunftsfeld Bezeichnung'; Editable = false; }
         field(50; "Validation Type"; Enum DMTFieldValidationType) { Caption = 'Valid. Type', Comment = 'de-DE=Valid. Typ'; }
         field(52; "Ignore Validation Error"; Boolean) { Caption = 'Ignore Errors', Comment = 'de-DE=Fehler ignorieren '; }
-        field(100; "Processing Action"; Enum DMTFieldProcessingType) { Caption = 'Action', Comment = 'de-DE=Aktion'; }
+        field(100; "Processing Action"; Enum DMTFieldProcessingType)
+        {
+            Caption = 'Action', Comment = 'de-DE=Aktion';
+            trigger OnValidate()
+            begin
+                if xRec."Processing Action" = rec."Processing Action" then
+                    exit;
+                if rec."Processing Action" = Rec."Processing Action"::Transfer then
+                    rec.TestField("Source Field No.");
+            end;
+        }
         field(101; "Fixed Value"; Text[250])
         {
             Caption = 'Fixed Value', Comment = 'de-DE=Fester Wert';

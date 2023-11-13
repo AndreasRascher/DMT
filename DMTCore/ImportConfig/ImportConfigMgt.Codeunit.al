@@ -4,8 +4,8 @@ codeunit 91002 DMTImportConfigMgt
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
         ImportConfigLine, ImportConfigLine_NEW : Record DMTImportConfigLine;
-        TargetRecRef: RecordRef;
         refHelper: Codeunit DMTRefHelper;
+        TargetRecRef: RecordRef;
         i: Integer;
         KeyFieldIDsList: List of [Integer];
     begin
@@ -133,6 +133,23 @@ codeunit 91002 DMTImportConfigMgt
             ImportConfigLine."Validation Order" := i * 10000;
             ImportConfigLine.Modify(false);
         until TempImportConfigLine.Next() = 0;
+    end;
+
+    internal procedure PageAction_SetProcessingActionTo(var TempImportConfigLine_Selected: Record DMTImportConfigLine temporary; NewValue: Enum DMTFieldProcessingType)
+    var
+        ImportConfigLine: Record DMTImportConfigLine;
+        NoOfRecords: Integer;
+    begin
+        NoOfRecords := TempImportConfigLine_Selected.Count;
+        if not TempImportConfigLine_Selected.FindFirst() then exit;
+        TempImportConfigLine_Selected.FindSet();
+        repeat
+            ImportConfigLine.Get(TempImportConfigLine_Selected.RecordId);
+            if ImportConfigLine."Processing Action" <> NewValue then begin
+                ImportConfigLine.Validate("Processing Action", NewValue);
+                ImportConfigLine.Modify()
+            end;
+        until TempImportConfigLine_Selected.Next() = 0;
     end;
 
     procedure PageAction_ProposeMatchingFields("Imp.Conf.Header ID": Integer)
