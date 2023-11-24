@@ -49,8 +49,9 @@ codeunit 91003 DMTMigrationLib
     /// <returns></returns>
     local procedure FindKnownUseValidateValue(TargetField: Record Field; var KnownValidationType: Enum DMTFieldValidationType) Found: Boolean
     var
-    // RoutingHeader: Record "Routing Header";
-    // Contact: Record Contact;
+        // RoutingHeader: Record "Routing Header";
+        // Contact: Record Contact;
+        SalesHeader: Record "Sales Header";
     begin
         KnownValidationType := KnownValidationType::AlwaysValidate;
         Found := true;
@@ -82,7 +83,8 @@ codeunit 91003 DMTMigrationLib
             IsMatch(TargetField, Database::"Routing Header", 'Status'),
             IsMatch(TargetField, Database::"Extended Text Header", 'Language Code'), /* Possible in old version to have Language Code + All Language */
             IsMatch(TargetField, Database::"Extended Text Header", 'All Language Codes'), /* Possible in old version to have Language Code + All Language */
-            IsMatch(TargetField, Database::"Interaction Template", 'Language Code (Default)'): /* Avoid confirm */
+            IsMatch(TargetField, Database::"Interaction Template", 'Language Code (Default)'), /* Avoid confirm */
+            IsMatch(TargetField, Database::"Sales Header", 'Bill-to Customer No.'): /* Avoid confirm */
                 KnownValidationType := KnownValidationType::AssignWithoutValidate;
             else
                 Found := false;

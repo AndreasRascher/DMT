@@ -70,5 +70,10 @@ permissionset 91000 GeneratedPermission
         page DMTReplacementRulePart = X,
         page DMTSelectMultipleFields = X,
         page DMTSourceFiles = X,
-        query DMTLogQry = X;
+        query DMTLogQry = X,
+        tabledata DMTBlobStorage = RIMD,
+        table DMTBlobStorage = X,
+        codeunit DMTGenBuffAccessMgt = X,
+        xmlport DMTCSVWriter = X,
+        page DMTImportConfigLines = X;
 }

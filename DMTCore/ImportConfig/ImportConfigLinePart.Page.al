@@ -49,101 +49,132 @@ page 91009 DMTImportConfigLinePart
     {
         area(Processing)
         {
-            action(InitTargetFields)
+            group(Fields)
             {
-                Caption = 'Init Target Fields', Comment = 'de-DE=Feldliste initialisieren';
-                ApplicationArea = All;
-                Image = SuggestField;
-                trigger OnAction()
-                begin
-                    ImportConfigMgt.PageAction_InitImportConfigLine(Rec.GetRangeMin("Imp.Conf.Header ID"));
-                end;
-            }
-            action(ProposeMatchingFields)
-            {
-                Caption = 'Propose Matching Fields', Comment = 'de-DE=Feldzuordnung vorschlagen';
-                ApplicationArea = All;
-                Image = SuggestField;
-                trigger OnAction()
-                begin
-                    ImportConfigMgt.PageAction_ProposeMatchingFields(Rec.GetRangeMin("Imp.Conf.Header ID"));
-                end;
-            }
-            group(Lines)
-            {
-                Caption = 'Lines', Comment = 'de-DE=Zeilen';
-                action(ImportConfigLine_SetValidateFieldToAlways)
+                Image = AllLines;
+                Caption = 'Fields', Comment = 'de-DE=Felder';
+                action(InitTargetFields)
                 {
-                    Caption = 'Set Field Validate to always', Comment = 'de-DE=Validierungsart auf Immer setzen';
-                    Image = SetupLines;
+                    Caption = 'Init Target Fields', Comment = 'de-DE=Feldliste initialisieren';
+                    ApplicationArea = All;
+                    Image = SuggestField;
                     trigger OnAction()
                     begin
-                        GetSelection(TempImportConfigLine_Selected);
-                        ImportConfigMgt.PageAction_ImportConfigLine_SetValidateField(TempImportConfigLine_Selected, Enum::DMTFieldValidationType::AlwaysValidate);
+                        ImportConfigMgt.PageAction_InitImportConfigLine(Rec.GetRangeMin("Imp.Conf.Header ID"));
                     end;
                 }
-                action(DMTField_SetValidateFieldToFalse)
+                action(ProposeMatchingFields)
                 {
-                    Caption = 'Set Validation Type to assign without validate', Comment = 'de-DE=Validierungsart auf Zuweisen ohne validieren setzen';
-                    Image = SetupLines;
+                    Caption = 'Propose Matching Fields', Comment = 'de-DE=Feldzuordnung vorschlagen';
+                    ApplicationArea = All;
+                    Image = SuggestField;
                     trigger OnAction()
                     begin
-                        GetSelection(TempImportConfigLine_Selected);
-                        ImportConfigMgt.PageAction_ImportConfigLine_SetValidateField(TempImportConfigLine_Selected, Enum::DMTFieldValidationType::AssignWithoutValidate);
+                        ImportConfigMgt.PageAction_ProposeMatchingFields(Rec.GetRangeMin("Imp.Conf.Header ID"));
                     end;
                 }
             }
-            group(ChangeValidationOrder)
+            group(markedLines)
             {
-                Image = Allocate;
-                Caption = 'Change Validation Order', Comment = 'de-DE=Validierungsreihenfolge ändern';
-                action(MoveSelectedUp)
+                Caption = 'marked Lines', Comment = 'de-DE=markierte Zeilen';
+                group(setValidation)
                 {
-                    Caption = 'Up', Comment = 'de-DE=Oben';
-                    Image = MoveUp;
-                    trigger OnAction()
-                    var
-                        Direction: Option Up,Down,Top,Bottom;
-                    begin
-                        if GetSelection(TempImportConfigLine_Selected) then
-                            ImportConfigMgt.PageAction_MoveSelectedLines(TempImportConfigLine_Selected, Direction::Up);
-                    end;
+                    Caption = 'Set validation type to', Comment = 'de-DE=Validierungsart setzen auf';
+                    action(ImportConfigLine_SetValidateFieldToAlways)
+                    {
+                        Caption = 'Always', Comment = 'de-DE=Immer';
+                        Image = SetupLines;
+                        trigger OnAction()
+                        begin
+                            GetSelection(TempImportConfigLine_Selected);
+                            ImportConfigMgt.PageAction_ImportConfigLine_SetValidateField(TempImportConfigLine_Selected, Enum::DMTFieldValidationType::AlwaysValidate);
+                        end;
+                    }
+                    action(DMTField_SetValidateFieldToFalse)
+                    {
+                        Caption = 'assign without validate', Comment = 'de-DE= Zuweisen ohne validieren';
+                        Image = SetupLines;
+                        trigger OnAction()
+                        begin
+                            GetSelection(TempImportConfigLine_Selected);
+                            ImportConfigMgt.PageAction_ImportConfigLine_SetValidateField(TempImportConfigLine_Selected, Enum::DMTFieldValidationType::AssignWithoutValidate);
+                        end;
+                    }
                 }
-                action(MoveSelectedDown)
+                group(ChangeValidationOrder)
                 {
-                    Caption = 'Down', Comment = 'de-DE=Unten';
-                    Image = MoveDown;
-                    trigger OnAction()
-                    var
-                        Direction: Option Up,Down,Top,Bottom;
-                    begin
-                        if GetSelection(TempImportConfigLine_Selected) then
-                            ImportConfigMgt.PageAction_MoveSelectedLines(TempImportConfigLine_Selected, Direction::Down);
-                    end;
+                    Image = Allocate;
+                    Caption = 'Change Validation Order', Comment = 'de-DE=Validierungsreihenfolge ändern';
+                    action(MoveSelectedUp)
+                    {
+                        Caption = 'Up', Comment = 'de-DE=Oben';
+                        Image = MoveUp;
+                        trigger OnAction()
+                        var
+                            Direction: Option Up,Down,Top,Bottom;
+                        begin
+                            if GetSelection(TempImportConfigLine_Selected) then
+                                ImportConfigMgt.PageAction_MoveSelectedLines(TempImportConfigLine_Selected, Direction::Up);
+                        end;
+                    }
+                    action(MoveSelectedDown)
+                    {
+                        Caption = 'Down', Comment = 'de-DE=Unten';
+                        Image = MoveDown;
+                        trigger OnAction()
+                        var
+                            Direction: Option Up,Down,Top,Bottom;
+                        begin
+                            if GetSelection(TempImportConfigLine_Selected) then
+                                ImportConfigMgt.PageAction_MoveSelectedLines(TempImportConfigLine_Selected, Direction::Down);
+                        end;
+                    }
+                    action(MoveSelectedToTop)
+                    {
+                        Caption = 'Top', Comment = 'de-DE=Anfang';
+                        Image = ChangeTo;
+                        trigger OnAction()
+                        var
+                            Direction: Option Up,Down,Top,Bottom;
+                        begin
+                            if GetSelection(TempImportConfigLine_Selected) then
+                                ImportConfigMgt.PageAction_MoveSelectedLines(TempImportConfigLine_Selected, Direction::Top);
+                        end;
+                    }
+                    action(MoveSelectedToEnd)
+                    {
+                        Caption = 'Bottom', Comment = 'de-DE=Ende';
+                        Image = Apply;
+                        trigger OnAction()
+                        var
+                            Direction: Option Up,Down,Top,Bottom;
+                        begin
+                            if GetSelection(TempImportConfigLine_Selected) then
+                                ImportConfigMgt.PageAction_MoveSelectedLines(TempImportConfigLine_Selected, Direction::Bottom);
+                        end;
+                    }
                 }
-                action(MoveSelectedToTop)
+                group(setProcessingAction)
                 {
-                    Caption = 'Top', Comment = 'de-DE=Anfang';
-                    Image = ChangeTo;
-                    trigger OnAction()
-                    var
-                        Direction: Option Up,Down,Top,Bottom;
-                    begin
-                        if GetSelection(TempImportConfigLine_Selected) then
-                            ImportConfigMgt.PageAction_MoveSelectedLines(TempImportConfigLine_Selected, Direction::Top);
-                    end;
-                }
-                action(MoveSelectedToEnd)
-                {
-                    Caption = 'Bottom', Comment = 'de-DE=Ende';
-                    Image = Apply;
-                    trigger OnAction()
-                    var
-                        Direction: Option Up,Down,Top,Bottom;
-                    begin
-                        if GetSelection(TempImportConfigLine_Selected) then
-                            ImportConfigMgt.PageAction_MoveSelectedLines(TempImportConfigLine_Selected, Direction::Bottom);
-                    end;
+                    Caption = 'set action to', Comment = 'de-DE=Aktion setzen auf';
+                    action(SetProcessingActionTo_Ignore)
+                    {
+                        Caption = 'Ignore', Comment = 'de-DE=Ignorieren';
+                        trigger OnAction()
+                        begin
+                            if GetSelection(TempImportConfigLine_Selected) then
+                                ImportConfigMgt.PageAction_SetProcessingActionTo(TempImportConfigLine_Selected, Enum::DMTFieldProcessingType::Ignore);
+                        end;
+                    }
+                    action(SetProcessingActionTo_Transfer)
+                    {
+                        Caption = 'Transfer', Comment = 'de-DE=Transfer';
+                        trigger OnAction()
+                        begin
+                            if GetSelection(TempImportConfigLine_Selected) then
+                                ImportConfigMgt.PageAction_SetProcessingActionTo(TempImportConfigLine_Selected, Enum::DMTFieldProcessingType::Transfer);
+                        end;
+                    }
                 }
             }
         }

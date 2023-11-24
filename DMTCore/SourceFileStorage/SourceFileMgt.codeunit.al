@@ -18,6 +18,19 @@ codeunit 91001 DMTSourceFileMgt
         Message(ImportFinishedMsg);
     end;
 
+    internal procedure DownloadSourceFile(Rec: Record DMTSourceFileStorage)
+    var
+        IStream: InStream;
+        toFileName: Text;
+    begin
+        Rec.CalcFields("File Blob");
+        if not Rec."File Blob".HasValue then
+            exit;
+        rec."File Blob".CreateInStream(IStream);
+        toFileName := rec.Name;
+        DownloadFromStream(IStream, 'Download', 'Download', Format(Enum::DMTFileFilter::All), toFileName);
+    end;
+
     procedure AddFileToStorage(FileName: Text; IStr: InStream)
     var
         SourceFileStorage, SourceFileStorageExisting : Record DMTSourceFileStorage;
