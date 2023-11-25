@@ -1,9 +1,9 @@
-OBJECT XMLport 50050 DMT Export2
+OBJECT XMLport 50049 DMT Export2
 {
   OBJECT-PROPERTIES
   {
     Date=25.11.23;
-    Time=00:40:03;
+    Time=01:10:09;
     Modified=Yes;
     Version List=DMT;
   }
@@ -2697,7 +2697,7 @@ OBJECT XMLport 50050 DMT Export2
       TAB@55003 : Text[1];
       ReadyMsg@55004 : Text;
     BEGIN
-      IF CONFIRM('') THEN;
+      //IF CONFIRM('') THEN; //debug
       CheckTablesAndCreateActualTableFilter();
       IF ActualExportTableFilter = '' THEN ERROR('Keine Tabellen fr den Export verfgbar');
 
@@ -2793,7 +2793,7 @@ OBJECT XMLport 50050 DMT Export2
       ELSE
         field.SETRANGE(Class,field.Class::Normal);
       IF NOT ExportBlobContent THEN
-        field.SETFILTER(Type,'<>Media&<>BLOB');
+        field.SETFILTER(Type,'<>26207&<>BLOB'); //26207=Media
       //* schema export - exclude meta info fields from field table
       IF _ExportTableID = DATABASE::Field THEN
           field.SETFILTER("No.",'<>%1&<>%2&<>%3&<>%4',24{OptionString},25{ObsoleteState},26{ObsoleteReason},27{DataClassification});
@@ -3242,7 +3242,6 @@ OBJECT XMLport 50050 DMT Export2
       _Boolean@1000000006 : Boolean;
       _Field@1000000010 : Record 2000000041;
       _GUID@55001 : GUID;
-      TenantMedia@55000 : Record 2000000184;
       _fieldRefMediaID@55002 : FieldRef;
     BEGIN
       //* returns values in xmlformat, handles problems with field.type optionstring bug
@@ -3481,4 +3480,3 @@ OBJECT XMLport 50050 DMT Export2
     END.
   }
 }
-
