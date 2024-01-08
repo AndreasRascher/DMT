@@ -376,7 +376,8 @@ codeunit 91014 DMTMigrate
     procedure CheckMappedFieldsExist(ImportConfigHeader: Record DMTImportConfigHeader)
     var
         ImportConfigLine: Record DMTImportConfigLine;
-        ImportConfigLineEmptyErr: Label 'No field mapping found for %1 "%2"', Comment = 'de-DE=Kein Feldmapping gefunden für  %1 "%2"';
+        ImportConfigLineEmptyErr: Label 'No field mapping found for import configuration "%1"',
+                        Comment = 'de-DE=Importkonfiguration "%1" enthält keine Feldzuordnung.';
     begin
         // Key Fields Mapping Exists
         ImportConfigHeader.FilterRelated(ImportConfigLine);
@@ -385,7 +386,7 @@ codeunit 91014 DMTMigrate
         ImportConfigLine.SetFilter("Source Field No.", '<>0');
 
         if ImportConfigLine.IsEmpty then
-            Error(ImportConfigLineEmptyErr, ImportConfigHeader.TableCaption, ImportConfigHeader.ID);
+            Error(ImportConfigLineEmptyErr, ImportConfigHeader.ID);
     end;
 
     procedure ListOfBufferRecIDsInner(var RecIdToProcessList: List of [RecordId]; var Log: Codeunit DMTLog; ImportSettings: Codeunit DMTImportSettings) IsFullyProcessed: Boolean

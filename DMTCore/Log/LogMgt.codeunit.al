@@ -180,6 +180,9 @@ codeunit 91006 DMTLog
             ImportConfigHeader.Get(ImportConfigLine.GetRangeMin("Imp.Conf.Header ID"))
         else
             ImportConfigHeader.Get(ImportConfigLine."Imp.Conf.Header ID");
+        // exit if no source file is set
+        if ImportConfigHeader."Source File ID" = 0 then
+            exit(false);
         LogEntry.SetRange("Entry Type", LogEntry."Entry Type"::Error);
         LogEntry.SetRange(SourceFileName, ImportConfigHeader.GetSourceFileName());
         LogEntry.SetRange("Target Field No.", ImportConfigLine."Target Field No.");

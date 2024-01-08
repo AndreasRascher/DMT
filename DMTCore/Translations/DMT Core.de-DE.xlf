@@ -1995,6 +1995,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Import Konfiguration Kopf</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 200502431 - Method 4024274888 - NamedType 2782661697" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The import configuration %1 has no source file assigned.</source>
+          <target state="translated">Die Importkonfiguration %1 hat keine Quelldatei zugeordnet.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Die Importkonfiguration %1 hat keine Quelldatei zugeordnet.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Method GetDataLayout - NamedType noSourceFileAssignedErr</note>
+        </trans-unit>
         <trans-unit id="Table 200502431 - Method 157426326 - NamedType 3929116107" size-unit="char" translate="yes" xml:space="preserve">
           <source>Assign data layout</source>
           <target state="translated">Datenlayout zuweisen</target>
@@ -2680,9 +2686,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLog - Method CheckIfProcessNoIsSet - NamedType ProcessNoNotInitializedErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 623866352 - Method 1507708651 - NamedType 4003859195" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No field mapping found for %1 "%2"</source>
-          <target state="translated">Kein Feldmapping gefunden für  %1 "%2"</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Kein Feldmapping gefunden für  %1 "%2"</note>
+          <source>No field mapping found for import configuration "%1"</source>
+          <target state="translated">Importkonfiguration "%1" enthält keine Feldzuordnung.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Importkonfiguration "%1" enthält keine Feldzuordnung.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method CheckMappedFieldsExist - NamedType ImportConfigLineEmptyErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 623866352 - Method 3730941943 - NamedType 2931333304" size-unit="char" translate="yes" xml:space="preserve">

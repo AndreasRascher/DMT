@@ -18,9 +18,7 @@ table 91007 DMTBlobStorage
         key(Key1; "Primary Key") { Clustered = true; }
     }
 
-    fieldgroups
-    {
-    }
+    fieldgroups { }
 
     procedure filterBy(genBuffTable: Record DMTGenBuffTable) HasLines: Boolean
     begin

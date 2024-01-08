@@ -23,15 +23,20 @@ xmlport 91002 DMTCSVWriter
                     TextType = BigText;
                     trigger OnBeforePassVariable()
                     begin
+                        CurrFieldIndexGlobal += 1; // count columns per line
+
+                        // break after last column 
+                        if ExportFieldListGlobal.Values.Count < CurrFieldIndexGlobal then
+                            currXMLport.BreakUnbound(); // new line                        
+
                         Clear(FieldContent); // is not cleared automatically between Fields
-                        CurrFieldIndexGlobal += 1;
                         if Line.Number = 0 then begin
+                            // Column Header
                             FieldContent.AddText(ExportFieldListGlobal.Values.Get(CurrFieldIndexGlobal));
                         end else begin
+                            // Column Content
                             FieldContent.AddText(getFieldContentAsText(SourceRef, CurrFieldIndexGlobal));
                         end;
-                        if IsLastField(CurrFieldIndexGlobal) then
-                            currXMLport.BreakUnbound(); // new line
                     end;
                 }
 
@@ -81,7 +86,8 @@ xmlport 91002 DMTCSVWriter
         exportGenericCSV.SetDestination(OStr);
         exportGenericCSV.Export();
         tempBlob.CreateInStream(IStr, TextEncoding::UTF8);
-        Filename := importConfigHeader."Target Table Caption" + '.csv';
+        Filename := CompanyName + '_' + importConfigHeader."Target Table Caption" + '.csv';
+        Filename := ConvertStr(Filename, '<>*\/|"', '_______');
         DownloadFromStream(IStr, 'Download', 'ToFolder', Format(Enum::DMTFileFilter::CSV), FileName);
     end;
 
@@ -121,21 +127,21 @@ xmlport 91002 DMTCSVWriter
     var
         fieldRecord: Record Field;
         tenantMedia: Record "Tenant Media";
-        _tempBlob: Codeunit "Temp Blob";
         base64Convert: Codeunit "Base64 Convert";
-        fRef: FieldRef;
-        _integer: Integer;
-        _boolean: Boolean;
-        _decimal: Decimal;
-        _date: Date;
-        _time: Time;
-        _iStream: InStream;
-        _tab: Char;
-        _Guid: Guid;
-        JObj: JsonObject;
-        fieldNo: Integer;
-        char177: text[1];
+        _tempBlob: Codeunit "Temp Blob";
         recRef: RecordRef;
+        fRef: FieldRef;
+        _boolean: Boolean;
+        _tab: Char;
+        _date: Date;
+        _decimal: Decimal;
+        _Guid: Guid;
+        _iStream: InStream;
+        _integer: Integer;
+        fieldNo: Integer;
+        JObj: JsonObject;
+        char177: text[1];
+        _time: Time;
     begin
         _tab := 9;
         fieldNo := ExportFieldListGlobal.Keys.Get(fieldIndex);
