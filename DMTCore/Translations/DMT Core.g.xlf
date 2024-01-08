@@ -38,6 +38,66 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Herkunftsfeld Nr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTBlobStorage - Field Source Field No. - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2465824826 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Copy Table</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=DMT Tabellen kopieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2465824826 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Beschreibung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2465824826 - Field 2392829959 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filter</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field FilterText - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2465824826 - Field 523320669 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import Only New Records</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Nur neue Datensätze importieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field Import Only New Records - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2465824826 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Line No.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zeilennr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field Line No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2465824826 - Field 1945179778 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Records imported</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anz. importiert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field No. of Records inserted - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2465824826 - Field 2835452692 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Records</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field No. of Records(Target) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2465824826 - Field 2927347786 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processing Time</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Bearbeitungzeit</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field Processing Time - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2465824826 - Field 3041449367 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copy from Company</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Kopieren aus Mandant</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field SourceCompanyName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2465824826 - Field 1393533604 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Table Caption</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Tabellen Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field Table Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2465824826 - Field 3017471043 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Table No.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Tabellen ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field Table No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2465824826 - Field 4113082709 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>TableView</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field TableView - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 4224547593 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Layout</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Datenlayout</note>
@@ -2353,6 +2413,16 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Alle Zeilen in gen. Puffertabelle löschen?</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action ClearGenBuffer - Method OnAction - NamedType deleteGenBufferLinesQst</note>
         </trans-unit>
+        <trans-unit id="Page 1275022656 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Copy Table List</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=DMT Tabellen kopieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCopyTableList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1275022656 - Action 1629856273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copy Tables</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Tabellen kopieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCopyTableList - Action CopyDataFromSourceCompanyAction - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1540911173 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Data Layout</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Datenlayout</note>
@@ -2850,7 +2920,7 @@
         </trans-unit>
         <trans-unit id="Page 43196361 - Control 2780874720 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Caption</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Feldcaption</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementCard - Control FieldCaption - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 43196361 - Control 1178234503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

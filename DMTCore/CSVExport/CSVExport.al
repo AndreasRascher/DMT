@@ -1,6 +1,6 @@
 xmlport 91002 DMTCSVWriter
 {
-    Caption = 'CSVExport';
+    Caption = 'CSVExport', Locked = true;
     Direction = Export;
     Format = VariableText;
     FormatEvaluate = Xml;

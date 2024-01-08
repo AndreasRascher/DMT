@@ -59,7 +59,7 @@ page 91024 DMTReplacementCard
                         group(GridLabels)
                         {
                             Caption = ' ', Locked = true;
-                            label(FieldCaption) { Caption = 'Caption'; }
+                            label(FieldCaption) { Caption = 'Caption', Comment = 'de-DE=Feldcaption'; }
                             label("Rel.to Table ID") { Caption = 'Rel.to Table ID', Comment = 'de-DE=Rel. zu Tab.ID'; }
                             label("Rel.to Table Name") { Caption = 'Rel.to Table', Comment = 'de-DE=Rel. zu Tabelle'; }
                         }
