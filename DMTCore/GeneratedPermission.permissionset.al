@@ -75,5 +75,8 @@ permissionset 91000 GeneratedPermission
         table DMTBlobStorage = X,
         codeunit DMTGenBuffAccessMgt = X,
         xmlport DMTCSVWriter = X,
-        page DMTImportConfigLines = X;
+        page DMTImportConfigLines = X,
+        tabledata DMTCopyTable = RIMD,
+        table DMTCopyTable = X,
+        page DMTCopyTableList = X;
 }

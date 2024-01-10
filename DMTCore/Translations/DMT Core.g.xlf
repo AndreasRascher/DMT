@@ -2993,11 +2993,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTCSVReader - Property Caption</note>
         </trans-unit>
-        <trans-unit id="XmlPort 888029680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>CSVExport</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTCSVWriter - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Enum 101561864 - EnumValue 3972427471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Fixed Value</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Fixwert</note>
