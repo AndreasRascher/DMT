@@ -222,7 +222,7 @@ codeunit 91006 DMTLog
 
     local procedure CheckIfProcessNoIsSet()
     var
-        ProcessNoNotInitializedErr: Label 'Process number has not been initialized';
+        ProcessNoNotInitializedErr: Label 'Process number has not been initialized', Comment = 'de-DE=Prozessnummer wurde nicht initialisiert';
     begin
         if LogEntryTemplate."Process No." = 0 then
             Error(ProcessNoNotInitializedErr);

@@ -67,7 +67,7 @@ table 91009 DMTProcessingPlan
         field(33; "Update Fields Filter"; Blob) { Caption = 'Update Fields Filter', Locked = true; }
         field(34; "Default Field Values"; Blob) { Caption = 'Default Field Values', Locked = true; }
         field(40; Status; Option) { Caption = 'Status', Locked = true; OptionMembers = " ","In Progress",Finished; OptionCaption = ' ,In Progress', comment = 'de-DE= ,in Arbeit, Abgeschlossen'; Editable = false; }
-        field(41; StartTime; DateTime) { Caption = 'Start Time'; Editable = false; }
+        field(41; StartTime; DateTime) { Caption = 'Start Time', Comment = 'de-DE=Startzeit'; Editable = false; }
         field(42; "Processing Duration"; Duration) { Caption = 'Processing Duration', Comment = 'de-DE=Verarbeitungszeit'; Editable = false; }
         field(50; Indentation; Integer) { Caption = 'Indentation', Comment = 'de-DE=Einrückung'; Editable = false; }
     }

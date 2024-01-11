@@ -12,7 +12,7 @@ page 91015 DMTDeleteDataInTargetTable
             {
                 field(SourceTableView; SourceFilterGlobal)
                 {
-                    Caption = 'Source Table Filter';
+                    Caption = 'Source Table Filter', Comment = 'de-DE=Quelltabellenfilter';
                     ApplicationArea = All;
                     Editable = false;
                     trigger OnDrillDown()
@@ -22,7 +22,7 @@ page 91015 DMTDeleteDataInTargetTable
                 }
                 field(TargetTableFilter; TargetFilterGlobal)
                 {
-                    Caption = 'Target Table Filter';
+                    Caption = 'Target Table Filter', Comment = 'de-DE=Zieltabellenfilter';
                     ApplicationArea = All;
                     Editable = false;
 
@@ -31,7 +31,7 @@ page 91015 DMTDeleteDataInTargetTable
                         EditTargetTableFilter(TargetViewGlobal, TargetFilterGlobal, CurrImportConfigHeader);
                     end;
                 }
-                field(UseOnDeleteTriggerCtrl; UseOnDeleteTriggerGlobal) { Caption = 'Use On Delete Trigger'; ApplicationArea = All; }
+                field(UseOnDeleteTriggerCtrl; UseOnDeleteTriggerGlobal) { Caption = 'Use On Delete Trigger', Comment = 'de-DE=OnDelete Trigger verwenden'; ApplicationArea = All; }
             }
         }
     }
@@ -43,7 +43,7 @@ page 91015 DMTDeleteDataInTargetTable
             action(StartDeletingCtrl)
             {
                 ApplicationArea = All;
-                Caption = 'Start';
+                Caption = 'Start', Locked = true;
                 Image = Start;
                 trigger OnAction();
                 begin
@@ -189,6 +189,7 @@ page 91015 DMTDeleteDataInTargetTable
         Log: Codeunit DMTLog;
         RecRef: RecordRef;
         MaxSteps: Integer;
+        ProcessStoppedErr: Label 'Process Stopped', Comment = 'de-DE=Vorgang abgebrochen';
     begin
         ImportConfigHeader.TestField("Target Table ID");
         RecRef.Open(ImportConfigHeader."Target Table ID");
@@ -199,7 +200,7 @@ page 91015 DMTDeleteDataInTargetTable
                 DeleteRecordsWithErrorLog.DialogOpen(RecRef.Caption + ' @@@@@@@@@@@@@@@@@@1@\######2#\######3#');
                 repeat
                     if not DeleteRecordsWithErrorLog.DialogUpdate(1, Log.GetProgress(MaxSteps), 2, StrSubstNo('%1/%2', Log.GetNoOfProcessedRecords(), MaxSteps), 3, RecRef.RecordId) then begin
-                        Error('Process Stopped');
+                        Error(ProcessStoppedErr);
                     end;
                     Commit();
                     DeleteSingeRecordWithLog(ImportConfigHeader, useOnDeleteTrigger, Log, RecRef.RecordId);

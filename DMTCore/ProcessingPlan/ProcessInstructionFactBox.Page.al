@@ -1,6 +1,6 @@
 page 91016 DMTProcessInstructionFactBox
 {
-    Caption = 'Processing Instructions';
+    Caption = 'Processing Instructions', Comment = 'de-DE=Verarbeitungsanweisungen';
     PageType = ListPart;
     SourceTable = DMTImportConfigLine;
     SourceTableTemporary = true;
@@ -22,14 +22,14 @@ page 91016 DMTProcessInstructionFactBox
 
             repeater(FixedValuesList)
             {
-                Caption = 'Fixed Values';
+                Caption = 'Fixed Values', Comment = 'de-DE=Vorgabwerte';
                 Visible = IsFixedValueView;
                 field(FilterFieldCaption; Rec."Source Field Caption") { ApplicationArea = All; }
                 field("Fixed Value"; Rec."Fixed Value") { ApplicationArea = All; }
             }
             repeater(UpdateFieldsList)
             {
-                Caption = 'Fields', Comment = 'de-DE=Vorgabwerte';
+                Caption = 'Fields', Comment = 'de-DE=Update-Felder';
                 Visible = IsUpdateSelectedFieldsView;
                 field(UpdateFieldCaption; Rec."Source Field Caption") { ApplicationArea = All; }
             }

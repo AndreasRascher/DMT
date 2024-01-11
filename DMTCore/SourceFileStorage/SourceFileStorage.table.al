@@ -6,8 +6,8 @@ table 91004 DMTSourceFileStorage
 
     fields
     {
-        field(1; "File ID"; Integer) { }
-        field(10; "File Blob"; Blob) { }
+        field(1; "File ID"; Integer) { Caption = 'File ID', Comment = 'de-DE=Datei ID'; }
+        field(10; "File Blob"; Blob) { Caption = 'File Blob', Comment = 'de-DE=Datei Blob'; }
         field(20; SourceFileFormat; Enum DMTSourceFileFormat) { Caption = 'Source File Format', Comment = 'de-DE=Dateiformat'; }
         field(21; "Data Layout ID"; Integer)
         {

@@ -56,6 +56,23 @@
 					"longRunningSqlStatementsThreshold": 500,
 					"numberOfSqlStatements": 10,
 					"tenant": "c2aab99e-f404-4b09-b979-b7c38bbddaaa"
+				},
+				{
+					"name": "Attach: BC23",
+					"type": "al",
+					"request": "attach",
+					"environmentType": "OnPrem",
+					"server": "http://bc23/",
+					"serverInstance": "BC",
+					"authentication": "UserPassword",
+					"breakOnError": "All",
+					"breakOnRecordWrite": "None",
+					"enableSqlInformationDebugger": true,
+					"enableLongRunningSqlStatements": true,
+					"longRunningSqlStatementsThreshold": 500,
+					"numberOfSqlStatements": 10,
+					"breakOnNext": "WebClient",
+					"tenant": "default"
 				}
 			],
 			"compounds": []

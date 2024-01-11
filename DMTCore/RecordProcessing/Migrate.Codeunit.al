@@ -297,8 +297,8 @@ codeunit 91014 DMTMigrate
     procedure PrepareProgressBar(var ProgressDialog: Codeunit DMTProgressDialog; var ImportConfigHeader: Record DMTImportConfigHeader; var BufferRef: RecordRef)
     var
         MaxWith: Integer;
-        DurationLbl: Label 'Duration', Comment = 'de-DE Dauer';
-        TimeRemainingLbl: Label 'Time Remaining', Comment = 'de-DE Verbleibende Zeit';
+        DurationLbl: Label 'Duration', Comment = 'de-DE=Dauer';
+        TimeRemainingLbl: Label 'Time Remaining', Comment = 'de-DE=Verbleibende Zeit';
         ProgressBarTitle: Text;
     begin
         ProgressBarTitle := ImportConfigHeader."Target Table Caption";
@@ -389,39 +389,43 @@ codeunit 91014 DMTMigrate
             Error(ImportConfigLineEmptyErr, ImportConfigHeader.ID);
     end;
 
-    procedure ListOfBufferRecIDsInner(var RecIdToProcessList: List of [RecordId]; var Log: Codeunit DMTLog; ImportSettings: Codeunit DMTImportSettings) IsFullyProcessed: Boolean
+    procedure ListOfBufferRecIDsInner(var recIdToProcessList: List of [RecordId]; var Log: Codeunit DMTLog; importSettings: Codeunit DMTImportSettings) IsFullyProcessed: Boolean
     var
         // DMTErrorLog: Record DMTErrorLog;
-        ImportConfigHeader: Record DMTImportConfigHeader;
+        importConfigHeader: Record DMTImportConfigHeader;
+        progressDialog: Codeunit DMTProgressDialog;
         ID: RecordId;
-        BufferRef: RecordRef;
-        BufferRef2: RecordRef;
+        bufferRef: RecordRef;
+        bufferRef2: RecordRef;
         ResultType: Enum DMTProcessingResultType;
     begin
-        if RecIdToProcessList.Count = 0 then
+        if recIdToProcessList.Count = 0 then
             Error('Keine Daten zum Verarbeiten');
 
-        ImportConfigHeader := ImportSettings.ImportConfigHeader();
+        importConfigHeader := importSettings.ImportConfigHeader();
         // Buffer loop
-        BufferRef.Open(ImportConfigHeader."Buffer Table ID");
-        ID := RecIdToProcessList.Get(1);
-        BufferRef.Get(ID);
+        bufferRef.Open(importConfigHeader."Buffer Table ID");
+        ID := recIdToProcessList.Get(1);
+        bufferRef.Get(ID);
 
         IsFullyProcessed := true;
-        foreach ID in RecIdToProcessList do begin
-            BufferRef.Get(ID);
-            BufferRef2 := BufferRef.Duplicate(); // Variant + Events = Call By Reference 
-            ProcessSingleBufferRecord(BufferRef2, ImportSettings, Log, ResultType);
+        PrepareProgressBar(progressDialog, importConfigHeader, bufferRef);
+        progressDialog.Open();
+        foreach ID in recIdToProcessList do begin
+            bufferRef.Get(ID);
+            bufferRef2 := bufferRef.Duplicate(); // Variant + Events = Call By Reference 
+            ProcessSingleBufferRecord(bufferRef2, importSettings, Log, ResultType);
             Log.IncNoOfProcessedRecords();
             if ResultType = ResultType::ChangesApplied then begin
                 Log.IncNoOfSuccessfullyProcessedRecords();
             end;
             if ResultType = ResultType::Error then begin
                 Log.IncNoOfRecordsWithErrors();
-                if ImportSettings.StopProcessingRecIDListAfterError() then begin
+                if importSettings.StopProcessingRecIDListAfterError() then begin
                     exit(false); // break;
                 end;
             end;
+            UpdateProgress(importSettings, progressDialog, ResultType);
         end;
     end;
 
