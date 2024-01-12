@@ -1,4 +1,4 @@
-permissionset 91000 GeneratedPermission
+permissionset 110000 GeneratedPermission
 {
     Assignable = true;
     Permissions = tabledata DMTDataLayout = RIMD,

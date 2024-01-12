@@ -20,11 +20,16 @@
   ],
   "screenshots": [],
   "platform": "1.0.0.0",
-  "application": "22.0.0.0",
+  "application": "21.0.0.0",
   "idRanges": [
     {
       "from": 90011,
-      "to": 900020
+      "to": 90020
+    }
+    ,
+    {      
+      "from": 110011,
+      "to": 110020
     }
   ],
   "resourceExposurePolicy": {
@@ -32,6 +37,6 @@
     "allowDownloadingSource": true,
     "includeSourceInSymbolFile": true
   },
-  "runtime": "11.0",
+  "runtime": "10.0",
   "features": ["NoImplicitWith","TranslationFile"]
 }

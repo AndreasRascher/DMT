@@ -1,4 +1,4 @@
-codeunit 91005 DMTExcelFileImportImpl implements ISourceFileImport
+codeunit 110005 DMTExcelFileImportImpl implements ISourceFileImport
 {
     Access = Internal;
 

@@ -1,4 +1,4 @@
-table 91003 DMTImportConfigHeader
+table 110003 DMTImportConfigHeader
 {
     Caption = 'DMT Import Configuration Header', Comment = 'de-DE=Import Konfiguration Kopf';
     LookupPageId = DMTImportConfigList;
@@ -218,7 +218,7 @@ table 91003 DMTImportConfigHeader
     internal procedure GetDataLayout() dataLayout: Record DMTDataLayout
     var
         sourceFileStorage: Record DMTSourceFileStorage;
-        noSourceFileAssignedErr: Label 'The import configuration %1 has no source file assigned.',Comment = 'de-DE=Die Importkonfiguration %1 hat keine Quelldatei zugeordnet.';
+        noSourceFileAssignedErr: Label 'The import configuration %1 has no source file assigned.', Comment = 'de-DE=Die Importkonfiguration %1 hat keine Quelldatei zugeordnet.';
     begin
         // throw error if no source file is assigned
         if rec."Source File ID" = 0 then

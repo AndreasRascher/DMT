@@ -1,4 +1,4 @@
-page 91023 DMTCopyTableList
+page 110023 DMTCopyTableList
 {
     Caption = 'DMT Copy Table List', Comment = 'de-DE=DMT Tabellen kopieren';
     PageType = List;
