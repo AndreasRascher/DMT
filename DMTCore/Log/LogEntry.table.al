@@ -1,4 +1,4 @@
-table 110008 DMTLogEntry
+table 111008 DMTLogEntry
 {
     fields
     {

@@ -1,4 +1,4 @@
-pageextension 90013 ImportConfigList extends DMTImportConfigList
+pageextension 110013 ImportConfigList extends DMTImportConfigList
 {
     layout
     {

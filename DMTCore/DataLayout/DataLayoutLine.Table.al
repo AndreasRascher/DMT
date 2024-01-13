@@ -1,4 +1,4 @@
-table 110005 DMTDataLayoutLine
+table 111005 DMTDataLayoutLine
 {
     Caption = 'Data Layout Line', Comment = 'de-DE=Datenlayoutzeile';
     DataClassification = CustomerContent;

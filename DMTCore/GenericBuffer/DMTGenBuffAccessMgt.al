@@ -1,4 +1,4 @@
-codeunit 110023 DMTGenBuffAccessMgt
+codeunit 111023 DMTGenBuffAccessMgt
 {
     /// <summary>Initialize parameters for import into generic buffer table </summary>
     internal procedure InitImportToGenBuffer(importConfigHeader: Record DMTImportConfigHeader)

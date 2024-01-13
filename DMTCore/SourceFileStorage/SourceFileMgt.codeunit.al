@@ -1,4 +1,4 @@
-codeunit 110001 DMTSourceFileMgt
+codeunit 111001 DMTSourceFileMgt
 {
     internal procedure UploadFileIntoFileStorage()
     var
@@ -85,6 +85,7 @@ codeunit 110001 DMTSourceFileMgt
         OStream: OutStream;
         IStr: InStream;
         FileNameInArchive: Text;
+        EntryLength: Integer;
     begin
         OK := true;
         if not FileName.ToLower().EndsWith('zip') then
@@ -94,7 +95,7 @@ codeunit 110001 DMTSourceFileMgt
         foreach FileNameInArchive in EntryList do begin
             Clear(TempBlob);
             TempBlob.CreateOutStream(OStream);
-            DataCompression.ExtractEntry(FileNameInArchive, OStream);
+            DataCompression.ExtractEntry(FileNameInArchive, OStream, EntryLength);
             TempBlob.CreateInStream(IStr);
             AddFileToStorage(FileNameInArchive, IStr);
         end;

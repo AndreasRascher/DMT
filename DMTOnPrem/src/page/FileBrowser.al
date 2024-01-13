@@ -1,4 +1,4 @@
-page 90008 "DMTFileBrowser"
+page 110008 "DMTFileBrowser"
 {
     Caption = 'File Browser', Comment = 'de-DE=Datei Explorer';
     PageType = Worksheet;

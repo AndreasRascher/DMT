@@ -1,4 +1,4 @@
-codeunit 110002 DMTImportConfigMgt
+codeunit 111002 DMTImportConfigMgt
 {
     internal procedure PageAction_InitImportConfigLine(ImportConfigHeaderID: Integer): Boolean
     var

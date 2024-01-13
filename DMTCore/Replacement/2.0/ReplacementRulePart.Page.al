@@ -1,4 +1,4 @@
-page 110020 DMTReplacementRulePart
+page 111020 DMTReplacementRulePart
 {
     Caption = 'Rules', Comment = 'de-DE=Regeln';
     PageType = ListPart;
@@ -47,13 +47,15 @@ page 110020 DMTReplacementRulePart
     var
         invalidChars: Text;
         invalidChar: Char;
+        i: Integer;
     begin
         newStyleExpr := Format(enum::DMTFieldStyle::None);
         invalidChars[1] := 13; //CR
         invalidChars[2] := 10; //LF
         invalidChars[3] := 9; //Tab
         invalidChars[4] := 160; //No-Break Space (NBSP) ALT+0,1,6,0
-        foreach invalidChar in invalidChars do begin
+        for i := 1 to StrLen(invalidChars) do begin
+            invalidChar := invalidChars[i]; //Get the current invalid char
             if textValue.Contains(invalidChar) then
                 newStyleExpr := Format(enum::DMTFieldStyle::"Blue + Italic");
         end;

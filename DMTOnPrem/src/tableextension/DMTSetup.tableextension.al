@@ -1,4 +1,4 @@
-tableextension 90000 "DMTSetup" extends DMTSetup
+tableextension 110000 "DMTSetup" extends DMTSetup
 {
     fields
     {

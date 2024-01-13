@@ -1,4 +1,4 @@
-codeunit 110019 DMTGenericBuffertTableMgtImpl implements IBufferTableMgt
+codeunit 111019 DMTGenericBuffertTableMgtImpl implements IBufferTableMgt
 {
     procedure setImportConfigHeader(var ImportConfigHeader: record DMTImportConfigHeader);
     begin

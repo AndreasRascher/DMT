@@ -1,4 +1,4 @@
-codeunit 110018 DMTExcelReader
+codeunit 111018 DMTExcelReader
 {
     EventSubscriberInstance = Manual;
     trigger OnRun()
@@ -52,7 +52,7 @@ codeunit 110018 DMTExcelReader
         ReadModeGlobal := ReadModeGlobal::ImportToGenBuffer;
     end;
 
-    [EventSubscriber(ObjectType::Table, Database::"Excel Buffer", OnBeforeParseCellValue, '', false, false)]
+    [EventSubscriber(ObjectType::Table, Database::"Excel Buffer", 'OnBeforeParseCellValue', '', false, false)]
     local procedure OnBeforeParseCellValue(var ExcelBuffer: Record "Excel Buffer"; var Value: Text; var FormatString: Text; var IsHandled: Boolean);
     begin
         IsHandled := true;

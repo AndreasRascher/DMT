@@ -1,4 +1,5 @@
-page 90000 DMTFreeObjectsInLicense
+#pragma warning disable AL0424
+page 110000 DMTFreeObjectsInLicense
 {
     CaptionML = ENU = 'Free Objects in License', DEU = 'Freie Objekte in der Lizenz';
     ApplicationArea = All;
@@ -343,7 +344,7 @@ page 90000 DMTFreeObjectsInLicense
     var
         TempAllObjWithCaption: Record AllObjWithCaption temporary;
         i: Integer;
-    begin        
+    begin
         TempAllObjWithCaption.Copy(Rec, true);
         for i := 1 to GetMaxObjectType() do begin
             TempAllObjWithCaption."Object Type" := i;
@@ -362,7 +363,7 @@ page 90000 DMTFreeObjectsInLicense
                 TempAllObjWithCaption."Object Type"::XMLport:
                     NoOfXMLports := Rec.Count;
                 TempAllObjWithCaption."Object Type"::Enum:
-                    NoOfEnums := Rec.Count;                
+                    NoOfEnums := Rec.Count;
             end; // end_CASE
         end;
         Rec.Reset();
@@ -466,3 +467,4 @@ page 90000 DMTFreeObjectsInLicense
         RunMode: Option FreeIDs,AppIDs;
         GlobalAppFilter, GlobalObjectRangeFilter : Text;
 }
+#pragma warning restore AL0424

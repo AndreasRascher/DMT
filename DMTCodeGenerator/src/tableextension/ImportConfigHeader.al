@@ -1,4 +1,4 @@
-tableextension 90011 DMTImportConfigHeader extends DMTImportConfigHeader
+tableextension 110011 DMTImportConfigHeader extends DMTImportConfigHeader
 {
     fields
     {

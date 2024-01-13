@@ -1,4 +1,4 @@
-codeunit 110021 ReplacementHandlerImpl2 implements IReplacementHandler
+codeunit 111021 ReplacementHandlerImpl2 implements IReplacementHandler
 {
     SingleInstance = true;
     procedure InitBatchProcess(ImportConfigHeader: Record DMTImportConfigHeader);
@@ -142,7 +142,7 @@ codeunit 110021 ReplacementHandlerImpl2 implements IReplacementHandler
         end;
     end;
 
-    [EventSubscriber(ObjectType::Table, Database::DMTImportConfigHeader, OnAfterDeleteEvent, '', false, false)]
+    [EventSubscriber(ObjectType::Table, Database::DMTImportConfigHeader, 'OnAfterDeleteEvent', '', false, false)]
     local procedure DMTReplacementLine_OnAfterDeleteEvent(var Rec: Record DMTImportConfigHeader; RunTrigger: Boolean)
     var
         replacementLine: Record DMTReplacementLine;

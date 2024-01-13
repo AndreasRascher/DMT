@@ -1,4 +1,4 @@
-codeunit 110016 DMTDeleteRecordsWithErrorLog
+codeunit 111016 DMTDeleteRecordsWithErrorLog
 {
     trigger OnRun()
     begin

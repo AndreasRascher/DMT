@@ -1,4 +1,4 @@
-pageextension 90000 "DMTSetup" extends "DMT Setup"
+pageextension 110000 "DMTSetup" extends "DMT Setup"
 {
     layout
     {

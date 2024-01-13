@@ -1,4 +1,4 @@
-codeunit 110011 DMTChangeRecordWithPerm
+codeunit 111011 DMTChangeRecordWithPerm
 {
     Permissions = tabledata "Dimension Set Entry" = rimd,
                   tabledata "Dimension Set Tree Node" = rimd;

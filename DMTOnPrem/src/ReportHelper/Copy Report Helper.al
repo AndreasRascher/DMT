@@ -1,4 +1,5 @@
-page 90001 "Copy Report Helper"
+#pragma warning disable AL0424
+page 110001 "Copy Report Helper"
 {
     Caption = 'Copy Report Helper';
     PageType = List;
@@ -381,3 +382,4 @@ page 90001 "Copy Report Helper"
         [InDataSet]
         addSetDataGetDataCustomCodeOption, removeALWhitespaceOption : Boolean;
 }
+#pragma warning restore AL0424

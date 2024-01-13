@@ -1,4 +1,4 @@
-table 110007 DMTBlobStorage
+table 111007 DMTBlobStorage
 {
     Access = Internal;
     fields

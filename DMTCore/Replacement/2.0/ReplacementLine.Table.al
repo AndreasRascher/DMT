@@ -1,4 +1,4 @@
-table 110012 DMTReplacementLine
+table 111012 DMTReplacementLine
 {
     DataClassification = ToBeClassified;
 

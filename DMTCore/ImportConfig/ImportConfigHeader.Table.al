@@ -1,4 +1,4 @@
-table 110003 DMTImportConfigHeader
+table 111003 DMTImportConfigHeader
 {
     Caption = 'DMT Import Configuration Header', Comment = 'de-DE=Import Konfiguration Kopf';
     LookupPageId = DMTImportConfigList;
@@ -367,7 +367,9 @@ table 110003 DMTImportConfigHeader
         sourceFileStorage.Get(Rec."Source File ID");
         if sourceFileStorage."Data Layout ID" <> 0 then
             exit;
+#if BC23
         DataLayoutMissingErrInfo.AddAction(AssignDataLayoutButtonCaptionLbl, Codeunit::DMTSourceFileMgt, 'ShowSourceFileStorageWithErrorIfno');//Method must be global and have an errorinfo parameter
+#endif
         DataLayoutMissingErrInfo.Message := StrSubstNo(SourceFileHasNoDataLayoutErr, sourceFileStorage.TableCaption, sourceFileStorage.Name);// no error shown if missing
         DataLayoutMissingErrInfo.RecordId := sourceFileStorage.RecordId;
         Error(DataLayoutMissingErrInfo);
