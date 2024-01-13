@@ -21,7 +21,7 @@
 			"version": "0.2.0",
 			"configurations": [
 				{
-					"name": "BC23",
+					"name": "BC21",
 					"type": "al",
 					"request": "launch",
 					"environmentType": "OnPrem",
@@ -40,40 +40,7 @@
 					"tenant": "default",
 					"usePublicURLFromServer": true,
 					"schemaUpdateMode": "ForceSync"
-				},
-				{
-					"name": "Akra SandboxDEV",
-					"type": "al",
-					"request": "launch",
-					"environmentType": "Sandbox",
-					"environmentName": "SandboxDEV",
-					"startupObjectId": 22,
-					"breakOnError": "All",
-					"breakOnRecordWrite": "None",
-					"launchBrowser": true,
-					"enableSqlInformationDebugger": true,
-					"enableLongRunningSqlStatements": true,
-					"longRunningSqlStatementsThreshold": 500,
-					"numberOfSqlStatements": 10,
-					"tenant": "c2aab99e-f404-4b09-b979-b7c38bbddaaa"
-				},
-				{
-					"name": "Attach: BC23",
-					"type": "al",
-					"request": "attach",
-					"environmentType": "OnPrem",
-					"server": "http://bc23/",
-					"serverInstance": "BC",
-					"authentication": "UserPassword",
-					"breakOnError": "All",
-					"breakOnRecordWrite": "None",
-					"enableSqlInformationDebugger": true,
-					"enableLongRunningSqlStatements": true,
-					"longRunningSqlStatementsThreshold": 500,
-					"numberOfSqlStatements": 10,
-					"breakOnNext": "WebClient",
-					"tenant": "default"
-				}
+				}				
 				,
 				{
 					"name": "TEST_MC",
