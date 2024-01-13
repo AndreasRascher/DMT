@@ -2,8 +2,8 @@ OBJECT XMLport 50049 DMT Export2
 {
   OBJECT-PROPERTIES
   {
-    Date=25.11.23;
-    Time=01:10:09;
+    Date=13.01.24;
+    Time=22:57:37;
     Modified=Yes;
     Version List=DMT;
   }
@@ -3029,6 +3029,7 @@ OBJECT XMLport 50049 DMT Export2
         ExportRecRef.GETTABLE(field);
       END;
 
+      ApplyCustomExportFilters(ExportRecRef); //20240113
       ExportRecRef.FINDSET(FALSE,FALSE);
 
       CLEAR(Progress);
@@ -3474,6 +3475,21 @@ OBJECT XMLport 50049 DMT Export2
         JSONObjectAsText += STRSUBSTNO(',"%1":"%2"',JName,JValue)
       ELSE
         JSONObjectAsText += STRSUBSTNO('"%1":"%2"',JName,JValue)
+    END;
+
+    PROCEDURE ApplyCustomExportFilters@1000000004(VAR _RecRef@1000000000 : RecordRef);
+    VAR
+      _RecordLink@1000000001 : Record 2000000068;
+    BEGIN
+      // Add Custom Export Filters here
+      CASE _RecRef.NAME OF
+        _RecordLink.TABLENAME: BEGIN
+          _RecordLink.SETRANGE(Company,COMPANYNAME);
+          _RecRef.SETVIEW(_RecordLink.GETVIEW());
+        END;
+      END;
+      IF _RecRef.HASFILTER THEN
+        MESSAGE('Export der Tabelle %1 mit Filter:\%2',_RecordLink.TABLECAPTION,_RecordLink.GETFILTERS);
     END;
 
     BEGIN
