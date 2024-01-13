@@ -216,10 +216,11 @@ codeunit 91003 DMTMigrationLib
 
         //FeatureKey: ReplaceIntrastat
         if FeatureKey.Get('ReplaceIntrastat') and (FeatureKey.Enabled <> FeatureKey.Enabled::"All Users") then begin
+            // add obsolete tables if feature is disabled
             tableMetadata.Get(261);
-            NAVExportFileNamesDict.Add(createNAVExportFileName(tableMetadata.Caption), tableMetadata.ID);
+            NAVExportFileNamesDict.Set(createNAVExportFileName(tableMetadata.Caption), tableMetadata.ID);
             tableMetadata.Get(262);
-            NAVExportFileNamesDict.Add(createNAVExportFileName(tableMetadata.Caption), tableMetadata.ID);
+            NAVExportFileNamesDict.Set(createNAVExportFileName(tableMetadata.Caption), tableMetadata.ID);
         end;
 
         // Known renamed tables
