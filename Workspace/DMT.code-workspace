@@ -25,12 +25,11 @@
 					"type": "al",
 					"request": "launch",
 					"environmentType": "OnPrem",
-					"server": "http://bc23/",
+					"server": "http://bc21",
 					"serverInstance": "BC",
 					"authentication": "UserPassword",
-					"startupObjectType": "Page",
-					"startupObjectId": 91010,
-					"breakOnError": "ExcludeTry",
+					"startupObjectId": 22,
+					"breakOnError": "All",
 					"breakOnRecordWrite": "None",
 					"launchBrowser": true,
 					"enableSqlInformationDebugger": true,
@@ -38,27 +37,8 @@
 					"longRunningSqlStatementsThreshold": 500,
 					"numberOfSqlStatements": 10,
 					"tenant": "default",
-					"usePublicURLFromServer": true,
-					"schemaUpdateMode": "ForceSync"
-				}				
-				,
-				{
-					"name": "TEST_MC",
-					"request": "launch",
-					"type": "al",
-					"environmentType": "OnPrem",
-					"server": "https://businesscentraltest.sag-schlagbaum.com/TEST_MC/",
-					"serverInstance": "TEST_MC",
-					"authentication": "UserPassword",
-					"startupObjectType": "Page",
-					"startupObjectId": 110015,
-					"breakOnError": true,
-					"launchBrowser": true,
-					"enableLongRunningSqlStatements": true,
-					"enableSqlInformationDebugger": true,
-					"tenant": "default",
-					"schemaUpdateMode": "Synchronize"
-				}   
+					"usePublicURLFromServer": true
+				}
 			],
 			"compounds": []
 		},
@@ -66,7 +46,8 @@
 			"editor.wordBasedSuggestions": "off",
 			"editor.suggestSelection": "first",
 			"editor.formatOnSave": true,
-			"editor.semanticHighlighting.enabled": true
+			"editor.semanticHighlighting.enabled": true,
+			"editor.inlayHints.fontSize": 12
 		},
 		"al.packageCachePath": [
 			"..\\Workspace\\.alpackages"
@@ -75,14 +56,6 @@
 		"al.enableCodeActions": true,
 		"al.enableCodeAnalysis": true,
 		"al.ruleSetPath": "..\\Workspace\\ruleSets\\DMTRuleSet.json",
-		"al.compilationOptions": {
-			"maxDegreeOfParallelism": 4
-		},
-		"al.codeAnalyzers": [
-			"${PerTenantExtensionCop}",
-			"${CodeCop}",
-			"${UICop}"
-		],
 		"al.inlayhints.functionReturnTypes.enabled": true,
 		"al.inlayhints.parameterNames.enabled": true,
 		"editor.inlayHints.enabled": "offUnlessPressed",
@@ -102,6 +75,11 @@
 		"editor.stickyScroll.enabled": true,
 		"editor.stickyScroll.maxLineCount": 5,
 		"git.openRepositoryInParentFolders": "prompt",
-		"alOutline.addToolTipsToPageFields": false
+		"alOutline.addToolTipsToPageFields": false,
+		"al.codeAnalyzers": [
+			"${PerTenantExtensionCop}",
+			"${CodeCop}",
+			"${UICop}"
+		]
 	}
 }
