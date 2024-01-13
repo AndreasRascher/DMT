@@ -39,6 +39,24 @@
 					"tenant": "default",
 					"usePublicURLFromServer": true
 				}
+				,
+				{
+					"name": "TEST_MC",
+					"request": "launch",
+					"type": "al",
+					"environmentType": "OnPrem",
+					"server": "https://businesscentraltest.sag-schlagbaum.com/TEST_MC/",
+					"serverInstance": "TEST_MC",
+					"authentication": "UserPassword",
+					"startupObjectType": "Page",
+					"startupObjectId": 110015,
+					"breakOnError": true,
+					"launchBrowser": true,
+					"enableLongRunningSqlStatements": true,
+					"enableSqlInformationDebugger": true,
+					"tenant": "default",
+					"schemaUpdateMode": "Synchronize"
+				}    
 			],
 			"compounds": []
 		},
