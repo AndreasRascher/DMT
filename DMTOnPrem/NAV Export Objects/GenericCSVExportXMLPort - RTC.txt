@@ -2,8 +2,8 @@ OBJECT XMLport 50049 DMT Export2
 {
   OBJECT-PROPERTIES
   {
-    Date=13.01.24;
-    Time=22:57:37;
+    Date=14.01.24;
+    Time=00:56:07;
     Modified=Yes;
     Version List=DMT;
   }
@@ -20,6 +20,7 @@ OBJECT XMLport 50049 DMT Export2
 
     OnPreXMLport=BEGIN
                    IF HeaderLine.HASFILTER THEN BEGIN
+                     FilterToArguments(HeaderLine.GETFILTER(HeaderLine."Table Name"),ExportBlobContent,ExportFlowFields);
                      InitAvailableFields(HeaderLine.GETRANGEMIN("Table No."));
                      ActualExportTableFilter :=  HeaderLine.GETFILTER("Table No.");
                    END ELSE BEGIN
@@ -41,7 +42,9 @@ OBJECT XMLport 50049 DMT Export2
                                                   SourceTable=Table2000000028;
                                                   SourceTableView=SORTING(Field1,Field2);
                                                   Export::OnPreXMLItem=BEGIN
-                                                                         HeaderLine.SETRANGE("Company Name",COMPANYNAME);
+                                                                         // Filter only needed wehn DataPerCompany=true
+                                                                         IF HeaderLine.COUNT > 1 THEN
+                                                                           HeaderLine.SETRANGE("Company Name",COMPANYNAME);
                                                                        END;
                                                                         }
 
@@ -57,9 +60,9 @@ OBJECT XMLport 50049 DMT Export2
                                                   SourceTableView=SORTING(Field1)
                                                                   WHERE(Field1=FILTER(1..));
                                                   Export::OnAfterGetRecord=BEGIN
-                                                                             IF Lines.Number = 1 THEN
-                                                                               OpenExportRecord(HeaderLine.GETRANGEMIN("Table No."))
-                                                                             ELSE
+                                                                             IF Lines.Number = 1 THEN BEGIN
+                                                                               OpenExportRecord(HeaderLine.GETRANGEMIN("Table No."));
+                                                                             END ELSE
                                                                                FindNextExportRecord();
                                                                            END;
                                                                             }
@@ -3066,6 +3069,7 @@ OBJECT XMLport 50049 DMT Export2
       DMTExport@1000000002 : XMLport 50049;
       Params@55001 : Record 2000000028;
       field@55002 : Record 2000000041;
+      ArgumentFilter@1000000006 : Text;
     BEGIN
       CLEAR(ExportRecRef);
       CLEAR(ExportDuration);
@@ -3088,6 +3092,8 @@ OBJECT XMLport 50049 DMT Export2
       //DMTExport.SETDESTINATION(outStream);
       //DMTExport.EXPORT;
       Params.SETRANGE("Table No.",exportTableID);
+      ArgumentsToFilter(ArgumentFilter,ExportBlobContent,ExportFlowFields);
+      Params.SETFILTER("Table Name",ArgumentFilter);
       XMLPORT.EXPORT(XMLPORT::"DMT Export2",outStream,Params);
       serverFile.CLOSE;
 
@@ -3490,6 +3496,21 @@ OBJECT XMLport 50049 DMT Export2
       END;
       IF _RecRef.HASFILTER THEN
         MESSAGE('Export der Tabelle %1 mit Filter:\%2',_RecordLink.TABLECAPTION,_RecordLink.GETFILTERS);
+    END;
+
+    PROCEDURE ArgumentsToFilter@1000000005(VAR FilterExpr@1000000002 : Text;_ExportBlobContent@1000000000 : Boolean;_ExportFlowFields@1000000001 : Boolean);
+    BEGIN
+       FilterExpr += FORMAT(_ExportBlobContent,0,'<Number>');
+       FilterExpr += FORMAT(_ExportFlowFields,0,'<Number>');
+       FilterExpr := '*|' + FilterExpr;
+    END;
+
+    PROCEDURE FilterToArguments@1000000006(FilterExpr@1000000003 : Text;VAR _ExportBlobContent@1000000002 : Boolean;VAR _ExportFlowFields@1000000001 : Boolean);
+    BEGIN
+      IF STRPOS(FilterExpr,'*|')=0 THEN EXIT;
+      FilterExpr := DELCHR(FilterExpr,'<','*|');
+      _ExportBlobContent := COPYSTR(FilterExpr,1,1)='1';
+      _ExportFlowFields  := COPYSTR(FilterExpr,2,1)='1';
     END;
 
     BEGIN
