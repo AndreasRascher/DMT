@@ -100,6 +100,7 @@ codeunit 91008 DMTProcessRecord
         char177: Text[1];
     begin
         OK := true;
+        char177[1] := 177;
         if sourceRef.Number <> genBuffTable.RecordId.TableNo then
             exit(false);
         if field.Get(importConfigLine."Target Table ID", importConfigLine."Target Field No.") then
@@ -135,7 +136,6 @@ codeunit 91008 DMTProcessRecord
                     IStream.ReadText(fieldContent);
                     if fieldContent.StartsWith('JSON:') then begin
                         fieldContent := fieldContent.TrimStart('JSON:');
-                        char177[1] := 177;
                         fieldContent := DelChr(fieldContent, '<>', char177);
                         jObj.ReadFrom(fieldContent);
                         Clear(TenantMedia);
