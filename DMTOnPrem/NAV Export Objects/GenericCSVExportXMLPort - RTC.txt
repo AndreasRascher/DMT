@@ -3,7 +3,7 @@ OBJECT XMLport 50049 DMT Export2
   OBJECT-PROPERTIES
   {
     Date=14.01.24;
-    Time=00:56:07;
+    Time=01:16:53;
     Modified=Yes;
     Version List=DMT;
   }
@@ -50,7 +50,7 @@ OBJECT XMLport 50049 DMT Export2
 
     { [{5DD98F95-C564-45B0-871A-2E008E196ABE}];2 ;HeaderContent       ;Element ;Text    ;
                                                   Export::OnBeforePassVariable=BEGIN
-                                                                                 HeaderContent := CreateHeaderLine(NormalFields,BlobAndMediaFields,LastFieldNo);
+                                                                                 HeaderContent := CreateHeaderLine(NormalFields,BlobAndMediaFields,LastFieldNoGlobal);
                                                                                END;
                                                                                 }
 
@@ -2679,7 +2679,7 @@ OBJECT XMLport 50049 DMT Export2
       ExportBlobContent@55011 : Boolean;
       NoOfNormalFields@55019 : Integer;
       NoOfBlobAndMediaFields@55020 : Integer;
-      LastFieldNo@55008 : Integer;
+      LastFieldNoGlobal@55008 : Integer;
       ExportFinished@55009 : TextConst 'DEU=Export abgeschlossen;ENU=Export finished';
       BlobColumnIdentifier@55005 : TextConst 'DEU=[Base64];ENU=[Base64]';
       FieldSeparator@55010 : Text[1];
@@ -2809,7 +2809,7 @@ OBJECT XMLport 50049 DMT Export2
           _normalFields.INSERT;
         END;
       UNTIL field.NEXT=0;
-      LastFieldNo := field."No."; //* get last field no
+      LastFieldNoGlobal := field."No."; //* get last field no
 
       IF _ExportTableID = DATABASE::Field THEN
       AddCustomFieldsToSchemaExport(NormalFields);
@@ -3169,7 +3169,8 @@ OBJECT XMLport 50049 DMT Export2
       valueAsText := RemoveSpecialChars(valueAsText);
 
       // Add Closing Sign
-      IF LastFieldNo <> NormalFields."No." THEN
+      IF (LastFieldNoGlobal <> NormalFields."No.") OR
+         (NOT BlobAndMediaFields.ISEMPTY) THEN  // Blob fields are attached at the end -> separator needed
         valueAsText += FieldSeparator;
     END;
 
@@ -3434,7 +3435,7 @@ OBJECT XMLport 50049 DMT Export2
       RemoveSpecialCharsBT(valueAsBigText);
 
       // Add Closing Sign
-      IF LastFieldNo <> ExportFields."No." THEN
+      IF LastFieldNoGlobal <> ExportFields."No." THEN
         valueAsBigText.ADDTEXT(FieldSeparator);
     END;
 
