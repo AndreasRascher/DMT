@@ -13,6 +13,11 @@
             "justification": "The compilation target is set to 'OnPrem', but it must be set to 'Cloud' or 'Extension'."
         },
         {
+            "id": "PTE0012",
+            "action": "None",
+            "justification": "The InternalsVisibleTo setting will expose your internal objects to any extension with the given name, publisher, and ID. Access modifiers are not designed to be used as a security boundary, but for API development."
+        },
+        {
             "id": "AA0218",
             "action": "None",
             "justification": "ToolTip must be filled"
