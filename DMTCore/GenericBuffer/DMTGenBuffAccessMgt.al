@@ -38,7 +38,7 @@ codeunit 91023 DMTGenBuffAccessMgt
             //Handle large Texts
             if IsColumnCaptionLine then begin
                 ColCaptionsGlobal.add(CurrColIndex, cellValue);
-                if cellValue.EndsWith('[Base64]') then
+                if cellValue.EndsWith('[Base64]') or cellValue.EndsWith('[BlobText]') then
                     Base64FieldIDListGlobal.Add(CurrColIndex, cellValue);
             end;
             if not IsColumnCaptionLine then // is not a column caption
@@ -65,12 +65,12 @@ codeunit 91023 DMTGenBuffAccessMgt
     //<summary>save line content to generic buffer</summary>
     internal procedure ImportLine(currLine: List of [BigText]; currRowNo: Integer);
     var
-        genBuffTable: Record DMTGenBuffTable;
         blobStorage: Record DMTBlobStorage;
+        genBuffTable: Record DMTGenBuffTable;
+        cellValueBT: BigText;
         RecRef: RecordRef;
         IsColumnCaptionLine: Boolean;
         CurrColIndex: Integer;
-        cellValueBT: BigText;
     // cellValue: Text;
     begin
         IsColumnCaptionLine := (HeadLineRowNoGlobal = currRowNo);
@@ -93,7 +93,7 @@ codeunit 91023 DMTGenBuffAccessMgt
             //Handle large Texts
             if IsColumnCaptionLine then begin
                 ColCaptionsGlobal.add(CurrColIndex, format(cellValueBT));
-                if format(cellValueBT).EndsWith('[Base64]') then
+                if format(cellValueBT).EndsWith('[Base64]') or format(cellValueBT).EndsWith('[BlobText]') then
                     Base64FieldIDListGlobal.Add(CurrColIndex, format(cellValueBT));
             end;
             if not IsColumnCaptionLine then // is not a column caption

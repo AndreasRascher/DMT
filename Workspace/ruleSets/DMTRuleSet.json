@@ -3,23 +3,38 @@
     "description": "Description",
     "rules": [
         {
+            "id": "PTE0001",
+            "action": "None",
+            "justification": "Objects onPrem can have other IDs than 50000-99999"
+        },
+        {
+            "id": "PTE0005",
+            "action": "None",
+            "justification": "The compilation target is set to 'OnPrem', but it must be set to 'Cloud' or 'Extension'."
+        },
+        {
+            "id": "PTE0012",
+            "action": "None",
+            "justification": "The InternalsVisibleTo setting will expose your internal objects to any extension with the given name, publisher, and ID. Access modifiers are not designed to be used as a security boundary, but for API development."
+        },
+        {
             "id": "AA0218",
-            "action": "None", 
+            "action": "None",
             "justification": "ToolTip must be filled"
         },
         {
             "id": "AA0214",
-            "action": "None", 
+            "action": "None",
             "justification": "The record should be modified before saving to the database"
         },
         {
             "id": "AA0215",
-            "action": "None", 
+            "action": "None",
             "justification": "The file xyz.al has an incorrect name."
         },
         {
             "id": "PTE0004",
-            "action": "None", 
+            "action": "None",
             "justification": "missing permission set"
         },
         {
@@ -48,14 +63,14 @@
             "justification": "The variable '...' is initialized but not used."
         },
         {
-            "id":"AA0210",
-            "action":"None",
-            "justification":"The table ... does not contain a key with the field ..."
+            "id": "AA0210",
+            "action": "None",
+            "justification": "The table ... does not contain a key with the field ..."
         },
         {
-            "id":"AL0424",
-            "action":"None",
-            "justification":"CaptionML is used for buffer table"
+            "id": "AL0424",
+            "action": "None",
+            "justification": "CaptionML is used for buffer table"
         },
         {
             "id": "AA0233",
@@ -73,9 +88,9 @@
             "justification": "An implicit conversion is being performed from a value of type 'Option' to a value of type Enum"
         },
         {
-            "id":"PTE0005",
-            "action":"None",
-            "justification":"onPrem"
+            "id": "PTE0005",
+            "action": "None",
+            "justification": "onPrem"
         }
     ]
 }

@@ -248,6 +248,12 @@ codeunit 91002 DMTImportConfigMgt
                     SourceFieldName2 := SourceFieldName.Remove(StrLen(SourceFieldName) - StrLen('[Base64]') + 1);
                     FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName2);
                 end;
+                // BlobText Fields
+                if SourceFieldName.EndsWith('[BlobText]') then begin
+                    // SourceFieldName2 - original field name, SourceFieldName - field name from File
+                    SourceFieldName2 := SourceFieldName.Remove(StrLen(SourceFieldName) - StrLen('[BlobText]') + 1);
+                    FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName2);
+                end;
             end;
             if FoundAtIndex <> 0 then begin
                 TargetFieldID := TargetFieldNames.Keys.Get(FoundAtIndex);
@@ -288,11 +294,7 @@ codeunit 91002 DMTImportConfigMgt
     local procedure CreateSourceFieldNamesDict(importConfigHeader: Record DMTImportConfigHeader) SourceFieldNames: Dictionary of [Integer, Text]
     var
         dataLayout: Record DMTDataLayout;
-        genBuffTable: Record DMTGenBuffTable;
         dataLayoutLine: Record DMTDataLayoutLine;
-        Field: Record Field;
-        SourceFieldNames2: Dictionary of [Integer, Text];
-        FieldID: Integer;
         NoHeadlineInfoFoundInDataLayoutErr: Label 'You have to setup the column names in datalayout "%1"',
                                   Comment = 'de-DE=Sie müssen die Spaltentitel im Datenlayout "%1" einrichten.';
     begin

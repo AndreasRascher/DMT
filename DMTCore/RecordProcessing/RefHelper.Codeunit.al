@@ -15,6 +15,7 @@ codeunit 91013 DMTRefHelper
 
     procedure CopyRecordRef(var RecRefSource: RecordRef; var RecRefTarget: RecordRef)
     var
+        TempBlob: Codeunit "Temp Blob";
         FieldRefSource: FieldRef;
         FieldRefTarget: FieldRef;
         i: Integer;
@@ -22,8 +23,11 @@ codeunit 91013 DMTRefHelper
         for i := 1 to RecRefSource.FieldCount do begin
             if RecRefTarget.FieldIndex(i).Class = FieldClass::Normal then begin
                 FieldRefSource := RecRefSource.FieldIndex(i);
-                if FieldRefSource.Type in [FieldType::Blob] then
-                    FieldRefSource.CalcField();
+                if FieldRefSource.Type in [FieldType::Blob] then begin
+                    TempBlob.FromFieldRef(FieldRefSource);
+                    if not TempBlob.HasValue() then  // keep unsaved blob content
+                        FieldRefSource.CalcField();
+                end;
                 FieldRefTarget := RecRefTarget.FieldIndex(i);
                 FieldRefTarget.Value := FieldRefSource.Value;
             end;
@@ -41,8 +45,7 @@ codeunit 91013 DMTRefHelper
     procedure EvaluateFieldRef(var FieldRef_TO: FieldRef; FromText: Text; EvaluateOptionValueAsNumber: Boolean; ThrowError: Boolean): Boolean
     var
         TempBlob: Record "Tenant Media" temporary;
-        dummyVendor: Record Vendor temporary;
-        tenantMedia: Record "Tenant Media";
+        tempDummyVendor: Record Vendor temporary;
         _DateFormula: DateFormula;
         _RecordID: RecordId;
         _BigInteger: BigInteger;
@@ -222,7 +225,7 @@ codeunit 91013 DMTRefHelper
                     TempBlob.Insert();
                     TempBlob.CalcFields(Content);
                     TempBlob.Content.CreateInStream(_InStream);
-                    _Guid := dummyVendor.Image.ImportStream(_InStream, '');
+                    _Guid := tempDummyVendor.Image.ImportStream(_InStream, '');
                     FieldRef_TO.Value(_Guid);
                     exit(true);
                 end;

@@ -9,10 +9,20 @@ codeunit 91008 DMTProcessRecord
     begin
         Clear(CurrValueToAssignText);
         if RunMode = RunMode::FieldTransfer then begin
-            if ProcessedFields.Count < TargetKeyFieldIDs.Count then
-                ProcessKeyFields();
-            if (not SkipRecord) or UpdateFieldsInExistingRecordsOnly then
-                ProcessNonKeyFields();
+            case true of
+                ImportConfigHeader."Target Table ID" = Database::"Record Link":
+                    begin
+                        ProcessNonKeyFields(); // Surrogate Table Structure -> no Key Fields
+                                               // if ProcessedFields.Count < TargetKeyFieldIDs.Count then
+                        ProcessKeyFields();
+                    end;
+                else begin
+                    if ProcessedFields.Count < TargetKeyFieldIDs.Count then
+                        ProcessKeyFields();
+                    if (not SkipRecordGlobal) or UpdateFieldsInExistingRecordsOnly then
+                        ProcessNonKeyFields();
+                end;
+            end;
         end;
 
         if RunMode = RunMode::InsertRecord then begin
@@ -32,6 +42,7 @@ codeunit 91008 DMTProcessRecord
         TargetField := TmpTargetRef.Field(TempImportConfigLine."Target Field No.");
         if HandleBase64ToBlobTransferfromGenBuffTable(TargetField, TempImportConfigLine, SourceRef) then
             exit;
+        //hier: Prüfen warum der Blob nicht übertragen wird
         SourceField := SourceRef.Field(TempImportConfigLine."Source Field No.");
 
         if IReplacementHandler.HasReplacementsForTargetField(TargetField.Number) then begin
@@ -87,16 +98,18 @@ codeunit 91008 DMTProcessRecord
     var
         blobStorage: Record DMTBlobStorage;
         genBuffTable: Record DMTGenBuffTable;
-        TenantMedia: Record "Tenant Media";
         field: Record Field;
+        recordLink: Record "Record Link";
+        TenantMedia: Record "Tenant Media";
         Base64Convert: Codeunit "Base64 Convert";
+        RecordLinkManagement: Codeunit "Record Link Management";
         TempBlob: Codeunit "Temp Blob";
-        IStream: InStream;
-        OStream: OutStream;
-        fieldContent: Text;
         recRef: RecordRef;
+        IStream: InStream;
         jObj: JsonObject;
         jToken: JsonToken;
+        OStream: OutStream;
+        fieldContent: Text;
         char177: Text[1];
     begin
         OK := true;
@@ -114,6 +127,19 @@ codeunit 91008 DMTProcessRecord
             exit(false);
 
         case true of
+            // is record Link Note
+            (targetField.Number = recordLink.fieldNo(Note)) and (targetField.Record().RecordId.TableNo = database::"Record Link"):
+                begin
+                    blobStorage.FindFirst();
+                    blobStorage.CalcFields(Blob);
+                    blobStorage.Blob.CreateInStream(IStream);
+                    IStream.ReadText(fieldContent);
+                    RecordLinkManagement.WriteNote(recordLink, fieldContent);
+                    targetField.Value := recordLink.Note;
+                    Clear(fieldContent);
+                    fieldContent := RecordLinkManagement.ReadNote(recordLink);
+                end;
+            // is blob content
             (targetField.Type = FieldType::Blob):
                 begin
                     blobStorage.FindFirst();
@@ -128,6 +154,7 @@ codeunit 91008 DMTProcessRecord
                     Base64Convert.FromBase64(fieldContent, OStream);
                     TempBlob.ToFieldRef(targetField);
                 end;
+            // is media content
             (targetField.Type = FieldType::Media):
                 begin
                     blobStorage.FindFirst();
@@ -190,8 +217,8 @@ codeunit 91008 DMTProcessRecord
                 ProcessedFields.Add(TempImportConfigLine.RecordId);
             end;
         until TempImportConfigLine.Next() = 0;
-        SkipRecord := false;
-        TargetRecordExists := ExistingRef.Get(TmpTargetRef.RecordId);
+        SkipRecordGlobal := false;
+        TargetRecordExists := FindExistingTargetRef(ExistingRef, TmpTargetRef);
         case true of
             // Nur vorhandene Datensätze updaten. Felder aus exist. Datensatz kopieren.
             UpdateFieldsInExistingRecordsOnly:
@@ -199,18 +226,18 @@ codeunit 91008 DMTProcessRecord
                     if TargetRecordExists then
                         RefHelper.CopyRecordRef(ExistingRef, TmpTargetRef)
                     else
-                        SkipRecord := true; // only update, do not insert record when updating records
+                        SkipRecordGlobal := true; // only update, do not insert record when updating records
                 end;
             // Kein Insert neuer Datensätze
             ImportConfigHeader."Import Only New Records" and not UpdateFieldsInExistingRecordsOnly:
                 begin
                     if TargetRecordExists then
-                        SkipRecord := true;
+                        SkipRecordGlobal := true;
                 end;
             ImportConfigHeader."Import Only New Records":
                 begin
                     if TargetRecordExists then
-                        SkipRecord := true;
+                        SkipRecordGlobal := true;
                 end;
         end;
         CurrTargetRecIDText := Format(TmpTargetRef.RecordId);
@@ -282,16 +309,46 @@ codeunit 91008 DMTProcessRecord
         case RunMode of
             RunMode::InsertRecord:
                 begin
-                    if SkipRecord then
+                    if SkipRecordGlobal then
                         exit(false);
                     Success := ChangeRecordWithPerm.InsertOrOverwriteRecFromTmp(TmpTargetRef, ImportConfigHeader."Use OnInsert Trigger");
                 end;
             RunMode::ModifyRecord:
                 begin
-                    if SkipRecord then
+                    if SkipRecordGlobal then
                         exit(false);
                     Success := ChangeRecordWithPerm.ModifyRecFromTmp(TmpTargetRef, ImportConfigHeader."Use OnInsert Trigger");
                 end;
+        end;
+    end;
+
+    local procedure FindExistingTargetRef(var _ExistingRef: RecordRef; var _TmpTargetRef: RecordRef) TargetRefFound: Boolean
+    var
+        RecordLinkExisting, RecordLinkNew : Record "Record Link";
+        RecordLinkManagement: Codeunit "Record Link Management";
+        ToNote, FromNote : Text;
+    begin
+        case true of
+            _TmpTargetRef.RecordId.TableNo = Database::"Record Link":
+                begin
+                    _TmpTargetRef.SetTable(RecordLinkNew);
+                    RecordLinkExisting.SetRange("Record ID", RecordLinkNew."Record ID");
+                    RecordLinkExisting.SetRange(Company, CompanyName);
+                    RecordLinkExisting.SetRange(Type, RecordLinkNew.Type::Note);
+                    if not RecordLinkExisting.FindSet() then
+                        exit(false);
+                    repeat
+                        RecordLinkExisting.CalcFields(Note);
+                        FromNote := RecordLinkManagement.ReadNote(RecordLinkExisting);
+                        ToNote := RecordLinkManagement.ReadNote(RecordLinkNew);
+                        if FromNote = ToNote then begin
+                            _ExistingRef.GetTable(RecordLinkExisting);
+                            exit(true);
+                        end;
+                    until RecordLinkExisting.Next() = 0;
+                end;
+            else
+                TargetRefFound := _ExistingRef.Get(_TmpTargetRef.RecordId);
         end;
     end;
 
@@ -325,10 +382,10 @@ codeunit 91008 DMTProcessRecord
         case true of
             (RunMode in [RunMode::FieldTransfer, RunMode::ModifyRecord, RunMode::InsertRecord]) and ErrorsOccuredThatShouldNotBeIngored:
                 exit(ResultType::Error);
-            (RunMode in [RunMode::ModifyRecord, RunMode::InsertRecord]) and SkipRecord:
+            (RunMode in [RunMode::ModifyRecord, RunMode::InsertRecord]) and SkipRecordGlobal:
                 exit(ResultType::Ignored);
             (RunMode in [RunMode::FieldTransfer, RunMode::ModifyRecord, RunMode::InsertRecord]) and
-            not ErrorsOccuredThatShouldNotBeIngored and not SkipRecord:
+            not ErrorsOccuredThatShouldNotBeIngored and not SkipRecordGlobal:
                 exit(ResultType::ChangesApplied);
             else
                 Error('unhandled case');
@@ -351,7 +408,7 @@ codeunit 91008 DMTProcessRecord
         CurrValueToAssignText, CurrTargetRecIDText : Text;
         IReplacementHandler: Interface IReplacementHandler;
         CurrValueToAssign_IsInitialized: Boolean;
-        SkipRecord, TargetRecordExists, ErrorsOccuredThatShouldNotBeIngored : Boolean;
+        SkipRecordGlobal, TargetRecordExists, ErrorsOccuredThatShouldNotBeIngored : Boolean;
         UpdateFieldsInExistingRecordsOnly: Boolean;
         ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
         TargetKeyFieldIDs: List of [Integer];
