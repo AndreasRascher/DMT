@@ -119,6 +119,10 @@ codeunit 91008 DMTProcessRecord
                     blobStorage.CalcFields(Blob);
                     blobStorage.Blob.CreateInStream(IStream);
                     IStream.ReadText(fieldContent);
+                    if fieldContent.StartsWith('base64:') then begin
+                        fieldContent := fieldContent.TrimStart('base64:');
+                        fieldContent := DelChr(fieldContent, '<>', char177);
+                    end;
                     TempBlob.CreateOutStream(OStream);
                     Base64Convert.FromBase64(fieldContent, OStream);
                     TempBlob.ToFieldRef(targetField);
