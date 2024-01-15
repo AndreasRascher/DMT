@@ -20,6 +20,8 @@ page 111010 DMTImportConfigList
                 field("Target Table Caption"; Rec."Target Table Caption") { }
                 field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table") { }
                 field(ImportToTargetPercentage; Rec.ImportToTargetPercentage) { StyleExpr = Rec.ImportToTargetPercentageStyle; }
+                field("Buffer Table ID"; Rec."Buffer Table ID") { StyleExpr = Rec.BufferTableIDStyle; }
+                field("Import XMLPort ID"; Rec."Import XMLPort ID") { StyleExpr = Rec.ImportXMLPortIDStyle; }
             }
         }
         area(FactBoxes)
