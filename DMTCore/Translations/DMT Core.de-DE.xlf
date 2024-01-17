@@ -2499,6 +2499,18 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Tabellenrelation ID (Neu 2)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Rel.to Table ID (New Val.2) - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 1506912714 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Replacement Type</source>
+          <target state="translated">Ersetzungstyp</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ersetzungstyp</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Replacement Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 1506912714 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field Content,Part of Field Content</source>
+          <target state="translated">Feldinhalt,Bestandteil des Feldinhalts</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Feldinhalt,Bestandteil des Feldinhalts</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Replacement Type - Property OptionCaption</note>
+        </trans-unit>
         <trans-unit id="Table 663034807 - Field 455746087 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Old Value 1</source>
           <target state="translated">Alter Wert 1</target>
@@ -3695,8 +3707,8 @@
         </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 3304607464 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Delete Record</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2">DS Löschen</note>
+          <target state="translated">DS Löschen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=DS Löschen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogUsage - EnumValue Delete Record - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 877342396 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -3704,12 +3716,6 @@
           <target state="translated">Import in P.</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Import in P.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogUsage - EnumValue Import to Buffer Table - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Enum 3409397984 - EnumValue 419426744 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Information</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2"/>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogUsage - EnumValue Information - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 601505679 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Doc. Migration</source>
