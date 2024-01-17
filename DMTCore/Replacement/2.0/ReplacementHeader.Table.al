@@ -6,6 +6,7 @@ table 91011 DMTReplacementHeader
     {
         field(1; "Code"; Code[100]) { Caption = 'Code', Locked = true; NotBlank = true; }
         field(10; Description; Text[100]) { Caption = 'Description', Comment = 'de-DE=Beschreibung'; }
+        field(11; "Replacement Type"; Option) { Caption = 'Replacement Type', Comment = 'de-DE=Ersetzungstyp'; OptionMembers = "Field Content","Part of Field Content"; OptionCaption = 'Field Content,Part of Field Content', Comment = 'de-DE=Feldinhalt,Bestandteil des Feldinhalts'; }
         #region Compare Values
         field(100; "No. of Source Values"; Option)
         {

@@ -2083,6 +2083,16 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Tabellenrelation ID (Neu 2)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Rel.to Table ID (New Val.2) - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 1506912714 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Replacement Type</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ersetzungstyp</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Replacement Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2840373744 - Field 1506912714 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field Content,Part of Field Content</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Feldinhalt,Bestandteil des Feldinhalts</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementHeader - Field Replacement Type - Property OptionCaption</note>
+        </trans-unit>
         <trans-unit id="Table 663034807 - Field 455746087 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Old Value 1</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Alter Wert 1</note>

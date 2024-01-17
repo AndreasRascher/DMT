@@ -45,9 +45,6 @@ codeunit 91021 ReplacementHandlerImpl2 implements IReplacementHandler
     end;
 
     procedure InitProcess(var SourceRef: RecordRef);
-    var
-        importConfigLine: Record DMTImportConfigLine;
-        FromValue1, FromValue2 : Text;
     begin
         clear(ReplacementValuesGlobal);
         // foreach Assignment
@@ -55,33 +52,17 @@ codeunit 91021 ReplacementHandlerImpl2 implements IReplacementHandler
             exit;
         repeat
             tempReplacementHeaderGlobal.Get(TempAssignmentGlobal."Replacement Code");
-
             // find matching rules
-            TempReplacementRule.Reset();
-            TempReplacementRule.SetRange("Replacement Code", TempAssignmentGlobal."Replacement Code");
-            case true of
-                tempReplacementHeaderGlobal.IsMapping(1, 1), tempReplacementHeaderGlobal.IsMapping(1, 2):
-                    begin
-                        checkAssignmentIsValid(TempAssignmentGlobal);
-                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
-                        FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
-                        TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
-                    end;
-                tempReplacementHeaderGlobal.IsMapping(2, 1), tempReplacementHeaderGlobal.IsMapping(2, 2):
-                    begin
-                        checkAssignmentIsValid(TempAssignmentGlobal);
-                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
-                        FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
-                        TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
-
-                        importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 2 Field No.");
-                        FromValue2 := SourceRef.Field(importConfigLine."Source Field No.").Value;
-                        TempReplacementRule.SetRange("Comp.Value 2", FromValue2);
-                    end;
-            end;
+            findMatchingRules_ReplaceFieldContent(SourceRef);
+            findMatchingRules_ReplacePartOfFieldContent(SourceRef);
             // Add replacement values from matching rules
             if TempReplacementRule.FindFirst() then begin
-                ReplacementValuesGlobal.Add(TempAssignmentGlobal."Target 1 Field No.", TempReplacementRule."New Value 1");
+                if tempReplacementHeaderGlobal."Replacement Type" = tempReplacementHeaderGlobal."Replacement Type"::"Field Content" then
+                    ReplacementValuesGlobal.Add(TempAssignmentGlobal."Target 1 Field No.", TempReplacementRule."New Value 1");
+                if tempReplacementHeaderGlobal."Replacement Type" = tempReplacementHeaderGlobal."Replacement Type"::"Part of Field Content" then begin
+                    ReplacementValuesGlobal.Add(TempAssignmentGlobal."Target 1 Field No.",
+                      format(SourceRef.Field(TempAssignmentGlobal."Target 1 Field No." + 1000).Value).Replace(TempReplacementRule."Comp.Value 1", TempReplacementRule."New Value 1"));
+                end;
                 if (tempReplacementHeaderGlobal."No. of Values to modify" = tempReplacementHeaderGlobal."No. of Values to modify"::"2") then
                     ReplacementValuesGlobal.Add(TempAssignmentGlobal."Target 2 Field No.", TempReplacementRule."New Value 2");
             end;
@@ -139,6 +120,168 @@ codeunit 91021 ReplacementHandlerImpl2 implements IReplacementHandler
         if true in [tempReplacementHeaderGlobal.IsMapping(2, 1), tempReplacementHeaderGlobal.IsMapping(2, 2)] then begin
             if not importConfigLine.get(TempAssignment."Imp.Conf.Header ID", TempAssignment."Target 2 Field No.") then
                 Error(InvalidFieldAssignmentErr, TempAssignment."Replacement Code", TempAssignment."Imp.Conf.Header ID", TempAssignment."Target 2 Field No.");
+        end;
+    end;
+
+    local procedure findMatchingRules_ReplaceFieldContent(var SourceRef: RecordRef)
+    var
+        importConfigLine: Record DMTImportConfigLine;
+        FromValue1: Text;
+        FromValue2: Text;
+    begin
+        if tempReplacementHeaderGlobal."Replacement Type" <> tempReplacementHeaderGlobal."Replacement Type"::"Field Content" then
+            exit;
+        TempReplacementRule.Reset();
+        TempReplacementRule.SetRange("Replacement Code", TempAssignmentGlobal."Replacement Code");
+        case true of
+            tempReplacementHeaderGlobal.IsMapping(1, 1), tempReplacementHeaderGlobal.IsMapping(1, 2):
+                begin
+                    checkAssignmentIsValid(TempAssignmentGlobal);
+                    importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
+                    FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
+                    TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
+                end;
+            tempReplacementHeaderGlobal.IsMapping(2, 1), tempReplacementHeaderGlobal.IsMapping(2, 2):
+                begin
+                    checkAssignmentIsValid(TempAssignmentGlobal);
+                    importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
+                    FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
+                    TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
+
+                    importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 2 Field No.");
+                    FromValue2 := SourceRef.Field(importConfigLine."Source Field No.").Value;
+                    TempReplacementRule.SetRange("Comp.Value 2", FromValue2);
+                end;
+        end;
+    end;
+
+    local procedure findMatchingRules_ReplacePartOfFieldContent(var SourceRef: RecordRef)
+    var
+        importConfigLine: Record DMTImportConfigLine;
+        FromValue1: Text;
+        FromValue2: Text;
+    begin
+        if tempReplacementHeaderGlobal."Replacement Type" <> tempReplacementHeaderGlobal."Replacement Type"::"Part of Field Content" then
+            exit;
+        TempReplacementRule.Reset();
+        TempReplacementRule.SetRange("Replacement Code", TempAssignmentGlobal."Replacement Code");
+        case true of
+            tempReplacementHeaderGlobal.IsMapping(1, 1), tempReplacementHeaderGlobal.IsMapping(1, 2):
+                begin
+                    checkAssignmentIsValid(TempAssignmentGlobal);
+                    importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
+                    FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
+                    // TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
+                    TempReplacementRule.ClearMarks();
+                    if TempReplacementRule.FindSet() then begin
+                        repeat
+                            if FromValue1.Contains(TempReplacementRule."Comp.Value 1") then
+                                TempReplacementRule.Mark(true)
+                        until TempReplacementRule.Next() = 0;
+                        TempReplacementRule.MarkedOnly(true);
+                    end;
+                end;
+            tempReplacementHeaderGlobal.IsMapping(2, 1), tempReplacementHeaderGlobal.IsMapping(2, 2):
+                begin
+                    checkAssignmentIsValid(TempAssignmentGlobal);
+                    importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
+                    FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
+                    // TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
+
+                    importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 2 Field No.");
+                    FromValue2 := SourceRef.Field(importConfigLine."Source Field No.").Value;
+                    // TempReplacementRule.SetRange("Comp.Value 2", FromValue2);
+
+                    TempReplacementRule.ClearMarks();
+                    if TempReplacementRule.FindSet() then begin
+                        repeat
+                            if FromValue1.Contains(TempReplacementRule."Comp.Value 1") and FromValue2.Contains(TempReplacementRule."Comp.Value 2") then
+                                TempReplacementRule.Mark(true)
+                        until TempReplacementRule.Next() = 0;
+                        TempReplacementRule.MarkedOnly(true);
+                    end;
+                end;
+        end;
+    end;
+
+    local procedure findMatchingRules_ReplaceFieldContent(var SourceRef: RecordRef)
+    var
+        importConfigLine: Record DMTImportConfigLine;
+        FromValue1: Text;
+        FromValue2: Text;
+    begin
+        if tempReplacementHeaderGlobal."Replacement Type" <> tempReplacementHeaderGlobal."Replacement Type"::"Field Content" then
+            exit;
+        TempReplacementRule.Reset();
+        TempReplacementRule.SetRange("Replacement Code", TempAssignmentGlobal."Replacement Code");
+        case true of
+            tempReplacementHeaderGlobal.IsMapping(1, 1), tempReplacementHeaderGlobal.IsMapping(1, 2):
+                begin
+                    checkAssignmentIsValid(TempAssignmentGlobal);
+                    importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
+                    FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
+                    TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
+                end;
+            tempReplacementHeaderGlobal.IsMapping(2, 1), tempReplacementHeaderGlobal.IsMapping(2, 2):
+                begin
+                    checkAssignmentIsValid(TempAssignmentGlobal);
+                    importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
+                    FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
+                    TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
+
+                    importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 2 Field No.");
+                    FromValue2 := SourceRef.Field(importConfigLine."Source Field No.").Value;
+                    TempReplacementRule.SetRange("Comp.Value 2", FromValue2);
+                end;
+        end;
+    end;
+
+    local procedure findMatchingRules_ReplacePartOfFieldContent(var SourceRef: RecordRef)
+    var
+        importConfigLine: Record DMTImportConfigLine;
+        FromValue1: Text;
+        FromValue2: Text;
+    begin
+        if tempReplacementHeaderGlobal."Replacement Type" <> tempReplacementHeaderGlobal."Replacement Type"::"Part of Field Content" then
+            exit;
+        TempReplacementRule.Reset();
+        TempReplacementRule.SetRange("Replacement Code", TempAssignmentGlobal."Replacement Code");
+        case true of
+            tempReplacementHeaderGlobal.IsMapping(1, 1), tempReplacementHeaderGlobal.IsMapping(1, 2):
+                begin
+                    checkAssignmentIsValid(TempAssignmentGlobal);
+                    importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
+                    FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
+                    // TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
+                    TempReplacementRule.ClearMarks();
+                    if TempReplacementRule.FindSet() then begin
+                        repeat
+                            if FromValue1.Contains(TempReplacementRule."Comp.Value 1") then
+                                TempReplacementRule.Mark(true)
+                        until TempReplacementRule.Next() = 0;
+                        TempReplacementRule.MarkedOnly(true);
+                    end;
+                end;
+            tempReplacementHeaderGlobal.IsMapping(2, 1), tempReplacementHeaderGlobal.IsMapping(2, 2):
+                begin
+                    checkAssignmentIsValid(TempAssignmentGlobal);
+                    importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
+                    FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
+                    // TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
+
+                    importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 2 Field No.");
+                    FromValue2 := SourceRef.Field(importConfigLine."Source Field No.").Value;
+                    // TempReplacementRule.SetRange("Comp.Value 2", FromValue2);
+
+                    TempReplacementRule.ClearMarks();
+                    if TempReplacementRule.FindSet() then begin
+                        repeat
+                            if FromValue1.Contains(TempReplacementRule."Comp.Value 1") and FromValue2.Contains(TempReplacementRule."Comp.Value 2") then
+                                TempReplacementRule.Mark(true)
+                        until TempReplacementRule.Next() = 0;
+                        TempReplacementRule.MarkedOnly(true);
+                    end;
+                end;
         end;
     end;
 

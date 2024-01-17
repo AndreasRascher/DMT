@@ -16,6 +16,7 @@ page 91024 DMTReplacementCard
                 Caption = 'General', Comment = 'de-DE=Allgemein';
                 field(Code; Rec.Code) { }
                 field(Description; Rec.Description) { Importance = Promoted; }
+                field("Replacement Type"; Rec."Replacement Type") { }
             }
             group("Field Setup")
             {
