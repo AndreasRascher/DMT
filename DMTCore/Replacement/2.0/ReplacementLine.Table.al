@@ -122,7 +122,6 @@ table 91012 DMTReplacementLine
     internal procedure OnAfterLookUpField(var Selected: RecordRef; fromFieldNo: Integer; var currDataLayoutLine: Record DMTDataLayoutLine)
     var
         dataLayoutLineSelected: Record DMTDataLayoutLine;
-        importConfigHeaderSelected: Record DMTImportConfigHeader;
     begin
         case fromFieldNo of
             Rec.FieldNo("Target 1 Field Caption"):

@@ -136,11 +136,11 @@ codeunit 91022 DMTSeparateBufferTableMgtImpl implements IBufferTableMgt
 
     internal procedure updateImportToTargetPercentage()
     var
+        emptyRecID: RecordId;
         bufferRef, TargetRef : RecordRef;
+        IsImported, IsImportedOld : Boolean;
         noOfRecords, noOfRecordsMigrated : Integer;
         TargetRecIDFieldNo, TargetRecIsImportedFieldNo : Integer;
-        IsImported, IsImportedOld : Boolean;
-        emptyRecID: RecordId;
     begin
         ImportConfigHeaderGlobal.get(ImportConfigHeaderGlobal.RecordId); // update
         InitBufferRef(bufferRef);
