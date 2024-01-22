@@ -213,7 +213,8 @@ codeunit 91008 DMTProcessRecord
         repeat
             if not ProcessedFields.Contains(TempImportConfigLine.RecordId) then begin
                 CurrFieldToProcess := TempImportConfigLine.RecordId;
-                AssignField(Enum::DMTFieldValidationType::AssignWithoutValidate);
+                if not IsKnownAutoincrementField(TempImportConfigLine) then
+                    AssignField(Enum::DMTFieldValidationType::AssignWithoutValidate);
                 ProcessedFields.Add(TempImportConfigLine.RecordId);
             end;
         until TempImportConfigLine.Next() = 0;
@@ -311,7 +312,7 @@ codeunit 91008 DMTProcessRecord
                 begin
                     if SkipRecordGlobal then
                         exit(false);
-                    Success := ChangeRecordWithPerm.InsertOrOverwriteRecFromTmp(TmpTargetRef, ImportConfigHeader."Use OnInsert Trigger");
+                    Success := ChangeRecordWithPerm.InsertOrOverwriteRecFromTmp(TmpTargetRef, CurrTargetRecIDText, ImportConfigHeader."Use OnInsert Trigger");
                 end;
             RunMode::ModifyRecord:
                 begin
@@ -350,6 +351,32 @@ codeunit 91008 DMTProcessRecord
             else
                 TargetRefFound := _ExistingRef.Get(_TmpTargetRef.RecordId);
         end;
+    end;
+
+    local procedure IsKnownAutoincrementField(var importConfigLine: Record DMTImportConfigLine temporary) IsAutoincrement: Boolean
+    var
+        RecordLink: Record "Record Link";
+        ReservationEntry: Record "Reservation Entry";
+        ChangeLogEntry: Record "Change Log Entry";
+        JobQueueLogEntry: Record "Job Queue Log Entry";
+        ActivityLog: Record "Activity Log";
+    begin
+        IsAutoincrement := false;
+        case true of
+            (importConfigLine."Target Table ID" = RecordLink.RecordID.TableNo) and (importConfigLine."Target Field No." = RecordLink.FieldNo("Link ID")):
+                exit(true);
+            (importConfigLine."Target Table ID" = ReservationEntry.RecordID.TableNo) and (importConfigLine."Target Field No." = ReservationEntry.FieldNo("Entry No.")):
+                exit(true);
+            (importConfigLine."Target Table ID" = ChangeLogEntry.RecordID.TableNo) and (importConfigLine."Target Field No." = ChangeLogEntry.FieldNo("Entry No.")):
+                exit(true);
+            (importConfigLine."Target Table ID" = JobQueueLogEntry.RecordID.TableNo) and (importConfigLine."Target Field No." = JobQueueLogEntry.FieldNo("Entry No.")):
+                exit(true);
+            (importConfigLine."Target Table ID" = ActivityLog.RecordID.TableNo) and (importConfigLine."Target Field No." = ActivityLog.FieldNo(ID)):
+                exit(true);
+            else
+                exit(false);
+        end;
+
     end;
 
     procedure SaveErrorLog(Log: Codeunit DMTLog) ErrorsExist: Boolean
