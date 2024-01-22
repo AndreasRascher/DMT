@@ -3,7 +3,7 @@ OBJECT XMLport 50049 DMT Export2
   OBJECT-PROPERTIES
   {
     Date=14.01.24;
-    Time=01:16:53;
+    Time=12:19:42;
     Modified=Yes;
     Version List=DMT;
   }
@@ -2684,6 +2684,7 @@ OBJECT XMLport 50049 DMT Export2
       BlobColumnIdentifier@55005 : TextConst 'DEU=[Base64];ENU=[Base64]';
       FieldSeparator@55010 : Text[1];
       ActionTextArray@55013 : ARRAY [2] OF Text;
+      NoteColumnIdentifier@1000000000 : TextConst 'DEU=[BlobText];ENU=[BlobText]';
       ExportSchemaLbl@55014 : TextConst 'DEU=Tabellenschema exportieren (schema.csv);ENU=Export table schema (schema.csv)';
       ExportDataLbl@55012 : TextConst 'DEU=Tabellendaten exportieren;ENU=Export table data';
       ExportRecRef@55015 : RecordRef;
@@ -2849,6 +2850,24 @@ OBJECT XMLport 50049 DMT Export2
         Result := Object.Compiled
     END;
 
+    PROCEDURE IsRecordLinkNoteField@1000000012(VAR fieldRef@1000000000 : FieldRef) : Boolean;
+    VAR
+      _RecordLink@1000000001 : Record 2000000068;
+    BEGIN
+      IF fieldRef.NUMBER = _RecordLink.FIELDNO(Note) THEN
+        IF fieldRef.RECORD.RECORDID.TABLENO = DATABASE::"Record Link" THEN
+          EXIT(TRUE);
+    END;
+
+    PROCEDURE IsRecordLinkNoteField2@1000000015(field@1000000000 : Record 2000000041) : Boolean;
+    VAR
+      _RecordLink@1000000001 : Record 2000000068;
+    BEGIN
+      IF field.TableNo = DATABASE::"Record Link" THEN
+        IF field."No." = _RecordLink.FIELDNO(Note) THEN
+          EXIT(TRUE);
+    END;
+
     LOCAL PROCEDURE SetObsoleteFieldFilter@55003(VAR field@55001 : Record 2000000041);
     VAR
       recRef@55002 : RecordRef;
@@ -2982,8 +3001,11 @@ OBJECT XMLport 50049 DMT Export2
     BEGIN
       //* add column caption for a single field
       _Caption := ReplaceStr(_Field.FieldName,FieldSeparator,'');  // Remove FieldSeparator from Value
-      IF UPPERCASE(FORMAT(_Field.Type)) IN ['MEDIA','BLOB'] THEN // Add Blob Identifier to import as Base64
-        _Caption += BlobColumnIdentifier;
+      IF UPPERCASE(FORMAT(_Field.Type)) IN ['MEDIA','BLOB'] THEN // Add Blob Identifier to import as Base64 or Text
+        IF IsRecordLinkNoteField2(_Field) THEN
+          _Caption += NoteColumnIdentifier
+        ELSE
+          _Caption += BlobColumnIdentifier;
       IF HeaderLineText <> '' THEN
         HeaderLineText += FieldSeparator + _Caption
       ELSE
@@ -3301,6 +3323,12 @@ OBJECT XMLport 50049 DMT Export2
       _IStream@55002 : InStream;
       char177@55003 : Text[1];
     BEGIN
+      // handle record link notes
+      IF IsRecordLinkNoteField(fieldRef) THEN BEGIN
+        _Result := GetFormattedFieldValueFromRecordLinkNote(fieldRef);
+        EXIT(_Result);
+      END;
+      // other blob fields
       fieldRef.CALCFIELD;
       _TempBlob.Blob := fieldRef.VALUE;
       IF NOT _TempBlob.Blob.HASVALUE THEN
@@ -3341,6 +3369,27 @@ OBJECT XMLport 50049 DMT Export2
       END;
       char177[1] := 177;
       _Result :=  STRSUBSTNO('JSON:%1{%2}%3',char177[1],_Result,char177[1]);
+    END;
+
+    LOCAL PROCEDURE GetFormattedFieldValueFromRecordLinkNote@1000000014(VAR fieldRef@55000 : FieldRef) _Note : Text;
+    VAR
+      _TempBlob@55001 : Record 99008535;
+      _IStream@55002 : InStream;
+      char177@55003 : Text[1];
+      BinReader@1000000000 : DotNet "'mscorlib'.System.IO.BinaryReader";
+    BEGIN
+      // Read the Note BLOB
+      fieldRef.CALCFIELD;
+      _TempBlob.Blob := fieldRef.VALUE;
+      IF NOT _TempBlob.Blob.HASVALUE THEN
+        EXIT('');
+      _TempBlob.Blob.CREATEINSTREAM(_IStream);
+      BinReader := BinReader.BinaryReader(_IStream);
+      // Peek if stream is empty
+      IF BinReader.BaseStream.Position = BinReader.BaseStream.Length THEN
+        EXIT('');
+      _Note := BinReader.ReadString;
+      _Note := ReplaceStr(_Note,FieldSeparator,'');  // Remove FieldSeparator from Value
     END;
 
     LOCAL PROCEDURE RemoveSpecialChars@1109900000(VAR Text@1109900000 : Text) ResultText : Text;
@@ -3518,3 +3567,4 @@ OBJECT XMLport 50049 DMT Export2
     END.
   }
 }
+
