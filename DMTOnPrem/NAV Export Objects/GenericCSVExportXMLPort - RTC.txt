@@ -3088,7 +3088,6 @@ OBJECT XMLport 50049 DMT Export2
       start@1000000000 : DateTime;
       progress@1000000005 : Dialog;
       BigText@55000 : BigText;
-      DMTExport@1000000002 : XMLport 50049;
       Params@55001 : Record 2000000028;
       field@55002 : Record 2000000041;
       ArgumentFilter@1000000006 : Text;
