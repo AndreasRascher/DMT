@@ -1,9 +1,9 @@
-OBJECT XMLport 50049 DMT Export2
+OBJECT XMLport 50050 DMT Export2
 {
   OBJECT-PROPERTIES
   {
-    Date=14.01.24;
-    Time=12:19:42;
+    Date=29.01.24;
+    Time=10:34:15;
     Modified=Yes;
     Version List=DMT;
   }
@@ -2810,10 +2810,13 @@ OBJECT XMLport 50049 DMT Export2
           _normalFields.INSERT;
         END;
       UNTIL field.NEXT=0;
-      LastFieldNoGlobal := field."No."; //* get last field no
 
       IF _ExportTableID = DATABASE::Field THEN
-      AddCustomFieldsToSchemaExport(NormalFields);
+      AddCustomFieldsToSchemaExport(_normalFields);
+
+      //* get last field no (after adding custom fields for field export)
+      _normalFields.FINDLAST;
+      LastFieldNoGlobal := _normalFields."No.";
 
       NormalFields.COPY(_normalFields,TRUE);
       BlobAndMediaFields.COPY(_blobAndMediaFields,TRUE);
@@ -3544,7 +3547,8 @@ OBJECT XMLport 50049 DMT Export2
         END;
       END;
       IF _RecRef.HASFILTER THEN
-        MESSAGE('Export der Tabelle %1 mit Filter:\%2',_RecordLink.TABLECAPTION,_RecordLink.GETFILTERS);
+          IF _RecRef.NUMBER <> DATABASE::Field THEN
+            MESSAGE('Export der Tabelle %1 mit Filter:\%2',_RecordLink.TABLECAPTION,_RecordLink.GETFILTERS);
     END;
 
     PROCEDURE ArgumentsToFilter@1000000005(VAR FilterExpr@1000000002 : Text;_ExportBlobContent@1000000000 : Boolean;_ExportFlowFields@1000000001 : Boolean);
