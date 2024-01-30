@@ -93,6 +93,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Puffertabellen Objekte runterladen</note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension ImportConfigList - Action ExportALObjects - Property Caption</note>
         </trans-unit>
+        <trans-unit id="TableExtension 200502431 - Method 3628817529 - NamedType 2192461025" size-unit="char" translate="yes" xml:space="preserve" al-object-target="TableExtension 200502431">
+          <source>You have to import the Schema.csv.</source>
+          <target state="translated">Sie müssen die Schema.csv importieren.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Sie müssen die Schema.csv importieren.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTImportConfigHeader - Method updateNAVTableFromTableNo - NamedType SchemaIsNotImportedErr</note>
+        </trans-unit>
         <trans-unit id="TableExtension 200502431 - Field 755414655 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 200502431">
           <source>NAV Source Table Caption</source>
           <target state="needs-translation"/>
@@ -111,11 +117,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=NAV Tabellennr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTImportConfigHeader - Field NAV Src.Table No. - Property Caption</note>
         </trans-unit>
-        <trans-unit id="TableExtension 521254526 - Field 2204498840 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 521254526">
-          <source>Create Buffer Tables with Flowfields</source>
-          <target state="translated">Puffertabellen mit Flowfields generieren</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Puffertabellen mit Flowfields generieren</note>
-          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTSetup - Field Import with FlowFields - Property Caption</note>
+        <trans-unit id="TableExtension 521254526 - Method 4293292305 - NamedType 2167175506" size-unit="char" translate="yes" xml:space="preserve" al-object-target="TableExtension 521254526">
+          <source>No free object IDs of type %1 could be found. Defined ID range in setup: %2</source>
+          <target state="translated">Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Es konnten keine freien Objekt-IDs vom Typ %1 gefunden werden. Definierter ID Bereich in der Einrichtung: %2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTSetup - Method ProposeObjectIDs - NamedType NoAvailableObjectIDsErr</note>
         </trans-unit>
         <trans-unit id="TableExtension 521254526 - Field 2593167842 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 521254526">
           <source>Obj. ID Range Buffer Tables</source>
