@@ -1,4 +1,4 @@
-tableextension 90012 DMTSetup extends DMTSetup
+tableextension 110012 DMTSetup extends DMTSetup
 {
     fields
     {
