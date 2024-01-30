@@ -11,11 +11,12 @@ codeunit 91011 DMTChangeRecordWithPerm
         DMTDeleteDatainTargetTable.Run();
     end;
 
-    procedure InsertOrOverwriteRecFromTmp(var TmpTargetRef: RecordRef; InsertTrue: Boolean) InsertOK: Boolean
+    procedure InsertOrOverwriteRecFromTmp(var TmpTargetRef: RecordRef; var CurrTargetRecIDText: Text; InsertTrue: Boolean) InsertOK: Boolean
     var
         RefHelper: Codeunit DMTRefHelper;
         TargetRef: RecordRef;
         TargetRef2: RecordRef;
+        RecID, xRecID : RecordID;
     begin
         TargetRef.Open(TmpTargetRef.Number, false);
         RefHelper.CopyRecordRef(TmpTargetRef, TargetRef);
@@ -23,7 +24,11 @@ codeunit 91011 DMTChangeRecordWithPerm
         if TargetRef2.Get(TargetRef.RecordId) then begin
             InsertOK := TargetRef.Modify(InsertTrue);
         end else begin
+            xRecID := TargetRef.RecordId;
             InsertOK := TargetRef.Insert(InsertTrue);
+            RecID := TargetRef.RecordId;
+            if xRecID <> RecID then
+                CurrTargetRecIDText := Format(RecID);  // update if key is changed after insert
         end;
     end;
 

@@ -1,9 +1,9 @@
-OBJECT XMLport 50049 DMT Export2
+OBJECT XMLport 50050 DMT Export2
 {
   OBJECT-PROPERTIES
   {
-    Date=14.01.24;
-    Time=01:16:53;
+    Date=30.01.24;
+    Time=14:20:21;
     Modified=Yes;
     Version List=DMT;
   }
@@ -31,6 +31,7 @@ OBJECT XMLport 50049 DMT Export2
     Format=Variable Text;
     FieldDelimiter=<None>;
     FieldSeparator=<None>;
+    RecordSeparator=<None>;
     TableSeparator=<None>;
   }
   ELEMENTS
@@ -2682,15 +2683,18 @@ OBJECT XMLport 50049 DMT Export2
       LastFieldNoGlobal@55008 : Integer;
       ExportFinished@55009 : TextConst 'DEU=Export abgeschlossen;ENU=Export finished';
       BlobColumnIdentifier@55005 : TextConst 'DEU=[Base64];ENU=[Base64]';
+      LastBlobFieldNoGlobal@55024 : Integer;
       FieldSeparator@55010 : Text[1];
       ActionTextArray@55013 : ARRAY [2] OF Text;
+      NoteColumnIdentifier@1000000000 : TextConst 'DEU=[BlobText];ENU=[BlobText]';
       ExportSchemaLbl@55014 : TextConst 'DEU=Tabellenschema exportieren (schema.csv);ENU=Export table schema (schema.csv)';
       ExportDataLbl@55012 : TextConst 'DEU=Tabellendaten exportieren;ENU=Export table data';
       ExportRecRef@55015 : RecordRef;
       Progress@55016 : Dialog;
       Progress_TotalLineCount@55017 : Integer;
       Progress_LastUpdate@55018 : DateTime;
-      NoActionSelectedErr@55022 : TextConst 'DEU=Keine Aktion ausgew„hlt;ENU=No action selected';
+      NoActionSelectedErr@55022 : TextConst 'DEU=Keine Aktion ausgewhlt;ENU=No action selected';
+      CRLF@55023 : Text[2];
 
     LOCAL PROCEDURE Action_StartTableExport@55004();
     VAR
@@ -2775,6 +2779,7 @@ OBJECT XMLport 50049 DMT Export2
     LOCAL PROCEDURE InitDefaults@55008();
     BEGIN
       FieldSeparator[1]  := 9; // TAB
+      CRLF[1]:=13; CRLF[2]:=10;
       ActionTextArray[1] := ExportSchemaLbl;
       ActionTextArray[2] := ExportDataLbl;
     END;
@@ -2809,16 +2814,22 @@ OBJECT XMLport 50049 DMT Export2
           _normalFields.INSERT;
         END;
       UNTIL field.NEXT=0;
-      LastFieldNoGlobal := field."No."; //* get last field no
 
       IF _ExportTableID = DATABASE::Field THEN
-      AddCustomFieldsToSchemaExport(NormalFields);
+      AddCustomFieldsToSchemaExport(_normalFields);
 
       NormalFields.COPY(_normalFields,TRUE);
       BlobAndMediaFields.COPY(_blobAndMediaFields,TRUE);
 
       NoOfBlobAndMediaFields := BlobAndMediaFields.COUNT;
       NoOfNormalFields := NormalFields.COUNT;
+
+      //* get last field no
+      _normalFields.FINDLAST;
+        LastFieldNoGlobal := _normalFields."No.";
+
+      IF BlobAndMediaFields.FINDLAST THEN
+        LastBlobFieldNoGlobal:= BlobAndMediaFields."No.";
     END;
 
     LOCAL PROCEDURE IsTableInLicense@1000000007(ObjectID@1000000000 : Integer) : Boolean;
@@ -2847,6 +2858,24 @@ OBJECT XMLport 50049 DMT Export2
       Result:= TRUE;
       IF Object.GET(Object.Type::Table,'',TableID) THEN
         Result := Object.Compiled
+    END;
+
+    PROCEDURE IsRecordLinkNoteField@1000000012(VAR fieldRef@1000000000 : FieldRef) : Boolean;
+    VAR
+      _RecordLink@1000000001 : Record 2000000068;
+    BEGIN
+      IF fieldRef.NUMBER = _RecordLink.FIELDNO(Note) THEN
+        IF fieldRef.RECORD.RECORDID.TABLENO = DATABASE::"Record Link" THEN
+          EXIT(TRUE);
+    END;
+
+    PROCEDURE IsRecordLinkNoteField2@1000000015(field@1000000000 : Record 2000000041) : Boolean;
+    VAR
+      _RecordLink@1000000001 : Record 2000000068;
+    BEGIN
+      IF field.TableNo = DATABASE::"Record Link" THEN
+        IF field."No." = _RecordLink.FIELDNO(Note) THEN
+          EXIT(TRUE);
     END;
 
     LOCAL PROCEDURE SetObsoleteFieldFilter@55003(VAR field@55001 : Record 2000000041);
@@ -2951,14 +2980,13 @@ OBJECT XMLport 50049 DMT Export2
 
       _schemaExportFields."No." := 50004;
       _schemaExportFields.FieldName := 'No. of Records';
-      _schemaExportFields."Field Caption" := 'Anz. Datens„tze';
+      _schemaExportFields."Field Caption" := 'Anz. Datenstze';
       _schemaExportFields.INSERT;
     END;
 
     LOCAL PROCEDURE CreateHeaderLine@1000000013(VAR _NormalFields@55002 : TEMPORARY Record 2000000041;VAR _BlobAndMediaFields@55001 : TEMPORARY Record 2000000041;_LastFieldNo@1000000000 : Integer) HeaderLineText : Text;
     VAR
       _Caption@1000000002 : Text;
-      CRLF@55000 : Text[2];
     BEGIN
       //* add column captions for all export fields
       _NormalFields.FINDSET;
@@ -2971,7 +2999,6 @@ OBJECT XMLport 50049 DMT Export2
           CreateHeaderLine2(HeaderLineText,_BlobAndMediaFields);
         UNTIL _BlobAndMediaFields.NEXT = 0;
 
-      CRLF[1]:=13; CRLF[2]:=10;
       HeaderLineText += CRLF;
     END;
 
@@ -2982,8 +3009,11 @@ OBJECT XMLport 50049 DMT Export2
     BEGIN
       //* add column caption for a single field
       _Caption := ReplaceStr(_Field.FieldName,FieldSeparator,'');  // Remove FieldSeparator from Value
-      IF UPPERCASE(FORMAT(_Field.Type)) IN ['MEDIA','BLOB'] THEN // Add Blob Identifier to import as Base64
-        _Caption += BlobColumnIdentifier;
+      IF UPPERCASE(FORMAT(_Field.Type)) IN ['MEDIA','BLOB'] THEN // Add Blob Identifier to import as Base64 or Text
+        IF IsRecordLinkNoteField2(_Field) THEN
+          _Caption += NoteColumnIdentifier
+        ELSE
+          _Caption += BlobColumnIdentifier;
       IF HeaderLineText <> '' THEN
         HeaderLineText += FieldSeparator + _Caption
       ELSE
@@ -3066,7 +3096,6 @@ OBJECT XMLport 50049 DMT Export2
       start@1000000000 : DateTime;
       progress@1000000005 : Dialog;
       BigText@55000 : BigText;
-      DMTExport@1000000002 : XMLport 50049;
       Params@55001 : Record 2000000028;
       field@55002 : Record 2000000041;
       ArgumentFilter@1000000006 : Text;
@@ -3169,9 +3198,13 @@ OBJECT XMLport 50049 DMT Export2
       valueAsText := RemoveSpecialChars(valueAsText);
 
       // Add Closing Sign
-      IF (LastFieldNoGlobal <> NormalFields."No.") OR
-         (NOT BlobAndMediaFields.ISEMPTY) THEN  // Blob fields are attached at the end -> separator needed
+      IF (LastFieldNoGlobal <> NormalFields."No.") OR (NOT BlobAndMediaFields.ISEMPTY) THEN BEGIN  // Blob fields are attached at the end -> separator needed
         valueAsText += FieldSeparator;
+      END;
+
+      IF LastFieldNoGlobal = NormalFields."No." THEN
+        IF NoOfBlobAndMediaFields = 0 THEN
+          valueAsText += CRLF;
     END;
 
     LOCAL PROCEDURE GetListOfOptionString@1000000021(_FieldRef@1000000000 : FieldRef;VAR _Result@1000000006 : Text);
@@ -3301,6 +3334,12 @@ OBJECT XMLport 50049 DMT Export2
       _IStream@55002 : InStream;
       char177@55003 : Text[1];
     BEGIN
+      // handle record link notes
+      IF IsRecordLinkNoteField(fieldRef) THEN BEGIN
+        _Result := GetFormattedFieldValueFromRecordLinkNote(fieldRef);
+        EXIT(_Result);
+      END;
+      // other blob fields
       fieldRef.CALCFIELD;
       _TempBlob.Blob := fieldRef.VALUE;
       IF NOT _TempBlob.Blob.HASVALUE THEN
@@ -3341,6 +3380,27 @@ OBJECT XMLport 50049 DMT Export2
       END;
       char177[1] := 177;
       _Result :=  STRSUBSTNO('JSON:%1{%2}%3',char177[1],_Result,char177[1]);
+    END;
+
+    LOCAL PROCEDURE GetFormattedFieldValueFromRecordLinkNote@1000000014(VAR fieldRef@55000 : FieldRef) _Note : Text;
+    VAR
+      _TempBlob@55001 : Record 99008535;
+      _IStream@55002 : InStream;
+      char177@55003 : Text[1];
+      BinReader@1000000000 : DotNet "'mscorlib'.System.IO.BinaryReader";
+    BEGIN
+      // Read the Note BLOB
+      fieldRef.CALCFIELD;
+      _TempBlob.Blob := fieldRef.VALUE;
+      IF NOT _TempBlob.Blob.HASVALUE THEN
+        EXIT('');
+      _TempBlob.Blob.CREATEINSTREAM(_IStream);
+      BinReader := BinReader.BinaryReader(_IStream);
+      // Peek if stream is empty
+      IF BinReader.BaseStream.Position = BinReader.BaseStream.Length THEN
+        EXIT('');
+      _Note := BinReader.ReadString;
+      _Note := ReplaceStr(_Note,FieldSeparator,'');  // Remove FieldSeparator from Value
     END;
 
     LOCAL PROCEDURE RemoveSpecialChars@1109900000(VAR Text@1109900000 : Text) ResultText : Text;
@@ -3437,6 +3497,9 @@ OBJECT XMLport 50049 DMT Export2
       // Add Closing Sign
       IF LastFieldNoGlobal <> ExportFields."No." THEN
         valueAsBigText.ADDTEXT(FieldSeparator);
+
+      IF ExportFields."No." = LastBlobFieldNoGlobal THEN
+        valueAsBigText.ADDTEXT(CRLF);
     END;
 
     LOCAL PROCEDURE RemoveSpecialCharsBT@1000000009(VAR BigText@1109900000 : BigText) ResultText : Text;
@@ -3496,7 +3559,8 @@ OBJECT XMLport 50049 DMT Export2
         END;
       END;
       IF _RecRef.HASFILTER THEN
-        MESSAGE('Export der Tabelle %1 mit Filter:\%2',_RecordLink.TABLECAPTION,_RecordLink.GETFILTERS);
+          IF _RecRef.NUMBER <> DATABASE::Field THEN
+            MESSAGE('Export der Tabelle %1 mit Filter:\%2',_RecordLink.TABLECAPTION,_RecordLink.GETFILTERS);
     END;
 
     PROCEDURE ArgumentsToFilter@1000000005(VAR FilterExpr@1000000002 : Text;_ExportBlobContent@1000000000 : Boolean;_ExportFlowFields@1000000001 : Boolean);
