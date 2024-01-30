@@ -18,7 +18,7 @@ tableextension 90011 DMTImportConfigHeader extends DMTImportConfigHeader
     local procedure updateNAVTableFromTableNo()
     var
         fieldBuffer: Record DMTFieldBuffer;
-        SchemaIsNotImportedErr: Label 'You have to import the Schema.csv.', comment = 'de-De=Sie müssen die Schema.csv importieren.';
+        SchemaIsNotImportedErr: Label 'You have to import the Schema.csv.', comment = 'de-DE=Sie müssen die Schema.csv importieren.';
     begin
         if "NAV Src.Table No." = 0 then exit;
         if fieldBuffer.IsEmpty then
