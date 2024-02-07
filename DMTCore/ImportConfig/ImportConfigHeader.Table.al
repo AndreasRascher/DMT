@@ -225,6 +225,8 @@ table 111003 DMTImportConfigHeader
             Error(noSourceFileAssignedErr, Rec.ID);
         Rec.TestField("Source File ID");
         sourceFileStorage.Get(rec."Source File ID");
+        SourceFileMgt.AssignDefaultDataLayout(sourceFileStorage);  // if setup has been set after importing source files
+        sourceFileStorage.Modify();
         ThrowActionableErrorIfDataLayoutIsNotSet();
         sourceFileStorage.get(sourceFileStorage.RecordId);
         dataLayout.Get(sourceFileStorage."Data Layout ID");
