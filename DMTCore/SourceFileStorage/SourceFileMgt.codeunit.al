@@ -110,7 +110,7 @@ codeunit 91001 DMTSourceFileMgt
             sourceFileStorage.SourceFileFormat := sourceFileStorage.SourceFileFormat::"Custom CSV";
     end;
 
-    local procedure AssignDefaultDataLayout(var sourceFileStorage: Record DMTSourceFileStorage)
+    procedure AssignDefaultDataLayout(var sourceFileStorage: Record DMTSourceFileStorage)
     var
         dataLayout: Record DMTDataLayout;
     begin

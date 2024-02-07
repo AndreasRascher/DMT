@@ -218,13 +218,16 @@ table 91003 DMTImportConfigHeader
     internal procedure GetDataLayout() dataLayout: Record DMTDataLayout
     var
         sourceFileStorage: Record DMTSourceFileStorage;
-        noSourceFileAssignedErr: Label 'The import configuration %1 has no source file assigned.',Comment = 'de-DE=Die Importkonfiguration %1 hat keine Quelldatei zugeordnet.';
+        SourceFileMgt: Codeunit DMTSourceFileMgt;
+        noSourceFileAssignedErr: Label 'The import configuration %1 has no source file assigned.', Comment = 'de-DE=Die Importkonfiguration %1 hat keine Quelldatei zugeordnet.';
     begin
         // throw error if no source file is assigned
         if rec."Source File ID" = 0 then
             Error(noSourceFileAssignedErr, Rec.ID);
         Rec.TestField("Source File ID");
         sourceFileStorage.Get(rec."Source File ID");
+        SourceFileMgt.AssignDefaultDataLayout(sourceFileStorage);  // if setup has been set after importing source files
+        sourceFileStorage.Modify();
         ThrowActionableErrorIfDataLayoutIsNotSet();
         sourceFileStorage.get(sourceFileStorage.RecordId);
         dataLayout.Get(sourceFileStorage."Data Layout ID");
