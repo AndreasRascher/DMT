@@ -46,7 +46,7 @@
 					"type": "al",
 					"request": "launch",
 					"environmentType": "Sandbox",
-					"environmentName": "SandboxDEV",
+					"environmentName": "Sandbox-DEV2",
 					"startupObjectId": 22,
 					"breakOnError": "All",
 					"breakOnRecordWrite": "None",

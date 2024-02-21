@@ -14,12 +14,16 @@ table 91012 DMTReplacementLine
             trigger OnValidate()
             var
                 importConfigHeader: Record DMTImportConfigHeader;
+                ImportConfigLine: Record DMTImportConfigLine;
+                ImportConfigHasNoFieldsErr: Label 'The Import Configuration %1 has no fields to assign.', Comment = 'de-DE=Für die Importkonfiguration %1 sind keine Felder zum Zuweisen vorhanden.';
             begin
                 if not importConfigHeader.Get("Imp.Conf.Header ID") then
                     Init()
                 else begin
                     "Target Table ID" := importConfigHeader."Target Table ID";
                     "Source File Name" := importConfigHeader."Source File Name";
+                    if not importConfigHeader.FilterRelated(ImportConfigLine) then
+                        Error(ImportConfigHasNoFieldsErr, importConfigHeader.ID);
                 end;
             end;
         }
@@ -158,39 +162,69 @@ table 91012 DMTReplacementLine
     end;
 
     internal procedure OnValidateOnAfterLookUp(fromFieldNo: Integer; var currDataLayoutLine: Record DMTDataLayoutLine)
+    var
+        importConfigHeader: Record DMTImportConfigHeader;
+        importConfigLine: Record DMTImportConfigLine;
+        importConfigMgt: Codeunit DMTImportConfigMgt;
+        TargetFieldNames: Dictionary of [Integer, Text];
+        foundAtIndex: Integer;
     begin
-        case fromFieldNo of
-            Rec.FieldNo("Target 1 Field Caption"):
-                begin
-                    if (currDataLayoutLine.ColumnName = '') then
-                        exit;
-                    Rec."Target 1 Field No." := currDataLayoutLine."Column No.";
-                    Rec."Target 1 Field Caption" := currDataLayoutLine.ColumnName;
+        // Field Name from user input (e.g. Copy & Paste)
+        Rec.TestField("Imp.Conf.Header ID");
+        if (currDataLayoutLine."Data Layout ID" = 0) then begin
+            ImportConfigHeader.Get(Rec."Imp.Conf.Header ID");
+            ImportConfigLine.SetRange("Imp.Conf.Header ID", Rec."Imp.Conf.Header ID");
+            TargetFieldNames := importConfigMgt.CreateTargetFieldNamesDict(ImportConfigLine, false);
+            if fromFieldNo = rec.FieldNo("Target 1 Field Caption") then begin
+                if TargetFieldNames.Values.Contains(Rec."Target 1 Field Caption") then begin
+                    foundAtIndex := TargetFieldNames.Values.IndexOf(Rec."Target 1 Field Caption");
+                    Rec."Target 1 Field No." := TargetFieldNames.Keys.Get(foundAtIndex);
+                    Rec."Target 1 Field Caption" := CopyStr(TargetFieldNames.Values.Get(foundAtIndex), 1, MaxStrLen(Rec."Target 1 Field Caption"));
                 end;
-            Rec.FieldNo("Target 2 Field Caption"):
-                begin
-                    if (currDataLayoutLine.ColumnName = '') then
-                        exit;
-                    Rec."Target 2 Field No." := currDataLayoutLine."Column No.";
-                    Rec."Target 2 Field Caption" := currDataLayoutLine.ColumnName;
+            end;
+            if fromFieldNo = rec.FieldNo("Target 2 Field Caption") then begin
+                if TargetFieldNames.Values.Contains(Rec."Target 2 Field Caption") then begin
+                    foundAtIndex := TargetFieldNames.Values.IndexOf(Rec."Target 2 Field Caption");
+                    Rec."Target 2 Field No." := TargetFieldNames.Keys.Get(foundAtIndex);
+                    Rec."Target 2 Field Caption" := CopyStr(TargetFieldNames.Values.Get(foundAtIndex), 1, MaxStrLen(Rec."Target 2 Field Caption"));
                 end;
-            Rec.FieldNo("Source 1 Field Caption"):
-                begin
-                    if (currDataLayoutLine.ColumnName = '') then
-                        exit;
-                    Rec."Source 1 Field No." := currDataLayoutLine."Column No.";
-                    Rec."Source 1 Field Caption" := currDataLayoutLine.ColumnName;
-                end;
-            Rec.FieldNo("Source 2 Field Caption"):
-                begin
-                    if (currDataLayoutLine.ColumnName = '') then
-                        exit;
-                    Rec."Source 2 Field No." := currDataLayoutLine."Column No.";
-                    Rec."Source 2 Field Caption" := currDataLayoutLine.ColumnName;
-                end;
-            else
-                Error('unhandled case');
+            end;
         end;
+
+        // Field Name Selected from selection
+        if currDataLayoutLine."Data Layout ID" <> 0 then
+            case fromFieldNo of
+                Rec.FieldNo("Target 1 Field Caption"):
+                    begin
+                        if (currDataLayoutLine.ColumnName = '') then
+                            exit;
+                        Rec."Target 1 Field No." := currDataLayoutLine."Column No.";
+                        Rec."Target 1 Field Caption" := currDataLayoutLine.ColumnName;
+                    end;
+                Rec.FieldNo("Target 2 Field Caption"):
+                    begin
+                        if (currDataLayoutLine.ColumnName = '') then
+                            exit;
+                        Rec."Target 2 Field No." := currDataLayoutLine."Column No.";
+                        Rec."Target 2 Field Caption" := currDataLayoutLine.ColumnName;
+                    end;
+                Rec.FieldNo("Source 1 Field Caption"):
+                    begin
+                        if (currDataLayoutLine.ColumnName = '') then
+                            exit;
+                        Rec."Source 1 Field No." := currDataLayoutLine."Column No.";
+                        Rec."Source 1 Field Caption" := currDataLayoutLine.ColumnName;
+                    end;
+                Rec.FieldNo("Source 2 Field Caption"):
+                    begin
+                        if (currDataLayoutLine.ColumnName = '') then
+                            exit;
+                        Rec."Source 2 Field No." := currDataLayoutLine."Column No.";
+                        Rec."Source 2 Field Caption" := currDataLayoutLine.ColumnName;
+                    end;
+                else
+                    Error('unhandled case');
+            end;
         Clear(currDataLayoutLine);
     end;
 
