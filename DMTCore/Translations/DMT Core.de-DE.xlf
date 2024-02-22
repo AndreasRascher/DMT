@@ -2529,6 +2529,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Import Konfig. ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Imp.Conf.Header ID - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 663034807 - Field 2144357174 - Method 2126772001 - NamedType 1668434100" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The Import Configuration %1 has no fields to assign.</source>
+          <target state="translated">Für die Importkonfiguration %1 sind keine Felder zum Zuweisen vorhanden.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Für die Importkonfiguration %1 sind keine Felder zum Zuweisen vorhanden.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTReplacementLine - Field Imp.Conf.Header ID - Method OnValidate - NamedType ImportConfigHasNoFieldsErr</note>
+        </trans-unit>
         <trans-unit id="Table 663034807 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Line No.</source>
           <target state="translated">Zeilennr.</target>
