@@ -171,7 +171,7 @@ table 91012 DMTReplacementLine
     begin
         // Field Name from user input (e.g. Copy & Paste)
         Rec.TestField("Imp.Conf.Header ID");
-        if (currDataLayoutLine."Data Layout ID" = 0) then begin
+        if (currDataLayoutLine."Column No." = 0) then begin
             ImportConfigHeader.Get(Rec."Imp.Conf.Header ID");
             ImportConfigLine.SetRange("Imp.Conf.Header ID", Rec."Imp.Conf.Header ID");
             TargetFieldNames := importConfigMgt.CreateTargetFieldNamesDict(ImportConfigLine, false);
@@ -192,7 +192,7 @@ table 91012 DMTReplacementLine
         end;
 
         // Field Name Selected from selection
-        if currDataLayoutLine."Data Layout ID" <> 0 then
+        if currDataLayoutLine."Column No." <> 0 then
             case fromFieldNo of
                 Rec.FieldNo("Target 1 Field Caption"):
                     begin

@@ -48,10 +48,6 @@ codeunit 91003 DMTMigrationLib
     /// <param name="KnownValidationType"></param>
     /// <returns></returns>
     local procedure FindKnownUseValidateValue(TargetField: Record Field; var KnownValidationType: Enum DMTFieldValidationType) Found: Boolean
-    var
-        // RoutingHeader: Record "Routing Header";
-        // Contact: Record Contact;
-        SalesHeader: Record "Sales Header";
     begin
         KnownValidationType := KnownValidationType::AlwaysValidate;
         Found := true;
@@ -65,10 +61,18 @@ codeunit 91003 DMTMigrationLib
             IsMatch(TargetField, Database::Customer, 'Contact'),
             IsMatch(TargetField, Database::Customer, 'Block Payment Tolerance'),
             IsMatch(TargetField, Database::Customer, 'Bill-to Customer No.'),
+            IsMatch(TargetField, Database::Customer, 'Payment Terms Id'),     // ID Values clear the associated field
+            IsMatch(TargetField, Database::Customer, 'Payment Method Id'),    // ID Values clear the associated field
+            IsMatch(TargetField, Database::Customer, 'Currency Id'),          // ID Values clear the associated field
+            IsMatch(TargetField, Database::Customer, 'Contact ID'),           // ID Values clear the associated field
+            IsMatch(TargetField, Database::Customer, 'Tax Area ID'),          // ID Values clear the associated field
             IsMatch(TargetField, Database::Vendor, 'Primary Contact No.'),
             IsMatch(TargetField, Database::Vendor, 'Contact'),
             IsMatch(TargetField, Database::Vendor, 'Prices Including VAT'),
             IsMatch(TargetField, Database::Vendor, 'Pay-to Vendor No.'),
+            IsMatch(TargetField, Database::Vendor, 'Payment Terms Id'),     // ID Values clear the associated field
+            IsMatch(TargetField, Database::Vendor, 'Payment Method Id'),    // ID Values clear the associated field
+            IsMatch(TargetField, Database::Vendor, 'Currency Id'),          // ID Values clear the associated field
             IsMatch(TargetField, Database::Contact, 'Company No.'),
             IsMatch(TargetField, Database::Contact, 'First Name'),  // Avoid ProcessNameChange to clear Names
             IsMatch(TargetField, Database::Contact, 'Middle Name'),
