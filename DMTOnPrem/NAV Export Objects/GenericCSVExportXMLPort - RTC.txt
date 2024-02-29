@@ -3414,6 +3414,7 @@ OBJECT XMLport 50050 DMT Export2
       CharArray[2] := 9; // TAB
       CharArray[3] := 10; // LF
       CharArray[4] := 13; // CR
+      CharArray[5] := 30; // Record Seperator
       ResultText := DELCHR(Text,'=',CharArray);
     END;
 
