@@ -100,22 +100,9 @@ codeunit 91003 DMTMigrationLib
         IsMatch := (Field.FieldName = Field1);
     end;
 
-    procedure IsMatch(Field: Record Field; TableNo: Integer) IsMatch: Boolean
-    begin
-        IsMatch := (Field.TableNo = TableNo);
-    end;
-
     procedure IsMatch(Field: Record Field; TableNo: Integer; FieldName: Text) IsMatch: Boolean
     begin
         IsMatch := (Field.TableNo = TableNo) and (Field.FieldName = FieldName);
-    end;
-
-    procedure HasTableRelation(Field: Record Field; TableNo: Integer; RelatedToTableNo: Integer) HasRelation: Boolean
-    var
-        RecRef: RecordRef;
-    begin
-        RecRef.Open(Field.TableNo, true);
-        HasRelation := RecRef.Field(Field."No.").Relation = RelatedToTableNo;
     end;
 
     local procedure FindKnownFixedValue(TargetField: Record Field; KnownFixedValue: Text) Found: Boolean

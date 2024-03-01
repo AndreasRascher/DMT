@@ -91,15 +91,6 @@ xmlport 91002 DMTCSVWriter
         DownloadFromStream(IStr, 'Download', 'ToFolder', Format(Enum::DMTFileFilter::CSV), FileName);
     end;
 
-    local procedure IsLastField(fieldIndex: Integer): Boolean
-    begin
-        if ExportFieldListGlobal.Count = 0 then
-            exit(true);
-        if ExportFieldListGlobal.Count = fieldIndex then
-            exit(true);
-    end;
-
-
     local procedure initExportFieldList(var recRef: RecordRef)
     var
         field: FieldRef;

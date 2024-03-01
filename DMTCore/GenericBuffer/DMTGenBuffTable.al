@@ -14,6 +14,7 @@ table 91001 DMTGenBuffTable
         field(14; "Column Count"; Integer) { }
         field(20; Imported; Boolean) { Caption = 'Imported', comment = 'de-DE=Importiert'; }
         field(21; "RecId (Imported)"; RecordId) { Caption = 'Record ID (Imported)', comment = 'de-DE=Datensatz-ID (Importiert)'; }
+        field(22; "SystemModifiedAt (Imported)"; DateTime) { Caption = 'System Modified At (Imported Record)', comment = 'de-DE=Letzte Änderung am (Importierter Datensatz)'; }
         field(30; "No. of Blob Contents"; Integer)
         {
             Caption = 'BLOB Contents', comment = 'de-DE=Blob Inhalte';

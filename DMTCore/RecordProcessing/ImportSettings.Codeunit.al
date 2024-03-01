@@ -93,11 +93,21 @@ codeunit 91010 DMTImportSettings
         exit(UpdateExistingRecordsOnlyGlobal);
     end;
 
+    procedure UpdateUnchangedSinceLastImportOnly(UpdateUnchangedSinceLastImportOnlyNew: Boolean)
+    begin
+        UpdateUnchangedSinceLastImportOnlyGlobal := UpdateUnchangedSinceLastImportOnlyNew;
+    end;
+
+    procedure UpdateUnchangedSinceLastImportOnly(): Boolean
+    begin
+        exit(UpdateUnchangedSinceLastImportOnlyGlobal);
+    end;
+
     var
         TempImportConfigLineGlobal: Record DMTImportConfigLine temporary;
         ImportConfigHeaderGlobal: Record DMTImportConfigHeader;
         ProcessingPlanGlobal: Record DMTProcessingPlan;
         SourceTableViewGlobal, UpdateFieldsFilterGlobal : Text;
-        StopProcessingRecIDListAfterErrorGlobal, NoUserInteractionGlobal, UpdateExistingRecordsOnlyGlobal : Boolean;
+        StopProcessingRecIDListAfterErrorGlobal, NoUserInteractionGlobal, UpdateExistingRecordsOnlyGlobal, UpdateUnchangedSinceLastImportOnlyGlobal : Boolean;
         RecIdToProcessListGlobal: List of [RecordId];
 }

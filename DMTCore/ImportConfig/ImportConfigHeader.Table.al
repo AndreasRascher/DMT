@@ -15,9 +15,11 @@ table 91003 DMTImportConfigHeader
             trigger OnValidate()
             var
                 TableMetadata: Record "Table Metadata";
+                migrationLib: Codeunit DMTMigrationLib;
             begin
                 if TableMetadata.Get(Rec."Target Table ID") then
                     Rec."Target Table Caption" := TableMetadata.Caption;
+                migrationLib.ApplyKnownProcessingRulesToNewImportConfigHeaderRec(Rec);
             end;
         }
         field(11; "Target Table Caption"; Text[250])
