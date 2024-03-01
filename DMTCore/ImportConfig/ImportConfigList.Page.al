@@ -77,6 +77,7 @@ page 91010 DMTImportConfigList
                             TargetTableID := migrationLib.HandleObsoleteNAVTargetTable(TargetTableID);
 
                         if TargetTableID <> 0 then begin
+                            // validate Target Table to apply known settings from DMTMigrationLibrary
                             importConfigHeader.Validate("Target Table ID", TargetTableID);
                             importConfigHeader.Modify(true);
                             ImportConfigMgt.PageAction_InitImportConfigLine(importConfigHeader.ID);
