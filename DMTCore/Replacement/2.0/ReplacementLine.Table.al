@@ -110,17 +110,17 @@ table 91012 DMTReplacementLine
 
     procedure CopyToTemp(var TempReplacementLine: Record DMTReplacementLine temporary) LineCount: Integer
     var
-        ImportConfigLine: Record DMTReplacementLine;
-        TempImportConfigLine2: Record DMTReplacementLine temporary;
+        replacementLine: Record DMTReplacementLine;
+        tempReplacementLines2: Record DMTReplacementLine temporary;
     begin
-        ImportConfigLine.Copy(Rec);
-        if ImportConfigLine.FindSet(false) then
+        replacementLine.Copy(Rec);
+        if replacementLine.FindSet(false) then
             repeat
                 LineCount += 1;
-                TempImportConfigLine2 := ImportConfigLine;
-                TempImportConfigLine2.Insert(false);
-            until ImportConfigLine.Next() = 0;
-        TempReplacementLine.Copy(TempImportConfigLine2, true);
+                tempReplacementLines2 := replacementLine;
+                tempReplacementLines2.Insert(false);
+            until replacementLine.Next() = 0;
+        TempReplacementLine.Copy(tempReplacementLines2, true);
     end;
 
     internal procedure OnAfterLookUpField(var Selected: RecordRef; fromFieldNo: Integer; var currDataLayoutLine: Record DMTDataLayoutLine)

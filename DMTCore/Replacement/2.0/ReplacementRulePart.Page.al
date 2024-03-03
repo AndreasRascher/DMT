@@ -12,12 +12,33 @@ page 91020 DMTReplacementRulePart
         area(Content)
         {
 
-            repeater(Repeater)
+            repeater(Repeater_1_1)
             {
-                field("Comp.Value 1"; Rec."Comp.Value 1") { StyleExpr = CV1_SpecialCharWarningStyle; }
-                field("Comp.Value 2"; Rec."Comp.Value 2") { StyleExpr = CV2_SpecialCharWarningStyle; Visible = Source2Visible; }
-                field("New Value 1"; Rec."New Value 1") { StyleExpr = NV1_SpecialCharWarningStyle; }
-                field("New Value 2"; Rec."New Value 2") { StyleExpr = NV2_SpecialCharWarningStyle; Visible = Target2Visible; }
+                Visible = is1By1Mapping;
+                field(Repeater_1_1_CompValue1; Rec."Comp.Value 1") { StyleExpr = CV1_SpecialCharWarningStyle; }
+                field(Repeater_1_1_NewValue1; Rec."New Value 1") { StyleExpr = NV1_SpecialCharWarningStyle; }
+            }
+            repeater(Repeater_2_1)
+            {
+                Visible = is2By1Mapping;
+                field(Repeater_2_1_CompValue1; Rec."Comp.Value 1") { StyleExpr = CV1_SpecialCharWarningStyle; }
+                field(Repeater_2_1_CompValue2; Rec."Comp.Value 2") { StyleExpr = CV2_SpecialCharWarningStyle; }
+                field(Repeater_2_1_NewValue1; Rec."New Value 1") { StyleExpr = NV1_SpecialCharWarningStyle; }
+            }
+            repeater(Repeater_1_2)
+            {
+                Visible = is1By2Mapping;
+                field(Repeater_1_2_CompValue1; Rec."Comp.Value 1") { StyleExpr = CV1_SpecialCharWarningStyle; }
+                field(Repeater_1_2_NewValue1; Rec."New Value 1") { StyleExpr = NV1_SpecialCharWarningStyle; }
+                field(Repeater_1_2_NewValue2; Rec."New Value 2") { StyleExpr = NV2_SpecialCharWarningStyle; }
+            }
+            repeater(Repeater_2_2)
+            {
+                Visible = is2By2Mapping;
+                field(Repeater_2_2_CompValue1; Rec."Comp.Value 1") { StyleExpr = CV1_SpecialCharWarningStyle; }
+                field(Repeater_2_2_CompValue2; Rec."Comp.Value 2") { StyleExpr = CV2_SpecialCharWarningStyle; }
+                field(Repeater_2_2_NewValue1; Rec."New Value 1") { StyleExpr = NV1_SpecialCharWarningStyle; }
+                field(Repeater_2_2_NewValue2; Rec."New Value 2") { StyleExpr = NV2_SpecialCharWarningStyle; }
             }
         }
     }
@@ -38,9 +59,11 @@ page 91020 DMTReplacementRulePart
 
     procedure SetVisibility(replacementHeader: Record DMTReplacementHeader)
     begin
-        Source2Visible := replacementHeader."No. of Source Values" = replacementHeader."No. of Source Values"::"2";
-        Target2Visible := replacementHeader."No. of Values to modify" = replacementHeader."No. of Values to modify"::"2";
-        CurrPage.Update(Rec."Replacement Code" <> '');
+        is1By1Mapping := replacementHeader.IsMapping(1, 1);
+        is1By2Mapping := replacementHeader.IsMapping(1, 2);
+        is2By1Mapping := replacementHeader.IsMapping(2, 1);
+        is2By2Mapping := replacementHeader.IsMapping(2, 2);
+        CurrPage.Update(replacementHeader.Code <> '');
     end;
 
     local procedure GetWarningStyleIfValueContainsSpecialChars(textValue: Text[80]) newStyleExpr: Text
@@ -68,6 +91,6 @@ page 91020 DMTReplacementRulePart
     end;
 
     var
-        Source2Visible, Target2Visible : Boolean;
+        is1By1Mapping, is1By2Mapping, is2By1Mapping, is2By2Mapping : Boolean;
         NV1_SpecialCharWarningStyle, NV2_SpecialCharWarningStyle, CV1_SpecialCharWarningStyle, CV2_SpecialCharWarningStyle : Text;
 }

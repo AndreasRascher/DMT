@@ -93,10 +93,10 @@ table 91011 DMTReplacementHeader
     var
         Left, Right : Boolean;
     begin
-        Left := ((noOfSourceValues = 1) and (Rec."No. of Source Values" = Rec."No. of Source Values"::"1")) or
-                ((noOfSourceValues = 2) and (Rec."No. of Source Values" = Rec."No. of Source Values"::"2"));
-        Right := ((noOfValuesToModify = 1) and (Rec."No. of Values to modify" = rec."No. of Values to modify"::"1")) or
-                 ((noOfValuesToModify = 2) and (Rec."No. of Values to modify" = rec."No. of Values to modify"::"2"));
+        Left := ((noOfSourceValues = 1) and (Rec."No. of Source Values" = Rec."No. of Source Values"::"1"));
+        Left := Left or ((noOfSourceValues = 2) and (Rec."No. of Source Values" = Rec."No. of Source Values"::"2"));
+        Right := ((noOfValuesToModify = 1) and (Rec."No. of Values to modify" = rec."No. of Values to modify"::"1"));
+        Right := Right or ((noOfValuesToModify = 2) and (Rec."No. of Values to modify" = rec."No. of Values to modify"::"2"));
         exit(Left and Right);
     end;
 }

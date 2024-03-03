@@ -1,0 +1,37 @@
+{
+  "id": "a8397bb9-221a-4b7e-b8e9-53b19c0d3876",
+  "name": "DMT Tests",
+  "publisher": "Andreas Rascher",
+  "version": "1.0.0.0",
+  "brief": "",
+  "description": "",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [
+    {      
+      "id": "4698691e-c550-4026-9fac-05f90572a975",
+      "name": "DMT Core",
+      "publisher": "Andreas Rascher",
+      "version": "1.0.0.0"
+    }
+  ],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "22.0.0.0",
+  "idRanges": [
+    {
+      "from": 90021,
+      "to": 900030
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "11.0",
+  "features": ["NoImplicitWith","TranslationFile"]
+}

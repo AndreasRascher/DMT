@@ -14,12 +14,20 @@ page 91019 DMTReplacementAssignmentPart
             repeater(Repeater_1_1)
             {
                 Visible = not Source2Visible and not Target2Visible;
-                field("Imp.Conf.Header ID"; Rec."Imp.Conf.Header ID") { }
+                field("Imp.Conf.Header ID"; Rec."Imp.Conf.Header ID")
+                {
+                    ShowMandatory = true;
+                    trigger OnValidate()
+                    begin
+                        EnableControls();
+                    end;
+                }
                 field(SourceFileName_1_1; Rec."Source File Name") { }
                 field(Source1FieldCaption_1_1; Rec."Source 1 Field Caption")
                 {
                     LookupPageId = DMTFieldLookup;
                     ShowMandatory = true;
+                    Enabled = Source1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
@@ -33,6 +41,7 @@ page 91019 DMTReplacementAssignmentPart
                 field(Target1FieldCaption_1_1; Rec."Target 1 Field Caption")
                 {
                     LookupPageId = DMTFieldLookup;
+                    Enabled = Target1Enabled;
                     ShowMandatory = true;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
@@ -60,6 +69,7 @@ page 91019 DMTReplacementAssignmentPart
                 {
                     LookupPageId = DMTFieldLookup;
                     ShowMandatory = true;
+                    Enabled = Source1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
@@ -74,6 +84,7 @@ page 91019 DMTReplacementAssignmentPart
                 {
                     LookupPageId = DMTFieldLookup;
                     ShowMandatory = true;
+                    Enabled = Source2Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
@@ -88,6 +99,7 @@ page 91019 DMTReplacementAssignmentPart
                 {
                     LookupPageId = DMTFieldLookup;
                     ShowMandatory = true;
+                    Enabled = Target1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 1 Field Caption"), DataLayoutLineGlobal);
@@ -114,6 +126,7 @@ page 91019 DMTReplacementAssignmentPart
                 {
                     LookupPageId = DMTFieldLookup;
                     ShowMandatory = true;
+                    Enabled = Source1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
@@ -128,6 +141,7 @@ page 91019 DMTReplacementAssignmentPart
                 {
                     LookupPageId = DMTFieldLookup;
                     ShowMandatory = true;
+                    Enabled = Target1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 1 Field Caption"), DataLayoutLineGlobal);
@@ -142,6 +156,7 @@ page 91019 DMTReplacementAssignmentPart
                 {
                     LookupPageId = DMTFieldLookup;
                     ShowMandatory = true;
+                    Enabled = Target2Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 2 Field Caption"), DataLayoutLineGlobal);
@@ -168,6 +183,7 @@ page 91019 DMTReplacementAssignmentPart
                 {
                     LookupPageId = DMTFieldLookup;
                     ShowMandatory = true;
+                    Enabled = Source1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
@@ -182,6 +198,7 @@ page 91019 DMTReplacementAssignmentPart
                 {
                     LookupPageId = DMTFieldLookup;
                     ShowMandatory = true;
+                    Enabled = Source2Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 2 Field Caption"), DataLayoutLineGlobal);
@@ -196,6 +213,7 @@ page 91019 DMTReplacementAssignmentPart
                 {
                     LookupPageId = DMTFieldLookup;
                     ShowMandatory = true;
+                    Enabled = Target1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 1 Field Caption"), DataLayoutLineGlobal);
@@ -210,6 +228,7 @@ page 91019 DMTReplacementAssignmentPart
                 {
                     LookupPageId = DMTFieldLookup;
                     ShowMandatory = true;
+                    Enabled = Target2Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 2 Field Caption"), DataLayoutLineGlobal);
@@ -232,7 +251,7 @@ page 91019 DMTReplacementAssignmentPart
             action(SelectFieldMapping)
             {
                 Caption = 'Select Field Mapping', Comment = 'de-DE=Feldmapping auswählen';
-                Visible = Is1To1Assignment;
+                Visible = SelectFieldMappingVisible;
                 Image = Add;
                 trigger OnAction()
                 var
@@ -323,7 +342,7 @@ page 91019 DMTReplacementAssignmentPart
     begin
         Source2Visible := replacementHeader."No. of Source Values" = replacementHeader."No. of Source Values"::"2";
         Target2Visible := replacementHeader."No. of Values to modify" = replacementHeader."No. of Values to modify"::"2";
-        Is1To1Assignment := replacementHeader.IsMapping(1, 1);
+        SelectFieldMappingVisible := replacementHeader.IsMapping(1, 1);
         CurrPage.Update(Rec."Replacement Code" <> '');
     end;
 
@@ -332,5 +351,6 @@ page 91019 DMTReplacementAssignmentPart
         DataLayoutLineGlobal: Record DMTDataLayoutLine;
         Source1Enabled, Source2Enabled, Target1Enabled, Target2Enabled : Boolean;
         Source2Visible, Target2Visible : Boolean;
-        Is1To1Assignment: Boolean;
+        SelectFieldMappingVisible: Boolean;
+        ImportConfigIsSet: Boolean;
 }
