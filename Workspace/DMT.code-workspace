@@ -65,24 +65,7 @@
 					"tenant": "default",
 					"usePublicURLFromServer": true,
 					"schemaUpdateMode": "ForceSync"
-				},
-				{
-					"name": "Akra SandboxDEV",
-					"type": "al",
-					"request": "launch",
-					"environmentType": "Sandbox",
-					"environmentName": "Sandbox-DEV2",
-					"startupObjectId": 22,
-					"breakOnError": "All",
-					"breakOnRecordWrite": "None",
-					"launchBrowser": true,
-					"enableSqlInformationDebugger": true,
-					"enableLongRunningSqlStatements": true,
-					"longRunningSqlStatementsThreshold": 500,
-					"numberOfSqlStatements": 10,
-					"tenant": "default",
-					"usePublicURLFromServer": true
-				}
+				}				
 				,
 				{
 					"name": "TEST_MC",
