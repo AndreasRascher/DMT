@@ -29,25 +29,27 @@ codeunit 91014 DMTMigrate
     /// <summary>
     /// Process buffer records with field selection
     /// </summary>
-    procedure AllFieldsFrom(ImportConfigHeader: Record DMTImportConfigHeader)
+    procedure AllFieldsFrom(ImportConfigHeader: Record DMTImportConfigHeader; noUserInteractionNEW: Boolean)
     var
-        DMTImportSettings: Codeunit DMTImportSettings;
+        importSettings: Codeunit DMTImportSettings;
     begin
-        DMTImportSettings.ImportConfigHeader(ImportConfigHeader);
-        DMTImportSettings.SourceTableView(ImportConfigHeader.ReadLastUsedSourceTableView());
-        LoadImportConfigLine(DMTImportSettings);
-        ProcessFullBuffer(DMTImportSettings);
+        importSettings.ImportConfigHeader(ImportConfigHeader);
+        importSettings.NoUserInteraction(noUserInteractionNEW);
+        importSettings.SourceTableView(ImportConfigHeader.ReadLastUsedSourceTableView());
+        LoadImportConfigLine(importSettings);
+        ProcessFullBuffer(importSettings);
     end;
     /// <summary>
     /// Process buffer records
     /// </summary>
-    procedure SelectedFieldsFrom(ImportConfigHeader: Record DMTImportConfigHeader)
+    procedure SelectedFieldsFrom(ImportConfigHeader: Record DMTImportConfigHeader; noUserInteractionNEW: Boolean)
     var
         DMTImportSettings: Codeunit DMTImportSettings;
     begin
         DMTImportSettings.ImportConfigHeader(ImportConfigHeader);
         DMTImportSettings.UpdateFieldsFilter(ImportConfigHeader.ReadLastFieldUpdateSelection());
         DMTImportSettings.UpdateExistingRecordsOnly(true);
+        DMTImportSettings.NoUserInteraction(noUserInteractionNEW);
         LoadImportConfigLine(DMTImportSettings);
         ProcessFullBuffer(DMTImportSettings);
     end;
@@ -393,16 +395,22 @@ codeunit 91014 DMTMigrate
     var
         // DMTErrorLog: Record DMTErrorLog;
         importConfigHeader: Record DMTImportConfigHeader;
+        DMTSetup: Record DMTSetup;
         progressDialog: Codeunit DMTProgressDialog;
         ID: RecordId;
         bufferRef: RecordRef;
         bufferRef2: RecordRef;
         ResultType: Enum DMTProcessingResultType;
+        iReplacementHandler: Interface IReplacementHandler;
     begin
         if recIdToProcessList.Count = 0 then
             Error('Keine Daten zum Verarbeiten');
 
         importConfigHeader := importSettings.ImportConfigHeader();
+        // init replacement handler
+        DMTSetup.getDefaultReplacementImplementation(iReplacementHandler);
+        iReplacementHandler.InitBatchProcess(importConfigHeader);
+
         // Buffer loop
         bufferRef.Open(importConfigHeader."Buffer Table ID");
         ID := recIdToProcessList.Get(1);

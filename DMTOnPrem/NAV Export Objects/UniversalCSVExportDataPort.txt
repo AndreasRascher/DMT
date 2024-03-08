@@ -2,8 +2,8 @@ OBJECT Dataport 50009 DMTExport
 {
   OBJECT-PROPERTIES
   {
-    Date=21.09.23;
-    Time=11:46:28;
+    Date=29.02.24;
+    Time=16:28:04;
     Modified=Yes;
     Version List=DMT;
   }
@@ -566,6 +566,7 @@ OBJECT Dataport 50009 DMTExport
       CharArray[2] := 9; // TAB
       CharArray[3] := 10; // LF
       CharArray[4] := 13; // CR
+      CharArray[5] := 30; // Record Seperator
       ResultText := DELCHR(Text,'=',CharArray);
     END;
 

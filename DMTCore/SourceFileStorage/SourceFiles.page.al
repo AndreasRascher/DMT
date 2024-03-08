@@ -17,12 +17,13 @@ page 91005 DMTSourceFiles
                 field("File ID"; Rec."File ID") { Visible = false; Editable = false; }
                 field(Name; Rec.Name) { }
                 field(Extension; Rec.Extension) { }
-                field(SizeInKB; Rec.SizeInKB) { }
+                field(SizeInKB; Rec.SizeInKB) { StyleExpr = SizeInKBStyle; }
                 field("DateTime"; Rec.UploadDateTime) { }
                 field(SourceFileFormat; Rec.SourceFileFormat) { }
                 field("Data Layout Name"; Rec."Data Layout Name")
                 {
                     ShowMandatory = true;
+
                     TableRelation = DMTDataLayout where(SourceFileFormat = field(SourceFileFormat));
 
                     trigger OnAfterLookup(Selected: RecordRef)
@@ -89,4 +90,14 @@ page 91005 DMTSourceFiles
         SourceFileStorage.CopyToTemp(SourceFileStorage_SELECTED);
         HasLines := SourceFileStorage_SELECTED.FindFirst();
     end;
+
+    trigger OnAfterGetRecord()
+    begin
+        SizeInKBStyle := '';
+        if rec.Size = 0 then
+            SizeInKBStyle := format(Enum::DMTFieldStyle::"Red + Italic")
+    end;
+
+    var
+        SizeInKBStyle: Text;
 }

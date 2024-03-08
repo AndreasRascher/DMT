@@ -1718,6 +1718,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Datensatz-ID (Importiert)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field RecId (Imported) - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 3387052648 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>System Modified At (Imported Record)</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Letzte Änderung am (Importierter Datensatz)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field SystemModifiedAt (Imported) - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 200502431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Import Configuration Header</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Import Konfiguration Kopf</note>

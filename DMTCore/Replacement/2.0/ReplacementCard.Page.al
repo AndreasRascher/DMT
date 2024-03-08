@@ -36,7 +36,7 @@ page 91024 DMTReplacementCard
                                 Importance = Promoted;
                                 trigger OnValidate()
                                 begin
-                                    UpdateLineParts();
+                                    UpdateLineParts(Rec);
                                 end;
                             }
                         }
@@ -48,7 +48,7 @@ page 91024 DMTReplacementCard
                                 Importance = Promoted;
                                 trigger OnValidate()
                                 begin
-                                    UpdateLineParts();
+                                    UpdateLineParts(Rec);
                                 end;
                             }
                         }
@@ -109,15 +109,23 @@ page 91024 DMTReplacementCard
     actions
     {
     }
-
-    trigger OnAfterGetRecord()
+    trigger OnFindRecord(Which: Text): Boolean
+    var
+        found: Boolean;
     begin
-        UpdateLineParts();
+        found := Rec.Find(Which);
+        UpdateLineParts(Rec);
+        exit(found);
     end;
 
-    procedure UpdateLineParts()
+    // trigger OnAfterGetCurrRecord()
+    // begin
+    //     UpdateLineParts();
+    // end;
+
+    procedure UpdateLineParts(replacementHeader: Record DMTReplacementHeader)
     begin
-        CurrPage.ReplacementRulePart.Page.SetVisibility(Rec);
-        CurrPage.ReplacementAssigments.Page.SetVisibility(Rec);
+        CurrPage.ReplacementAssigments.Page.SetVisibility(replacementHeader);
+        CurrPage.ReplacementRulePart.Page.SetVisibility(replacementHeader);
     end;
 }

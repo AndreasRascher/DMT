@@ -166,8 +166,10 @@ codeunit 91019 DMTGenericBuffertTableMgtImpl implements IBufferTableMgt
         if Evaluate(TargetRecID, CurrTargetRecIDText) then begin
             genBuffTable."RecId (Imported)" := TargetRecID;
             genBuffTable.Imported := targetRef.Get(TargetRecID);
+            genBuffTable."SystemModifiedAt (Imported)" := targetRef.field(targetRef.SystemCreatedAtNo).Value;
         end else begin
             genBuffTable."RecId (Imported)" := TargetRecID;
+            genBuffTable."SystemModifiedAt (Imported)" := 0DT;
             genBuffTable.Imported := false;
         end;
         genBuffTable.Modify();

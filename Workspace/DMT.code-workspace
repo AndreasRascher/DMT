@@ -14,6 +14,10 @@
 		{
 			"path": "..\\DMTCodeGenerator",
 			"name": "APP CodeGenerator"
+		},
+		{
+			"path": "..\\DMTTest",
+			"name": "APP Tests"
 		}
 	],
 	"settings": {
@@ -30,6 +34,27 @@
 					"authentication": "UserPassword",
 					"startupObjectType": "Page",
 					"startupObjectId": 91010,
+					"breakOnError": "ExcludeTry",
+					"breakOnRecordWrite": "None",
+					"launchBrowser": true,
+					"enableSqlInformationDebugger": true,
+					"enableLongRunningSqlStatements": true,
+					"longRunningSqlStatementsThreshold": 500,
+					"numberOfSqlStatements": 10,
+					"tenant": "default",
+					"usePublicURLFromServer": true,
+					"schemaUpdateMode": "ForceSync"
+				},
+				{
+					"name": "BC23 AL TEST TOOL",
+					"type": "al",
+					"request": "launch",
+					"environmentType": "OnPrem",
+					"server": "http://bc23/",
+					"serverInstance": "BC",
+					"authentication": "UserPassword",
+					"startupObjectType": "Page",
+					"startupObjectId": 130451,
 					"breakOnError": "ExcludeTry",
 					"breakOnRecordWrite": "None",
 					"launchBrowser": true,

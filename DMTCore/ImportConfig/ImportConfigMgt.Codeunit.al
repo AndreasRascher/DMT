@@ -174,7 +174,7 @@ codeunit 91002 DMTImportConfigMgt
         RunModalAction := SelectMultipleFields.RunModal();
         if RunModalAction = Action::OK then begin
             ImportConfigHeader.WriteLastFieldUpdateSelection(SelectMultipleFields.GetTargetFieldIDListAsText());
-            Migrate.SelectedFieldsFrom(ImportConfigHeader);
+            Migrate.SelectedFieldsFrom(ImportConfigHeader, false);
         end;
     end;
 
