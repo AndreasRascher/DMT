@@ -37,6 +37,13 @@ page 91014 DMTImportConfigFactBox
                             CurrImportConfigHeader.BufferTableMgt().ShowBufferTable();
                         end;
                     }
+                    // debug csv import
+                    field("No.of CSV lines read"; DMTSessionStorage.LastLineRead())
+                    {
+                        ApplicationArea = All;
+                        Visible = false;
+                        Caption = 'No.of CSV lines read', comment = 'de-DE=Anz. CSV Zeilen gelesen';
+                    }
                 }
             }
             repeater(Log)
@@ -100,6 +107,7 @@ page 91014 DMTImportConfigFactBox
 
     var
         CurrImportConfigHeader: Record DMTImportConfigHeader;
+        DMTSessionStorage: Codeunit DMTSessionStorage;
         ViewMode: Option " ",Log,TableInfo;
 }
 

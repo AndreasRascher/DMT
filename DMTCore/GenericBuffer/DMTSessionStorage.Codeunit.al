@@ -30,6 +30,17 @@ codeunit 91000 DMTSessionStorage
         exit(Captions.Keys.Count);
     end;
 
+    procedure LastLineRead(LineNumber: Integer)
+    begin
+        LineNumberGlobal := LineNumber;
+    end;
+
+    procedure LastLineRead() LineNumber: Integer
+    begin
+        exit(LineNumberGlobal);
+    end;
+
     var
         Captions: Dictionary of [Integer, Text];
+        LineNumberGlobal: Integer;
 }

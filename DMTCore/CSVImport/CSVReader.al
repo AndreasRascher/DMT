@@ -34,6 +34,7 @@ xmlport 91001 DMTCSVReader
                 // Called when starting new line
                 trigger OnAfterInitRecord()
                 begin
+                    sessionStorage.LastLineRead(CurrRowNoGlobal);
                     CurrRowNoGlobal += 1;
                     Line.Number := CurrRowNoGlobal; // required to raise onBeforeInsertRecord
                     if RowListGlobal.Count > 0 then begin
@@ -118,6 +119,7 @@ xmlport 91001 DMTCSVReader
 
     var
         genBuffAccessMgt: Codeunit DMTGenBuffAccessMgt;
+        sessionStorage: Codeunit DMTSessionStorage;
         ReadModeGlobal: Option ReadOnly,ImportToGenBuffer;
         FirstRowWithValuesGlobal, CurrRowNoGlobal, toRowNoGlobal : Integer;
         DataTable: List of [List of [BigText]];
