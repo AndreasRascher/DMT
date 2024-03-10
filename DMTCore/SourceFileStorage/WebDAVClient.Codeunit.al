@@ -69,19 +69,20 @@ codeunit 91024 DMTWebDAVClient
             if xNode.SelectSingleNode('./d:href/text()', xNsMgr, xNode2) then
                 Evaluate(prop_Href, xNode2.AsXmlText().Value);
             Clear(prop_ContentLength);
-            if xNode.SelectSingleNode('./d:quota-used-bytes', xNsMgr, xNode2) then
+            if xNode.SelectSingleNode('./d:propstat/d:prop/d:quota-used-bytes', xNsMgr, xNode2) then
                 Evaluate(prop_ContentLength, xNode2.AsXmlElement().InnerText);
-            if xNode.SelectSingleNode('./d:response/d:propstat/d:prop/d:getcontentlength', xNsMgr, xNode2) then
+            if xNode.SelectSingleNode('./d:propstat/d:prop/d:getcontentlength', xNsMgr, xNode2) then
                 Evaluate(prop_ContentLength, xNode2.AsXmlElement().InnerText);
             Clear(prop_ContentType);
-            if xNode.SelectSingleNode('./d:response/d:propstat/d:prop/d:getcontenttype', xNsMgr, xNode2) then
+            if xNode.SelectSingleNode('./d:propstat/d:prop/d:getcontenttype', xNsMgr, xNode2) then
                 prop_ContentType := xNode2.AsXmlElement().InnerText;
             Clear(prop_LastModified);
-            if xNode.SelectSingleNode('./d:response/d:propstat/d:prop/d:getlastmodified', xNsMgr, xNode2) then
+            if xNode.SelectSingleNode('./d:propstat/d:prop/d:getlastmodified', xNsMgr, xNode2) then
                 Evaluate(prop_LastModified, xNode2.AsXmlElement().InnerText);
 
-            webDAVFile.Size := prop_ContentLength;
             webDAVFile."Is Folder" := prop_Href.EndsWith('/');
+            if not webDAVFile."Is Folder" then
+                webDAVFile.Size := prop_ContentLength;
             name := prop_Href;
             name := name.Substring(name.TrimEnd('/').LastIndexOf('/') + 1).TrimEnd('/');
             webDAVFile.Name := CopyStr(typeHelper.UrlDecode(name), 1, MaxStrLen(webDAVFile.Name));
@@ -161,6 +162,27 @@ codeunit 91024 DMTWebDAVClient
         foreach xAttribute in xAttributeCollection do
             if StrPos(xAttribute.Name(), 'xmlns:') = 1 then
                 xNsMgr.AddNamespace(DelStr(xAttribute.Name(), 1, 6), xAttribute.Value());
+    end;
+
+    procedure SplitUrl(url: Text; var serverUrl: Text; var serverRelativeUrl: Text)
+    var
+        WebRequestHelper: Codeunit "Web Request Helper";
+        serverUrlOld: Text;
+        hostName: Text;
+    begin
+        // split url in server url and server relative url
+        if serverUrl = '' then exit;
+        serverUrlOld := serverUrl;
+        hostName := WebRequestHelper.GetHostNameFromUrl(serverUrl);
+
+        // check if url contains relative path
+        serverUrl := serverUrl.TrimEnd('/');
+        if serverUrl.EndsWith(hostName) then
+            exit;
+
+        // Split after host name
+        serverUrl := CopyStr(serverUrlOld, 1, StrPos(serverUrl, hostName) + StrLen(hostName));
+        serverRelativeUrl := serverUrlOld.Remove(1, StrPos(serverUrl, hostName) + StrLen(hostName));
     end;
 
     var

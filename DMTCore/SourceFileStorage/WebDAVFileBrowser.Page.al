@@ -20,30 +20,10 @@ page 91025 WebDAVFileBrowser
                     Caption = 'Server URL', Locked = true;
                     ApplicationArea = All;
                     ShowMandatory = true;
-                    // trigger OnValidate()
-                    // begin
-                    //     serverRelativeUrl := StrSubstNo(UserFilesRelPathLbl, UserName);
-                    // end;
 
                     trigger OnValidate()
-                    var
-                        WebRequestHelper: Codeunit "Web Request Helper";
-                        serverUrlOld: Text;
-                        hostName: Text;
                     begin
-                        // split url in server url and server relative url
-                        if serverUrl = '' then exit;
-                        serverUrlOld := serverUrl;
-                        hostName := WebRequestHelper.GetHostNameFromUrl(serverUrl);
-
-                        // check if url contains relative path
-                        serverUrl := serverUrl.TrimEnd('/');
-                        if serverUrl.EndsWith(hostName) then
-                            exit;
-
-                        // Split after host name
-                        serverUrl := CopyStr(serverUrlOld, 1, StrPos(serverUrl, hostName) + StrLen(hostName));
-                        serverRelativeUrl := serverUrlOld.Remove(1, StrPos(serverUrl, hostName) + StrLen(hostName));
+                        webDAVClient.SplitUrl(serverUrl, serverUrl, serverRelativeUrl);
                     end;
                 }
                 field(serverRelativeUrl; serverRelativeUrl) { Caption = 'Server relative URL', Locked = true; ApplicationArea = All; }
@@ -97,7 +77,7 @@ page 91025 WebDAVFileBrowser
                     end;
                 }
                 field(LastModified; Rec.LastModified) { ApplicationArea = All; }
-                field(Size; Rec.Size) { ApplicationArea = All; Width = 10; }
+                field(Size; Rec.Size) { ApplicationArea = All; Width = 10; BlankZero = true; }
                 field(Path; Rec.Path) { ApplicationArea = All; Width = 200; }
             }
         }
@@ -137,9 +117,6 @@ page 91025 WebDAVFileBrowser
 
     trigger OnOpenPage()
     begin
-        // DownloadUrl := 'https://transfer.modusconsult.de/remote.php/dav/files/arascher/';
-        // DownloadUrl := 'https://transfer.modusconsult.de/remote.php/dav/files/arascher/dox42/';
-        // DownloadUrl := 'https://transfer.modusconsult.de/remote.php/dav/files/arascher/dox42/GraefILN.txt';
         loadSettingsFromObjectOptions();
         serverRelativeUrl := StrSubstNo(UserFilesRelPathLbl, UserName);
     end;
@@ -227,10 +204,9 @@ page 91025 WebDAVFileBrowser
     end;
 
     var
-        uri: Codeunit Uri;
         selectedRecordGlobal: Record DMTWebDAVFile;
         webDAVClient: Codeunit DMTWebDAVClient;
         UserFilesRelPathLbl: Label '/remote.php/dav/files/%1/', locked = true;
-        serverUrl, Password, serverRelativeUrl, UserName : Text;
+        Password, serverRelativeUrl, serverUrl, UserName : Text;
 
 }
