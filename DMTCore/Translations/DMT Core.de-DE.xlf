@@ -2133,6 +2133,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze in Puffertabelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field No.of Records in Buffer Table - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 200502431 - Field 2509418355 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Skip Records with User Changes</source>
+          <target state="translated">Datensätze mit Nutzeränderung überspringen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Datensätze mit Nutzeränderung überspringen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Skip Records with User Changes - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 200502431 - Field 831512162 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source File ID</source>
           <target state="translated">Quell-Datei ID</target>
@@ -3080,6 +3086,12 @@
           <target state="translated">Puffertabellen Objekte</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Puffertabellen Objekte</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control SeperateBufferObjects - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Control 2509418355 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Skip records which have been changed after the import.</source>
+          <target state="translated">Datensätze überspringen, die vom Benutzer geändert wurden</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Datensätze überspringen, die vom Benutzer geändert wurden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control Skip Records with User Changes - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 809130730 - Control 1510032611 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Log</source>

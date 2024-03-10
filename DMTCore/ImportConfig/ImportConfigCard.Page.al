@@ -50,6 +50,11 @@ page 91008 DMTImportConfigCard
                 field("Target Table ID"; Rec."Target Table ID") { Visible = false; }
                 field("Use OnInsert Trigger"; Rec."Use OnInsert Trigger") { }
                 field("Import Only New Records"; Rec."Import Only New Records") { }
+                field("Skip Records with User Changes"; Rec."Skip Records with User Changes")
+                {
+                    ToolTip = 'Skip records which have been changed after the import.', Comment = 'de-DE=Datensätze überspringen, die vom Benutzer geändert wurden';
+                    Visible = false; // TODO: Fertig entwickeln und dann sichtbar machen
+                }
                 field("Use Separate Buffer Table"; Rec."Use Separate Buffer Table") { }
                 group(SeperateBufferObjects)
                 {
