@@ -2061,6 +2061,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Datensatz-ID (Importiert)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field RecId (Imported) - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1296439604 - Field 3387052648 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>System Modified At (Imported Record)</source>
+          <target state="translated">Letzte Änderung am (Importierter Datensatz)</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Letzte Änderung am (Importierter Datensatz)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTGenBuffTable - Field SystemModifiedAt (Imported) - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 200502431 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Import Configuration Header</source>
           <target state="translated">Import Konfiguration Kopf</target>
@@ -2739,6 +2745,36 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Hochgeladen am</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Field UploadDateTime - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 523974668 - Field 3968297008 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Is Folder</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTWebDAVFile - Field Is Folder - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 523974668 - Field 3374796909 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>LastModified</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTWebDAVFile - Field LastModified - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 523974668 - Field 2961552353 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Name</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTWebDAVFile - Field Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 523974668 - Field 2206733951 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Path</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTWebDAVFile - Field Path - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 523974668 - Field 3964473375 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Size</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTWebDAVFile - Field Size - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Codeunit 484048500 - Method 2689460527 - NamedType 1044229085" size-unit="char" translate="yes" xml:space="preserve">
           <source>too large field values have been cut off. Max. string length is 250 chars.\Filename: "%1"\Columns: "%2."</source>
           <target state="translated">Zu lange Feldwerte wurden abgeschnitten. Max. Textlänge ist 250 Zeichen.\Dateiname: "%1"\Betroffene Spalten: "%2."</target>
@@ -3152,6 +3188,12 @@
           <target state="translated">Ziel</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Ziel</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigFactBox - Control No. of Records In Trgt. Table - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1337506145 - Control 1801483529 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No.of CSV lines read</source>
+          <target state="translated">Anz. CSV Zeilen gelesen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anz. CSV Zeilen gelesen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigFactBox - Control No.of CSV lines read - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1337506145 - Control 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffer</source>
@@ -3591,11 +3633,35 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Datei runterladen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTSourceFiles - Action DownloadFile - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 698368471 - Action 2708485306 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import File from WebDAV</source>
+          <target state="translated">Datei von WebDAV importieren</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Datei von WebDAV importieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSourceFiles - Action ImportFileFromWebDAV - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 698368471 - Action 1139572727 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Upload File</source>
           <target state="translated">Datei hochladen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Datei hochladen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTSourceFiles - Action UploadFile - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1983903763 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>WebDAV File Browser</source>
+          <target state="translated">WebDAV Datei Browser</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=WebDAV Datei Browser</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WebDAVFileBrowser - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1983903763 - Control 486669812 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Authentication</source>
+          <target state="translated">Authentifizierung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Authentifizierung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WebDAVFileBrowser - Control Authentication - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1983903763 - Control 4266135001 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Selected File</source>
+          <target state="translated">Ausgewählte Datei</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ausgewählte Datei</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WebDAVFileBrowser - Control SelectedFile - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 89294914 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>GenBufferImport</source>
