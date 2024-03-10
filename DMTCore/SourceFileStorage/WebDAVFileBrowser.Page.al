@@ -2,7 +2,7 @@ page 91025 WebDAVFileBrowser
 {
     Caption = 'WebDAV File Browser', Comment = 'de-DE=WebDAV Datei Browser';
     PageType = Worksheet;
-    UsageCategory = Lists;
+    UsageCategory = None;
     ApplicationArea = All;
     SourceTable = DMTWebDAVFile;
     InsertAllowed = false;
