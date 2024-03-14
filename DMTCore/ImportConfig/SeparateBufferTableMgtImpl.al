@@ -104,10 +104,11 @@ codeunit 91022 DMTSeparateBufferTableMgtImpl implements IBufferTableMgt
         checkHeaderIsSet();
         if not FindDMTFieldNosInBufferTable(TargetRecIDFieldNo, TargetRecIsImportedFieldNo) then
             exit;
-        if Evaluate(TargetRecID, CurrTargetRecIDText) then begin
+        if Evaluate(TargetRecID, CurrTargetRecIDText) and targetRef.Get(TargetRecID) then begin
             BufferRef.Field(TargetRecIDFieldNo).Value := TargetRecID;
             BufferRef.Field(TargetRecIsImportedFieldNo).Value := targetRef.Get(TargetRecID);
-        end else begin
+        end
+        else begin
             BufferRef.Field(TargetRecIDFieldNo).Value := TargetRecID;
             BufferRef.Field(TargetRecIsImportedFieldNo).Value := false;
         end;

@@ -98,7 +98,7 @@ codeunit 90021 ReplacementTests
         TestLibrary.BuildDataTable(dataTable, 2, 4, 'OldValue1');
         TestLibrary.BuildDataTable(dataTable, 2, 5, 'OldValue2');
         TestLibrary.CreateSourceFileStorage(sourceFileStorage, 'sample.csv', dataLayout);
-        TestLibrary.WriteDataTableToSourceFile(dataTable, sourceFileStorage);
+        TestLibrary.WriteDataTableToSourceFile(sourceFileStorage, dataTable);
         TestLibrary.CreateImportConfigHeader(importConfigHeader, 37, sourceFileStorage);
         TestLibrary.CreateFieldMapping(importConfigHeader, true);
         importConfigHeader.ImportFileToBuffer();

@@ -83,6 +83,16 @@ codeunit 90022 DMTTestLibrary
         OK := dataLayout.FindFirst();
     end;
 
+    internal procedure GetDefaultNAVDMTLayout() dataLayout: Record DMTDataLayout
+    begin
+        CreateOrGetDataLayout(dataLayout, 'DMT NAV CSV Export');
+    end;
+
+    internal procedure BuildDataTable(var dataTable: List of [List of [Text]]; rowNo: Integer; colNo: Integer; content: Decimal)
+    begin
+        BuildDataTable(dataTable, rowNo, colNo, Format(content));
+    end;
+
     internal procedure BuildDataTable(var dataTable: List of [List of [Text]]; rowNo: Integer; colNo: Integer; content: Text)
     var
         line: list of [Text];
@@ -97,7 +107,7 @@ codeunit 90022 DMTTestLibrary
         dataTable.Get(rowNo).Set(colNo, content);
     end;
 
-    internal procedure WriteDataTableToSourceFile(dataTable: List of [List of [Text]]; sourceFileStorage: Record DMTSourceFileStorage)
+    internal procedure WriteDataTableToSourceFile(sourceFileStorage: Record DMTSourceFileStorage; dataTable: List of [List of [Text]])
     var
         BigText: BigText;
         iStr: InStream;

@@ -180,7 +180,7 @@ page 91008 DMTImportConfigCard
                 var
                     Migrate: Codeunit DMTMigrate;
                 begin
-                    Migrate.AllFieldsFrom(Rec, true);
+                    Migrate.AllFieldsFrom(Rec, false);
                 end;
             }
             action(UpdateFields)
