@@ -54,6 +54,15 @@ table 91000 DMTSetup
         IReplacementHandler := ReplacementHandlerImpl;
     end;
 
+    // Interface used as return value because only atomic procedure calls are possible
+    procedure getDefaultImportConfigPageActionImplementation() IImportConfigPageAction: Interface IImportConfigPageAction
+    var
+        // ReplacementHandlerImpl: codeunit ReplacementHandlerImpl;
+        importConfigPageActionImpl: codeunit DMTImportConfigPageActionImpl;
+    begin
+        IImportConfigPageAction := importConfigPageActionImpl;
+    end;
+
     procedure IsNAVExport(): Boolean
     begin
         if not RecordHasBeenRead then

@@ -62,16 +62,23 @@ codeunit 90022 DMTTestLibrary
         replacementLine.Modify();
     end;
 
-    internal procedure CreateSourceFileStorage(var sourceFileStorage: Record DMTSourceFileStorage; fileNameWithExtension: Text; DMTDataLayout: Record DMTDataLayout) OK: Boolean
+    internal procedure CreateSourceFileStorage(var sourceFileStorage: Record DMTSourceFileStorage; fileNameWithExtension: Text; DMTDataLayout: Record DMTDataLayout; var TempBlob: Codeunit "Temp Blob") OK: Boolean
     var
         fileMgt: Codeunit "File Management";
+        recRef: RecordRef;
     begin
+        Clear(sourceFileStorage);
         sourceFileStorage."File ID" := 1;
         sourceFileStorage.Name := CopyStr(fileNameWithExtension, 1, MaxStrLen(sourceFileStorage.Name));
         sourceFileStorage.Extension := CopyStr(fileMgt.GetExtension(fileNameWithExtension), 1, MaxStrLen(sourceFileStorage.Extension));
-        sourceFileStorage.SourceFileFormat := sourceFileStorage.SourceFileFormat::"Custom CSV";
+        sourceFileStorage.SourceFileFormat := DMTDataLayout.SourceFileFormat;
         sourceFileStorage.Validate("Data Layout ID", DMTDataLayout.ID);
         OK := sourceFileStorage.Insert();
+        if OK then begin
+            recRef.GetTable(sourceFileStorage);
+            TempBlob.ToRecordRef(recRef, sourceFileStorage.FieldNo("File Blob"));
+            sourceFileStorage.Modify();
+        end;
     end;
 
     internal procedure CreateOrGetDataLayout(var dataLayout: Record DMTDataLayout; dataLayoutName: Text) OK: Boolean
@@ -107,7 +114,40 @@ codeunit 90022 DMTTestLibrary
         dataTable.Get(rowNo).Set(colNo, content);
     end;
 
-    internal procedure WriteDataTableToSourceFile(sourceFileStorage: Record DMTSourceFileStorage; dataTable: List of [List of [Text]])
+    ///<summary><p>Copy the content of the table (records in view) to the data table</p></summary>
+    internal procedure BuildDataTable(var dataTable: List of [List of [Text]]; tableNo: Integer; tableView: Text)
+    var
+        recRef: RecordRef;
+        fieldIndex: Integer;
+        rowNo: Integer;
+        shouldWriteField: Boolean;
+    begin
+        recRef.open(tableNo);
+        recRef.SetView(tableView);
+        recRef.FindSet(false);
+        repeat
+            rowNo += 1;
+            // add the field names as the first row
+            if rowNo = 1 then
+                for fieldIndex := 1 to recRef.FieldCount do
+                    BuildDataTable(dataTable, rowNo, fieldIndex, recRef.Field(fieldIndex).Name);
+
+            // add the field values as the next rows
+            for fieldIndex := 1 to recRef.FieldCount do begin
+                //exclude blob and media fields
+                shouldWriteField := not (recRef.Field(fieldIndex).Type in [FieldType::Blob, FieldType::MediaSet]);
+                //exclude system fields
+                if recRef.Field(fieldIndex).Number in [recRef.SystemCreatedAtNo, recRef.SystemCreatedByNo, recRef.SystemIdNo, recRef.SystemModifiedAtNo, recRef.SystemModifiedByNo] then
+                    shouldWriteField := false;
+                // write the field value
+                if shouldWriteField then
+                    BuildDataTable(dataTable, rowNo, fieldIndex, format(recRef.Field(fieldIndex).Value, 0, 9));
+            end;
+
+        until recRef.Next() = 0;
+    end;
+
+    internal procedure WriteDataTableToFileBlob(var TempBlob: Codeunit "Temp Blob"; dataTable: List of [List of [Text]])
     var
         BigText: BigText;
         iStr: InStream;
@@ -120,8 +160,8 @@ codeunit 90022 DMTTestLibrary
         TAB[1] := 9;
         CRLF[1] := 13;
         CRLF[2] := 10;
-        clear(sourceFileStorage."File Blob");
-        sourceFileStorage."File Blob".CreateOutStream(oStr);
+        clear(TempBlob);
+        TempBlob.CreateOutStream(oStr);
         // iterate through the data table and write the content to the CSV file
         foreach line in dataTable do begin
             lastColNo := line.Count;
@@ -132,9 +172,7 @@ codeunit 90022 DMTTestLibrary
                     OStr.WriteText(line.Get(colNo) + TAB);
             oStr.WriteText(CRLF);
         end;
-        sourceFileStorage.Modify();
-        sourceFileStorage.CalcFields("File Blob");
-        sourceFileStorage."File Blob".CreateInStream(iStr);
+        TempBlob.CreateInStream(iStr);
         BigText.Read(iStr);
     end;
 

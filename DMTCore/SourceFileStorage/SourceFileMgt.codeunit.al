@@ -31,7 +31,7 @@ codeunit 91001 DMTSourceFileMgt
         DownloadFromStream(IStream, 'Download', 'Download', Format(Enum::DMTFileFilter::All), toFileName);
     end;
 
-    procedure AddFileToStorage(FileName: Text; IStr: InStream)
+    procedure AddFileToStorage(FileName: Text; IStr: InStream) fileID: Integer
     var
         SourceFileStorage, SourceFileStorageExisting : Record DMTSourceFileStorage;
         FileManagement: Codeunit "File Management";
@@ -47,10 +47,7 @@ codeunit 91001 DMTSourceFileMgt
         fileBaseName := FileManagement.GetFileName(FileName);
         fileExtension := FileManagement.GetExtension(FileName);
 
-        Clear(SourceFileStorageExisting);
-        SourceFileStorageExisting.SetRange(Name, fileBaseName);
-        SourceFileStorageExisting.SetRange(Extension, fileExtension);
-        IsUpdate := SourceFileStorageExisting.FindFirst();
+        IsUpdate := findFileByName(SourceFileStorageExisting, fileBaseName, fileExtension);
 
         if IsUpdate then begin
             SourceFileStorage := SourceFileStorageExisting;
@@ -75,6 +72,7 @@ codeunit 91001 DMTSourceFileMgt
             AssignDefaultDataLayout(SourceFileStorage);
         end;
         SourceFileStorage.Modify();
+        fileID := SourceFileStorage."File ID";
     end;
 
     local procedure GetFilesFromZipFile(FileName: Text; var InStr: InStream) OK: Boolean
@@ -110,6 +108,14 @@ codeunit 91001 DMTSourceFileMgt
             sourceFileStorage.SourceFileFormat := sourceFileStorage.SourceFileFormat::"Custom CSV";
     end;
 
+    local procedure findFileByName(var SourceFileStorageExisting: Record DMTSourceFileStorage; var fileBaseName: Text; var fileExtension: Text) hasFileWithTheSameName: Boolean;
+    begin
+        Clear(SourceFileStorageExisting);
+        SourceFileStorageExisting.SetRange(Name, fileBaseName);
+        SourceFileStorageExisting.SetRange(Extension, fileExtension);
+        hasFileWithTheSameName := SourceFileStorageExisting.FindFirst();
+    end;
+
     procedure AssignDefaultDataLayout(var sourceFileStorage: Record DMTSourceFileStorage)
     var
         dataLayout: Record DMTDataLayout;
@@ -122,7 +128,7 @@ codeunit 91001 DMTSourceFileMgt
             SourceFileStorage.Validate("Data Layout ID", dataLayout.ID);
     end;
 
-    procedure ShowSourceFileStorageWithErrorIfno(ErrorInfoDataLayout: ErrorInfo)
+    procedure ShowSourceFileStorageWithErrorInfo(ErrorInfoDataLayout: ErrorInfo)
     var
         sourceFileStorage: Record DMTSourceFileStorage;
     begin

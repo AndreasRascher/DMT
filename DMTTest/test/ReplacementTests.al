@@ -78,6 +78,7 @@ codeunit 90021 ReplacementTests
     var
         sourceFileStorage: Record DMTSourceFileStorage;
         dataLayout: Record DMTDataLayout;
+        TempBlob: Codeunit "Temp Blob";
         dataTable: List of [List of [Text]];
     begin
         if CreatedImportConfigHeaderID <> 0 then begin
@@ -97,8 +98,8 @@ codeunit 90021 ReplacementTests
         TestLibrary.BuildDataTable(dataTable, 2, 3, '10000');
         TestLibrary.BuildDataTable(dataTable, 2, 4, 'OldValue1');
         TestLibrary.BuildDataTable(dataTable, 2, 5, 'OldValue2');
-        TestLibrary.CreateSourceFileStorage(sourceFileStorage, 'sample.csv', dataLayout);
-        TestLibrary.WriteDataTableToSourceFile(sourceFileStorage, dataTable);
+        TestLibrary.WriteDataTableToFileBlob(TempBlob, dataTable);
+        TestLibrary.CreateSourceFileStorage(sourceFileStorage, 'sample.csv', dataLayout, TempBlob);
         TestLibrary.CreateImportConfigHeader(importConfigHeader, 37, sourceFileStorage);
         TestLibrary.CreateFieldMapping(importConfigHeader, true);
         importConfigHeader.ImportFileToBuffer();

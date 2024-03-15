@@ -99,7 +99,7 @@ page 91008 DMTImportConfigCard
                 PromotedCategory = Process;
                 trigger OnAction()
                 begin
-                    Rec.ImportFileToBuffer();
+                    DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_ImportBufferDataFromFile(Rec);
                     CurrPage.TableInfoFactBox.Page.DoUpdate(Rec);
                     CurrPage.LogFactBox.Page.DoUpdate(Rec);
                 end;
@@ -177,10 +177,8 @@ page 91008 DMTImportConfigCard
                 PromotedCategory = Process;
 
                 trigger OnAction()
-                var
-                    Migrate: Codeunit DMTMigrate;
                 begin
-                    Migrate.AllFieldsFrom(Rec, false);
+                    DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_TransferToTargetTable(Rec);
                 end;
             }
             action(UpdateFields)
@@ -194,10 +192,8 @@ page 91008 DMTImportConfigCard
                 PromotedCategory = Process;
 
                 trigger OnAction()
-                var
-                    importConfigMgt: Codeunit DMTImportConfigMgt;
                 begin
-                    importConfigMgt.PageAction_UpdateFields(Rec);
+                    DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_UpdateFields(Rec);
                 end;
             }
             action(RetryBufferRecordsWithError)
@@ -302,4 +298,7 @@ page 91008 DMTImportConfigCard
                     CurrPage.SaveRecord();
 
     end;
+
+    var
+        DMTSetup: Record DMTSetup;
 }
