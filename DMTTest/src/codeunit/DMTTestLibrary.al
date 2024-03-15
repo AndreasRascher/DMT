@@ -11,7 +11,7 @@ codeunit 90022 DMTTestLibrary
     procedure CreateImportConfigHeader(var importConfigHeader: Record DMTImportConfigHeader; targetTableID: Integer; sourceFileStorage: Record DMTSourceFileStorage) OK: Boolean
     begin
         Clear(importConfigHeader);
-        importConfigHeader.Validate("Target Table ID", Database::"Sales Line");
+        importConfigHeader.Validate("Target Table ID", targetTableID);
         importConfigHeader.Validate("Source File ID", sourceFileStorage."File ID");
         importConfigHeader.Validate("Source File Name", sourceFileStorage.Name);
         OK := importConfigHeader.Insert(true);
@@ -64,21 +64,13 @@ codeunit 90022 DMTTestLibrary
 
     internal procedure CreateSourceFileStorage(var sourceFileStorage: Record DMTSourceFileStorage; fileNameWithExtension: Text; DMTDataLayout: Record DMTDataLayout; var TempBlob: Codeunit "Temp Blob") OK: Boolean
     var
-        fileMgt: Codeunit "File Management";
-        recRef: RecordRef;
+        sourceFileMgt: Codeunit DMTSourceFileMgt;
+        iStr: InStream;
     begin
         Clear(sourceFileStorage);
-        sourceFileStorage."File ID" := 1;
-        sourceFileStorage.Name := CopyStr(fileNameWithExtension, 1, MaxStrLen(sourceFileStorage.Name));
-        sourceFileStorage.Extension := CopyStr(fileMgt.GetExtension(fileNameWithExtension), 1, MaxStrLen(sourceFileStorage.Extension));
-        sourceFileStorage.SourceFileFormat := DMTDataLayout.SourceFileFormat;
-        sourceFileStorage.Validate("Data Layout ID", DMTDataLayout.ID);
-        OK := sourceFileStorage.Insert();
-        if OK then begin
-            recRef.GetTable(sourceFileStorage);
-            TempBlob.ToRecordRef(recRef, sourceFileStorage.FieldNo("File Blob"));
-            sourceFileStorage.Modify();
-        end;
+        TempBlob.CreateInStream(iStr);
+        sourceFileStorage.Get(sourceFileMgt.AddFileToStorage(fileNameWithExtension, iStr));
+        sourceFileStorage.TestField(Size);
     end;
 
     internal procedure CreateOrGetDataLayout(var dataLayout: Record DMTDataLayout; dataLayoutName: Text) OK: Boolean
@@ -128,20 +120,22 @@ codeunit 90022 DMTTestLibrary
         repeat
             rowNo += 1;
             // add the field names as the first row
-            if rowNo = 1 then
+            if rowNo = 1 then begin
                 for fieldIndex := 1 to recRef.FieldCount do
-                    BuildDataTable(dataTable, rowNo, fieldIndex, recRef.Field(fieldIndex).Name);
+                    BuildDataTable(dataTable, rowNo, fieldIndex, recRef.FieldIndex(fieldIndex).Name);
+                rowNo += 1;
+            end;
 
             // add the field values as the next rows
             for fieldIndex := 1 to recRef.FieldCount do begin
                 //exclude blob and media fields
-                shouldWriteField := not (recRef.Field(fieldIndex).Type in [FieldType::Blob, FieldType::MediaSet]);
+                shouldWriteField := not (recRef.FieldIndex(fieldIndex).Type in [FieldType::Blob, FieldType::MediaSet]);
                 //exclude system fields
-                if recRef.Field(fieldIndex).Number in [recRef.SystemCreatedAtNo, recRef.SystemCreatedByNo, recRef.SystemIdNo, recRef.SystemModifiedAtNo, recRef.SystemModifiedByNo] then
+                if recRef.FieldIndex(fieldIndex).Number in [recRef.SystemCreatedAtNo, recRef.SystemCreatedByNo, recRef.SystemIdNo, recRef.SystemModifiedAtNo, recRef.SystemModifiedByNo] then
                     shouldWriteField := false;
                 // write the field value
                 if shouldWriteField then
-                    BuildDataTable(dataTable, rowNo, fieldIndex, format(recRef.Field(fieldIndex).Value, 0, 9));
+                    BuildDataTable(dataTable, rowNo, fieldIndex, format(recRef.FieldIndex(fieldIndex).Value, 0, 9));
             end;
 
         until recRef.Next() = 0;

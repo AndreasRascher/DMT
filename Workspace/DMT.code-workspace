@@ -43,7 +43,7 @@
 					"numberOfSqlStatements": 10,
 					"tenant": "default",
 					"usePublicURLFromServer": true,
-					"schemaUpdateMode": "ForceSync"
+					"schemaUpdateMode": "Synchronize"
 				},
 				{
 					"name": "BC23 AL TEST TOOL",

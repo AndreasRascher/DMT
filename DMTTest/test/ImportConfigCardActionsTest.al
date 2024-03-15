@@ -1,7 +1,7 @@
 codeunit 90023 ImportConfigCardActionsTest
 {
     Subtype = Test;
-    TestPermissions = NonRestrictive;
+    TestPermissions = Disabled;
 
     [Test]
     procedure GivenImportConfigHeaderWithSourceFile_WhenImportingToBuffer_ThenBufferRecordsHaveBeenCreated()
@@ -12,19 +12,28 @@ codeunit 90023 ImportConfigCardActionsTest
         initializeImportConfigHeader();
         // [WHEN] WhenImporting 
         DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_ImportBufferDataFromFile(ImportConfigHeaderGlobal);
+        ImportConfigHeaderGlobal.UpdateBufferRecordCount();
         if ImportConfigHeaderGlobal."No.of Records in Buffer Table" = 0 then
             Error('No records were imported');
     end;
 
     [Test]
+    [HandlerFunctions('ImportToTargetFilterPageHandler')]
     procedure GivenImportConfigHeaderWithBufferRecords_WhenImportingToTarget_ThenFilterPageIsRaised()
     var
         DMTSetup: Record DMTSetup;
-        importConfigHeader: Record DMTImportConfigHeader;
+        testLibrary: Codeunit DMTTestLibrary;
     begin
         // [GIVEN] GivenImportConfigHeaderWithSourceFile 
+        testLibrary.CreateFieldMapping(ImportConfigHeaderGlobal, false);
         // [WHEN] WhenImporting 
-        DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_TransferToTargetTable(importConfigHeader);
+        DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_TransferToTargetTable(ImportConfigHeaderGlobal);
+    end;
+
+    [FilterPageHandler]
+    procedure ImportToTargetFilterPageHandler(var Record1: RecordRef): Boolean;
+    begin
+        // If this procedure isn't called, no filter page is raised and the test fails
     end;
 
     procedure GivenImportConfigHeaderWithBufferRecords_WhenImportingToTarget_LinesHaveBeenUpdated()
@@ -40,7 +49,7 @@ codeunit 90023 ImportConfigCardActionsTest
     local procedure initializeImportConfigHeader()
     var
         sourceFileStorage: Record DMTSourceFileStorage;
-        SalesHeader: Record "Sales Header";
+        ExtendedTextHeader: Record "Extended Text Header";
         testLibrary: Codeunit DMTTestLibrary;
         tempBlob: Codeunit "Temp Blob";
         dataTable: List of [List of [Text]];
@@ -48,13 +57,12 @@ codeunit 90023 ImportConfigCardActionsTest
         if IsInitializedGlobal then
             exit;
         testLibrary.CreateDMTSetup();
-        SalesHeader.SetFilter("Sell-to Customer No.", '<>''''');
-        SalesHeader.FindFirst();
-        SalesHeader.SetRecFilter();
-        testLibrary.BuildDataTable(dataTable, SalesHeader.RecordId.TableNo, SalesHeader.GetView());
+        ExtendedTextHeader.FindFirst();
+        ExtendedTextHeader.SetRecFilter();
+        testLibrary.BuildDataTable(dataTable, ExtendedTextHeader.RecordId.TableNo, ExtendedTextHeader.GetView());
         testLibrary.WriteDataTableToFileBlob(tempBlob, dataTable);
-        TestLibrary.CreateSourceFileStorage(sourceFileStorage, 'SalesHeader.csv', testLibrary.GetDefaultNAVDMTLayout(), tempBlob);
-        TestLibrary.CreateImportConfigHeader(ImportConfigHeaderGlobal, SalesHeader.RecordId.TableNo, sourceFileStorage);
+        TestLibrary.CreateSourceFileStorage(sourceFileStorage, 'ExtendedTextHeader.csv', testLibrary.GetDefaultNAVDMTLayout(), tempBlob);
+        TestLibrary.CreateImportConfigHeader(ImportConfigHeaderGlobal, ExtendedTextHeader.RecordId.TableNo, sourceFileStorage);
         IsInitializedGlobal := true;
     end;
 

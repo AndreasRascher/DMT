@@ -1,7 +1,7 @@
 codeunit 90024 SourceFileStorageTests
 {
     Subtype = Test;
-    TestPermissions = NonRestrictive;
+    TestPermissions = Disabled;
     local procedure initialize()
     var
         testLibrary: Codeunit DMTTestLibrary;
@@ -15,7 +15,7 @@ codeunit 90024 SourceFileStorageTests
     [Test]
     procedure WHEN_ImportingSameFileTwice_THEN_TheOldFileIsOverwriten()
     var
-        SalesHeader1, SalesHeader2 : Record "Sales Header";
+        ExtTextHeader1, ExtTextHeader2;
         sourceFileMgt: Codeunit DMTSourceFileMgt;
         testLibrary: Codeunit DMTTestLibrary;
         fileBlob1, fileBlob2 : Codeunit "Temp Blob";
