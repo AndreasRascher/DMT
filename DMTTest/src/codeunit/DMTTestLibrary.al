@@ -62,7 +62,7 @@ codeunit 90022 DMTTestLibrary
         replacementLine.Modify();
     end;
 
-    internal procedure CreateSourceFileStorage(var sourceFileStorage: Record DMTSourceFileStorage; fileNameWithExtension: Text; DMTDataLayout: Record DMTDataLayout; var TempBlob: Codeunit "Temp Blob") OK: Boolean
+    internal procedure AddFileToSourceFileStorage(var sourceFileStorage: Record DMTSourceFileStorage; fileNameWithExtension: Text; DMTDataLayout: Record DMTDataLayout; var TempBlob: Codeunit "Temp Blob") OK: Boolean
     var
         sourceFileMgt: Codeunit DMTSourceFileMgt;
         iStr: InStream;

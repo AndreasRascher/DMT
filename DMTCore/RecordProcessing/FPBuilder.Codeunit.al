@@ -4,40 +4,48 @@ codeunit 91012 DMTFPBuilder
     /// Filter page for RecordRef
     /// </summary>
     /// <returns>Continue - True when filterpage was closed with OK-Button</returns>
-    procedure RunModal(var RecRef: RecordRef; ShowKeyFieldsAsFilterFields: Boolean) Continue: Boolean;
+    procedure RunModal(var RecRef: RecordRef) Continue: Boolean;
     begin
-        Continue := RunModalInner(RecRef, InitKeyFieldFilter(RecRef), ShowKeyFieldsAsFilterFields);
+        Continue := RunModalInner(RecRef, InitKeyFieldFilter(RecRef));
     end;
 
     /// <summary>
     /// Filter page for DMT buffer tables
     /// </summary>
     /// <returns>Continue - True when filterpage was closed with OK-Button</returns>
-    procedure RunModal(var RecRef: RecordRef; var ImportConfigHeader: Record DMTImportConfigHeader; ShowKeyFieldsAsFilterFields: Boolean) Continue: Boolean;
+    procedure RunModal(var RecRef: RecordRef; var ImportConfigHeader: Record DMTImportConfigHeader) Continue: Boolean;
     begin
-        Continue := RunModalInner(RecRef, InitKeyFieldFilter(RecRef, ImportConfigHeader), ShowKeyFieldsAsFilterFields);
+        Continue := RunModalInner(RecRef, InitFilterFields(RecRef, ImportConfigHeader));
     end;
 
-    local procedure RunModalInner(var BufferRef: RecordRef; FilterFields: Dictionary of [Integer, Text]; ShowKeyFieldsAsFilterFields: Boolean) Continue: Boolean;
+    local procedure RunModalInner(var BufferRef: RecordRef; FilterFields: Dictionary of [Integer, Text]) Continue: Boolean;
     var
         FPBuilder: FilterPageBuilder;
     begin
         FPBuilder.AddTable(BufferRef.Caption, BufferRef.Number);// ADD DATAITEM
         if BufferRef.HasFilter then // APPLY CURRENT FILTER SETTING 
             FPBuilder.SetView(BufferRef.Caption, BufferRef.GetView());
-        if ShowKeyFieldsAsFilterFields then
-            AddFilterFields(FPBuilder, FilterFields);
+        AddFilterFields(FPBuilder, FilterFields);
         // START FILTER PAGE DIALOG, CANCEL LEAVES OLD FILTER UNTOUCHED
         Continue := FPBuilder.RunModal();
         BufferRef.SetView(FPBuilder.GetView(BufferRef.Caption));
     end;
 
-    local procedure InitKeyFieldFilter(var BufferRef: RecordRef; var ImportConfigHeader: Record DMTImportConfigHeader) FilterFields: Dictionary of [Integer/*FieldNo*/, Text/*TableCaption*/]
+    /// <summary>
+    /// Create a dicionary of field numbers and table captions for the primary key fields of the given buffer table
+    /// </summary>
+    /// <param name="BufferRef"></param>
+    /// <param name="ImportConfigHeader"></param>
+    /// <returns></returns>
+    procedure InitFilterFields(var BufferRef: RecordRef; var ImportConfigHeader: Record DMTImportConfigHeader) FilterFields: Dictionary of [Integer/*FieldNo*/, Text/*TableCaption*/]
     var
         ImportConfigLine: Record DMTImportConfigLine;
         GenBuffTable: Record DMTGenBuffTable;
+        tableView: Text;
         Debug: Text;
+        fieldOrderNo: Integer;
     begin
+        // add key fields
         case true of
             // If Generic Buffer is Source
             (ImportConfigHeader.ID <> 0) and not ImportConfigHeader."Use Separate Buffer Table" and (ImportConfigHeader.FilterRelated(ImportConfigLine)):
@@ -65,6 +73,15 @@ codeunit 91012 DMTFPBuilder
             else begin
                 FilterFields := InitKeyFieldFilter(BufferRef);
             end;
+        end;
+        // add fields from filter
+        tableView := ImportConfigHeader.ReadLastUsedSourceTableView();
+        if tableView <> '' then begin
+            BufferRef.SetView(tableView);
+            for fieldOrderNo := 1 to BufferRef.FieldCount do
+                if BufferRef.FieldIndex(fieldOrderNo).getFilter() <> '' then
+                    if not FilterFields.ContainsKey(BufferRef.FieldIndex(fieldOrderNo).Number) then
+                        FilterFields.Add(BufferRef.FieldIndex(fieldOrderNo).Number, BufferRef.Caption);
         end;
     end;
 

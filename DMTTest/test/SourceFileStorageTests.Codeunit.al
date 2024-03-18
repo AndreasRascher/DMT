@@ -15,7 +15,7 @@ codeunit 90024 SourceFileStorageTests
     [Test]
     procedure WHEN_ImportingSameFileTwice_THEN_TheOldFileIsOverwriten()
     var
-        ExtTextHeader1, ExtTextHeader2;
+        ExtTextHeader1, ExtTextHeader2 : Record "Extended Text Header";
         sourceFileMgt: Codeunit DMTSourceFileMgt;
         testLibrary: Codeunit DMTTestLibrary;
         fileBlob1, fileBlob2 : Codeunit "Temp Blob";
@@ -26,25 +26,23 @@ codeunit 90024 SourceFileStorageTests
         // [GIVEN] DMT Setup exists
         initialize();
         // [GIVEN] File 1
-        SalesHeader1.SetFilter("Sell-to Customer No.", '<>''''');
-        SalesHeader1 := SalesHeader2;
-        SalesHeader1.SetRecFilter();
-        testLibrary.BuildDataTable(dataTable1, SalesHeader1.RecordId.TableNo, SalesHeader1.GetView());
+        ExtTextHeader2.FindFirst();
+        ExtTextHeader1 := ExtTextHeader2;
+        ExtTextHeader2.Next();
+        ExtTextHeader1.SetRecFilter();
+        ExtTextHeader2.SetRecFilter();
+        testLibrary.BuildDataTable(dataTable1, ExtTextHeader1.RecordId.TableNo, ExtTextHeader1.GetView());
         testLibrary.WriteDataTableToFileBlob(fileBlob1, dataTable1);
         // [GIVEN] File 2
-        SalesHeader2 := SalesHeader1;
-        SalesHeader2.SetFilter("Sell-to Customer No.", '<>''''');
-        SalesHeader2.Find('>');
-        SalesHeader2.SetRecFilter();
-        testLibrary.BuildDataTable(dataTable2, SalesHeader2.RecordId.TableNo, SalesHeader2.GetView());
+        testLibrary.BuildDataTable(dataTable2, ExtTextHeader2.RecordId.TableNo, ExtTextHeader2.GetView());
         testLibrary.WriteDataTableToFileBlob(fileBlob2, dataTable2);
 
         // [WHEN] Adding a file to the source file storage and then adding another file with the same name
         fileBlob1.CreateInStream(iStr);
-        fileID1 := sourceFileMgt.AddFileToStorage('SalesHeader.csv', iStr);
+        fileID1 := sourceFileMgt.AddFileToStorage('ExtTextHeader.csv', iStr);
         fileBlob2.CreateInStream(iStr);
-        fileID2 := sourceFileMgt.AddFileToStorage('SalesHeader.csv', iStr);
-        if fileID1 = fileID2 then
+        fileID2 := sourceFileMgt.AddFileToStorage('ExtTextHeader.csv', iStr);
+        if fileID1 <> fileID2 then
             error('The file was not overwritten');
     end;
 

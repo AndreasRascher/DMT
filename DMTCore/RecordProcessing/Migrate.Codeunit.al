@@ -232,20 +232,20 @@ codeunit 91014 DMTMigrate
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
         FPBuilder: Codeunit DMTFPBuilder;
-        Filters, Filters2 : List of [Text];
+    // Filters, Filters2 : List of [Text];
     begin
-        Continue := true; // Canceling the dialog should stop th process
+        Continue := true; // Canceling the dialog should stop the process
 
         if DMTImportSettings.SourceTableView() <> '' then begin
             BufferRef.FilterGroup(2);
-            Filters.Add(BufferRef.GetFilters);
+            // Filters.Add(BufferRef.GetFilters);
             BufferRef.FilterGroup(0);
-            Filters.Add(BufferRef.GetFilters);
+            // Filters.Add(BufferRef.GetFilters);
             BufferRef.SetView(DMTImportSettings.SourceTableView());
             BufferRef.FilterGroup(2);
-            Filters2.Add(BufferRef.GetFilters);
+            // Filters2.Add(BufferRef.GetFilters);
             BufferRef.FilterGroup(0);
-            Filters2.Add(BufferRef.GetFilters);
+            // Filters2.Add(BufferRef.GetFilters);
         end;
 
         if DMTImportSettings.NoUserInteraction() then begin
@@ -253,7 +253,7 @@ codeunit 91014 DMTMigrate
         end;
 
         ImportConfigHeader.Get(DMTImportSettings.ImportConfigHeader().RecordId);
-        if not FPBuilder.RunModal(BufferRef, ImportConfigHeader, true) then
+        if not FPBuilder.RunModal(BufferRef, ImportConfigHeader) then
             exit(false);
         if BufferRef.HasFilter then begin
             ImportConfigHeader.WriteSourceTableView(BufferRef.GetView());

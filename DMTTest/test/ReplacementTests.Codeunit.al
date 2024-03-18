@@ -99,7 +99,7 @@ codeunit 90021 ReplacementTests
         TestLibrary.BuildDataTable(dataTable, 2, 4, 'OldValue1');
         TestLibrary.BuildDataTable(dataTable, 2, 5, 'OldValue2');
         TestLibrary.WriteDataTableToFileBlob(TempBlob, dataTable);
-        TestLibrary.CreateSourceFileStorage(sourceFileStorage, 'sample.csv', dataLayout, TempBlob);
+        TestLibrary.AddFileToSourceFileStorage(sourceFileStorage, 'sample.csv', dataLayout, TempBlob);
         TestLibrary.CreateImportConfigHeader(importConfigHeader, 37, sourceFileStorage);
         TestLibrary.CreateFieldMapping(importConfigHeader, true);
         importConfigHeader.ImportFileToBuffer();

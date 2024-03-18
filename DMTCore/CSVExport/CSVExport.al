@@ -78,7 +78,7 @@ xmlport 91002 DMTCSVWriter
     begin
         if importConfigHeader."Target Table ID" = 0 then exit;
         rRef.Open(importConfigHeader."Target Table ID");
-        if not FPBuilder.RunModal(rRef, true) then
+        if not FPBuilder.RunModal(rRef) then
             exit;
         if not rRef.FindSet() then exit;
         exportGenericCSV.SetExportTable(rRef);

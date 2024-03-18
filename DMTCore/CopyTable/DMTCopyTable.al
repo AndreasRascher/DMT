@@ -72,7 +72,7 @@ table 91010 DMTCopyTable
         SourceRef.Open(Rec."Table No.", false, Rec.SourceCompanyName);
         if Rec.LoadTableView() <> '' then
             SourceRef.SetView(Rec.LoadTableView());
-        if not FPBuilder.RunModal(SourceRef, true) then
+        if not FPBuilder.RunModal(SourceRef) then
             exit(false);
         if SourceRef.HasFilter then begin
             Rec.SaveTableView(SourceRef.GetView());

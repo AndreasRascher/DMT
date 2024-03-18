@@ -96,7 +96,7 @@ table 91009 DMTProcessingPlan
         CurrView := ReadSourceTableView();
         if CurrView <> '' then
             BufferRef.SetView(CurrView);
-        if FPBuilder.RunModal(BufferRef, ImportConfigHeader, true) then begin
+        if FPBuilder.RunModal(BufferRef, ImportConfigHeader) then begin
             SaveSourceTableFilter(BufferRef.GetView());
         end;
     end;
@@ -114,7 +114,7 @@ table 91009 DMTProcessingPlan
         CurrView := ReadDefaultValuesView();
         if CurrView <> '' then
             TargetRef.SetView(CurrView);
-        if FPBuilder.RunModal(TargetRef, true) then begin
+        if FPBuilder.RunModal(TargetRef) then begin
             SaveDefaultValuesView(TargetRef.GetView());
         end;
     end;

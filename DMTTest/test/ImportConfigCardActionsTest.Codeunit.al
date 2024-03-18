@@ -61,7 +61,7 @@ codeunit 90023 ImportConfigCardActionsTest
         ExtendedTextHeader.SetRecFilter();
         testLibrary.BuildDataTable(dataTable, ExtendedTextHeader.RecordId.TableNo, ExtendedTextHeader.GetView());
         testLibrary.WriteDataTableToFileBlob(tempBlob, dataTable);
-        TestLibrary.CreateSourceFileStorage(sourceFileStorage, 'ExtendedTextHeader.csv', testLibrary.GetDefaultNAVDMTLayout(), tempBlob);
+        TestLibrary.AddFileToSourceFileStorage(sourceFileStorage, 'ExtendedTextHeader.csv', testLibrary.GetDefaultNAVDMTLayout(), tempBlob);
         TestLibrary.CreateImportConfigHeader(ImportConfigHeaderGlobal, ExtendedTextHeader.RecordId.TableNo, sourceFileStorage);
         IsInitializedGlobal := true;
     end;

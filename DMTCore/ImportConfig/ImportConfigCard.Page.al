@@ -136,7 +136,7 @@ page 91008 DMTImportConfigCard
                     RecRef.Open(Rec."Target Table ID");
                     if TargetTableView <> '' then
                         RecRef.SetView(TargetTableView);
-                    if FPBuilder.RunModal(RecRef, true) then begin
+                    if FPBuilder.RunModal(RecRef) then begin
                         TargetTableView := RecRef.GetView();
                         TargetTableFilter := RecRef.GetFilters;
                         Message(NoOfLinesInFilterLbl, TargetTableFilter, RecRef.Count);
@@ -158,7 +158,7 @@ page 91008 DMTImportConfigCard
                     Rec.BufferTableMgt().InitBufferRef(RecRef);
                     if TargetTableView <> '' then
                         RecRef.SetView(TargetTableView);
-                    if FPBuilder.RunModal(RecRef, true) then begin
+                    if FPBuilder.RunModal(RecRef) then begin
                         TargetTableView := RecRef.GetView();
                         TargetTableFilter := RecRef.GetFilters;
                         Message(NoOfLinesInFilterLbl, TargetTableFilter, RecRef.Count);

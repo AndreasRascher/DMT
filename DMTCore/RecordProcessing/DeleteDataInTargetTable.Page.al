@@ -69,7 +69,7 @@ page 91015 DMTDeleteDataInTargetTable
         ImportConfigHeader.BufferTableMgt().InitBufferRef(BufferRef);
         if sourceView <> '' then
             BufferRef.SetView(sourceView);
-        if not FPBuilder.RunModal(BufferRef, ImportConfigHeader, true) then
+        if not FPBuilder.RunModal(BufferRef, ImportConfigHeader) then
             exit;
         sourceView := BufferRef.GetView();
         sourceFilter := BufferRef.GetFilters;
@@ -83,7 +83,7 @@ page 91015 DMTDeleteDataInTargetTable
         RecRef.Open(ImportConfigHeader."Target Table ID");
         if targetView <> '' then
             RecRef.SetView(targetView);
-        if FPBuilder.RunModal(RecRef, true) then begin
+        if FPBuilder.RunModal(RecRef) then begin
             targetView := RecRef.GetView();
             targetFilter := RecRef.GetFilters;
         end;
