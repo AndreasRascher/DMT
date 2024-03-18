@@ -1,7 +1,13 @@
-DMTOnPrem/*.app
+DMTCore/.vscode/rad.json
+DMTCodeGenerator/.vscode/rad.json
+DMTOnPrem/.vscode/rad.json
+
 DMTCore/*.app
 DMTCodeGenerator/*.app
-DMTCore/.vscode/rad.json
+DMTOnPrem/*.app
+DMTTest/*.app
+
 Workspace/.alpackages/*
 Workspace/*.app
-DMTCodeGenerator/.vscode/rad.json
+
+
