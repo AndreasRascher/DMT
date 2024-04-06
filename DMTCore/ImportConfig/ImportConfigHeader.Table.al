@@ -373,7 +373,7 @@ table 91003 DMTImportConfigHeader
         sourceFileStorage.Get(Rec."Source File ID");
         if sourceFileStorage."Data Layout ID" <> 0 then
             exit;
-        DataLayoutMissingErrInfo.AddAction(AssignDataLayoutButtonCaptionLbl, Codeunit::DMTSourceFileMgt, 'ShowSourceFileStorageWithErrorIfno');//Method must be global and have an errorinfo parameter
+        DataLayoutMissingErrInfo.AddAction(AssignDataLayoutButtonCaptionLbl, Codeunit::DMTSourceFileMgt, 'ShowSourceFileStorageWithErrorInfo');//Method must be global and have an errorinfo parameter
         DataLayoutMissingErrInfo.Message := StrSubstNo(SourceFileHasNoDataLayoutErr, sourceFileStorage.TableCaption, sourceFileStorage.Name);// no error shown if missing
         DataLayoutMissingErrInfo.RecordId := sourceFileStorage.RecordId;
         Error(DataLayoutMissingErrInfo);
