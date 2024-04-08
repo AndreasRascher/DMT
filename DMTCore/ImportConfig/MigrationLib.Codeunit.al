@@ -83,6 +83,11 @@ codeunit 91003 DMTMigrationLib
             IsMatch(TargetField, Database::Item, 'Rounding Precision'),
             IsMatch(TargetField, Database::Item, 'Standard Cost'),
             IsMatch(TargetField, Database::Item, 'Indirect Cost %'),
+            IsMatch(TargetField, Database::Item, 'Unit of Measure Id'),           // ID Values clear the associated field            
+            IsMatch(TargetField, Database::Item, 'Tax Group Id'),                 // ID Values clear the associated field
+            IsMatch(TargetField, Database::Item, 'Item Category Id'),             // ID Values clear the associated field
+            IsMatch(TargetField, Database::Item, 'Inventory Posting Group Id'),   // ID Values clear the associated field
+            IsMatch(TargetField, Database::Item, 'Gen. Prod. Posting Group Id'),  // ID Values clear the associated field
             IsMatch(TargetField, Database::"Item Unit of Measure", 'Qty. per Unit of Measure'),
             IsMatch(TargetField, Database::"Routing Header", 'Status'),
             IsMatch(TargetField, Database::"Extended Text Header", 'Language Code'), /* Possible in old version to have Language Code + All Language */
