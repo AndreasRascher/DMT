@@ -1,14 +1,5 @@
-codeunit 91026 ValueMigrationLogImpl implements IValueMigrationLog
+codeunit 91026 ValueMigrationLogImpl
 {
-    procedure Activate()
-    begin
-        isActiveGlobal := true;
-    end;
-
-    procedure IsActive(): Boolean
-    begin
-        exit(isActiveGlobal);
-    end;
 
     procedure setBeforeState(targetRefBeforeChange: RecordRef)
     var
@@ -16,40 +7,52 @@ codeunit 91026 ValueMigrationLogImpl implements IValueMigrationLog
         targetRefBeforeChangeGlobal := targetRefBeforeChange;
     end;
 
-    procedure setAfterState(targetRefAfterChange: RecordRef)
+    procedure analyseStatesForAction(targetRefAfterChange: RecordRef; toValueNew: Text; recOperationType: enum DMTRecOperationType; validateFieldNo: Integer)
+    var
+        changedFields: Dictionary of [Integer/*FieldNo*/, List of [Text]/*1:FromValue 2:ToValue*/];
+        fromValueToValueList: list of [Text];
+        fieldNo: Integer;
+        logChanges: Boolean;
     begin
-        targetRefAfterChangeGlobal := targetRefAfterChange;
+        logChanges := false;
+        findChangedFields(changedFields, targetRefBeforeChangeGlobal, targetRefAfterChange);
+        if recOperationType = recOperationType::ValidateFieldValue then
+            if (changedFields.Count = 1) and changedFields.Get(validateFieldNo, fromValueToValueList) then
+                // if after validate the target field doesn't contains the assigned value
+                    if toValueNew <> fromValueToValueList.Get(2) then
+                    logChanges := true;
+        exit;
+
+        foreach fieldNo in changedFields.Keys do begin
+
+        end;
+
+        //     fRef := targetRefBeforeChange.FieldIndex(fieldIndex);
+        //     beforefieldValuesDict.Add(fRef.Name, Format(fRef.Value, 0, 9));
+        // ToDos: 
+        // - Geänderte Felder zusammen mit der Aktion auflisten.
+        // - Die Anzahl der Änderungen in der ImportKonfiguration anzeigen(Anz.Änderungen, filterbar)
+        // - Beim Klick auf die Anzahl der Änderungen, die Änderungen in der Reihenfolge anzeigen
     end;
 
-    procedure analyseStatesForAction(recOperationType: enum DMTRecOperationType; fieldNo: Integer)
+    local procedure findChangedFields(var changedFields: Dictionary of [Integer, List of [Text]]; recRefFrom: RecordRef; recRefTO: RecordRef) hasChangedFields: Boolean
     var
-        fRef: FieldRef;
-        changesDict: Dictionary of [Integer, Text];
+        fRefFrom, fRefTo : FieldRef;
+        fromValueToValueList: list of [Text];
         fieldIndex: Integer;
     begin
-        // nothing changed
-        if Format(targetRefBeforeChangeGlobal) = Format(targetRefAfterChangeGlobal) then
-            exit;
-        for fieldIndex := 1 to targetRefBeforeChangeGlobal.FieldCount do begin
-            if targetRefBeforeChangeGlobal.FieldIndex(fieldIndex).Value <> targetRefAfterChangeGlobal.FieldIndex(fieldIndex).Value then begin
-                fRef := targetRefBeforeChangeGlobal.FieldIndex(fieldIndex);
-                changesDict.Add(fRef.Number, Format(fRef.Value, 0, 9));
+        Clear(changedFields);
+        for fieldIndex := 1 to recRefFrom.FieldCount do begin
+            if recRefFrom.FieldIndex(fieldIndex).Value <> recRefTO.FieldIndex(fieldIndex).Value then begin
+                fRefFrom := recRefFrom.FieldIndex(fieldIndex);
+                fRefTo := recRefTO.FieldIndex(fieldIndex);
+                fromValueToValueList.AddRange(Format(fRefFrom.Value, 0, 9), Format(fRefTo.Value, 0, 9));
+                changedFields.Add(fRefFrom.Number, fromValueToValueList);
             end;
-            //     fRef := targetRefBeforeChange.FieldIndex(fieldIndex);
-            //     beforefieldValuesDict.Add(fRef.Name, Format(fRef.Value, 0, 9));
-            ToDos: 
-            - Geänderte Felder zusammen mit der Aktion auflisten.
-            - Die Anzahl der Änderungen in der ImportKonfiguration anzeigen(Anz.Änderungen, filterbar)
-            - Beim Klick auf die Anzahl der Änderungen, die Änderungen in der Reihenfolge anzeigen
         end;
-    end;
-
-    procedure showChangesInOrder(forFieldNo: Integer)
-    begin
-
+        hasChangedFields := changedFields.Count > 0;
     end;
 
     var
-        isActiveGlobal: Boolean;
-        targetRefBeforeChangeGlobal, targetRefAfterChangeGlobal : RecordRef
+        targetRefBeforeChangeGlobal: RecordRef;
 }

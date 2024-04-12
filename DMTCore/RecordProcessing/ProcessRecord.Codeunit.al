@@ -301,6 +301,12 @@ codeunit 91008 DMTProcessRecord
         ClearLastError();
     end;
 
+    procedure LogTriggerChanges()
+    begin
+        if TempTriggerChangesLog.Count = 0 then
+            exit;
+    end;
+
     local procedure SaveRecord() Success: Boolean
     begin
         Success := true;
@@ -438,6 +444,7 @@ codeunit 91008 DMTProcessRecord
         SkipRecordGlobal, TargetRecordExists, ErrorsOccuredThatShouldNotBeIngored : Boolean;
         UpdateFieldsInExistingRecordsOnly: Boolean;
         ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
+        TempTriggerChangesLogEntry: Record DMTTriggerChangesLogEntry temporary;
         TargetKeyFieldIDs: List of [Integer];
         ProcessedFields: List of [RecordId];
         RunMode: Option FieldTransfer,InsertRecord,ModifyRecord;

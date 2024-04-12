@@ -176,9 +176,6 @@ codeunit 91014 DMTMigrate
 
 
         repeat
-            // hier weiter machen:
-            // Wenn beim Feldupdate ein Zieldatensatz nicht existiert, dann soll der als geskipped gekennzeichnet werden
-            // Nur wenn ein Zieldatensatz existiert und kein Fehler auftreteten ist , dann ist das ok
             bufferRef2 := bufferRef.Duplicate(); // Variant + Events = Call By Reference 
             ProcessSingleBufferRecord(bufferRef2, DMTImportSettings, log, resultType);
             UpdateLog(DMTImportSettings, log, resultType);
@@ -215,6 +212,7 @@ codeunit 91014 DMTMigrate
             Commit();
             if not ProcessRecord.Run() then
                 ProcessRecord.LogLastError();
+            ProcessRecord.LogTriggerChanges();
         end else begin
             // insert new records
             ProcessRecord.InitInsert();
@@ -223,6 +221,7 @@ codeunit 91014 DMTMigrate
                 ProcessRecord.LogLastError()
             else
                 ProcessRecord.SaveTargetRefInfosInBuffertable();
+            ProcessRecord.LogTriggerChanges();
         end;
         ProcessRecord.SaveErrorLog(Log);
         ResultType := ProcessRecord.GetProcessingResultType();

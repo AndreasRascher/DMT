@@ -63,6 +63,7 @@ table 91003 DMTImportConfigHeader
         field(52; "Use OnInsert Trigger"; Boolean) { Caption = 'Use OnInsert Trigger', Comment = 'de-DE=OnInsert Trigger verwenden'; InitValue = true; }
         field(53; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
         field(54; "Skip Records with User Changes"; Boolean) { Caption = 'Skip Records with User Changes', Comment = 'de-DE=Datensätze mit Nutzeränderung überspringen'; }
+        field(55; "Log Trigger Changes"; Boolean) { Caption = 'Log Trigger Changes', Comment = 'de-DE=Trigger Änderungen protokollieren'; }
         field(100; "Source File ID"; Integer) { Caption = 'Source File ID', Comment = 'de-DE=Quell-Datei ID'; TableRelation = DMTSourceFileStorage; }
         field(101; "Source File Name"; Text[250])
         {
