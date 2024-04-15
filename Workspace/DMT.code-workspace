@@ -46,11 +46,11 @@
 					"schemaUpdateMode": "Synchronize"
 				},
 				{
-					"name": "BC23 AL TEST TOOL",
+					"name": "BC24 AL TEST TOOL",
 					"type": "al",
 					"request": "launch",
 					"environmentType": "OnPrem",
-					"server": "http://bc23/",
+					"server": "http://bc24/",
 					"serverInstance": "BC",
 					"authentication": "UserPassword",
 					"startupObjectType": "Page",

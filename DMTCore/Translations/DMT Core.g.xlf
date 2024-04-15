@@ -1773,6 +1773,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field LastUsedUpdateFieldsSelection - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 200502431 - Field 1620595835 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Log Trigger Changes</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Trigger Änderungen protokollieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Log Trigger Changes - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 200502431 - Field 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>No.of Records in Buffer Table</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze in Puffertabelle</note>
@@ -2292,6 +2297,51 @@
           <source>Uploaded at</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Hochgeladen am</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Field UploadDateTime - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4084916308 - Field 2680665143 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>changed Field Caption (Trigger)</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=geändertes Feld (Trigger)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field Changed Field Cap.(Trigger) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4084916308 - Field 2284301858 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>changed Field No. (Trigger)</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=geändertes Feldnr. (Trigger)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field Changed Field No. (Trigger) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4084916308 - Field 883711285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Entry No.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Lfd.Nr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4084916308 - Field 2855219704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>From Value (Trigger)</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Von Feldwert (Trigger)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field From Value (Trigger) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4084916308 - Field 665135315 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>To Value (Trigger)</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zu Feldwert (Trigger)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field To Value (Trigger) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4084916308 - Field 3570832196 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Trigger</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field Trigger - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4084916308 - Field 2714983628 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Validate Field Caption</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Feldbezeichnung Validierung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field Validate Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4084916308 - Field 3062036613 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Validate Field No.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Feldnr. Validierung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field Validate Field No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4084916308 - Field 2393483805 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Value Assigned</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zugewiesener Wert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field Value Assigned - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 523974668 - Field 3968297008 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Is Folder</source>

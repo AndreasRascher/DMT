@@ -3,7 +3,7 @@ codeunit 90025 FilterPageBuilderTest
     Subtype = Test;
     TestPermissions = Disabled;
     [Test]
-    procedure "GivenImportConfigWithSavedFilters_WhenFilterPageFielsAreCollected_ThenKeyFieldsAndFilterFieldsAreShow"()
+    procedure GIVEN_ImportConfigWithSavedFilters_WHEN_FilterPageFieldsAreCollected_THEN_KeyFieldsAndFilterFieldsAreShow()
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
         sourceFileStorage: Record DMTSourceFileStorage;
@@ -37,10 +37,9 @@ codeunit 90025 FilterPageBuilderTest
         importConfigLine.FindFirst();
         ImportConfigHeader.BufferTableMgt().InitBufferRef(bufferRef);
         bufferRef.Field(importConfigLine."Source Field No.").SetFilter('<>''''');
-        ImportConfigHeader.WriteSourceTableView(bufferRef.GetView());
-        // [WHEN] WhenFilterPageFielsAreCollected 
-        recRef.GetTable(salesHeader);
-        FilterFields := FPBuilder.InitFilterFields(recRef, ImportConfigHeader);
+        ImportConfigHeader.WriteSourceTableView(bufferRef.GetView(false));
+        // [WHEN] WhenFilterPageFieldsAreCollected 
+        FilterFields := FPBuilder.InitFilterFields(bufferRef, ImportConfigHeader);
         // [THEN] ThenKeyFieldsAndFilterFieldsAreShown 
         assert.AreEqual(2 + 1, FilterFields.Keys.Count, '1 filtered field an 2 key fields are expected');
     end;

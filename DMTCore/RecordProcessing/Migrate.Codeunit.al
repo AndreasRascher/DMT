@@ -255,7 +255,7 @@ codeunit 91014 DMTMigrate
         if not FPBuilder.RunModal(BufferRef, ImportConfigHeader) then
             exit(false);
         if BufferRef.HasFilter then begin
-            ImportConfigHeader.WriteSourceTableView(BufferRef.GetView());
+            ImportConfigHeader.WriteSourceTableView(BufferRef.GetView(false));
             Commit();
         end else begin
             ImportConfigHeader.WriteSourceTableView('');
