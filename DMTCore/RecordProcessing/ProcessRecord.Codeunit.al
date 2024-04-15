@@ -303,7 +303,7 @@ codeunit 91008 DMTProcessRecord
 
     procedure LogTriggerChanges()
     begin
-        if TempTriggerChangesLog.Count = 0 then
+        if TempTriggerChangesLogEntry.Count = 0 then
             exit;
     end;
 
@@ -433,6 +433,7 @@ codeunit 91008 DMTProcessRecord
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
         TempImportConfigLine: Record DMTImportConfigLine temporary;
+        TempTriggerChangesLogEntry: Record DMTTriggerChangesLogEntry temporary;
         ChangeRecordWithPerm: Codeunit DMTChangeRecordWithPerm;
         RefHelper: Codeunit DMTRefHelper;
         CurrFieldToProcess: RecordId;
@@ -444,7 +445,6 @@ codeunit 91008 DMTProcessRecord
         SkipRecordGlobal, TargetRecordExists, ErrorsOccuredThatShouldNotBeIngored : Boolean;
         UpdateFieldsInExistingRecordsOnly: Boolean;
         ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
-        TempTriggerChangesLogEntry: Record DMTTriggerChangesLogEntry temporary;
         TargetKeyFieldIDs: List of [Integer];
         ProcessedFields: List of [RecordId];
         RunMode: Option FieldTransfer,InsertRecord,ModifyRecord;
