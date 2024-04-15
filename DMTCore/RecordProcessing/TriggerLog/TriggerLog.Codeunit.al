@@ -1,4 +1,4 @@
-codeunit 91026 ValueMigrationLogImpl
+codeunit 91026 DMTTriggerLog
 {
 
     procedure setBeforeState(targetRefBeforeChange: RecordRef)
@@ -7,7 +7,7 @@ codeunit 91026 ValueMigrationLogImpl
         targetRefBeforeChangeGlobal := targetRefBeforeChange;
     end;
 
-    procedure analyseStatesForAction(targetRefAfterChange: RecordRef; toValueNew: Text; recOperationType: enum DMTRecOperationType; validateFieldNo: Integer)
+    procedure searchTriggerChanges(targetRefAfterChange: RecordRef; toValueNew: Text; recOperationType: enum DMTRecOperationType; validateFieldNo: Integer)
     var
         changedFields: Dictionary of [Integer/*FieldNo*/, List of [Text]/*1:FromValue 2:ToValue*/];
         fromValueToValueList: list of [Text];
@@ -33,6 +33,16 @@ codeunit 91026 ValueMigrationLogImpl
         // - Geänderte Felder zusammen mit der Aktion auflisten.
         // - Die Anzahl der Änderungen in der ImportKonfiguration anzeigen(Anz.Änderungen, filterbar)
         // - Beim Klick auf die Anzahl der Änderungen, die Änderungen in der Reihenfolge anzeigen
+    end;
+
+    internal procedure InitBeforeValidate(SourceField: FieldRef; TargetField: FieldRef; TmpTargetRef: RecordRef)
+    begin
+        Error('Procedure InitBeforeValidate not implemented.');
+    end;
+
+    internal procedure CheckAfterValidate(SourceField: FieldRef; TargetField: FieldRef; TmpTargetRef: RecordRef)
+    begin
+        Error('Procedure CheckAfterValidate not implemented.');
     end;
 
     local procedure findChangedFields(var changedFields: Dictionary of [Integer, List of [Text]]; recRefFrom: RecordRef; recRefTO: RecordRef) hasChangedFields: Boolean

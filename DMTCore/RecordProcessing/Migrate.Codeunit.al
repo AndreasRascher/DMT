@@ -212,7 +212,7 @@ codeunit 91014 DMTMigrate
             Commit();
             if not ProcessRecord.Run() then
                 ProcessRecord.LogLastError();
-            ProcessRecord.LogTriggerChanges();
+            ProcessRecord.SaveTriggerLog();
         end else begin
             // insert new records
             ProcessRecord.InitInsert();
@@ -221,7 +221,7 @@ codeunit 91014 DMTMigrate
                 ProcessRecord.LogLastError()
             else
                 ProcessRecord.SaveTargetRefInfosInBuffertable();
-            ProcessRecord.LogTriggerChanges();
+            ProcessRecord.SaveTriggerLog();
         end;
         ProcessRecord.SaveErrorLog(Log);
         ResultType := ProcessRecord.GetProcessingResultType();

@@ -44,7 +44,6 @@ codeunit 91008 DMTProcessRecord
             exit;
         //hier: Prüfen warum der Blob nicht übertragen wird
         SourceField := SourceRefGlobal.Field(TempImportConfigLine."Source Field No.");
-
         if IReplacementHandler.HasReplacementsForTargetField(TargetField.Number) then begin
             //use value from replacement
             FieldWithTypeCorrectValueToValidate := IReplacementHandler.GetReplacementValue(TargetField.Number);
@@ -61,12 +60,17 @@ codeunit 91008 DMTProcessRecord
                 end;
             ValidateSetting::ValidateOnlyIfNotEmpty:
                 begin
-                    if Format(SourceField.Value) <> Format(TargetRef_INIT.Field(TargetField.Number).Value) then
+                    if Format(SourceField.Value) <> Format(TargetRef_INIT.Field(TargetField.Number).Value) then begin
+                        TriggerLog.InitBeforeValidate(SourceField, TargetField, TmpTargetRef);
                         TargetField.Validate(FieldWithTypeCorrectValueToValidate.Value);
+                        TriggerLog.CheckAfterValidate(SourceField, TargetField, TmpTargetRef);
+                    end;
                 end;
             ValidateSetting::AlwaysValidate:
                 begin
+                    TriggerLog.InitBeforeValidate(SourceField, TargetField, TmpTargetRef);
                     TargetField.Validate(FieldWithTypeCorrectValueToValidate.Value);
+                    TriggerLog.CheckAfterValidate(SourceField, TargetField, TmpTargetRef);
                 end;
         end;
     end;
@@ -318,13 +322,13 @@ codeunit 91008 DMTProcessRecord
                 begin
                     if SkipRecordGlobal then
                         exit(false);
-                    Success := ChangeRecordWithPerm.InsertOrOverwriteRecFromTmp(TmpTargetRef, CurrTargetRecIDText, ImportConfigHeader."Use OnInsert Trigger");
+                    Success := ChangeRecordWithPerm.InsertOrOverwriteRecFromTmp(TmpTargetRef, CurrTargetRecIDText, ImportConfigHeader."Use OnInsert Trigger", TriggerLog);
                 end;
             RunMode::ModifyRecord:
                 begin
                     if SkipRecordGlobal then
                         exit(false);
-                    Success := ChangeRecordWithPerm.ModifyRecFromTmp(TmpTargetRef, ImportConfigHeader."Use OnInsert Trigger");
+                    Success := ChangeRecordWithPerm.ModifyRecFromTmp(TmpTargetRef, ImportConfigHeader."Use OnInsert Trigger", TriggerLog);
                 end;
         end;
     end;
@@ -430,12 +434,20 @@ codeunit 91008 DMTProcessRecord
         ImportConfigHeader.BufferTableMgt().SetDMTImportFields(SourceRefGlobal, CurrTargetRecIDText);
     end;
 
+    internal procedure SaveTriggerLog()
+    begin
+        if TempTriggerChangesLogEntry.IsEmpty then
+            exit;
+
+    end;
+
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
         TempImportConfigLine: Record DMTImportConfigLine temporary;
         TempTriggerChangesLogEntry: Record DMTTriggerChangesLogEntry temporary;
         ChangeRecordWithPerm: Codeunit DMTChangeRecordWithPerm;
         RefHelper: Codeunit DMTRefHelper;
+        TriggerLog: Codeunit DMTTriggerLog;
         CurrFieldToProcess: RecordId;
         SourceRefGlobal, TargetRef_INIT, TmpTargetRef : RecordRef;
         CurrValueToAssign: FieldRef;

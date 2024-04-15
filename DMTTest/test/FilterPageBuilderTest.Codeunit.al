@@ -13,7 +13,6 @@ codeunit 90025 FilterPageBuilderTest
         testLibrary: Codeunit DMTTestLibrary;
         TempBlob: Codeunit "Temp Blob";
         assert: Codeunit "Library Assert";
-        recRef: RecordRef;
         bufferRef: RecordRef;
         FilterFields: Dictionary of [Integer, Text];
         dataTable: List of [List of [Text]];
