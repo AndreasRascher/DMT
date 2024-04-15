@@ -9,10 +9,10 @@
 /// </summary>
 
 /*
-Code   | ProcessStorage Instanz 1 | Call Publisher Set                    | Call Publisher Get
--------|--------------------------|------------------- -------------------|--------------------
-Global |			              | Subcriber -> ProcessStorage Instanz 2 | Subscriber -> ProcessStorage Instanz 2
-       |                          | Store Global                          | Get Global
+Code   | ProcessStorage Instanz 1 | Call Publisher Set                     | Call Publisher Get
+-------|--------------------------|------------------- --------------------|--------------------
+Global |			              | Subscriber -> ProcessStorage Instanz 2 | Subscriber -> ProcessStorage Instanz 2
+       |                          | Store Global                           | Get Global
 */
 codeunit 91009 DMTProcessStorage
 {

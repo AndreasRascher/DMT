@@ -40,17 +40,17 @@ codeunit 91008 DMTProcessRecord
         SourceField: FieldRef;
     begin
         TargetField := TmpTargetRef.Field(TempImportConfigLine."Target Field No.");
-        if HandleBase64ToBlobTransferfromGenBuffTable(TargetField, TempImportConfigLine, SourceRef) then
+        if HandleBase64ToBlobTransferfromGenBuffTable(TargetField, TempImportConfigLine, SourceRefGlobal) then
             exit;
         //hier: Prüfen warum der Blob nicht übertragen wird
-        SourceField := SourceRef.Field(TempImportConfigLine."Source Field No.");
+        SourceField := SourceRefGlobal.Field(TempImportConfigLine."Source Field No.");
 
         if IReplacementHandler.HasReplacementsForTargetField(TargetField.Number) then begin
             //use value from replacement
             FieldWithTypeCorrectValueToValidate := IReplacementHandler.GetReplacementValue(TargetField.Number);
         end else begin
             //use values from buffer table field
-            AssignValueToFieldRef(SourceRef, TempImportConfigLine, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
+            AssignValueToFieldRef(SourceRefGlobal, TempImportConfigLine, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
         end;
         CurrValueToAssign := FieldWithTypeCorrectValueToValidate;
         CurrValueToAssign_IsInitialized := true;
@@ -250,7 +250,7 @@ codeunit 91008 DMTProcessRecord
     begin
         Clear(CurrTargetRecIDText); // only once, not for every field
         ImportConfigHeader := DMTImportSettings.ImportConfigHeader();
-        SourceRef := _SourceRef;
+        SourceRefGlobal := _SourceRef;
         UpdateFieldsInExistingRecordsOnly := DMTImportSettings.UpdateExistingRecordsOnly();
         DMTImportSettings.GetImportConfigLine(TempImportConfigLine);
         TmpTargetRef.Open(ImportConfigHeader."Target Table ID", true, CompanyName);
@@ -394,7 +394,7 @@ codeunit 91008 DMTProcessRecord
             ErrorItem := ErrorLogDict.Get(ImportConfigLineID);
             TempImportConfigLine.Get(ImportConfigLineID);
             ErrorsExist := ErrorsExist or not TempImportConfigLine."Ignore Validation Error";
-            Log.AddErrorByImportConfigLineEntry(SourceRef.RecordId, ImportConfigHeader, TempImportConfigLine, ErrorItem);
+            Log.AddErrorByImportConfigLineEntry(SourceRefGlobal.RecordId, ImportConfigHeader, TempImportConfigLine, ErrorItem);
         end;
     end;
 
@@ -427,7 +427,7 @@ codeunit 91008 DMTProcessRecord
 
     internal procedure SaveTargetRefInfosInBuffertable()
     begin
-        ImportConfigHeader.BufferTableMgt().SetDMTImportFields(SourceRef, CurrTargetRecIDText);
+        ImportConfigHeader.BufferTableMgt().SetDMTImportFields(SourceRefGlobal, CurrTargetRecIDText);
     end;
 
     var
@@ -436,7 +436,7 @@ codeunit 91008 DMTProcessRecord
         ChangeRecordWithPerm: Codeunit DMTChangeRecordWithPerm;
         RefHelper: Codeunit DMTRefHelper;
         CurrFieldToProcess: RecordId;
-        SourceRef, TargetRef_INIT, TmpTargetRef : RecordRef;
+        SourceRefGlobal, TargetRef_INIT, TmpTargetRef : RecordRef;
         CurrValueToAssign: FieldRef;
         CurrValueToAssignText, CurrTargetRecIDText : Text;
         IReplacementHandler: Interface IReplacementHandler;
