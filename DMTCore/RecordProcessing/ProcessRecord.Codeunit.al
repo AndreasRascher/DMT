@@ -82,13 +82,15 @@ codeunit 91008 DMTProcessRecord
 
     procedure AssignValueToFieldRef(SourceRecRef: RecordRef; ImportConfigLine: Record DMTImportConfigLine; TargetRecRef: RecordRef; var FieldWithTypeCorrectValueToValidate: FieldRef)
     var
+        TargetRecRef2: RecordRef;
         FromField: FieldRef;
         EvaluateOptionValueAsNumber: Boolean;
     begin
         if not HandleBase64ToBlobTransferfromGenBuffTable(FromField, ImportConfigLine, SourceRecRef) then
             FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
         EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRecRef.Number);
-        FieldWithTypeCorrectValueToValidate := TargetRecRef.Field(ImportConfigLine."Target Field No.");
+        TargetRecRef2 := TargetRecRef.Duplicate(); // create a duplicate to avoid filling the original target record
+        FieldWithTypeCorrectValueToValidate := TargetRecRef2.Field(ImportConfigLine."Target Field No.");
         CurrValueToAssignText := Format(FromField.Value); // Error Log Info
         case true of
             (ImportConfigLine."Processing Action" = ImportConfigLine."Processing Action"::FixedValue):

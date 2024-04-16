@@ -3,7 +3,7 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
 
     internal procedure InitBeforeValidate(SourceField: FieldRef; TargetField: FieldRef; TmpTargetRef: RecordRef)
     begin
-        targetRefBeforeChangeGlobal := TmpTargetRef;
+        targetRefBeforeChangeGlobal := TmpTargetRef.Duplicate();
         TargetFieldGlobal := TargetField;
         SourceFieldGlobal := SourceField;
         AreVarsToCompareInitialized := true;
@@ -13,6 +13,7 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
     var
         changedFields: Dictionary of [Integer/*FieldNo*/, List of [Text]/*1:FromValue 2:ToValue*/];
         fromValueToValueList: list of [Text];
+        fieldNo: Integer;
         logChanges: Boolean;
         varsToCompareNotInitializedErr: Label 'The variables to compare are not initialized.', Comment = 'de-DE=Die Variablen zum Vergleichen sind nicht initialisiert.';
     begin
@@ -21,22 +22,23 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
             Error(varsToCompareNotInitializedErr);
 
         findChangedFields(changedFields, targetRefBeforeChangeGlobal, TmpTargetRef);
-        if (changedFields.Count = 1) and changedFields.Get(TargetFieldGlobal.Number, fromValueToValueList) then
-            // if after validate the target field doesn't contains the assigned value
+        // if after validate the target field doesn't contains the assigned value
+        if (changedFields.Count = 1) and changedFields.Get(TargetFieldGlobal.Number, fromValueToValueList) then begin
             if formatField(SourceFieldGlobal) <> fromValueToValueList.Get(2) then
                 logChanges := true;
-        exit;
+        end;
+        // if more than one field has changed
+        if changedFields.Count > 1 then
+            logChanges := true;
 
+        // log all changes besides the one that is assigned to the target field
         if logChanges then begin
-            TempDMTTriggerChangesLogEntry.Init();
-            TempDMTTriggerChangesLogEntry."Entry No." := TempDMTTriggerChangesLogEntry.GetNextEntryNo();
-            TempDMTTriggerChangesLogEntry."Trigger" := TempDMTTriggerChangesLogEntry."Trigger"::OnValidate;
-            TempDMTTriggerChangesLogEntry."Changed Field Cap.(Trigger)" := CopyStr(TargetFieldGlobal.Caption, 1, MaxStrLen(TempDMTTriggerChangesLogEntry."Changed Field Cap.(Trigger)"));
-            TempDMTTriggerChangesLogEntry."Changed Field No. (Trigger)" := TargetFieldGlobal.Number;
-            TempDMTTriggerChangesLogEntry."Old Value (Trigger)" := CopyStr(fromValueToValueList.Get(1), 1, MaxStrLen(TempDMTTriggerChangesLogEntry."Old Value (Trigger)"));
-            TempDMTTriggerChangesLogEntry."Value Assigned" := CopyStr(formatField(TargetFieldGlobal), 1, MaxStrLen(TempDMTTriggerChangesLogEntry."Value Assigned"));
-            TempDMTTriggerChangesLogEntry."New Value (Trigger)" := CopyStr(fromValueToValueList.Get(2), 1, MaxStrLen(TempDMTTriggerChangesLogEntry."New Value (Trigger)"));
-            TempDMTTriggerChangesLogEntry.Insert();
+            foreach fieldNo in changedFields.Keys do begin
+                changedFields.Get(fieldNo, fromValueToValueList);
+                if fieldNo <> TargetFieldGlobal.Number then
+                    addTableTriggerLogEntry(fromValueToValueList, Enum::DMTTriggerType::OnValidate);
+            end;
+            addValidateTriggerLog(fieldNo, fromValueToValueList);
         end;
     end;
 
@@ -56,7 +58,7 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
         if findChangedFields(changedFields, targetRefBeforeChangeGlobal, TargetRef) then begin
             foreach fieldNo in changedFields.Keys do begin
                 changedFields.Get(fieldNo, fromValueToValueList);
-                addTriggerLogEntry(fromValueToValueList, Enum::DMTTriggerType::OnModify);
+                addTableTriggerLogEntry(fromValueToValueList, Enum::DMTTriggerType::OnModify);
             end;
         end;
     end;
@@ -77,7 +79,7 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
         if findChangedFields(changedFields, targetRefBeforeChangeGlobal, TargetRef) then begin
             foreach fieldNo in changedFields.Keys do begin
                 changedFields.Get(fieldNo, fromValueToValueList);
-                addTriggerLogEntry(fromValueToValueList, Enum::DMTTriggerType::OnModify);
+                addTableTriggerLogEntry(fromValueToValueList, Enum::DMTTriggerType::OnModify);
             end;
         end;
     end;
@@ -90,12 +92,17 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
     begin
         Clear(changedFields);
         for fieldIndex := 1 to recRefFrom.FieldCount do begin
-            if recRefFrom.FieldIndex(fieldIndex).Value <> recRefTO.FieldIndex(fieldIndex).Value then begin
-                fRefFrom := recRefFrom.FieldIndex(fieldIndex);
-                fRefTo := recRefTO.FieldIndex(fieldIndex);
-                fromValueToValueList.AddRange(formatField(fRefFrom), formatField(fRefTo));
-                changedFields.Add(fRefFrom.Number, fromValueToValueList);
-            end;
+            // ignore system fields
+            if not (recRefTO.FieldIndex(fieldIndex).Number in [recRefTO.SystemCreatedAtNo, recRefTO.SystemCreatedByNo,
+                                                               recRefTO.SystemModifiedByNo, recRefTO.SystemModifiedAtNo,
+                                                               recRefTO.SystemIdNo]) then
+                if recRefFrom.FieldIndex(fieldIndex).Value <> recRefTO.FieldIndex(fieldIndex).Value then begin
+                    fRefFrom := recRefFrom.FieldIndex(fieldIndex);
+                    fRefTo := recRefTO.FieldIndex(fieldIndex);
+                    Clear(fromValueToValueList);
+                    fromValueToValueList.AddRange(formatField(fRefFrom), formatField(fRefTo));
+                    changedFields.Add(fRefFrom.Number, fromValueToValueList);
+                end;
         end;
         hasChangedFields := changedFields.Count > 0;
     end;
@@ -105,7 +112,7 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
         result := Format(SourceField.Value, 0, 9);
     end;
 
-    local procedure addTriggerLogEntry(var fromValueToValueList: list of [Text]; triggerType: Enum DMTTriggerType)
+    local procedure addTableTriggerLogEntry(var fromValueToValueList: list of [Text]; triggerType: Enum DMTTriggerType)
     begin
         TempDMTTriggerChangesLogEntry.Init();
         TempDMTTriggerChangesLogEntry."Entry No." := TempDMTTriggerChangesLogEntry.GetNextEntryNo();
@@ -114,6 +121,19 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
         TempDMTTriggerChangesLogEntry."Changed Field No. (Trigger)" := TargetFieldGlobal.Number;
         TempDMTTriggerChangesLogEntry."Old Value (Trigger)" := CopyStr(fromValueToValueList.Get(1), 1, MaxStrLen(TempDMTTriggerChangesLogEntry."Old Value (Trigger)"));
         TempDMTTriggerChangesLogEntry."Value Assigned" := '';
+        TempDMTTriggerChangesLogEntry."New Value (Trigger)" := CopyStr(fromValueToValueList.Get(2), 1, MaxStrLen(TempDMTTriggerChangesLogEntry."New Value (Trigger)"));
+        TempDMTTriggerChangesLogEntry.Insert();
+    end;
+
+    local procedure addValidateTriggerLog(fieldNo: Integer; fromValueToValueList: list of [Text])
+    begin
+        TempDMTTriggerChangesLogEntry.Init();
+        TempDMTTriggerChangesLogEntry."Entry No." := TempDMTTriggerChangesLogEntry.GetNextEntryNo();
+        TempDMTTriggerChangesLogEntry."Trigger" := TempDMTTriggerChangesLogEntry."Trigger"::OnValidate;
+        TempDMTTriggerChangesLogEntry."Validate Field No." := TargetFieldGlobal.Number;
+        TempDMTTriggerChangesLogEntry."Changed Field No. (Trigger)" := fieldNo;
+        // TempDMTTriggerChangesLogEntry."Changed Field Cap.(Trigger)"
+        TempDMTTriggerChangesLogEntry."Old Value (Trigger)" := CopyStr(fromValueToValueList.Get(1), 1, MaxStrLen(TempDMTTriggerChangesLogEntry."Old Value (Trigger)"));
         TempDMTTriggerChangesLogEntry."New Value (Trigger)" := CopyStr(fromValueToValueList.Get(2), 1, MaxStrLen(TempDMTTriggerChangesLogEntry."New Value (Trigger)"));
         TempDMTTriggerChangesLogEntry.Insert();
     end;

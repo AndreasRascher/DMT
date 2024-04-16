@@ -15,13 +15,25 @@ codeunit 90027 dataTableHelper
     begin
         for fieldIndex := 1 to recRef.FieldCount do begin
             if shouldWriteField(recRef, fieldIndex) then
-                Row.Add(formatFieldRef(recRef.FieldIndex(fieldIndex).Value));
+                Row.Add(formatFieldRef(recRef.FieldIndex(fieldIndex)));
         end;
     end;
 
     procedure formatFieldRef(field: FieldRef) result: Text;
+    var
+        BooleanValue: Boolean;
     begin
-        result := Format(field.Value, 0, 9);
+        case field.Type of
+            fieldtype::Boolean:
+                begin
+                    BooleanValue := field.Value;
+                    if BooleanValue then
+                        exit('1');
+                    exit('0');
+                end;
+            else
+                result := Format(field.Value, 0, 9);
+        end;
     end;
 
     internal procedure shouldWriteField(var recRef: RecordRef; fieldIndex: Integer) shouldWriteField: Boolean

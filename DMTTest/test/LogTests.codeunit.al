@@ -28,16 +28,27 @@ codeunit 90026 LogTests
                                             TempBlob);
         testLibrary.CreateImportConfigHeader(importConfigHeader, customer.RecordId.TableNo, sourceFileStorage);
         testLibrary.CreateFieldMapping(importConfigHeader, false);
-        importConfigHeader.FilterRelated(importConfigLine);
 
-        importConfigLine.SetRange("Target Field No.", customer.FieldNo("Payment Method Code"));
+        importConfigHeader.FilterRelated(importConfigLine);
+        importConfigLine.SetRange("Is Key Field(Target)", false);
+        importConfigLine.ModifyAll("Processing Action", importConfigLine."Processing Action"::Ignore);
+
+        importConfigLine.Reset();
+        importConfigHeader.FilterRelated(importConfigLine);
+        importConfigLine.SetRange("Target Field No.", customer.FieldNo("Payment Terms Code"));
         importConfigLine.FindFirst();
+        importConfigLine.Validate("Processing Action", importConfigLine."Processing Action"::Transfer);
         importConfigLine.Validate("Validation Type", importConfigLine."Validation Type"::AlwaysValidate);
+        importConfigLine."Validation Order" := 1;
         importConfigLine.Modify();
 
+        importConfigLine.Reset();
+        importConfigHeader.FilterRelated(importConfigLine);
         importConfigLine.SetRange("Target Field No.", customer.FieldNo("Payment Terms Id"));
         importConfigLine.FindFirst();
+        importConfigLine.Validate("Processing Action", importConfigLine."Processing Action"::Transfer);
         importConfigLine.Validate("Validation Type", importConfigLine."Validation Type"::AlwaysValidate);
+        importConfigLine."Validation Order" := 2;
         importConfigLine.Modify();
 
         // [WHEN] Other values are written as intended 
