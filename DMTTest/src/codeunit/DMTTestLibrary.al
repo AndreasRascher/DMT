@@ -107,68 +107,48 @@ codeunit 90022 DMTTestLibrary
     end;
 
     ///<summary><p>Copy the content of the table (records in view) to the data table</p></summary>
-    internal procedure BuildDataTable(var dataTable: List of [List of [Text]]; tableNo: Integer; tableView: Text)
-    var
-        recRef: RecordRef;
-        fieldIndex: Integer;
-        rowNo: Integer;
-        shouldWriteField: Boolean;
-    begin
-        recRef.open(tableNo);
-        recRef.SetView(tableView);
-        recRef.FindSet(false);
-        repeat
-            rowNo += 1;
-            // add the field names as the first row
-            if rowNo = 1 then begin
-                for fieldIndex := 1 to recRef.FieldCount do
-                    BuildDataTable(dataTable, rowNo, fieldIndex, recRef.FieldIndex(fieldIndex).Name);
-                rowNo += 1;
-            end;
+    // internal procedure BuildDataTable(var dataTable: List of [List of [Text]]; tableNo: Integer; tableView: Text)
+    // var
+    //     recRef: RecordRef;
+    //     rowNo: Integer;
+    // begin
+    //     recRef.open(tableNo);
+    //     recRef.SetView(tableView);
+    //     recRef.FindSet(false);
+    //     repeat
+    //         rowNo += 1;
+    //         BuildDataTable(dataTable, recRef, rowNo);
+    //     until recRef.Next() = 0;
+    // end;
 
-            // add the field values as the next rows
-            for fieldIndex := 1 to recRef.FieldCount do begin
-                //exclude blob and media fields
-                shouldWriteField := not (recRef.FieldIndex(fieldIndex).Type in [FieldType::Blob, FieldType::MediaSet]);
-                //exclude system fields
-                if recRef.FieldIndex(fieldIndex).Number in [recRef.SystemCreatedAtNo, recRef.SystemCreatedByNo, recRef.SystemIdNo, recRef.SystemModifiedAtNo, recRef.SystemModifiedByNo] then
-                    shouldWriteField := false;
-                // write the field value
-                if shouldWriteField then
-                    BuildDataTable(dataTable, rowNo, fieldIndex, format(recRef.FieldIndex(fieldIndex).Value, 0, 9));
-            end;
+    // internal procedure BuildDataTable(var dataTable: List of [List of [Text]]; recVariant: Variant; rowNo: Integer)
+    // var
+    //     recRef: RecordRef;
+    //     fieldIndex: Integer;
+    //     shouldWriteField: Boolean;
+    // begin
+    //     recRef.GetTable(recVariant);
+    //     // add the field names as the first row
+    //     if rowNo = 1 then begin
+    //         for fieldIndex := 1 to recRef.FieldCount do
+    //             BuildDataTable(dataTable, rowNo, fieldIndex, recRef.FieldIndex(fieldIndex).Name);
+    //         rowNo += 1;
+    //     end;
 
-        until recRef.Next() = 0;
-    end;
+    //     // add the field values as the next rows
+    //     for fieldIndex := 1 to recRef.FieldCount do begin
+    //         //exclude blob and media fields
+    //         shouldWriteField := not (recRef.FieldIndex(fieldIndex).Type in [FieldType::Blob, FieldType::MediaSet]);
+    //         //exclude system fields
+    //         if recRef.FieldIndex(fieldIndex).Number in [recRef.SystemCreatedAtNo, recRef.SystemCreatedByNo, recRef.SystemIdNo, recRef.SystemModifiedAtNo, recRef.SystemModifiedByNo] then
+    //             shouldWriteField := false;
+    //         // write the field value
+    //         if shouldWriteField then
+    //             BuildDataTable(dataTable, rowNo, fieldIndex, format(recRef.FieldIndex(fieldIndex).Value, 0, 9));
+    //     end;
+    // end;
 
-    internal procedure WriteDataTableToFileBlob(var TempBlob: Codeunit "Temp Blob"; dataTable: List of [List of [Text]])
-    var
-        BigText: BigText;
-        iStr: InStream;
-        colNo, lastColNo : Integer;
-        line: list of [Text];
-        oStr: OutStream;
-        TAB: Text[1];
-        CRLF: Text[2];
-    begin
-        TAB[1] := 9;
-        CRLF[1] := 13;
-        CRLF[2] := 10;
-        clear(TempBlob);
-        TempBlob.CreateOutStream(oStr);
-        // iterate through the data table and write the content to the CSV file
-        foreach line in dataTable do begin
-            lastColNo := line.Count;
-            for colNo := 1 to line.Count do
-                if colNo = lastColNo then
-                    oStr.WriteText(line.Get(colNo))
-                else
-                    OStr.WriteText(line.Get(colNo) + TAB);
-            oStr.WriteText(CRLF);
-        end;
-        TempBlob.CreateInStream(iStr);
-        BigText.Read(iStr);
-    end;
+
 
     internal procedure ImportSelectedToTarget(importConfigHeader: Record DMTImportConfigHeader)
     var

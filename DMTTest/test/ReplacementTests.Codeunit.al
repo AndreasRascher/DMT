@@ -76,10 +76,10 @@ codeunit 90021 ReplacementTests
 
     local procedure CreateImportConfigWithSampleSourceFileAndFieldMapping(var importConfigHeader: Record DMTImportConfigHeader)
     var
-        sourceFileStorage: Record DMTSourceFileStorage;
         dataLayout: Record DMTDataLayout;
+        sourceFileStorage: Record DMTSourceFileStorage;
+        dataTableHelper: Codeunit dataTableHelper;
         TempBlob: Codeunit "Temp Blob";
-        dataTable: List of [List of [Text]];
     begin
         if CreatedImportConfigHeaderID <> 0 then begin
             importConfigHeader.GET(CreatedImportConfigHeaderID);
@@ -88,17 +88,17 @@ codeunit 90021 ReplacementTests
         TestLibrary.CreateDMTSetup();
         TestLibrary.CreateOrGetDataLayout(dataLayout, 'DMT NAV CSV Export');
 
-        TestLibrary.BuildDataTable(dataTable, 1, 1, 'Document Type');
-        TestLibrary.BuildDataTable(dataTable, 1, 2, 'Document No.');
-        TestLibrary.BuildDataTable(dataTable, 1, 3, 'Line No.');
-        TestLibrary.BuildDataTable(dataTable, 1, 4, 'Description');
-        TestLibrary.BuildDataTable(dataTable, 1, 5, 'Description 2');
-        TestLibrary.BuildDataTable(dataTable, 2, 1, '1');
-        TestLibrary.BuildDataTable(dataTable, 2, 2, 'TestDocNo');
-        TestLibrary.BuildDataTable(dataTable, 2, 3, '10000');
-        TestLibrary.BuildDataTable(dataTable, 2, 4, 'OldValue1');
-        TestLibrary.BuildDataTable(dataTable, 2, 5, 'OldValue2');
-        TestLibrary.WriteDataTableToFileBlob(TempBlob, dataTable);
+        dataTableHelper.BuildDataTable(1, 1, 'Document Type');
+        dataTableHelper.BuildDataTable(1, 2, 'Document No.');
+        dataTableHelper.BuildDataTable(1, 3, 'Line No.');
+        dataTableHelper.BuildDataTable(1, 4, 'Description');
+        dataTableHelper.BuildDataTable(1, 5, 'Description 2');
+        dataTableHelper.BuildDataTable(2, 1, '1');
+        dataTableHelper.BuildDataTable(2, 2, 'TestDocNo');
+        dataTableHelper.BuildDataTable(2, 3, '10000');
+        dataTableHelper.BuildDataTable(2, 4, 'OldValue1');
+        dataTableHelper.BuildDataTable(2, 5, 'OldValue2');
+        dataTableHelper.WriteDataTableToFileBlob(TempBlob);
         TestLibrary.AddFileToSourceFileStorage(sourceFileStorage, 'sample.csv', dataLayout, TempBlob);
         TestLibrary.CreateImportConfigHeader(importConfigHeader, 37, sourceFileStorage);
         TestLibrary.CreateFieldMapping(importConfigHeader, true);

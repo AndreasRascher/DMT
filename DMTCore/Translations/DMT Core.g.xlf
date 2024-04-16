@@ -2298,50 +2298,60 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Hochgeladen am</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTSourceFileStorage - Field UploadDateTime - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 4084916308 - Field 2680665143 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>changed Field Caption (Trigger)</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=geändertes Feld (Trigger)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field Changed Field Cap.(Trigger) - Property Caption</note>
+        <trans-unit id="Table 305600207 - Field 2680665143 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>changed Field Caption</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=geändertes Feld</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerLogEntry - Field Changed Field Cap.(Trigger) - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 4084916308 - Field 2284301858 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>changed Field No. (Trigger)</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=geändertes Feldnr. (Trigger)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field Changed Field No. (Trigger) - Property Caption</note>
+        <trans-unit id="Table 305600207 - Field 2284301858 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>changed Field No.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=geändertes Feldnr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerLogEntry - Field Changed Field No. (Trigger) - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 4084916308 - Field 883711285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 305600207 - Field 883711285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Entry No.</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Lfd.Nr.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field Entry No. - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerLogEntry - Field Entry No. - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 4084916308 - Field 2855219704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>From Value (Trigger)</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Von Feldwert (Trigger)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field From Value (Trigger) - Property Caption</note>
+        <trans-unit id="Table 305600207 - Field 2241071850 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Neuer Feldwert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerLogEntry - Field New Value (Trigger) - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 4084916308 - Field 665135315 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>To Value (Trigger)</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Zu Feldwert (Trigger)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field To Value (Trigger) - Property Caption</note>
+        <trans-unit id="Table 305600207 - Field 3647572351 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Old Value</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Alter Feldwert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerLogEntry - Field Old Value (Trigger) - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 4084916308 - Field 3570832196 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Trigger</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field Trigger - Property Caption</note>
+        <trans-unit id="Table 305600207 - Field 345314420 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source ID</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Herkunfts-ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerLogEntry - Field Source ID - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 4084916308 - Field 2714983628 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 305600207 - Field 3586143976 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source File Name</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Quelldatei Name</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerLogEntry - Field SourceFileName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 305600207 - Field 848768200 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target ID</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ziel-ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerLogEntry - Field Target ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 305600207 - Field 2714983628 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Validate Field Caption</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Feldbezeichnung Validierung</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field Validate Caption - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerLogEntry - Field Validate Caption - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 4084916308 - Field 3062036613 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 305600207 - Field 3062036613 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Validate Field No.</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Feldnr. Validierung</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field Validate Field No. - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerLogEntry - Field Validate Field No. - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 4084916308 - Field 2393483805 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 305600207 - Field 2393483805 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Value Assigned</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Zugewiesener Wert</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerChangesLogEntry - Field Value Assigned - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerLogEntry - Field Value Assigned - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 523974668 - Field 3968297008 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Is Folder</source>
@@ -2447,6 +2457,11 @@
           <source>Select a file to upload</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Wählen Sie eine Datei zum Hochladen aus</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTSourceFileMgt - Method UploadFileIntoFileStorage - NamedType UploadFileMsg</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3132342291 - Method 3562242352 - NamedType 2581105778" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The variables to compare are not initialized.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Die Variablen zum Vergleichen sind nicht initialisiert.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTTriggerLogImpl - Method CheckAfterValidate - NamedType varsToCompareNotInitializedErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 2940556576 - Method 3472600955 - NamedType 2829063540" size-unit="char" translate="yes" xml:space="preserve">
           <source>Invalid assignment in replacement "%1". An import configuration with the ID %2 does not exist.</source>
@@ -3108,6 +3123,16 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Authentifizierung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page WebDAVFileBrowser - Control Authentication - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1983903763 - Control 2575460289 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Password</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Passwort</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WebDAVFileBrowser - Control Password - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1983903763 - Control 3549826426 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User Name</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Benutzername</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WebDAVFileBrowser - Control UserName - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1983903763 - Control 4266135001 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Selected File</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Ausgewählte Datei</note>
@@ -3207,6 +3232,11 @@
           <source>Summary</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogEntryType - EnumValue Summary - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3775792799 - EnumValue 2071372527 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Trigger Changes</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogEntryType - EnumValue Trigger Changes - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 3304607464 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Delete Record</source>

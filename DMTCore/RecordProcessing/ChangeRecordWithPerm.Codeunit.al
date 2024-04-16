@@ -11,7 +11,7 @@ codeunit 91011 DMTChangeRecordWithPerm
         DMTDeleteDatainTargetTable.Run();
     end;
 
-    procedure InsertOrOverwriteRecFromTmp(var TmpTargetRef: RecordRef; var CurrTargetRecIDText: Text; InsertTrue: Boolean; var triggerLog: Codeunit DMTTriggerLog) InsertOK: Boolean
+    procedure InsertOrOverwriteRecFromTmp(var TmpTargetRef: RecordRef; var CurrTargetRecIDText: Text; UseTrigger: Boolean; IsTriggerLogInterfaceInitialized: Boolean; var triggerLog: Interface ITriggerLog) InsertOK: Boolean
     var
         RefHelper: Codeunit DMTRefHelper;
         TargetRef: RecordRef;
@@ -22,29 +22,42 @@ codeunit 91011 DMTChangeRecordWithPerm
         RefHelper.CopyRecordRef(TmpTargetRef, TargetRef);
 
         if TargetRef2.Get(TargetRef.RecordId) then begin
-            triggerLog.setBeforeState(TargetRef);
-            InsertOK := TargetRef.Modify(InsertTrue);
-            triggerLog.logTriggerChanges(TargetRef, Enum::DMTRecOperationType::ModifyRecord);
+
+            if IsTriggerLogInterfaceInitialized then
+                triggerLog.InitBeforeModify(TargetRef, UseTrigger);
+
+            InsertOK := TargetRef.Modify(UseTrigger);
+
+            if IsTriggerLogInterfaceInitialized then
+                triggerLog.CheckAfterOnModiy(TargetRef);
+
         end else begin
+
             xRecID := TargetRef.RecordId;
-            triggerLog.setBeforeState(TargetRef);
-            InsertOK := TargetRef.Insert(InsertTrue);
-            triggerLog.logTriggerChanges(TargetRef, Enum::DMTRecOperationType::InsertRecord);
+
+            if IsTriggerLogInterfaceInitialized then
+                triggerLog.InitBeforeInsert(TargetRef, UseTrigger);
+
+            InsertOK := TargetRef.Insert(UseTrigger);
+
+            if IsTriggerLogInterfaceInitialized then
+                triggerLog.CheckAfterOnInsert(TargetRef);
+
             RecID := TargetRef.RecordId;
             if xRecID <> RecID then
                 CurrTargetRecIDText := Format(RecID);  // update if key is changed after insert
         end;
     end;
 
-    procedure ModifyRecFromTmp(var TmpTargetRef: RecordRef; UseTrigger: Boolean; var triggerLog: Codeunit DMTTriggerLog) ModifyOK: Boolean
+    procedure ModifyRecFromTmp(var TmpTargetRef: RecordRef; UseTrigger: Boolean; IsTriggerLogInterfaceInitialized: Boolean; triggerLog: Interface ITriggerLog) ModifyOK: Boolean
     var
         RefHelper: Codeunit DMTRefHelper;
         TargetRef: RecordRef;
     begin
         TargetRef.Open(TmpTargetRef.Number, false);
         RefHelper.CopyRecordRef(TmpTargetRef, TargetRef);
-        triggerLog.setBeforeState(TargetRef);
+        triggerLog.InitBeforeModify(TargetRef, UseTrigger);
         ModifyOK := TargetRef.Modify(UseTrigger);
-        triggerLog.logTriggerChanges(TargetRef, Enum::DMTRecOperationType::ModifyRecord);
+        triggerLog.CheckAfterOnModiy(TargetRef);
     end;
 }

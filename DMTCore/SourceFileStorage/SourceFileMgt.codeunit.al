@@ -108,7 +108,7 @@ codeunit 91001 DMTSourceFileMgt
             sourceFileStorage.SourceFileFormat := sourceFileStorage.SourceFileFormat::"Custom CSV";
     end;
 
-    local procedure findFileByName(var SourceFileStorageExisting: Record DMTSourceFileStorage; var fileBaseName: Text; var fileExtension: Text) hasFileWithTheSameName: Boolean;
+    local procedure findFileByName(var SourceFileStorageExisting: Record DMTSourceFileStorage; fileBaseName: Text; fileExtension: Text) hasFileWithTheSameName: Boolean;
     begin
         Clear(SourceFileStorageExisting);
         SourceFileStorageExisting.SetRange(Name, fileBaseName);

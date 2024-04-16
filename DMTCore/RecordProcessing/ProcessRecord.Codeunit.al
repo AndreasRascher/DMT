@@ -7,6 +7,7 @@ codeunit 91008 DMTProcessRecord
 
     procedure Start()
     begin
+        initTriggerLog();
         Clear(CurrValueToAssignText);
         if RunMode = RunMode::FieldTransfer then begin
             case true of
@@ -61,16 +62,20 @@ codeunit 91008 DMTProcessRecord
             ValidateSetting::ValidateOnlyIfNotEmpty:
                 begin
                     if Format(SourceField.Value) <> Format(TargetRef_INIT.Field(TargetField.Number).Value) then begin
-                        TriggerLog.InitBeforeValidate(SourceField, TargetField, TmpTargetRef);
+                        if IsTriggerLogInterfaceInitialized then
+                            ITriggerLogGlobal.InitBeforeValidate(SourceField, TargetField, TmpTargetRef);
                         TargetField.Validate(FieldWithTypeCorrectValueToValidate.Value);
-                        TriggerLog.CheckAfterValidate(SourceField, TargetField, TmpTargetRef);
+                        if IsTriggerLogInterfaceInitialized then
+                            ITriggerLogGlobal.CheckAfterValidate(TmpTargetRef);
                     end;
                 end;
             ValidateSetting::AlwaysValidate:
                 begin
-                    TriggerLog.InitBeforeValidate(SourceField, TargetField, TmpTargetRef);
+                    if IsTriggerLogInterfaceInitialized then
+                        ITriggerLogGlobal.InitBeforeValidate(SourceField, TargetField, TmpTargetRef);
                     TargetField.Validate(FieldWithTypeCorrectValueToValidate.Value);
-                    TriggerLog.CheckAfterValidate(SourceField, TargetField, TmpTargetRef);
+                    if IsTriggerLogInterfaceInitialized then
+                        ITriggerLogGlobal.CheckAfterValidate(TmpTargetRef);
                 end;
         end;
     end;
@@ -249,8 +254,6 @@ codeunit 91008 DMTProcessRecord
     end;
 
     procedure InitFieldTransfer(_SourceRef: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings)
-    var
-        DMTSetup: Record "DMTSetup";
     begin
         Clear(CurrTargetRecIDText); // only once, not for every field
         ImportConfigHeader := DMTImportSettings.ImportConfigHeader();
@@ -305,10 +308,11 @@ codeunit 91008 DMTProcessRecord
         ClearLastError();
     end;
 
-    procedure LogTriggerChanges()
+    procedure InitTriggerLog() IsInitialized: Boolean
     begin
-        if TempTriggerChangesLogEntry.Count = 0 then
-            exit;
+        if not IsTriggerLogInterfaceInitialized then
+            IsTriggerLogInterfaceInitialized := DMTSetup.getDefaultTriggerLogImplementation(ITriggerLogGlobal);
+        exit(IsTriggerLogInterfaceInitialized);
     end;
 
     local procedure SaveRecord() Success: Boolean
@@ -322,13 +326,13 @@ codeunit 91008 DMTProcessRecord
                 begin
                     if SkipRecordGlobal then
                         exit(false);
-                    Success := ChangeRecordWithPerm.InsertOrOverwriteRecFromTmp(TmpTargetRef, CurrTargetRecIDText, ImportConfigHeader."Use OnInsert Trigger", TriggerLog);
+                    Success := ChangeRecordWithPerm.InsertOrOverwriteRecFromTmp(TmpTargetRef, CurrTargetRecIDText, ImportConfigHeader."Use OnInsert Trigger", IsTriggerLogInterfaceInitialized, ITriggerLogGlobal);
                 end;
             RunMode::ModifyRecord:
                 begin
                     if SkipRecordGlobal then
                         exit(false);
-                    Success := ChangeRecordWithPerm.ModifyRecFromTmp(TmpTargetRef, ImportConfigHeader."Use OnInsert Trigger", TriggerLog);
+                    Success := ChangeRecordWithPerm.ModifyRecFromTmp(TmpTargetRef, ImportConfigHeader."Use OnInsert Trigger", IsTriggerLogInterfaceInitialized, ITriggerLogGlobal);
                 end;
         end;
     end;
@@ -401,6 +405,20 @@ codeunit 91008 DMTProcessRecord
             Log.AddErrorByImportConfigLineEntry(SourceRefGlobal.RecordId, ImportConfigHeader, TempImportConfigLine, ErrorItem);
         end;
     end;
+    //ToDo: if values have been changed via trigger, create log entry and write the changes in the trigger log to the database
+    internal procedure SaveTriggerLog(Log: Codeunit DMTLog)
+    var
+        triggerLogEntry: Record DMTTriggerLogEntry;
+    begin
+        if TempTriggerLogEntry.IsEmpty then
+            exit;
+        TempTriggerLogEntry.FindSet();
+        repeat
+            triggerLogEntry := TempTriggerLogEntry;
+            triggerLogEntry.Insert();
+        until TempTriggerLogEntry.Next() = 0;
+
+    end;
 
     procedure GetProcessingResultType() ResultType: Enum DMTProcessingResultType
     begin
@@ -434,30 +452,27 @@ codeunit 91008 DMTProcessRecord
         ImportConfigHeader.BufferTableMgt().SetDMTImportFields(SourceRefGlobal, CurrTargetRecIDText);
     end;
 
-    internal procedure SaveTriggerLog()
-    begin
-        if TempTriggerChangesLogEntry.IsEmpty then
-            exit;
 
-    end;
 
     var
+        DMTSetup: Record "DMTSetup";
         ImportConfigHeader: Record DMTImportConfigHeader;
         TempImportConfigLine: Record DMTImportConfigLine temporary;
-        TempTriggerChangesLogEntry: Record DMTTriggerChangesLogEntry temporary;
+        TempTriggerLogEntry: Record DMTTriggerLogEntry temporary;
         ChangeRecordWithPerm: Codeunit DMTChangeRecordWithPerm;
         RefHelper: Codeunit DMTRefHelper;
-        TriggerLog: Codeunit DMTTriggerLog;
         CurrFieldToProcess: RecordId;
         SourceRefGlobal, TargetRef_INIT, TmpTargetRef : RecordRef;
         CurrValueToAssign: FieldRef;
-        CurrValueToAssignText, CurrTargetRecIDText : Text;
-        IReplacementHandler: Interface IReplacementHandler;
         CurrValueToAssign_IsInitialized: Boolean;
-        SkipRecordGlobal, TargetRecordExists, ErrorsOccuredThatShouldNotBeIngored : Boolean;
+        ErrorsOccuredThatShouldNotBeIngored, SkipRecordGlobal, TargetRecordExists : Boolean;
         UpdateFieldsInExistingRecordsOnly: Boolean;
         ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
+        IReplacementHandler: Interface IReplacementHandler;
+        IsTriggerLogInterfaceInitialized: Boolean;
+        ITriggerLogGlobal: Interface ITriggerLog;
         TargetKeyFieldIDs: List of [Integer];
         ProcessedFields: List of [RecordId];
         RunMode: Option FieldTransfer,InsertRecord,ModifyRecord;
+        CurrTargetRecIDText, CurrValueToAssignText : Text;
 }

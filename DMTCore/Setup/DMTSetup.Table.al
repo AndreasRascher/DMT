@@ -63,6 +63,14 @@ table 91000 DMTSetup
         IImportConfigPageAction := importConfigPageActionImpl;
     end;
 
+    internal procedure getDefaultTriggerLogImplementation(var IValueMigrationLog: Interface ITriggerLog) IsInterfaceInititalized: Boolean
+    var
+        ITriggerLog: Codeunit DMTTriggerLogImpl;
+    begin
+        IValueMigrationLog := ITriggerLog;
+        IsInterfaceInititalized := true;
+    end;
+
     procedure IsNAVExport(): Boolean
     begin
         if not RecordHasBeenRead then

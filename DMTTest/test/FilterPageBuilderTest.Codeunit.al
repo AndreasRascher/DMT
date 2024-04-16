@@ -13,18 +13,16 @@ codeunit 90025 FilterPageBuilderTest
         testLibrary: Codeunit DMTTestLibrary;
         TempBlob: Codeunit "Temp Blob";
         assert: Codeunit "Library Assert";
+        dataTableHelper: Codeunit dataTableHelper;
         bufferRef: RecordRef;
         FilterFields: Dictionary of [Integer, Text];
-        dataTable: List of [List of [Text]];
     begin
         // [GIVEN] GivenImportConfigWithSavedFilters
         testLibrary.CreateDMTSetup();
         salesHeader.FindFirst();
         salesHeader.SetRecFilter();
-        salesHeader.FindFirst();
-        salesHeader.SetRecFilter();
-        testLibrary.BuildDataTable(dataTable, salesHeader.RecordId.TableNo, salesHeader.GetView());
-        testLibrary.WriteDataTableToFileBlob(TempBlob, dataTable);
+        dataTableHelper.AddRecordWithCaptionsToDataTable(salesHeader);
+        dataTableHelper.WriteDataTableToFileBlob(TempBlob);
         testLibrary.AddFileToSourceFileStorage(sourceFileStorage,
                                             'SalesHeader.csv',
                                             testLibrary.GetDefaultNAVDMTLayout(),

@@ -29,6 +29,7 @@ page 91025 WebDAVFileBrowser
                 field(serverRelativeUrl; serverRelativeUrl) { Caption = 'Server relative URL', Locked = true; ApplicationArea = All; }
                 field(UserName; UserName)
                 {
+                    Caption = 'User Name', Comment = 'de-DE=Benutzername';
                     ApplicationArea = All;
                     ShowMandatory = true;
                     trigger OnValidate()
@@ -36,7 +37,13 @@ page 91025 WebDAVFileBrowser
                         serverRelativeUrl := StrSubstNo(UserFilesRelPathLbl, UserName);
                     end;
                 }
-                field(Password; Password) { ApplicationArea = All; ShowMandatory = true; ExtendedDatatype = Masked; }
+                field(Password; Password)
+                {
+                    Caption = 'Password', Comment = 'de-DE=Passwort';
+                    ApplicationArea = All;
+                    ShowMandatory = true;
+                    ExtendedDatatype = Masked;
+                }
             }
             group(SelectedFile)
             {

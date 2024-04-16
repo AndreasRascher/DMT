@@ -43,7 +43,7 @@
 					"numberOfSqlStatements": 10,
 					"tenant": "default",
 					"usePublicURLFromServer": true,
-					"schemaUpdateMode": "Synchronize"
+					"schemaUpdateMode": "ForceSync"
 				},
 				{
 					"name": "BC24 AL TEST TOOL",
@@ -102,7 +102,7 @@
 			"compounds": []
 		},
 		"[al]": {
-			"editor.wordBasedSuggestions": false,
+			"editor.wordBasedSuggestions": "off",
 			"editor.suggestSelection": "first",
 			"editor.formatOnSave": true,
 			"editor.semanticHighlighting.enabled": true

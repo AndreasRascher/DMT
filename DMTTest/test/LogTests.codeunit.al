@@ -12,20 +12,21 @@ codeunit 90026 LogTests
         importConfigLine: Record DMTImportConfigLine;
         TempBlob: Codeunit "Temp Blob";
         testLibrary: Codeunit DMTTestLibrary;
-        dataTable: List of [List of [Text]];
+        dataTableHelper: Codeunit dataTableHelper;
     begin
         // [GIVEN] Import field values with validate 
         testLibrary.CreateDMTSetup();
-        customer.SetFilter("Payment Method Code", '<>''''');
+        customer.SetFilter("Payment Terms Code", '<>''''');
         customer.FindFirst();
-        customer.SetRecFilter();
-        testLibrary.BuildDataTable(dataTable, customer.RecordId.TableNo, customer.GetView());
-        testLibrary.WriteDataTableToFileBlob(TempBlob, dataTable);
+        clear(customer."Payment Terms Id");  // empty the field to trigger the validation
+
+        dataTableHelper.AddRecordWithCaptionsToDataTable(customer);
+        dataTableHelper.WriteDataTableToFileBlob(TempBlob);
         testLibrary.AddFileToSourceFileStorage(sourceFileStorage,
                                             'Customer.csv',
                                             testLibrary.GetDefaultNAVDMTLayout(),
                                             TempBlob);
-        testLibrary.CreateImportConfigHeader(importConfigHeader, Database::"Sales Header", sourceFileStorage);
+        testLibrary.CreateImportConfigHeader(importConfigHeader, customer.RecordId.TableNo, sourceFileStorage);
         testLibrary.CreateFieldMapping(importConfigHeader, false);
         importConfigHeader.FilterRelated(importConfigLine);
 
@@ -34,7 +35,7 @@ codeunit 90026 LogTests
         importConfigLine.Validate("Validation Type", importConfigLine."Validation Type"::AlwaysValidate);
         importConfigLine.Modify();
 
-        importConfigLine.SetRange("Target Field No.", customer.FieldNo("Payment Method Id"));
+        importConfigLine.SetRange("Target Field No.", customer.FieldNo("Payment Terms Id"));
         importConfigLine.FindFirst();
         importConfigLine.Validate("Validation Type", importConfigLine."Validation Type"::AlwaysValidate);
         importConfigLine.Modify();
@@ -48,10 +49,18 @@ codeunit 90026 LogTests
     local procedure VerifyLogValuesOfTriggerChangesExist(importConfigHeader: Record DMTImportConfigHeader; customer: Record Customer)
     var
         logEntry: Record DMTLogEntry;
+        triggerLogEntry: Record DMTTriggerLogEntry;
     begin
         logEntry.FilterFor(importConfigHeader);
         logEntry.SetRange("Target ID", customer.RecordId);
         logEntry.SetRange("Entry Type", logEntry."Entry Type"::"Trigger Changes");
-        logEntry.FindSet();
+#pragma warning disable AA0175
+        logEntry.FindFirst();
+#pragma warning restore AA0175
+
+        triggerLogEntry.SetRange("Target ID", customer.RecordId);
+#pragma warning disable AA0175
+        triggerLogEntry.FindFirst();
+#pragma warning restore AA0175
     end;
 }
