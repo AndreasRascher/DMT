@@ -96,6 +96,26 @@ codeunit 90027 dataTableHelper
         BigText.Read(iStr);
     end;
 
+    internal procedure WriteDataTableToExcelBuffer(var ExcelBufferFilled: Record "Excel Buffer" temporary)
+    var
+        tempExcelBuffer: Record "Excel Buffer" temporary;
+        currColNo, currRowNo : Integer;
+        line: list of [Text];
+    begin
+        // iterate through the data table and write the content to excel buffer file
+        for currRowNo := 1 to CurrDataTable.Count do begin
+            line := CurrDataTable.Get(currRowNo);
+            for currColNo := 1 to line.Count do begin
+                tempExcelBuffer.Init();
+                tempExcelBuffer.Validate("Row No.", currRowNo);
+                tempExcelBuffer.Validate("Column No.", currColNo);
+                tempExcelBuffer.Validate("Cell Value as Text", line.Get(currColNo));
+                tempExcelBuffer.Insert();
+            end;
+        end;
+        ExcelBufferFilled.Copy(tempExcelBuffer, true);
+    end;
+
     internal procedure BuildDataTable(rowIndex: Integer; colIndex: Integer; content: Text)
     var
         row: List of [Text];
