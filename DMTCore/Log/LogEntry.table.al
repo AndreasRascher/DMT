@@ -31,6 +31,15 @@ table 91008 DMTLogEntry
         field(43; "Ignore Error"; Boolean) { Caption = 'Ignore Error', Comment = 'de-DE=Fehler ignorieren'; }
         field(44; "Error Field Value"; Text[250]) { Caption = 'Error Field Value', Comment = 'de-DE=Fehler für Feldwert'; }
         field(51; SourceFileName; Text[250]) { Caption = 'Source File Name', Comment = 'de-DE=Quelldatei Name'; }
+        field(60; NoOfTriggerLogEntries; Integer)
+        {
+            Caption = 'No. of Trigger Log Entries', Comment = 'de-DE=Anzahl Trigger Log Einträge';
+            FieldClass = FlowField;
+            CalcFormula = count(DMTTriggerLogEntry where("Target ID" = field("Target ID"), "Owner RecordID" = field("Owner RecordID")));
+            Editable = false;
+            BlankZero = true;
+        }
+
     }
 
     keys

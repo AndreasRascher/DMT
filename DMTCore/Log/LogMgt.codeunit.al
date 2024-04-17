@@ -166,6 +166,25 @@ codeunit 91006 DMTLog
         logEntry.Insert();
     end;
 
+    internal procedure AddTriggerLogWarnings(var triggerLog: Record DMTTriggerLogEntry temporary; importConfigHeader: Record DMTImportConfigHeader)
+    var
+        logEntry: Record DMTLogEntry;
+        triggerChangesLbl: Label 'Assigned Values have been changed by triggers', Comment = 'de-DE=Zugewiesene Werte wurden duch Trigger Code geändert';
+    begin
+        triggerLog.FindSet();
+
+        logEntry := LogEntryTemplate;
+        logEntry.Usage := logEntry.Usage::Information;
+        logEntry."Entry Type" := logEntry."Entry Type"::"Trigger Changes";
+        logEntry."Context Description" := triggerChangesLbl;
+        logEntry.SourceFileName := importConfigHeader.GetSourceFileName();
+        logEntry."Target Table ID" := importConfigHeader."Target Table ID";
+        logEntry."Owner RecordID" := importConfigHeader.RecordId;
+        logEntry."Target ID" := triggerLog."Target ID";
+        logEntry."Target ID (Text)" := format(triggerLog."Target ID");
+        logEntry.Insert();
+    end;
+
     procedure CreateSummary()
     var
         LogEntry: Record DMTLogEntry;

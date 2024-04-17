@@ -25,11 +25,18 @@ table 91013 DMTTriggerLogEntry
     internal procedure GetNextEntryNo() NextEntryNo: Integer
     var
         triggerChangesLogEntry: Record DMTTriggerLogEntry;
+        tempTriggerChangesLogEntry: Record DMTTriggerLogEntry temporary;
     begin
         NextEntryNo := 1;
-        triggerChangesLogEntry.Reset();
-        triggerChangesLogEntry.SetLoadFields("Entry No.");
-        if triggerChangesLogEntry.FindLast() then begin
+        if Rec.IsTemporary then begin
+            tempTriggerChangesLogEntry.Copy(Rec, true);
+            tempTriggerChangesLogEntry.Reset();
+            if tempTriggerChangesLogEntry.FindLast() then;
+            NextEntryNo += tempTriggerChangesLogEntry."Entry No.";
+        end else begin
+            triggerChangesLogEntry.Reset();
+            triggerChangesLogEntry.SetLoadFields("Entry No.");
+            if triggerChangesLogEntry.FindLast() then;
             NextEntryNo += triggerChangesLogEntry."Entry No.";
         end;
     end;

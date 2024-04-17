@@ -8,5 +8,6 @@ interface ITriggerLog
     procedure CheckAfterOnInsert(TargetRef: RecordRef)
     procedure findChangedFields(var changedFields: Dictionary of [Integer, List of [Text]]; recRefFrom: RecordRef; recRefTO: RecordRef) hasChangedFields: Boolean
     procedure DeleteExistingLogFor(BufferRef2: RecordRef);
+    procedure SaveTriggerLog(log: Codeunit DMTLog; importConfigHeader: Record DMTImportConfigHeader)
 
 }

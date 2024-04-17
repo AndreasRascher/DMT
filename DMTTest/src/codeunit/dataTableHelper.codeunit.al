@@ -21,13 +21,13 @@ codeunit 90027 dataTableHelper
 
     procedure formatFieldRef(field: FieldRef) result: Text;
     var
-        boolValue: Boolean;
+        BooleanValue: Boolean;
     begin
-        case true of
-            field.Type = fieldtype::Boolean:
+        case field.Type of
+            fieldtype::Boolean:
                 begin
-                    boolValue := field.Value;
-                    if boolValue then
+                    BooleanValue := field.Value;
+                    if BooleanValue then
                         exit('1');
                     exit('0');
                 end;
