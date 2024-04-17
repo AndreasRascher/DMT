@@ -102,6 +102,10 @@ codeunit 90027 dataTableHelper
         currColNo, currRowNo : Integer;
         line: list of [Text];
     begin
+        //TODO Sample Data in Excel
+        // No.	Name	Payment Terms Code	Payment Terms Id
+        // 111111	Test	1M(8T)	{00000000-0000-0000-0000-000000000000}
+
         // iterate through the data table and write the content to excel buffer file
         for currRowNo := 1 to CurrDataTable.Count do begin
             line := CurrDataTable.Get(currRowNo);
