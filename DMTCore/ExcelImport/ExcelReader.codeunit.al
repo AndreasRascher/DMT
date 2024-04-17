@@ -122,9 +122,6 @@ codeunit 91018 DMTExcelReader
         RecRef.GetTable(genBuffTable);
         foreach cellValue in currentLine do begin
             CurrColIndex += 1;
-            if IsColumnCaptionLine then
-                ColCaptionsGlobal.add(CurrColIndex, cellValue);
-
             //Handle large Texts
             if IsColumnCaptionLine then
                 ColCaptionsGlobal.add(CurrColIndex, cellValue);

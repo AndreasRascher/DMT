@@ -1,5 +1,7 @@
 table 91013 DMTTriggerLogEntry
 {
+    LookupPageId = DMTTriggerLogEntries;
+    DrillDownPageId = DMTTriggerLogEntries;
     fields
     {
         field(1; "Entry No."; Integer) { Caption = 'Entry No.', Comment = 'de-DE=Lfd.Nr.'; }
@@ -7,9 +9,9 @@ table 91013 DMTTriggerLogEntry
         field(11; "Source ID"; RecordId) { Caption = 'Source ID', Comment = 'de-DE=Herkunfts-ID'; }
         field(12; "Target ID"; RecordId) { Caption = 'Target ID', Comment = 'de-DE=Ziel-ID'; }
         field(20; "Validate Field No."; Integer) { Caption = 'Validate Field No.', Comment = 'de-DE=Feldnr. Validierung'; }
-        field(21; "Validate Caption"; Integer) { Caption = 'Validate Field Caption', Comment = 'de-DE=Feldbezeichnung Validierung'; }
+        field(21; "Validate Caption"; Text[250]) { Caption = 'Validate Field Caption', Comment = 'de-DE=Validiertes Feld'; }
         field(30; "Changed Field No. (Trigger)"; Integer) { Caption = 'changed Field No.', Comment = 'de-DE=geändertes Feldnr.'; }
-        field(31; "Changed Field Cap.(Trigger)"; Text[250]) { Caption = 'changed Field Caption', Comment = 'de-DE=geändertes Feld'; }
+        field(31; "Changed Field Cap.(Trigger)"; Text[250]) { Caption = 'changed Field Caption', Comment = 'de-DE=Geändertes Feld'; }
         field(40; "Old Value (Trigger)"; Text[250]) { Caption = 'Old Value', Comment = 'de-DE=Alter Feldwert'; }
         field(41; "Value Assigned"; Text[250]) { Caption = 'Value Assigned', Comment = 'de-DE=Zugewiesener Wert'; }
         field(42; "New Value (Trigger)"; Text[250]) { Caption = 'New Value', Comment = 'de-DE=Neuer Feldwert'; }

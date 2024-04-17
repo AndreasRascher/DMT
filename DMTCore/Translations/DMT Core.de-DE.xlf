@@ -2765,8 +2765,8 @@
         </trans-unit>
         <trans-unit id="Table 305600207 - Field 2680665143 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>changed Field Caption</source>
-          <target state="translated">geändertes Feld</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=geändertes Feld</note>
+          <target state="translated">Geändertes Feld</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Geändertes Feld</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerLogEntry - Field Changed Field Cap.(Trigger) - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 305600207 - Field 2284301858 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2813,8 +2813,8 @@
         </trans-unit>
         <trans-unit id="Table 305600207 - Field 2714983628 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Validate Field Caption</source>
-          <target state="translated">Feldbezeichnung Validierung</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Feldbezeichnung Validierung</note>
+          <target state="translated">Validiertes Feld</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Validiertes Feld</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerLogEntry - Field Validate Caption - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 305600207 - Field 3062036613 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -3746,6 +3746,12 @@
           <target state="translated">Datei hochladen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Datei hochladen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTSourceFiles - Action UploadFile - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3161783181 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Trigger Log Entries</source>
+          <target state="translated">DMT Trigger Protokollposten</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=DMT Trigger Protokollposten</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTTriggerLogEntries - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1983903763 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>WebDAV File Browser</source>

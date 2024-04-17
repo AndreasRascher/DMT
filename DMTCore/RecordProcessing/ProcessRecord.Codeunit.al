@@ -58,6 +58,7 @@ codeunit 91008 DMTProcessRecord
             ValidateSetting::AssignWithoutValidate:
                 begin
                     TargetField.Value := FieldWithTypeCorrectValueToValidate.Value;
+                    ITriggerLogGlobal.LogAssignment(SourceField, TargetField, TmpTargetRef);
                 end;
             ValidateSetting::ValidateOnlyIfNotEmpty:
                 begin
@@ -411,7 +412,7 @@ codeunit 91008 DMTProcessRecord
     internal procedure SaveTriggerLog(Log: Codeunit DMTLog)
     begin
         if IsTriggerLogInterfaceInitialized then
-            ITriggerLogGlobal.SaveTriggerLog(Log, ImportConfigHeader);
+            ITriggerLogGlobal.SaveTriggerLog(Log, ImportConfigHeader, SourceRefGlobal);
     end;
 
     procedure GetProcessingResultType() ResultType: Enum DMTProcessingResultType
