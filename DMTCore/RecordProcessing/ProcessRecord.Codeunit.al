@@ -409,17 +409,9 @@ codeunit 91008 DMTProcessRecord
     end;
     //ToDo: if values have been changed via trigger, create log entry and write the changes in the trigger log to the database
     internal procedure SaveTriggerLog(Log: Codeunit DMTLog)
-    var
-        triggerLogEntry: Record DMTTriggerLogEntry;
     begin
-        if TempTriggerLogEntry.IsEmpty then
-            exit;
-        TempTriggerLogEntry.FindSet();
-        repeat
-            triggerLogEntry := TempTriggerLogEntry;
-            triggerLogEntry.Insert();
-        until TempTriggerLogEntry.Next() = 0;
-
+        if IsTriggerLogInterfaceInitialized then
+            ITriggerLogGlobal.SaveTriggerLog(Log, ImportConfigHeader);
     end;
 
     procedure GetProcessingResultType() ResultType: Enum DMTProcessingResultType
@@ -460,7 +452,6 @@ codeunit 91008 DMTProcessRecord
         DMTSetup: Record "DMTSetup";
         ImportConfigHeader: Record DMTImportConfigHeader;
         TempImportConfigLine: Record DMTImportConfigLine temporary;
-        TempTriggerLogEntry: Record DMTTriggerLogEntry temporary;
         ChangeRecordWithPerm: Codeunit DMTChangeRecordWithPerm;
         RefHelper: Codeunit DMTRefHelper;
         CurrFieldToProcess: RecordId;

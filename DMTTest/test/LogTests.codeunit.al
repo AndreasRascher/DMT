@@ -62,6 +62,11 @@ codeunit 90026 LogTests
         logEntry: Record DMTLogEntry;
         triggerLogEntry: Record DMTTriggerLogEntry;
     begin
+        triggerLogEntry.SetRange("Target ID", customer.RecordId);
+#pragma warning disable AA0175
+        triggerLogEntry.FindFirst();
+#pragma warning restore AA0175
+
         logEntry.FilterFor(importConfigHeader);
         logEntry.SetRange("Target ID", customer.RecordId);
         logEntry.SetRange("Entry Type", logEntry."Entry Type"::"Trigger Changes");
@@ -69,9 +74,5 @@ codeunit 90026 LogTests
         logEntry.FindFirst();
 #pragma warning restore AA0175
 
-        triggerLogEntry.SetRange("Target ID", customer.RecordId);
-#pragma warning disable AA0175
-        triggerLogEntry.FindFirst();
-#pragma warning restore AA0175
     end;
 }

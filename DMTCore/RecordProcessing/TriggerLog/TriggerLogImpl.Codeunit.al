@@ -14,31 +14,17 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
         changedFields: Dictionary of [Integer/*FieldNo*/, List of [Text]/*1:FromValue 2:ToValue*/];
         fromValueToValueList: list of [Text];
         fieldNo: Integer;
-        logChanges: Boolean;
         varsToCompareNotInitializedErr: Label 'The variables to compare are not initialized.', Comment = 'de-DE=Die Variablen zum Vergleichen sind nicht initialisiert.';
     begin
-        logChanges := false;
         if not AreVarsToCompareInitialized then
             Error(varsToCompareNotInitializedErr);
 
         findChangedFields(changedFields, targetRefBeforeChangeGlobal, TmpTargetRef);
-        // if after validate the target field doesn't contains the assigned value
-        if (changedFields.Count = 1) and changedFields.Get(TargetFieldGlobal.Number, fromValueToValueList) then begin
-            if formatField(SourceFieldGlobal) <> fromValueToValueList.Get(2) then
-                logChanges := true;
-        end;
-        // if more than one field has changed
-        if changedFields.Count > 1 then
-            logChanges := true;
 
         // log all changes besides the one that is assigned to the target field
-        if logChanges then begin
-            foreach fieldNo in changedFields.Keys do begin
-                changedFields.Get(fieldNo, fromValueToValueList);
-                if fieldNo <> TargetFieldGlobal.Number then
-                    addTableTriggerLogEntry(fromValueToValueList, Enum::DMTTriggerType::OnValidate);
-            end;
-            addValidateTriggerLog(fieldNo, fromValueToValueList);
+        foreach fieldNo in changedFields.Keys do begin
+            changedFields.Get(fieldNo, fromValueToValueList);
+            addValidateTriggerLog(fieldNo, fromValueToValueList, TmpTargetRef.RecordId);
         end;
     end;
 
@@ -58,7 +44,7 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
         if findChangedFields(changedFields, targetRefBeforeChangeGlobal, TargetRef) then begin
             foreach fieldNo in changedFields.Keys do begin
                 changedFields.Get(fieldNo, fromValueToValueList);
-                addTableTriggerLogEntry(fromValueToValueList, Enum::DMTTriggerType::OnModify);
+                addTableTriggerLogEntry(fromValueToValueList, Enum::DMTTriggerType::OnModify, TargetRef.RecordId);
             end;
         end;
     end;
@@ -79,7 +65,7 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
         if findChangedFields(changedFields, targetRefBeforeChangeGlobal, TargetRef) then begin
             foreach fieldNo in changedFields.Keys do begin
                 changedFields.Get(fieldNo, fromValueToValueList);
-                addTableTriggerLogEntry(fromValueToValueList, Enum::DMTTriggerType::OnModify);
+                addTableTriggerLogEntry(fromValueToValueList, Enum::DMTTriggerType::OnInsert, TargetRef.RecordId);
             end;
         end;
     end;
@@ -112,39 +98,33 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
         result := Format(SourceField.Value, 0, 9);
     end;
 
-    local procedure addTableTriggerLogEntry(var fromValueToValueList: list of [Text]; triggerType: Enum DMTTriggerType)
+    local procedure addTableTriggerLogEntry(var fromValueToValueList: list of [Text]; triggerType: Enum DMTTriggerType; targetID: RecordId)
     begin
-        TempDMTTriggerChangesLogEntry.Init();
-        TempDMTTriggerChangesLogEntry."Entry No." := TempDMTTriggerChangesLogEntry.GetNextEntryNo();
-        TempDMTTriggerChangesLogEntry."Trigger" := triggerType;
-        TempDMTTriggerChangesLogEntry."Changed Field Cap.(Trigger)" := CopyStr(TargetFieldGlobal.Caption, 1, MaxStrLen(TempDMTTriggerChangesLogEntry."Changed Field Cap.(Trigger)"));
-        TempDMTTriggerChangesLogEntry."Changed Field No. (Trigger)" := TargetFieldGlobal.Number;
-        TempDMTTriggerChangesLogEntry."Old Value (Trigger)" := CopyStr(fromValueToValueList.Get(1), 1, MaxStrLen(TempDMTTriggerChangesLogEntry."Old Value (Trigger)"));
-        TempDMTTriggerChangesLogEntry."Value Assigned" := '';
-        TempDMTTriggerChangesLogEntry."New Value (Trigger)" := CopyStr(fromValueToValueList.Get(2), 1, MaxStrLen(TempDMTTriggerChangesLogEntry."New Value (Trigger)"));
-        TempDMTTriggerChangesLogEntry.Insert();
+        TempTriggerLogEntryGlobal.Init();
+        TempTriggerLogEntryGlobal."Entry No." := TempTriggerLogEntryGlobal.GetNextEntryNo();
+        TempTriggerLogEntryGlobal."Trigger" := triggerType;
+        TempTriggerLogEntryGlobal."Changed Field Cap.(Trigger)" := CopyStr(TargetFieldGlobal.Caption, 1, MaxStrLen(TempTriggerLogEntryGlobal."Changed Field Cap.(Trigger)"));
+        TempTriggerLogEntryGlobal."Changed Field No. (Trigger)" := TargetFieldGlobal.Number;
+        TempTriggerLogEntryGlobal."Old Value (Trigger)" := CopyStr(fromValueToValueList.Get(1), 1, MaxStrLen(TempTriggerLogEntryGlobal."Old Value (Trigger)"));
+        TempTriggerLogEntryGlobal."Value Assigned" := '';
+        TempTriggerLogEntryGlobal."New Value (Trigger)" := CopyStr(fromValueToValueList.Get(2), 1, MaxStrLen(TempTriggerLogEntryGlobal."New Value (Trigger)"));
+        TempTriggerLogEntryGlobal."Target ID" := targetID;
+        TempTriggerLogEntryGlobal.Insert();
     end;
 
-    local procedure addValidateTriggerLog(fieldNo: Integer; fromValueToValueList: list of [Text])
+    local procedure addValidateTriggerLog(fieldNo: Integer; fromValueToValueList: list of [Text]; targetID: RecordId)
     begin
-        TempDMTTriggerChangesLogEntry.Init();
-        TempDMTTriggerChangesLogEntry."Entry No." := TempDMTTriggerChangesLogEntry.GetNextEntryNo();
-        TempDMTTriggerChangesLogEntry."Trigger" := TempDMTTriggerChangesLogEntry."Trigger"::OnValidate;
-        TempDMTTriggerChangesLogEntry."Validate Field No." := TargetFieldGlobal.Number;
-        TempDMTTriggerChangesLogEntry."Changed Field No. (Trigger)" := fieldNo;
+        TempTriggerLogEntryGlobal.Init();
+        TempTriggerLogEntryGlobal."Entry No." := TempTriggerLogEntryGlobal.GetNextEntryNo();
+        TempTriggerLogEntryGlobal."Trigger" := TempTriggerLogEntryGlobal."Trigger"::OnValidate;
+        TempTriggerLogEntryGlobal."Validate Field No." := TargetFieldGlobal.Number;
+        TempTriggerLogEntryGlobal."Changed Field No. (Trigger)" := fieldNo;
         // TempDMTTriggerChangesLogEntry."Changed Field Cap.(Trigger)"
-        TempDMTTriggerChangesLogEntry."Old Value (Trigger)" := CopyStr(fromValueToValueList.Get(1), 1, MaxStrLen(TempDMTTriggerChangesLogEntry."Old Value (Trigger)"));
-        TempDMTTriggerChangesLogEntry."New Value (Trigger)" := CopyStr(fromValueToValueList.Get(2), 1, MaxStrLen(TempDMTTriggerChangesLogEntry."New Value (Trigger)"));
-        TempDMTTriggerChangesLogEntry.Insert();
+        TempTriggerLogEntryGlobal."Old Value (Trigger)" := CopyStr(fromValueToValueList.Get(1), 1, MaxStrLen(TempTriggerLogEntryGlobal."Old Value (Trigger)"));
+        TempTriggerLogEntryGlobal."New Value (Trigger)" := CopyStr(fromValueToValueList.Get(2), 1, MaxStrLen(TempTriggerLogEntryGlobal."New Value (Trigger)"));
+        TempTriggerLogEntryGlobal."Target ID" := targetID;
+        TempTriggerLogEntryGlobal.Insert();
     end;
-
-    var
-        TempDMTTriggerChangesLogEntry: Record DMTTriggerLogEntry temporary;
-        targetRefBeforeChangeGlobal: RecordRef;
-        SourceFieldGlobal: FieldRef;
-        TargetFieldGlobal: FieldRef;
-        AreVarsToCompareInitialized: Boolean;
-        UseTriggerGlobal: Boolean;
 
     procedure DeleteExistingLogFor(BufferRef: RecordRef);
     var
@@ -154,4 +134,29 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
         if not triggerLogEntry.IsEmpty then
             triggerLogEntry.DeleteAll();
     end;
+
+    procedure SaveTriggerLog(Log: Codeunit DMTLog; importConfigHeader: Record DMTImportConfigHeader)
+    var
+        triggerLogEntry: Record DMTTriggerLogEntry;
+    begin
+        if TempTriggerLogEntryGlobal.IsEmpty then
+            exit;
+        TempTriggerLogEntryGlobal.FindSet();
+        repeat
+            triggerLogEntry := TempTriggerLogEntryGlobal;
+            triggerLogEntry."Owner RecordID" := importConfigHeader.RecordId;
+            triggerLogEntry.SourceFileName := importConfigHeader."Source File Name";
+            triggerLogEntry.Insert();
+        until TempTriggerLogEntryGlobal.Next() = 0;
+
+        Log.AddTriggerLogWarnings(TempTriggerLogEntryGlobal, importConfigHeader);
+    end;
+
+    var
+        TempTriggerLogEntryGlobal: Record DMTTriggerLogEntry temporary;
+        targetRefBeforeChangeGlobal: RecordRef;
+        SourceFieldGlobal: FieldRef;
+        TargetFieldGlobal: FieldRef;
+        AreVarsToCompareInitialized: Boolean;
+        UseTriggerGlobal: Boolean;
 }
