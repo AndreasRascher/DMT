@@ -25,6 +25,7 @@ codeunit 90023 ImportConfigCardActionsTest
         testLibrary: Codeunit DMTTestLibrary;
     begin
         // [GIVEN] GivenImportConfigHeaderWithSourceFile 
+        initializeImportConfigHeader();
         testLibrary.CreateFieldMapping(ImportConfigHeaderGlobal, false);
         // [WHEN] WhenImporting 
         DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_TransferToTargetTable(ImportConfigHeaderGlobal);
@@ -51,16 +52,16 @@ codeunit 90023 ImportConfigCardActionsTest
         sourceFileStorage: Record DMTSourceFileStorage;
         ExtendedTextHeader: Record "Extended Text Header";
         testLibrary: Codeunit DMTTestLibrary;
+        dataTableHelper: Codeunit dataTableHelper;
         tempBlob: Codeunit "Temp Blob";
-        dataTable: List of [List of [Text]];
     begin
         if IsInitializedGlobal then
             exit;
         testLibrary.CreateDMTSetup();
         ExtendedTextHeader.FindFirst();
         ExtendedTextHeader.SetRecFilter();
-        testLibrary.BuildDataTable(dataTable, ExtendedTextHeader.RecordId.TableNo, ExtendedTextHeader.GetView());
-        testLibrary.WriteDataTableToFileBlob(tempBlob, dataTable);
+        dataTableHelper.AddRecordWithCaptionsToDataTable(ExtendedTextHeader);
+        dataTableHelper.WriteDataTableToFileBlob(tempBlob);
         TestLibrary.AddFileToSourceFileStorage(sourceFileStorage, 'ExtendedTextHeader.csv', testLibrary.GetDefaultNAVDMTLayout(), tempBlob);
         TestLibrary.CreateImportConfigHeader(ImportConfigHeaderGlobal, ExtendedTextHeader.RecordId.TableNo, sourceFileStorage);
         IsInitializedGlobal := true;

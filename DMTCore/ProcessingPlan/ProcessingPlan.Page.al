@@ -430,8 +430,8 @@ page 91017 DMTProcessingPlan
     end;
 
     var
-        ProcessingPlanMgt: Codeunit DMTProcessingPlanMgt;
         TempProcessingPlan_SELECTED: Record DMTProcessingPlan temporary;
+        ProcessingPlanMgt: Codeunit DMTProcessingPlanMgt;
         // [InDataSet]
         ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart : Boolean;
         LineStyle: Text;

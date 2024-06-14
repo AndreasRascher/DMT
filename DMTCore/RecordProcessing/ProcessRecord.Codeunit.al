@@ -7,6 +7,7 @@ codeunit 91008 DMTProcessRecord
 
     procedure Start()
     begin
+        initTriggerLog();
         Clear(CurrValueToAssignText);
         if RunMode = RunMode::FieldTransfer then begin
             case true of
@@ -40,17 +41,16 @@ codeunit 91008 DMTProcessRecord
         SourceField: FieldRef;
     begin
         TargetField := TmpTargetRef.Field(TempImportConfigLine."Target Field No.");
-        if HandleBase64ToBlobTransferfromGenBuffTable(TargetField, TempImportConfigLine, SourceRef) then
+        if HandleBase64ToBlobTransferfromGenBuffTable(TargetField, TempImportConfigLine, SourceRefGlobal) then
             exit;
         //hier: Prüfen warum der Blob nicht übertragen wird
-        SourceField := SourceRef.Field(TempImportConfigLine."Source Field No.");
-
+        SourceField := SourceRefGlobal.Field(TempImportConfigLine."Source Field No.");
         if IReplacementHandler.HasReplacementsForTargetField(TargetField.Number) then begin
             //use value from replacement
             FieldWithTypeCorrectValueToValidate := IReplacementHandler.GetReplacementValue(TargetField.Number);
         end else begin
             //use values from buffer table field
-            AssignValueToFieldRef(SourceRef, TempImportConfigLine, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
+            AssignValueToFieldRef(SourceRefGlobal, TempImportConfigLine, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
         end;
         CurrValueToAssign := FieldWithTypeCorrectValueToValidate;
         CurrValueToAssign_IsInitialized := true;
@@ -58,28 +58,40 @@ codeunit 91008 DMTProcessRecord
             ValidateSetting::AssignWithoutValidate:
                 begin
                     TargetField.Value := FieldWithTypeCorrectValueToValidate.Value;
+                    ITriggerLogGlobal.LogAssignment(SourceField, TargetField, TmpTargetRef);
                 end;
             ValidateSetting::ValidateOnlyIfNotEmpty:
                 begin
-                    if Format(SourceField.Value) <> Format(TargetRef_INIT.Field(TargetField.Number).Value) then
+                    if Format(SourceField.Value) <> Format(TargetRef_INIT.Field(TargetField.Number).Value) then begin
+                        if IsTriggerLogInterfaceInitialized then
+                            ITriggerLogGlobal.InitBeforeValidate(SourceField, TargetField, TmpTargetRef);
                         TargetField.Validate(FieldWithTypeCorrectValueToValidate.Value);
+                        if IsTriggerLogInterfaceInitialized then
+                            ITriggerLogGlobal.CheckAfterValidate(TmpTargetRef);
+                    end;
                 end;
             ValidateSetting::AlwaysValidate:
                 begin
+                    if IsTriggerLogInterfaceInitialized then
+                        ITriggerLogGlobal.InitBeforeValidate(SourceField, TargetField, TmpTargetRef);
                     TargetField.Validate(FieldWithTypeCorrectValueToValidate.Value);
+                    if IsTriggerLogInterfaceInitialized then
+                        ITriggerLogGlobal.CheckAfterValidate(TmpTargetRef);
                 end;
         end;
     end;
 
     procedure AssignValueToFieldRef(SourceRecRef: RecordRef; ImportConfigLine: Record DMTImportConfigLine; TargetRecRef: RecordRef; var FieldWithTypeCorrectValueToValidate: FieldRef)
     var
+        TargetRecRef2: RecordRef;
         FromField: FieldRef;
         EvaluateOptionValueAsNumber: Boolean;
     begin
         if not HandleBase64ToBlobTransferfromGenBuffTable(FromField, ImportConfigLine, SourceRecRef) then
             FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
         EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRecRef.Number);
-        FieldWithTypeCorrectValueToValidate := TargetRecRef.Field(ImportConfigLine."Target Field No.");
+        TargetRecRef2 := TargetRecRef.Duplicate(); // create a duplicate to avoid filling the original target record
+        FieldWithTypeCorrectValueToValidate := TargetRecRef2.Field(ImportConfigLine."Target Field No.");
         CurrValueToAssignText := Format(FromField.Value); // Error Log Info
         case true of
             (ImportConfigLine."Processing Action" = ImportConfigLine."Processing Action"::FixedValue):
@@ -245,12 +257,10 @@ codeunit 91008 DMTProcessRecord
     end;
 
     procedure InitFieldTransfer(_SourceRef: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings)
-    var
-        DMTSetup: Record "DMTSetup";
     begin
         Clear(CurrTargetRecIDText); // only once, not for every field
         ImportConfigHeader := DMTImportSettings.ImportConfigHeader();
-        SourceRef := _SourceRef;
+        SourceRefGlobal := _SourceRef;
         UpdateFieldsInExistingRecordsOnly := DMTImportSettings.UpdateExistingRecordsOnly();
         DMTImportSettings.GetImportConfigLine(TempImportConfigLine);
         TmpTargetRef.Open(ImportConfigHeader."Target Table ID", true, CompanyName);
@@ -301,6 +311,13 @@ codeunit 91008 DMTProcessRecord
         ClearLastError();
     end;
 
+    procedure InitTriggerLog() IsInitialized: Boolean
+    begin
+        if not IsTriggerLogInterfaceInitialized then
+            IsTriggerLogInterfaceInitialized := DMTSetup.getDefaultTriggerLogImplementation(ITriggerLogGlobal);
+        exit(IsTriggerLogInterfaceInitialized);
+    end;
+
     local procedure SaveRecord() Success: Boolean
     begin
         Success := true;
@@ -312,13 +329,13 @@ codeunit 91008 DMTProcessRecord
                 begin
                     if SkipRecordGlobal then
                         exit(false);
-                    Success := ChangeRecordWithPerm.InsertOrOverwriteRecFromTmp(TmpTargetRef, CurrTargetRecIDText, ImportConfigHeader."Use OnInsert Trigger");
+                    Success := ChangeRecordWithPerm.InsertOrOverwriteRecFromTmp(TmpTargetRef, CurrTargetRecIDText, ImportConfigHeader."Use OnInsert Trigger", IsTriggerLogInterfaceInitialized, ITriggerLogGlobal);
                 end;
             RunMode::ModifyRecord:
                 begin
                     if SkipRecordGlobal then
                         exit(false);
-                    Success := ChangeRecordWithPerm.ModifyRecFromTmp(TmpTargetRef, ImportConfigHeader."Use OnInsert Trigger");
+                    Success := ChangeRecordWithPerm.ModifyRecFromTmp(TmpTargetRef, ImportConfigHeader."Use OnInsert Trigger", IsTriggerLogInterfaceInitialized, ITriggerLogGlobal);
                 end;
         end;
     end;
@@ -388,8 +405,14 @@ codeunit 91008 DMTProcessRecord
             ErrorItem := ErrorLogDict.Get(ImportConfigLineID);
             TempImportConfigLine.Get(ImportConfigLineID);
             ErrorsExist := ErrorsExist or not TempImportConfigLine."Ignore Validation Error";
-            Log.AddErrorByImportConfigLineEntry(SourceRef.RecordId, ImportConfigHeader, TempImportConfigLine, ErrorItem);
+            Log.AddErrorByImportConfigLineEntry(SourceRefGlobal.RecordId, ImportConfigHeader, TempImportConfigLine, ErrorItem);
         end;
+    end;
+    //ToDo: if values have been changed via trigger, create log entry and write the changes in the trigger log to the database
+    internal procedure SaveTriggerLog(Log: Codeunit DMTLog)
+    begin
+        if IsTriggerLogInterfaceInitialized then
+            ITriggerLogGlobal.SaveTriggerLog(Log, ImportConfigHeader, SourceRefGlobal);
     end;
 
     procedure GetProcessingResultType() ResultType: Enum DMTProcessingResultType
@@ -421,24 +444,29 @@ codeunit 91008 DMTProcessRecord
 
     internal procedure SaveTargetRefInfosInBuffertable()
     begin
-        ImportConfigHeader.BufferTableMgt().SetDMTImportFields(SourceRef, CurrTargetRecIDText);
+        ImportConfigHeader.BufferTableMgt().SetDMTImportFields(SourceRefGlobal, CurrTargetRecIDText);
     end;
 
+
+
     var
+        DMTSetup: Record "DMTSetup";
         ImportConfigHeader: Record DMTImportConfigHeader;
         TempImportConfigLine: Record DMTImportConfigLine temporary;
         ChangeRecordWithPerm: Codeunit DMTChangeRecordWithPerm;
         RefHelper: Codeunit DMTRefHelper;
         CurrFieldToProcess: RecordId;
-        SourceRef, TargetRef_INIT, TmpTargetRef : RecordRef;
+        SourceRefGlobal, TargetRef_INIT, TmpTargetRef : RecordRef;
         CurrValueToAssign: FieldRef;
-        CurrValueToAssignText, CurrTargetRecIDText : Text;
-        IReplacementHandler: Interface IReplacementHandler;
         CurrValueToAssign_IsInitialized: Boolean;
-        SkipRecordGlobal, TargetRecordExists, ErrorsOccuredThatShouldNotBeIngored : Boolean;
+        ErrorsOccuredThatShouldNotBeIngored, SkipRecordGlobal, TargetRecordExists : Boolean;
         UpdateFieldsInExistingRecordsOnly: Boolean;
         ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
+        IReplacementHandler: Interface IReplacementHandler;
+        IsTriggerLogInterfaceInitialized: Boolean;
+        ITriggerLogGlobal: Interface ITriggerLog;
         TargetKeyFieldIDs: List of [Integer];
         ProcessedFields: List of [RecordId];
         RunMode: Option FieldTransfer,InsertRecord,ModifyRecord;
+        CurrTargetRecIDText, CurrValueToAssignText : Text;
 }

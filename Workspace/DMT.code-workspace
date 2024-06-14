@@ -25,11 +25,11 @@
 			"version": "0.2.0",
 			"configurations": [
 				{
-					"name": "BC23",
+					"name": "BC24",
 					"type": "al",
 					"request": "launch",
 					"environmentType": "OnPrem",
-					"server": "http://bc23/",
+					"server": "http://bc24/",
 					"serverInstance": "BC",
 					"authentication": "UserPassword",
 					"startupObjectType": "Page",
@@ -43,14 +43,14 @@
 					"numberOfSqlStatements": 10,
 					"tenant": "default",
 					"usePublicURLFromServer": true,
-					"schemaUpdateMode": "Synchronize"
+					"schemaUpdateMode": "ForceSync"
 				},
 				{
-					"name": "BC23 AL TEST TOOL",
+					"name": "BC24 AL TEST TOOL",
 					"type": "al",
 					"request": "launch",
 					"environmentType": "OnPrem",
-					"server": "http://bc23/",
+					"server": "http://bc24/",
 					"serverInstance": "BC",
 					"authentication": "UserPassword",
 					"startupObjectType": "Page",

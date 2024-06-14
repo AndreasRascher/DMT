@@ -74,14 +74,16 @@ codeunit 91012 DMTFPBuilder
                 FilterFields := InitKeyFieldFilter(BufferRef);
             end;
         end;
-        // add fields from filter
+        // add fields from filter (value fields from ID > 1000)
         tableView := ImportConfigHeader.ReadLastUsedSourceTableView();
         if tableView <> '' then begin
             BufferRef.SetView(tableView);
+            Debug := BufferRef.GetView(false);
             for fieldOrderNo := 1 to BufferRef.FieldCount do
                 if BufferRef.FieldIndex(fieldOrderNo).getFilter() <> '' then
-                    if not FilterFields.ContainsKey(BufferRef.FieldIndex(fieldOrderNo).Number) then
-                        FilterFields.Add(BufferRef.FieldIndex(fieldOrderNo).Number, BufferRef.Caption);
+                    if BufferRef.FieldIndex(fieldOrderNo).Number > 1000 then // exclude filename filters, only imported values
+                        if not FilterFields.ContainsKey(BufferRef.FieldIndex(fieldOrderNo).Number) then
+                            FilterFields.Add(BufferRef.FieldIndex(fieldOrderNo).Number, BufferRef.Caption);
         end;
     end;
 

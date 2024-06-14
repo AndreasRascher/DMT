@@ -5,6 +5,7 @@ codeunit 91005 DMTExcelFileImportImpl implements ISourceFileImport
     procedure ImportToBufferTable(ImportConfigHeader: Record DMTImportConfigHeader);
     var
         logEntry: Record DMTLogEntry;
+        triggerLogEntry: Record DMTTriggerLogEntry;
         SourceFileStorage: Record DMTSourceFileStorage;
         defaultSourceFileImportImpl: Codeunit DMTDefaultSourceFileImportImpl;
         excelReader: Codeunit DMTExcelReader;
@@ -13,6 +14,9 @@ codeunit 91005 DMTExcelFileImportImpl implements ISourceFileImport
         ImportConfigHeader.BufferTableMgt().DeleteAllBufferData(); // Delete existing lines
         if logEntry.FilterFor(ImportConfigHeader) then // Delete Error Log because it references the old autoincr. Line IDs
             logEntry.DeleteAll();
+        if triggerLogEntry.FilterFor(ImportConfigHeader) then // Delete Trigger Log because it references the old autoincr. Line IDs
+            triggerLogEntry.DeleteAll();
+
         // Read File Blob
         SourceFileStorage.Get(ImportConfigHeader."Source File ID");
         SourceFileStorage.TestField(Name);

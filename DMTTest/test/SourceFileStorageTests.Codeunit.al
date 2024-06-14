@@ -1,3 +1,7 @@
+// ToDo:
+// Wenn beim Feldupdate ein Zieldatensatz nicht existiert, dann soll der als geskipped gekennzeichnet werden
+// Nur wenn ein Zieldatensatz existiert und kein Fehler auftreteten ist , dann ist das ok
+
 codeunit 90024 SourceFileStorageTests
 {
     Subtype = Test;
@@ -17,10 +21,9 @@ codeunit 90024 SourceFileStorageTests
     var
         ExtTextHeader1, ExtTextHeader2 : Record "Extended Text Header";
         sourceFileMgt: Codeunit DMTSourceFileMgt;
-        testLibrary: Codeunit DMTTestLibrary;
+        dataTableHelper: Codeunit dataTableHelper;
         fileBlob1, fileBlob2 : Codeunit "Temp Blob";
         iStr: InStream;
-        dataTable1, dataTable2 : List of [List of [Text]];
         fileID1, fileID2 : Integer;
     begin
         // [GIVEN] DMT Setup exists
@@ -31,11 +34,12 @@ codeunit 90024 SourceFileStorageTests
         ExtTextHeader2.Next();
         ExtTextHeader1.SetRecFilter();
         ExtTextHeader2.SetRecFilter();
-        testLibrary.BuildDataTable(dataTable1, ExtTextHeader1.RecordId.TableNo, ExtTextHeader1.GetView());
-        testLibrary.WriteDataTableToFileBlob(fileBlob1, dataTable1);
+        dataTableHelper.AddRecordWithCaptionsToDataTable(ExtTextHeader1);
+        dataTableHelper.WriteDataTableToFileBlob(fileBlob1);
         // [GIVEN] File 2
-        testLibrary.BuildDataTable(dataTable2, ExtTextHeader2.RecordId.TableNo, ExtTextHeader2.GetView());
-        testLibrary.WriteDataTableToFileBlob(fileBlob2, dataTable2);
+        Clear(dataTableHelper);
+        dataTableHelper.AddRecordWithCaptionsToDataTable(ExtTextHeader2);
+        dataTableHelper.WriteDataTableToFileBlob(fileBlob2);
 
         // [WHEN] Adding a file to the source file storage and then adding another file with the same name
         fileBlob1.CreateInStream(iStr);

@@ -10,17 +10,6 @@ codeunit 91006 DMTLog
             LogEntry.DeleteAll();
     end;
 
-    procedure FilterFor(var ImportConfigLine: Record DMTImportConfigLine) HasLines: Boolean
-    var
-        ImportConfigHeader: Record DMTImportConfigHeader;
-        LogEntry: Record DMTLogEntry;
-    begin
-        ImportConfigHeader.Get(ImportConfigLine.GetRangeMin("Imp.Conf.Header ID"));
-        LogEntry.SetRange(SourceFileName, ImportConfigHeader.GetSourceFileName());
-        LogEntry.SetRange("Target Field No.", ImportConfigLine."Target Field No.");
-        HasLines := not LogEntry.IsEmpty;
-    end;
-
     procedure InitNewProcess(LogUsage: Enum DMTLogUsage; ImportConfigHeader: Record DMTImportConfigHeader)
     var
         LogEntry: Record DMTLogEntry;
@@ -41,15 +30,13 @@ codeunit 91006 DMTLog
         ProcessingStatistics.Add(Format(StatisticType::Processed), 0);
     end;
 
-    procedure AddTitleEntryForCurrentProcess(TitleDescription: Text)
-    var
-        LogEntry: Record DMTLogEntry;
+    /// <summary>
+    /// Returns the current log entry template. It initialized with process number and the usage. Every new log entry will be created based on this template.
+    /// </summary>
+    /// <returns>Current log entry template</returns>
+    procedure GetCurrentLogEntryTemplate() CurrLogEntryTemplate: Record DMTLogEntry
     begin
-        CheckIfProcessNoIsSet();
-        LogEntry := LogEntryTemplate;
-        LogEntry."Entry Type" := LogEntry."Entry Type"::"Process Title";
-        LogEntry."Context Description" := CopyStr(TitleDescription, 1, MaxStrLen(LogEntry."Context Description"));
-        LogEntry.Insert(true);
+        exit(LogEntryTemplate);
     end;
 
     procedure AddTargetSuccessEntry(SourceID: RecordId; ImportConfigHeader: Record DMTImportConfigHeader)
@@ -127,31 +114,6 @@ codeunit 91006 DMTLog
         LogEntry.Insert();
     end;
 
-    // procedure AddEntryForCurrentProcess(sourceRef: RecordRef; targetRef: RecordRef; ImportConfigLine: Record DMTImportConfigLine; errorItem: Dictionary of [Text, Text]);
-    // var
-    //     LogEntry: Record DMTLogEntry;
-    //     ImportConfigHeader: Record DMTImportConfigHeader;
-    // begin
-    //     CheckIfProcessNoIsSet();
-    //     LogEntry := LogEntryTemplate;
-
-    //     LogEntry."Source ID" := sourceRef.RecordId;
-    //     LogEntry."Target ID" := targetRef.RecordId;
-    //     LogEntry."Source ID (Text)" := CopyStr(Format(LogEntry."Source ID"), 1, MaxStrLen(LogEntry."Source ID (Text)"));
-    //     LogEntry."Target ID (Text)" := CopyStr(Format(LogEntry."Target ID"), 1, MaxStrLen(LogEntry."Target ID (Text)"));
-    //     ImportConfigHeader.Get(ImportConfigLine."Imp.Conf.Header ID");
-    //     // LogEntry."Target Table ID" := ImportConfigLine."Target Table ID";
-    //     LogEntry."Owner RecordID" := ImportConfigHeader.RecordId;
-    //     LogEntry."Target Field No." := ImportConfigLine."Target Field No.";
-    //     LogEntry."Ignore Error" := ImportConfigLine."Ignore Validation Error";
-    //     LogEntry."Context Description" := CopyStr(errorItem.Get('GetLastErrorText'), 1, MaxStrLen(LogEntry."Context Description"));
-    //     LogEntry.ErrorCode := CopyStr(errorItem.Get('GetLastErrorCode'), 1, MaxStrLen(LogEntry.ErrorCode));
-    //     LogEntry."Error Field Value" := CopyStr(errorItem.Get('ErrorValue'), 1, MaxStrLen(LogEntry."Error Field Value"));
-    //     LogEntry.SetErrorCallStack(errorItem.Get('GetLastErrorCallStack'));
-
-    //     LogEntry.Insert();
-    // end;
-
     internal procedure CreateErrorItem() ErrorItem: Dictionary of [Text, Text];
     begin
         ErrorItem.Add('GetLastErrorCallStack', GetLastErrorCallStack);
@@ -201,6 +163,25 @@ codeunit 91006 DMTLog
         logEntry.SourceFileName := ImportConfigHeader.GetSourceFileName();
         logEntry."Target Table ID" := ImportConfigHeader."Target Table ID";
         logEntry."Owner RecordID" := ImportConfigHeader.RecordId;
+        logEntry.Insert();
+    end;
+
+    internal procedure AddTriggerLogWarnings(var triggerLog: Record DMTTriggerLogEntry temporary; importConfigHeader: Record DMTImportConfigHeader)
+    var
+        logEntry: Record DMTLogEntry;
+        triggerChangesLbl: Label 'Assigned Values have been changed by triggers', Comment = 'de-DE=Zugewiesene Werte wurden duch Trigger Code geändert';
+    begin
+        triggerLog.FindSet();
+
+        logEntry := LogEntryTemplate;
+        logEntry.Usage := logEntry.Usage::Information;
+        logEntry."Entry Type" := logEntry."Entry Type"::"Trigger Changes";
+        logEntry."Context Description" := triggerChangesLbl;
+        logEntry.SourceFileName := importConfigHeader.GetSourceFileName();
+        logEntry."Target Table ID" := importConfigHeader."Target Table ID";
+        logEntry."Owner RecordID" := importConfigHeader.RecordId;
+        logEntry."Target ID" := triggerLog."Target ID";
+        logEntry."Target ID (Text)" := format(triggerLog."Target ID");
         logEntry.Insert();
     end;
 

@@ -7,6 +7,7 @@ codeunit 91002 DMTImportConfigMgt
         refHelper: Codeunit DMTRefHelper;
         TargetRecRef: RecordRef;
         i: Integer;
+        fieldNo: Integer;
         KeyFieldIDsList: List of [Integer];
     begin
         ImportConfigHeader.Get(ImportConfigHeaderID);
@@ -16,6 +17,7 @@ codeunit 91002 DMTImportConfigMgt
         TargetRecRef.Open(ImportConfigHeader."Target Table ID");
         KeyFieldIDsList := refHelper.GetListOfKeyFieldIDs(TargetRecRef);
         for i := 1 to TargetRecRef.FieldCount do begin
+            fieldNo := TargetRecRef.FieldIndex(i).Number;
             if TargetRecRef.FieldIndex(i).Active then
                 if (TargetRecRef.FieldIndex(i).Class = TargetRecRef.FieldIndex(i).Class::Normal) then begin
                     ImportConfigHeader.FilterRelated(ImportConfigLine);

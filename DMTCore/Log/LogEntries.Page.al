@@ -40,6 +40,7 @@ page 91013 DMTLogEntries
                 field("Target Field No."; Rec."Target Field No.") { }
                 field("Target ID (Text)"; Rec."Target ID (Text)") { }
                 field("Target Table No."; Rec."Target Table ID") { }
+                field(NoOfTriggerLogEntries; Rec.NoOfTriggerLogEntries) { }
             }
         }
     }

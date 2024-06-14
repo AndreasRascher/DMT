@@ -143,6 +143,7 @@ codeunit 91014 DMTMigrate
         start: DateTime;
         resultType: Enum DMTProcessingResultType;
         iReplacementHandler: Interface IReplacementHandler;
+        iTriggerLog: Interface ITriggerLog;
         noBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filter: "%1"', Comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"';
     begin
         start := CurrentDateTime;
@@ -168,6 +169,7 @@ codeunit 91014 DMTMigrate
 
         DMTSetup.getDefaultReplacementImplementation(iReplacementHandler);
         iReplacementHandler.InitBatchProcess(importConfigHeader);
+        DMTSetup.getDefaultTriggerLogImplementation(iTriggerLog);
 
         if DMTImportSettings.UpdateFieldsFilter() <> '' then
             log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Field Update", importConfigHeader)
@@ -176,11 +178,8 @@ codeunit 91014 DMTMigrate
 
 
         repeat
-            // hier weiter machen:
-            // Wenn beim Feldupdate ein Zieldatensatz nicht existiert, dann soll der als geskipped gekennzeichnet werden
-            // Nur wenn ein Zieldatensatz existiert und kein Fehler auftreteten ist , dann ist das ok
             bufferRef2 := bufferRef.Duplicate(); // Variant + Events = Call By Reference 
-            ProcessSingleBufferRecord(bufferRef2, DMTImportSettings, log, resultType);
+            ProcessSingleBufferRecord(bufferRef2, DMTImportSettings, log, iTriggerLog, resultType);
             UpdateLog(DMTImportSettings, log, resultType);
             UpdateProgress(DMTImportSettings, progressDialog, resultType);
             if progressDialog.GetStep('Process') mod 50 = 0 then
@@ -196,13 +195,14 @@ codeunit 91014 DMTMigrate
         end;
     end;
 
-    local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings; var Log: Codeunit DMTLog; var ResultType: Enum DMTProcessingResultType)
+    local procedure ProcessSingleBufferRecord(BufferRef2: RecordRef; var DMTImportSettings: Codeunit DMTImportSettings; var Log: Codeunit DMTLog; var triggerLog: Interface ITriggerLog; var ResultType: Enum DMTProcessingResultType)
     var
         ProcessRecord: Codeunit DMTProcessRecord;
     begin
         ClearLastError();
         Clear(ResultType);
         Log.DeleteExistingLogFor(BufferRef2);
+        triggerLog.DeleteExistingLogFor(BufferRef2);
         ProcessRecord.InitFieldTransfer(BufferRef2, DMTImportSettings);
         // apply field values to target record
         Commit();
@@ -225,6 +225,7 @@ codeunit 91014 DMTMigrate
                 ProcessRecord.SaveTargetRefInfosInBuffertable();
         end;
         ProcessRecord.SaveErrorLog(Log);
+        ProcessRecord.SaveTriggerLog(Log);
         ResultType := ProcessRecord.GetProcessingResultType();
     end;
 
@@ -256,7 +257,7 @@ codeunit 91014 DMTMigrate
         if not FPBuilder.RunModal(BufferRef, ImportConfigHeader) then
             exit(false);
         if BufferRef.HasFilter then begin
-            ImportConfigHeader.WriteSourceTableView(BufferRef.GetView());
+            ImportConfigHeader.WriteSourceTableView(BufferRef.GetView(false));
             Commit();
         end else begin
             ImportConfigHeader.WriteSourceTableView('');
@@ -402,6 +403,7 @@ codeunit 91014 DMTMigrate
         bufferRef2: RecordRef;
         ResultType: Enum DMTProcessingResultType;
         iReplacementHandler: Interface IReplacementHandler;
+        iTriggerLog: Interface ITriggerLog;
     begin
         if recIdToProcessList.Count = 0 then
             Error('Keine Daten zum Verarbeiten');
@@ -410,6 +412,8 @@ codeunit 91014 DMTMigrate
         // init replacement handler
         DMTSetup.getDefaultReplacementImplementation(iReplacementHandler);
         iReplacementHandler.InitBatchProcess(importConfigHeader);
+
+        DMTSetup.getDefaultTriggerLogImplementation(iTriggerLog);
 
         // Buffer loop
         bufferRef.Open(importConfigHeader."Buffer Table ID");
@@ -422,7 +426,7 @@ codeunit 91014 DMTMigrate
         foreach ID in recIdToProcessList do begin
             bufferRef.Get(ID);
             bufferRef2 := bufferRef.Duplicate(); // Variant + Events = Call By Reference 
-            ProcessSingleBufferRecord(bufferRef2, importSettings, Log, ResultType);
+            ProcessSingleBufferRecord(bufferRef2, importSettings, Log, iTriggerLog, ResultType);
             Log.IncNoOfProcessedRecords();
             if ResultType = ResultType::ChangesApplied then begin
                 Log.IncNoOfSuccessfullyProcessedRecords();

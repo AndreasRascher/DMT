@@ -6,4 +6,5 @@ enum 91005 DMTLogEntryType
     value(30; Success) { Caption = 'Success'; }
     value(40; Error) { Caption = 'Error'; }
     value(50; Summary) { Caption = 'Summary'; }
+    value(60; "Trigger Changes") { Caption = 'Trigger Changes'; }
 }
