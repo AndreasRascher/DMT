@@ -357,23 +357,24 @@ codeunit 90011 DMTCodeGenerator
     begin
         DefaultTextEncoding := TextEncoding::UTF8;
         importConfigHeader.SetRange("Use Separate Buffer Table", true);
-        if importConfigHeader.FindSet() then begin
-            DataCompression.CreateZipArchive();
-            repeat
-                //Table
-                Clear(FileBlob);
-                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
-                OStr.WriteText(ObjGen.CreateALTable(importConfigHeader).ToText());
-                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
-                DataCompression.AddEntry(IStr, GetALBufferTableName(importConfigHeader));
-                //XMLPort
-                Clear(FileBlob);
-                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
-                OStr.WriteText(ObjGen.CreateALXMLPort(importConfigHeader).ToText());
-                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
-                DataCompression.AddEntry(IStr, GetALXMLPortName(importConfigHeader));
-            until importConfigHeader.Next() = 0;
-        end;
+        importConfigHeader.FindSet();  // Fehlermeldung wenn keine Einrichtung passt
+        // if importConfigHeader.FindSet() then begin
+        DataCompression.CreateZipArchive();
+        repeat
+            //Table
+            Clear(FileBlob);
+            FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+            OStr.WriteText(ObjGen.CreateALTable(importConfigHeader).ToText());
+            FileBlob.CreateInStream(IStr, DefaultTextEncoding);
+            DataCompression.AddEntry(IStr, GetALBufferTableName(importConfigHeader));
+            //XMLPort
+            Clear(FileBlob);
+            FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+            OStr.WriteText(ObjGen.CreateALXMLPort(importConfigHeader).ToText());
+            FileBlob.CreateInStream(IStr, DefaultTextEncoding);
+            DataCompression.AddEntry(IStr, GetALXMLPortName(importConfigHeader));
+        until importConfigHeader.Next() = 0;
+        // end;
         Clear(FileBlob);
         FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
         DataCompression.SaveZipArchive(OStr);

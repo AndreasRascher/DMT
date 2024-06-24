@@ -25,6 +25,11 @@
     {
       "from": 90011,
       "to": 900020
+    },
+     // generated Objects
+    {
+      "from": 50000,
+      "to": 50000
     }
   ],
   "resourceExposurePolicy": {

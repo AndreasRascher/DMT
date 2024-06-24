@@ -3,11 +3,11 @@ table 91007 DMTBlobStorage
     Access = Internal;
     fields
     {
-        field(1; "Primary Key"; BigInteger) { DataClassification = SystemMetadata; }
-        field(2; Blob; BLOB) { DataClassification = CustomerContent; }
-        field(100; "Gen. Buffer Table Entry No."; Integer) { }
-        field(101; "Import from Filename"; Text[250]) { }
-        field(102; "Imp.Conf.Header ID"; Integer) { TableRelation = DMTImportConfigHeader; }
+        field(1; "Primary Key"; BigInteger) { Caption = 'Primary Key', Locked = true; DataClassification = SystemMetadata; }
+        field(2; Blob; BLOB) { Caption = 'Blob', locked = true; DataClassification = CustomerContent; }
+        field(100; "Gen. Buffer Table Entry No."; Integer) { Caption = 'Gen. Buffer Table Entry No.', locked = true; }
+        field(101; "Import from Filename"; Text[250]) { Caption = 'Import from Filename', locked = true; }
+        field(102; "Imp.Conf.Header ID"; Integer) { Caption = 'Imp.Conf.Header ID', Comment = 'de-DE=Import Konfig. Kopf ID'; TableRelation = DMTImportConfigHeader; }
         field(103; "Source Field No."; Integer) { Caption = 'Source Field No.', Comment = 'de-DE=Herkunftsfeld Nr.'; }
         field(104; "Source Field Caption"; Text[80]) { Caption = 'Source Field Caption', Comment = 'de-DE=Herkunftsfeld Bezeichnung'; Editable = false; }
 

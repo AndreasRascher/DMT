@@ -31,7 +31,7 @@ table 91010 DMTCopyTable
         field(50; TableView; Blob) { }
         field(51; FilterText; Text[250]) { Caption = 'Filter', Comment = 'de-DE=Filter'; Editable = false; }
         field(100; "Processing Time"; Duration) { Caption = 'Processing Time', Comment = 'de-DE=Bearbeitungzeit'; Editable = false; }
-        field(101; "No. of Records(Target)"; Integer) { Caption = 'No. of Records', Comment = 'de-DE=Anz. Datensätze'; Editable = false; }
+        field(101; "No. of Records(Target)"; Integer) { Caption = 'No. of Records (Target)', Comment = 'de-DE=Anz. Datensätze (Ziel)'; Editable = false; }
         field(102; "No. of Records inserted"; Integer) { Caption = 'No. of Records imported', Comment = 'de-DE=Anz. importiert'; Editable = false; }
     }
 

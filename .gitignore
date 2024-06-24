@@ -11,3 +11,4 @@ Workspace/.alpackages/*
 Workspace/*.app
 
 
+DMTCodeGenerator/generatedObjects/*.al

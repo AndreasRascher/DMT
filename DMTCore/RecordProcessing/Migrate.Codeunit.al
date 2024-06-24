@@ -416,7 +416,8 @@ codeunit 91014 DMTMigrate
         DMTSetup.getDefaultTriggerLogImplementation(iTriggerLog);
 
         // Buffer loop
-        bufferRef.Open(importConfigHeader."Buffer Table ID");
+        importConfigHeader.BufferTableMgt().InitBufferRef(bufferRef);
+        // bufferRef.Open(importConfigHeader."Buffer Table ID");
         ID := recIdToProcessList.Get(1);
         bufferRef.Get(ID);
 

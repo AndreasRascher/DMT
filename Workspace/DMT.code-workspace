@@ -34,7 +34,7 @@
 					"authentication": "UserPassword",
 					"startupObjectType": "Page",
 					"startupObjectId": 91010,
-					"breakOnError": "ExcludeTry",
+					"breakOnError": "None",
 					"breakOnRecordWrite": "None",
 					"launchBrowser": true,
 					"enableSqlInformationDebugger": true,

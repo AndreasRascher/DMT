@@ -3,30 +3,10 @@
   <file datatype="xml" source-language="en-US" target-language="en-US" original="DMT Core">
     <body>
       <group id="body">
-        <trans-unit id="Table 365532593 - Field 3926698677 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Blob</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTBlobStorage - Field Blob - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 365532593 - Field 3230443473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Gen. Buffer Table Entry No.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTBlobStorage - Field Gen. Buffer Table Entry No. - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 365532593 - Field 2144357174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Imp.Conf.Header ID</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import Konfig. Kopf ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTBlobStorage - Field Imp.Conf.Header ID - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 365532593 - Field 2840077126 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import from Filename</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTBlobStorage - Field Import from Filename - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 365532593 - Field 1663593181 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Primary Key</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTBlobStorage - Field Primary Key - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 365532593 - Field 4163973499 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source Field Caption</source>
@@ -69,8 +49,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field No. of Records inserted - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2465824826 - Field 2835452692 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No. of Records</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze</note>
+          <source>No. of Records (Target)</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze (Ziel)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field No. of Records(Target) - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2465824826 - Field 2927347786 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
