@@ -72,10 +72,8 @@ page 91016 DMTProcessInstructionFactBox
                         exit;
                     RunModalAction := SelectMultipleFields.RunModal();
                     if RunModalAction = Action::OK then begin
-                        if SelectMultipleFields.RunModal() = Action::LookupOK then begin
-                            CurrProcessingPlan.Get(CurrProcessingPlan.RecordId);
-                            CurrProcessingPlan.SaveUpdateFieldsFilter(SelectMultipleFields.GetTargetFieldIDListAsText());
-                        end;
+                        CurrProcessingPlan.Get(CurrProcessingPlan.RecordId);
+                        CurrProcessingPlan.SaveUpdateFieldsFilter(SelectMultipleFields.GetTargetFieldIDListAsText());
                     end;
                 end;
             }
