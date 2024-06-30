@@ -93,7 +93,8 @@ codeunit 91003 DMTMigrationLib
             IsMatch(TargetField, Database::"Extended Text Header", 'Language Code'), /* Possible in old version to have Language Code + All Language */
             IsMatch(TargetField, Database::"Extended Text Header", 'All Language Codes'), /* Possible in old version to have Language Code + All Language */
             IsMatch(TargetField, Database::"Interaction Template", 'Language Code (Default)'), /* Avoid confirm */
-            IsMatch(TargetField, Database::"Sales Header", 'Bill-to Customer No.'): /* Avoid confirm */
+            IsMatch(TargetField, Database::"Sales Header", 'Bill-to Customer No.'), /* Avoid confirm */
+             IsMatch(TargetField, Database::"Sales Header", 'Sell-to Customer Name'): /* Avoid LookUp Dialog */
                 KnownValidationType := KnownValidationType::AssignWithoutValidate;
             else
                 Found := false;
