@@ -113,7 +113,19 @@ table 91006 DMTImportConfigLine
             Editable = false;
         }
         field(202; Selection; Boolean) { Caption = 'Selection', Comment = 'de-DE=Auswahl'; }
-
+        field(300; PrPl_FBRunMode_Filter; Option)
+        {
+            Caption = 'ProcessingPlan FactBox RunModeFilter', Locked = true;
+            FieldClass = FlowFilter;
+            OptionMembers = " ","SourceTableFilter","FixedValueView","UpdateSelectedFields";
+            Editable = false;
+        }
+        field(301; "PrPl_LineNo_Filter"; Integer)
+        {
+            Caption = 'Line No.', Comment = 'de-DE=Zeilennr.';
+            FieldClass = FlowFilter;
+            Editable = false;
+        }
         #endregion SelectMulipleFields
     }
 

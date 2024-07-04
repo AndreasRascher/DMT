@@ -44,6 +44,7 @@ page 91016 DMTProcessInstructionFactBox
                 Caption = 'Edit', Comment = 'de-DE=Bearbeiten';
                 ApplicationArea = All;
                 Image = Edit;
+                Visible = not IsUpdateSelectedFieldsView;
 
                 trigger OnAction()
                 begin
@@ -74,6 +75,7 @@ page 91016 DMTProcessInstructionFactBox
                     if RunModalAction = Action::OK then begin
                         CurrProcessingPlan.Get(CurrProcessingPlan.RecordId);
                         CurrProcessingPlan.SaveUpdateFieldsFilter(SelectMultipleFields.GetTargetFieldIDListAsText());
+                        ReloadPageContent();
                     end;
                 end;
             }
@@ -87,6 +89,7 @@ page 91016 DMTProcessInstructionFactBox
                 trigger OnAction()
                 begin
                     CurrProcessingPlan.SaveUpdateFieldsFilter('');
+                    ReloadPageContent();
                 end;
             }
         }
@@ -98,13 +101,13 @@ page 91016 DMTProcessInstructionFactBox
         Clear(IsFixedValueView);
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
+        Rec.DeleteAll();
         if not ProcessingPlan.TypeSupportsSourceTableFilter() then begin
             IsSourceTableFilterView := false;
-            Rec.DeleteAll();
             exit;
         end;
         IsSourceTableFilterView := true;
-        CurrProcessingPlan.ConvertSourceTableFilterToFieldLines(Rec);
+        CurrProcessingPlan.ConvertSourceTableFilterToFieldLines(Rec, ProcessingPlan.ID);
         CurrPage.Update(false);
     end;
 
@@ -114,6 +117,7 @@ page 91016 DMTProcessInstructionFactBox
         Clear(IsFixedValueView);
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
+        Rec.DeleteAll();
         if not ProcessingPlan.TypeSupportsFixedValues() then begin
             IsFixedValueView := false;
             Rec.DeleteAll();
@@ -130,9 +134,9 @@ page 91016 DMTProcessInstructionFactBox
         Clear(IsFixedValueView);
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
+        Rec.DeleteAll();
         if not ProcessingPlan.TypeSupportsProcessSelectedFieldsOnly() then begin
             IsUpdateSelectedFieldsView := false;
-            Rec.DeleteAll();
             exit;
         end;
 
@@ -156,9 +160,43 @@ page 91016 DMTProcessInstructionFactBox
         end;
         if IsSourceTableFilterView then begin
             CurrProcessingPlan.Get(CurrProcessingPlan.RecordId);
-            CurrProcessingPlan.ConvertSourceTableFilterToFieldLines(Rec);
+            CurrProcessingPlan.ConvertSourceTableFilterToFieldLines(Rec, CurrProcessingPlan.ID);
+        end;
+        if IsUpdateSelectedFieldsView then begin
+            CurrProcessingPlan.Get(CurrProcessingPlan.RecordId);
+            CurrProcessingPlan.ConvertUpdateFieldsListToFieldLines(Rec);
         end;
         CurrPage.Update();
+    end;
+
+    trigger OnFindRecord(Which: Text): Boolean
+    var
+        found: Boolean;
+    begin
+        found := Rec.Find(Which);
+        LoadLines();
+        exit(found);
+    end;
+
+    procedure LoadLines()
+    var
+        lineNo: Integer;
+        runMode: Option " ","SourceTableFilter","FixedValueView","UpdateSelectedFields";
+    begin
+        runMode := rec.GetRangeMin(PrPl_FBRunMode_Filter);
+        lineNo := rec.GetRangeMin(PrPl_LineNo_Filter);
+        // if is loaded
+        if CurrProcessingPlan."Line No." = lineNo then
+            exit;
+        CurrProcessingPlan.Get(lineNo);
+        case runMode of
+            runMode::SourceTableFilter:
+                InitFactBoxAsSourceTableFilter(CurrProcessingPlan);
+            runMode::FixedValueView:
+                InitFactBoxAsFixedValueView(CurrProcessingPlan);
+            runMode::UpdateSelectedFields:
+                InitFactBoxAsUpdateSelectedFields(CurrProcessingPlan);
+        end;
     end;
 
     var

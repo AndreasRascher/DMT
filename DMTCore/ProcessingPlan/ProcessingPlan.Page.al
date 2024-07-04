@@ -9,9 +9,7 @@ page 91017 DMTProcessingPlan
     AutoSplitKey = true;
     InsertAllowed = false;
     DeleteAllowed = false;
-    // Report = Backup
-    // Category4 = Arrange
-    // PromotedActionCategories = 'New,Process,Backup,Arrange,Category5,Category6,Category7,Category8,Category9,Category10,Category11,Category12,Category13,Category14,Category15,Category16,Category17,Category18,Category19,Category20';
+
     layout
     {
         area(Content)
@@ -31,41 +29,27 @@ page 91017 DMTProcessingPlan
                 field("Source Table No."; Rec."Source Table No.") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field("Line No."; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
             }
-            // repeater(EditRepeater)
-            // {
-            //     IndentationColumn = Rec.Indentation;
-            //     IndentationControls = DescriptionEdit;
-            //     // Visible = not ShowTreeView;
-            //     field(LineTypeEdit; Rec.Type) { ApplicationArea = All; StyleExpr = LineStyle; }
-            //     field(ImportConfigHeaderIDEdit; Rec.ID) { ApplicationArea = All; StyleExpr = LineStyle; BlankZero = true; }
-            //     field(DescriptionEdit; Rec.Description) { ApplicationArea = All; StyleExpr = LineStyle; }
-            //     field(ProcessingTimeEdit; Rec."Processing Duration") { ApplicationArea = All; StyleExpr = LineStyle; }
-            //     field(StartTimeEdit; Rec.StartTime) { ApplicationArea = All; StyleExpr = LineStyle; }
-            //     field(StatusEdit; Rec.Status) { ApplicationArea = All; StyleExpr = LineStyle; }
-            //     field(SourceTableNoEdit; Rec."Source Table No.") { ApplicationArea = All; StyleExpr = LineStyle; }
-            //     field(LineNoEdit; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
-            // }
         }
         area(FactBoxes)
         {
             part(SourceTableFilter; DMTProcessInstructionFactBox)
             {
                 Caption = 'Source Table Filter', Comment = 'de-DE=Quelldaten Filter';
-                SubPageLink = "Imp.Conf.Header ID" = field(ID);
+                SubPageLink = PrPl_FBRunMode_Filter = const(SourceTableFilter), PrPl_LineNo_Filter = field("Line No.");
                 UpdatePropagation = Both;
                 Enabled = ShowSourceTableFilterPart;
             }
             part(FixedValues; DMTProcessInstructionFactBox)
             {
                 Caption = 'Default Values', Comment = 'de-DE=Vorgabewerte';
-                SubPageLink = "Imp.Conf.Header ID" = field(ID);
+                SubPageLink = PrPl_FBRunMode_Filter = const(FixedValueView), PrPl_LineNo_Filter = field("Line No.");
                 UpdatePropagation = Both;
                 Enabled = ShowFixedValuesPart;
             }
-            part(ProcessSelectedFieldsOnly; DMTProcessInstructionFactBox)
+            part(UpdateSelectedFieldsOnly; DMTProcessInstructionFactBox)
             {
                 Caption = 'Process selected fields only', Comment = 'de-DE=Ausgew. Felder verarbeiten';
-                SubPageLink = "Imp.Conf.Header ID" = field(ID);
+                SubPageLink = PrPl_FBRunMode_Filter = const(UpdateSelectedFields), PrPl_LineNo_Filter = field("Line No.");
                 UpdatePropagation = Both;
                 Enabled = ShowProcessSelectedFieldsOnly;
             }
@@ -276,10 +260,10 @@ page 91017 DMTProcessingPlan
 
     trigger OnAfterGetCurrRecord()
     begin
-        UpdateVisibility();
-        CurrPage.SourceTableFilter.Page.InitFactBoxAsSourceTableFilter(Rec);
-        CurrPage.FixedValues.Page.InitFactBoxAsFixedValueView(Rec);
-        CurrPage.ProcessSelectedFieldsOnly.Page.InitFactBoxAsUpdateSelectedFields(Rec);
+        ShowSupportedFactboxes();
+        // CurrPage.SourceTableFilter.Page.InitFactBoxAsSourceTableFilter(Rec);
+        // CurrPage.FixedValues.Page.InitFactBoxAsFixedValueView(Rec);
+        // CurrPage.ProcessSelectedFieldsOnly.Page.InitFactBoxAsUpdateSelectedFields(Rec);
     end;
 
     local procedure RunSelected(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
@@ -422,7 +406,7 @@ page 91017 DMTProcessingPlan
         until TempProcessingPlan.Next() = 0;
     end;
 
-    local procedure UpdateVisibility()
+    local procedure ShowSupportedFactboxes()
     begin
         ShowSourceTableFilterPart := Rec.TypeSupportsSourceTableFilter();
         ShowFixedValuesPart := Rec.TypeSupportsFixedValues();

@@ -223,7 +223,7 @@ table 91009 DMTProcessingPlan
         end;
     end;
 
-    procedure ConvertSourceTableFilterToFieldLines(var TmpImportConfigLine: Record DMTImportConfigLine temporary)
+    procedure ConvertSourceTableFilterToFieldLines(var TmpImportConfigLine: Record DMTImportConfigLine temporary; ImportConfigHeaderID: Integer)
     var
         genBuffTable: Record DMTGenBuffTable;
         TempImportConfigLine2: Record DMTImportConfigLine temporary;
@@ -238,7 +238,7 @@ table 91009 DMTProcessingPlan
             exit;
         if RecRef.Name = genBuffTable.TableName then begin
             RecRef.SetTable(genBuffTable);
-            if not genBuffTable.HasCaptionLine(genBuffTable."Imp.Conf.Header ID") then begin
+            if not genBuffTable.HasCaptionLine(ImportConfigHeaderID) then begin
                 TmpImportConfigLine.Copy(TempImportConfigLine2, true);
                 exit;
             end;
@@ -248,7 +248,8 @@ table 91009 DMTProcessingPlan
         CurrView := Rec.ReadSourceTableView();
         if CurrView <> '' then begin
             RecRef.SetView(CurrView);
-            if RecRef.HasFilter then
+            if RecRef.HasFilter then begin
+
                 for FieldIndexNo := 1 to RecRef.FieldCount do begin
                     if RecRef.FieldIndex(FieldIndexNo).GetFilter <> '' then begin
                         TempImportConfigLine2."Imp.Conf.Header ID" := Rec.ID;
@@ -258,9 +259,10 @@ table 91009 DMTProcessingPlan
                         TempImportConfigLine2.Insert();
                     end;
                 end;
+                TmpImportConfigLine.Copy(TempImportConfigLine2, true);
+            end;
         end;
 
-        TmpImportConfigLine.Copy(TempImportConfigLine2, true);
     end;
 
     procedure ConvertDefaultValuesViewToFieldLines(var TmpImportConfigLine: Record DMTImportConfigLine temporary) LineCount: Integer
@@ -287,10 +289,9 @@ table 91009 DMTProcessingPlan
                         TempImportConfigLine2.Insert();
                     end;
                 end;
+            TmpImportConfigLine.Copy(TempImportConfigLine2, true);
+            LineCount := TmpImportConfigLine.Count;
         end;
-
-        TmpImportConfigLine.Copy(TempImportConfigLine2, true);
-        LineCount := TmpImportConfigLine.Count;
     end;
 
     procedure ConvertUpdateFieldsListToFieldLines(var TmpImportConfigLine: Record DMTImportConfigLine temporary) LineCount: Integer
@@ -339,19 +340,19 @@ table 91009 DMTProcessingPlan
         Rec.FilterGroup(0);
     end;
 
-    procedure TypeSupportsSourceTableFilter(): Boolean
+    procedure TypeSupportsSourceTableFilter() IsSupported: Boolean
     begin
-        exit(Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Run Codeunit", Rec.Type::"Buffer + Target"]);
+        IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Run Codeunit", Rec.Type::"Buffer + Target"];
     end;
 
-    procedure TypeSupportsProcessSelectedFieldsOnly(): Boolean
+    procedure TypeSupportsProcessSelectedFieldsOnly() IsSupported: Boolean
     begin
-        exit(Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"]);
+        IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"];
     end;
 
-    procedure TypeSupportsFixedValues(): Boolean
+    procedure TypeSupportsFixedValues() IsSupported: Boolean
     begin
-        exit(Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"]);
+        IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"];
     end;
 
 }
