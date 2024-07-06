@@ -55,13 +55,27 @@ page 91008 DMTImportConfigCard
                     ToolTip = 'Skip records which have been changed after the import.', Comment = 'de-DE=Datensätze überspringen, die vom Benutzer geändert wurden';
                     Visible = false; // TODO: Fertig entwickeln und dann sichtbar machen
                 }
-                field("Use Separate Buffer Table"; Rec."Use Separate Buffer Table") { }
+                field("Separate Buffer Table Objects"; Rec."Separate Buffer Table Objects") { }
                 group(SeperateBufferObjects)
                 {
                     Caption = 'Buffer Table Objects', Comment = 'de-DE=Puffertabellen Objekte';
-                    Visible = Rec."Use Separate Buffer Table";
-                    field("Buffer Table ID"; Rec."Buffer Table ID") { StyleExpr = Rec.BufferTableIDStyle; }
-                    field("Import XMLPort ID"; Rec."Import XMLPort ID") { StyleExpr = Rec.ImportXMLPortIDStyle; }
+                    Visible = Rec."Separate Buffer Table Objects" <> Rec."Separate Buffer Table Objects"::None;
+                    field("Buffer Table ID"; Rec."Buffer Table ID")
+                    {
+                        StyleExpr = Rec.BufferTableIDStyle;
+                        trigger OnValidate()
+                        begin
+                            Rec.UpdateIndicators();
+                        end;
+                    }
+                    field("Import XMLPort ID"; Rec."Import XMLPort ID")
+                    {
+                        StyleExpr = Rec.ImportXMLPortIDStyle;
+                        trigger OnValidate()
+                        begin
+                            Rec.UpdateIndicators();
+                        end;
+                    }
                 }
             }
             part(LinePart; DMTImportConfigLinePart)

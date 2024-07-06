@@ -352,5 +352,4 @@ page 91019 DMTReplacementAssignmentPart
         Source1Enabled, Source2Enabled, Target1Enabled, Target2Enabled : Boolean;
         Source2Visible, Target2Visible : Boolean;
         SelectFieldMappingVisible: Boolean;
-        ImportConfigIsSet: Boolean;
 }

@@ -2115,6 +2115,18 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze in Puffertabelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field No.of Records in Buffer Table - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 200502431 - Field 3749297391 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Separate Buffer Table Objects</source>
+          <target state="translated">Separate Puffertabelle verwenden</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Separate Puffertabelle verwenden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Separate Buffer Table Objects - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 200502431 - Field 3749297391 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>None,buffer table and XMLPort (Best performance),Use existing buffer table &amp; generate XMLPort only</source>
+          <target state="translated">Keine,Puffertabelle und XMLPort (Beste Performance),Existierende Puffertabelle verwenden &amp; nur XMLPort generieren</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Keine,Puffertabelle und XMLPort (Beste Performance),Existierende Puffertabelle verwenden &amp; nur XMLPort generieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Separate Buffer Table Objects - Property OptionCaption</note>
+        </trans-unit>
         <trans-unit id="Table 200502431 - Field 2509418355 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Skip Records with User Changes</source>
           <target state="translated">Datensätze mit Nutzeränderung überspringen</target>
@@ -2150,12 +2162,6 @@
           <target state="translated">OnInsert Trigger verwenden</target>
           <note from="Developer" annotates="general" priority="2">de-DE=OnInsert Trigger verwenden</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Use OnInsert Trigger - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 200502431 - Field 3660718236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Use Separate Buffer Table</source>
-          <target state="translated">Separate Puffertabelle verwenden</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Separate Puffertabelle verwenden</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Use Separate Buffer Table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3570477496 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Import Configuration Line</source>
@@ -2870,6 +2876,12 @@
           <target state="translated">Es wurden keine Fehler zur erneuten Verbeitung gefunden</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Fehler zur erneuten Verbeitung gefunden</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportConfigMgt - Method PageAction_RetryBufferRecordsWithError - NamedType NoErrorFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3834207626 - Method 2653064554 - NamedType 2519779786" size-unit="char" translate="yes" xml:space="preserve">
+          <source>XMLPort %1 not found</source>
+          <target state="translated">XMLPort %1 ist nicht vorhanden.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=XMLPort %1 ist nicht vorhanden.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportCSVImpl - Method ImportViaSeparateXMLPort - NamedType xmlPortNotFoundErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3774911051 - Method 4006425096 - NamedType 2696288649" size-unit="char" translate="yes" xml:space="preserve">
           <source>Assigned Values have been changed by triggers</source>

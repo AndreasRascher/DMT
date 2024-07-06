@@ -303,7 +303,7 @@ codeunit 91002 DMTImportConfigMgt
         dataLayout := importConfigHeader.GetDataLayout();
         case true of
             // seperate buffer table -> read field names
-            importConfigHeader."Use Separate Buffer Table":
+            not importConfigHeader.UseGenericBufferTable():
                 importConfigHeader.BufferTableMgt().ReadBufferTableColumnCaptions(SourceFieldNames);
             // use genBuffer, file has heading line  -> read heading line from buffer
             dataLayout."Has Heading Row":

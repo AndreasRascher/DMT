@@ -56,13 +56,14 @@ codeunit 91022 DMTSeparateBufferTableMgtImpl implements IBufferTableMgt
     begin
         checkHeaderIsSet();
         ImportConfigHeaderGlobal.TestField("Target Table ID");
-        field.SetRange(TableNo, ImportConfigHeaderGlobal."Target Table ID");
+        field.SetRange(TableNo, ImportConfigHeaderGlobal."Buffer Table ID");
         field.SetFilter("No.", '<2000000000'); // exclude system fields
         field.SetRange(Enabled, true);
         field.SetRange(Class, Field.Class::Normal);
         if field.FindSet(false) then
             repeat
-                BuffTableCaptions.Add(field."No.", field."Field Caption");
+                // field name is used, because renamed fields are matched on changed names not caption
+                BuffTableCaptions.Add(field."No.", field.FieldName);
             until field.Next() = 0;
     end;
 

@@ -1,21 +1,34 @@
 codeunit 90011 DMTCodeGenerator
 {
 
-    procedure CreateALXMLPort(ImportConfigHeader: Record DMTImportConfigHeader) C: TextBuilder
+    procedure CreateALXMLPort(importConfigHeader: Record DMTImportConfigHeader) C: TextBuilder
+    var
     begin
-        ImportConfigHeader.TestField("Import XMLPort ID");
-        ImportConfigHeader.TestField("NAV Src.Table No.");
-        ImportConfigHeader.TestField("NAV Src.Table Caption");
-        C := CreateALXMLPort(ImportConfigHeader."Import XMLPort ID", ImportConfigHeader."NAV Src.Table No.", ImportConfigHeader."NAV Src.Table Caption");
+        case importConfigHeader."Separate Buffer Table Objects" of
+            importConfigHeader."Separate Buffer Table Objects"::"buffer table and XMLPort (Best performance)":
+                begin
+                    ImportConfigHeader.TestField("Buffer Table ID");
+                    ImportConfigHeader.TestField("Import XMLPort ID");
+                    ImportConfigHeader.TestField("NAV Src.Table No.");
+                    ImportConfigHeader.TestField("NAV Src.Table Caption");
+                    C := CreateALXMLPortFromNAVSchema(ImportConfigHeader."Import XMLPort ID", ImportConfigHeader."NAV Src.Table No.", ImportConfigHeader."NAV Src.Table Caption");
+                end;
+            importConfigHeader."Separate Buffer Table Objects"::"Use existing buffer table & generate XMLPort only":
+                begin
+                    ImportConfigHeader.TestField("Buffer Table ID");
+                    ImportConfigHeader.TestField("Import XMLPort ID");
+                    C := CreateXMLPortFromExistingBufferTable(importConfigHeader."Import XMLPort ID", importConfigHeader."Buffer Table ID")
+                end;
+        end;
     end;
 
-    local procedure CreateALXMLPort(ImportXMLPortID: Integer; NAVSrcTableNo: Integer; NAVSrcTableCaption: Text) C: TextBuilder
+    local procedure CreateALXMLPortFromNAVSchema(ImportXMLPortID: Integer; NAVSrcTableNo: Integer; NAVSrcTableCaption: Text) C: TextBuilder
     var
         DMTFieldBuffer: Record DMTFieldBuffer;
         DMTSetup: Record DMTSetup;
         HasFieldsInFilter: Boolean;
     begin
-        HasFieldsInFilter := FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, DMTSetup."Exports include FlowFields", false);
+        HasFieldsInFilter := FilterFieldsInNAVSchema(DMTFieldBuffer, NAVSrcTableNo, false, DMTSetup."Exports include FlowFields", false);
         C.AppendLine('xmlport ' + Format(ImportXMLPortID) + ' T' + Format(NAVSrcTableNo) + 'Import');
         C.AppendLine('{');
         DMTSetup.Get();
@@ -36,12 +49,12 @@ codeunit 90011 DMTCodeGenerator
         C.AppendLine('        {');
 
         if HasFieldsInFilter then begin
-            C.AppendLine('            tableelement(' + GetCleanTableName(DMTFieldBuffer) + '; ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + ')');
+            C.AppendLine('            tableelement(' + GetCleanTableName(DMTFieldBuffer.TableName) + '; ' + StrSubstNo('T%1Buffer', NAVSrcTableNo) + ')');
             C.AppendLine('            {');
-            C.AppendLine('                XmlName = ''' + GetCleanTableName(DMTFieldBuffer) + ''';');
+            C.AppendLine('                XmlName = ''' + GetCleanTableName(DMTFieldBuffer.TableName) + ''';');
             DMTFieldBuffer.FindSet();
             repeat
-                C.AppendLine('                fieldelement("' + GetCleanFieldName(DMTFieldBuffer) + '"; ' + GetCleanTableName(DMTFieldBuffer) + '."' + DMTFieldBuffer.FieldName + '") { FieldValidate = No; MinOccurs = Zero; }');
+                C.AppendLine('                fieldelement("' + GetCleanFieldName(DMTFieldBuffer.FieldName) + '"; ' + GetCleanTableName(DMTFieldBuffer.TableName) + '."' + DMTFieldBuffer.FieldName + '") { FieldValidate = No; MinOccurs = Zero; }');
             until DMTFieldBuffer.Next() = 0;
         end;
 
@@ -98,26 +111,126 @@ codeunit 90011 DMTCodeGenerator
         C.AppendLine('        ReceivedLinesCount: Integer;');
         C.AppendLine('        FileHasHeader: Boolean;');
         C.AppendLine('');
-        // C.AppendLine('    procedure GetFieldCaption(_TableNo: Integer;');
-        // C.AppendLine('    _FieldNo: Integer) _FieldCpt: Text[1024]');
-        // C.AppendLine('    var');
-        // C.AppendLine('        _Field: Record "Field";');
-        // C.AppendLine('    begin');
-        // C.AppendLine('        IF _TableNo = 0 then exit('''');');
-        // C.AppendLine('        IF _FieldNo = 0 then exit('''');');
-        // C.AppendLine('        IF NOT _Field.GET(_TableNo, _FieldNo) then exit('''');');
-        // C.AppendLine('        _FieldCpt := _Field."Field Caption";');
-        // C.AppendLine('    end;');
-        // C.AppendLine('');
-        C.AppendLine('    procedure RemoveSpecialChars(TextIn: Text[1024]) TextOut: Text[1024]');
+        C.AppendLine('    local procedure ClearBufferBeforeImportTable(BufferTableNo: Integer)');
         C.AppendLine('    var');
-        C.AppendLine('        CharArray: Text[30];');
+        C.AppendLine('        BufferRef: RecordRef;');
         C.AppendLine('    begin');
-        C.AppendLine('        CharArray[1] := 9; // TAB');
-        C.AppendLine('        CharArray[2] := 10; // LF');
-        C.AppendLine('        CharArray[3] := 13; // CR');
-        C.AppendLine('        exit(DELCHR(TextIn, ''='', CharArray));');
+        C.AppendLine('        //* Puffertabelle l”schen vor dem Import');
+        C.AppendLine('        IF NOT currXMLport.IMPORTFILE then');
+        C.AppendLine('            exit;');
+        C.AppendLine('        IF BufferTableNo < 50000 then begin');
+        C.AppendLine('            MESSAGE(''Achtung: Puffertabellen ID kleiner 50000'');');
+        C.AppendLine('            exit;');
+        C.AppendLine('        end;');
+        C.AppendLine('        BufferRef.OPEN(BufferTableNo);');
+        C.AppendLine('        IF NOT BufferRef.IsEmpty then');
+        C.AppendLine('            BufferRef.DELETEALL();');
         C.AppendLine('    end;');
+        C.AppendLine('');
+        C.AppendLine('    procedure GetDatabaseName(): Text[250]');
+        C.AppendLine('    var');
+        C.AppendLine('        ActiveSession: Record "Active Session";');
+        C.AppendLine('    begin');
+        C.AppendLine('        ActiveSession.SetRange("Server Instance ID", SERVICEINSTANCEID());');
+        C.AppendLine('        ActiveSession.SetRange("Session ID", SESSIONID());');
+        C.AppendLine('        ActiveSession.findfirst();');
+        C.AppendLine('        exit(ActiveSession."Database Name");');
+        C.AppendLine('    end;');
+        C.AppendLine('}');
+    end;
+
+    local procedure CreateXMLPortFromExistingBufferTable(ImportXMLPortID: Integer; BufferTableID: Integer) C: TextBuilder
+    var
+        TableMetadata: Record "Table Metadata";
+        field: Record Field;
+        DMTSetup: Record DMTSetup;
+        HasFieldsInFilter: Boolean;
+        bufferTableCaption: Text;
+        bufferTableName: Text;
+    begin
+        TableMetadata.Get(BufferTableID);
+        bufferTableName := TableMetadata.Name;
+        bufferTableCaption := TableMetadata.Caption;
+
+        HasFieldsInFilter := FilterFields(field, BufferTableID, false, DMTSetup."Exports include FlowFields", false);
+        C.AppendLine('xmlport ' + Format(ImportXMLPortID) + ' T' + Format(BufferTableID) + 'Import');
+        C.AppendLine('{');
+        DMTSetup.Get();
+        if DMTSetup."Exports include FlowFields" then
+            C.AppendLine('    CaptionML= DEU = ''' + bufferTableCaption + '(DMT)' + 'FlowField' + ''', ENU = ''' + field.TableName + '(DMT)' + ''';')
+        else
+            C.AppendLine('    CaptionML= DEU = ''' + bufferTableCaption + '(DMT)' + ''', ENU = ''' + field.TableName + '(DMT)' + ''';');
+        C.AppendLine('    Direction = Import;');
+        C.AppendLine('    FieldSeparator = ''<TAB>'';');
+        C.AppendLine('    FieldDelimiter = ''<None>'';');
+        C.AppendLine('    TextEncoding = UTF8;');
+        C.AppendLine('    Format = VariableText;');
+        C.AppendLine('    FormatEvaluate = Xml;');
+        C.AppendLine('');
+        C.AppendLine('    schema');
+        C.AppendLine('    {');
+        C.AppendLine('        textelement(Root)');
+        C.AppendLine('        {');
+
+        if HasFieldsInFilter then begin
+            C.AppendLine('            tableelement(' + GetCleanTableName(field.TableName) + '; ' + bufferTableName + ')');
+            C.AppendLine('            {');
+            C.AppendLine('                XmlName = ''' + GetCleanTableName(field.TableName) + ''';');
+            field.FindSet();
+            repeat
+                C.AppendLine('                fieldelement("' + GetCleanFieldName(field.FieldName) + '"; ' + GetCleanTableName(field.TableName) + '."' + field.FieldName + '") { FieldValidate = No; MinOccurs = Zero; }');
+            until field.Next() = 0;
+        end;
+
+        C.AppendLine('                trigger OnBeforeInsertRecord()');
+        C.AppendLine('                begin');
+        C.AppendLine('                    ReceivedLinesCount += 1;');
+        C.AppendLine('                end;');
+        C.AppendLine('');
+        C.AppendLine('                trigger OnAfterInitRecord()');
+        C.AppendLine('                begin');
+        C.AppendLine('                    if FileHasHeader then begin');
+        C.AppendLine('                        FileHasHeader := false;');
+        C.AppendLine('                        currXMLport.Skip();');
+        C.AppendLine('                    end;');
+        C.AppendLine('                end;');
+        C.AppendLine('            }');
+        C.AppendLine('        }');
+        C.AppendLine('    }');
+        C.AppendLine('');
+        C.AppendLine('    requestpage');
+        C.AppendLine('    {');
+        C.AppendLine('        layout');
+        C.AppendLine('        {');
+        C.AppendLine('            area(content)');
+        C.AppendLine('            {');
+        C.AppendLine('                group(Umgebung)');
+        C.AppendLine('                {');
+        C.AppendLine('                    Caption = ''Environment'',locked=true;');
+        C.AppendLine('                    field(DatabaseName; GetDatabaseName()) { Caption = ''Database'',locked=true; ApplicationArea = all; }');
+        C.AppendLine('                    field(COMPANYNAME; COMPANYNAME) { Caption = ''Company'',locked=true; ApplicationArea = all; }');
+        C.AppendLine('                }');
+        C.AppendLine('            }');
+        C.AppendLine('        }');
+        C.AppendLine('    }');
+        C.AppendLine('');
+        C.AppendLine('    trigger OnPostXmlPort()');
+        C.AppendLine('    var');
+        C.AppendLine('        LinesProcessedMsg: Label ''%1 Buffer\%2 lines imported'',locked=true;');
+        C.AppendLine('    begin');
+        C.AppendLine('        IF currXMLport.Filename <> '''' then //only for manual excecution');
+        C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + bufferTableName + '.TABLECAPTION, ReceivedLinesCount);');
+        C.AppendLine('    end;');
+        C.AppendLine('');
+        C.AppendLine('    trigger OnPreXmlPort()');
+        C.AppendLine('    begin');
+        C.AppendLine('        ClearBufferBeforeImportTable(' + bufferTableName + '.RECORDID.TABLENO);');
+        C.AppendLine('        FileHasHeader := true;');
+        C.AppendLine('    end;');
+        C.AppendLine('');
+        C.AppendLine('    var');
+        C.AppendLine('        ReceivedLinesCount: Integer;');
+        C.AppendLine('        FileHasHeader: Boolean;');
         C.AppendLine('');
         C.AppendLine('    local procedure ClearBufferBeforeImportTable(BufferTableNo: Integer)');
         C.AppendLine('    var');
@@ -147,6 +260,7 @@ codeunit 90011 DMTCodeGenerator
         C.AppendLine('}');
     end;
 
+
     procedure CreateALTable(ImportConfigHeader: Record DMTImportConfigHeader) C: TextBuilder
     begin
         ImportConfigHeader.TestField("Buffer Table ID");
@@ -162,12 +276,12 @@ codeunit 90011 DMTCodeGenerator
         _FieldTypeText: Text;
     begin
         DMTSetup.Get();
-        FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, true, false);
+        FilterFieldsInNAVSchema(DMTFieldBuffer, NAVSrcTableNo, false, true, false);
         C.AppendLine('table ' + Format(BufferTableID) + ' ' + StrSubstNo('T%1Buffer', NAVSrcTableNo));
         C.AppendLine('{');
         C.AppendLine('    CaptionML= DEU = ''' + NAVSrcTableCaption + '(DMT)' + ''', ENU = ''' + DMTFieldBuffer.TableName + '(DMT)' + ''';');
         C.AppendLine('  fields {');
-        if FilterFields(DMTFieldBuffer, NAVSrcTableNo, false, DMTSetup."Exports include FlowFields", false) then
+        if FilterFieldsInNAVSchema(DMTFieldBuffer, NAVSrcTableNo, false, DMTSetup."Exports include FlowFields", false) then
             repeat
                 case DMTFieldBuffer.Type of
                     DMTFieldBuffer.Type::RecordID:
@@ -222,21 +336,21 @@ codeunit 90011 DMTCodeGenerator
         DownloadFromStream(iStr, 'Download', 'ToFolder', Format(Enum::DMTFileFilter::All), toFileName);
     end;
 
-    local procedure GetCleanFieldName(var Field: Record DMTFieldBuffer) CleanFieldName: Text
+    local procedure GetCleanFieldName(fieldName: Text) CleanFieldName: Text
     begin
-        CleanFieldName := DelChr(Field.FieldName, '=', '#&-%/\(),. ');
+        CleanFieldName := DelChr(fieldName, '=', '#&-%/\(),. ');
         // XMLPort Fieldelements cannot start with numbers
         if CleanFieldName <> '' then
             if CopyStr(CleanFieldName, 1, 1) in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] then
                 CleanFieldName := '_' + CleanFieldName;
     end;
 
-    local procedure GetCleanTableName(Field: Record DMTFieldBuffer) CleanFieldName: Text
+    local procedure GetCleanTableName(tableName: Text) CleanFieldName: Text
     begin
-        CleanFieldName := ConvertStr(Field.TableName, '&-%/\(),. ', '__________');
+        CleanFieldName := ConvertStr(tableName, '&-%/\(),. ', '__________');
     end;
 
-    procedure FilterFields(var fieldBuffer_FOUND: Record DMTFieldBuffer; tableNo: Integer; includeDisabled: Boolean; IncludeFlowFields: Boolean; IncludeBlob: Boolean) hasFields: Boolean
+    procedure FilterFieldsInNAVSchema(var fieldBuffer_FOUND: Record DMTFieldBuffer; tableNo: Integer; includeDisabled: Boolean; IncludeFlowFields: Boolean; IncludeBlob: Boolean) hasFields: Boolean
     var
         Debug: Integer;
     begin
@@ -257,6 +371,36 @@ codeunit 90011 DMTCodeGenerator
         Debug := fieldBuffer_FOUND.Count;
         fieldBuffer_FOUND.SetRange(FieldName);
         hasFields := fieldBuffer_FOUND.FindFirst();
+    end;
+
+    procedure FilterFields(var field_FOUND: Record field; tableNo: Integer; includeDisabled: Boolean; IncludeFlowFields: Boolean; IncludeBlob: Boolean) hasFields: Boolean
+    var
+        recRef: RecordRef;
+        Debug: Integer;
+        excludeSystemFieldsFilter: Text;
+    begin
+        recRef.Open(tableNo);
+        excludeSystemFieldsFilter := StrSubstNo('<>%1&<>%2&<>%3&<>%4&<>%5', recRef.SystemCreatedAtNo,
+                                                                  recRef.SystemCreatedByNo,
+                                                                  recRef.SystemIdNo,
+                                                                  recRef.SystemModifiedAtNo,
+                                                                  recRef.SystemModifiedByNo);
+
+        Clear(field_FOUND);
+        field_FOUND.SetRange(TableNo, tableNo);
+        field_FOUND.SetFilter("No.", excludeSystemFieldsFilter);
+        Debug := field_FOUND.Count;
+        if not includeDisabled then
+            field_FOUND.SetRange(Enabled, true);
+        Debug := field_FOUND.Count;
+        field_FOUND.SetFilter(Class, '%1|%2', field_FOUND.Class::Normal, field_FOUND.Class::FlowField);
+        if not IncludeFlowFields then
+            field_FOUND.SetRange(Class, field_FOUND.Class::Normal);
+        if not IncludeBlob then
+            field_FOUND.SetFilter(Type, '<>%1', field_FOUND.Type::BLOB);
+        Debug := field_FOUND.Count;
+        field_FOUND.SetRange(FieldName);
+        hasFields := field_FOUND.FindFirst();
     end;
 
     local procedure BuildKeyFieldsString(TableIDInNAV: Integer) KeyString: Text
@@ -341,7 +485,10 @@ codeunit 90011 DMTCodeGenerator
 
     local procedure GetALXMLPortName(importConfigHeader: Record DMTImportConfigHeader) Name: Text;
     begin
-        Name := StrSubstNo('XMLPORT %1 - T%2Import.al', importConfigHeader."Import XMLPort ID", importConfigHeader."NAV Src.Table No.");
+        if importConfigHeader."Separate Buffer Table Objects" = importConfigHeader."Separate Buffer Table Objects"::"Use existing buffer table & generate XMLPort only" then
+            Name := StrSubstNo('XMLPORT %1 - T%2Import.al', importConfigHeader."Import XMLPort ID", importConfigHeader."Target Table ID")
+        else
+            Name := StrSubstNo('XMLPORT %1 - T%2Import.al', importConfigHeader."Import XMLPort ID", importConfigHeader."NAV Src.Table No.");
     end;
 
     procedure DownloadAllALDataMigrationObjects()
@@ -354,25 +501,33 @@ codeunit 90011 DMTCodeGenerator
         OStr: OutStream;
         toFileName: Text;
         DefaultTextEncoding: TextEncoding;
+        doCreateALTable, doCreateALXMLPort : boolean;
     begin
         DefaultTextEncoding := TextEncoding::UTF8;
-        importConfigHeader.SetRange("Use Separate Buffer Table", true);
+        importConfigHeader.SetFilter("Separate Buffer Table Objects", '<>%1', importConfigHeader."Separate Buffer Table Objects"::None);
         importConfigHeader.FindSet();  // Fehlermeldung wenn keine Einrichtung passt
         // if importConfigHeader.FindSet() then begin
         DataCompression.CreateZipArchive();
         repeat
+            doCreateALTable := importConfigHeader."Separate Buffer Table Objects" in [importConfigHeader."Separate Buffer Table Objects"::"buffer table and XMLPort (Best performance)"];
+            doCreateALXMLPort := importConfigHeader."Separate Buffer Table Objects" in [importConfigHeader."Separate Buffer Table Objects"::"buffer table and XMLPort (Best performance)",
+                                                                                    importConfigHeader."Separate Buffer Table Objects"::"Use existing buffer table & generate XMLPort only"];
             //Table
-            Clear(FileBlob);
-            FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
-            OStr.WriteText(ObjGen.CreateALTable(importConfigHeader).ToText());
-            FileBlob.CreateInStream(IStr, DefaultTextEncoding);
-            DataCompression.AddEntry(IStr, GetALBufferTableName(importConfigHeader));
+            if doCreateALTable then begin
+                Clear(FileBlob);
+                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+                OStr.WriteText(ObjGen.CreateALTable(importConfigHeader).ToText());
+                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
+                DataCompression.AddEntry(IStr, GetALBufferTableName(importConfigHeader));
+            end;
             //XMLPort
-            Clear(FileBlob);
-            FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
-            OStr.WriteText(ObjGen.CreateALXMLPort(importConfigHeader).ToText());
-            FileBlob.CreateInStream(IStr, DefaultTextEncoding);
-            DataCompression.AddEntry(IStr, GetALXMLPortName(importConfigHeader));
+            if doCreateALXMLPort then begin
+                Clear(FileBlob);
+                FileBlob.CreateOutStream(OStr, DefaultTextEncoding);
+                OStr.WriteText(ObjGen.CreateALXMLPort(importConfigHeader).ToText());
+                FileBlob.CreateInStream(IStr, DefaultTextEncoding);
+                DataCompression.AddEntry(IStr, GetALXMLPortName(importConfigHeader));
+            end;
         until importConfigHeader.Next() = 0;
         // end;
         Clear(FileBlob);

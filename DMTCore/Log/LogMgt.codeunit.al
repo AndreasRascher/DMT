@@ -231,7 +231,7 @@ codeunit 91006 DMTLog
 
     procedure IncNoOfSuccessfullyProcessedRecords()
     begin
-        ProcessingStatistics.Set(Format(StatisticType::Success), GetNoOfSuccessfullyProcessedRecords());
+        ProcessingStatistics.Set(Format(StatisticType::Success), GetNoOfSuccessfullyProcessedRecords() + 1);
     end;
 
     procedure GetNoOfSuccessfullyProcessedRecords(): Integer

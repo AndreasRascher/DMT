@@ -29,14 +29,28 @@ table 91003 DMTImportConfigHeader
             ValidateTableRelation = false;
         }
         field(20; "No.of Records in Buffer Table"; Integer) { Caption = 'No.of Records in Buffer Table', Comment = 'de-DE=Anz. Datensätze in Puffertabelle'; Editable = false; }
-        field(40; "Use Separate Buffer Table"; Boolean)
+        field(40; "Separate Buffer Table Objects"; Option)
         {
-            Caption = 'Use Separate Buffer Table', Comment = 'de-DE=Separate Puffertabelle verwenden';
+            Caption = 'Separate Buffer Table Objects', Comment = 'de-DE=Separate Puffertabelle verwenden';
+            OptionMembers = None,"buffer table and XMLPort (Best performance)","Use existing buffer table & generate XMLPort only";
+            OptionCaption = 'None,buffer table and XMLPort (Best performance),Use existing buffer table & generate XMLPort only',
+            Comment = 'de-DE=Keine,Puffertabelle und XMLPort (Beste Performance),Existierende Puffertabelle verwenden & nur XMLPort generieren';
             trigger OnValidate()
             begin
-                if not "Use Separate Buffer Table" then begin
-                    Clear(Rec."Import XMLPort ID");
-                    Clear(Rec."Buffer Table ID");
+                case Rec."Separate Buffer Table Objects" of
+                    Rec."Separate Buffer Table Objects"::None:
+                        begin
+                            Clear(Rec."Import XMLPort ID");
+                            Clear(Rec."Buffer Table ID");
+                        end;
+                    Rec."Separate Buffer Table Objects"::"Use existing buffer table & generate XMLPort only":
+                        begin
+
+                        end;
+                    Rec."Separate Buffer Table Objects"::"buffer table and XMLPort (Best performance)":
+                        begin
+
+                        end;
                 end;
             end;
         }
@@ -356,10 +370,10 @@ table 91003 DMTImportConfigHeader
         genericBuffertTableMgtImpl: Codeunit DMTGenericBuffertTableMgtImpl;
         separateBufferTableMgtImpl: Codeunit DMTSeparateBufferTableMgtImpl;
     begin
-        if Rec."Use Separate Buffer Table" then
-            IBufferTableMgt := separateBufferTableMgtImpl
+        if Rec.UseGenericBufferTable() then
+            IBufferTableMgt := genericBuffertTableMgtImpl
         else
-            IBufferTableMgt := genericBuffertTableMgtImpl;
+            IBufferTableMgt := separateBufferTableMgtImpl;
         IBufferTableMgt.setImportConfigHeader(Rec);
     end;
 
@@ -411,25 +425,31 @@ table 91003 DMTImportConfigHeader
     var
         AllObjWithCaption: Record AllObjWithCaption;
     begin
-        // DataFileExistsStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
-        // if Rec.FindFileRec(FileRec) then begin
-        //     Rec.DataFileExistsStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
-        //     Rec.CopyFrom(FileRec);
-        // end;
-
-        // Generated Objects exist
-        if not rec."Use Separate Buffer Table" then begin
-            Clear(Rec.ImportXMLPortIDStyle);
-            Clear(Rec.BufferTableIDStyle);
-        end else begin
+        Clear(Rec.BufferTableIDStyle);
+        if not UseGenericBufferTable() then begin
             Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
             if (Rec."Buffer Table ID" <> 0) then
                 if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, Rec."Buffer Table ID") then
                     Rec.BufferTableIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+        end;
+
+        Clear(Rec.ImportXMLPortIDStyle);
+        if Rec.UseSeparateXMLPort() then begin
             Rec.ImportXMLPortIDStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
             if (Rec."Import XMLPort ID" <> 0) then
                 if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::XMLport, Rec."Import XMLPort ID") then
                     Rec.ImportXMLPortIDStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
         end;
+    end;
+
+    procedure UseGenericBufferTable(): Boolean
+    begin
+        exit(Rec."Separate Buffer Table Objects" = Rec."Separate Buffer Table Objects"::None);
+    end;
+
+    procedure UseSeparateXMLPort(): Boolean
+    begin
+        exit(Rec."Separate Buffer Table Objects" in [Rec."Separate Buffer Table Objects"::"buffer table and XMLPort (Best performance)",
+                                                     Rec."Separate Buffer Table Objects"::"Use existing buffer table & generate XMLPort only"]);
     end;
 }

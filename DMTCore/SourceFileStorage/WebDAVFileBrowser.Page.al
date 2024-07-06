@@ -196,8 +196,8 @@ page 91025 WebDAVFileBrowser
             ObjectOptions."Parameter Name" := 'WebDAVFileBrowser';
             ObjectOptions."Object ID" := pageID;
             ObjectOptions."Object Type" := ObjectOptions."Object Type"::Page;
-            ObjectOptions."User Name" := UserId;
-            ObjectOptions."Company Name" := CompanyName;
+            ObjectOptions."User Name" := CopyStr(UserId, 1, MaxStrLen(ObjectOptions."User Name"));
+            ObjectOptions."Company Name" := CopyStr(CompanyName, 1, MaxStrLen(ObjectOptions."Company Name"));
             ObjectOptions.Insert();
         end;
 
