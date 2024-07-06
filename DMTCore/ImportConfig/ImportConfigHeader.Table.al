@@ -29,14 +29,28 @@ table 91003 DMTImportConfigHeader
             ValidateTableRelation = false;
         }
         field(20; "No.of Records in Buffer Table"; Integer) { Caption = 'No.of Records in Buffer Table', Comment = 'de-DE=Anz. Datensätze in Puffertabelle'; Editable = false; }
-        field(40; "Use Separate Buffer Table"; Boolean)
+        field(40; "Separate Buffer Table Objects"; Option)
         {
-            Caption = 'Use Separate Buffer Table', Comment = 'de-DE=Separate Puffertabelle verwenden';
+            Caption = 'Separate Buffer Table Objects', Comment = 'de-DE=Separate Puffertabelle verwenden';
+            OptionMembers = None,"Use existing buffer table & generate XMLPort only","generate Buffertable and XMLPort (Best performance)";
+            OptionCaption = 'None,Use existing buffer table & generate XMLPort only,generate Buffertable and XMLPort (Best performance)',
+            Comment = 'de-DE=Keine,Existierende Puffertabelle verwenden & nur XMLPort generieren, Puffertabelle und XMLPort generieren (Beste Performance)';
             trigger OnValidate()
             begin
-                if not "Use Separate Buffer Table" then begin
-                    Clear(Rec."Import XMLPort ID");
-                    Clear(Rec."Buffer Table ID");
+                case Rec."Separate Buffer Table Objects" of
+                    Rec."Separate Buffer Table Objects"::None:
+                        begin
+                            Clear(Rec."Import XMLPort ID");
+                            Clear(Rec."Buffer Table ID");
+                        end;
+                    Rec."Separate Buffer Table Objects"::"Use existing buffer table & generate XMLPort only":
+                        begin
+
+                        end;
+                    Rec."Separate Buffer Table Objects"::"generate Buffertable and XMLPort (Best performance)":
+                        begin
+
+                        end;
                 end;
             end;
         }
