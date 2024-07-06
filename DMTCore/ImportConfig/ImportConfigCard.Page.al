@@ -60,8 +60,22 @@ page 91008 DMTImportConfigCard
                 {
                     Caption = 'Buffer Table Objects', Comment = 'de-DE=Puffertabellen Objekte';
                     Visible = Rec."Separate Buffer Table Objects" <> Rec."Separate Buffer Table Objects"::None;
-                    field("Buffer Table ID"; Rec."Buffer Table ID") { StyleExpr = Rec.BufferTableIDStyle; }
-                    field("Import XMLPort ID"; Rec."Import XMLPort ID") { StyleExpr = Rec.ImportXMLPortIDStyle; }
+                    field("Buffer Table ID"; Rec."Buffer Table ID")
+                    {
+                        StyleExpr = Rec.BufferTableIDStyle;
+                        trigger OnValidate()
+                        begin
+                            Rec.UpdateIndicators();
+                        end;
+                    }
+                    field("Import XMLPort ID"; Rec."Import XMLPort ID")
+                    {
+                        StyleExpr = Rec.ImportXMLPortIDStyle;
+                        trigger OnValidate()
+                        begin
+                            Rec.UpdateIndicators();
+                        end;
+                    }
                 }
             }
             part(LinePart; DMTImportConfigLinePart)

@@ -112,7 +112,7 @@ page 91015 DMTDeleteDataInTargetTable
                 exit;
         end;
         // FindSourceRef - CSVBuffer
-        if ImportConfigHeader.UseSeparateBufferTable() then begin
+        if not ImportConfigHeader.UseGenericBufferTable() then begin
             SourceRef.Open(ImportConfigHeader."Buffer Table ID");
             if SourceRef.IsEmpty then
                 exit;

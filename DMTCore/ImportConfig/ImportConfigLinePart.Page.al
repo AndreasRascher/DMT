@@ -160,6 +160,7 @@ page 91009 DMTImportConfigLinePart
                     action(SetProcessingActionTo_Ignore)
                     {
                         Caption = 'Ignore', Comment = 'de-DE=Ignorieren';
+                        Image = Allocations;
                         trigger OnAction()
                         begin
                             if GetSelection(TempImportConfigLine_Selected) then
@@ -169,6 +170,7 @@ page 91009 DMTImportConfigLinePart
                     action(SetProcessingActionTo_Transfer)
                     {
                         Caption = 'Transfer', Comment = 'de-DE=Transfer';
+                        Image = Allocations;
                         trigger OnAction()
                         begin
                             if GetSelection(TempImportConfigLine_Selected) then

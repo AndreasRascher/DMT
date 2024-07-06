@@ -76,8 +76,8 @@ xmlport 91001 DMTCSVReader
 
     internal procedure GetHeadlineColumnValues(var FirstRowWithValues: Integer) HeadLine: List of [Text]
     var
-        HeadLineBigText: List of [BigText];
         columnCaption: BigText;
+        HeadLineBigText: List of [BigText];
     begin
         if (DataTable.Count > 1) and (FirstRowWithValuesGlobal <> 0) then begin
             DataTable.Get(FirstRowWithValuesGlobal, HeadLineBigText);

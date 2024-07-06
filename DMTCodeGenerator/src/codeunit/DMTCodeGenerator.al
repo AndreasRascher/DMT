@@ -1,32 +1,24 @@
 codeunit 90011 DMTCodeGenerator
 {
 
-    // procedure CreateALXMLPort(ImportConfigHeader: Record DMTImportConfigHeader) C: TextBuilder
-    // begin
-    //     ImportConfigHeader.TestField("Import XMLPort ID");
-    //     ImportConfigHeader.TestField("NAV Src.Table No.");
-    //     ImportConfigHeader.TestField("NAV Src.Table Caption");
-    //     C := CreateALXMLPort(ImportConfigHeader);
-    // end;
-
     procedure CreateALXMLPort(importConfigHeader: Record DMTImportConfigHeader) C: TextBuilder
     var
-        AllObjwithCaption: Record AllObjWithCaption;
     begin
-        case true of
-            // buffer table exists and xmlport has a number but no object
-            AllObjwithCaption.Get(importConfigHeader."Buffer Table ID") and
-             not AllObjwithCaption.Get(importConfigHeader."Import XMLPort ID") and
-             (importConfigHeader."Import XMLPort ID" <> 0):
+        case importConfigHeader."Separate Buffer Table Objects" of
+            importConfigHeader."Separate Buffer Table Objects"::"buffer table and XMLPort (Best performance)":
                 begin
+                    ImportConfigHeader.TestField("Buffer Table ID");
+                    ImportConfigHeader.TestField("Import XMLPort ID");
+                    ImportConfigHeader.TestField("NAV Src.Table No.");
+                    ImportConfigHeader.TestField("NAV Src.Table Caption");
+                    C := CreateALXMLPortFromNAVSchema(ImportConfigHeader."Import XMLPort ID", ImportConfigHeader."NAV Src.Table No.", ImportConfigHeader."NAV Src.Table Caption");
+                end;
+            importConfigHeader."Separate Buffer Table Objects"::"Use existing buffer table & generate XMLPort only":
+                begin
+                    ImportConfigHeader.TestField("Buffer Table ID");
+                    ImportConfigHeader.TestField("Import XMLPort ID");
                     C := CreateXMLPortFromExistingBufferTable(importConfigHeader."Import XMLPort ID", importConfigHeader."Buffer Table ID")
                 end;
-            else begin
-                ImportConfigHeader.TestField("Import XMLPort ID");
-                ImportConfigHeader.TestField("NAV Src.Table No.");
-                ImportConfigHeader.TestField("NAV Src.Table Caption");
-                C := CreateALXMLPortFromNAVSchema(ImportConfigHeader."Import XMLPort ID", ImportConfigHeader."NAV Src.Table No.", ImportConfigHeader."NAV Src.Table Caption");
-            end;
         end;
     end;
 
@@ -119,16 +111,6 @@ codeunit 90011 DMTCodeGenerator
         C.AppendLine('        ReceivedLinesCount: Integer;');
         C.AppendLine('        FileHasHeader: Boolean;');
         C.AppendLine('');
-        C.AppendLine('    procedure RemoveSpecialChars(TextIn: Text[1024]) TextOut: Text[1024]');
-        C.AppendLine('    var');
-        C.AppendLine('        CharArray: Text[30];');
-        C.AppendLine('    begin');
-        C.AppendLine('        CharArray[1] := 9; // TAB');
-        C.AppendLine('        CharArray[2] := 10; // LF');
-        C.AppendLine('        CharArray[3] := 13; // CR');
-        C.AppendLine('        exit(DELCHR(TextIn, ''='', CharArray));');
-        C.AppendLine('    end;');
-        C.AppendLine('');
         C.AppendLine('    local procedure ClearBufferBeforeImportTable(BufferTableNo: Integer)');
         C.AppendLine('    var');
         C.AppendLine('        BufferRef: RecordRef;');
@@ -159,13 +141,15 @@ codeunit 90011 DMTCodeGenerator
 
     local procedure CreateXMLPortFromExistingBufferTable(ImportXMLPortID: Integer; BufferTableID: Integer) C: TextBuilder
     var
+        TableMetadata: Record "Table Metadata";
         field: Record Field;
         DMTSetup: Record DMTSetup;
         HasFieldsInFilter: Boolean;
         bufferTableCaption: Text;
-        TableMetadata: Record "Table Metadata";
+        bufferTableName: Text;
     begin
         TableMetadata.Get(BufferTableID);
+        bufferTableName := TableMetadata.Name;
         bufferTableCaption := TableMetadata.Caption;
 
         HasFieldsInFilter := FilterFields(field, BufferTableID, false, DMTSetup."Exports include FlowFields", false);
@@ -189,12 +173,12 @@ codeunit 90011 DMTCodeGenerator
         C.AppendLine('        {');
 
         if HasFieldsInFilter then begin
-            C.AppendLine('            tableelement(' + GetCleanTableName(field.TableName) + '; ' + StrSubstNo('T%1Buffer', BufferTableID) + ')');
+            C.AppendLine('            tableelement(' + GetCleanTableName(field.TableName) + '; ' + bufferTableName + ')');
             C.AppendLine('            {');
             C.AppendLine('                XmlName = ''' + GetCleanTableName(field.TableName) + ''';');
             field.FindSet();
             repeat
-                C.AppendLine('                fieldelement("' + GetCleanFieldName(field.TableName) + '"; ' + GetCleanTableName(field.TableName) + '."' + field.FieldName + '") { FieldValidate = No; MinOccurs = Zero; }');
+                C.AppendLine('                fieldelement("' + GetCleanFieldName(field.FieldName) + '"; ' + GetCleanTableName(field.TableName) + '."' + field.FieldName + '") { FieldValidate = No; MinOccurs = Zero; }');
             until field.Next() = 0;
         end;
 
@@ -232,34 +216,21 @@ codeunit 90011 DMTCodeGenerator
         C.AppendLine('');
         C.AppendLine('    trigger OnPostXmlPort()');
         C.AppendLine('    var');
-        C.AppendLine('        ' + StrSubstNo('T%1Buffer', BufferTableID) + ': Record ' + StrSubstNo('T%1Buffer', BufferTableID) + ';');
         C.AppendLine('        LinesProcessedMsg: Label ''%1 Buffer\%2 lines imported'',locked=true;');
         C.AppendLine('    begin');
         C.AppendLine('        IF currXMLport.Filename <> '''' then //only for manual excecution');
-        C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + StrSubstNo('T%1Buffer', BufferTableID) + '.TABLECAPTION, ReceivedLinesCount);');
+        C.AppendLine('            MESSAGE(LinesProcessedMsg, ' + bufferTableName + '.TABLECAPTION, ReceivedLinesCount);');
         C.AppendLine('    end;');
         C.AppendLine('');
         C.AppendLine('    trigger OnPreXmlPort()');
-        C.AppendLine('    var');
-        C.AppendLine('        ' + StrSubstNo('T%1Buffer', BufferTableID) + ': Record ' + StrSubstNo('T%1Buffer', BufferTableID) + ';');
         C.AppendLine('    begin');
-        C.AppendLine('        ClearBufferBeforeImportTable(' + StrSubstNo('T%1Buffer', BufferTableID) + '.RECORDID.TABLENO);');
+        C.AppendLine('        ClearBufferBeforeImportTable(' + bufferTableName + '.RECORDID.TABLENO);');
         C.AppendLine('        FileHasHeader := true;');
         C.AppendLine('    end;');
         C.AppendLine('');
         C.AppendLine('    var');
         C.AppendLine('        ReceivedLinesCount: Integer;');
         C.AppendLine('        FileHasHeader: Boolean;');
-        C.AppendLine('');
-        C.AppendLine('    procedure RemoveSpecialChars(TextIn: Text[1024]) TextOut: Text[1024]');
-        C.AppendLine('    var');
-        C.AppendLine('        CharArray: Text[30];');
-        C.AppendLine('    begin');
-        C.AppendLine('        CharArray[1] := 9; // TAB');
-        C.AppendLine('        CharArray[2] := 10; // LF');
-        C.AppendLine('        CharArray[3] := 13; // CR');
-        C.AppendLine('        exit(DELCHR(TextIn, ''='', CharArray));');
-        C.AppendLine('    end;');
         C.AppendLine('');
         C.AppendLine('    local procedure ClearBufferBeforeImportTable(BufferTableNo: Integer)');
         C.AppendLine('    var');
@@ -404,10 +375,20 @@ codeunit 90011 DMTCodeGenerator
 
     procedure FilterFields(var field_FOUND: Record field; tableNo: Integer; includeDisabled: Boolean; IncludeFlowFields: Boolean; IncludeBlob: Boolean) hasFields: Boolean
     var
+        recRef: RecordRef;
         Debug: Integer;
+        excludeSystemFieldsFilter: Text;
     begin
+        recRef.Open(tableNo);
+        excludeSystemFieldsFilter := StrSubstNo('<>%1&<>%2&<>%3&<>%4&<>%5', recRef.SystemCreatedAtNo,
+                                                                  recRef.SystemCreatedByNo,
+                                                                  recRef.SystemIdNo,
+                                                                  recRef.SystemModifiedAtNo,
+                                                                  recRef.SystemModifiedByNo);
+
         Clear(field_FOUND);
         field_FOUND.SetRange(TableNo, tableNo);
+        field_FOUND.SetFilter("No.", excludeSystemFieldsFilter);
         Debug := field_FOUND.Count;
         if not includeDisabled then
             field_FOUND.SetRange(Enabled, true);
@@ -504,7 +485,10 @@ codeunit 90011 DMTCodeGenerator
 
     local procedure GetALXMLPortName(importConfigHeader: Record DMTImportConfigHeader) Name: Text;
     begin
-        Name := StrSubstNo('XMLPORT %1 - T%2Import.al', importConfigHeader."Import XMLPort ID", importConfigHeader."NAV Src.Table No.");
+        if importConfigHeader."Separate Buffer Table Objects" = importConfigHeader."Separate Buffer Table Objects"::"Use existing buffer table & generate XMLPort only" then
+            Name := StrSubstNo('XMLPORT %1 - T%2Import.al', importConfigHeader."Import XMLPort ID", importConfigHeader."Target Table ID")
+        else
+            Name := StrSubstNo('XMLPORT %1 - T%2Import.al', importConfigHeader."Import XMLPort ID", importConfigHeader."NAV Src.Table No.");
     end;
 
     procedure DownloadAllALDataMigrationObjects()
@@ -525,8 +509,8 @@ codeunit 90011 DMTCodeGenerator
         // if importConfigHeader.FindSet() then begin
         DataCompression.CreateZipArchive();
         repeat
-            doCreateALTable := importConfigHeader."Separate Buffer Table Objects" in [importConfigHeader."Separate Buffer Table Objects"::"generate Buffertable and XMLPort (Best performance)"];
-            doCreateALXMLPort := importConfigHeader."Separate Buffer Table Objects" in [importConfigHeader."Separate Buffer Table Objects"::"generate Buffertable and XMLPort (Best performance)",
+            doCreateALTable := importConfigHeader."Separate Buffer Table Objects" in [importConfigHeader."Separate Buffer Table Objects"::"buffer table and XMLPort (Best performance)"];
+            doCreateALXMLPort := importConfigHeader."Separate Buffer Table Objects" in [importConfigHeader."Separate Buffer Table Objects"::"buffer table and XMLPort (Best performance)",
                                                                                     importConfigHeader."Separate Buffer Table Objects"::"Use existing buffer table & generate XMLPort only"];
             //Table
             if doCreateALTable then begin

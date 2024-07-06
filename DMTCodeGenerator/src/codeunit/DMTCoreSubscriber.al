@@ -9,7 +9,8 @@ codeunit 90012 DMTCoreSubscriber
             exit;
         if rec."Separate Buffer Table Objects" = rec."Separate Buffer Table Objects"::None then
             exit;
-        Rec.SetNAVTableByFileName(Rec."Source File Name");
+        if Rec."Separate Buffer Table Objects" = Rec."Separate Buffer Table Objects"::"buffer table and XMLPort (Best performance)" then
+            Rec.SetNAVTableByFileName(Rec."Source File Name");
         DMTSetup.ProposeObjectIDs(Rec, false);
     end;
 

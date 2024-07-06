@@ -81,7 +81,7 @@ codeunit 91014 DMTMigrate
         ImportConfigHeader := DMTImportSettings.ImportConfigHeader();
         ImportConfigHeader.FilterRelated(ImportConfigLine);
         ImportConfigLine.SetFilter("Processing Action", '<>%1', ImportConfigLine."Processing Action"::Ignore);
-        if ImportConfigHeader.UseSeparateBufferTable() then
+        if not ImportConfigHeader.UseGenericBufferTable() then
             ImportConfigLine.SetFilter("Source Field No.", '<>0');
 
         if DMTImportSettings.UpdateFieldsFilter() <> '' then begin // Scope ProcessingPlan

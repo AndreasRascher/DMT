@@ -30,9 +30,14 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
     local procedure ImportViaSeparateXMLPort(importConfigHeader: Record DMTImportConfigHeader) HasBeenImported: Boolean
     var
         sourceFileStorage: Record DMTSourceFileStorage;
+        AllObjWithCaption: Record AllObjWithCaption;
+        xmlPortNotFoundErr: Label 'XMLPort %1 not found', Comment = 'de-DE=XMLPort %1 ist nicht vorhanden.';
     begin
         if not importConfigHeader.UseSeparateXMLPort() then exit(false);
         if importConfigHeader."Import XMLPort ID" = 0 then exit(false);
+        // Validate XMLPort exists
+        if not AllObjWithCaption.get(AllObjWithCaption."Object Type"::XMLport, importConfigHeader."Import XMLPort ID") then
+            Error(xmlPortNotFoundErr, importConfigHeader."Import XMLPort ID");
         sourceFileStorage.Get(ImportConfigHeader."Source File ID");
         sourceFileStorage.TestField(Name);
         sourceFileStorage.GetFileAsTempBlob(FileBlobGlobal);
