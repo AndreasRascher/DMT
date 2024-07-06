@@ -81,7 +81,7 @@ codeunit 91014 DMTMigrate
         ImportConfigHeader := DMTImportSettings.ImportConfigHeader();
         ImportConfigHeader.FilterRelated(ImportConfigLine);
         ImportConfigLine.SetFilter("Processing Action", '<>%1', ImportConfigLine."Processing Action"::Ignore);
-        if ImportConfigHeader."Use Separate Buffer Table" then
+        if ImportConfigHeader.UseSeparateBufferTable() then
             ImportConfigLine.SetFilter("Source Field No.", '<>0');
 
         if DMTImportSettings.UpdateFieldsFilter() <> '' then begin // Scope ProcessingPlan
@@ -116,7 +116,7 @@ codeunit 91014 DMTMigrate
         end;
 
         // Update From Field No From Index To Gen.Buff Field No
-        if not ImportConfigHeader."Use Separate Buffer Table" then begin
+        if ImportConfigHeader.UseGenericBufferTable() then begin
             TempImportConfigLine.Reset();
             if TempImportConfigLine.FindSet() then
                 repeat

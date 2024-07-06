@@ -31,7 +31,7 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
     var
         sourceFileStorage: Record DMTSourceFileStorage;
     begin
-        if not importConfigHeader."Use Separate Buffer Table" then exit(false);
+        if not importConfigHeader.UseSeparateXMLPort() then exit(false);
         if importConfigHeader."Import XMLPort ID" = 0 then exit(false);
         sourceFileStorage.Get(ImportConfigHeader."Source File ID");
         sourceFileStorage.TestField(Name);

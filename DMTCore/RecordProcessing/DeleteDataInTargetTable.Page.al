@@ -101,7 +101,7 @@ page 91015 DMTDeleteDataInTargetTable
 
         ImportConfigHeader.BufferTableMgt().LoadImportConfigLines(TempImportConfigLine);
         // FindSourceRef - GenBuffer
-        if not ImportConfigHeader."Use Separate Buffer Table" then begin
+        if ImportConfigHeader.UseGenericBufferTable() then begin
             GenBuffTable.Reset();
             GenBuffTable.SetRange(IsCaptionLine, false);
             GenBuffTable.FilterBy(ImportConfigHeader);
@@ -112,7 +112,7 @@ page 91015 DMTDeleteDataInTargetTable
                 exit;
         end;
         // FindSourceRef - CSVBuffer
-        if ImportConfigHeader."Use Separate Buffer Table" then begin
+        if ImportConfigHeader.UseSeparateBufferTable() then begin
             SourceRef.Open(ImportConfigHeader."Buffer Table ID");
             if SourceRef.IsEmpty then
                 exit;

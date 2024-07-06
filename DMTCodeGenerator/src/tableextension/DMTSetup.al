@@ -64,17 +64,18 @@ tableextension 90012 DMTSetup extends DMTSetup
 
         // Buffer Table ID - Assign Next Number in Filter
         // if DMTSetup."Obj. ID Range Buffer Tables" <> '' then
-        if ImportConfigHeaderRec."Separate Buffer Table Objects"
-        if (ImportConfigHeaderRec."Buffer Table ID" = 0) and (AvailableTables.Count > 0) then begin
+        if ImportConfigHeaderRec."Separate Buffer Table Objects" = ImportConfigHeaderRec."Separate Buffer Table Objects"::"generate Buffertable and XMLPort (Best performance)" then
+            if (ImportConfigHeaderRec."Buffer Table ID" = 0) and (AvailableTables.Count > 0) then begin
                 ImportConfigHeaderRec."Buffer Table ID" := AvailableTables.Get(1);
                 AvailableTables.Remove(ImportConfigHeaderRec."Buffer Table ID");
             end;
         // Import XMLPort ID - Assign Next Number in Filter
         // if DMTSetup."Obj. ID Range XMLPorts" <> '' then
-        if (ImportConfigHeaderRec."Import XMLPort ID" = 0) and (AvailableXMLPorts.Count > 0) then begin
-            ImportConfigHeaderRec."Import XMLPort ID" := AvailableXMLPorts.Get(1);
-            AvailableXMLPorts.Remove(ImportConfigHeaderRec."Import XMLPort ID");
-        end;
+        if ImportConfigHeaderRec.UseSeparateXMLPort() then
+            if (ImportConfigHeaderRec."Import XMLPort ID" = 0) and (AvailableXMLPorts.Count > 0) then begin
+                ImportConfigHeaderRec."Import XMLPort ID" := AvailableXMLPorts.Get(1);
+                AvailableXMLPorts.Remove(ImportConfigHeaderRec."Import XMLPort ID");
+            end;
         if not IsRenumberObjectsIntent then begin
             TryFindBufferTableID(ImportConfigHeaderRec, false);
             TryFindXMLPortID(ImportConfigHeaderRec, false);
