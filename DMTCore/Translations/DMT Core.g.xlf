@@ -3013,11 +3013,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Bearbeiten</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Action Edit - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3333708309 - Action 3796592595 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Refresh</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Action Reload - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 3333708309 - Action 647208151 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reset Selection</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Auswahl zurücksetzen</note>

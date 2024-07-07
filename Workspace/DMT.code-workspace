@@ -12,8 +12,8 @@
 			"name": "APP OnPrem"
 		},
 		{
-			"path": "..\\DMTCodeGenerator",
-			"name": "APP CodeGenerator"
+			"path": "..\\DMTNAVUpgradeHelper",
+			"name": "APP NAVUpgradeHelper"
 		},
 		{
 			"path": "..\\DMTTest",
