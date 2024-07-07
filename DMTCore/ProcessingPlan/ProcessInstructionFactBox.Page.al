@@ -39,6 +39,15 @@ page 91016 DMTProcessInstructionFactBox
     {
         area(Processing)
         {
+            action(Reload)
+            {
+                ApplicationArea = All;
+                Caption = 'Refresh';
+                trigger OnAction()
+                begin
+                    ReloadPageContent();
+                end;
+            }
             action(Edit)
             {
                 Caption = 'Edit', Comment = 'de-DE=Bearbeiten';
@@ -107,8 +116,11 @@ page 91016 DMTProcessInstructionFactBox
             exit;
         end;
         IsSourceTableFilterView := true;
-        CurrProcessingPlan.ConvertSourceTableFilterToFieldLines(Rec, ProcessingPlan.ID);
-        CurrPage.Update(false);
+        //CurrProcessingPlan.ConvertSourceTableFilterToFieldLines(Rec, ProcessingPlan.ID);
+        //if not Rec.IsEmpty then
+        //    rec.FindFirst();
+        ReloadPageContent();
+        //CurrPage.Update(false);
     end;
 
     internal procedure InitFactBoxAsFixedValueView(ProcessingPlan: Record DMTProcessingPlan)
@@ -169,39 +181,39 @@ page 91016 DMTProcessInstructionFactBox
         CurrPage.Update();
     end;
 
-    trigger OnFindRecord(Which: Text): Boolean
-    var
-        found: Boolean;
-    begin
-        found := Rec.Find(Which);
-        LoadLines();
-        exit(found);
-    end;
+    // trigger OnFindRecord(Which: Text): Boolean
+    // var
+    //     found: Boolean;
+    // begin
+    //     found := Rec.Find(Which);
+    //     LoadLines();
+    //     exit(found);
+    // end;
 
-    procedure LoadLines()
-    var
-        lineNo: Integer;
-        runMode: Option " ","SourceTableFilter","FixedValueView","UpdateSelectedFields";
-    begin
-        runMode := rec.GetRangeMin(PrPl_FBRunMode_Filter);
-        lineNo := rec.GetRangeMin(PrPl_LineNo_Filter);
-        // if is loaded
-        if CurrProcessingPlan."Line No." = lineNo then
-            exit;
-        CurrProcessingPlan.Get(lineNo);
-        case runMode of
-            runMode::SourceTableFilter:
-                InitFactBoxAsSourceTableFilter(CurrProcessingPlan);
-            runMode::FixedValueView:
-                InitFactBoxAsFixedValueView(CurrProcessingPlan);
-            runMode::UpdateSelectedFields:
-                InitFactBoxAsUpdateSelectedFields(CurrProcessingPlan);
-        end;
-    end;
+    // procedure LoadLines()
+    // var
+    //     lineNo: Integer;
+    //     runMode: Option " ","SourceTableFilter","FixedValueView","UpdateSelectedFields";
+    // begin
+    //     runMode := rec.GetRangeMin(PrPl_FBRunMode_Filter);
+    //     lineNo := rec.GetRangeMin(PrPl_LineNo_Filter);
+    //     // if is loaded
+    //     if CurrProcessingPlan."Line No." = lineNo then
+    //         exit;
+    //     CurrProcessingPlan.Get(lineNo);
+    //     case runMode of
+    //         runMode::SourceTableFilter:
+    //             InitFactBoxAsSourceTableFilter(CurrProcessingPlan);
+    //         runMode::FixedValueView:
+    //             InitFactBoxAsFixedValueView(CurrProcessingPlan);
+    //         runMode::UpdateSelectedFields:
+    //             InitFactBoxAsUpdateSelectedFields(CurrProcessingPlan);
+    //     end;
+    // end;
 
     var
         CurrProcessingPlan: Record DMTProcessingPlan;
-        // [InDataSet]
+        [InDataSet]
         IsFixedValueView, IsSourceTableFilterView, IsUpdateSelectedFieldsView : Boolean;
         ActionAddFieldVisible, ActionResetSelectionVisible : Boolean;
 }

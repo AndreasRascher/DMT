@@ -2928,20 +2928,25 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Ausgew. Felder verarbeiten</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control UpdateSelectedFieldsOnly - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1212190007 - Action 247166185 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1212190007 - Action 2147184157 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Clone Line</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zeile klonen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action CloneCurrLine - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 247166185 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Delete</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Löschen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action DeleteLine - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action DeleteLine - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 1212190007 - Action 1042755249 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1212190007 - Action 1042755249 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Indent Left</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Links einrücken</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentLeft - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentLeft - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 1212190007 - Action 242972736 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1212190007 - Action 242972736 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Indent Right</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Rechts einrücken</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentRight - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action IndentRight - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Action 4181015414 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>New</source>
@@ -2955,13 +2960,13 @@
         </trans-unit>
         <trans-unit id="Page 1212190007 - Action 3066818762 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reset Lines</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Zeilen zurücksetzen</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Status und Zeiten zurücksetzen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action ResetLinesAction - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1212190007 - Action 620325036 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1212190007 - Action 620325036 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Start</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Ausführen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action Start - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action Start - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Action 866183911 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create Backup</source>
@@ -2972,6 +2977,11 @@
           <source>Import Backup</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Backup importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action XMLImport - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 2982858869 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lines</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zeilen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action LineActions - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3333708309 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Processing Instructions</source>
@@ -3002,6 +3012,11 @@
           <source>Edit</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Bearbeiten</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Action Edit - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3333708309 - Action 3796592595 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Refresh</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Action Reload - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3333708309 - Action 647208151 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reset Selection</source>

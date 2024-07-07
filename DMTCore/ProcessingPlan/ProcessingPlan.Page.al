@@ -62,12 +62,11 @@ page 91017 DMTProcessingPlan
         {
             action(Start)
             {
-                Caption = 'Start', Comment = 'de-DE=Ausführen';
+                // Caption = 'Start', Comment = 'de-DE=Ausführen';
+                Caption = ' ', Locked = true;
+                ToolTip = 'Start', Comment = 'de-DE=Ausführen';
                 ApplicationArea = All;
                 Image = Start;
-                // Promoted = true;
-                // PromotedOnly = true;
-                // PromotedCategory = Process;
 
                 trigger OnAction();
                 begin
@@ -84,31 +83,10 @@ page 91017 DMTProcessingPlan
                 Scope = Repeater;
                 trigger OnAction()
                 var
-                    LineBefore, Line : Record DMTProcessingPlan;
-                    NewLineNo, NextLineNo, LastLineNo : Integer;
+                    Line: Record DMTProcessingPlan;
+                    NewLineNo: Integer;
                 begin
-                    // find last line no
-                    Clear(Line);
-                    if Line.FindLast() then
-                        LastLineNo := Line."Line No.";
-                    // find line before current rec
-                    LineBefore := Rec;
-                    if LineBefore.Next(-1) <> -1 then
-                        Clear(LineBefore);
-
-                    // find line no after current rec
-                    Line := Rec;
-                    if Line.Next(1) <> 1 then
-                        Clear(Line);
-                    NextLineNo := Line."Line No.";
-                    case true of
-                        // Rec is last line oder first line
-                        (Rec."Line No." = LastLineNo):
-                            NewLineNo := LastLineNo + 10000;
-                        // new line below current line
-                        (Rec."Line No." < LastLineNo) and (NextLineNo > Rec."Line No."):
-                            NewLineNo := (Rec."Line No." + NextLineNo) div 2;
-                    end;
+                    NewLineNo := findNextLineNoBelow();
                     if NewLineNo <> 0 then begin
                         Clear(Line);
                         Line."Line No." := NewLineNo;
@@ -126,17 +104,22 @@ page 91017 DMTProcessingPlan
             }
             action(DeleteLine)
             {
-                Caption = 'Delete', Comment = 'de-DE=Löschen';
+                // Caption = 'Delete', Comment = 'de-DE=Löschen';
+                Caption = ' ', Locked = true;
+                ToolTip = 'Delete', Comment = 'de-DE=Löschen';
                 ShortcutKey = 'Ctrl+Delete'; //TODO ShortcutKey geht nicht, Ctrl+ ist richtig
                 Image = Delete;
                 trigger OnAction()
                 begin
-                    Rec.Delete();
+                    if Rec."Line No." <> 0 then // no error when empty
+                        Rec.Delete();
                 end;
             }
             action(IndentLeft)
             {
-                Caption = 'Indent Left', Comment = 'de-DE=Links einrücken';
+                // Caption = 'Indent Left', Comment = 'de-DE=Links einrücken';
+                Caption = ' ', Locked = true;
+                ToolTip = 'Indent Left', Comment = 'de-DE=Links einrücken';
                 ApplicationArea = All;
                 Image = DecreaseIndent;
 
@@ -149,7 +132,9 @@ page 91017 DMTProcessingPlan
             }
             action(IndentRight)
             {
-                Caption = 'Indent Right', Comment = 'de-DE=Rechts einrücken';
+                // Caption = 'Indent Right', Comment = 'de-DE=Rechts einrücken';
+                Caption = ' ', Locked = true;
+                ToolTip = 'Indent Right', Comment = 'de-DE=Rechts einrücken';
                 ApplicationArea = All;
                 Image = Indent;
 
@@ -160,9 +145,32 @@ page 91017 DMTProcessingPlan
                     CurrPage.Update(false);
                 end;
             }
+            action(CloneCurrLine)
+            {
+                // Caption = 'Indent Right', Comment = 'de-DE=Rechts einrücken';
+                Caption = ' ', Locked = true;
+                ToolTip = 'Clone Line', Comment = 'de-DE=Zeile klonen';
+                ApplicationArea = All;
+                Image = Copy;
+
+                trigger OnAction()
+                var
+                    Line: Record DMTProcessingPlan;
+                    NewLineNo: Integer;
+                begin
+                    NewLineNo := findNextLineNoBelow();
+                    if NewLineNo <> 0 then begin
+                        Clear(Line);
+                        Rec.CalcFields("Source Table Filter", "Update Fields Filter", "Default Field Values");
+                        Line := Rec;
+                        Line."Line No." := NewLineNo;
+                        Line.Insert();
+                    end;
+                end;
+            }
             action(ResetLinesAction)
             {
-                Caption = 'Reset Lines', Comment = 'de-DE=Zeilen zurücksetzen';
+                Caption = 'Reset Lines', Comment = 'de-DE=Status und Zeiten zurücksetzen';
                 ApplicationArea = All;
                 Image = Restore;
 
@@ -205,10 +213,6 @@ page 91017 DMTProcessingPlan
                 Caption = 'Import Backup', Comment = 'de-DE=Backup importieren';
                 ApplicationArea = All;
                 Image = ImportCodes;
-                // Promoted = true;
-                // PromotedOnly = true;
-                // PromotedIsBig = true;
-                // PromotedCategory = Report;
 
                 trigger OnAction()
                 var
@@ -231,15 +235,27 @@ page 91017 DMTProcessingPlan
             actionref(DeleteLineRef; DeleteLine) { }
             actionref(IndentLeftRef; IndentLeft) { }
             actionref(IndentRightRef; IndentRight) { }
-            actionref(RenumberLinesActionRef; RenumberLinesAction) { }
-            actionref(ResetLinesActionRef; ResetLinesAction) { }
-            group(XMLBackup)
+            actionref(CloneCurrLineRef; CloneCurrLine) { }
+            group(Backup)
             {
-                ShowAs = SplitButton;
-                Caption = 'XML Backup', Locked = true;
+                ShowAs = Standard;
+                Caption = 'Backup', Locked = true;
                 Image = XMLSetup;
+                // group(XMLBackupActions)
+                // {
+                // Caption = 'XML Backup2', Locked = true;
+                // Image = XMLSetup;
                 actionref(XMLExportRef; XMLExport) { }
                 actionref(XMLImportRef; XMLImport) { }
+                // }
+            }
+            group(LineActions)
+            {
+                ShowAs = Standard;
+                Caption = 'Lines', Comment = 'de-DE=Zeilen';
+                Image = AllLines;
+                actionref(RenumberLinesActionRef; RenumberLinesAction) { }
+                actionref(ResetLinesActionRef; ResetLinesAction) { }
             }
         }
     }
@@ -261,9 +277,9 @@ page 91017 DMTProcessingPlan
     trigger OnAfterGetCurrRecord()
     begin
         ShowSupportedFactboxes();
-        // CurrPage.SourceTableFilter.Page.InitFactBoxAsSourceTableFilter(Rec);
-        // CurrPage.FixedValues.Page.InitFactBoxAsFixedValueView(Rec);
-        // CurrPage.ProcessSelectedFieldsOnly.Page.InitFactBoxAsUpdateSelectedFields(Rec);
+        CurrPage.SourceTableFilter.Page.InitFactBoxAsSourceTableFilter(Rec);
+        CurrPage.FixedValues.Page.InitFactBoxAsFixedValueView(Rec);
+        CurrPage.UpdateSelectedFieldsOnly.Page.InitFactBoxAsUpdateSelectedFields(Rec);
     end;
 
     local procedure RunSelected(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
@@ -411,6 +427,37 @@ page 91017 DMTProcessingPlan
         ShowSourceTableFilterPart := Rec.TypeSupportsSourceTableFilter();
         ShowFixedValuesPart := Rec.TypeSupportsFixedValues();
         ShowProcessSelectedFieldsOnly := Rec.TypeSupportsProcessSelectedFieldsOnly();
+    end;
+
+    local procedure findNextLineNoBelow() NewLineNo: Integer
+    var
+        Line: Record DMTProcessingPlan;
+        LineBefore: Record DMTProcessingPlan;
+        NextLineNo: Integer;
+        LastLineNo: Integer;
+    begin
+        // find last line no
+        Clear(Line);
+        if Line.FindLast() then
+            LastLineNo := Line."Line No.";
+        // find line before current rec
+        LineBefore := Rec;
+        if LineBefore.Next(-1) <> -1 then
+            Clear(LineBefore);
+
+        // find line no after current rec
+        Line := Rec;
+        if Line.Next(1) <> 1 then
+            Clear(Line);
+        NextLineNo := Line."Line No.";
+        case true of
+            // Rec is last line oder first line
+            (Rec."Line No." = LastLineNo):
+                NewLineNo := LastLineNo + 10000;
+            // new line below current line
+            (Rec."Line No." < LastLineNo) and (NextLineNo > Rec."Line No."):
+                NewLineNo := (Rec."Line No." + NextLineNo) div 2;
+        end;
     end;
 
     var
