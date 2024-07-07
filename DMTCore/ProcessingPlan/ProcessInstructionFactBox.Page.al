@@ -39,15 +39,6 @@ page 91016 DMTProcessInstructionFactBox
     {
         area(Processing)
         {
-            action(Reload)
-            {
-                ApplicationArea = All;
-                Caption = 'Refresh';
-                trigger OnAction()
-                begin
-                    ReloadPageContent();
-                end;
-            }
             action(Edit)
             {
                 Caption = 'Edit', Comment = 'de-DE=Bearbeiten';
@@ -213,7 +204,6 @@ page 91016 DMTProcessInstructionFactBox
 
     var
         CurrProcessingPlan: Record DMTProcessingPlan;
-        [InDataSet]
         IsFixedValueView, IsSourceTableFilterView, IsUpdateSelectedFieldsView : Boolean;
         ActionAddFieldVisible, ActionResetSelectionVisible : Boolean;
 }

@@ -40,6 +40,17 @@ codeunit 91000 DMTSessionStorage
         exit(LineNumberGlobal);
     end;
 
+    internal procedure SetUnusedCaptions()
+    var
+        fieldNo: Integer;
+    begin
+        for fieldNo := 1000 to 1300 do begin
+            if not HasCaption(fieldNo) then begin
+                AddCaption(fieldNo, 'ΞunusedΞ');
+            end;
+        end;
+    end;
+
     var
         Captions: Dictionary of [Integer, Text];
         LineNumberGlobal: Integer;

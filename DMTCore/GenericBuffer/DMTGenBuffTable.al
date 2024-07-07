@@ -369,10 +369,11 @@ table 91001 DMTGenBuffTable
 
         DMTGenBufferFieldCaptions.DisposeCaptions();
         RecRef.GetTable(GenBuffTable_CaptionLine);
-        for FieldIndex := 1001 to (1001 + GenBuffTable_CaptionLine."Column Count") do begin
+        for FieldIndex := 1001 to (1001 + GenBuffTable_CaptionLine."Column Count" - 1) do begin
             DMTGenBufferFieldCaptions.AddCaption(FieldIndex, RecRef.Field(FieldIndex).Value);
         end;
         NoOfCols := DMTGenBufferFieldCaptions.GetNoOfCaptions();
+        DMTGenBufferFieldCaptions.SetUnusedCaptions();
     end;
 
     internal procedure FilterBy(ImportConfigHeader: Record DMTImportConfigHeader) HasLinesInFilter: Boolean
