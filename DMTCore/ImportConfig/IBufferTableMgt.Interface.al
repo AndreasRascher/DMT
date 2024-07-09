@@ -5,7 +5,8 @@ interface IBufferTableMgt
     procedure InitBufferRef(var BufferRef: RecordRef);
     procedure InitBufferRef(var BufferRef: RecordRef; HideGenBufferFilters: Boolean);
     procedure LoadImportConfigLines(var tempImportConfigLine: Record DMTImportConfigLine temporary) OK: Boolean
-    procedure CheckBufferTableIsNotEmpty()
+    procedure ThrowErrorIfBufferTableIsEmpty()
+    procedure IsBufferTableEmpty(): Boolean
     procedure ReadBufferTableColumnCaptions(var BuffTableCaptions: Dictionary of [Integer, Text]) OK: Boolean
     procedure CountRecordsInBufferTable() NoOfRecords: Integer
     procedure ShowBufferTable() OK: Boolean

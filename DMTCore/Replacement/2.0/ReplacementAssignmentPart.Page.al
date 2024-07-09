@@ -308,7 +308,7 @@ page 91019 DMTReplacementAssignmentPart
                     if replacementHeader."No. of Source Values" = replacementHeader."No. of Source Values"::"2" then
                         FieldIDs.Add(rec."Source 2 Field No.");
 
-                    importConfigHeader.BufferTableMgt().CheckBufferTableIsNotEmpty();
+                    importConfigHeader.BufferTableMgt().ThrowErrorIfBufferTableIsEmpty();
                     uniqueCombinationList := genBuffTable.GetUniqueColumnValues(rec."Imp.Conf.Header ID", FieldIDs);
                     if uniqueCombinationList.Count = 0 then
                         foreach uniqueCombination in uniqueCombinationList do begin

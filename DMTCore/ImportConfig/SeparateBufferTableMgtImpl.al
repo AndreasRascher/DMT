@@ -39,14 +39,21 @@ codeunit 91022 DMTSeparateBufferTableMgtImpl implements IBufferTableMgt
         OK := tempImportConfigLine.FindFirst();
     end;
 
-    procedure CheckBufferTableIsNotEmpty()
+    procedure IsBufferTableEmpty(): Boolean
     var
         bufferRef: RecordRef;
-        bufferTableEmptyErr: Label 'The buffer table is empty. Filename: "%1"', Comment = 'de-DE=Die Puffertable entält keine Zeilen. Dateiname: "%1"';
     begin
         checkHeaderIsSet();
         InitBufferRef(bufferRef);
-        if bufferRef.IsEmpty then
+        exit(bufferRef.IsEmpty);
+    end;
+
+    procedure ThrowErrorIfBufferTableIsEmpty()
+    var
+        bufferTableEmptyErr: Label 'The buffer table is empty. Filename: "%1"', Comment = 'de-DE=Die Puffertable entält keine Zeilen. Dateiname: "%1"';
+    begin
+        checkHeaderIsSet();
+        if IsBufferTableEmpty() then
             Error(bufferTableEmptyErr, ImportConfigHeaderGlobal."Source File Name");
     end;
 

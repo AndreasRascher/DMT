@@ -53,6 +53,12 @@ page 91017 DMTProcessingPlan
                 UpdatePropagation = Both;
                 Enabled = ShowProcessSelectedFieldsOnly;
             }
+            part(LogFactBox; DMTImportConfigFactBox)
+            {
+                ApplicationArea = All;
+                Caption = 'Log', Comment = 'de-DE=Protokoll';
+                Enabled = ShowLogFactboxPart;
+            }
         }
     }
 
@@ -269,17 +275,25 @@ page 91017 DMTProcessingPlan
                 LineStyle := Format(Enum::DMTFieldStyle::Bold);
             (Rec.Status = Rec.Status::"In Progress"):
                 LineStyle := Format(Enum::DMTFieldStyle::Yellow);
+            (Rec.Status = Rec.Status::Error):
+                LineStyle := Format(Enum::DMTFieldStyle::"Red + Italic");
             (Rec.Status = Rec.Status::Finished):
                 LineStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
         end;
     end;
 
     trigger OnAfterGetCurrRecord()
+    var
+        importConfigHeader: Record DMTImportConfigHeader;
     begin
         ShowSupportedFactboxes();
         CurrPage.SourceTableFilter.Page.InitFactBoxAsSourceTableFilter(Rec);
         CurrPage.FixedValues.Page.InitFactBoxAsFixedValueView(Rec);
         CurrPage.UpdateSelectedFieldsOnly.Page.InitFactBoxAsUpdateSelectedFields(Rec);
+        if Rec.findImportConfigHeader(importConfigHeader) then begin
+            CurrPage.LogFactBox.Page.ShowAsLogAndUpdateOnAfterGetCurrRecord(importConfigHeader);
+            CurrPage.LogFactBox.Page.Update(false);
+        end;
     end;
 
     local procedure RunSelected(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
@@ -288,6 +302,7 @@ page 91017 DMTProcessingPlan
         ProcessingPlan: Record DMTProcessingPlan;
         ProcessStorage: Codeunit DMTProcessStorage;
         Success: Boolean;
+        HasErrors: Boolean;
     begin
         ProcessingPlan_SELECTED.SetFilter(Type, '<>%1&<>%2', ProcessingPlan_SELECTED.Type::Group, ProcessingPlan_SELECTED.Type::" ");
         if not ProcessingPlan_SELECTED.FindSet() then exit;
@@ -307,7 +322,8 @@ page 91017 DMTProcessingPlan
                 DMTProcessingPlanType::"Import To Target":
                     begin
                         SetStatusToStartAndCommit(ProcessingPlan);
-                        ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan);
+                        if not ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan) then
+                            HasErrors := true;
                     end;
                 DMTProcessingPlanType::"Run Codeunit":
                     begin
@@ -328,12 +344,16 @@ page 91017 DMTProcessingPlan
                         SetStatusToStartAndCommit(ProcessingPlan);
                         ImportConfigHeader.Get(ProcessingPlan.ID);
                         ImportConfigHeader.SetRecFilter();
-                        ProcessingPlanMgt.ImportToBufferTable(ImportConfigHeader, false);
-                        ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan);
+                        if not ProcessingPlanMgt.ImportToBufferTable(ImportConfigHeader, false) then
+                            HasErrors := true;
+                        if not ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan) then
+                            HasErrors := true;
                     end;
             end;
             ProcessingPlan."Processing Duration" := CurrentDateTime - ProcessingPlan.StartTime;
             ProcessingPlan.Status := ProcessingPlan.Status::Finished;
+            if HasErrors then
+                ProcessingPlan.Status := ProcessingPlan.Status::Error;
             ProcessingPlan.Modify();
             Commit();
             ProcessStorage.Unbind();
@@ -427,6 +447,7 @@ page 91017 DMTProcessingPlan
         ShowSourceTableFilterPart := Rec.TypeSupportsSourceTableFilter();
         ShowFixedValuesPart := Rec.TypeSupportsFixedValues();
         ShowProcessSelectedFieldsOnly := Rec.TypeSupportsProcessSelectedFieldsOnly();
+        ShowLogFactboxPart := Rec.TypeSupportsLog();
     end;
 
     local procedure findNextLineNoBelow() NewLineNo: Integer
@@ -464,6 +485,6 @@ page 91017 DMTProcessingPlan
         TempProcessingPlan_SELECTED: Record DMTProcessingPlan temporary;
         ProcessingPlanMgt: Codeunit DMTProcessingPlanMgt;
         // [InDataSet]
-        ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart : Boolean;
+        ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart, ShowLogFactboxPart : Boolean;
         LineStyle: Text;
 }

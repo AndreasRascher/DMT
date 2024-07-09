@@ -151,7 +151,7 @@ codeunit 91014 DMTMigrate
         importConfigHeader := DMTImportSettings.ImportConfigHeader();
 
         CheckMappedFieldsExist(importConfigHeader);
-        importConfigHeader.BufferTableMgt().CheckBufferTableIsNotEmpty();
+        importConfigHeader.BufferTableMgt().ThrowErrorIfBufferTableIsEmpty();
 
         // Show Filter Dialog
         importConfigHeader.BufferTableMgt().InitBufferRef(bufferRef, true);
