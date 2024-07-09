@@ -14,8 +14,6 @@ codeunit 90013 DMTProcessTemplateLib
         DMTFieldBuffer: Record DMTFieldBuffer;
         processTemplate: Record DMTProcessTemplate;
     begin
-
-
         processTemplate.Code := 'Sachmerkmale';
         processTemplate.Description := 'Sachmerkmale';
         processTemplate.Insert();
@@ -33,7 +31,7 @@ codeunit 90013 DMTProcessTemplateLib
         addSrcFileRequirement(processTemplate, 'Ausprägung Übersetzung.csv');
     end;
 
-    local procedure addSrcFileRequirement(processTemplate: Record DMTProcessTemplate; fileName: Text[100])
+    local procedure addSrcFileRequirement(processTemplate: Record DMTProcessTemplate; NAVSourceTableID: Integer; fileName: Text[100])
     var
         processTemplateDetails: Record DMTProcessTemplateDetails;
     begin
