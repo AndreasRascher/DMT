@@ -325,11 +325,16 @@ page 91017 DMTProcessingPlan
                     end;
                 DMTProcessingPlanType::"Buffer + Target":
                     begin
-                        SetStatusToStartAndCommit(ProcessingPlan);
-                        ImportConfigHeader.Get(ProcessingPlan.ID);
-                        ImportConfigHeader.SetRecFilter();
-                        ProcessingPlanMgt.ImportToBufferTable(ImportConfigHeader, false);
-                        ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan);
+                        if not CheckBuffer(ProcessingPlan) then begin
+
+                            exit;
+                        end else begin
+                            SetStatusToStartAndCommit(ProcessingPlan);
+                            ImportConfigHeader.Get(ProcessingPlan.ID);
+                            ImportConfigHeader.SetRecFilter();
+                            ProcessingPlanMgt.ImportToBufferTable(ImportConfigHeader, false);
+                            ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan);
+                        end;
                     end;
             end;
             ProcessingPlan."Processing Duration" := CurrentDateTime - ProcessingPlan.StartTime;
@@ -457,6 +462,20 @@ page 91017 DMTProcessingPlan
             // new line below current line
             (Rec."Line No." < LastLineNo) and (NextLineNo > Rec."Line No."):
                 NewLineNo := (Rec."Line No." + NextLineNo) div 2;
+        end;
+    end;
+
+    local procedure CheckBuffer(ProcessingPlan: Record DMTProcessingPlan) IsValid: Boolean
+    var
+        importConfigHeader: Record DMTImportConfigHeader;
+        bufferRef: RecordRef;
+        noBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filter: "%1"', Comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"';
+    begin
+        IsValid := true;
+        importConfigHeader.get(ProcessingPlan.ID);
+        importConfigHeader.BufferTableMgt().InitBufferRef(bufferRef, true);
+        if bufferRef.IsEmpty then begin
+            Message(noBufferTableRecorsInFilterErr, bufferRef.GetFilters);
         end;
     end;
 
