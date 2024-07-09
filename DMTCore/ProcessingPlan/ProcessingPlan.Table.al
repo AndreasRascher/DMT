@@ -286,12 +286,28 @@ table 91009 DMTProcessingPlan
                         TempImportConfigLine2 := ImportConfigLine;
                         TempImportConfigLine2."Processing Action" := TempImportConfigLine2."Processing Action"::FixedValue;
                         TempImportConfigLine2."Fixed Value" := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempImportConfigLine2."Fixed Value"));
+                        cleanUpFixedValue(TempImportConfigLine2);
                         TempImportConfigLine2.Insert();
                     end;
                 end;
             TmpImportConfigLine.Copy(TempImportConfigLine2, true);
             LineCount := TmpImportConfigLine.Count;
         end;
+    end;
+
+    local procedure cleanUpFixedValue(var TempImportConfigLine: Record DMTImportConfigLine temporary)
+    var
+        fixedValueText: Text;
+    begin
+        // if filter value contains spaces, brackets or quotes then the filter value is enclosed in quotes
+        fixedValueText := TempImportConfigLine."Fixed Value";
+        if fixedValueText = '' then exit;
+        if not (fixedValueText.EndsWith('''') and fixedValueText.StartsWith('''')) then
+            exit;
+        if StrLen(fixedValueText) = StrLen(DelChr(fixedValueText, '=', '() ')) then
+            exit;
+        fixedValueText := CopyStr(fixedValueText, 2, StrLen(fixedValueText) - 2);
+        TempImportConfigLine."Fixed Value" := CopyStr(fixedValueText, 1, MaxStrLen(TempImportConfigLine."Fixed Value"));
     end;
 
     procedure ConvertUpdateFieldsListToFieldLines(var TmpImportConfigLine: Record DMTImportConfigLine temporary) LineCount: Integer
