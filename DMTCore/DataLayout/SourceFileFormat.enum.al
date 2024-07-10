@@ -1,4 +1,4 @@
-enum 91000 DMTSourceFileFormat implements ISourceFileImport
+enum 50040 DMTSourceFileFormat implements ISourceFileImport
 {
     Extensible = true;
     DefaultImplementation = ISourceFileImport = DMTDefaultSourceFileImportImpl;

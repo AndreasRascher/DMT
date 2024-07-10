@@ -1,4 +1,4 @@
-page 91021 DMTImportConfigLines
+page 50161 DMTImportConfigLines
 {
     Caption = 'Import Config Lines', Comment = 'de-DE=Import Konfiguration Zeilen';
     PageType = List;

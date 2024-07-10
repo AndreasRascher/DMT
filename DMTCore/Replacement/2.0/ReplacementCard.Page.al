@@ -1,4 +1,4 @@
-page 91024 DMTReplacementCard
+page 50164 DMTReplacementCard
 {
     Caption = 'DMT Replacement Card', comment = 'de-DE=DMT Ersetzungen Karte';
     PageType = Card;

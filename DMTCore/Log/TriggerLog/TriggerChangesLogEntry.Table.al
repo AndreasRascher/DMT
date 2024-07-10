@@ -1,4 +1,4 @@
-table 91013 DMTTriggerLogEntry
+table 50153 DMTTriggerLogEntry
 {
     LookupPageId = DMTTriggerLogEntries;
     DrillDownPageId = DMTTriggerLogEntries;

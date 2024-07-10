@@ -1,4 +1,4 @@
-page 91014 DMTImportConfigFactBox
+page 50154 DMTImportConfigFactBox
 {
     Caption = 'ImportConfig FactBox';
     PageType = ListPart;

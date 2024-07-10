@@ -1,4 +1,4 @@
-page 91013 DMTLogEntries
+page 50153 DMTLogEntries
 {
     Caption = 'DMT Log Entries', Comment = 'de-DE=DMT Protokollposten';
     DeleteAllowed = false;

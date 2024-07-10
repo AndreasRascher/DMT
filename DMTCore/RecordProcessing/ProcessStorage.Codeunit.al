@@ -14,7 +14,7 @@ Code   | ProcessStorage Instanz 1 | Call Publisher Set                     | Cal
 Global |			              | Subscriber -> ProcessStorage Instanz 2 | Subscriber -> ProcessStorage Instanz 2
        |                          | Store Global                           | Get Global
 */
-codeunit 91009 DMTProcessStorage
+codeunit 50049 DMTProcessStorage
 {
     EventSubscriberInstance = Manual;
 

@@ -1,4 +1,4 @@
-codeunit 91025 DMTImportConfigPageActionImpl implements IImportConfigPageAction
+codeunit 50065 DMTImportConfigPageActionImpl implements IImportConfigPageAction
 {
     procedure ImportConfigCard_TransferToTargetTable(var Rec: Record DMTImportConfigHeader);
     var

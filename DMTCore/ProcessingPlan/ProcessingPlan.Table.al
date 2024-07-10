@@ -1,4 +1,4 @@
-table 91009 DMTProcessingPlan
+table 50149 DMTProcessingPlan
 {
     DataClassification = ToBeClassified;
     Caption = 'DMTProcessingPlan', Locked = true;
