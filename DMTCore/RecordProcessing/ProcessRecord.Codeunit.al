@@ -100,7 +100,7 @@ codeunit 91008 DMTProcessRecord
                 FieldWithTypeCorrectValueToValidate.Value := FromField.Value; // Same Type -> no conversion needed
             (FromField.Type in [FieldType::Text, FieldType::Code]):
                 if not RefHelper.EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
-                    Error('TODO');
+                    Error('TODO'); // Kommt beim Wechsel von Puffertabelle zu generischer Tabelle vor
             else
                 Error('unhandled TODO %1', FromField.Type);
         end;

@@ -67,20 +67,25 @@
 					"schemaUpdateMode": "ForceSync"
 				},
 				{
-					"name": "Akra SandboxDEV",
+					"name": "kadeco.de",
 					"type": "al",
 					"request": "launch",
-					"environmentType": "Sandbox",
-					"environmentName": "Sandbox-DEV2",
-					"startupObjectId": 22,
-					"breakOnError": "All",
+					"environmentType": "OnPrem",
+					"server": "https://bctest.kadeco.de/",
+					"serverInstance": "DEV",
+					"authentication": "UserPassword",
+					"startupObjectType": "Page",
+					"startupObjectId": 91017,
+					"breakOnError": "ExcludeTry",
 					"breakOnRecordWrite": "None",
 					"launchBrowser": true,
 					"enableSqlInformationDebugger": true,
 					"enableLongRunningSqlStatements": true,
 					"longRunningSqlStatementsThreshold": 500,
 					"numberOfSqlStatements": 10,
-					"tenant": "c2aab99e-f404-4b09-b979-b7c38bbddaaa"
+					"tenant": "default",
+					"usePublicURLFromServer": true,
+					"schemaUpdateMode": "ForceSync"
 				},
 				{
 					"name": "TEST_ABI",

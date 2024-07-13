@@ -66,7 +66,7 @@ table 91009 DMTProcessingPlan
         field(32; "Source Table Filter"; Blob) { Caption = 'Source Table Filter Blob', Locked = true; }
         field(33; "Update Fields Filter"; Blob) { Caption = 'Update Fields Filter', Locked = true; }
         field(34; "Default Field Values"; Blob) { Caption = 'Default Field Values', Locked = true; }
-        field(40; Status; Option) { Caption = 'Status', Locked = true; OptionMembers = " ","In Progress",Finished; OptionCaption = ' ,In Progress', comment = 'de-DE= ,in Arbeit, Abgeschlossen'; Editable = false; }
+        field(40; Status; Option) { Caption = 'Status', Locked = true; OptionMembers = " ","In Progress",Finished,Error; OptionCaption = ' ,In Progress,Finished,Error', comment = 'de-DE= ,in Arbeit,Abgeschlossen,Fehler'; Editable = false; }
         field(41; StartTime; DateTime) { Caption = 'Start Time', Comment = 'de-DE=Startzeit'; Editable = false; }
         field(42; "Processing Duration"; Duration) { Caption = 'Processing Duration', Comment = 'de-DE=Verarbeitungszeit'; Editable = false; }
         field(50; Indentation; Integer) { Caption = 'Indentation', Comment = 'de-DE=Einrückung'; Editable = false; }
@@ -90,7 +90,7 @@ table 91009 DMTProcessingPlan
             // ImportConfigHeader.BufferTableType := ImportConfigHeader.BufferTableType::"Seperate Buffer Table per CSV";
         end else begin
             ImportConfigHeader.Get(Rec.ID);
-            ImportConfigHeader.BufferTableMgt().CheckBufferTableIsNotEmpty();
+            ImportConfigHeader.BufferTableMgt().ThrowErrorIfBufferTableIsEmpty();
             ImportConfigHeader.BufferTableMgt().InitBufferRef(BufferRef, true);
         end;
         CurrView := ReadSourceTableView();
@@ -109,7 +109,7 @@ table 91009 DMTProcessingPlan
         CurrView: Text;
     begin
         ImportConfigHeader.Get(Rec.ID);
-        ImportConfigHeader.BufferTableMgt().CheckBufferTableIsNotEmpty();
+        ImportConfigHeader.BufferTableMgt().ThrowErrorIfBufferTableIsEmpty();
         TargetRef.Open(ImportConfigHeader."Target Table ID");
         CurrView := ReadDefaultValuesView();
         if CurrView <> '' then
@@ -286,12 +286,28 @@ table 91009 DMTProcessingPlan
                         TempImportConfigLine2 := ImportConfigLine;
                         TempImportConfigLine2."Processing Action" := TempImportConfigLine2."Processing Action"::FixedValue;
                         TempImportConfigLine2."Fixed Value" := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempImportConfigLine2."Fixed Value"));
+                        cleanUpFixedValue(TempImportConfigLine2);
                         TempImportConfigLine2.Insert();
                     end;
                 end;
             TmpImportConfigLine.Copy(TempImportConfigLine2, true);
             LineCount := TmpImportConfigLine.Count;
         end;
+    end;
+
+    local procedure cleanUpFixedValue(var TempImportConfigLine: Record DMTImportConfigLine temporary)
+    var
+        fixedValueText: Text;
+    begin
+        // if filter value contains spaces, brackets or quotes then the filter value is enclosed in quotes
+        fixedValueText := TempImportConfigLine."Fixed Value";
+        if fixedValueText = '' then exit;
+        if not (fixedValueText.EndsWith('''') and fixedValueText.StartsWith('''')) then
+            exit;
+        if StrLen(fixedValueText) = StrLen(DelChr(fixedValueText, '=', '() ')) then
+            exit;
+        fixedValueText := CopyStr(fixedValueText, 2, StrLen(fixedValueText) - 2);
+        TempImportConfigLine."Fixed Value" := CopyStr(fixedValueText, 1, MaxStrLen(TempImportConfigLine."Fixed Value"));
     end;
 
     procedure ConvertUpdateFieldsListToFieldLines(var TmpImportConfigLine: Record DMTImportConfigLine temporary) LineCount: Integer
@@ -355,4 +371,16 @@ table 91009 DMTProcessingPlan
         IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"];
     end;
 
+    internal procedure TypeSupportsLog() IsSupported: Boolean
+    begin
+        IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"];
+    end;
+
+    procedure findImportConfigHeader(var importConfigHeader: Record DMTImportConfigHeader) OK: Boolean
+    begin
+        if not (Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"]) then
+            exit(false);
+        Clear(importConfigHeader);
+        OK := importConfigHeader.Get(Rec.ID);
+    end;
 }
