@@ -23,13 +23,13 @@ table 90013 DMTProcessTemplateDetails
         field(10; "Requirement Sub Type"; Option)
         {
             Caption = 'Requirement Type', Comment = 'de-DE=Anforderungstyp';
-            OptionMembers = " ",SourceFile,MigrationTable,MigrationCodeunit;
-            OptionCaption = ' ,SourceFile,MigrationTable,MigrationCodeunit',
-                  Comment = 'de-DE= ,Quelldatei,Migrations-Tabelle,Migrations-Codeunit';
+            OptionMembers = " ",SourceFile,"Table","Codeunit";
+            OptionCaption = ' ,SourceFile,Table,Codeunit',
+                  Comment = 'de-DE= ,Quelldatei,Tabelle,Codeunit';
         }
-        field(11; "Req. Src.Filename"; Text[250])
+        field(11; "Name"; Text[250])
         {
-            Caption = 'Source File Name', Comment = 'de-DE=Quelldateiname (Vorraussetzung)';
+            Caption = 'Name', Comment = 'de-DE=Name';
         }
         field(12; "Object Type (Req.)"; Option)
         {
@@ -46,30 +46,29 @@ table 90013 DMTProcessTemplateDetails
             var
                 AllObjWithCaption: Record AllObjWithCaption;
             begin
-                Rec."Object Name (Req.)" := '';
+                Rec.Name := '';
                 if (Rec."Object Type (Req.)" = Rec."Object Type (Req.)"::Codeunit) then
                     if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Codeunit, Rec."Object ID (Req.)") then
-                        Rec."Object Name (Req.)" := AllObjWithCaption."Object Caption";
+                        Rec.Name := AllObjWithCaption."Object Caption";
 
                 if Rec."Object Type (Req.)" = Rec."Object Type (Req.)"::Table then
                     if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, Rec."Object ID (Req.)") then
-                        Rec."Object Name (Req.)" := AllObjWithCaption."Object Caption"
+                        Rec.Name := AllObjWithCaption."Object Caption"
             end;
         }
-        field(14; "Object Name (Req.)"; Text[249])
-        {
-            Caption = 'Object Name (Req.)', Comment = 'de-DE=Objektname (Vorraussetzung)';
-        }
+        // field(14; "Object Name (Req.)"; Text[249])
+        // {
+        //     Caption = 'Object Name (Req.)', Comment = 'de-DE=Objektname (Vorraussetzung)';
+        // }
         field(15; "NAV Source Table No.(Req.)"; Integer)
         {
             Caption = 'NAV Source Table No.(Req.)', Comment = 'de-DE=NAV Quelltabelle Nr.(Vorraussetzung)';
         }
         #endregion Requirement
         #region Step
-        field(20; "Step Type"; Option)
+        field(20; "Processing Plan Type"; Enum DMTProcessingPlanType)
         {
-            Caption = 'Step Type', Comment = 'de-DE=Schritt Typ';
-            OptionMembers = ,MigrationTable,MigrationCodeunit;
+            Caption = 'Processing Plan Type', Comment = 'de-DE=Verarbeitungsplan Art';
         }
         #endregion Step
     }

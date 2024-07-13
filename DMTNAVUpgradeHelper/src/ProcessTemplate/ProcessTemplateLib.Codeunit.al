@@ -32,6 +32,36 @@ codeunit 90013 DMTProcessTemplateLib
         // - Migrationspaket in Verarbeitungsplan aufnehmen
     end;
 
+    internal procedure TransferToProcessingPlan(processTemplate: Record DMTProcessTemplate)
+    var
+        processingPlan: Record DMTProcessingPlan;
+        processTemplateDetails: Record DMTProcessTemplateDetails;
+        nextLineNo: Integer;
+        templateAlreadyTransferedErr: Label 'Process Template %1 already transferred to Processing Plan', Comment = 'de-DE=Vorlage %1 wurde bereits übertragen';
+    begin
+        processingPlan.SetRange("Process Template Code", processTemplate.Code);
+        if not processingPlan.IsEmpty() then
+            Error(templateAlreadyTransferedErr, processTemplate.Code);
+
+        processingPlan.Reset();
+        if not processingPlan.FindLast() then;
+        nextLineNo := processingPlan."Line No." + 10000;
+
+        processTemplateDetails.SetRange(Type, processTemplateDetails.Type::Step);
+        if not processTemplateDetails.filterFor(processTemplate) then
+            exit;
+        processTemplateDetails.FindSet();
+        repeat
+            processingPlan.Init();
+            processingPlan."Line No." := nextLineNo;
+            processingPlan.Type := processTemplateDetails."Processing Plan Type";
+            processingPlan."Process Template Code" := processTemplate.Code;
+            processingPlan.Description := processTemplateDetails.Name;
+            processingPlan.Insert();
+            nextLineNo += 10000;
+        until processTemplateDetails.Next() = 0;
+    end;
+
     local procedure Insert_Contact_Customer_Vendor()
     var
         processTemplate: Record DMTProcessTemplate;
@@ -69,7 +99,7 @@ codeunit 90013 DMTProcessTemplateLib
         processTemplateDetails."Line No." := processTemplateDetails.getNextLineNo();
         processTemplateDetails.Type := processTemplateDetails.Type::Requirement;
         processTemplateDetails."Requirement Sub Type" := processTemplateDetails."Requirement Sub Type"::SourceFile;
-        processTemplateDetails."Req. Src.Filename" := fileName;
+        processTemplateDetails."Name" := fileName;
         processTemplateDetails."NAV Source Table No.(Req.)" := NAVSourceTableID;
         processTemplateDetails.Insert();
     end;
@@ -82,10 +112,10 @@ codeunit 90013 DMTProcessTemplateLib
         processTemplateDetails."Process Template Code" := processTemplate.Code;
         processTemplateDetails."Line No." := processTemplateDetails.getNextLineNo();
         processTemplateDetails.Type := processTemplateDetails.Type::Requirement;
-        processTemplateDetails."Requirement Sub Type" := processTemplateDetails."Requirement Sub Type"::MigrationCodeunit;
+        processTemplateDetails."Requirement Sub Type" := processTemplateDetails."Requirement Sub Type"::"Codeunit";
         processTemplateDetails."Object Type (Req.)" := processTemplateDetails."Object Type (Req.)"::Codeunit;
         processTemplateDetails."Object ID (Req.)" := objectID;
-        processTemplateDetails."Object Name (Req.)" := objectName;
+        processTemplateDetails.Name := objectName;
         processTemplateDetails.Insert();
     end;
 

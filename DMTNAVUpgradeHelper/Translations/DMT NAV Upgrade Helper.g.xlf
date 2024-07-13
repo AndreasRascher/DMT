@@ -33,6 +33,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilennummer</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateDetails - Field Line No. - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 711163168 - Field 2961552353 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Name</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Name</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateDetails - Field Name - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 711163168 - Field 4035500440 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>NAV Source Table No.(Req.)</source>
           <note from="Developer" annotates="general" priority="2">de-DE=NAV Quelltabelle Nr.(Vorraussetzung)</note>
@@ -42,11 +47,6 @@
           <source>Object ID (Req.)</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Objekt ID (Vorraussetzung)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateDetails - Field Object ID (Req.) - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 711163168 - Field 1206142221 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Object Name (Req.)</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Objektname (Vorraussetzung)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateDetails - Field Object Name (Req.) - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 711163168 - Field 2847804296 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Object Type (Req.)</source>
@@ -63,19 +63,14 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Prozessvorlage Code</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateDetails - Field Process Template Code - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 711163168 - Field 3459562655 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Source File Name</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Quelldateiname (Vorraussetzung)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateDetails - Field Req. Src.Filename - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 711163168 - Field 2898467957 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Requirement Type</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Anforderungstyp</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateDetails - Field Requirement Sub Type - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 711163168 - Field 2898467957 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
-          <source> ,SourceFile,MigrationTable,MigrationCodeunit</source>
-          <note from="Developer" annotates="general" priority="2">de-DE= ,Quelldatei,Migrations-Tabelle,Migrations-Codeunit</note>
+          <source> ,SourceFile,Table,Codeunit</source>
+          <note from="Developer" annotates="general" priority="2">de-DE= ,Quelldatei,Tabelle,Codeunit</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateDetails - Field Requirement Sub Type - Property OptionCaption</note>
         </trans-unit>
         <trans-unit id="Table 711163168 - Field 3674987782 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -113,6 +108,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Kontakt, Kunde, Lieferant</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method Insert_Contact_Customer_Vendor - NamedType CustContVendorLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 634704931 - Method 2014718948 - NamedType 2277219875" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Process Template %1 already transferred to Processing Plan</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vorlage %1 wurde bereits übertragen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method TransferToProcessingPlan - NamedType templateAlreadyTransferedErr</note>
+        </trans-unit>
         <trans-unit id="Page 2911572108 - Control 1735507514 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Code</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -133,10 +133,20 @@
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Prozessvorlagen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateList - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2371400208 - Action 2014718948 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Transfer to Processing Plan</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=In Verarbeitungsplan übertragen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateList - Action TransferToProcessingPlan - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3655853132 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Requirements</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Vorraussetzungen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page ProcessTemplateRequirementFB - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3655853132 - Control 1061624206 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>NAV Table Filter</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=NAV Tabellenfilter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page ProcessTemplateRequirementFB - Control NAVSourceTableFilter - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3655853132 - Control 1226282471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Requirements</source>
@@ -227,6 +237,11 @@
           <source>NAV Src.Table No.</source>
           <note from="Developer" annotates="general" priority="2">de-DE=NAV Tabellennr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTImportConfigHeader - Field NAV Src.Table No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1212190007 - Field 3992063146 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1212190007">
+          <source>Process Template Code</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Prozessvorlage Code</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension DMTProcessingPlan - Field Process Template Code - Property Caption</note>
         </trans-unit>
         <trans-unit id="TableExtension 521254526 - Method 4293292305 - NamedType 2167175506" size-unit="char" translate="yes" xml:space="preserve" al-object-target="TableExtension 521254526">
           <source>No free object IDs of type %1 could be found. Defined ID range in setup: %2</source>

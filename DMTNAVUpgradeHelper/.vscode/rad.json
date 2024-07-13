@@ -1,1 +1,1 @@
-﻿{"Added":[],"Modified":[{"Id":90013,"Kind":11,"Name":"DMTProcessTemplateLib","Namespace":""},{"Id":90012,"Kind":10,"Name":"DMTProcessTemplate","Namespace":""}],"Removed":[]}
+﻿{"Added":[],"Modified":[{"Id":90013,"Kind":17,"Name":"DMTProcessingPlan","Namespace":""},{"Id":90012,"Kind":12,"Name":"DMTProcessTemplateList","Namespace":""},{"Id":90013,"Kind":11,"Name":"DMTProcessTemplateLib","Namespace":""}],"Removed":[]}

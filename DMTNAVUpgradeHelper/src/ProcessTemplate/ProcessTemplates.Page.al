@@ -14,8 +14,8 @@ page 90012 DMTProcessTemplateList
             {
                 field("Code"; Rec."Code") { }
                 field(Description; Rec.Description) { }
-                field("Required Files"; Rec."Required Files Ratio") { StyleExpr = requiredFilesStyle; }
-                field("Required Objects"; Rec."Required Objects Ratio") { StyleExpr = requiredObjectsStyle; }
+                field("Required Files"; Rec."Required Files Ratio") { StyleExpr = Rec.RequiredFilesStyle; }
+                field("Required Objects"; Rec."Required Objects Ratio") { StyleExpr = Rec.RequiredObjectsStyle; }
             }
         }
         area(Factboxes)
@@ -33,6 +33,27 @@ page 90012 DMTProcessTemplateList
 
     actions
     {
+        area(Processing)
+        {
+            action(TransferToProcessingPlan)
+            {
+                ApplicationArea = All;
+                Image = Process;
+                Caption = 'Transfer to Processing Plan', Comment = 'de-DE=In Verarbeitungsplan übertragen';
+                trigger OnAction()
+                var
+                    ProcessTemplateLib: Codeunit DMTProcessTemplateLib;
+                begin
+                    ProcessTemplateLib.TransferToProcessingPlan(Rec);
+                end;
+            }
+        }
+        area(Promoted)
+        {
+            actionref(TransferToProcessingPlanRef; TransferToProcessingPlan)
+            {
+            }
+        }
     }
 
     trigger OnOpenPage()
@@ -47,6 +68,4 @@ page 90012 DMTProcessTemplateList
         Rec.UpdateIndicators();
     end;
 
-    var
-        requiredFilesStyle, requiredObjectsStyle : text;
 }

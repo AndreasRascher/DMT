@@ -67,8 +67,8 @@ table 90012 DMTProcessTemplate
         processTemplateDetails: Record DMTProcessTemplateDetails;
     begin
         checkRequirementStatusByType(Rec.RequiredObjectsStyle, Rec."Required Objects Ratio", Rec,
-                                    StrSubstNo('%1|%2', processTemplateDetails."Requirement Sub Type"::MigrationCodeunit,
-                                                        processTemplateDetails."Requirement Sub Type"::MigrationTable));
+                                    StrSubstNo('%1|%2', processTemplateDetails."Requirement Sub Type"::"Codeunit",
+                                                        processTemplateDetails."Requirement Sub Type"::"Table"));
         checkRequirementStatusByType(Rec.RequiredFilesStyle, Rec."Required Files Ratio", Rec,
                                     StrSubstNo('%1', processTemplateDetails."Requirement Sub Type"::SourceFile));
     end;
@@ -90,16 +90,16 @@ table 90012 DMTProcessTemplate
                 case processTemplateDetails."Requirement Sub Type" of
                     processTemplateDetails."Requirement Sub Type"::SourceFile:
                         begin
-                            sourceFileStorage.SetFilter(Name, processTemplateDetails."Req. Src.Filename");
+                            sourceFileStorage.SetFilter(Name, processTemplateDetails."Name");
                             if not sourceFileStorage.IsEmpty() then
                                 noOfEntitiesFound += 1;
                         end;
-                    processTemplateDetails."Requirement Sub Type"::MigrationCodeunit:
+                    processTemplateDetails."Requirement Sub Type"::"Codeunit":
                         begin
                             if allObjWithCaption.get(allObjWithCaption."Object Type"::Codeunit, processTemplateDetails."Object ID (Req.)") then
                                 noOfEntitiesFound += 1;
                         end;
-                    processTemplateDetails."Requirement Sub Type"::MigrationTable:
+                    processTemplateDetails."Requirement Sub Type"::"Table":
                         begin
                             if allObjWithCaption.get(allObjWithCaption."Object Type"::Table, processTemplateDetails."Object ID (Req.)") then
                                 noOfEntitiesFound += 1;
