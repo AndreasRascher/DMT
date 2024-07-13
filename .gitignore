@@ -12,3 +12,4 @@ Workspace/*.app
 
 
 DMTCodeGenerator/generatedObjects/*.al
+DMTNAVUpgradeHelper/*.app

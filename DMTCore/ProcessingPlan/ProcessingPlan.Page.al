@@ -26,7 +26,13 @@ page 91017 DMTProcessingPlan
                 field(ProcessingTime; Rec."Processing Duration") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(StartTime; Rec.StartTime) { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(Status; Rec.Status) { ApplicationArea = All; StyleExpr = LineStyle; }
-                field("Source Table No."; Rec."Source Table No.") { ApplicationArea = All; StyleExpr = LineStyle; }
+                field("Source Table No."; Rec."Source Table No.")
+                {
+                    ApplicationArea = All;
+                    StyleExpr = LineStyle;
+                    ToolTip = 'Defining the source table no. for which a filter as event is provided for rows of type Codeunit.',
+                    comment = 'de-DE=Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.';
+                }
                 field("Line No."; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
             }
         }

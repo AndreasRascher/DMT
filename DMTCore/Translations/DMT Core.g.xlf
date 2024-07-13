@@ -2014,8 +2014,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Processing Duration - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 76420432 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Source Table No.</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Herkunftstabellennr.</note>
+          <source>Source Table No. (Codeunit)</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Herkunftstabellennr. (Codeunit)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Source Table No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 530928583 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2922,6 +2922,11 @@
           <source>DMT Processing Plan</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Verarbeitungsplan</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 76420432 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Defining the source table no. for which a filter as event is provided for rows of type Codeunit.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control Source Table No. - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Control 3177385690 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Default Values</source>
