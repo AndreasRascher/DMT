@@ -13,3 +13,4 @@ Workspace/*.app
 
 DMTCodeGenerator/generatedObjects/*.al
 DMTNAVUpgradeHelper/*.app
+DMTNAVUpgradeHelper/.vscode/rad.json

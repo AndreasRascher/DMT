@@ -14,6 +14,8 @@ page 90012 DMTProcessTemplateList
             {
                 field("Code"; Rec."Code") { }
                 field(Description; Rec.Description) { }
+                field("Required Files"; Rec."Required Files Ratio") { StyleExpr = requiredFilesStyle; }
+                field("Required Objects"; Rec."Required Objects Ratio") { StyleExpr = requiredObjectsStyle; }
             }
         }
         area(Factboxes)
@@ -39,4 +41,12 @@ page 90012 DMTProcessTemplateList
     begin
         ProcessTemplateLib.InsertProcessTemplateData();
     end;
+
+    trigger OnAfterGetRecord()
+    begin
+        Rec.UpdateIndicators();
+    end;
+
+    var
+        requiredFilesStyle, requiredObjectsStyle : text;
 }

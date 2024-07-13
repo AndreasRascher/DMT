@@ -20,12 +20,12 @@ table 90013 DMTProcessTemplateDetails
             OptionMembers = Requirement,Step;
         }
         #region Requirement
-        field(10; "Requirement Type"; Option)
+        field(10; "Requirement Sub Type"; Option)
         {
             Caption = 'Requirement Type', Comment = 'de-DE=Anforderungstyp';
-            OptionMembers = SourceFile,MigrationTable,MigrationCodeunit;
-            OptionCaption = 'SourceFile,MigrationTable,MigrationCodeunit',
-                  Comment = 'de-DE=Quelldatei,Migrations-Tabelle,Migrations-Codeunit';
+            OptionMembers = " ",SourceFile,MigrationTable,MigrationCodeunit;
+            OptionCaption = ' ,SourceFile,MigrationTable,MigrationCodeunit',
+                  Comment = 'de-DE= ,Quelldatei,Migrations-Tabelle,Migrations-Codeunit';
         }
         field(11; "Req. Src.Filename"; Text[250])
         {
@@ -59,6 +59,10 @@ table 90013 DMTProcessTemplateDetails
         field(14; "Object Name (Req.)"; Text[249])
         {
             Caption = 'Object Name (Req.)', Comment = 'de-DE=Objektname (Vorraussetzung)';
+        }
+        field(15; "NAV Source Table No.(Req.)"; Integer)
+        {
+            Caption = 'NAV Source Table No.(Req.)', Comment = 'de-DE=NAV Quelltabelle Nr.(Vorraussetzung)';
         }
         #endregion Requirement
         #region Step
