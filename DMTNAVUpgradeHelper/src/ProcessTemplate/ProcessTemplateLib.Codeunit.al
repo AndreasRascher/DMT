@@ -55,8 +55,10 @@ codeunit 90013 DMTProcessTemplateLib
             processingPlan.Init();
             processingPlan."Line No." := nextLineNo;
             processingPlan.Type := processTemplateDetails."Processing Plan Type";
+            processingPlan.ID := findProcessingPlanID(processTemplateDetails);
             processingPlan."Process Template Code" := processTemplate.Code;
             processingPlan.Description := processTemplateDetails.Name;
+            processingPlan.Indentation := processTemplateDetails."Proc.Plan Indentation";
             processingPlan.Insert();
             nextLineNo += 10000;
         until processTemplateDetails.Next() = 0;
@@ -117,6 +119,45 @@ codeunit 90013 DMTProcessTemplateLib
         processTemplateDetails."Object ID (Req.)" := objectID;
         processTemplateDetails.Name := objectName;
         processTemplateDetails.Insert();
+    end;
+
+    local procedure findProcessingPlanID(processTemplateDetails: Record DMTProcessTemplateDetails): Integer
+    var
+        sourceFileStorage: Record DMTSourceFileStorage;
+        importConfigHeader: Record DMTImportConfigHeader;
+        sourceFileNotFoundErr: Label 'Source File %1 not found', Comment = 'de-DE=Quelldatei %1 nicht gefunden';
+        noImportConfigExitsForSourceFileErr: Label 'No Import Configuration exits for Source File %1', Comment = 'de-DE=Keine Importkonfiguration für Quelldatei %1 vorhanden';
+    begin
+        case processTemplateDetails."Processing Plan Type" of
+            processTemplateDetails."Processing Plan Type"::" ",
+            processTemplateDetails."Processing Plan Type"::Group:
+                exit(0);
+            processTemplateDetails."Processing Plan Type"::"Buffer + Target",
+            processTemplateDetails."Processing Plan Type"::"Import To Target",
+            processTemplateDetails."Processing Plan Type"::"Update Field":
+                begin
+                    // find source file
+                    processTemplateDetails.TestField(processTemplateDetails.Name);
+                    sourceFileStorage.SetRange(Name, processTemplateDetails.Name);
+                    if not sourceFileStorage.FindFirst() then
+                        Error(sourceFileNotFoundErr, processTemplateDetails.Name);
+
+                    // find import configuration
+                    importConfigHeader.SetRange("Source File ID", sourceFileStorage."File ID");
+                    if not importConfigHeader.FindFirst() then
+                        Error(noImportConfigExitsForSourceFileErr, processTemplateDetails.Name);
+                    //TODO: create import configuration
+                    exit(importConfigHeader."ID")
+                end;
+            processTemplateDetails."Processing Plan Type"::"Run Codeunit":
+                begin
+                    processTemplateDetails.TestField("Object Type (Req.)", processTemplateDetails."Object Type (Req.)"::Codeunit);
+                    processTemplateDetails.TestField("Object ID (Req.)");
+                    exit(processTemplateDetails."Object ID (Req.)");
+                end;
+            else
+                Error('Processing Plan Type %1 not supported', processTemplateDetails."Processing Plan Type");
+        end;
     end;
 
 

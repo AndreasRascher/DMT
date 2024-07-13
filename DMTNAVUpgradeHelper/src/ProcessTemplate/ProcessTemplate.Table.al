@@ -38,13 +38,10 @@ table 90012 DMTProcessTemplate
     }
     trigger OnDelete()
     var
-        processTemplateRequirement: Record DMTProcessTemplateDetails;
-        processTemplateSteps: Record DMTProcessTemplateSteps;
+        processTemplateDetails: Record DMTProcessTemplateDetails;
     begin
-        if processTemplateRequirement.filterFor(Rec) then
-            processTemplateRequirement.DeleteAll();
-        if processTemplateSteps.filterFor(Rec) then
-            processTemplateSteps.DeleteAll();
+        if processTemplateDetails.filterFor(Rec) then
+            processTemplateDetails.DeleteAll();
     end;
 
     internal procedure addTemplate(DescriptionNEW: Text[250]) OK: Boolean

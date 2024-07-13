@@ -56,10 +56,6 @@ table 90013 DMTProcessTemplateDetails
                         Rec.Name := AllObjWithCaption."Object Caption"
             end;
         }
-        // field(14; "Object Name (Req.)"; Text[249])
-        // {
-        //     Caption = 'Object Name (Req.)', Comment = 'de-DE=Objektname (Vorraussetzung)';
-        // }
         field(15; "NAV Source Table No.(Req.)"; Integer)
         {
             Caption = 'NAV Source Table No.(Req.)', Comment = 'de-DE=NAV Quelltabelle Nr.(Vorraussetzung)';
@@ -70,6 +66,7 @@ table 90013 DMTProcessTemplateDetails
         {
             Caption = 'Processing Plan Type', Comment = 'de-DE=Verarbeitungsplan Art';
         }
+        field(21; "Proc.Plan Indentation"; Integer) { Caption = 'Processing Plan Indentation', Comment = 'de-DE=Verarbeitungsplan Einrückung'; Editable = false; }
         #endregion Step
     }
 
