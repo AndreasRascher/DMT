@@ -38,7 +38,7 @@ table 90012 DMTProcessTemplate
     }
     trigger OnDelete()
     var
-        processTemplateDetails: Record DMTProcessTemplateDetails;
+        processTemplateDetails: Record DMTProcessTemplateDetail;
     begin
         if processTemplateDetails.filterFor(Rec) then
             processTemplateDetails.DeleteAll();
@@ -61,7 +61,7 @@ table 90012 DMTProcessTemplate
 
     procedure UpdateIndicators()
     var
-        processTemplateDetails: Record DMTProcessTemplateDetails;
+        processTemplateDetails: Record DMTProcessTemplateDetail;
     begin
         checkRequirementStatusByType(Rec.RequiredObjectsStyle, Rec."Required Objects Ratio", Rec,
                                     StrSubstNo('%1|%2', processTemplateDetails."Requirement Sub Type"::"Codeunit",
@@ -72,7 +72,7 @@ table 90012 DMTProcessTemplate
 
     local procedure checkRequirementStatusByType(var styleExprNew: Text[15]; var requiredEntityRation: text[10]; processTemplate: Record DMTProcessTemplate; requirementSubTypeFilter: Text)
     var
-        processTemplateDetails: Record dmtProcessTemplateDetails;
+        processTemplateDetails: Record DMTProcessTemplateDetail;
         sourceFileStorage: Record DMTSourceFileStorage;
         allObjWithCaption: Record AllObjWithCaption;
         noOfRequiredEntities, noOfEntitiesFound : Integer;

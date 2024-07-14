@@ -1,4 +1,4 @@
-table 90013 DMTProcessTemplateDetails
+table 90013 DMTProcessTemplateDetail
 {
     DataClassification = ToBeClassified;
 
@@ -91,7 +91,7 @@ table 90013 DMTProcessTemplateDetails
 
     internal procedure getNextLineNo() nextLineNo: Integer
     var
-        DMTProcessTemplateDetails: Record DMTProcessTemplateDetails;
+        DMTProcessTemplateDetails: Record DMTProcessTemplateDetail;
     begin
         Rec.TestField("Process Template Code");
         DMTProcessTemplateDetails.SetRange("Process Template Code", Rec."Process Template Code");

@@ -3,7 +3,7 @@ page 90014 ProcessTemplateRequirementFB
 {
     Caption = 'Requirements', Comment = 'de-DE=Vorraussetzungen';
     PageType = ListPart;
-    SourceTable = DMTProcessTemplateDetails;
+    SourceTable = DMTProcessTemplateDetail;
     SourceTableView = where(Type = const(Requirement));
     DeleteAllowed = false;
     InsertAllowed = false;
@@ -32,7 +32,7 @@ page 90014 ProcessTemplateRequirementFB
 
     local procedure BuildNAVSourceTableFilter() sourceTableFilter: Text
     var
-        Rec2: Record DMTProcessTemplateDetails;
+        Rec2: Record DMTProcessTemplateDetail;
     begin
         Rec2.Copy(Rec);
         if Rec2.IsEmpty then exit('');
