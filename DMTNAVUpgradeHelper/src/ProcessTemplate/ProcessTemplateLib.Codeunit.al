@@ -78,14 +78,14 @@ codeunit 90013 DMTProcessTemplateLib
 
         addStep_ImportToBuffer(processTemplateDetail, processTemplate, 'Kontakt.csv');
 
-        addStep_ImportToTarget(processTemplate, 'Kontakt.csv');
-        addFilterForImport(processTemplateDetail, 'Kontakt.csv', 'Type', '0');
+        addStep_ImportToTarget(processTemplateDetail, processTemplate, 'Kontakt.csv');
+        addFilterForImport(processTemplateDetail, 'Type', '0');
 
-        addStep_ImportToTarget(processTemplate, 'Kontakt.csv');
-        addFilterForImport(processTemplateDetail, 'Kontakt.csv', 'Type', '1');
+        addStep_ImportToTarget(processTemplateDetail, processTemplate, 'Kontakt.csv');
+        addFilterForImport(processTemplateDetail, 'Type', '1');
 
         addStep_ImportToBuffer(processTemplateDetail, processTemplate, 'Debitor.csv');
-        addStep_ImportToTarget(processTemplate, 'Debitor.csv');
+        addStep_ImportToTarget(processTemplateDetail, processTemplate, 'Debitor.csv');
     end;
 
     local procedure Insert_Sachmerkmale()
