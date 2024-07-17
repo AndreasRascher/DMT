@@ -59,7 +59,7 @@ codeunit 90013 DMTProcessTemplateLib
             processingPlan."Process Template Code" := processTemplate.Code;
             processingPlan.Description := processTemplateDetails.Name;
             processingPlan.Indentation := processTemplateDetails."PrPl Indentation";
-            addSourceFilter(processTemplateDetails, processingPlan);
+            addSourceFilter(processingPlan, processTemplateDetails);
             processingPlan.Insert();
             nextLineNo += 10000;
         until processTemplateDetails.Next() = 0;
@@ -75,10 +75,15 @@ codeunit 90013 DMTProcessTemplateLib
         addSrcFileRequirement(processTemplate, 5050, 'Kontakt.csv');
         addSrcFileRequirement(processTemplate, 18, 'Debitor.csv');
         addSrcFileRequirement(processTemplate, 27, 'Kreditor.csv');
+
         addStep_ImportToBuffer(processTemplateDetail, processTemplate, 'Kontakt.csv');
+
+        addStep_ImportToTarget(processTemplate, 'Kontakt.csv');
         addFilterForImport(processTemplateDetail, 'Kontakt.csv', 'Type', '0');
-        addStep_ImportToBuffer(processTemplateDetail, processTemplate, 'Kontakt.csv');
+
+        addStep_ImportToTarget(processTemplate, 'Kontakt.csv');
         addFilterForImport(processTemplateDetail, 'Kontakt.csv', 'Type', '1');
+
         addStep_ImportToBuffer(processTemplateDetail, processTemplate, 'Debitor.csv');
         addStep_ImportToTarget(processTemplate, 'Debitor.csv');
     end;
@@ -140,7 +145,7 @@ codeunit 90013 DMTProcessTemplateLib
         processTemplateDetails_NEW.Insert();
     end;
 
-    local procedure addStep_ImportToTarget(processTemplate: Record DMTProcessTemplate; importFileName: Text[250])
+    local procedure addStep_ImportToTarget(var processTemplateDetails_NEW: Record DMTProcessTemplateDetail; processTemplate: Record DMTProcessTemplate; importFileName: Text[250])
     var
         processTemplateDetails: Record DMTProcessTemplateDetail;
     begin
@@ -155,13 +160,14 @@ codeunit 90013 DMTProcessTemplateLib
 
     local procedure findOrCreateProcessingPlanID(processTemplateDetails: Record DMTProcessTemplateDetail): Integer
     var
+        importConfigHeader: Record DMTImportConfigHeader;
         sourceFileStorage: Record DMTSourceFileStorage;
         tempSourceFileStorage: Record DMTSourceFileStorage temporary;
-        importConfigHeader: Record DMTImportConfigHeader;
         importConfigMgt: Codeunit DMTImportConfigMgt;
-        sourceFileNotFoundErr: Label 'Source File %1 not found', Comment = 'de-DE=Quelldatei %1 nicht gefunden';
+        ISourceFileImport: Interface ISourceFileImport;
         noImportConfigExitsForSourceFileErr: Label 'No Import Configuration exits for Source File %1', Comment = 'de-DE=Keine Importkonfiguration für Quelldatei %1 vorhanden';
         notSupportedProcessingPlanTypeErr: Label 'Processing Plan Type "%1" not supported', Comment = 'de-DE=Verarbeitungsplan Typ "%1" wird nicht unterstützt';
+        sourceFileNotFoundErr: Label 'Source File %1 not found', Comment = 'de-DE=Quelldatei %1 nicht gefunden';
     begin
         case processTemplateDetails."PrPl Type" of
             processTemplateDetails."PrPl Type"::" ",
@@ -190,8 +196,8 @@ codeunit 90013 DMTProcessTemplateLib
                         if not importConfigHeader.FindFirst() then
                             Error(noImportConfigExitsForSourceFileErr, processTemplateDetails.Name)
                         else begin
-                            if importConfigHeader.UseGenericBufferTable() then
-                                importConfigHeader.ImportFileToBuffer();
+                            ISourceFileImport := importConfigHeader.GetSourceFileStorage().SourceFileFormat;
+                            ISourceFileImport.ImportSelectedRows(importConfigHeader, importConfigHeader.GetDataLayout().HeadingRowNo, importConfigHeader.GetDataLayout().HeadingRowNo);
                             importConfigMgt.PageAction_ProposeMatchingFields(importConfigHeader.ID);
                         end;
                     end;
@@ -208,7 +214,7 @@ codeunit 90013 DMTProcessTemplateLib
         end;
     end;
 
-    local procedure addFilterForImport(processTemplateDetail: Record DMTProcessTemplateDetail; fileName: Text; fieldName: Text[30]; filterValue: Text[250])
+    local procedure addFilterForImport(processTemplateDetail: Record DMTProcessTemplateDetail; fieldName: Text[30]; filterValue: Text[250])
     begin
         case true of
             (processTemplateDetail."PrPl Filter Field 1" = ''):
@@ -272,6 +278,8 @@ codeunit 90013 DMTProcessTemplateLib
     begin
         if not processingPlan.findImportConfigHeader(importConfigHeader) then
             exit(false);
+        importConfigHeader.TestField(ID);
+        importConfigHeader.TestField("Source File Name");
         if not translateTargetFilterToSourceFilter(processTemplateDetails, importConfigHeader)
             then
             exit(false);

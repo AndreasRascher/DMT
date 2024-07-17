@@ -74,6 +74,17 @@ xmlport 91001 DMTCSVReader
         toRowNoGlobal := toRowNo;
     end;
 
+    internal procedure InitImportSelectedRows(fromRowNo: integer; toRowNo: Integer; importConfigHeader: Record DMTImportConfigHeader)
+    var
+        rowNo: Integer;
+    begin
+        for rowNo := fromRowNo to toRowNo do
+            RowListGlobal.Add(rowNo);
+        genBuffAccessMgt.InitImportToGenBuffer(importConfigHeader);
+        ReadModeGlobal := ReadModeGlobal::ImportToGenBuffer;
+        toRowNoGlobal := toRowNo;
+    end;
+
     internal procedure GetHeadlineColumnValues(var FirstRowWithValues: Integer) HeadLine: List of [Text]
     var
         columnCaption: BigText;

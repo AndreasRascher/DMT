@@ -113,11 +113,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTCodeGenerator - Method ImportNAVSchemaFile - NamedType ImportFinishedMsg</note>
         </trans-unit>
-        <trans-unit id="Codeunit 634704931 - Method 3584965203 - NamedType 3458107479" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Source File %1 not found</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Quelldatei %1 nicht gefunden</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method findOrCreateProcessingPlanID - NamedType sourceFileNotFoundErr</note>
-        </trans-unit>
         <trans-unit id="Codeunit 634704931 - Method 3584965203 - NamedType 309902852" size-unit="char" translate="yes" xml:space="preserve">
           <source>No Import Configuration exits for Source File %1</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Keine Importkonfiguration für Quelldatei %1 vorhanden</note>
@@ -127,6 +122,11 @@
           <source>Processing Plan Type "%1" not supported</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Verarbeitungsplan Typ "%1" wird nicht unterstützt</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method findOrCreateProcessingPlanID - NamedType notSupportedProcessingPlanTypeErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 634704931 - Method 3584965203 - NamedType 3458107479" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source File %1 not found</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Quelldatei %1 nicht gefunden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method findOrCreateProcessingPlanID - NamedType sourceFileNotFoundErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 634704931 - Method 1977540100 - NamedType 732372603" size-unit="char" translate="yes" xml:space="preserve">
           <source>Contact, Customer, Vendor</source>
