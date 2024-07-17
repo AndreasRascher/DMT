@@ -5,9 +5,9 @@ codeunit 90013 DMTProcessTemplateLib
         processTemplate: Record DMTProcessTemplate;
     begin
         processTemplate.DeleteAll(true);
-
-        Insert_Sachmerkmale();
+        Insert_Dimensions();
         Insert_Contact_Customer_Vendor();
+        Insert_Sachmerkmale();
         // Anforderungen:
         //   Zieltabelle ist vorhanden
         //   Quelltabelle
@@ -35,7 +35,7 @@ codeunit 90013 DMTProcessTemplateLib
     internal procedure TransferToProcessingPlan(processTemplate: Record DMTProcessTemplate)
     var
         processingPlan: Record DMTProcessingPlan;
-        processTemplateDetails: Record DMTProcessTemplateDetail;
+        processTemplateDetail: Record DMTProcessTemplateDetail;
         nextLineNo: Integer;
         templateAlreadyTransferedErr: Label 'Process Template %1 already transferred to Processing Plan', Comment = 'de-DE=Vorlage %1 wurde bereits übertragen';
     begin
@@ -47,22 +47,59 @@ codeunit 90013 DMTProcessTemplateLib
         if not processingPlan.FindLast() then;
         nextLineNo := processingPlan."Line No." + 10000;
 
-        processTemplateDetails.SetRange(Type, processTemplateDetails.Type::Step);
-        if not processTemplateDetails.filterFor(processTemplate) then
+        processTemplateDetail.SetRange(Type, processTemplateDetail.Type::Step);
+        if not processTemplateDetail.filterFor(processTemplate) then
             exit;
-        processTemplateDetails.FindSet();
+        processTemplateDetail.FindSet();
         repeat
-            processingPlan.Init();
-            processingPlan."Line No." := nextLineNo;
-            processingPlan.Type := processTemplateDetails."PrPl Type";
-            processingPlan.ID := findOrCreateProcessingPlanID(processTemplateDetails);
-            processingPlan."Process Template Code" := processTemplate.Code;
-            processingPlan.Description := processTemplateDetails.Name;
-            processingPlan.Indentation := processTemplateDetails."PrPl Indentation";
-            addSourceFilter(processingPlan, processTemplateDetails);
-            processingPlan.Insert();
+            AddTemplateDetailToProcessingPlan(processingPlan, processTemplate, processTemplateDetail, nextLineNo);
             nextLineNo += 10000;
-        until processTemplateDetails.Next() = 0;
+        until processTemplateDetail.Next() = 0;
+    end;
+
+    local procedure AddTemplateDetailToProcessingPlan(var processingPlan: Record DMTProcessingPlan; var processTemplate: Record DMTProcessTemplate; var processTemplateDetail: Record DMTProcessTemplateDetail; var nextLineNo: Integer)
+    begin
+        // only add needed Tables
+        if processTemplateDetail."Requirement Sub Type" = processTemplateDetail."Requirement Sub Type"::SourceFile then
+            if IsNAVSourceTableEmpty(processTemplateDetail."NAV Source Table No.(Req.)") then
+                exit;
+
+        processingPlan."Line No." := nextLineNo;
+        processingPlan.Insert();
+
+        processingPlan.Type := processTemplateDetail."PrPl Type";
+        processingPlan.ID := findOrCreateProcessingPlanID(processTemplateDetail);
+        processingPlan."Process Template Code" := processTemplate.Code;
+        processingPlan.Description := processTemplateDetail.Name;
+        processingPlan.Indentation := processTemplateDetail."PrPl Indentation";
+        addSourceFilter(processingPlan, processTemplateDetail);
+        processingPlan.Modify();
+    end;
+
+    local procedure Insert_Dimensions()
+    var
+        processTemplate: Record DMTProcessTemplate;
+        processTemplateDetail: Record DMTProcessTemplateDetail;
+        dimensionsLbl: Label 'Dimensions', Comment = 'de-DE=Dimensionen';
+    begin
+        processTemplate.addTemplate(dimensionsLbl);
+        addSrcFileRequirement(processTemplate, 348, 'Dimension.csv');
+        addSrcFileRequirement(processTemplate, 349, 'Dimensionswert.csv');
+        addSrcFileRequirement(processTemplate, 350, 'Dimensionskombination.csv');
+        addSrcFileRequirement(processTemplate, 351, 'Dimensionswertkombination.csv');
+        addSrcFileRequirement(processTemplate, 352, 'Vorgabedimension.csv');
+        addSrcFileRequirement(processTemplate, 388, 'Dimensionsübersetzung.csv');
+        addSrcFileRequirement(processTemplate, 480, 'Dimensionssatzposten.csv');
+        addSrcFileRequirement(processTemplate, 481, 'Dimensionssatz-Strukturknoten.csv');
+
+        addStep_ImportToBufferAndTarget(processTemplateDetail, processTemplate, 348, 'Dimension.csv');
+        addStep_ImportToBufferAndTarget(processTemplateDetail, processTemplate, 349, 'Dimensionswert.csv');
+        addStep_ImportToBufferAndTarget(processTemplateDetail, processTemplate, 350, 'Dimensionskombination.csv');
+        addStep_ImportToBufferAndTarget(processTemplateDetail, processTemplate, 351, 'Dimensionswertkombination.csv');
+        addStep_ImportToBufferAndTarget(processTemplateDetail, processTemplate, 352, 'Vorgabedimension.csv');
+        addStep_ImportToBufferAndTarget(processTemplateDetail, processTemplate, 388, 'Dimensionsübersetzung.csv');
+        addStep_ImportToBufferAndTarget(processTemplateDetail, processTemplate, 480, 'Dimensionssatzposten.csv');
+        addStep_ImportToBufferAndTarget(processTemplateDetail, processTemplate, 481, 'Dimensionssatz-Strukturknoten.csv');
     end;
 
     local procedure Insert_Contact_Customer_Vendor()
@@ -72,10 +109,13 @@ codeunit 90013 DMTProcessTemplateLib
         CustContVendorLbl: Label 'Contact, Customer, Vendor', Comment = 'de-DE=Kontakt, Kunde, Lieferant';
     begin
         processTemplate.addTemplate(CustContVendorLbl);
+        addSrcFileRequirement(processTemplate, 13, 'Verkäufer_Einkäufer.csv');
         addSrcFileRequirement(processTemplate, 5050, 'Kontakt.csv');
         addSrcFileRequirement(processTemplate, 18, 'Debitor.csv');
         addSrcFileRequirement(processTemplate, 27, 'Kreditor.csv');
 
+
+        addStep_ImportToBufferAndTarget(processTemplateDetail, processTemplate, 13, 'Verkäufer_Einkäufer.csv');
         addStep_ImportToBuffer(processTemplateDetail, processTemplate, 'Kontakt.csv');
 
         addStep_ImportToTarget(processTemplateDetail, processTemplate, 'Kontakt.csv');
@@ -109,6 +149,7 @@ codeunit 90013 DMTProcessTemplateLib
     var
         processTemplateDetails: Record DMTProcessTemplateDetail;
     begin
+        // only used tables
         processTemplateDetails.Init();
         processTemplateDetails."Process Template Code" := processTemplate.Code;
         processTemplateDetails."Line No." := processTemplateDetails.getNextLineNo();
@@ -146,16 +187,26 @@ codeunit 90013 DMTProcessTemplateLib
     end;
 
     local procedure addStep_ImportToTarget(var processTemplateDetails_NEW: Record DMTProcessTemplateDetail; processTemplate: Record DMTProcessTemplate; importFileName: Text[250])
-    var
-        processTemplateDetails: Record DMTProcessTemplateDetail;
     begin
-        processTemplateDetails.Init();
-        processTemplateDetails."Process Template Code" := processTemplate.Code;
-        processTemplateDetails."Line No." := processTemplateDetails.getNextLineNo();
-        processTemplateDetails.Type := processTemplateDetails.Type::Step;
-        processTemplateDetails.Name := importFileName;
-        processTemplateDetails."PrPl Type" := processTemplateDetails."PrPl Type"::"Import To Target";
-        processTemplateDetails.Insert();
+        processTemplateDetails_NEW.Init();
+        processTemplateDetails_NEW."Process Template Code" := processTemplate.Code;
+        processTemplateDetails_NEW."Line No." := processTemplateDetails_NEW.getNextLineNo();
+        processTemplateDetails_NEW.Type := processTemplateDetails_NEW.Type::Step;
+        processTemplateDetails_NEW.Name := importFileName;
+        processTemplateDetails_NEW."PrPl Type" := processTemplateDetails_NEW."PrPl Type"::"Import To Target";
+        processTemplateDetails_NEW.Insert();
+    end;
+
+    local procedure addStep_ImportToBufferAndTarget(var processTemplateDetails_NEW: Record DMTProcessTemplateDetail; processTemplate: Record DMTProcessTemplate; NAVSourceTableID: Integer; importFileName: Text[250])
+    begin
+        processTemplateDetails_NEW.Init();
+        processTemplateDetails_NEW."Process Template Code" := processTemplate.Code;
+        processTemplateDetails_NEW."Line No." := processTemplateDetails_NEW.getNextLineNo();
+        processTemplateDetails_NEW.Type := processTemplateDetails_NEW.Type::Step;
+        processTemplateDetails_NEW.Name := importFileName;
+        processTemplateDetails_NEW."NAV Source Table No.(Req.)" := NAVSourceTableID;
+        processTemplateDetails_NEW."PrPl Type" := processTemplateDetails_NEW."PrPl Type"::"Buffer + Target";
+        processTemplateDetails_NEW.Insert();
     end;
 
     local procedure findOrCreateProcessingPlanID(processTemplateDetails: Record DMTProcessTemplateDetail): Integer
@@ -214,7 +265,7 @@ codeunit 90013 DMTProcessTemplateLib
         end;
     end;
 
-    local procedure addFilterForImport(processTemplateDetail: Record DMTProcessTemplateDetail; fieldName: Text[30]; filterValue: Text[250])
+    local procedure addFilterForImport(var processTemplateDetail: Record DMTProcessTemplateDetail; fieldName: Text[30]; filterValue: Text[250])
     begin
         case true of
             (processTemplateDetail."PrPl Filter Field 1" = ''):
@@ -233,10 +284,9 @@ codeunit 90013 DMTProcessTemplateLib
         processTemplateDetail.Modify();
     end;
 
-    local procedure translateTargetFilterToSourceFilter(processTemplateDetail: Record DMTProcessTemplateDetail; importConfigHeader: Record DMTImportConfigHeader) OK: Boolean
+    local procedure translateTargetFilterToSourceFilter(var filteredView: Text; processTemplateDetail: Record DMTProcessTemplateDetail; importConfigHeader: Record DMTImportConfigHeader) OK: Boolean
     var
         importConfigLine: Record DMTImportConfigLine;
-        filteredView: Text;
         index: Integer;
         filterFieldName: List of [Text[30]];
         filterFieldValue: List of [Text[250]];
@@ -270,20 +320,48 @@ codeunit 90013 DMTProcessTemplateLib
                 filteredView += ',';
         end;
         filteredView := 'VERSION(1) SORTING(Field1) WHERE(' + filteredView + ')';
+        OK := filters.Count > 0;
     end;
 
-    local procedure addSourceFilter(var processingPlan: Record DMTProcessingPlan; processTemplateDetails: Record DMTProcessTemplateDetail) OK: Boolean
+    local procedure addSourceFilter(var processingPlan: Record DMTProcessingPlan; processTemplateDetail: Record DMTProcessTemplateDetail) OK: Boolean
     var
         importConfigHeader: Record DMTImportConfigHeader;
+        filteredView: Text;
     begin
+        OK := true;
         if not processingPlan.findImportConfigHeader(importConfigHeader) then
             exit(false);
         importConfigHeader.TestField(ID);
         importConfigHeader.TestField("Source File Name");
-        if not translateTargetFilterToSourceFilter(processTemplateDetails, importConfigHeader)
+        if not translateTargetFilterToSourceFilter(filteredView, processTemplateDetail, importConfigHeader)
             then
             exit(false);
-        exit(true);
+        processingPlan.SaveSourceTableFilter(filteredView);
+    end;
+
+
+    /// <summary>
+    /// checks if a table has data (nav schema file has to be imported) 
+    /// </summary>
+    procedure IsNAVSourceTableEmpty(NAVSourceTableID: Integer) isEmpty: Boolean
+    var
+        fieldBuffer: Record DMTFieldBuffer;
+    begin
+        isEmpty := false;
+        fieldBuffer.SetRange(TableNo, NAVSourceTableID);
+        if fieldBuffer.FindFirst() then
+            if fieldBuffer."No. of Records" = 0 then
+                exit(true);
+    end;
+
+    procedure IsSourceFileAvailable(processTemplateDetail: Record DMTProcessTemplateDetail) OK: Boolean
+    var
+        sourceFileStorage: Record DMTSourceFileStorage;
+    begin
+        // find source file
+        processTemplateDetail.TestField(processTemplateDetail.Name);
+        sourceFileStorage.SetRange(Name, processTemplateDetail.Name);
+        OK := sourceFileStorage.FindFirst();
     end;
 
 }

@@ -133,6 +133,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Kontakt, Kunde, Lieferant</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method Insert_Contact_Customer_Vendor - NamedType CustContVendorLbl</note>
         </trans-unit>
+        <trans-unit id="Codeunit 634704931 - Method 796638517 - NamedType 1230911531" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Dimensions</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Dimensionen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method Insert_Dimensions - NamedType dimensionsLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 634704931 - Method 2014718948 - NamedType 2277219875" size-unit="char" translate="yes" xml:space="preserve">
           <source>Process Template %1 already transferred to Processing Plan</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Vorlage %1 wurde bereits übertragen</note>

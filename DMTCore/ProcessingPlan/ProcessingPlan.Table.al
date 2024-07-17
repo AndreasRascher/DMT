@@ -216,7 +216,8 @@ table 91009 DMTProcessingPlan
                     exit(true);
                 end;
             else begin
-                ImportConfigHeader.Get(Rec.ID);
+                if not ImportConfigHeader.Get(Rec.ID) then
+                    exit(false);
                 ImportConfigHeader.BufferTableMgt().InitBufferRef(SourceRef);
                 exit(true)
             end;

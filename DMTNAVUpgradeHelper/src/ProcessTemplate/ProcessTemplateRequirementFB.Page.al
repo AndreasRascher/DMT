@@ -24,8 +24,8 @@ page 90014 ProcessTemplateRequirementFB
             repeater(RequirementList)
             {
                 Caption = 'Requirements', Comment = 'de-DE=Vorraussetzungen';
-                field("Requirement Type"; Rec."Requirement Sub Type") { ApplicationArea = All; }
-                field("Name"; Rec."Name") { ApplicationArea = All; }
+                field("Requirement Type"; Rec."Requirement Sub Type") { ApplicationArea = All; StyleExpr = lineStyle; }
+                field("Name"; Rec."Name") { ApplicationArea = All; StyleExpr = lineStyle; }
             }
         }
     }
@@ -33,13 +33,15 @@ page 90014 ProcessTemplateRequirementFB
     local procedure BuildNAVSourceTableFilter() sourceTableFilter: Text
     var
         Rec2: Record DMTProcessTemplateDetail;
+        processTemplateLib: Codeunit DMTProcessTemplateLib;
     begin
         Rec2.Copy(Rec);
         if Rec2.IsEmpty then exit('');
         Rec2.SetFilter("NAV Source Table No.(Req.)", '<>0');
         if Rec2.FindSet() then
             repeat
-                sourceTableFilter += StrSubstNo('%1|', Rec2."NAV Source Table No.(Req.)");
+                if not processTemplateLib.IsNAVSourceTableEmpty(Rec2."NAV Source Table No.(Req.)") then
+                    sourceTableFilter += StrSubstNo('%1|', Rec2."NAV Source Table No.(Req.)");
             until Rec2.Next() = 0;
         sourceTableFilter := sourceTableFilter.TrimEnd('|');
     end;
@@ -54,7 +56,27 @@ page 90014 ProcessTemplateRequirementFB
         exit(found);
     end;
 
+    trigger OnAfterGetRecord()
     var
+        processTemplateLib: Codeunit DMTProcessTemplateLib;
+    begin
+        case true of
+            (rec."Requirement Sub Type" = rec."Requirement Sub Type"::SourceFile) and
+            processTemplateLib.IsNAVSourceTableEmpty(rec."NAV Source Table No.(Req.)"):
+                lineStyle := Format(Enum::DMTFieldStyle::Grey);
+            (rec."Requirement Sub Type" = rec."Requirement Sub Type"::SourceFile) and
+            processTemplateLib.IsSourceFileAvailable(Rec):
+                lineStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
+            (rec."Requirement Sub Type" = rec."Requirement Sub Type"::SourceFile) and
+            not processTemplateLib.IsSourceFileAvailable(Rec):
+                lineStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+            else
+                lineStyle := Format(Enum::DMTFieldStyle::None);
+        end;
+    end;
+
+    var
+        lineStyle: Text;
         NAVTableIDFilter: Text;
         NAVTableIDFilterVisible: Boolean;
 }
