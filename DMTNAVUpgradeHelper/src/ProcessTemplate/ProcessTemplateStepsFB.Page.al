@@ -16,7 +16,7 @@ page 90013 ProcessTemplateStepsFB
             repeater(RequirementList)
             {
                 Caption = 'Requirements', Comment = 'de-DE=Vorraussetzungen';
-                field("Processing Plan Type"; Rec."Processing Plan Type") { ApplicationArea = All; }
+                field("Processing Plan Type"; Rec."PrPl Type") { ApplicationArea = All; }
                 field("Name"; Rec."Name") { ApplicationArea = All; }
             }
         }

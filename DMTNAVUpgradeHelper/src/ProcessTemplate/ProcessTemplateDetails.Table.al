@@ -62,11 +62,15 @@ table 90013 DMTProcessTemplateDetail
         }
         #endregion Requirement
         #region Step
-        field(20; "Processing Plan Type"; Enum DMTProcessingPlanType)
+        field(20; "PrPl Type"; Enum DMTProcessingPlanType)
         {
             Caption = 'Processing Plan Type', Comment = 'de-DE=Verarbeitungsplan Art';
         }
-        field(21; "Proc.Plan Indentation"; Integer) { Caption = 'Processing Plan Indentation', Comment = 'de-DE=Verarbeitungsplan Einrückung'; Editable = false; }
+        field(21; "PrPl Indentation"; Integer) { Caption = 'Processing Plan Indentation', Comment = 'de-DE=Verarbeitungsplan Einrückung'; Editable = false; }
+        field(30; "PrPl Filter Field 1"; Text[30]) { Caption = 'Filter Field 1', Comment = 'de-DE=Filterfeld 1'; Editable = false; }
+        field(31; "PrPl Filter Value 1"; Text[250]) { Caption = 'Filter Value 1', Comment = 'de-DE=Filterwert 1'; Editable = false; }
+        field(32; "PrPl Filter Field 2"; Text[30]) { Caption = 'Filter Field 2', Comment = 'de-DE=Filterfeld 2'; Editable = false; }
+        field(33; "PrPl Filter Value 2"; Text[250]) { Caption = 'Filter Value 2', Comment = 'de-DE=Filterwert 2'; Editable = false; }
         #endregion Step
     }
 

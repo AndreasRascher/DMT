@@ -54,11 +54,11 @@ codeunit 90013 DMTProcessTemplateLib
         repeat
             processingPlan.Init();
             processingPlan."Line No." := nextLineNo;
-            processingPlan.Type := processTemplateDetails."Processing Plan Type";
+            processingPlan.Type := processTemplateDetails."PrPl Type";
             processingPlan.ID := findOrCreateProcessingPlanID(processTemplateDetails);
             processingPlan."Process Template Code" := processTemplate.Code;
             processingPlan.Description := processTemplateDetails.Name;
-            processingPlan.Indentation := processTemplateDetails."Proc.Plan Indentation";
+            processingPlan.Indentation := processTemplateDetails."PrPl Indentation";
             processingPlan.Insert();
             nextLineNo += 10000;
         until processTemplateDetails.Next() = 0;
@@ -76,7 +76,8 @@ codeunit 90013 DMTProcessTemplateLib
         addSrcFileRequirement(processTemplate, 27, 'Kreditor.csv');
         addStep_ImportToBuffer(processTemplateDetail, processTemplate, 'Kontakt.csv');
         addFilterForImport(processTemplateDetail, 'Kontakt.csv', 'Type', '0');
-        addStep_ImportToTarget(processTemplate, 'Kontakt.csv');
+        addStep_ImportToBuffer(processTemplateDetail, processTemplate, 'Kontakt.csv');
+        addFilterForImport(processTemplateDetail, 'Kontakt.csv', 'Type', '1');
         addStep_ImportToBuffer(processTemplateDetail, processTemplate, 'Debitor.csv');
         addStep_ImportToTarget(processTemplate, 'Debitor.csv');
     end;
@@ -134,7 +135,7 @@ codeunit 90013 DMTProcessTemplateLib
         processTemplateDetails_NEW."Line No." := processTemplateDetails_NEW.getNextLineNo();
         processTemplateDetails_NEW.Type := processTemplateDetails_NEW.Type::Step;
         processTemplateDetails_NEW.Name := importFileName;
-        processTemplateDetails_NEW."Processing Plan Type" := processTemplateDetails_NEW."Processing Plan Type"::"Import To Buffer";
+        processTemplateDetails_NEW."PrPl Type" := processTemplateDetails_NEW."PrPl Type"::"Import To Buffer";
         processTemplateDetails_NEW.Insert();
     end;
 
@@ -147,7 +148,7 @@ codeunit 90013 DMTProcessTemplateLib
         processTemplateDetails."Line No." := processTemplateDetails.getNextLineNo();
         processTemplateDetails.Type := processTemplateDetails.Type::Step;
         processTemplateDetails.Name := importFileName;
-        processTemplateDetails."Processing Plan Type" := processTemplateDetails."Processing Plan Type"::"Import To Target";
+        processTemplateDetails."PrPl Type" := processTemplateDetails."PrPl Type"::"Import To Target";
         processTemplateDetails.Insert();
     end;
 
@@ -161,14 +162,14 @@ codeunit 90013 DMTProcessTemplateLib
         noImportConfigExitsForSourceFileErr: Label 'No Import Configuration exits for Source File %1', Comment = 'de-DE=Keine Importkonfiguration für Quelldatei %1 vorhanden';
         notSupportedProcessingPlanTypeErr: Label 'Processing Plan Type "%1" not supported', Comment = 'de-DE=Verarbeitungsplan Typ "%1" wird nicht unterstützt';
     begin
-        case processTemplateDetails."Processing Plan Type" of
-            processTemplateDetails."Processing Plan Type"::" ",
-            processTemplateDetails."Processing Plan Type"::Group:
+        case processTemplateDetails."PrPl Type" of
+            processTemplateDetails."PrPl Type"::" ",
+            processTemplateDetails."PrPl Type"::Group:
                 exit(0);
-            processTemplateDetails."Processing Plan Type"::"Import To Buffer",
-            processTemplateDetails."Processing Plan Type"::"Buffer + Target",
-            processTemplateDetails."Processing Plan Type"::"Import To Target",
-            processTemplateDetails."Processing Plan Type"::"Update Field":
+            processTemplateDetails."PrPl Type"::"Import To Buffer",
+            processTemplateDetails."PrPl Type"::"Buffer + Target",
+            processTemplateDetails."PrPl Type"::"Import To Target",
+            processTemplateDetails."PrPl Type"::"Update Field":
                 begin
                     // find source file
                     processTemplateDetails.TestField(processTemplateDetails.Name);
@@ -195,33 +196,76 @@ codeunit 90013 DMTProcessTemplateLib
                     end;
                     exit(importConfigHeader."ID")
                 end;
-            processTemplateDetails."Processing Plan Type"::"Run Codeunit":
+            processTemplateDetails."PrPl Type"::"Run Codeunit":
                 begin
                     processTemplateDetails.TestField("Object Type (Req.)", processTemplateDetails."Object Type (Req.)"::Codeunit);
                     processTemplateDetails.TestField("Object ID (Req.)");
                     exit(processTemplateDetails."Object ID (Req.)");
                 end;
             else
-                Error(notSupportedProcessingPlanTypeErr, processTemplateDetails."Processing Plan Type");
+                Error(notSupportedProcessingPlanTypeErr, processTemplateDetails."PrPl Type");
         end;
     end;
 
-    local procedure addFilterForImport(processTemplateDetail: Record DMTProcessTemplateDetail; fileName: Text; fieldName: Text; filterValue: Text)
+    local procedure addFilterForImport(processTemplateDetail: Record DMTProcessTemplateDetail; fileName: Text; fieldName: Text[30]; filterValue: Text[250])
+    begin
+        case true of
+            (processTemplateDetail."PrPl Filter Field 1" = ''):
+                begin
+                    processTemplateDetail."PrPl Filter Field 1" := fieldName;
+                    processTemplateDetail."PrPl Filter Value 1" := filterValue;
+                end;
+            (processTemplateDetail."PrPl Filter Field 2" = ''):
+                begin
+                    processTemplateDetail."PrPl Filter Field 2" := fieldName;
+                    processTemplateDetail."PrPl Filter Value 2" := filterValue;
+                end;
+            else
+                Error('Filter fields are already set');
+        end;
+        processTemplateDetail.Modify();
+    end;
+
+    local procedure translateTargetFilterToSourceFilter(processTemplateDetail: Record DMTProcessTemplateDetail; fileName: Text)
     var
         importConfigHeader: Record DMTImportConfigHeader;
-        importConfigLine: Record DMTImportConfigLine;
+        importConfigLine, importConfigLine2 : Record DMTImportConfigLine;
         filteredView: Text;
+        index: Integer;
+        filterFieldName: List of [Text[30]];
+        filterFieldValue: List of [Text[250]];
+        filters: List of [Text];
     begin
         importConfigHeader.SetRange("Source File Name", fileName);
         if not importConfigHeader.FindFirst() then
             exit;
-        importConfigLine.SetRange("Source Field Caption", fieldName);
-        importConfigHeader.FilterRelated(importConfigLine);
-        if not importConfigLine.FindFirst() then
-            exit;
-        //'VERSION(1) SORTING(Field1) WHERE(Field1027=1(0))'
-        filteredView := StrSubstNo('VERSION(1) SORTING(Field1) WHERE(Field%=1(0))');
-        hier weiter machen: filter in Detail speichern, übernahme in Verarbeitungsplan
+
+        if (processTemplateDetail."PrPl Filter Field 1" <> '') and
+           (processTemplateDetail."PrPl Filter Value 1" <> '') then begin
+            filterFieldName.Add(processTemplateDetail."PrPl Filter Field 1");
+            filterFieldValue.Add(processTemplateDetail."PrPl Filter Value 1");
+        end;
+
+        if (processTemplateDetail."PrPl Filter Field 2" <> '') and
+           (processTemplateDetail."PrPl Filter Value 2" <> '') then begin
+            filterFieldName.Add(processTemplateDetail."PrPl Filter Field 2");
+            filterFieldValue.Add(processTemplateDetail."PrPl Filter Value 2");
+        end;
+
+        for index := 1 to filterFieldName.Count do begin
+            importConfigLine.SetRange("Source Field Caption", filterFieldName.Get(index));
+            importConfigHeader.FilterRelated(importConfigLine);
+            if importConfigLine.FindFirst() then begin
+                filters.Add(StrSubstNo('Field%1=1(%2)', importConfigLine."Source Field No.", filterFieldValue.Get(index)));
+            end;
+        end;
+
+        for index := 1 to filters.Count do begin
+            filteredView += filters.Get(index);
+            if index < filters.Count then
+                filteredView += ',';
+        end;
+        filteredView := 'VERSION(1) SORTING(Field1) WHERE(' + filteredView + ')';
     end;
 
 }
