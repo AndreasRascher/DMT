@@ -59,6 +59,7 @@ codeunit 90013 DMTProcessTemplateLib
             processingPlan."Process Template Code" := processTemplate.Code;
             processingPlan.Description := processTemplateDetails.Name;
             processingPlan.Indentation := processTemplateDetails."PrPl Indentation";
+            addSourceFilter(processTemplateDetails, processingPlan);
             processingPlan.Insert();
             nextLineNo += 10000;
         until processTemplateDetails.Next() = 0;
@@ -226,20 +227,17 @@ codeunit 90013 DMTProcessTemplateLib
         processTemplateDetail.Modify();
     end;
 
-    local procedure translateTargetFilterToSourceFilter(processTemplateDetail: Record DMTProcessTemplateDetail; fileName: Text)
+    local procedure translateTargetFilterToSourceFilter(processTemplateDetail: Record DMTProcessTemplateDetail; importConfigHeader: Record DMTImportConfigHeader) OK: Boolean
     var
-        importConfigHeader: Record DMTImportConfigHeader;
-        importConfigLine, importConfigLine2 : Record DMTImportConfigLine;
+        importConfigLine: Record DMTImportConfigLine;
         filteredView: Text;
         index: Integer;
         filterFieldName: List of [Text[30]];
         filterFieldValue: List of [Text[250]];
         filters: List of [Text];
     begin
-        importConfigHeader.SetRange("Source File Name", fileName);
-        if not importConfigHeader.FindFirst() then
-            exit;
-
+        importConfigHeader.TestField(ID);
+        importConfigHeader.TestField("Source File Name");
         if (processTemplateDetail."PrPl Filter Field 1" <> '') and
            (processTemplateDetail."PrPl Filter Value 1" <> '') then begin
             filterFieldName.Add(processTemplateDetail."PrPl Filter Field 1");
@@ -266,6 +264,18 @@ codeunit 90013 DMTProcessTemplateLib
                 filteredView += ',';
         end;
         filteredView := 'VERSION(1) SORTING(Field1) WHERE(' + filteredView + ')';
+    end;
+
+    local procedure addSourceFilter(var processingPlan: Record DMTProcessingPlan; processTemplateDetails: Record DMTProcessTemplateDetail) OK: Boolean
+    var
+        importConfigHeader: Record DMTImportConfigHeader;
+    begin
+        if not processingPlan.findImportConfigHeader(importConfigHeader) then
+            exit(false);
+        if not translateTargetFilterToSourceFilter(processTemplateDetails, importConfigHeader)
+            then
+            exit(false);
+        exit(true);
     end;
 
 }
