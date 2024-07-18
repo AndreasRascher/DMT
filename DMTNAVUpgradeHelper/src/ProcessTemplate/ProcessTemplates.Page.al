@@ -4,7 +4,8 @@ page 90012 DMTProcessTemplateList
     PageType = List;
     UsageCategory = Lists;
     ApplicationArea = All;
-    SourceTable = DMTProcessTemplate;
+    SourceTable = DMTProcTemplSelection;
+    SourceTableTemporary = true;
 
     layout
     {
@@ -58,9 +59,16 @@ page 90012 DMTProcessTemplateList
 
     trigger OnOpenPage()
     var
-        ProcessTemplateLib: Codeunit DMTProcessTemplateLib;
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+        TemplateCodeList: List of [Text[150]];
     begin
-        ProcessTemplateLib.InsertProcessTemplateData();
+        if processTemplateSetup.FindSet() then
+            repeat
+                if processTemplateSetup."Template Code" <> '' then
+                    if not TemplateCodeList.Contains(processTemplateSetup."Template Code") then
+                        TemplateCodeList.Add(processTemplateSetup."Template Code");
+            until processTemplateSetup.Next() = 0;
+        TODO: Füllen der Zeilen mit den Prozessvorlagen
     end;
 
     trigger OnAfterGetRecord()

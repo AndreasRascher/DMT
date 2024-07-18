@@ -258,6 +258,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Prozessvorlagen Einrichtung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateSetup - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 373303067 - Method 716454850 - NamedType 732372603" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Contact, Customer, Vendor</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Kontakt, Kunde, Lieferant</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateSetup - Method OnOpenPage - NamedType CustContVendorLbl</note>
+        </trans-unit>
         <trans-unit id="Page 3655853132 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Requirements</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Vorraussetzungen</note>

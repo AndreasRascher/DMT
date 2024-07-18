@@ -7,7 +7,7 @@
 // - Prüfung ob die Vorraussetzungen erfüllt sind
 // - Anbieten des Migrationspakets
 
-table 90012 DMTProcessTemplate
+table 90012 DMTProcTemplSelection
 {
     DataClassification = ToBeClassified;
     Caption = 'DMT Process Template', Comment = 'de-DE=DMT Prozessvorlage';
