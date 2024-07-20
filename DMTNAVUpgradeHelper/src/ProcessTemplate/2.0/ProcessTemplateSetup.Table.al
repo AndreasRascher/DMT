@@ -5,23 +5,24 @@ table 90014 DMTProcessTemplateSetup
         field(1; "Template Code"; Code[150]) { Caption = 'Template Code', Comment = 'de-DE=Vorlagencode'; }
         field(2; "Line No."; Integer) { Caption = 'Line No.', Comment = 'de-DE=Zeilennummer'; }
         #region SourceInfo
-        field(10; "NAV Source Table No."; Integer) { Caption = 'NAV Source Table No.', Comment = 'de-DE=NAV Quelltabelle Nr.'; BlankZero = true; }
-        field(11; "Source File Name"; Text[250]) { Caption = 'Source File Name', Comment = 'de-DE=Quelldatei Name'; }
+        field(10; Type; Option)
+        {
+            Caption = 'Type', Comment = 'de-DE=Art';
+            OptionMembers = " ",Group,"Import Buffer","Import Target","Import Buffer+Target","Update Field","Default Value","Filter","Req. Setup","Run Codeunit";
+            OptionCaption = ' ,Group,Import Buffer,Import Target,Import Buffer+Target,Update Field,Default Value,Filter,Req. Setup,Run Codeunit',
+            Comment = 'de-DE= ,Gruppe,In Puffertabelle einlesen,In Zieltabelle einlesen,Puffer- und Zieltab. importieren,Felder aktualisieren,Vorgaberwert,Filter,benötigte Einrichtung,Codeunit ausführen';
+        }
+        field(11; "NAV Source Table No."; Integer) { Caption = 'NAV Source Table No.', Comment = 'de-DE=NAV Quelltabelle Nr.'; BlankZero = true; }
+        field(12; "Source File Name"; Text[250]) { Caption = 'Source File Name', Comment = 'de-DE=Quelldatei Name'; }
         #endregion SourceInfo
         #region ProcessingPlan
-        field(20; "PrPl Type"; Enum DMTProcessingPlanType) { Caption = 'Type (Processing Plan)', Comment = 'de-DE=Art (Verarbeitungsplan)'; }
-        field(21; "PrPl Indentation"; Integer) { Caption = 'Indentation (Processing Plan)', Comment = 'de-DE=Einrückung (Verarbeitungsplan)'; Editable = false; }
-        field(22; "PrPl Description"; Text[250]) { Caption = 'Description (Processing Plan)', Comment = 'de-DE=Beschreibung (Verarbeitungsplan)'; }
-        field(23; "PrPl Run Codeunit"; Integer) { Caption = 'Run Codeunit ID (Processing Plan)', Comment = 'de-DE=Codeunit ID ausführen (Verarbeitungsplan)'; BlankZero = true; }
-        field(24; "PrPl Default Target Table ID"; Integer) { Caption = 'Default Target Table ID', Comment = 'de-DE=Vorgabe Zieltabelle ID'; BlankZero = true; }
-        field(30; "PrPl Filter Field 1"; Text[30]) { Caption = 'Filter Field 1', Comment = 'de-DE=Filterfeld 1'; Editable = false; }
-        field(31; "PrPl Filter Value 1"; Text[250]) { Caption = 'Filter Value 1', Comment = 'de-DE=Filterwert 1'; Editable = false; }
-        field(32; "PrPl Filter Field 2"; Text[30]) { Caption = 'Filter Field 2', Comment = 'de-DE=Filterfeld 2'; Editable = false; }
-        field(33; "PrPl Filter Value 2"; Text[250]) { Caption = 'Filter Value 2', Comment = 'de-DE=Filterwert 2'; Editable = false; }
-        field(40; "PrPl Default Field 1"; Text[30]) { Caption = 'Default Field 1', Comment = 'de-DE=Vorgabefeld 1'; Editable = false; }
-        field(41; "PrPl Default Value 1"; Text[250]) { Caption = 'Default Value 1', Comment = 'de-DE=Vorgabewert 1'; Editable = false; }
-        field(42; "PrPl Default Field 2"; Text[30]) { Caption = 'Default Field 2', Comment = 'de-DE=Vorgabefeld 2'; Editable = false; }
-        field(43; "PrPl Default Value 2"; Text[250]) { Caption = 'Default Value 2', Comment = 'de-DE=Vorgabewert 2'; Editable = false; }
+        field(21; "Description"; Text[250]) { Caption = 'Description (Processing Plan)', Comment = 'de-DE=Beschreibung (Verarbeitungsplan)'; }
+        field(22; "Indentation"; Integer) { Caption = 'Indentation (Processing Plan)', Comment = 'de-DE=Einrückung (Verarbeitungsplan)'; Editable = false; }
+        field(23; "Run Codeunit"; Integer) { Caption = 'Run Codeunit ID (Processing Plan)', Comment = 'de-DE=Codeunit ID ausführen (Verarbeitungsplan)'; BlankZero = true; }
+        field(30; "Field Name"; Text[30]) { Caption = 'Field Name', Comment = 'de-DE=Feldname'; }
+        field(31; "Default Value"; Text[250]) { Caption = 'Default Value', Comment = 'de-DE=Vorgabewert'; }
+        field(32; "Filter Expression"; Text[250]) { Caption = 'Filter', Comment = 'de-DE=Filter'; }
+        field(24; "Target Table ID"; Integer) { Caption = 'Target Table ID', Comment = 'de-DE=Zieltabelle ID'; BlankZero = true; }
         #endregion ProcessingPlan
     }
 
@@ -52,6 +53,26 @@ table 90014 DMTProcessTemplateSetup
     begin
     end;
 
+    procedure getMappedProcessingPlanType() processingPlanType: Enum DMTProcessingPlanType
+    begin
+        case Rec."Type" of
+            Rec."Type"::" ":
+                processingPlanType := processingPlanType::" ";
+            Rec."Type"::Group:
+                processingPlanType := processingPlanType::Group;
+            Rec."Type"::"Import Buffer":
+                processingPlanType := processingPlanType::"Import To Buffer";
+            Rec."Type"::"Import Target":
+                processingPlanType := processingPlanType::"Import To Target";
+            Rec."Type"::"Import Buffer+Target":
+                processingPlanType := processingPlanType::"Buffer + Target";
+            Rec."Type"::"Update Field":
+                processingPlanType := processingPlanType::"Update Field";
+            else
+                Error('Unknown processing template type "%1"', Rec."Type");
+        end;
+    end;
+
     procedure getNextLineNo(templateCode: Code[150]) NextLineNo: Integer
     var
         ProcessTemplateSetup: Record DMTProcessTemplateSetup;
@@ -80,12 +101,12 @@ table 90014 DMTProcessTemplateSetup
         if processTemplateSetup.FindSet() then
             repeat
                 // Steps
-                if processTemplateSetup."PrPl Type" <> DMTProcessingPlanType::Group then begin
+                if processTemplateSetup."Type" <> processTemplateSetup."Type"::Group then begin
                     ProcessTemplateDetailGlobal.InsertNew(templateCode);
                     ProcessTemplateDetailGlobal."NAV Source Table No.(Req.)" := processTemplateSetup."NAV Source Table No.";
-                    ProcessTemplateDetailGlobal."PrPl Type" := processTemplateSetup."PrPl Type";
-                    if processTemplateSetup."PrPl Description" <> '' then
-                        ProcessTemplateDetailGlobal.Name := processTemplateSetup."PrPl Description"
+                    ProcessTemplateDetailGlobal."PrPl Type" := processTemplateSetup.getMappedProcessingPlanType();
+                    if processTemplateSetup."Description" <> '' then
+                        ProcessTemplateDetailGlobal.Name := processTemplateSetup."Description"
                     else
                         ProcessTemplateDetailGlobal.Name := processTemplateSetup."Source File Name";
                     ProcessTemplateDetailGlobal.Modify();
@@ -94,13 +115,14 @@ table 90014 DMTProcessTemplateSetup
                         if not TemplateSourceFileNamesGlobal.Contains(processTemplateSetup."Source File Name") then
                             TemplateSourceFileNamesGlobal.Add(processTemplateSetup."Source File Name");
                     // migration objects
-                    if processTemplateSetup."PrPl Run Codeunit" <> 0 then
-                        if not TemplateCodeunitsGlobal.Contains(processTemplateSetup."PrPl Run Codeunit") then
-                            TemplateCodeunitsGlobal.Add(processTemplateSetup."PrPl Run Codeunit");
+                    if processTemplateSetup."Run Codeunit" <> 0 then
+                        if not TemplateCodeunitsGlobal.Contains(processTemplateSetup."Run Codeunit") then
+                            TemplateCodeunitsGlobal.Add(processTemplateSetup."Run Codeunit");
                     // target tables
-                    if processTemplateSetup."PrPl Default Target Table ID" <> 0 then
-                        if not TargetTablesGlobal.Contains(processTemplateSetup."PrPl Default Target Table ID") then
-                            TargetTablesGlobal.Add(processTemplateSetup."PrPl Default Target Table ID");
+                    if processTemplateSetup.Type <> processTemplateSetup.Type::"Req. Setup" then
+                        if processTemplateSetup."Target Table ID" <> 0 then
+                            if not TargetTablesGlobal.Contains(processTemplateSetup."Target Table ID") then
+                                TargetTablesGlobal.Add(processTemplateSetup."Target Table ID");
                 end;
             until processTemplateSetup.Next() = 0;
         InitializedTemplateCode := templateCode;

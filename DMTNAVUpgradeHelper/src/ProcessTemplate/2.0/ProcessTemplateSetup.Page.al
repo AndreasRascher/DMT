@@ -13,22 +13,24 @@ page 90015 DMTProcessTemplateSetup
             repeater(Group)
             {
                 field("Template Code"; Rec."Template Code") { StyleExpr = lineStyleExpr; }
-                field("Line No."; Rec."Line No.") { StyleExpr = lineStyleExpr; }
-                field("Source File Name"; Rec."Source File Name") { StyleExpr = lineStyleExpr; }
-                field("PrPl Type"; Rec."PrPl Type") { StyleExpr = lineStyleExpr; }
-                field("PrPl Indentation"; Rec."PrPl Indentation") { StyleExpr = lineStyleExpr; }
-                field("PrPl Description"; Rec."PrPl Description") { StyleExpr = lineStyleExpr; }
-                field("NAV Source Table No."; Rec."NAV Source Table No.") { StyleExpr = lineStyleExpr; }
-                field("PrPl Default Target Table ID"; Rec."PrPl Default Target Table ID") { }
-                field("PrPl Run Codeunit"; Rec."PrPl Run Codeunit") { StyleExpr = lineStyleExpr; }
-                field("PrPl Default Field 1"; Rec."PrPl Default Field 1") { }
-                field("PrPl Default Field 2"; Rec."PrPl Default Field 2") { }
-                field("PrPl Default Value 1"; Rec."PrPl Default Value 1") { }
-                field("PrPl Default Value 2"; Rec."PrPl Default Value 2") { }
-                field("PrPl Filter Field 1"; Rec."PrPl Filter Field 1") { }
-                field("PrPl Filter Field 2"; Rec."PrPl Filter Field 2") { }
-                field("PrPl Filter Value 1"; Rec."PrPl Filter Value 1") { }
-                field("PrPl Filter Value 2"; Rec."PrPl Filter Value 2") { }
+                field("Line No."; Rec."Line No.") { }
+                field("Type"; Rec."Type")
+                {
+                    StyleExpr = lineStyleExpr;
+                    trigger OnValidate()
+                    begin
+                        UpdateMandatoryIndicator();
+                    end;
+                }
+                field("Source File Name"; Rec."Source File Name") { ShowMandatory = SourceFileName_Mandatory; }
+                field(Indentation; Rec.Indentation) { ShowMandatory = Description_Mandatory; }
+                field(Description; Rec.Description) { StyleExpr = lineStyleExpr; ShowMandatory = Description_Mandatory; }
+                field("Field Name"; Rec."Field Name") { ShowMandatory = FieldName_Mandatory; }
+                field("Filter Expression"; Rec."Filter Expression") { ShowMandatory = FilterExpression_Mandatory; }
+                field("Default Value"; Rec."Default Value") { ShowMandatory = DefaultValue_Mandatory; }
+                field("NAV Source Table No."; Rec."NAV Source Table No.") { ShowMandatory = NAVSourceTableNo_Mandatory; }
+                field("Run Codeunit"; Rec."Run Codeunit") { ShowMandatory = RunCodeunit_Mandatory; }
+                field("Target Table ID"; Rec."Target Table ID") { ShowMandatory = TargetTableID_Mandatory; }
             }
         }
         area(Factboxes)
@@ -50,17 +52,83 @@ page 90015 DMTProcessTemplateSetup
         processTemplateLib.InitDefaults();
     end;
 
+    trigger OnAfterGetCurrRecord()
+    begin
+        UpdateMandatoryIndicator();
+    end;
+
     trigger OnAfterGetRecord()
     begin
+        UpdateMandatoryIndicator();
         case true of
-            (Rec."PrPl Type" = Rec."PrPl Type"::Group):
+            (Rec.Type = Rec.Type::Group):
                 lineStyleExpr := Format(Enum::DMTFieldStyle::Bold);
             else
                 lineStyleExpr := Format(Enum::DMTFieldStyle::None);
         end;
+    end;
 
+    local procedure UpdateMandatoryIndicator()
+    begin
+        case Rec.Type of
+            Rec.Type::" ":
+                begin
+                    resetMandatoryIndicator();
+                end;
+            Rec.Type::"Default Value":
+                begin
+                    resetMandatoryIndicator();
+                    FieldName_Mandatory := true;
+                    DefaultValue_Mandatory := true;
+                end;
+            Rec.Type::"Filter":
+                begin
+                    resetMandatoryIndicator();
+                    FieldName_Mandatory := true;
+                    FilterExpression_Mandatory := true;
+                end;
+            Rec.Type::Group:
+                begin
+                    resetMandatoryIndicator();
+                    Description_Mandatory := true;
+                end;
+            Rec.Type::"Import Buffer",
+            Rec.Type::"Import Buffer+Target",
+            Rec.Type::"Import Target":
+                begin
+                    resetMandatoryIndicator();
+                    SourceFileName_Mandatory := true;
+                end;
+            Rec.Type::"Run Codeunit":
+                begin
+                    resetMandatoryIndicator();
+                    RunCodeunit_Mandatory := true;
+                end;
+        end;
+    end;
+
+    local procedure resetMandatoryIndicator()
+    begin
+        Description_Mandatory := false;
+        SourceFileName_Mandatory := false;
+        FieldName_Mandatory := false;
+        FilterExpression_Mandatory := false;
+        DefaultValue_Mandatory := false;
+        NAVSourceTableNo_Mandatory := false;
+        RunCodeunit_Mandatory := false;
+        TargetTableID_Mandatory := false;
     end;
 
     var
         lineStyleExpr: Text;
+        // mandatory boolean fields
+        Description_Mandatory: Boolean;
+        SourceFileName_Mandatory: Boolean;
+        FieldName_Mandatory: Boolean;
+        FilterExpression_Mandatory: Boolean;
+        DefaultValue_Mandatory: Boolean;
+        NAVSourceTableNo_Mandatory: Boolean;
+        RunCodeunit_Mandatory: Boolean;
+        TargetTableID_Mandatory: Boolean;
+
 }

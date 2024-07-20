@@ -73,7 +73,7 @@ page 90012 DMTProcessTemplateList
             processTemplateSetup.SetRange("Template Code", templateCode);
             processTemplateSetup.FindFirst();
             Rec."Template Code" := processTemplateSetup."Template Code";
-            Rec.Description := processTemplateSetup."PrPl Description";
+            Rec.Description := processTemplateSetup."Description";
             Rec.Insert();
         end;
     end;
