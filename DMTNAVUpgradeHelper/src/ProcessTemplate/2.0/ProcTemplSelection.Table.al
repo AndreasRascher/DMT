@@ -16,7 +16,7 @@ table 90012 DMTProcTemplSelection
 
     fields
     {
-        field(1; Code; Code[150]) { Caption = 'Code', Comment = 'de-DE=Code'; }
+        field(1; "Template Code"; Code[150]) { Caption = 'Code', Comment = 'de-DE=Code'; }
         field(2; Description; Text[250]) { Caption = 'Description', Comment = 'de-DE=Beschreibung'; }
         field(10; "Required Files Ratio"; Text[10]) { Caption = 'Required Files', Comment = 'de-DE=Benötigte Dateien'; }
         field(11; RequiredFilesStyle; Text[15]) { Caption = 'RequiredFilesStyle', Locked = true; Editable = false; }
@@ -26,7 +26,7 @@ table 90012 DMTProcTemplSelection
 
     keys
     {
-        key(PK; Code)
+        key(PK; "Template Code")
         {
             Clustered = true;
         }

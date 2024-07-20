@@ -13,7 +13,7 @@ page 90012 DMTProcessTemplateList
         {
             repeater(Group)
             {
-                field("Code"; Rec."Code") { }
+                field("Code"; Rec."Template Code") { }
                 field(Description; Rec.Description) { }
                 field("Required Files"; Rec."Required Files Ratio") { StyleExpr = Rec.RequiredFilesStyle; }
                 field("Required Objects"; Rec."Required Objects Ratio") { StyleExpr = Rec.RequiredObjectsStyle; }
@@ -38,8 +38,10 @@ page 90012 DMTProcessTemplateList
                 trigger OnAction()
                 var
                     ProcessTemplateLib: Codeunit DMTProcessTemplateLib;
+                    processingPlan: Page DMTProcessingPlan;
                 begin
-                    // ProcessTemplateLib.TransferToProcessingPlan(Rec);
+                    ProcessTemplateLib.TransferToProcessingPlan(Rec."Template Code");
+                    processingPlan.Run();
                 end;
             }
         }
@@ -57,6 +59,9 @@ page 90012 DMTProcessTemplateList
         TemplateCodeList: List of [Text[150]];
         templateCode: Text[150];
     begin
+        if processTemplateSetup.IsEmpty then
+            processTemplateSetup.InitDefaults();
+
         if processTemplateSetup.FindSet() then
             repeat
                 if processTemplateSetup."Template Code" <> '' then
@@ -67,7 +72,7 @@ page 90012 DMTProcessTemplateList
         foreach templateCode in TemplateCodeList do begin
             processTemplateSetup.SetRange("Template Code", templateCode);
             processTemplateSetup.FindFirst();
-            Rec.Code := processTemplateSetup."Template Code";
+            Rec."Template Code" := processTemplateSetup."Template Code";
             Rec.Description := processTemplateSetup."PrPl Description";
             Rec.Insert();
         end;
@@ -82,7 +87,7 @@ page 90012 DMTProcessTemplateList
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
     begin
-        processTemplateSetup.initTemplateSetupFor(Rec.Code);
+        processTemplateSetup.initTemplateSetupFor(Rec."Template Code");
         CurrPage.ProcessTemplateRequirementFB.Page.Set(processTemplateSetup);
         CurrPage.ProcessTemplateStepsFB.Page.Set(processTemplateSetup);
     end;

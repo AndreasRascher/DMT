@@ -48,6 +48,10 @@ table 90014 DMTProcessTemplateSetup
         Rec.Copy(ProcessTemplateSetup);
     end;
 
+    internal procedure InitDefaults()
+    begin
+    end;
+
     procedure getNextLineNo(templateCode: Code[150]) NextLineNo: Integer
     var
         ProcessTemplateSetup: Record DMTProcessTemplateSetup;
@@ -60,6 +64,7 @@ table 90014 DMTProcessTemplateSetup
     procedure initTemplateSetupFor(templateCode: Code[150])
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
+        debug: Integer;
     begin
         if InitializedTemplateCode = templateCode then
             exit;
@@ -67,7 +72,9 @@ table 90014 DMTProcessTemplateSetup
         Clear(TemplateSourceFileNamesGlobal);
         Clear(TemplateCodeunitsGlobal);
         Clear(TemplateSourceFileNamesGlobal);
-
+        Clear(TargetTablesGlobal);
+        ProcessTemplateDetailGlobal.DeleteAll();
+        debug := ProcessTemplateDetailGlobal.Count;
         processTemplateSetup.Reset();
         processTemplateSetup.SetRange("Template Code", templateCode);
         if processTemplateSetup.FindSet() then
@@ -81,9 +88,11 @@ table 90014 DMTProcessTemplateSetup
                         ProcessTemplateDetailGlobal.Name := processTemplateSetup."PrPl Description"
                     else
                         ProcessTemplateDetailGlobal.Name := processTemplateSetup."Source File Name";
+                    ProcessTemplateDetailGlobal.Modify();
                     // Source file names
-                    if not TemplateSourceFileNamesGlobal.Contains(processTemplateSetup."Source File Name") then
-                        TemplateSourceFileNamesGlobal.Add(processTemplateSetup."Source File Name");
+                    if processTemplateSetup."Source File Name" <> '' then
+                        if not TemplateSourceFileNamesGlobal.Contains(processTemplateSetup."Source File Name") then
+                            TemplateSourceFileNamesGlobal.Add(processTemplateSetup."Source File Name");
                     // migration objects
                     if processTemplateSetup."PrPl Run Codeunit" <> 0 then
                         if not TemplateCodeunitsGlobal.Contains(processTemplateSetup."PrPl Run Codeunit") then
@@ -119,8 +128,12 @@ table 90014 DMTProcessTemplateSetup
     end;
 
     procedure getSteps(var processTemplateDetail: Record DMTProcessTemplateDetail temporary)
+    var
+        debug: Integer;
     begin
+        debug := processTemplateDetail.Count;
         processTemplateDetail.Copy(ProcessTemplateDetailGlobal, true);
+        debug := processTemplateDetail.Count;
     end;
 
     procedure getInitializedTemplateCode() TemplateCode: Code[150]

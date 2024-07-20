@@ -4,7 +4,6 @@ page 90013 ProcessTemplateStepsFB
     Caption = 'Steps', Comment = 'de-DE=Schritte';
     PageType = ListPart;
     SourceTable = DMTProcessTemplateDetail;
-    SourceTableView = where(Type = const(Step));
     DeleteAllowed = false;
     InsertAllowed = false;
     ModifyAllowed = false;
@@ -25,5 +24,6 @@ page 90013 ProcessTemplateStepsFB
     internal procedure Set(var processTemplateSetup: Record DMTProcessTemplateSetup)
     begin
         processTemplateSetup.getSteps(Rec);
+        CurrPage.Update(false);
     end;
 }

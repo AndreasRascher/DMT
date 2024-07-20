@@ -4,7 +4,6 @@ page 90014 ProcessTemplateRequirementFB
     Caption = 'Requirements', Comment = 'de-DE=Vorraussetzungen';
     PageType = ListPart;
     SourceTable = DMTProcessTemplateDetail;
-    SourceTableView = where(Type = const(Requirement));
     DeleteAllowed = false;
     InsertAllowed = false;
     ModifyAllowed = false;
@@ -20,7 +19,7 @@ page 90014 ProcessTemplateRequirementFB
             repeater(RequirementList)
             {
                 Caption = 'Requirements', Comment = 'de-DE=Vorraussetzungen';
-                field("Requirement Type"; Rec."Requirement Sub Type") { ApplicationArea = All; StyleExpr = lineStyle; }
+                field("Requirement Type"; Rec.Type) { ApplicationArea = All; StyleExpr = lineStyle; }
                 field("Name"; Rec."Name") { ApplicationArea = All; StyleExpr = lineStyle; }
             }
         }
@@ -58,14 +57,14 @@ page 90014 ProcessTemplateRequirementFB
         processTemplateLib: Codeunit DMTProcessTemplateLib;
     begin
         case true of
-            (rec."Requirement Sub Type" = rec."Requirement Sub Type"::SourceFile) and
+            (rec.Type = rec.Type::SourceFile) and
             processTemplateLib.IsNAVSourceTableEmpty(rec."NAV Source Table No.(Req.)"):
                 lineStyle := Format(Enum::DMTFieldStyle::Grey);
-            (rec."Requirement Sub Type" = rec."Requirement Sub Type"::SourceFile) and
-            processTemplateLib.IsSourceFileAvailable(Rec):
+            (rec.Type = rec.Type::SourceFile) and
+            processTemplateLib.IsSourceFileAvailable(Rec.Name):
                 lineStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
-            (rec."Requirement Sub Type" = rec."Requirement Sub Type"::SourceFile) and
-            not processTemplateLib.IsSourceFileAvailable(Rec):
+            (rec.Type = rec.Type::SourceFile) and
+            not processTemplateLib.IsSourceFileAvailable(Rec.Name):
                 lineStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
             else
                 lineStyle := Format(Enum::DMTFieldStyle::None);
@@ -85,7 +84,7 @@ page 90014 ProcessTemplateRequirementFB
         sourceFileNames := processTemplateSetup.getTemplateSourceFileNames();
         foreach sourceFileName in sourceFileNames do begin
             Rec.InsertNew(processTemplateSetup.getInitializedTemplateCode());
-            Rec."Requirement Sub Type" := Rec."Requirement Sub Type"::SourceFile;
+            Rec.Type := Rec.Type::SourceFile;
             Rec."Name" := CopyStr(sourceFileName, 1, MaxStrLen(Rec."Name"));
             Rec.Modify();
         end;
@@ -93,7 +92,7 @@ page 90014 ProcessTemplateRequirementFB
         codeunits := processTemplateSetup.getTemplateCodeunits();
         foreach Codeunit in codeunits do begin
             Rec.InsertNew(processTemplateSetup.getInitializedTemplateCode());
-            Rec."Requirement Sub Type" := Rec."Requirement Sub Type"::Codeunit;
+            Rec.Type := Rec.Type::Codeunit;
             Rec.Name := StrSubstNo('Codeunit %1', Codeunit);
             Rec.Modify();
         end;
@@ -101,10 +100,12 @@ page 90014 ProcessTemplateRequirementFB
         targetTables := processTemplateSetup.getTargetTables();
         foreach Codeunit in targetTables do begin
             Rec.InsertNew(processTemplateSetup.getInitializedTemplateCode());
-            Rec."Requirement Sub Type" := Rec."Requirement Sub Type"::Table;
+            Rec.Type := Rec.Type::Table;
             Rec.Name := StrSubstNo('Table %1', Codeunit);
             Rec.Modify();
         end;
+
+        CurrPage.Update(false);
     end;
 
     var
