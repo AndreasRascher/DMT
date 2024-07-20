@@ -6,7 +6,7 @@ tableextension 90013 DMTProcessingPlan extends DMTProcessingPlan
         field(90011; "Process Template Code"; Code[150])
         {
             Caption = 'Process Template Code', Comment = 'de-DE=Prozessvorlage Code';
-            TableRelation = DMTProcessTemplate;
+            // TableRelation = DMTProcessTemplate;
         }
     }
 

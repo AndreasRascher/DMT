@@ -1,13 +1,13 @@
 table 90013 DMTProcessTemplateDetail
 {
     DataClassification = ToBeClassified;
+    TableType = Temporary;
 
     fields
     {
         field(1; "Process Template Code"; Code[150])
         {
             Caption = 'Process Template Code', Comment = 'de-DE=Prozessvorlage Code';
-            TableRelation = DMTProcessTemplate;
         }
         field(2; "Line No."; Integer)
         {
@@ -87,19 +87,30 @@ table 90013 DMTProcessTemplateDetail
         // Add changes to field groups here
     }
 
-    procedure filterFor(DMTProcessTemplate: Record DMTProcessTemplate) HasLinesInFilter: Boolean
-    begin
-        Rec.SetRange(Rec."Process Template Code", DMTProcessTemplate.Code);
-        HasLinesInFilter := not Rec.IsEmpty;
-    end;
-
     internal procedure getNextLineNo() nextLineNo: Integer
     var
-        DMTProcessTemplateDetails: Record DMTProcessTemplateDetail;
+        processTemplateDetails: Record DMTProcessTemplateDetail;
+        tempProcessTemplateDetails: Record DMTProcessTemplateDetail temporary;
     begin
-        Rec.TestField("Process Template Code");
-        DMTProcessTemplateDetails.SetRange("Process Template Code", Rec."Process Template Code");
-        if DMTProcessTemplateDetails.FindLast() then;
-        nextLineNo := DMTProcessTemplateDetails."Line No." + 10000;
+        if Rec.IsTemporary then begin
+            tempProcessTemplateDetails.Copy(Rec, true);
+            if tempProcessTemplateDetails.FindLast() then;
+            nextLineNo := tempProcessTemplateDetails."Line No." + 10000;
+        end else begin
+            processTemplateDetails.Copy(Rec);
+            if processTemplateDetails.FindLast() then;
+            nextLineNo := processTemplateDetails."Line No." + 10000;
+        end;
     end;
+
+    internal procedure InsertNew(templateCode: Code[150])
+    var
+        processTemplateDetailNEW: Record DMTProcessTemplateDetail;
+    begin
+        processTemplateDetailNEW."Process Template Code" := templateCode;
+        processTemplateDetailNEW."Line No." := Rec.getNextLineNo();
+        Rec := processTemplateDetailNEW;
+        Rec.Insert();
+    end;
+
 }

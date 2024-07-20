@@ -21,4 +21,9 @@ page 90013 ProcessTemplateStepsFB
             }
         }
     }
+
+    internal procedure Set(var processTemplateSetup: Record DMTProcessTemplateSetup)
+    begin
+        processTemplateSetup.getSteps(Rec);
+    end;
 }

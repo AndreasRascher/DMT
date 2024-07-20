@@ -56,4 +56,84 @@ table 90014 DMTProcessTemplateSetup
         if ProcessTemplateSetup.FindLast() then;
         NextLineNo += ProcessTemplateSetup."Line No." + 10000;
     end;
+
+    procedure initTemplateSetupFor(templateCode: Code[150])
+    var
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+    begin
+        if InitializedTemplateCode = templateCode then
+            exit;
+
+        Clear(TemplateSourceFileNamesGlobal);
+        Clear(TemplateCodeunitsGlobal);
+        Clear(TemplateSourceFileNamesGlobal);
+
+        processTemplateSetup.Reset();
+        processTemplateSetup.SetRange("Template Code", templateCode);
+        if processTemplateSetup.FindSet() then
+            repeat
+                // Steps
+                if processTemplateSetup."PrPl Type" <> DMTProcessingPlanType::Group then begin
+                    ProcessTemplateDetailGlobal.InsertNew(templateCode);
+                    ProcessTemplateDetailGlobal."NAV Source Table No.(Req.)" := processTemplateSetup."NAV Source Table No.";
+                    ProcessTemplateDetailGlobal."PrPl Type" := processTemplateSetup."PrPl Type";
+                    if processTemplateSetup."PrPl Description" <> '' then
+                        ProcessTemplateDetailGlobal.Name := processTemplateSetup."PrPl Description"
+                    else
+                        ProcessTemplateDetailGlobal.Name := processTemplateSetup."Source File Name";
+                    // Source file names
+                    if not TemplateSourceFileNamesGlobal.Contains(processTemplateSetup."Source File Name") then
+                        TemplateSourceFileNamesGlobal.Add(processTemplateSetup."Source File Name");
+                    // migration objects
+                    if processTemplateSetup."PrPl Run Codeunit" <> 0 then
+                        if not TemplateCodeunitsGlobal.Contains(processTemplateSetup."PrPl Run Codeunit") then
+                            TemplateCodeunitsGlobal.Add(processTemplateSetup."PrPl Run Codeunit");
+                    // target tables
+                    if processTemplateSetup."PrPl Default Target Table ID" <> 0 then
+                        if not TargetTablesGlobal.Contains(processTemplateSetup."PrPl Default Target Table ID") then
+                            TargetTablesGlobal.Add(processTemplateSetup."PrPl Default Target Table ID");
+                end;
+            until processTemplateSetup.Next() = 0;
+        InitializedTemplateCode := templateCode;
+    end;
+
+    procedure getTemplateSourceFileNames() SourceFileNames: List of [Text]
+    begin
+        if InitializedTemplateCode = '' then
+            Error(TemplateNotInitializedErr);
+        SourceFileNames := TemplateSourceFileNamesGlobal;
+    end;
+
+    procedure getTemplateCodeunits() Codeunits: List of [Integer]
+    begin
+        if InitializedTemplateCode = '' then
+            Error(TemplateNotInitializedErr);
+        Codeunits := TemplateCodeunitsGlobal;
+    end;
+
+    procedure getTargetTables() TargetTables: List of [Integer]
+    begin
+        if InitializedTemplateCode = '' then
+            Error(TemplateNotInitializedErr);
+        TargetTables := TargetTablesGlobal;
+    end;
+
+    procedure getSteps(var processTemplateDetail: Record DMTProcessTemplateDetail temporary)
+    begin
+        processTemplateDetail.Copy(ProcessTemplateDetailGlobal, true);
+    end;
+
+    procedure getInitializedTemplateCode() TemplateCode: Code[150]
+    begin
+        TemplateCode := InitializedTemplateCode;
+    end;
+
+
+    var
+        ProcessTemplateDetailGlobal: Record DMTProcessTemplateDetail;
+        InitializedTemplateCode: Code[150];
+        TemplateSourceFileNamesGlobal: List of [Text];
+        TemplateCodeunitsGlobal, TargetTablesGlobal : List of [Integer];
+        TemplateNotInitializedErr: Label 'Template not initialized', Comment = 'de-DE=Vorlage nicht initialisiert';
+
 }

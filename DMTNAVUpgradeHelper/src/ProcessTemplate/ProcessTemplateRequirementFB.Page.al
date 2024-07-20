@@ -15,12 +15,8 @@ page 90014 ProcessTemplateRequirementFB
     {
         area(Content)
         {
-            // group(NAVSourceTableFilterGroup)
-            // {
-            // Visible = NAVTableIDFilterVisible;
-            // ShowCaption = false;
             field(NAVSourceTableFilter; NAVTableIDFilter) { Caption = 'NAV Table Filter', Comment = 'de-DE=NAV Tabellenfilter'; }
-            // }
+
             repeater(RequirementList)
             {
                 Caption = 'Requirements', Comment = 'de-DE=Vorraussetzungen';
@@ -51,6 +47,7 @@ page 90014 ProcessTemplateRequirementFB
         found: Boolean;
     begin
         found := Rec.find(Which);
+        // Table Filter for copy & paste
         NAVTableIDFilter := BuildNAVSourceTableFilter();
         NAVTableIDFilterVisible := NAVTableIDFilter <> '';
         exit(found);
@@ -72,6 +69,41 @@ page 90014 ProcessTemplateRequirementFB
                 lineStyle := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
             else
                 lineStyle := Format(Enum::DMTFieldStyle::None);
+        end;
+    end;
+
+    internal procedure Set(var processTemplateSetup: Record DMTProcessTemplateSetup)
+    var
+        sourceFileNames: List of [Text];
+        codeunits, targetTables : List of [Integer];
+        Codeunit: Integer;
+        sourceFileName: Text;
+    begin
+        Rec.Reset();
+        Rec.DeleteAll();
+
+        sourceFileNames := processTemplateSetup.getTemplateSourceFileNames();
+        foreach sourceFileName in sourceFileNames do begin
+            Rec.InsertNew(processTemplateSetup.getInitializedTemplateCode());
+            Rec."Requirement Sub Type" := Rec."Requirement Sub Type"::SourceFile;
+            Rec."Name" := CopyStr(sourceFileName, 1, MaxStrLen(Rec."Name"));
+            Rec.Modify();
+        end;
+
+        codeunits := processTemplateSetup.getTemplateCodeunits();
+        foreach Codeunit in codeunits do begin
+            Rec.InsertNew(processTemplateSetup.getInitializedTemplateCode());
+            Rec."Requirement Sub Type" := Rec."Requirement Sub Type"::Codeunit;
+            Rec.Name := StrSubstNo('Codeunit %1', Codeunit);
+            Rec.Modify();
+        end;
+
+        targetTables := processTemplateSetup.getTargetTables();
+        foreach Codeunit in targetTables do begin
+            Rec.InsertNew(processTemplateSetup.getInitializedTemplateCode());
+            Rec."Requirement Sub Type" := Rec."Requirement Sub Type"::Table;
+            Rec.Name := StrSubstNo('Table %1', Codeunit);
+            Rec.Modify();
         end;
     end;
 

@@ -3,31 +3,6 @@
   <file datatype="xml" source-language="en-US" target-language="en-US" original="DMT NAV Upgrade Helper">
     <body>
       <group id="body">
-        <trans-unit id="Table 1254373258 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>DMT Process Template</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=DMT Prozessvorlage</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplate - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1254373258 - Field 3004954119 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Code</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Code</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplate - Field Code - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1254373258 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Description</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Beschreibung</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplate - Field Description - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1254373258 - Field 1805386071 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Required Files</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Benötigte Dateien</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplate - Field Required Files Ratio - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1254373258 - Field 3667482490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Required Objects</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Benötigte Objekte</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplate - Field Required Objects Ratio - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 3998705033 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Line No.</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilennummer</note>
@@ -107,6 +82,11 @@
           <source>Type</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Art</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateDetail - Field Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 373303067 - NamedType 562625128" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Template not initialized</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vorlage nicht initialisiert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateSetup - NamedType TemplateNotInitializedErr</note>
         </trans-unit>
         <trans-unit id="Table 373303067 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Line No.</source>
@@ -193,40 +173,35 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Vorlagencode</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateSetup - Field Template Code - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 788213925 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Process Template</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=DMT Prozessvorlage</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcTemplSelection - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 788213925 - Field 3004954119 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Code</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Code</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcTemplSelection - Field Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 788213925 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Beschreibung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcTemplSelection - Field Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 788213925 - Field 1805386071 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Required Files</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Benötigte Dateien</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcTemplSelection - Field Required Files Ratio - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 788213925 - Field 3667482490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Required Objects</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Benötigte Objekte</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcTemplSelection - Field Required Objects Ratio - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Codeunit 368545005 - Method 1710761149 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import finished</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTCodeGenerator - Method ImportNAVSchemaFile - NamedType ImportFinishedMsg</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 634704931 - Method 3584965203 - NamedType 309902852" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No Import Configuration exits for Source File %1</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Keine Importkonfiguration für Quelldatei %1 vorhanden</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method findOrCreateProcessingPlanID - NamedType noImportConfigExitsForSourceFileErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 634704931 - Method 3584965203 - NamedType 365384090" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Processing Plan Type "%1" not supported</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Verarbeitungsplan Typ "%1" wird nicht unterstützt</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method findOrCreateProcessingPlanID - NamedType notSupportedProcessingPlanTypeErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 634704931 - Method 3584965203 - NamedType 3458107479" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Source File %1 not found</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Quelldatei %1 nicht gefunden</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method findOrCreateProcessingPlanID - NamedType sourceFileNotFoundErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 634704931 - Method 1977540100 - NamedType 732372603" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Contact, Customer, Vendor</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Kontakt, Kunde, Lieferant</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method Insert_Contact_Customer_Vendor - NamedType CustContVendorLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 634704931 - Method 796638517 - NamedType 1230911531" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Dimensions</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Dimensionen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method Insert_Dimensions - NamedType dimensionsLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 634704931 - Method 2014718948 - NamedType 2277219875" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Process Template %1 already transferred to Processing Plan</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Vorlage %1 wurde bereits übertragen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method TransferToProcessingPlan - NamedType templateAlreadyTransferedErr</note>
         </trans-unit>
         <trans-unit id="Page 2911572108 - Control 1735507514 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Code</source>

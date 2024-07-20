@@ -21,14 +21,8 @@ page 90012 DMTProcessTemplateList
         }
         area(Factboxes)
         {
-            part(ProcessTemplateRequirementFB; ProcessTemplateRequirementFB)
-            {
-                SubPageLink = "Process Template Code" = field(Code);
-            }
-            part(ProcessTemplateStepsFB; ProcessTemplateStepsFB)
-            {
-                SubPageLink = "Process Template Code" = field(Code);
-            }
+            part(ProcessTemplateRequirementFB; ProcessTemplateRequirementFB) { }
+            part(ProcessTemplateStepsFB; ProcessTemplateStepsFB) { }
         }
     }
 
@@ -45,7 +39,7 @@ page 90012 DMTProcessTemplateList
                 var
                     ProcessTemplateLib: Codeunit DMTProcessTemplateLib;
                 begin
-                    ProcessTemplateLib.TransferToProcessingPlan(Rec);
+                    // ProcessTemplateLib.TransferToProcessingPlan(Rec);
                 end;
             }
         }
@@ -61,6 +55,7 @@ page 90012 DMTProcessTemplateList
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
         TemplateCodeList: List of [Text[150]];
+        templateCode: Text[150];
     begin
         if processTemplateSetup.FindSet() then
             repeat
@@ -68,12 +63,28 @@ page 90012 DMTProcessTemplateList
                     if not TemplateCodeList.Contains(processTemplateSetup."Template Code") then
                         TemplateCodeList.Add(processTemplateSetup."Template Code");
             until processTemplateSetup.Next() = 0;
-        TODO: Füllen der Zeilen mit den Prozessvorlagen
+        processTemplateSetup.Reset();
+        foreach templateCode in TemplateCodeList do begin
+            processTemplateSetup.SetRange("Template Code", templateCode);
+            processTemplateSetup.FindFirst();
+            Rec.Code := processTemplateSetup."Template Code";
+            Rec.Description := processTemplateSetup."PrPl Description";
+            Rec.Insert();
+        end;
     end;
 
     trigger OnAfterGetRecord()
     begin
-        Rec.UpdateIndicators();
+        // Rec.UpdateIndicators();
+    end;
+
+    trigger OnAfterGetCurrRecord()
+    var
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+    begin
+        processTemplateSetup.initTemplateSetupFor(Rec.Code);
+        CurrPage.ProcessTemplateRequirementFB.Page.Set(processTemplateSetup);
+        CurrPage.ProcessTemplateStepsFB.Page.Set(processTemplateSetup);
     end;
 
 }
