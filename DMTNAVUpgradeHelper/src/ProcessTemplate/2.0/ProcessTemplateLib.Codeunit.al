@@ -30,6 +30,12 @@ codeunit 90013 DMTProcessTemplateLib
     begin
         if IsNAVSourceTableEmpty(processTemplateSetup."NAV Source Table No.") then
             exit;
+        if processTemplateSetup.Type = processTemplateSetup.Type::Filter then
+            exit;
+        if processTemplateSetup.Type = processTemplateSetup.Type::"Default Value" then
+            exit;
+        if processTemplateSetup.Type = processTemplateSetup.Type::"Update Field" then
+            exit;
 
         processingPlan.Init();
         processingPlan."Process Template Code" := processTemplateSetup."Template Code";
@@ -168,6 +174,7 @@ codeunit 90013 DMTProcessTemplateLib
             processingPlan.SaveSourceTableFilter(filteredView);
         if translateTargetFilterToSourceFilter(filteredView, processingPlan, defaults) then
             processingPlan.SaveDefaultValuesView(filteredView);
+        TODO: Update Field
     end;
 
     /// <summary>
