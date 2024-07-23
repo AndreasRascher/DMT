@@ -105,14 +105,15 @@ table 90014 DMTProcessTemplateSetup
     procedure initTemplateSetupFor(templateCode: Code[150])
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
+        processTemplateLib: Codeunit DMTProcessTemplateLib;
         debug: Integer;
     begin
         if InitializedTemplateCode = templateCode then
             exit;
 
-        Clear(TemplateSourceFileNamesGlobal);
+        Clear(SourceFileNamesGlobal);
         Clear(TemplateCodeunitsGlobal);
-        Clear(TemplateSourceFileNamesGlobal);
+        Clear(SourceFileNamesGlobal);
         Clear(TargetTablesGlobal);
         ProcessTemplateDetailGlobal.DeleteAll();
         debug := ProcessTemplateDetailGlobal.Count;
@@ -131,18 +132,25 @@ table 90014 DMTProcessTemplateSetup
                         ProcessTemplateDetailGlobal.Name := processTemplateSetup."Source File Name";
                     ProcessTemplateDetailGlobal.Modify();
                     // Source file names
-                    if processTemplateSetup."Source File Name" <> '' then
-                        if not TemplateSourceFileNamesGlobal.Keys.Contains(processTemplateSetup."Source File Name") then
-                            TemplateSourceFileNamesGlobal.Add(processTemplateSetup."Source File Name", processTemplateSetup."NAV Source Table No.");
+                    if processTemplateSetup."Source File Name" <> '' then begin
+                        if not SourceFileNamesGlobal.Keys.Contains(processTemplateSetup."Source File Name") then
+                            SourceFileNamesGlobal.Add(processTemplateSetup."Source File Name", processTemplateSetup."NAV Source Table No.");
+                        if not MissingSourceFileNamesGlobal.Keys.Contains(processTemplateSetup."Source File Name") then
+                            if not processTemplateLib.IsSourceFileAvailable(processTemplateSetup."Source File Name") then
+                                MissingSourceFileNamesGlobal.Add(processTemplateSetup."Source File Name", processTemplateSetup."NAV Source Table No.");
+                    end;
+
                     // Codenunits to run 
                     if processTemplateSetup."Run Codeunit" <> 0 then begin
+
                         if not TemplateCodeunitsGlobal.Contains(processTemplateSetup."Run Codeunit") then
                             TemplateCodeunitsGlobal.Add(processTemplateSetup."Run Codeunit");
+
                         if not TargetCodeunitsMissingGlobal.Contains(processTemplateSetup."Run Codeunit") then
                             if TargetCodenitExists(processTemplateSetup."Run Codeunit") then
                                 TargetCodeunitsMissingGlobal.Add(processTemplateSetup."Run Codeunit");
-
                     end;
+
                     // target tables
                     if processTemplateSetup.Type <> processTemplateSetup.Type::"Req. Setup" then
                         if processTemplateSetup."Target Table ID" <> 0 then begin
@@ -169,7 +177,7 @@ table 90014 DMTProcessTemplateSetup
     begin
         if InitializedTemplateCode = '' then
             Error(TemplateNotInitializedErr);
-        SourceFileNames := TemplateSourceFileNamesGlobal;
+        SourceFileNames := SourceFileNamesGlobal;
     end;
 
     procedure getTemplateCodeunits() Codeunits: List of [Integer]
@@ -179,11 +187,33 @@ table 90014 DMTProcessTemplateSetup
         Codeunits := TemplateCodeunitsGlobal;
     end;
 
+    procedure getMissingCodeunits() MissingCodeunits: List of [Integer]
+    begin
+        if InitializedTemplateCode = '' then
+            Error(TemplateNotInitializedErr);
+        MissingCodeunits := TargetCodeunitsMissingGlobal;
+    end;
+
+    procedure getMissingSourceFileNames() MissingSourceFileNames: Dictionary of [Text/*Filename*/, Integer/*NAVTableNo*/]
+    begin
+        if InitializedTemplateCode = '' then
+            Error(TemplateNotInitializedErr);
+        MissingSourceFileNames := MissingSourceFileNamesGlobal;
+    end;
+
+
     procedure getTargetTables() TargetTables: List of [Integer]
     begin
         if InitializedTemplateCode = '' then
             Error(TemplateNotInitializedErr);
         TargetTables := TargetTablesGlobal;
+    end;
+
+    procedure getMissingTargetTables() MissingTargetTables: List of [Integer]
+    begin
+        if InitializedTemplateCode = '' then
+            Error(TemplateNotInitializedErr);
+        MissingTargetTables := TargetTablesMissingGlobal;
     end;
 
     procedure getSteps(var processTemplateDetail: Record DMTProcessTemplateDetail temporary)
@@ -204,7 +234,7 @@ table 90014 DMTProcessTemplateSetup
     var
         ProcessTemplateDetailGlobal: Record DMTProcessTemplateDetail;
         InitializedTemplateCode: Code[150];
-        TemplateSourceFileNamesGlobal: Dictionary of [Text/*Filename*/, Integer/*NAVTableNo*/];
+        SourceFileNamesGlobal, MissingSourceFileNamesGlobal : Dictionary of [Text/*Filename*/, Integer/*NAVTableNo*/];
         TemplateCodeunitsGlobal, TargetCodeunitsMissingGlobal, TargetTablesGlobal, TargetTablesMissingGlobal : List of [Integer];
         TemplateNotInitializedErr: Label 'Template not initialized', Comment = 'de-DE=Vorlage nicht initialisiert';
 

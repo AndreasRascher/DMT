@@ -35,25 +35,19 @@ table 90012 DMTProcTemplSelection
     procedure UpdateIndicators()
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
-        processTemplateLib: Codeunit DMTProcessTemplateLib;
-        SourceFileNames: Dictionary of [Text, Integer];
-        sourceFileNamesMissing: Dictionary of [Text, Integer];
-        TargetTables, Codeunits : List of [Integer];
-        SourceFileName: Text;
+        noOfRequiredEntities, noOfEntitiesFound : Integer;
     begin
         processTemplateSetup.initTemplateSetupFor(Rec."Template Code");
         // Ratio Source Files required to available
-        SourceFileNames := processTemplateSetup.getTemplateSourceFileNames();
-        foreach SourceFileName in SourceFileNames.Keys do begin
-            if not processTemplateLib.IsSourceFileAvailable(SourceFileName) then
-                sourceFileNamesMissing.Add(SourceFileName, SourceFileNames.Get(SourceFileName));
-        end;
-        Rec."Required Files Ratio" := StrSubstNo('%1/%2', SourceFileNames.Count - sourceFileNamesMissing.Count, SourceFileNames.Count);
+        noOfRequiredEntities := processTemplateSetup.getTemplateSourceFileNames().Count;
+        noOfEntitiesFound := processTemplateSetup.getTemplateSourceFileNames().Count - processTemplateSetup.getMissingSourceFileNames().Count;
+        Rec."Required Files Ratio" := StrSubstNo('%1/%2', noOfEntitiesFound, noOfRequiredEntities);
 
         // Required Objects required to available
-        TargetTables := processTemplateSetup.getTargetTables();
-        Codeunits := processTemplateSetup.getTemplateCodeunits();
-        Rec."Required Objects Ratio" := StrSubstNo('%1/%2', Codeunits.Count + TargetTables.Count, Codeunits.Count + TargetTables.Count);
+        noOfRequiredEntities := processTemplateSetup.getTemplateCodeunits().Count + processTemplateSetup.getTargetTables().Count;
+        noOfEntitiesFound := (processTemplateSetup.getTemplateCodeunits().Count - processTemplateSetup.getMissingCodeunits().Count) +
+                             (processTemplateSetup.getTargetTables().Count - processTemplateSetup.getMissingTargetTables().Count);
+        Rec."Required Objects Ratio" := StrSubstNo('%1/%2', noOfEntitiesFound, noOfRequiredEntities);
         // Required Data required to available
 
         // checkRequirementStatusByType(Rec.RequiredObjectsStyle, Rec."Required Objects Ratio", Rec,
