@@ -2416,9 +2416,10 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Processing Duration - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 76420432 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Source Table No.</source>
-          <target state="translated">Herkunftstabellennr.</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Herkunftstabellennr.</note>
+          <source>Source Table No. (Codeunit)</source>
+          <target state="needs-adaptation">Herkunftstabellennr. (Codeunit)</target>
+          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Herkunftstabellennr. (Codeunit)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Source Table No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 530928583 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2429,8 +2430,7 @@
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 513339096 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
           <source> ,In Progress,Finished,Error</source>
-          <target state="needs-adaptation"> ,in Arbeit,Abgeschlossen,Fehler</target>
-          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <target state="translated"> ,in Arbeit,Abgeschlossen,Fehler</target>
           <note from="Developer" annotates="general" priority="2">de-DE= ,in Arbeit,Abgeschlossen,Fehler</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Status - Property OptionCaption</note>
         </trans-unit>
@@ -3507,6 +3507,18 @@
           <target state="translated">DMT Verarbeitungsplan</target>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Verarbeitungsplan</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Method 2443406223 - NamedType 4264524006" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do you want to delete %1 lines?</source>
+          <target state="translated">Möchten Sie %1 Zeilen löschen?</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Möchten Sie %1 Zeilen löschen?</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Method DeleteSelectedLines - NamedType deleteLinesQst</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 76420432 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Defining the source table no. for which a filter as event is provided for rows of type Codeunit.</source>
+          <target state="translated">Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control Source Table No. - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Control 3177385690 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Default Values</source>

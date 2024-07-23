@@ -2,13 +2,13 @@ page 91017 DMTProcessingPlan
 {
     Caption = 'DMT Processing Plan', Comment = 'de-DE=DMT Verarbeitungsplan';
     AdditionalSearchTerms = 'DMT Plan', Locked = true;
-    PageType = List;
+    PageType = Worksheet;
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTable = DMTProcessingPlan;
     AutoSplitKey = true;
     InsertAllowed = false;
-    DeleteAllowed = false;
+    DeleteAllowed = true;
 
     layout
     {

@@ -29,8 +29,11 @@ page 90014 ProcessTemplateRequirementFB
     var
         Rec2: Record DMTProcessTemplateDetail;
         processTemplateLib: Codeunit DMTProcessTemplateLib;
+        debug: Integer;
     begin
-        Rec2.Copy(Rec);
+        debug := Rec.Count;
+        Rec2.Copy(Rec, true);
+        debug := Rec2.Count;
         if Rec2.IsEmpty then exit('');
         Rec2.SetFilter("NAV Source Table No.(Req.)", '<>0');
         if Rec2.FindSet() then
@@ -73,7 +76,7 @@ page 90014 ProcessTemplateRequirementFB
 
     internal procedure Set(var processTemplateSetup: Record DMTProcessTemplateSetup)
     var
-        sourceFileNames: List of [Text];
+        sourceFileNames: Dictionary of [Text/*Filename*/, Integer/*NAVTableNo*/];
         codeunits, targetTables : List of [Integer];
         Codeunit: Integer;
         sourceFileName: Text;
@@ -82,10 +85,11 @@ page 90014 ProcessTemplateRequirementFB
         Rec.DeleteAll();
 
         sourceFileNames := processTemplateSetup.getTemplateSourceFileNames();
-        foreach sourceFileName in sourceFileNames do begin
+        foreach sourceFileName in sourceFileNames.Keys do begin
             Rec.InsertNew(processTemplateSetup.getInitializedTemplateCode());
             Rec.Type := Rec.Type::SourceFile;
             Rec."Name" := CopyStr(sourceFileName, 1, MaxStrLen(Rec."Name"));
+            Rec."NAV Source Table No.(Req.)" := sourceFileNames.Get(sourceFileName);
             Rec.Modify();
         end;
 

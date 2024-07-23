@@ -40,8 +40,10 @@ codeunit 90013 DMTProcessTemplateLib
         processingPlan.Init();
         processingPlan."Process Template Code" := processTemplateSetup."Template Code";
         processingPlan."Line No." := nextLineNo;
-        processingPlan.Type := processTemplateSetup.getMappedProcessingPlanType();
+        if not processTemplateSetup.tryFindMappedProcessingPlanType(processingPlan.Type) then
+            exit;
         processingPlan.Description := processTemplateSetup."Description";
+        processingPlan.Indentation := processTemplateSetup."Indentation";
         processingPlan.Insert();
 
         case processingPlan."Type" of
@@ -174,7 +176,7 @@ codeunit 90013 DMTProcessTemplateLib
             processingPlan.SaveSourceTableFilter(filteredView);
         if translateTargetFilterToSourceFilter(filteredView, processingPlan, defaults) then
             processingPlan.SaveDefaultValuesView(filteredView);
-        TODO: Update Field
+        //TODO: Update Field
     end;
 
     /// <summary>
@@ -219,9 +221,9 @@ codeunit 90013 DMTProcessTemplateLib
         deleteTemplateLines(templateCode);
         addGroup(templateCode, 'Dimensionen');
         indentation += 1;
-        addComment(templateCode, 'Hinweise:');
-        addComment(templateCode, 'Fi-Bu Einrichtung der glob. Dimensionen erforderlich');
-        addComment(templateCode, 'Nicht mehr importieren wenn neue Dimensionen hinzugefügt wurden.');
+        addComment(templateCode, indentation, 'Hinweise:');
+        addComment(templateCode, indentation, 'Fi-Bu Einrichtung der glob. Dimensionen erforderlich');
+        addComment(templateCode, indentation, 'Nicht mehr importieren wenn neue Dimensionen hinzugefügt wurden.');
         // prüfung ob erforderliche Felder gefüllt sind (via Tabellen-ID und Feld-ID)
         addFieldRequirement(templateCode, indentation, Database::"General Ledger Setup", 'Global Dimension 1 Code');
 
@@ -238,6 +240,7 @@ codeunit 90013 DMTProcessTemplateLib
         indentation := 0;
         deleteTemplateLines(templateCode);
         addGroup(templateCode, CustContVendorLbl);
+        indentation := 1;
         addImportBufferAndTargetNAVFile(templateCode, indentation, 13, 'Verkäufer_Einkäufer.csv');
         addImportToBufferNAVFile(templateCode, indentation, 5050, 'Kontakt.csv');
         addImportTargetNAVFile(templateCode, indentation, 5050, 'Kontakt.csv', 'Unternehmenskontakte');
@@ -248,8 +251,10 @@ codeunit 90013 DMTProcessTemplateLib
         addImportBufferAndTargetNAVFile(templateCode, indentation, 27, 'Kreditor.csv');
 
         templateCode := 'Sachmerkmale';
+        indentation := 0;
         deleteTemplateLines(templateCode);
         addGroup(templateCode, 'Sachmerkmale');
+        indentation := 1;
         addImportBufferAndTargetNAVFile(templateCode, indentation, 5022730, 'Objekte für Formeln u. Regeln.csv');
         addImportBufferAndTargetNAVFile(templateCode, indentation, 5022748, 'Formeln Variablen Einrichtung.csv');
         addImportBufferAndTargetNAVFile(templateCode, indentation, 5022705, 'Sachmerkmalsgruppen.csv');
@@ -272,13 +277,14 @@ codeunit 90013 DMTProcessTemplateLib
         processTemplateSetup.Insert(true);
     end;
 
-    local procedure addComment(templateCode: Code[150]; comment: Text[250])
+    local procedure addComment(templateCode: Code[150]; indentation: Integer; comment: Text[250])
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
     begin
         ProcessTemplateSetup.New(templateCode);
         processTemplateSetup."Type" := processTemplateSetup."Type"::" ";
         processTemplateSetup."Description" := comment;
+        processTemplateSetup."Indentation" := indentation;
         processTemplateSetup.Insert(true);
     end;
 

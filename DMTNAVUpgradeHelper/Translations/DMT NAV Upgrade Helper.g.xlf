@@ -88,6 +88,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Quelldatei Name</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateSetup - Field Source File Name - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 373303067 - Field 4040554107 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table Caption</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zieltabellen Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateSetup - Field Target Table Caption - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 373303067 - Field 1666780894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Table ID</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Zieltabelle ID</note>
@@ -192,6 +197,21 @@
           <source>DMT Process Template Setup</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Prozessvorlagen Einrichtung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateSetup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4216686118 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data Requirements</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Erforderliche Daten</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page ProcessTemplateDataReqsFB - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4216686118 - Control 1226282471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Requirements</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vorraussetzungen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page ProcessTemplateDataReqsFB - Control RequirementList - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4216686118 - Control 4040554107 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Table</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Tabelle</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page ProcessTemplateDataReqsFB - Control Target Table Caption - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3655853132 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Requirements</source>

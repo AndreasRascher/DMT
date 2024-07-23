@@ -102,6 +102,9 @@ page 91016 DMTProcessInstructionFactBox
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
         Rec.DeleteAll();
+        // exit if line has been deleted
+        if not ProcessingPlan.Get(ProcessingPlan.RecordId) then
+            exit;
         if not ProcessingPlan.TypeSupportsSourceTableFilter() then begin
             IsSourceTableFilterView := false;
             exit;
@@ -121,6 +124,7 @@ page 91016 DMTProcessInstructionFactBox
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
         Rec.DeleteAll();
+        // exit if line has been deleted
         if not ProcessingPlan.TypeSupportsFixedValues() then begin
             IsFixedValueView := false;
             Rec.DeleteAll();
@@ -138,6 +142,7 @@ page 91016 DMTProcessInstructionFactBox
         Clear(IsUpdateSelectedFieldsView);
         Clear(IsSourceTableFilterView);
         Rec.DeleteAll();
+        // exit if line has been deleted
         if not ProcessingPlan.TypeSupportsProcessSelectedFieldsOnly() then begin
             IsUpdateSelectedFieldsView := false;
             exit;

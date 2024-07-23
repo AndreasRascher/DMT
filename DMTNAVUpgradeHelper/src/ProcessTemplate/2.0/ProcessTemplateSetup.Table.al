@@ -23,6 +23,13 @@ table 90014 DMTProcessTemplateSetup
         field(31; "Default Value"; Text[250]) { Caption = 'Default Value', Comment = 'de-DE=Vorgabewert'; }
         field(32; "Filter Expression"; Text[250]) { Caption = 'Filter', Comment = 'de-DE=Filter'; }
         field(24; "Target Table ID"; Integer) { Caption = 'Target Table ID', Comment = 'de-DE=Zieltabelle ID'; BlankZero = true; }
+        field(25; "Target Table Caption"; Text[249])
+        {
+            Caption = 'Target Table Caption', Comment = 'de-DE=Zieltabellen Bezeichnung';
+            Editable = false;
+            FieldClass = FlowField;
+            CalcFormula = lookup(AllObjWithCaption."Object Caption" where("Object Type" = const(Table), "Object ID" = field("Target Table ID")));
+        }
         #endregion ProcessingPlan
     }
 
@@ -49,12 +56,23 @@ table 90014 DMTProcessTemplateSetup
         Rec.Copy(ProcessTemplateSetup);
     end;
 
-    internal procedure InitDefaults()
+    local procedure TargetTableExists(TargetTableID: Integer) exists: Boolean
+    var
+        allObjWithCaption: Record allObjWithCaption;
     begin
+        exists := allObjWithCaption.get(allObjWithCaption."Object Type"::Table, TargetTableID);
     end;
 
-    procedure getMappedProcessingPlanType() processingPlanType: Enum DMTProcessingPlanType
+    local procedure TargetCodenitExists(TargetCodeunitID: Integer) exists: Boolean
+    var
+        allObjWithCaption: Record allObjWithCaption;
     begin
+        exists := allObjWithCaption.get(allObjWithCaption."Object Type"::Codeunit, TargetCodeunitID);
+    end;
+
+    procedure tryFindMappedProcessingPlanType(var processingPlanType: Enum DMTProcessingPlanType) OK: Boolean
+    begin
+        ok := true;
         case Rec."Type" of
             Rec."Type"::" ":
                 processingPlanType := processingPlanType::" ";
@@ -68,8 +86,10 @@ table 90014 DMTProcessTemplateSetup
                 processingPlanType := processingPlanType::"Buffer + Target";
             Rec."Type"::"Update Field":
                 processingPlanType := processingPlanType::"Update Field";
+            Rec.Type::"Run Codeunit":
+                processingPlanType := processingPlanType::"Run Codeunit";
             else
-                Error('Unknown processing template type "%1"', Rec."Type");
+                OK := false;
         end;
     end;
 
@@ -101,10 +121,10 @@ table 90014 DMTProcessTemplateSetup
         if processTemplateSetup.FindSet() then
             repeat
                 // Steps
-                if processTemplateSetup."Type" <> processTemplateSetup."Type"::Group then begin
+                if processTemplateSetup.tryFindMappedProcessingPlanType(ProcessTemplateDetailGlobal."PrPl Type") then begin
                     ProcessTemplateDetailGlobal.InsertNew(templateCode);
+                    processTemplateSetup.tryFindMappedProcessingPlanType(ProcessTemplateDetailGlobal."PrPl Type");
                     ProcessTemplateDetailGlobal."NAV Source Table No.(Req.)" := processTemplateSetup."NAV Source Table No.";
-                    ProcessTemplateDetailGlobal."PrPl Type" := processTemplateSetup.getMappedProcessingPlanType();
                     if processTemplateSetup."Description" <> '' then
                         ProcessTemplateDetailGlobal.Name := processTemplateSetup."Description"
                     else
@@ -112,23 +132,40 @@ table 90014 DMTProcessTemplateSetup
                     ProcessTemplateDetailGlobal.Modify();
                     // Source file names
                     if processTemplateSetup."Source File Name" <> '' then
-                        if not TemplateSourceFileNamesGlobal.Contains(processTemplateSetup."Source File Name") then
-                            TemplateSourceFileNamesGlobal.Add(processTemplateSetup."Source File Name");
-                    // migration objects
-                    if processTemplateSetup."Run Codeunit" <> 0 then
+                        if not TemplateSourceFileNamesGlobal.Keys.Contains(processTemplateSetup."Source File Name") then
+                            TemplateSourceFileNamesGlobal.Add(processTemplateSetup."Source File Name", processTemplateSetup."NAV Source Table No.");
+                    // Codenunits to run 
+                    if processTemplateSetup."Run Codeunit" <> 0 then begin
                         if not TemplateCodeunitsGlobal.Contains(processTemplateSetup."Run Codeunit") then
                             TemplateCodeunitsGlobal.Add(processTemplateSetup."Run Codeunit");
+                        if not TargetCodeunitsMissingGlobal.Contains(processTemplateSetup."Run Codeunit") then
+                            if TargetCodenitExists(processTemplateSetup."Run Codeunit") then
+                                TargetCodeunitsMissingGlobal.Add(processTemplateSetup."Run Codeunit");
+
+                    end;
                     // target tables
                     if processTemplateSetup.Type <> processTemplateSetup.Type::"Req. Setup" then
-                        if processTemplateSetup."Target Table ID" <> 0 then
+                        if processTemplateSetup."Target Table ID" <> 0 then begin
                             if not TargetTablesGlobal.Contains(processTemplateSetup."Target Table ID") then
                                 TargetTablesGlobal.Add(processTemplateSetup."Target Table ID");
+                            if not TargetTablesMissingGlobal.Contains(processTemplateSetup."Target Table ID") then
+                                if TargetTableExists(processTemplateSetup."Target Table ID") then
+                                    TargetTablesMissingGlobal.Add(processTemplateSetup."Target Table ID");
+                        end;
+
+                    //                         if allObjWithCaption.get(allObjWithCaption."Object Type"::Codeunit, processTemplateDetails."Object ID (Req.)") then
+                    //                             noOfEntitiesFound += 1;
+                    //                     end;
+                    //                 processTemplateDetails."Requirement Sub Type"::"Table":
+                    //                     begin
+                    //                         if allObjWithCaption.get(allObjWithCaption."Object Type"::Table, processTemplateDetails."Object ID (Req.)") then
+                    //                             noOfEntitiesFound += 1;
                 end;
             until processTemplateSetup.Next() = 0;
         InitializedTemplateCode := templateCode;
     end;
 
-    procedure getTemplateSourceFileNames() SourceFileNames: List of [Text]
+    procedure getTemplateSourceFileNames() SourceFileNames: Dictionary of [Text/*Filename*/, Integer/*NAVTableNo*/]
     begin
         if InitializedTemplateCode = '' then
             Error(TemplateNotInitializedErr);
@@ -167,8 +204,8 @@ table 90014 DMTProcessTemplateSetup
     var
         ProcessTemplateDetailGlobal: Record DMTProcessTemplateDetail;
         InitializedTemplateCode: Code[150];
-        TemplateSourceFileNamesGlobal: List of [Text];
-        TemplateCodeunitsGlobal, TargetTablesGlobal : List of [Integer];
+        TemplateSourceFileNamesGlobal: Dictionary of [Text/*Filename*/, Integer/*NAVTableNo*/];
+        TemplateCodeunitsGlobal, TargetCodeunitsMissingGlobal, TargetTablesGlobal, TargetTablesMissingGlobal : List of [Integer];
         TemplateNotInitializedErr: Label 'Template not initialized', Comment = 'de-DE=Vorlage nicht initialisiert';
 
 }

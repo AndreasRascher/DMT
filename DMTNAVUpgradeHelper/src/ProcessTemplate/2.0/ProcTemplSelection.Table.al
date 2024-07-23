@@ -1,11 +1,3 @@
-// Aufbau:
-// - Code - Description Tabelle
-// - Requirements
-//      - benötige Dateinamen in den DMT Quelldateien
-//      - Pufferobjekte (Migrationstabellen + Codeunits)
-// Logik:
-// - Prüfung ob die Vorraussetzungen erfüllt sind
-// - Anbieten des Migrationspakets
 
 table 90012 DMTProcTemplSelection
 {
@@ -22,6 +14,8 @@ table 90012 DMTProcTemplSelection
         field(11; RequiredFilesStyle; Text[15]) { Caption = 'RequiredFilesStyle', Locked = true; Editable = false; }
         field(12; "Required Objects Ratio"; Text[10]) { Caption = 'Required Objects', Comment = 'de-DE=Benötigte Objekte'; }
         field(13; RequiredObjectsStyle; Text[15]) { Caption = 'RequiredObjectsStyle', Locked = true; Editable = false; }
+        field(14; "Required Data Ratio"; Text[10]) { Caption = 'Required Data', Comment = 'de-DE=Erforderliche Daten'; }
+        field(15; RequiredDataStyle; Text[15]) { Caption = 'RequiredDataStyle', Locked = true; Editable = false; }
     }
 
     keys
@@ -36,39 +30,38 @@ table 90012 DMTProcTemplSelection
     {
         // Add changes to field groups here
     }
-    // trigger OnDelete()
-    // var
-    //     processTemplateDetails: Record DMTProcessTemplateDetail;
-    // begin
-    //     if processTemplateDetails.filterFor(Rec) then
-    //         processTemplateDetails.DeleteAll();
-    // end;
 
-    // internal procedure addTemplate(DescriptionNEW: Text[250]) OK: Boolean
-    // begin
-    //     OK := addTemplate(CopyStr(DescriptionNEW, 1, MaxStrLen(Rec.Code)), DescriptionNEW);
-    // end;
 
-    // internal procedure addTemplate(CodeNEW: Text[150]; DescriptionNEW: Text[250]) OK: Boolean
-    // var
-    //     processTemplate: Record DMTProcessTemplate;
-    // begin
-    //     processTemplate.Code := CodeNEW;
-    //     processTemplate.Description := DescriptionNEW;
-    //     OK := processTemplate.Insert();
-    //     Rec.Copy(processTemplate);
-    // end;
+    procedure UpdateIndicators()
+    var
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+        processTemplateLib: Codeunit DMTProcessTemplateLib;
+        SourceFileNames: Dictionary of [Text, Integer];
+        sourceFileNamesMissing: Dictionary of [Text, Integer];
+        TargetTables, Codeunits : List of [Integer];
+        SourceFileName: Text;
+    begin
+        processTemplateSetup.initTemplateSetupFor(Rec."Template Code");
+        // Ratio Source Files required to available
+        SourceFileNames := processTemplateSetup.getTemplateSourceFileNames();
+        foreach SourceFileName in SourceFileNames.Keys do begin
+            if not processTemplateLib.IsSourceFileAvailable(SourceFileName) then
+                sourceFileNamesMissing.Add(SourceFileName, SourceFileNames.Get(SourceFileName));
+        end;
+        Rec."Required Files Ratio" := StrSubstNo('%1/%2', SourceFileNames.Count - sourceFileNamesMissing.Count, SourceFileNames.Count);
 
-    // procedure UpdateIndicators()
-    // var
-    //     processTemplateDetails: Record DMTProcessTemplateDetail;
-    // begin
-    //     // checkRequirementStatusByType(Rec.RequiredObjectsStyle, Rec."Required Objects Ratio", Rec,
-    //     //                             StrSubstNo('%1|%2', processTemplateDetails."Requirement Sub Type"::"Codeunit",
-    //     //                                                 processTemplateDetails."Requirement Sub Type"::"Table"));
-    //     // checkRequirementStatusByType(Rec.RequiredFilesStyle, Rec."Required Files Ratio", Rec,
-    //     //                             StrSubstNo('%1', processTemplateDetails."Requirement Sub Type"::SourceFile));
-    // end;
+        // Required Objects required to available
+        TargetTables := processTemplateSetup.getTargetTables();
+        Codeunits := processTemplateSetup.getTemplateCodeunits();
+        Rec."Required Objects Ratio" := StrSubstNo('%1/%2', Codeunits.Count + TargetTables.Count, Codeunits.Count + TargetTables.Count);
+        // Required Data required to available
+
+        // checkRequirementStatusByType(Rec.RequiredObjectsStyle, Rec."Required Objects Ratio", Rec,
+        //                             StrSubstNo('%1|%2', processTemplateDetails."Requirement Sub Type"::"Codeunit",
+        //                                                 processTemplateDetails."Requirement Sub Type"::"Table"));
+        // checkRequirementStatusByType(Rec.RequiredFilesStyle, Rec."Required Files Ratio", Rec,
+        //                             StrSubstNo('%1', processTemplateDetails."Requirement Sub Type"::SourceFile));
+    end;
 
     // local procedure checkRequirementStatusByType(var styleExprNew: Text[15]; var requiredEntityRation: text[10]; processTemplate: Record DMTProcessTemplate; requirementSubTypeFilter: Text)
     // var

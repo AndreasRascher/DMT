@@ -22,6 +22,7 @@ page 90012 DMTProcessTemplateList
         area(Factboxes)
         {
             part(ProcessTemplateRequirementFB; ProcessTemplateRequirementFB) { }
+            part(ProcessTemplateDataReqsFB; ProcessTemplateDataReqsFB) { SubPageLink = "Template Code" = field("Template Code"); Visible = ProcessTemplateDataReqsFB_Visible; }
             part(ProcessTemplateStepsFB; ProcessTemplateStepsFB) { }
         }
     }
@@ -47,20 +48,19 @@ page 90012 DMTProcessTemplateList
         }
         area(Promoted)
         {
-            actionref(TransferToProcessingPlanRef; TransferToProcessingPlan)
-            {
-            }
+            actionref(TransferToProcessingPlanRef; TransferToProcessingPlan) { }
         }
     }
 
     trigger OnOpenPage()
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
+        processTemplateLib: codeunit DMTProcessTemplateLib;
         TemplateCodeList: List of [Text[150]];
         templateCode: Text[150];
     begin
         if processTemplateSetup.IsEmpty then
-            processTemplateSetup.InitDefaults();
+            processTemplateLib.InitDefaults();
 
         if processTemplateSetup.FindSet() then
             repeat
@@ -79,8 +79,13 @@ page 90012 DMTProcessTemplateList
     end;
 
     trigger OnAfterGetRecord()
+    var
+        processTemplateSetup: Record DMTProcessTemplateSetup;
     begin
-        // Rec.UpdateIndicators();
+        processTemplateSetup.SetRange("Template Code", Rec."Template Code");
+        processTemplateSetup.SetRange("Type", processTemplateSetup.Type::"Req. Setup");
+        ProcessTemplateDataReqsFB_Visible := not processTemplateSetup.IsEmpty;
+        Rec.UpdateIndicators();
     end;
 
     trigger OnAfterGetCurrRecord()
@@ -92,4 +97,6 @@ page 90012 DMTProcessTemplateList
         CurrPage.ProcessTemplateStepsFB.Page.Set(processTemplateSetup);
     end;
 
+    var
+        ProcessTemplateDataReqsFB_Visible: Boolean;
 }
