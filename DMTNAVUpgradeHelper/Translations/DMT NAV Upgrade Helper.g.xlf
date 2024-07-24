@@ -123,6 +123,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Beschreibung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcTemplSelection - Field Description - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 788213925 - Field 173576404 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Required Data</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Erforderliche Daten</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcTemplSelection - Field Required Data Ratio - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 788213925 - Field 1805386071 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Required Files</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Benötigte Dateien</note>

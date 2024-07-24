@@ -325,13 +325,13 @@ codeunit 90013 DMTProcessTemplateLib
         processTemplateSetup.Insert(true);
     end;
 
-    local procedure addRunCodeunit(templateCode: Code[150]; indentation: Integer; NAVSourceTableNo: Integer; description: Text[250])
+    local procedure addRunCodeunit(templateCode: Code[150]; indentation: Integer; CodeunitID: Integer; description: Text[250])
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
     begin
         processTemplateSetup.New(templateCode);
         processTemplateSetup."Type" := processTemplateSetup."Type"::"Run Codeunit";
-        processTemplateSetup."NAV Source Table No." := NAVSourceTableNo;
+        processTemplateSetup."Run Codeunit" := CodeunitID;
         processTemplateSetup."Description" := description;
         processTemplateSetup."Indentation" := indentation;
         processTemplateSetup.Insert(true);

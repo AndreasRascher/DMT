@@ -3,7 +3,7 @@ page 90014 ProcessTemplateRequirementFB
 {
     Caption = 'Requirements', Comment = 'de-DE=Vorraussetzungen';
     PageType = ListPart;
-    SourceTable = DMTProcessTemplateDetail;
+    SourceTable = Integer;
     DeleteAllowed = false;
     InsertAllowed = false;
     ModifyAllowed = false;
@@ -81,38 +81,31 @@ page 90014 ProcessTemplateRequirementFB
         Codeunit: Integer;
         sourceFileName: Text;
     begin
-        Rec.Reset();
-        Rec.DeleteAll();
-
         sourceFileNames := processTemplateSetup.getTemplateSourceFileNames();
-        foreach sourceFileName in sourceFileNames.Keys do begin
-            Rec.InsertNew(processTemplateSetup.getInitializedTemplateCode());
-            Rec.Type := Rec.Type::SourceFile;
-            Rec."Name" := CopyStr(sourceFileName, 1, MaxStrLen(Rec."Name"));
-            Rec."NAV Source Table No.(Req.)" := sourceFileNames.Get(sourceFileName);
-            Rec.Modify();
-        end;
+        foreach sourceFileName in sourceFileNames.Keys do
+            DataTableMgt.Requirements_Add('SourceFile', sourceFileName, sourceFileNames.Get(sourceFileName), '');
 
         codeunits := processTemplateSetup.getTemplateCodeunits();
-        foreach Codeunit in codeunits do begin
-            Rec.InsertNew(processTemplateSetup.getInitializedTemplateCode());
-            Rec.Type := Rec.Type::Codeunit;
-            Rec.Name := StrSubstNo('Codeunit %1', Codeunit);
-            Rec.Modify();
-        end;
+        foreach Codeunit in codeunits do
+            DataTableMgt.Requirements_Add('Codeunit', Format(Codeunit), 0, '');
 
-        targetTables := processTemplateSetup.getTargetTables();
-        foreach Codeunit in targetTables do begin
-            Rec.InsertNew(processTemplateSetup.getInitializedTemplateCode());
-            Rec.Type := Rec.Type::Table;
-            Rec.Name := StrSubstNo('Table %1', Codeunit);
-            Rec.Modify();
-        end;
+        Rec.SetRange(Number, 1, DataTableMgt.Count());
+    end;
 
-        CurrPage.Update(false);
+
+        // targetTables := processTemplateSetup.getTargetTables();
+        // foreach Codeunit in targetTables do begin
+        //     Rec.InsertNew(processTemplateSetup.getInitializedTemplateCode());
+        //     Rec.Type := Rec.Type::Table;
+        //     Rec.Name := StrSubstNo('Table %1', Codeunit);
+        //     Rec.Modify();
+        // end;
+
+        // CurrPage.Update(false);
     end;
 
     var
+        DataTableMgt: Codeunit DMTDataTableMgt;
         lineStyle: Text;
         NAVTableIDFilter: Text;
         NAVTableIDFilterVisible: Boolean;
