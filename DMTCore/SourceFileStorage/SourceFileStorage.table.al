@@ -159,4 +159,15 @@ table 91004 DMTSourceFileStorage
             until SourceFileStorage.Next() = 0;
         TempSourceFileStorage.Copy(TempSourceFileStorage2, true);
     end;
+
+    procedure findByFileName(sourceFileName: Text) Found: Boolean
+    var
+        sourceFileStorage: Record DMTSourceFileStorage;
+    begin
+        if sourceFileName = '' then
+            exit(false);
+        sourceFileStorage.SetRange(Name, sourceFileName);
+        Found := sourceFileStorage.FindFirst();
+        Rec.Copy(sourceFileStorage);
+    end;
 }

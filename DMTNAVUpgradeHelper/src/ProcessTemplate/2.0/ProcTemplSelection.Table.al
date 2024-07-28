@@ -34,72 +34,23 @@ table 90012 DMTProcTemplSelection
 
     procedure UpdateIndicators()
     var
-        processTemplateSetup: Record DMTProcessTemplateSetup;
-        noOfRequiredEntities, noOfEntitiesFound : Integer;
+        processTemplateLib: Codeunit DMTProcessTemplateLib;
+        noOfRequiredObjects, noOfRequiredData, noOfRequiredSourceFiles : Integer;
+        noOfFoundObjects, noOfFoundData, noOfFoundSourceFiles : Integer;
     begin
-        processTemplateSetup.initTemplateSetupFor(Rec."Template Code");
-        // Ratio Source Files required to available
-        noOfRequiredEntities := processTemplateSetup.getTemplateSourceFileNames().Count;
-        noOfEntitiesFound := processTemplateSetup.getTemplateSourceFileNames().Count - processTemplateSetup.getMissingSourceFileNames().Count;
-        Rec."Required Files Ratio" := StrSubstNo('%1/%2', noOfEntitiesFound, noOfRequiredEntities);
-
-        // Required Objects required to available
-        noOfRequiredEntities := processTemplateSetup.getTemplateCodeunits().Count + processTemplateSetup.getTargetTables().Count;
-        noOfEntitiesFound := (processTemplateSetup.getTemplateCodeunits().Count - processTemplateSetup.getMissingCodeunits().Count) +
-                             (processTemplateSetup.getTargetTables().Count - processTemplateSetup.getMissingTargetTables().Count);
-        Rec."Required Objects Ratio" := StrSubstNo('%1/%2', noOfEntitiesFound, noOfRequiredEntities);
-        // Required Data required to available
-
-        // checkRequirementStatusByType(Rec.RequiredObjectsStyle, Rec."Required Objects Ratio", Rec,
-        //                             StrSubstNo('%1|%2', processTemplateDetails."Requirement Sub Type"::"Codeunit",
-        //                                                 processTemplateDetails."Requirement Sub Type"::"Table"));
-        // checkRequirementStatusByType(Rec.RequiredFilesStyle, Rec."Required Files Ratio", Rec,
-        //                             StrSubstNo('%1', processTemplateDetails."Requirement Sub Type"::SourceFile));
+        processTemplateLib.calcRequirementRatios(Rec."Template Code", noOfRequiredObjects, noOfRequiredData, noOfRequiredSourceFiles, noOfFoundObjects, noOfFoundData, noOfFoundSourceFiles);
+        setEntityStyleAndRatio(Rec.RequiredDataStyle, Rec."Required Data Ratio", noOfFoundData, noOfRequiredData);
+        setEntityStyleAndRatio(Rec.RequiredObjectsStyle, Rec."Required Objects Ratio", noOfFoundObjects, noOfRequiredObjects);
+        setEntityStyleAndRatio(Rec.RequiredFilesStyle, Rec."Required Files Ratio", noOfFoundSourceFiles, noOfRequiredSourceFiles);
     end;
 
-    // local procedure checkRequirementStatusByType(var styleExprNew: Text[15]; var requiredEntityRation: text[10]; processTemplate: Record DMTProcessTemplate; requirementSubTypeFilter: Text)
-    // var
-    //     processTemplateDetails: Record DMTProcessTemplateDetail;
-    //     sourceFileStorage: Record DMTSourceFileStorage;
-    //     allObjWithCaption: Record AllObjWithCaption;
-    //     noOfRequiredEntities, noOfEntitiesFound : Integer;
-    // begin
-    //     styleExprNew := format(Enum::DMTFieldStyle::None);
-    //     processTemplateDetails.SetRange(Type, processTemplateDetails.Type::Requirement);
-    //     processTemplateDetails.SetFilter("Requirement Sub Type", requirementSubTypeFilter);
-    //     processTemplateDetails.filterFor(processTemplate);
-    //     if processTemplateDetails.FindSet() then
-    //         repeat
-    //             noOfRequiredEntities += 1;
-    //             case processTemplateDetails."Requirement Sub Type" of
-    //                 processTemplateDetails."Requirement Sub Type"::SourceFile:
-    //                     begin
-    //                         sourceFileStorage.SetFilter(Name, processTemplateDetails."Name");
-    //                         if not sourceFileStorage.IsEmpty() then
-    //                             noOfEntitiesFound += 1;
-    //                     end;
-    //                 processTemplateDetails."Requirement Sub Type"::"Codeunit":
-    //                     begin
-    //                         if allObjWithCaption.get(allObjWithCaption."Object Type"::Codeunit, processTemplateDetails."Object ID (Req.)") then
-    //                             noOfEntitiesFound += 1;
-    //                     end;
-    //                 processTemplateDetails."Requirement Sub Type"::"Table":
-    //                     begin
-    //                         if allObjWithCaption.get(allObjWithCaption."Object Type"::Table, processTemplateDetails."Object ID (Req.)") then
-    //                             noOfEntitiesFound += 1;
-    //                     end;
-    //             end;
-    //         until processTemplateDetails.Next() = 0;
-    //     requiredEntityRation := StrSubstNo('%1/%2', noOfEntitiesFound, noOfRequiredEntities);
-    //     case true of
-    //         (noOfRequiredEntities = 0):
-    //             styleExprNew := format(Enum::DMTFieldStyle::None);
-    //         (noOfEntitiesFound < noOfRequiredEntities):
-    //             styleExprNew := format(Enum::DMTFieldStyle::"Bold + Italic + Red");
-    //         (noOfEntitiesFound = noOfRequiredEntities):
-    //             styleExprNew := format(Enum::DMTFieldStyle::"Bold + Green");
-    //     end;
-    // end;
+    local procedure setEntityStyleAndRatio(var style: Text[15]; var ratio: Text[10]; noOfEntitiesFound: Integer; noOfRequiredEntities: Integer)
+    begin
+        style := Format(Enum::DMTFieldStyle::"Bold + Green");
+        if noOfEntitiesFound < noOfRequiredEntities then
+            Style := Format(Enum::DMTFieldStyle::"Bold + Italic + Red");
+        ratio := StrSubstNo('%1/%2', noOfEntitiesFound, noOfRequiredEntities)
+    end;
 
 
 }

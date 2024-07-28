@@ -17,7 +17,7 @@ table 90014 DMTProcessTemplateSetup
         #endregion SourceInfo
         #region ProcessingPlan
         field(21; "Description"; Text[250]) { Caption = 'Description (Processing Plan)', Comment = 'de-DE=Beschreibung (Verarbeitungsplan)'; }
-        field(22; "Indentation"; Integer) { Caption = 'Indentation (Processing Plan)', Comment = 'de-DE=Einrückung (Verarbeitungsplan)'; Editable = false; }
+        field(22; "Indentation"; Integer) { Caption = 'Indentation (Processing Plan)', Comment = 'de-DE=Einrückung (Verarbeitungsplan)'; Editable = false; BlankZero = true; }
         field(23; "Run Codeunit"; Integer) { Caption = 'Run Codeunit ID (Processing Plan)', Comment = 'de-DE=Codeunit ID ausführen (Verarbeitungsplan)'; BlankZero = true; }
         field(30; "Field Name"; Text[30]) { Caption = 'Field Name', Comment = 'de-DE=Feldname'; }
         field(31; "Default Value"; Text[250]) { Caption = 'Default Value', Comment = 'de-DE=Vorgabewert'; }
@@ -56,18 +56,82 @@ table 90014 DMTProcessTemplateSetup
         Rec.Copy(ProcessTemplateSetup);
     end;
 
-    local procedure TargetTableExists(TargetTableID: Integer) exists: Boolean
-    var
-        allObjWithCaption: Record allObjWithCaption;
+    internal procedure IsDataRequiremt(): Boolean
     begin
-        exists := allObjWithCaption.get(allObjWithCaption."Object Type"::Table, TargetTableID);
+        exit(Rec.Type = Rec.Type::"Req. Setup");
     end;
 
-    local procedure TargetCodenitExists(TargetCodeunitID: Integer) exists: Boolean
+    internal procedure IsDataRequirementFulfilled() Result: Boolean
+    var
+        TableMetadata: Record "Table Metadata";
+        dataTypeMgt: Codeunit "Data Type Management";
+        recRef: RecordRef;
+        fieldRef: FieldRef;
+    begin
+        Result := true;
+        if not TableMetadata.Get(Rec."Target Table ID") then
+            exit(false);
+        recRef.Open(Rec."Target Table ID");
+        if not recRef.FindFirst() then
+            exit(false);
+        if not dataTypeMgt.FindFieldByName(recRef, fieldRef, Rec."Field Name") then
+            exit(false);
+        Result := format(fieldRef.Value) <> '';
+    end;
+
+    internal procedure IsSourceFileRequirement(): Boolean
+    begin
+        exit(Rec."Source File Name" <> '');
+    end;
+
+    internal procedure IsSourceFileRequirementFulfilled() sourceFileExists: Boolean
+    var
+        sourceFileStorage: Record DMTSourceFileStorage;
+    begin
+        sourceFileExists := sourceFileStorage.findByFileName(Rec."Source File Name");
+        if IsNAVSourceTableEmpty() then
+            sourceFileExists := true;
+    end;
+
+    internal procedure IsTableRequirement(): Boolean
+    begin
+        exit(Rec."Target Table ID" <> 0);
+    end;
+
+    procedure IsTableRequirementFulfilled() targetTableExists: Boolean
     var
         allObjWithCaption: Record allObjWithCaption;
     begin
-        exists := allObjWithCaption.get(allObjWithCaption."Object Type"::Codeunit, TargetCodeunitID);
+        if Rec."Target Table ID" = 0 then
+            exit(false);
+        targetTableExists := allObjWithCaption.get(allObjWithCaption."Object Type"::Table, Rec."Target Table ID");
+    end;
+
+    internal procedure IsCodeunitRequirement(): Boolean
+    begin
+        exit(Rec.Type = Rec.Type::"Run Codeunit");
+    end;
+
+    procedure IsCodeunitRequirementFulfilled() exists: Boolean
+    var
+        allObjWithCaption: Record allObjWithCaption;
+    begin
+        if Rec."Run Codeunit" = 0 then
+            exit(false);
+        exists := allObjWithCaption.get(allObjWithCaption."Object Type"::Codeunit, Rec."Run Codeunit");
+    end;
+
+    procedure IsNAVSourceTableEmpty() isEmpty: Boolean
+    var
+        fieldBuffer: Record DMTFieldBuffer;
+    begin
+        isEmpty := false;
+        if Rec."NAV Source Table No." = 0 then
+            exit(false);
+        fieldBuffer.SetRange(TableNo, Rec."NAV Source Table No.");
+        if fieldBuffer.FindFirst() then
+            if fieldBuffer."No. of Records" = 0 then
+                exit(true);
     end;
 
     procedure tryFindMappedProcessingPlanType(var processingPlanType: Enum DMTProcessingPlanType) OK: Boolean
@@ -101,141 +165,4 @@ table 90014 DMTProcessTemplateSetup
         if ProcessTemplateSetup.FindLast() then;
         NextLineNo += ProcessTemplateSetup."Line No." + 10000;
     end;
-
-    procedure initTemplateSetupFor(templateCode: Code[150])
-    var
-        processTemplateSetup: Record DMTProcessTemplateSetup;
-        processTemplateLib: Codeunit DMTProcessTemplateLib;
-        debug: Integer;
-    begin
-        if InitializedTemplateCode = templateCode then
-            exit;
-
-        Clear(SourceFileNamesGlobal);
-        Clear(TemplateCodeunitsGlobal);
-        Clear(SourceFileNamesGlobal);
-        Clear(TargetTablesGlobal);
-        ProcessTemplateDetailGlobal.DeleteAll();
-        debug := ProcessTemplateDetailGlobal.Count;
-        processTemplateSetup.Reset();
-        processTemplateSetup.SetRange("Template Code", templateCode);
-        if processTemplateSetup.FindSet() then
-            repeat
-                // Steps
-                if processTemplateSetup.tryFindMappedProcessingPlanType(ProcessTemplateDetailGlobal."PrPl Type") then begin
-                    ProcessTemplateDetailGlobal.InsertNew(templateCode);
-                    processTemplateSetup.tryFindMappedProcessingPlanType(ProcessTemplateDetailGlobal."PrPl Type");
-                    ProcessTemplateDetailGlobal."NAV Source Table No.(Req.)" := processTemplateSetup."NAV Source Table No.";
-                    if processTemplateSetup."Description" <> '' then
-                        ProcessTemplateDetailGlobal.Name := processTemplateSetup."Description"
-                    else
-                        ProcessTemplateDetailGlobal.Name := processTemplateSetup."Source File Name";
-                    ProcessTemplateDetailGlobal.Modify();
-                    // Source file names
-                    if processTemplateSetup."Source File Name" <> '' then begin
-                        if not SourceFileNamesGlobal.Keys.Contains(processTemplateSetup."Source File Name") then
-                            SourceFileNamesGlobal.Add(processTemplateSetup."Source File Name", processTemplateSetup."NAV Source Table No.");
-                        if not MissingSourceFileNamesGlobal.Keys.Contains(processTemplateSetup."Source File Name") then
-                            if not processTemplateLib.IsSourceFileAvailable(processTemplateSetup."Source File Name") then
-                                MissingSourceFileNamesGlobal.Add(processTemplateSetup."Source File Name", processTemplateSetup."NAV Source Table No.");
-                    end;
-
-                    // Codenunits to run 
-                    if processTemplateSetup."Run Codeunit" <> 0 then begin
-
-                        if not TemplateCodeunitsGlobal.Contains(processTemplateSetup."Run Codeunit") then
-                            TemplateCodeunitsGlobal.Add(processTemplateSetup."Run Codeunit");
-
-                        if not TargetCodeunitsMissingGlobal.Contains(processTemplateSetup."Run Codeunit") then
-                            if TargetCodenitExists(processTemplateSetup."Run Codeunit") then
-                                TargetCodeunitsMissingGlobal.Add(processTemplateSetup."Run Codeunit");
-                    end;
-
-                    // target tables
-                    if processTemplateSetup.Type <> processTemplateSetup.Type::"Req. Setup" then
-                        if processTemplateSetup."Target Table ID" <> 0 then begin
-                            if not TargetTablesGlobal.Contains(processTemplateSetup."Target Table ID") then
-                                TargetTablesGlobal.Add(processTemplateSetup."Target Table ID");
-                            if not TargetTablesMissingGlobal.Contains(processTemplateSetup."Target Table ID") then
-                                if TargetTableExists(processTemplateSetup."Target Table ID") then
-                                    TargetTablesMissingGlobal.Add(processTemplateSetup."Target Table ID");
-                        end;
-
-                    //                         if allObjWithCaption.get(allObjWithCaption."Object Type"::Codeunit, processTemplateDetails."Object ID (Req.)") then
-                    //                             noOfEntitiesFound += 1;
-                    //                     end;
-                    //                 processTemplateDetails."Requirement Sub Type"::"Table":
-                    //                     begin
-                    //                         if allObjWithCaption.get(allObjWithCaption."Object Type"::Table, processTemplateDetails."Object ID (Req.)") then
-                    //                             noOfEntitiesFound += 1;
-                end;
-            until processTemplateSetup.Next() = 0;
-        InitializedTemplateCode := templateCode;
-    end;
-
-    procedure getTemplateSourceFileNames() SourceFileNames: Dictionary of [Text/*Filename*/, Integer/*NAVTableNo*/]
-    begin
-        if InitializedTemplateCode = '' then
-            Error(TemplateNotInitializedErr);
-        SourceFileNames := SourceFileNamesGlobal;
-    end;
-
-    procedure getTemplateCodeunits() Codeunits: List of [Integer]
-    begin
-        if InitializedTemplateCode = '' then
-            Error(TemplateNotInitializedErr);
-        Codeunits := TemplateCodeunitsGlobal;
-    end;
-
-    procedure getMissingCodeunits() MissingCodeunits: List of [Integer]
-    begin
-        if InitializedTemplateCode = '' then
-            Error(TemplateNotInitializedErr);
-        MissingCodeunits := TargetCodeunitsMissingGlobal;
-    end;
-
-    procedure getMissingSourceFileNames() MissingSourceFileNames: Dictionary of [Text/*Filename*/, Integer/*NAVTableNo*/]
-    begin
-        if InitializedTemplateCode = '' then
-            Error(TemplateNotInitializedErr);
-        MissingSourceFileNames := MissingSourceFileNamesGlobal;
-    end;
-
-
-    procedure getTargetTables() TargetTables: List of [Integer]
-    begin
-        if InitializedTemplateCode = '' then
-            Error(TemplateNotInitializedErr);
-        TargetTables := TargetTablesGlobal;
-    end;
-
-    procedure getMissingTargetTables() MissingTargetTables: List of [Integer]
-    begin
-        if InitializedTemplateCode = '' then
-            Error(TemplateNotInitializedErr);
-        MissingTargetTables := TargetTablesMissingGlobal;
-    end;
-
-    procedure getSteps(var processTemplateDetail: Record DMTProcessTemplateDetail temporary)
-    var
-        debug: Integer;
-    begin
-        debug := processTemplateDetail.Count;
-        processTemplateDetail.Copy(ProcessTemplateDetailGlobal, true);
-        debug := processTemplateDetail.Count;
-    end;
-
-    procedure getInitializedTemplateCode() TemplateCode: Code[150]
-    begin
-        TemplateCode := InitializedTemplateCode;
-    end;
-
-
-    var
-        ProcessTemplateDetailGlobal: Record DMTProcessTemplateDetail;
-        InitializedTemplateCode: Code[150];
-        SourceFileNamesGlobal, MissingSourceFileNamesGlobal : Dictionary of [Text/*Filename*/, Integer/*NAVTableNo*/];
-        TemplateCodeunitsGlobal, TargetCodeunitsMissingGlobal, TargetTablesGlobal, TargetTablesMissingGlobal : List of [Integer];
-        TemplateNotInitializedErr: Label 'Template not initialized', Comment = 'de-DE=Vorlage nicht initialisiert';
-
 }

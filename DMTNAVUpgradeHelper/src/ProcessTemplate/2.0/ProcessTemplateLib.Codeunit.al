@@ -12,6 +12,7 @@ codeunit 90013 DMTProcessTemplateLib
         if not processingPlan.IsEmpty() then
             Error(templateAlreadyTransferedErr, templateCode);
 
+
         processingPlan.Reset();
         if not processingPlan.FindLast() then;
         nextLineNo := processingPlan."Line No." + 10000;
@@ -27,8 +28,13 @@ codeunit 90013 DMTProcessTemplateLib
     local procedure AddToProcessingPlan(processTemplateSetup: Record DMTProcessTemplateSetup; nextLineNo: Integer)
     var
         processingPlan: Record DMTProcessingPlan;
+        processTemplateLib: Codeunit DMTProcessTemplateLib;
+        noOfRequiredObjects, noOfRequiredData, noOfRequiredSourceFiles, noOfFoundObjects, noOfFoundData, noOfFoundSourceFiles : Integer;
+        dataReqNotFulfilledErr: Label 'Required setup data is not available for %1', Comment = 'de-DE=Benötigte Einrichtungen sind nicht vorhanden für %1';
+        reqObjectsAreMissingErr: Label 'Required objects are missing for %1', Comment = 'de-DE=Benötigte Objekte fehlen für %1';
+        sourceFilesAreMissingErr: Label 'Required source files are missing for %1', Comment = 'de-DE=Benötigte Quelldateien fehlen für %1';
     begin
-        if IsNAVSourceTableEmpty(processTemplateSetup."NAV Source Table No.") then
+        if processTemplateSetup.IsNAVSourceTableEmpty() then
             exit;
         if processTemplateSetup.Type = processTemplateSetup.Type::Filter then
             exit;
@@ -36,6 +42,14 @@ codeunit 90013 DMTProcessTemplateLib
             exit;
         if processTemplateSetup.Type = processTemplateSetup.Type::"Update Field" then
             exit;
+
+        processTemplateLib.calcRequirementRatios(processTemplateSetup."Template Code", noOfRequiredObjects, noOfRequiredData, noOfRequiredSourceFiles, noOfFoundObjects, noOfFoundData, noOfFoundSourceFiles);
+        if noOfFoundData < noOfRequiredData then
+            Error(dataReqNotFulfilledErr, processTemplateSetup."Template Code");
+        if noOfFoundObjects < noOfRequiredObjects then
+            Error(reqObjectsAreMissingErr, processTemplateSetup."Template Code");
+        if noOfFoundSourceFiles < noOfRequiredSourceFiles then
+            Error(sourceFilesAreMissingErr, processTemplateSetup."Template Code");
 
         processingPlan.Init();
         processingPlan."Process Template Code" := processTemplateSetup."Template Code";
@@ -89,7 +103,7 @@ codeunit 90013 DMTProcessTemplateLib
                 begin
                     // find source file
                     processTemplateSetup.TestField(processTemplateSetup."Source File Name");
-                    if not findSourceFile(sourceFileStorage, processTemplateSetup."Source File Name") then
+                    if not sourceFileStorage.findByFileName(processTemplateSetup."Source File Name") then
                         Error(sourceFileNotFoundErr, processTemplateSetup."Source File Name");
 
                     // find import configuration
@@ -182,33 +196,7 @@ codeunit 90013 DMTProcessTemplateLib
     /// <summary>
     /// checks if a table has data (nav schema file has to be imported) 
     /// </summary>
-    procedure IsNAVSourceTableEmpty(NAVSourceTableID: Integer) isEmpty: Boolean
-    var
-        fieldBuffer: Record DMTFieldBuffer;
-    begin
-        isEmpty := false;
-        if NAVSourceTableID = 0 then
-            exit(false);
-        fieldBuffer.SetRange(TableNo, NAVSourceTableID);
-        if fieldBuffer.FindFirst() then
-            if fieldBuffer."No. of Records" = 0 then
-                exit(true);
-    end;
 
-    procedure IsSourceFileAvailable(sourceFileName: Text) OK: Boolean
-    var
-        sourceFileStorage: Record DMTSourceFileStorage;
-    begin
-        OK := findSourceFile(sourceFileStorage, sourceFileName);
-    end;
-
-    procedure findSourceFile(var sourceFileStorage: Record DMTSourceFileStorage; sourceFileName: Text) Found: Boolean
-    begin
-        if sourceFileName = '' then
-            exit(false);
-        sourceFileStorage.SetRange(Name, sourceFileName);
-        Found := sourceFileStorage.FindFirst();
-    end;
 
     procedure InitDefaults()
     var
@@ -368,4 +356,36 @@ codeunit 90013 DMTProcessTemplateLib
         processTemplateSetup."Filter Expression" := filterExpr;
         processTemplateSetup.Insert(true);
     end;
+
+    procedure calcRequirementRatios(templateCode: Code[150]; var noOfRequiredObjects: Integer; var noOfRequiredData: Integer; var noOfRequiredSourceFiles: Integer; var noOfFoundObjects: Integer; var noOfFoundData: Integer; var noOfFoundSourceFiles: Integer)
+    var
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+    begin
+        processTemplateSetup.Reset();
+        processTemplateSetup.SetRange("Template Code", templateCode);
+        processTemplateSetup.FindSet();
+        repeat
+            if processTemplateSetup.IsDataRequiremt() then begin
+                noOfRequiredData += 1;
+                if processTemplateSetup.IsDataRequirementFulfilled() then
+                    noOfFoundData += 1;
+            end;
+            if processTemplateSetup.IsCodeunitRequirement() then begin
+                noOfRequiredObjects += 1;
+                if processTemplateSetup.IsCodeunitRequirementFulfilled() then
+                    noOfFoundObjects += 1;
+            end;
+            if processTemplateSetup.IsSourceFileRequirement() then begin
+                noOfRequiredSourceFiles += 1;
+                if processTemplateSetup.IsSourceFileRequirementFulfilled() then
+                    noOfFoundSourceFiles += 1;
+            end;
+            if processTemplateSetup.IsTableRequirement() then begin
+                noOfRequiredObjects += 1;
+                if processTemplateSetup.IsTableRequirementFulfilled() then
+                    noOfFoundObjects += 1;
+            end;
+        until processTemplateSetup.Next() = 0;
+    end;
+
 }

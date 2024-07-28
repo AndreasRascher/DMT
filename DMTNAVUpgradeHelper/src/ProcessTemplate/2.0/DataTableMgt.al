@@ -1,102 +1,95 @@
 codeunit 90014 DMTDataTableMgt
 {
-
-    procedure Steps_InitForTemplate(templateCode: Text)
+    internal procedure setCaptions(caption1: Text; caption2: Text; caption3: Text)
     begin
-        noOfColumnsGlobal := 2; // Type, Name
+        Clear(CaptionsList);
+        CaptionsList.AddRange(caption1, caption2, caption3);
+        Clear(Captions);
+        Captions.Add(1, caption1);
+        Captions.Add(2, caption2);
+        Captions.Add(3, caption3);
+        IsInitialized := true;
     end;
 
-    procedure RequiredData_InitForTemplate(templateCode: Text)
-    begin
-        noOfColumnsGlobal := 3; // TableName, FieldName, Style
-    end;
-
-    procedure Requirements_InitForTemplate(templateCode: Text)
-    begin
-        noOfColumnsGlobal := 4; // Type, Name, NAV Source Table No, Style
-    end;
-
-    procedure Steps_Add(TypeText: text; Name: Text)
-    begin
-        addLine(TypeText, Name);
-    end;
-
-    procedure RequiredData_Add(TableName: Text; FieldName: Text; Style: Text)
-    begin
-        addLine(TableName, FieldName, Style);
-    end;
-
-    procedure Requirements_Add(TypeText: Text; Name: Text; NAVID: Integer; Style: Text)
-    begin
-        addLine(TypeText, Name, Format(NAVID), Style);
-    end;
-
-    procedure Count() NoOfSteps: Integer
-    begin
-        NoOfSteps := DataTable.Count;
-    end;
-
-    procedure Steps_GetTypeText(index: Integer) TypeText: Text
-    begin
-        exit(DataTable.Get(index).Get(1));
-    end;
-
-    procedure Steps_GetName(index: Integer) Name: Text
-    begin
-        exit(DataTable.Get(index).Get(2));
-    end;
-
-    procedure Requirements_GetTypeText(index: Integer): Text
-    begin
-        exit(DataTable.Get(index).Get(1));
-    end;
-
-    procedure Requirements_GetName(index: Integer): Text
-    begin
-        exit(DataTable.Get(index).Get(2));
-    end;
-
-    procedure RequiredData_GetTypeText(index: Integer): Text
-    begin
-        exit(DataTable.Get(index).Get(1));
-    end;
-
-    procedure RequiredData_GetName(index: Integer): Text
-    begin
-        exit(DataTable.Get(index).Get(2));
-    end;
-
-    local procedure addLine(Col1: Text; Col2: Text)
+    internal procedure addLine(col1Content: Variant; col2Content: Variant; col3Content: Variant)
     var
         LineNew: List of [Text];
     begin
-        LineNew.Add(Col1);
-        LineNew.Add(Col2);
+        LineNew.AddRange(format(col1Content, 0, 9), format(col2Content, 0, 9), format(col3Content, 0, 9));
         DataTable.Add(DataTable.Count + 1, LineNew);
+        IsInitialized := true;
     end;
 
-    local procedure addLine(Col1: Text; Col2: Text; Col3: Text)
+    internal procedure Get(columnCaption: Text; lineIndex: Integer; currContext: Text) columnContent: Text
     var
-        LineNew: List of [Text];
+        columnIndex: Integer;
     begin
-        LineNew.Add(Col1);
-        LineNew.Add(Col2);
-        LineNew.Add(Col3);
-        DataTable.Add(DataTable.Count + 1, LineNew);
+        if (currContext <> ContextGlobal) and (currContext <> '') then
+            exit('');
+        columnIndex := Captions.Values.IndexOf(columnCaption);
+        if columnIndex = 0 then
+            //Error('Column not found %1\Context: %2', ColumnCaption, ContextGlobal);
+            exit('ColNotFound - ' + ContextGlobal);
+        columnContent := Get(columnIndex, lineIndex, columnCaption, currContext);
     end;
 
-    local procedure addLine(Col1: Text; Col2: Text; Col3: Text; Col4: Text)
+    internal procedure Get(ColumnIndex: Integer; lineIndex: Integer; debugColumnCaptionContext: Text; currContext: Text) columnContent: Text
     var
-        LineNew: List of [Text];
+        line: List of [Text];
     begin
-        LineNew.Add(Col1);
-        LineNew.Add(Col2);
-        LineNew.Add(Col3);
-        LineNew.Add(Col4);
-        DataTable.Add(DataTable.Count + 1, LineNew);
+        if (currContext <> ContextGlobal) and (currContext <> '') then
+            exit('');
+        if not DataTable.Get(lineIndex, line) then
+            exit(StrSubstNo('ColValueNotFound (%1-%2)', debugColumnCaptionContext, ContextGlobal));
+        if (ColumnIndex < 1) or (ColumnIndex > line.Count) then
+            Error('hier');
+        columnContent := line.Get(ColumnIndex);
+    end;
+
+    internal procedure Count(): Integer
+    begin
+        throwErrorIfNoInitalized();
+        exit(DataTable.Count());
+    end;
+
+    internal procedure Dispose()
+    begin
+        Clear(CaptionsList);
+        Clear(Captions);
+        Clear(DataTable);
+        Clear(ContextGlobal);
+    end;
+
+    internal procedure setContext(contextNew: Text)
+    begin
+        ContextGlobal := contextNew;
+    end;
+
+    internal procedure Constant_RequirementList(): Text
+    begin
+        exit('RequirementsList');
+    end;
+
+    internal procedure Constant_StepsView(): Text
+    begin
+        exit('StepsView');
+    end;
+
+    internal procedure Constant_ReqData(): Text
+    begin
+        exit('ReqData');
+    end;
+
+    local procedure throwErrorIfNoInitalized()
+    begin
+        if not IsInitialized then
+            Error('Data table not initialized');
     end;
 
     var
+        ContextGlobal: Text;
+        CaptionsList: List of [Text];
+        Captions: Dictionary of [Integer/*ColumnNo*/, Text/*Caption Text*/];
         DataTable: Dictionary of [Integer/*Index*/, List of [Text]];
-        noOfColumnsGlobal: Integer;
+        IsInitialized: Boolean;
 }

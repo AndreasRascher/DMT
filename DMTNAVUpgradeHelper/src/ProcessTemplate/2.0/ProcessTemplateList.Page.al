@@ -17,13 +17,14 @@ page 90012 DMTProcessTemplateList
                 field(Description; Rec.Description) { }
                 field("Required Files"; Rec."Required Files Ratio") { StyleExpr = Rec.RequiredFilesStyle; }
                 field("Required Objects"; Rec."Required Objects Ratio") { StyleExpr = Rec.RequiredObjectsStyle; }
+                field("Required Data"; Rec."Required Data Ratio") { StyleExpr = Rec.RequiredDataStyle; }
             }
         }
         area(Factboxes)
         {
-            part(ProcessTemplateRequirementFB; ProcessTemplateRequirementFB) { }
-            part(ProcessTemplateDataReqsFB; ProcessTemplateDataReqsFB) { SubPageLink = "Template Code" = field("Template Code"); Visible = ProcessTemplateDataReqsFB_Visible; }
-            part(ProcessTemplateStepsFB; ProcessTemplateStepsFB) { }
+            part(ProcessTemplateRequirementFB; DMTProcessTemplateFactbox) { Caption = 'Required Files & Objects', Comment = 'de-DE=Benötigte Dateien & Objekte'; }
+            part(ProcessTemplateDataReqsFB; DMTProcessTemplateFactbox) { Caption = 'Data Requirements', Comment = 'de-DE=Benötigte Daten'; Visible = ProcessTemplateDataReqsFB_Visible; }
+            part(ProcessTemplateStepsFB; DMTProcessTemplateFactbox) { Caption = 'Steps', Comment = 'de-DE=Schritte'; }
         }
     }
 
@@ -68,6 +69,7 @@ page 90012 DMTProcessTemplateList
                     if not TemplateCodeList.Contains(processTemplateSetup."Template Code") then
                         TemplateCodeList.Add(processTemplateSetup."Template Code");
             until processTemplateSetup.Next() = 0;
+
         processTemplateSetup.Reset();
         foreach templateCode in TemplateCodeList do begin
             processTemplateSetup.SetRange("Template Code", templateCode);
@@ -90,11 +92,11 @@ page 90012 DMTProcessTemplateList
 
     trigger OnAfterGetCurrRecord()
     var
-        processTemplateSetup: Record DMTProcessTemplateSetup;
+        DataTableMgt_ReqList, DataTableMgt_Steps, DataTableMgt_DataReq : Codeunit DMTDataTableMgt; // required because AL does not seperate the factboxes and globals in it. The als factbox will provide the globals for both factboxes.
     begin
-        processTemplateSetup.initTemplateSetupFor(Rec."Template Code");
-        CurrPage.ProcessTemplateRequirementFB.Page.Set(processTemplateSetup);
-        CurrPage.ProcessTemplateStepsFB.Page.Set(processTemplateSetup);
+        CurrPage.ProcessTemplateRequirementFB.Page.InitAsRequirementsList(Rec."Template Code", DataTableMgt_ReqList);
+        CurrPage.ProcessTemplateStepsFB.Page.InitAsStepsView(Rec."Template Code", DataTableMgt_Steps);
+        CurrPage.ProcessTemplateDataReqsFB.Page.InitAsReqData(Rec."Template Code", DataTableMgt_DataReq);
     end;
 
     var
