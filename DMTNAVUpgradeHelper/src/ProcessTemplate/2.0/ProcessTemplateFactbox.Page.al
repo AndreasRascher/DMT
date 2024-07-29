@@ -53,6 +53,7 @@ page 90014 DMTProcessTemplateFactbox
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
         lineStyleNew: Text;
+        addedRequirements: List of [Text];
     begin
         IsRequirementListView := true;
         IsStepView := false;
@@ -66,18 +67,24 @@ page 90014 DMTProcessTemplateFactbox
         processTemplateSetup.SetRange("Template Code", templateCode);
         if processTemplateSetup.FindSet() then
             repeat
-                if processTemplateSetup.IsCodeunitRequirement() then begin
-                    setFieldStyle(lineStyleNew, processTemplateSetup.IsCodeunitRequirementFulfilled());
-                    dataTableMgt.addLine('Codeunit', processTemplateSetup."Run Codeunit", lineStyleNew);
-                end;
-                if processTemplateSetup.IsSourceFileRequirement() then begin
-                    setFieldStyle(lineStyleNew, processTemplateSetup.IsSourceFileRequirementFulfilled());
-                    dataTableMgt.addLine('Source File', processTemplateSetup."Source File Name", lineStyleNew);
-                end;
-                if processTemplateSetup.IsTableRequirement() then begin
-                    setFieldStyle(lineStyleNew, processTemplateSetup.IsTableRequirementFulfilled());
-                    dataTableMgt.addLine('Table', processTemplateSetup."Target Table ID", lineStyleNew);
-                end;
+                if processTemplateSetup.IsCodeunitRequirement() then
+                    if not addedRequirements.Contains('Codeunit_' + Format(processTemplateSetup."Run Codeunit")) then begin
+                        addedRequirements.Add('Codeunit_' + Format(processTemplateSetup."Run Codeunit"));
+                        setFieldStyle(lineStyleNew, processTemplateSetup.IsCodeunitRequirementFulfilled());
+                        dataTableMgt.addLine('Codeunit', processTemplateSetup."Run Codeunit", lineStyleNew);
+                    end;
+                if processTemplateSetup.IsSourceFileRequirement() then
+                    if not addedRequirements.Contains('SourceFile_' + processTemplateSetup."Source File Name") then begin
+                        addedRequirements.Add('SourceFile_' + processTemplateSetup."Source File Name");
+                        setFieldStyle(lineStyleNew, processTemplateSetup.IsSourceFileRequirementFulfilled());
+                        dataTableMgt.addLine('Source File', processTemplateSetup."Source File Name", lineStyleNew);
+                    end;
+                if processTemplateSetup.IsTableRequirement() then
+                    if not addedRequirements.Contains('Table_' + Format(processTemplateSetup."Target Table ID")) then begin
+                        addedRequirements.Add('Table_' + Format(processTemplateSetup."Target Table ID"));
+                        setFieldStyle(lineStyleNew, processTemplateSetup.IsTableRequirementFulfilled());
+                        dataTableMgt.addLine('Table', processTemplateSetup."Target Table ID", lineStyleNew);
+                    end;
             until processTemplateSetup.Next() = 0;
 
         Rec.SetRange(Number, 1, dataTableMgt.Count());
@@ -85,7 +92,8 @@ page 90014 DMTProcessTemplateFactbox
         CurrPage.Update(false);
     end;
 
-    internal procedure InitAsStepsView(templateCode: Text; var dataTableMgt: Codeunit DMTDataTableMgt)
+    internal procedure InitAsStepsView(templateCode: Text; var
+                                                               dataTableMgt: Codeunit DMTDataTableMgt)
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
         processingPlanType: Enum DMTProcessingPlanType;

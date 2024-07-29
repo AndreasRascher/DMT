@@ -95,7 +95,7 @@ table 90014 DMTProcessTemplateSetup
 
     internal procedure IsTableRequirement(): Boolean
     begin
-        exit(Rec."Target Table ID" <> 0);
+        exit((Rec."Target Table ID" <> 0) and (rec.Type <> rec.Type::"Req. Setup"));
     end;
 
     procedure IsTableRequirementFulfilled() targetTableExists: Boolean
