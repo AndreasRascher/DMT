@@ -157,12 +157,21 @@ table 90014 DMTProcessTemplateSetup
         end;
     end;
 
-    procedure getNextLineNo(templateCode: Code[150]) NextLineNo: Integer
+    procedure getNextLineNo(templateCode: Code[150]) nextLineNo: Integer
     var
-        ProcessTemplateSetup: Record DMTProcessTemplateSetup;
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+        tempProcessTemplateSetup: Record DMTProcessTemplateSetup temporary;
     begin
-        ProcessTemplateSetup.SetRange("Template Code", templateCode);
-        if ProcessTemplateSetup.FindLast() then;
-        NextLineNo += ProcessTemplateSetup."Line No." + 10000;
+        if Rec.IsTemporary then begin
+            tempProcessTemplateSetup.Copy(Rec, true);
+
+            tempProcessTemplateSetup.SetRange("Template Code", templateCode);
+            if tempProcessTemplateSetup.FindLast() then;
+            nextLineNo += tempProcessTemplateSetup."Line No." + 10000;
+        end else begin
+            processTemplateSetup.SetRange("Template Code", templateCode);
+            if processTemplateSetup.FindLast() then;
+            nextLineNo += processTemplateSetup."Line No." + 10000;
+        end;
     end;
 }

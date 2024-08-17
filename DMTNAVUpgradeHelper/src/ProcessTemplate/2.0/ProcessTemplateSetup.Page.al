@@ -43,7 +43,7 @@ page 90015 DMTProcessTemplateSetup
     {
         area(Processing)
         {
-            action(CSVExport)
+            action(XLSXExport)
             {
                 Caption = 'Create Backup', Comment = 'de-DE=Backup erstellen';
                 ApplicationArea = All;
@@ -51,9 +51,10 @@ page 90015 DMTProcessTemplateSetup
 
                 trigger OnAction()
                 begin
+                    ExportTemplateSetupToExcel();
                 end;
             }
-            action(CSVImport)
+            action(XLSXImport)
             {
                 Caption = 'Import Backup', Comment = 'de-DE=Backup importieren';
                 ApplicationArea = All;
@@ -61,7 +62,7 @@ page 90015 DMTProcessTemplateSetup
 
                 trigger OnAction()
                 begin
-
+                    ImportTemplateSetupFromExcel();
                 end;
             }
         }
@@ -138,6 +139,170 @@ page 90015 DMTProcessTemplateSetup
         NAVSourceTableNo_Mandatory := false;
         RunCodeunit_Mandatory := false;
         TargetTableID_Mandatory := false;
+    end;
+
+    procedure createListEntry(var exportSchema: Dictionary of [Integer/*field No.*/, List of [Text] /*Caption, CellType*/]; fieldNo: Integer)
+    var
+        dmyExcelBuffer: Record "Excel Buffer";
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+        recRef: RecordRef;
+        fieldProps: List of [Text];
+    begin
+        recRef.GetTable(processTemplateSetup);
+        fieldProps.Add(recRef.Field(fieldNo).Caption);
+        case recRef.Field(fieldNo).Type of
+            FieldType::Code, FieldType::Text, FieldType::Option:
+                fieldProps.Add(format(dmyExcelBuffer."Cell Type"::Text));
+            FieldType::Integer:
+                fieldProps.Add(format(dmyExcelBuffer."Cell Type"::Number));
+            else
+                Error('Field type %1 not supported', recRef.Field(fieldNo).Type);
+        end;
+        exportSchema.Add(fieldNo, fieldProps);
+    end;
+
+    local procedure ExportTemplateSetupToExcel()
+    var
+        tempExcelBuffer: Record "Excel Buffer" temporary;
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+        recRef: RecordRef;
+        exportSchema: Dictionary of [Integer/*field No.*/, List of [Text] /*Caption, CellType*/];
+        fieldNo: Integer;
+        fieldProps: List of [Text];
+    begin
+
+        // if not processTemplateSetup.FindSet(false) then
+        //     exit;
+        exportSchema := loadExportSchema();
+
+        // create headline
+        foreach fieldNo in exportSchema.Keys do begin
+            fieldProps := exportSchema.Get(fieldNo);
+            addTitleColumn(tempExcelBuffer, fieldProps.Get(1));
+        end;
+        tempExcelBuffer.NewRow();
+        if processTemplateSetup.FindSet(false) then
+            repeat
+                // add line
+                recRef.GetTable(processTemplateSetup);
+                foreach fieldNo in exportSchema.Keys do begin
+                    fieldProps := exportSchema.Get(fieldNo);
+                    case true of
+                        fieldProps.Get(2) = format(tempExcelBuffer."Cell Type"::Text):
+                            tempExcelBuffer.AddColumn(recRef.Field(fieldNo).Value, false, '', false, false, false, '', tempExcelBuffer."Cell Type"::Text);
+                        fieldProps.Get(2) = format(tempExcelBuffer."Cell Type"::Number):
+                            tempExcelBuffer.AddColumn(recRef.Field(fieldNo).Value, false, '', false, false, false, '', tempExcelBuffer."Cell Type"::Number);
+                        else
+                            Error('Cell type %1 not supported', fieldProps.Get(1));
+                    end;
+                end;
+                tempExcelBuffer.NewRow();
+            until processTemplateSetup.Next() = 0;
+        tempExcelBuffer.CreateNewBook(CopyStr(processTemplateSetup.TableCaption, 1, 250));
+        tempExcelBuffer.WriteSheet(Rec.TableCaption, CompanyName, UserId);
+        tempExcelBuffer.CloseBook();
+
+        tempExcelBuffer.SetFriendlyFilename(StrSubstNo('%1-%2', Rec.TableCaption, Format(CurrentDateTime, 0, '<Year4><Month,2><Day,2>_<Hours24,2><Minutes,2>_<Seconds,2>')));
+        tempExcelBuffer.OpenExcel();
+    end;
+
+    local procedure addTitleColumn(var tempExcelBuffer: Record "Excel Buffer" temporary; content: Text)
+    begin
+        tempExcelBuffer.AddColumn(content, false, '', true, false, false, '', tempExcelBuffer."Cell Type"::Text);
+    end;
+
+    local procedure ImportTemplateSetupFromExcel()
+    var
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+        tempProcessTemplateSetup: Record DMTProcessTemplateSetup temporary;
+        tempExcelBuffer: Record "Excel Buffer" temporary;
+        TempNameValueBufferOut: Record "Name/Value Buffer" temporary;
+        TempBlob: Codeunit "Temp Blob";
+        recRef: RecordRef;
+        exportSchema: Dictionary of [Integer, List of [Text]];
+        FileStream: InStream;
+        fieldNo: Integer;
+        maxRowNo, rowNo : Integer;
+        ImportFinishedMsg: Label 'Import finished', Comment = 'de-DE=Import abgeschlossen';
+    begin
+        if not UploadExcelFile(TempBlob) then
+            exit;
+        TempBlob.CreateInStream(FileStream);
+        tempExcelBuffer.GetSheetsNameListFromStream(FileStream, TempNameValueBufferOut);
+        TempNameValueBufferOut.FindFirst();
+        tempExcelBuffer.OpenBookStream(FileStream, TempNameValueBufferOut.Value);
+        tempExcelBuffer.ReadSheet();
+
+        if not tempExcelBuffer.FindLast() then
+            exit;
+        maxRowNo := tempExcelBuffer."Row No.";
+
+        exportSchema := loadExportSchema();
+        for rowNo := 2 to maxRowNo do begin
+            Clear(processTemplateSetup);
+            recRef.GetTable(processTemplateSetup);
+            foreach fieldNo in exportSchema.Keys do begin
+                if tempExcelBuffer.Get(rowNo, exportSchema.Keys.IndexOf(fieldNo)) then
+                    AssignFieldValue(recRef, fieldNo, tempExcelBuffer);
+            end;
+            recRef.SetTable(processTemplateSetup);
+            tempProcessTemplateSetup := processTemplateSetup;
+            tempProcessTemplateSetup."Line No." := tempProcessTemplateSetup.getNextLineNo(tempProcessTemplateSetup."Template Code");
+            tempProcessTemplateSetup.Insert(false);
+        end;
+        // Replace
+        if tempProcessTemplateSetup.FindSet() then begin
+            processTemplateSetup.DeleteAll();
+            repeat
+                processTemplateSetup := tempProcessTemplateSetup;
+                processTemplateSetup.Insert();
+            until tempProcessTemplateSetup.Next() = 0;
+        end;
+        Message(ImportFinishedMsg);
+    end;
+
+    local procedure loadExportSchema() exportSchema: Dictionary of [Integer/*field No.*/, List of [Text] /*Caption, CellType*/]
+    var
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+    begin
+        createListEntry(exportSchema, processTemplateSetup.FieldNo("Template Code"));
+        createListEntry(exportSchema, processTemplateSetup.FieldNo("Type"));
+        createListEntry(exportSchema, processTemplateSetup.FieldNo("Source File Name"));
+        createListEntry(exportSchema, processTemplateSetup.FieldNo(Indentation));
+        createListEntry(exportSchema, processTemplateSetup.FieldNo(Description));
+        createListEntry(exportSchema, processTemplateSetup.FieldNo("Field Name"));
+        createListEntry(exportSchema, processTemplateSetup.FieldNo("Filter Expression"));
+        createListEntry(exportSchema, processTemplateSetup.FieldNo("Default Value"));
+        createListEntry(exportSchema, processTemplateSetup.FieldNo("NAV Source Table No."));
+        createListEntry(exportSchema, processTemplateSetup.FieldNo("Run Codeunit"));
+        createListEntry(exportSchema, processTemplateSetup.FieldNo("Target Table ID"));
+    end;
+
+    local procedure AssignFieldValue(var recRef: RecordRef; fieldNo: Integer; var tempExcelBuffer: Record "Excel Buffer" temporary)
+    var
+        refHelper: Codeunit DMTRefHelper;
+        fieldRef: FieldRef;
+        InvalidValueErr: Label 'Invalid cell value "%1" in cell %2%3', Comment = 'de-DE=Ungültiger Zellwert %1 in Zelle %2%3';
+    begin
+        fieldRef := recRef.Field(fieldNo);
+        if not refHelper.EvaluateFieldRef(fieldRef, tempExcelBuffer."Cell Value as Text", false, false) then begin
+            Error(InvalidValueErr, tempExcelBuffer."Cell Value as Text", tempExcelBuffer.xlColID, tempExcelBuffer.xlRowID);
+        end;
+    end;
+
+    procedure UploadExcelFile(var TempBlob: Codeunit "Temp Blob") OK: Boolean
+    var
+        InStr: InStream;
+        OutStr: OutStream;
+        FileName: Text;
+        selectExcelFileLbl: Label 'Select Excel File', Comment = 'de-DE=Excel Datei auswählen';
+        debug: Integer;
+    begin
+        TempBlob.CreateInStream(InStr);
+        TempBlob.CreateOutStream(OutStr);
+        OK := UploadIntoStream(selectExcelFileLbl, '', Format(Enum::DMTFileFilter::Excel), FileName, InStr);
+        CopyStream(OutStr, InStr);
+        debug := TempBlob.Length();
     end;
 
     var
