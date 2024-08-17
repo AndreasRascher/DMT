@@ -11,11 +11,11 @@ table 91000 DMTSetup
             Caption = 'Migration Profil', Comment = 'de-DE=Migrationsprofil';
             trigger OnValidate()
             var
-                DMTDataLayouts: Page DMTDataLayouts;
+                dataLayout: Record DMTDataLayout;
             begin
                 Modify();
                 if Rec.IsNAVExport() then
-                    DMTDataLayouts.InsertPresetDataLayouts();
+                    dataLayout.InsertPresetDataLayouts();
             end;
         }
         field(23; "Use exist. mappings"; Boolean) { Caption = 'Propose matching fields - Use existing mappings', Comment = 'de-DE=Feldzuordnung vorschlagen - Existierende Feld-Mappings verwenden'; InitValue = true; }

@@ -36,7 +36,7 @@ pageextension 90014 DMTSetup extends "DMT Setup"
         {
             action(ImportNAVSchema)
             {
-                Caption = 'Import Schema.csv', comment = 'NAV Schema.csv importieren';
+                Caption = 'Import NAV Schema.csv', comment = 'NAV Schema.csv importieren';
                 ApplicationArea = All;
                 Image = DataEntry;
 

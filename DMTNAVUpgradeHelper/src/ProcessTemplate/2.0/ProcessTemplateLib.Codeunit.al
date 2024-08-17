@@ -229,7 +229,14 @@ codeunit 90013 DMTProcessTemplateLib
         deleteTemplateLines(templateCode);
         addGroup(templateCode, CustContVendorLbl);
         indentation := 1;
+        addImportBufferAndTargetNAVFile(templateCode, indentation, 9, 'Land_Region.csv');
+        addImportBufferAndTargetNAVFile(templateCode, indentation, 4, 'Währung.csv');
+        addImportBufferAndTargetNAVFile(templateCode, indentation, 8, 'Sprache.csv');
+        addImportBufferAndTargetNAVFile(templateCode, indentation, 5068, 'Anrede.csv');
+        addImportBufferAndTargetNAVFile(templateCode, indentation, 5069, 'Anredeformel.csv'); // benötigt Sprachen
+        addImportBufferAndTargetNAVFile(templateCode, indentation, 308, 'Nummernserie.csv');
         addImportBufferAndTargetNAVFile(templateCode, indentation, 13, 'Verkäufer_Einkäufer.csv');
+        addImportBufferAndTargetNAVFile(templateCode, indentation, 5070, 'Position.csv');
         addImportToBufferNAVFile(templateCode, indentation, 5050, 'Kontakt.csv');
         addImportTargetNAVFile(templateCode, indentation, 5050, 'Kontakt.csv', 'Unternehmenskontakte');
         addFilter(templateCode, 'Type', '0');

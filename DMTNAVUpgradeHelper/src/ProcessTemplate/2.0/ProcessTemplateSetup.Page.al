@@ -43,6 +43,42 @@ page 90015 DMTProcessTemplateSetup
     {
         area(Processing)
         {
+            action(CSVExport)
+            {
+                Caption = 'Create Backup', Comment = 'de-DE=Backup erstellen';
+                ApplicationArea = All;
+                Image = CreateXMLFile;
+
+                trigger OnAction()
+                var
+                    dummyImportConfigHeader: Record DMTImportConfigHeader;
+                    DMTCSVWriter: XmlPort DMTCSVWriter;
+                begin
+                    dummyImportConfigHeader."Target Table ID" := Rec.RecordId.TableNo;
+                    DMTCSVWriter.ExportTargetTableAsCSV(dummyImportConfigHeader);
+                end;
+            }
+            action(CSVImport)
+            {
+                Caption = 'Import Backup', Comment = 'de-DE=Backup importieren';
+                ApplicationArea = All;
+                Image = ImportCodes;
+
+                trigger OnAction()
+                var
+                    dataLayout: Record DMTDataLayout;
+                    dummyImportConfigHeader: Record DMTImportConfigHeader;
+                    DMTImportCSVImpl: Codeunit DMTImportCSVImpl;
+                    csvReader: XmlPort DMTCSVReader;
+                    fileBlob: Codeunit "Temp Blob";
+                begin
+                    dummyImportConfigHeader."Target Table ID" := Rec.RecordId.TableNo;
+                    if not DMTImportCSVImpl.UploadImportFileToBlob(fileBlob) then
+                        exit;
+                    dataLayout := dataLayout.GetDefaultNAVDMTLayout();
+                    DMTImportCSVImpl.SetupCSVReader(csvReader, fileBlob, dataLayout);
+                end;
+            }
         }
     }
     trigger OnOpenPage()
