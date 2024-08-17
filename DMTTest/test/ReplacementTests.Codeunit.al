@@ -86,7 +86,7 @@ codeunit 90021 ReplacementTests
             exit;
         end;
         TestLibrary.CreateDMTSetup();
-        TestLibrary.CreateOrGetDataLayout(dataLayout, 'DMT NAV CSV Export');
+        dataLayout.CreateOrGetDataLayout(dataLayout, 'DMT NAV CSV Export');
 
         dataTableHelper.BuildDataTable(1, 1, 'Document Type');
         dataTableHelper.BuildDataTable(1, 2, 'Document No.');

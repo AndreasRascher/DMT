@@ -231,4 +231,9 @@ codeunit 90022 DMTTestLibrary
         if replacementAssignments.IsEmpty() then
             Error('No replacement rules found for the replacement code');
     end;
+
+    internal procedure GetDefaultNAVDMTLayout() dataLayout: Record DMTDataLayout
+    begin
+        dataLayout := dataLayout.GetDefaultNAVDMTLayout();
+    end;
 }
