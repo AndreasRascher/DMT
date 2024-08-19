@@ -57,11 +57,14 @@ page 90012 DMTProcessTemplateList
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
         processTemplateLib: codeunit DMTProcessTemplateLib;
+        downloadedFile: Codeunit "Temp Blob";
         TemplateCodeList: List of [Text[150]];
         templateCode: Text[150];
     begin
-        if processTemplateSetup.IsEmpty then
-            processTemplateLib.InitDefaults();
+        if processTemplateSetup.IsEmpty then begin
+            processTemplateLib.downloadProcessTemplateXLSFromGitHub(downloadedFile);
+            processTemplateLib.ImportTemplateSetupFromExcel(downloadedFile);
+        end;
 
         if processTemplateSetup.FindSet() then
             repeat

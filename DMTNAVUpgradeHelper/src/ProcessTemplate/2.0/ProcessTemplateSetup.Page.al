@@ -73,9 +73,14 @@ page 90015 DMTProcessTemplateSetup
     }
     trigger OnOpenPage()
     var
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+        downloadedFile: Codeunit "Temp Blob";
         processTemplateLib: Codeunit DMTProcessTemplateLib;
     begin
-        processTemplateLib.InitDefaults();
+        if processTemplateSetup.IsEmpty then begin
+            processTemplateLib.downloadProcessTemplateXLSFromGitHub(downloadedFile);
+            processTemplateLib.ImportTemplateSetupFromExcel(downloadedFile);
+        end;
     end;
 
     trigger OnAfterGetCurrRecord()

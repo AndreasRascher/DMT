@@ -395,18 +395,21 @@ codeunit 90013 DMTProcessTemplateLib
         until processTemplateSetup.Next() = 0;
     end;
 
-    local procedure importProcessTemplateXLSFromGitHub(var downloadedFile: Codeunit "Temp Blob")
+    procedure downloadProcessTemplateXLSFromGitHub(var downloadedFile: Codeunit "Temp Blob")
     var
 
         Client: HttpClient;
         ResponseMessage: HttpResponseMessage;
         InStr: InStream;
-        downloadURL: Label 'https://raw.githubusercontent.com/StefanMaron/MSDyn365BC.Code.History/6db5c63afa1adaa04e0d4024d14279d54a2aba4d/BaseApp/Source/Base%20Application/%1.Report.al';
+        ResponseText: Text;
+        downloadURLTok: Label 'https://github.com/AndreasRascher/DMT/raw/NAV-Upgrade-Helper/DMTNAVUpgradeHelper/ProcessTemplates/DefaultProcessTemplateSetup.xlsx', Locked = true;
         OutStr: OutStream;
     begin
         downloadedFile.CreateInStream(InStr);
-        if not Client.Get(downloadURL, ResponseMessage) then
+        if not Client.Get(downloadURLTok, ResponseMessage) then begin
+            ResponseMessage.Content.ReadAs(ResponseText);
             Error('The call to the web service failed.');
+        end;
         ResponseMessage.Content.ReadAs(InStr);
         downloadedFile.CreateOutStream(OutStr);
         CopyStream(OutStr, InStr);
@@ -484,11 +487,29 @@ codeunit 90013 DMTProcessTemplateLib
 
     procedure ImportTemplateSetupFromExcel()
     var
+        TempBlob: Codeunit "Temp Blob";
+        InStr: InStream;
+        OutStr: OutStream;
+        FileName: Text;
+        selectExcelFileLbl: Label 'Select Excel File', Comment = 'de-DE=Excel Datei auswählen';
+        debug: Integer;
+    begin
+        TempBlob.CreateInStream(InStr);
+        TempBlob.CreateOutStream(OutStr);
+        UploadIntoStream(selectExcelFileLbl, '', Format(Enum::DMTFileFilter::Excel), FileName, InStr);
+        CopyStream(OutStr, InStr);
+        debug := TempBlob.Length();
+
+        ImportTemplateSetupFromExcel(TempBlob);
+    end;
+
+
+    procedure ImportTemplateSetupFromExcel(var TempBlob: Codeunit "Temp Blob")
+    var
         processTemplateSetup: Record DMTProcessTemplateSetup;
         tempProcessTemplateSetup: Record DMTProcessTemplateSetup temporary;
         tempExcelBuffer: Record "Excel Buffer" temporary;
         TempNameValueBufferOut: Record "Name/Value Buffer" temporary;
-        TempBlob: Codeunit "Temp Blob";
         recRef: RecordRef;
         exportSchema: Dictionary of [Integer, List of [Text]];
         FileStream: InStream;
@@ -496,8 +517,6 @@ codeunit 90013 DMTProcessTemplateLib
         maxRowNo, rowNo : Integer;
         ImportFinishedMsg: Label 'Import finished', Comment = 'de-DE=Import abgeschlossen';
     begin
-        if not UploadExcelFile(TempBlob) then
-            exit;
         TempBlob.CreateInStream(FileStream);
         tempExcelBuffer.GetSheetsNameListFromStream(FileStream, TempNameValueBufferOut);
         TempNameValueBufferOut.FindFirst();
@@ -561,19 +580,5 @@ codeunit 90013 DMTProcessTemplateLib
         end;
     end;
 
-    procedure UploadExcelFile(var TempBlob: Codeunit "Temp Blob") OK: Boolean
-    var
-        InStr: InStream;
-        OutStr: OutStream;
-        FileName: Text;
-        selectExcelFileLbl: Label 'Select Excel File', Comment = 'de-DE=Excel Datei auswählen';
-        debug: Integer;
-    begin
-        TempBlob.CreateInStream(InStr);
-        TempBlob.CreateOutStream(OutStr);
-        OK := UploadIntoStream(selectExcelFileLbl, '', Format(Enum::DMTFileFilter::Excel), FileName, InStr);
-        CopyStream(OutStr, InStr);
-        debug := TempBlob.Length();
-    end;
 
 }

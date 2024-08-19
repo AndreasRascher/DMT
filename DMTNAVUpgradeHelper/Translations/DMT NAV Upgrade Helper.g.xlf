@@ -3,6 +3,11 @@
   <file datatype="xml" source-language="en-US" target-language="en-US" original="DMT NAV Upgrade Helper">
     <body>
       <group id="body">
+        <trans-unit id="Table 373303067 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Process Template Setup</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=DMT Prozessvorlagen Einrichtung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateSetup - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 373303067 - Field 2913739292 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Default Value</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Vorgabewert</note>
@@ -123,6 +128,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Benötigte Quelldateien fehlen für %1</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method AddToProcessingPlan - NamedType sourceFilesAreMissingErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 634704931 - Method 1699920268 - NamedType 2510853505" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Invalid cell value "%1" in cell %2%3</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ungültiger Zellwert %1 in Zelle %2%3</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method AssignFieldValue - NamedType InvalidValueErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 634704931 - Method 3584965203 - NamedType 309902852" size-unit="char" translate="yes" xml:space="preserve">
           <source>No Import Configuration exits for Source File %1</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Keine Importkonfiguration für Quelldatei %1 vorhanden</note>
@@ -137,6 +147,21 @@
           <source>Source File %1 not found</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Quelldatei %1 nicht gefunden</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method findOrCreateProcessingPlanID - NamedType sourceFileNotFoundErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 634704931 - Method 3193293510 - NamedType 1043885977" size-unit="char" translate="yes" xml:space="preserve">
+          <source>https://github.com/AndreasRascher/DMT/raw/NAV-Upgrade-Helper/DMTNAVUpgradeHelper/ProcessTemplates/DefaultProcessTemplateSetup.xlsx</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method importProcessTemplateXLSFromGitHub - NamedType downloadURL</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 634704931 - Method 2765902045 - NamedType 720884949" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Select Excel File</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Excel Datei auswählen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method ImportTemplateSetupFromExcel - NamedType selectExcelFileLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 634704931 - Method 2765902045 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import finished</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method ImportTemplateSetupFromExcel - NamedType ImportFinishedMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 634704931 - Method 463375086 - NamedType 732372603" size-unit="char" translate="yes" xml:space="preserve">
           <source>Contact, Customer, Vendor</source>
@@ -237,21 +262,6 @@
           <source>DMT Process Template Setup</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Prozessvorlagen Einrichtung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateSetup - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 373303067 - Method 1699920268 - NamedType 2510853505" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Invalid cell value "%1" in cell %2%3</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Ungültiger Zellwert %1 in Zelle %2%3</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateSetup - Method AssignFieldValue - NamedType InvalidValueErr</note>
-        </trans-unit>
-        <trans-unit id="Page 373303067 - Method 2765902045 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import finished</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateSetup - Method ImportTemplateSetupFromExcel - NamedType ImportFinishedMsg</note>
-        </trans-unit>
-        <trans-unit id="Page 373303067 - Method 3493918430 - NamedType 720884949" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Select Excel File</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Excel Datei auswählen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateSetup - Method UploadExcelFile - NamedType selectExcelFileLbl</note>
         </trans-unit>
         <trans-unit id="Page 373303067 - Action 1990819557 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create Backup</source>

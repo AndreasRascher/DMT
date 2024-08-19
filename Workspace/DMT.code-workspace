@@ -18,6 +18,10 @@
 		{
 			"path": "..\\DMTTest",
 			"name": "APP Tests"
+		},
+		{
+			"path": "..\\DMTDocumentation",
+			"name": "DOC"
 		}
 	],
 	"settings": {
