@@ -1,5 +1,7 @@
 # DMT - Data Migration Tool #
 
+[a relative link](Guides\02 - Empfohlene Vorgehensweise.md)
+
 ## Features ##
 - Read structured files (CSV or XLSX)
 - Map source columns to target columns
