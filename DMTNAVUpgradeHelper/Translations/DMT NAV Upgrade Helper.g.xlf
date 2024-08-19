@@ -148,11 +148,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Quelldatei %1 nicht gefunden</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method findOrCreateProcessingPlanID - NamedType sourceFileNotFoundErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 634704931 - Method 3193293510 - NamedType 1043885977" size-unit="char" translate="yes" xml:space="preserve">
-          <source>https://github.com/AndreasRascher/DMT/raw/NAV-Upgrade-Helper/DMTNAVUpgradeHelper/ProcessTemplates/DefaultProcessTemplateSetup.xlsx</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessTemplateLib - Method importProcessTemplateXLSFromGitHub - NamedType downloadURL</note>
-        </trans-unit>
         <trans-unit id="Codeunit 634704931 - Method 2765902045 - NamedType 720884949" size-unit="char" translate="yes" xml:space="preserve">
           <source>Select Excel File</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Excel Datei auswählen</note>

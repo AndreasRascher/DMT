@@ -20,8 +20,12 @@
 			"name": "APP Tests"
 		},
 		{
-			"path": "..\\DMTDocumentation",
-			"name": "DOC"
+			"path": "..\\Docs",
+			"name": "Docs"
+		},
+		{
+			"path": "..\\",
+			"name": "Root"
 		}
 	],
 	"settings": {
