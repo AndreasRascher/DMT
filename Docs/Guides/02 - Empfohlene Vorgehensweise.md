@@ -54,4 +54,4 @@ Exportieren Sie die Tabellendaten mithilfe aus NAV mit Hilfer der  bereitgestell
             iii. Excel Export ignorierter Fehler
 
 # Export Objekte
-[Export für NAV Versionen bis 2009 R2](../images/DMT_ExportObjects_NAVClassic.png)
+[Export für NAV Versionen bis 2009 R2]([../images/DMT_ExportObjects_NAVClassic.png](https://github.com/AndreasRascher/DMT/blob/NAV-Upgrade-Helper/Docs/images/DMT_ExportObjects_NAVClassic.png))
