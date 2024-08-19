@@ -152,4 +152,13 @@
 		"git.openRepositoryInParentFolders": "prompt",
 		"alOutline.addToolTipsToPageFields": false
 	}
+	,
+	"extensions": {
+		"recommendations": [
+			"rvanbekkum.xliff-sync",
+			"yzane.markdown-pdf",
+			"andrzejzwierzchowski.al-code-outline",
+			"vscode-icons-team.vscode-icons"
+		]
+	}
 }
