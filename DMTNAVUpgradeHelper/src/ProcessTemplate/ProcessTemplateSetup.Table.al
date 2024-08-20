@@ -23,7 +23,13 @@ table 90014 DMTProcessTemplateSetup
         field(30; "Field Name"; Text[30]) { Caption = 'Field Name', Comment = 'de-DE=Feldname'; }
         field(31; "Default Value"; Text[250]) { Caption = 'Default Value', Comment = 'de-DE=Vorgabewert'; }
         field(32; "Filter Expression"; Text[250]) { Caption = 'Filter', Comment = 'de-DE=Filter'; }
-        field(24; "Target Table ID"; Integer) { Caption = 'Target Table ID', Comment = 'de-DE=Zieltabelle ID'; BlankZero = true; }
+        field(24; "Target Table ID"; Integer)
+        {
+            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
+            ValidateTableRelation = false;
+            Caption = 'Target Table ID', Comment = 'de-DE=Zieltabelle ID';
+            BlankZero = true;
+        }
         field(25; "Target Table Caption"; Text[249])
         {
             Caption = 'Target Table Caption', Comment = 'de-DE=Zieltabellen Bezeichnung';
@@ -75,6 +81,10 @@ table 90014 DMTProcessTemplateSetup
         recRef.Open(Rec."Target Table ID");
         if not recRef.FindFirst() then
             exit(false);
+        // Tabelle ohne Feld -> Tabelle muss Daten enthalten
+        if rec."Field Name" = '' then
+            exit(true);
+        // Tabelle mit Feldname -> Feld muss gefüllt sein
         if not dataTypeMgt.FindFieldByName(recRef, fieldRef, Rec."Field Name") then
             exit(false);
         Result := format(fieldRef.Value) <> '';

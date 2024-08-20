@@ -151,6 +151,11 @@ page 90015 DMTProcessTemplateSetup
                     resetMandatoryIndicator();
                     RunCodeunit_Mandatory := true;
                 end;
+            Rec.Type::"Req. Setup":
+                begin
+                    resetMandatoryIndicator();
+                    TargetTableID_Mandatory := true;
+                end;
         end;
     end;
 

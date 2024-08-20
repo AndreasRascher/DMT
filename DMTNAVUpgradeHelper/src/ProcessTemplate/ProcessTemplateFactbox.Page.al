@@ -14,6 +14,8 @@ page 90014 DMTProcessTemplateFactbox
     {
         area(Content)
         {
+            // field(TemplateCodeGlobal; TemplateCodeGlobal) { }
+            // field(LastUpdateTime; LastUpdateTime) { }
             repeater(RequirementListView)
             {
                 Visible = IsRequirementListView;
@@ -58,7 +60,8 @@ page 90014 DMTProcessTemplateFactbox
         IsRequirementListView := true;
         IsStepView := false;
         IsReqDataView := false;
-        CurrPage.Update(false);
+        // templateCodeGlobal := templateCode;
+        // LastUpdateTime := Time;
 
         dataTableMgt.Dispose();
         dataTableMgt.setContext(dataTableMgt.Constant_RequirementList());
@@ -89,11 +92,9 @@ page 90014 DMTProcessTemplateFactbox
 
         Rec.SetRange(Number, 1, dataTableMgt.Count());
         DataTableMgtGlobal := dataTableMgt;
-        CurrPage.Update(false);
     end;
 
-    internal procedure InitAsStepsView(templateCode: Text; var
-                                                               dataTableMgt: Codeunit DMTDataTableMgt)
+    internal procedure InitAsStepsView(templateCode: Text; var dataTableMgt: Codeunit DMTDataTableMgt)
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
         processingPlanType: Enum DMTProcessingPlanType;
@@ -102,7 +103,8 @@ page 90014 DMTProcessTemplateFactbox
         IsRequirementListView := false;
         IsStepView := true;
         IsReqDataView := false;
-        CurrPage.Update(false);
+        // templateCodeGlobal := templateCode;
+        // LastUpdateTime := Time;
 
         dataTableMgt.Dispose();
         dataTableMgt.setContext(dataTableMgt.Constant_StepsView());
@@ -119,7 +121,7 @@ page 90014 DMTProcessTemplateFactbox
             until processTemplateSetup.Next() = 0;
         Rec.SetRange(Number, 1, dataTableMgt.Count());
         DataTableMgtGlobal := dataTableMgt;
-        CurrPage.Update(false);
+        // CurrPage.Update(false);
     end;
 
     internal procedure InitAsReqData(templateCode: Text; var dataTableMgt: Codeunit DMTDataTableMgt)
@@ -138,7 +140,8 @@ page 90014 DMTProcessTemplateFactbox
         IsRequirementListView := false;
         IsStepView := false;
         IsReqDataView := true;
-        CurrPage.Update(false);
+        // templateCodeGlobal := templateCode;
+        // LastUpdateTime := Time;
 
         dataTableMgt.Dispose();
         dataTableMgt.setContext(dataTableMgt.Constant_ReqData());
@@ -157,8 +160,13 @@ page 90014 DMTProcessTemplateFactbox
                     tableCaptionText := TableMetadata."Caption";
                     recordRef.Open(processTemplateSetup."Target Table ID");
                     recordFound := recordRef.FindFirst();
-                    fieldFound := dataTypeMgt.FindFieldByName(recordRef, fieldRef, processTemplateSetup."Field Name");
-                    fieldHasValue := format(fieldRef.Value) <> '';
+                    if processTemplateSetup."Field Name" = '' then
+                        fieldHasValue := true // has records
+                    else begin
+                        fieldFound := dataTypeMgt.FindFieldByName(recordRef, fieldRef, processTemplateSetup."Field Name");
+                        if fieldFound then
+                            fieldHasValue := format(fieldRef.Value) <> '';
+                    end;
                 end;
 
                 case true of
@@ -174,7 +182,6 @@ page 90014 DMTProcessTemplateFactbox
 
         Rec.SetRange(Number, 1, dataTableMgt.Count());
         DataTableMgtGlobal := dataTableMgt;
-        CurrPage.Update(false);
     end;
 
     local procedure setFieldStyle(var lineStyleNew: Text; IsRequirementFulfilled: Boolean)
@@ -184,8 +191,17 @@ page 90014 DMTProcessTemplateFactbox
             lineStyleNew := Format(Enum::DMTFieldStyle::"Bold + Green");
     end;
 
+    procedure doUpdate()
+    begin
+        // Hinweis: Update der Factboxen mit Update(false) von der 1 zur 2. Zeile funktioniert nicht, wenn es mehr als 2 Zeilen gibt
+        // CurrPage.Update(false);
+        CurrPage.Activate(true);
+    end;
+
     var
         DataTableMgtGlobal: Codeunit DMTDataTableMgt;
         IsStepView, IsRequirementListView, IsReqDataView : Boolean;
         lineStyle: Text;
+    // templateCodeGlobal: Text;
+    // LastUpdateTime: Time;
 }

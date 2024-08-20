@@ -6,6 +6,7 @@ page 90012 DMTProcessTemplateList
     ApplicationArea = All;
     SourceTable = DMTProcTemplSelection;
     SourceTableTemporary = true;
+    InsertAllowed = false;
 
     layout
     {
@@ -94,12 +95,34 @@ page 90012 DMTProcessTemplateList
     end;
 
     trigger OnAfterGetCurrRecord()
-    var
-        DataTableMgt_ReqList, DataTableMgt_Steps, DataTableMgt_DataReq : Codeunit DMTDataTableMgt; // required because AL does not seperate the factboxes and globals in it. The als factbox will provide the globals for both factboxes.
     begin
+
+    end;
+
+    trigger OnFindRecord(Which: Text): Boolean
+    var
+        tempProcTemplSelection: Record DMTProcTemplSelection temporary;
+        found: Boolean;
+    begin
+        tempProcTemplSelection.Copy(Rec, true);
+        found := Rec.Find(Which);
+        updateFactBoxes();
+        exit(found);
+    end;
+
+    local procedure updateFactBoxes()
+    var
+        DataTableMgt_ReqList: Codeunit DMTDataTableMgt;
+        DataTableMgt_Steps: Codeunit DMTDataTableMgt;
+        DataTableMgt_DataReq: Codeunit DMTDataTableMgt;
+    begin
+        CurrPage.ProcessTemplateRequirementFB.Page.doUpdate();
         CurrPage.ProcessTemplateRequirementFB.Page.InitAsRequirementsList(Rec."Template Code", DataTableMgt_ReqList);
+        CurrPage.ProcessTemplateRequirementFB.Page.doUpdate();
         CurrPage.ProcessTemplateStepsFB.Page.InitAsStepsView(Rec."Template Code", DataTableMgt_Steps);
+        CurrPage.ProcessTemplateStepsFB.Page.doUpdate();
         CurrPage.ProcessTemplateDataReqsFB.Page.InitAsReqData(Rec."Template Code", DataTableMgt_DataReq);
+        CurrPage.ProcessTemplateDataReqsFB.Page.doUpdate();
     end;
 
     var
