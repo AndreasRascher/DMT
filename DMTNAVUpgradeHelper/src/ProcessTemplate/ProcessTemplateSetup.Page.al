@@ -79,11 +79,10 @@ page 90015 DMTProcessTemplateSetup
                 var
                     processTemplateLib: Codeunit DMTProcessTemplateLib;
                     downloadedFile: Codeunit "Temp Blob";
-                    ReportALCode: Text;
+                    importOption: Option "Replace entries","Add entries";
                 begin
-                    processTemplateLib.ReadALCode(ReportALCode, Report::"Sales - Shipment");
-                    processTemplateLib.downloadProcessTemplateXLSFromGitHub(downloadedFile);
-                    processTemplateLib.ImportTemplateSetupFromExcel(downloadedFile);
+                    processTemplateLib.downloadProcessTemplateXLSFromGitHub(downloadedFile, importOption);
+                    processTemplateLib.ImportTemplateSetupFromExcel(downloadedFile, importOption);
                 end;
             }
         }

@@ -183,6 +183,26 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCode - Control TargetRecVarName - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2076196089 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Optionen</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control Options - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2076196089 - Control 349474617 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Download URL</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control DownloadURL - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2076196089 - Control 652589522 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Option</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control ImportOption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2076196089 - Control 652589522 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Replace entries,Add entries</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Einträge ersetzen,Neue Einträge hinzufügen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control ImportOption - Property OptionCaption</note>
+        </trans-unit>
         <trans-unit id="Page 1270938733 - Control 4292991650 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Requirements</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Erforderliche Daten</note>

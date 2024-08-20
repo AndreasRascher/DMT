@@ -395,18 +395,22 @@ codeunit 90013 DMTProcessTemplateLib
         until processTemplateSetup.Next() = 0;
     end;
 
-    procedure downloadProcessTemplateXLSFromGitHub(var downloadedFile: Codeunit "Temp Blob")
+    procedure downloadProcessTemplateXLSFromGitHub(var downloadedFile: Codeunit "Temp Blob"; var importOptionNew: Option "Replace entries","Add entries")
     var
-
+        DMTReqURL: Page DMTConfirm;
         Client: HttpClient;
         ResponseMessage: HttpResponseMessage;
         InStr: InStream;
         ResponseText: Text;
-        downloadURLTok: Label 'https://github.com/AndreasRascher/DMT/raw/NAV-Upgrade-Helper/DMTNAVUpgradeHelper/src/ProcessTemplate/DefaultProcessTemplateSetup.bin', Locked = true;
+        downloadURLTok: Label 'https://github.com/AndreasRascher/DMT/raw/NAV-Upgrade-Helper/DMTNAVUpgradeHelper/src/ProcessTemplate/DefaultProcessTemplateSetup.xlsx', Locked = true;
         OutStr: OutStream;
     begin
+        DMTReqURL.SetURL(downloadURLTok);
+        DMTReqURL.RunModal();
+        importOptionNew := DMTReqURL.GetImportOption();
         downloadedFile.CreateInStream(InStr);
-        if not Client.Get(downloadURLTok, ResponseMessage) then begin
+        // Client.Get(DMTReqURL.GetURL(), ResponseMessage);
+        if not Client.Get(DMTReqURL.GetURL(), ResponseMessage) then begin
             ResponseMessage.Content.ReadAs(ResponseText);
             Error('The call to the web service failed.');
         end;
@@ -500,13 +504,13 @@ codeunit 90013 DMTProcessTemplateLib
         CopyStream(OutStr, InStr);
         debug := TempBlob.Length();
 
-        ImportTemplateSetupFromExcel(TempBlob);
+        ImportTemplateSetupFromExcel(TempBlob, 0);
     end;
 
 
-    procedure ImportTemplateSetupFromExcel(var TempBlob: Codeunit "Temp Blob")
+    procedure ImportTemplateSetupFromExcel(var TempBlob: Codeunit "Temp Blob"; importOption: Option "Replace entries","Add entries")
     var
-        processTemplateSetup: Record DMTProcessTemplateSetup;
+        processTemplateSetup, processTemplateSetup2 : Record DMTProcessTemplateSetup;
         tempProcessTemplateSetup: Record DMTProcessTemplateSetup temporary;
         tempExcelBuffer: Record "Excel Buffer" temporary;
         TempNameValueBufferOut: Record "Name/Value Buffer" temporary;
@@ -542,10 +546,13 @@ codeunit 90013 DMTProcessTemplateLib
         end;
         // Replace
         if tempProcessTemplateSetup.FindSet() then begin
-            processTemplateSetup.DeleteAll();
+            if importOption = importOption::"Replace entries" then
+                processTemplateSetup.DeleteAll();
             repeat
-                processTemplateSetup := tempProcessTemplateSetup;
-                processTemplateSetup.Insert();
+                if not processTemplateSetup2.Get(tempProcessTemplateSetup.RecordId) then begin
+                    processTemplateSetup2 := tempProcessTemplateSetup;
+                    processTemplateSetup2.Insert();
+                end;
             until tempProcessTemplateSetup.Next() = 0;
         end;
         Message(ImportFinishedMsg);
