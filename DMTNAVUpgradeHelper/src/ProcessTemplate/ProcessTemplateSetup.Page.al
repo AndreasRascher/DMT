@@ -69,18 +69,35 @@ page 90015 DMTProcessTemplateSetup
                     processTemplateLib.ImportTemplateSetupFromExcel();
                 end;
             }
+            action(DownloadDefaultTemplate)
+            {
+                Caption = 'Download Default Template', Comment = 'de-DE=Standardvorlage herunterladen';
+                ApplicationArea = All;
+                Image = Download;
+
+                trigger OnAction()
+                var
+                    processTemplateLib: Codeunit DMTProcessTemplateLib;
+                    downloadedFile: Codeunit "Temp Blob";
+                    ReportALCode: Text;
+                begin
+                    processTemplateLib.ReadALCode(ReportALCode, Report::"Sales - Shipment");
+                    processTemplateLib.downloadProcessTemplateXLSFromGitHub(downloadedFile);
+                    processTemplateLib.ImportTemplateSetupFromExcel(downloadedFile);
+                end;
+            }
         }
     }
     trigger OnOpenPage()
-    var
-        processTemplateSetup: Record DMTProcessTemplateSetup;
-        downloadedFile: Codeunit "Temp Blob";
-        processTemplateLib: Codeunit DMTProcessTemplateLib;
+    // var
+    //     processTemplateSetup: Record DMTProcessTemplateSetup;
+    //     downloadedFile: Codeunit "Temp Blob";
+    //     processTemplateLib: Codeunit DMTProcessTemplateLib;
     begin
-        if processTemplateSetup.IsEmpty then begin
-            processTemplateLib.downloadProcessTemplateXLSFromGitHub(downloadedFile);
-            processTemplateLib.ImportTemplateSetupFromExcel(downloadedFile);
-        end;
+        // if processTemplateSetup.IsEmpty then begin
+        //     processTemplateLib.downloadProcessTemplateXLSFromGitHub(downloadedFile);
+        //     processTemplateLib.ImportTemplateSetupFromExcel(downloadedFile);
+        // end;
     end;
 
     trigger OnAfterGetCurrRecord()

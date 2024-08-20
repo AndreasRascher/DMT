@@ -402,7 +402,7 @@ codeunit 90013 DMTProcessTemplateLib
         ResponseMessage: HttpResponseMessage;
         InStr: InStream;
         ResponseText: Text;
-        downloadURLTok: Label 'https://github.com/AndreasRascher/DMT/raw/NAV-Upgrade-Helper/DMTNAVUpgradeHelper/ProcessTemplates/DefaultProcessTemplateSetup.xlsx', Locked = true;
+        downloadURLTok: Label 'https://github.com/AndreasRascher/DMT/raw/NAV-Upgrade-Helper/DMTNAVUpgradeHelper/src/ProcessTemplate/DefaultProcessTemplateSetup.bin', Locked = true;
         OutStr: OutStream;
     begin
         downloadedFile.CreateInStream(InStr);
