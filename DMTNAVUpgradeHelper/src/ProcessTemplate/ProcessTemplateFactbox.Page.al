@@ -14,8 +14,8 @@ page 90014 DMTProcessTemplateFactbox
     {
         area(Content)
         {
-            // field(TemplateCodeGlobal; TemplateCodeGlobal) { }
-            // field(LastUpdateTime; LastUpdateTime) { }
+            field(TemplateCodeGlobal; TemplateCodeGlobal) { }
+            field(LastUpdateTime; LastUpdateTime) { }
             repeater(RequirementListView)
             {
                 Visible = IsRequirementListView;
@@ -60,8 +60,8 @@ page 90014 DMTProcessTemplateFactbox
         IsRequirementListView := true;
         IsStepView := false;
         IsReqDataView := false;
-        // templateCodeGlobal := templateCode;
-        // LastUpdateTime := Time;
+        templateCodeGlobal := templateCode;
+        LastUpdateTime := Time;
 
         dataTableMgt.Dispose();
         dataTableMgt.setContext(dataTableMgt.Constant_RequirementList());
@@ -92,6 +92,7 @@ page 90014 DMTProcessTemplateFactbox
 
         Rec.SetRange(Number, 1, dataTableMgt.Count());
         DataTableMgtGlobal := dataTableMgt;
+        if rec.findlast() then;
     end;
 
     internal procedure InitAsStepsView(templateCode: Text; var dataTableMgt: Codeunit DMTDataTableMgt)
@@ -103,8 +104,8 @@ page 90014 DMTProcessTemplateFactbox
         IsRequirementListView := false;
         IsStepView := true;
         IsReqDataView := false;
-        // templateCodeGlobal := templateCode;
-        // LastUpdateTime := Time;
+        templateCodeGlobal := templateCode;
+        LastUpdateTime := Time;
 
         dataTableMgt.Dispose();
         dataTableMgt.setContext(dataTableMgt.Constant_StepsView());
@@ -140,8 +141,8 @@ page 90014 DMTProcessTemplateFactbox
         IsRequirementListView := false;
         IsStepView := false;
         IsReqDataView := true;
-        // templateCodeGlobal := templateCode;
-        // LastUpdateTime := Time;
+        templateCodeGlobal := templateCode;
+        LastUpdateTime := Time;
 
         dataTableMgt.Dispose();
         dataTableMgt.setContext(dataTableMgt.Constant_ReqData());
@@ -158,6 +159,7 @@ page 90014 DMTProcessTemplateFactbox
                 tableCaptionText := Format(processTemplateSetup."Target Table ID");
                 if TableMetadata.Get(processTemplateSetup."Target Table ID") then begin
                     tableCaptionText := TableMetadata."Caption";
+                    Clear(recordRef);
                     recordRef.Open(processTemplateSetup."Target Table ID");
                     recordFound := recordRef.FindFirst();
                     if processTemplateSetup."Field Name" = '' then
@@ -194,7 +196,7 @@ page 90014 DMTProcessTemplateFactbox
     procedure doUpdate()
     begin
         // Hinweis: Update der Factboxen mit Update(false) von der 1 zur 2. Zeile funktioniert nicht, wenn es mehr als 2 Zeilen gibt
-        // CurrPage.Update(false);
+        CurrPage.Update(false);
         CurrPage.Activate(true);
     end;
 
@@ -202,6 +204,6 @@ page 90014 DMTProcessTemplateFactbox
         DataTableMgtGlobal: Codeunit DMTDataTableMgt;
         IsStepView, IsRequirementListView, IsReqDataView : Boolean;
         lineStyle: Text;
-    // templateCodeGlobal: Text;
-    // LastUpdateTime: Time;
+        templateCodeGlobal: Text;
+        LastUpdateTime: Time;
 }
