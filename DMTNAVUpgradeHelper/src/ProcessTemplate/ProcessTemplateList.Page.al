@@ -23,12 +23,22 @@ page 90012 DMTProcessTemplateList
         }
         area(Factboxes)
         {
-            part(ProcessTemplateRequirementFB; DMTProcessTemplateFactbox) { Caption = 'Required Files & Objects', Comment = 'de-DE=Benötigte Dateien & Objekte'; }
-            part(ProcessTemplateDataReqsFB; DMTProcessTemplateFactbox) { Caption = 'Data Requirements', Comment = 'de-DE=Benötigte Daten'; Visible = ProcessTemplateDataReqsFB_Visible; }
+            part(RequiredFilesAndObjectsFB; DMTProcessTemplateFactbox)
+            {
+                Caption = 'Required Files & Objects', Comment = 'de-DE=Benötigte Dateien & Objekte';
+                SubPageLink = Number = field(RequiredFilesAndObjectsFilter);
+            }
+            part(ProcessTemplateDataReqsFB; DMTProcessTemplateFactbox)
+            {
+                Caption = 'Data Requirements', Comment = 'de-DE=Benötigte Daten';
+                Visible = ProcessTemplateDataReqsFB_Visible;
+                SubPageLink = Number = field(SetupRequirementsFilter);
+            }
             part(ProcessTemplateStepsFB; DMTProcessTemplateFactbox)
             {
                 Caption = 'Steps', Comment = 'de-DE=Schritte';
-                SubPageLink = Number = field(no) }
+                SubPageLink = Number = field(StepsFilter);
+            }
         }
     }
 
@@ -115,17 +125,17 @@ page 90012 DMTProcessTemplateList
 
     local procedure updateFactBoxes()
     var
-        DataTableMgt_ReqList: Codeunit DMTDataTableMgt;
+        DataTableMgt_ReqFilesAndObjects: Codeunit DMTDataTableMgt;
         DataTableMgt_Steps: Codeunit DMTDataTableMgt;
-        DataTableMgt_DataReq: Codeunit DMTDataTableMgt;
+        DataTableMgt_SetupReqmt: Codeunit DMTDataTableMgt;
     begin
-        CurrPage.ProcessTemplateRequirementFB.Page.doUpdate();
-        CurrPage.ProcessTemplateRequirementFB.Page.InitAsRequirementsList(Rec."Template Code", DataTableMgt_ReqList);
-        CurrPage.ProcessTemplateRequirementFB.Page.doUpdate();
+        CurrPage.RequiredFilesAndObjectsFB.Page.InitAsRequiredFilesAndObjects(Rec."Template Code", DataTableMgt_ReqFilesAndObjects);
         CurrPage.ProcessTemplateStepsFB.Page.InitAsStepsView(Rec."Template Code", DataTableMgt_Steps);
-        CurrPage.ProcessTemplateStepsFB.Page.doUpdate();
-        CurrPage.ProcessTemplateDataReqsFB.Page.InitAsReqData(Rec."Template Code", DataTableMgt_DataReq);
-        CurrPage.ProcessTemplateDataReqsFB.Page.doUpdate();
+        CurrPage.ProcessTemplateDataReqsFB.Page.InitAsReqSetup(Rec."Template Code", DataTableMgt_SetupReqmt);
+        // PagePart.Update or Activate doesnt work, so we have to set the range manually
+        Rec.SetRange(RequiredFilesAndObjectsFilter, 1, DataTableMgt_ReqFilesAndObjects.Count());
+        Rec.SetRange(SetupRequirementsFilter, 1, DataTableMgt_SetupReqmt.Count());
+        Rec.SetRange(StepsFilter, 1, DataTableMgt_Steps.Count());
     end;
 
     var

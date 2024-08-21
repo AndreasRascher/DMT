@@ -14,8 +14,8 @@ page 90014 DMTProcessTemplateFactbox
     {
         area(Content)
         {
-            field(TemplateCodeGlobal; TemplateCodeGlobal) { }
-            field(LastUpdateTime; LastUpdateTime) { }
+            // field(TemplateCodeGlobal; TemplateCodeGlobal) { }
+            // field(LastUpdateTime; LastUpdateTime) { }
             repeater(RequirementListView)
             {
                 Visible = IsRequirementListView;
@@ -51,7 +51,7 @@ page 90014 DMTProcessTemplateFactbox
     end;
 
 
-    internal procedure InitAsRequirementsList(templateCode: Text; var dataTableMgt: Codeunit DMTDataTableMgt)
+    internal procedure InitAsRequiredFilesAndObjects(templateCode: Text; var dataTableMgt: Codeunit DMTDataTableMgt)
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
         lineStyleNew: Text;
@@ -125,7 +125,7 @@ page 90014 DMTProcessTemplateFactbox
         // CurrPage.Update(false);
     end;
 
-    internal procedure InitAsReqData(templateCode: Text; var dataTableMgt: Codeunit DMTDataTableMgt)
+    internal procedure InitAsReqSetup(templateCode: Text; var dataTableMgt: Codeunit DMTDataTableMgt)
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
         TableMetadata: Record "Table Metadata";

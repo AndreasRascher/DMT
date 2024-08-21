@@ -258,15 +258,15 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Benötigte Daten</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateList - Control ProcessTemplateDataReqsFB - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2371400208 - Control 3655853132 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Required Files &amp; Objects</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Benötigte Dateien &amp; Objekte</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateList - Control ProcessTemplateRequirementFB - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 2371400208 - Control 936007610 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Steps</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Schritte</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateList - Control ProcessTemplateStepsFB - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2371400208 - Control 4090178495 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Required Files &amp; Objects</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Benötigte Dateien &amp; Objekte</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateList - Control RequiredFilesAndObjectsFB - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2371400208 - Action 2014718948 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Transfer to Processing Plan</source>
