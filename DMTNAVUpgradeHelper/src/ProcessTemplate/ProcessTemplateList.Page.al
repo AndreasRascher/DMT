@@ -25,7 +25,10 @@ page 90012 DMTProcessTemplateList
         {
             part(ProcessTemplateRequirementFB; DMTProcessTemplateFactbox) { Caption = 'Required Files & Objects', Comment = 'de-DE=Benötigte Dateien & Objekte'; }
             part(ProcessTemplateDataReqsFB; DMTProcessTemplateFactbox) { Caption = 'Data Requirements', Comment = 'de-DE=Benötigte Daten'; Visible = ProcessTemplateDataReqsFB_Visible; }
-            part(ProcessTemplateStepsFB; DMTProcessTemplateFactbox) { Caption = 'Steps', Comment = 'de-DE=Schritte'; }
+            part(ProcessTemplateStepsFB; DMTProcessTemplateFactbox)
+            {
+                Caption = 'Steps', Comment = 'de-DE=Schritte';
+                SubPageLink = Number = field(no) }
         }
     }
 
