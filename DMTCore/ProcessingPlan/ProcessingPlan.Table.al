@@ -58,9 +58,9 @@ table 50149 DMTProcessingPlan
         field(12; Description; Text[250]) { Caption = 'Description', Comment = 'de-DE=Beschreibung'; }
         field(30; "Source Table No."; Integer)
         {
-            Caption = 'Source Table No.', Comment = 'de-DE=Herkunftstabellennr.';
+            Caption = 'Source Table No. (Codeunit)', Comment = 'de-DE=Herkunftstabellennr. (Codeunit)';
             BlankZero = true;
-            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table), "App Package ID" = field("Current App Package ID Filter"));
+            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
         }
         field(31; "Current App Package ID Filter"; Guid) { Caption = 'Current Package ID Filter', Locked = true; FieldClass = FlowFilter; }
         field(32; "Source Table Filter"; Blob) { Caption = 'Source Table Filter Blob', Locked = true; }
@@ -97,7 +97,7 @@ table 50149 DMTProcessingPlan
         if CurrView <> '' then
             BufferRef.SetView(CurrView);
         if FPBuilder.RunModal(BufferRef, ImportConfigHeader) then begin
-            SaveSourceTableFilter(BufferRef.GetView());
+            SaveSourceTableFilter(BufferRef.GetView(false));
         end;
     end;
 
@@ -216,7 +216,8 @@ table 50149 DMTProcessingPlan
                     exit(true);
                 end;
             else begin
-                ImportConfigHeader.Get(Rec.ID);
+                if not ImportConfigHeader.Get(Rec.ID) then
+                    exit(false);
                 ImportConfigHeader.BufferTableMgt().InitBufferRef(SourceRef);
                 exit(true)
             end;
@@ -334,13 +335,6 @@ table 50149 DMTProcessingPlan
 
         TmpImportConfigLine.Copy(TempImportConfigLine2, true);
         LineCount := TmpImportConfigLine.Count;
-    end;
-
-    procedure ApplySourceTableFilter(var Ref: RecordRef) OK: Boolean
-    begin
-        OK := true;
-        if Rec.ReadSourceTableView() = '' then exit(false);
-        Ref.SetView(Rec.ReadSourceTableView());
     end;
 
     internal procedure InitFlowFilters()

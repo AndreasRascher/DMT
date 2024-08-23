@@ -23,4 +23,9 @@ codeunit 50044 DMTDefaultSourceFileImportImpl implements ISourceFileImport
         if ColCaptionsList <> '' then
             Message(TooLargeValuesHaveBeenCutOffMsg, sourceFileStorage.Name, ColCaptionsList);
     end;
+
+    procedure ImportSelectedRows(importConfigHeader: Record DMTImportConfigHeader; fromLineNo: Integer; toLineLineNo: Integer)
+    begin
+        Error('ISourceFileImport "ImportSelectedRows" not implemented. Data Layout Type "%1"', importConfigHeader.GetDataLayout().SourceFileFormat);
+    end;
 }

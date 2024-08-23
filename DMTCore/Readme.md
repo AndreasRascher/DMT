@@ -1,5 +1,7 @@
 # DMT - Data Migration Tool #
 
+[doc/readme.md](/../../edit/master/doc/readme.md)
+
 ## Features ##
 - Read structured files (CSV or XLSX)
 - Map source columns to target columns

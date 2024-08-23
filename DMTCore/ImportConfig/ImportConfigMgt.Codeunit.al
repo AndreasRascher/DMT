@@ -390,4 +390,43 @@ codeunit 50042 DMTImportConfigMgt
             if Field.FieldName = 'Image' then;
         if Field.Type in [Field.Type::Media, Field.Type::MediaSet] then exit(false);
     end;
+
+    procedure AddImportConfigForSelectedSourceFiles(var tempSourceFileStorage_SELECTED: Record DMTSourceFileStorage temporary)
+    var
+        importConfigHeader: Record DMTImportConfigHeader;
+        DMTSetup: Record DMTSetup;
+        ImportConfigMgt: Codeunit DMTImportConfigMgt;
+        migrationLib: Codeunit DMTMigrationLib;
+        NAVExportFileNamesDict: Dictionary of [Text, Integer];
+        TargetTableID: Integer;
+    begin
+        DMTSetup.GetRecordOnce();
+        if DMTSetup.IsNAVExport() then
+            migrationLib.CreateNAVExportFileNameDictionary(NAVExportFileNamesDict);
+
+        tempSourceFileStorage_SELECTED.FindSet();
+        repeat
+            if not importConfigHeader.filterBy(tempSourceFileStorage_SELECTED) then begin
+                // Assign Source File
+                Clear(importConfigHeader);
+                importConfigHeader."Source File ID" := tempSourceFileStorage_SELECTED."File ID";
+                importConfigHeader."Source File Name" := tempSourceFileStorage_SELECTED.Name;
+                importConfigHeader.Insert(true);
+                // Assign Target Table
+                if DMTSetup.IsNAVExport() then
+                    if not NAVExportFileNamesDict.Get(tempSourceFileStorage_SELECTED.Name, TargetTableID) then
+                        Clear(TargetTableID);
+            end;
+
+            if DMTSetup.IsNAVExport() and (TargetTableID <> 0) then
+                TargetTableID := migrationLib.HandleObsoleteNAVTargetTable(TargetTableID);
+
+            if TargetTableID <> 0 then begin
+                // validate Target Table to apply known settings from DMTMigrationLibrary
+                importConfigHeader.Validate("Target Table ID", TargetTableID);
+                importConfigHeader.Modify(true);
+                ImportConfigMgt.PageAction_InitImportConfigLine(importConfigHeader.ID);
+            end;
+        until tempSourceFileStorage_SELECTED.Next() = 0;
+    end;
 }

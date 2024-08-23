@@ -11,8 +11,8 @@ tableextension 90011 DMTImportConfigHeader extends DMTImportConfigHeader
                 updateNAVTableFromTableNo();
             end;
         }
-        field(90001; "NAV Src.Table Name"; Text[250]) { Caption = 'NAV Source Table Name'; Editable = false; }
-        field(90002; "NAV Src.Table Caption"; Text[250]) { Caption = 'NAV Source Table Caption'; Editable = false; }
+        field(90001; "NAV Src.Table Name"; Text[250]) { Caption = 'NAV Source Table Name', Comment = 'de-DE=NAV Tabellenname'; Editable = false; }
+        field(90002; "NAV Src.Table Caption"; Text[250]) { Caption = 'NAV Source Table Caption', Comment = 'de-DE=NAV Tabellenbezeichnung'; Editable = false; }
     }
 
     local procedure updateNAVTableFromTableNo()

@@ -89,6 +89,13 @@ codeunit 50041 DMTSourceFileMgt
             exit(false);
         DataCompression.OpenZipArchive(InStr, false, 850); // Codepage 850 - Umlaute in Dateinamem werden sonst nicht richtig dargestellt 
         DataCompression.GetEntryList(EntryList);
+        // TODO: Zeichensatzfehler bei Umlauten in Dateinamen("ä" = "├ñ")
+        // foreach FileNameInArchive in EntryList do begin
+        //     if FileNameInArchive.Contains('├ñ') then begin
+        //         DataCompression.OpenZipArchive(InStr, false);
+        //         DataCompression.GetEntryList(EntryList);
+        //     end;
+        // end;
         foreach FileNameInArchive in EntryList do begin
             Clear(TempBlob);
             TempBlob.CreateOutStream(OStream);

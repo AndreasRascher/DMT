@@ -48,6 +48,8 @@ codeunit 50043 DMTMigrationLib
     /// <param name="KnownValidationType"></param>
     /// <returns></returns>
     local procedure FindKnownUseValidateValue(TargetField: Record Field; var KnownValidationType: Enum DMTFieldValidationType) Found: Boolean
+    // var
+    // DimensionValue: Record "Dimension Value";
     begin
         KnownValidationType := KnownValidationType::AlwaysValidate;
         Found := true;
@@ -74,6 +76,7 @@ codeunit 50043 DMTMigrationLib
             IsMatch(TargetField, Database::Vendor, 'Payment Method Id'),    // ID Values clear the associated field
             IsMatch(TargetField, Database::Vendor, 'Currency Id'),          // ID Values clear the associated field
             IsMatch(TargetField, Database::Contact, 'Company No.'),
+            IsMatch(TargetField, Database::Contact, 'Company Name'),  // Avoid Dialog
             IsMatch(TargetField, Database::Contact, 'First Name'),  // Avoid ProcessNameChange to clear Names
             IsMatch(TargetField, Database::Contact, 'Middle Name'),
             IsMatch(TargetField, Database::Contact, 'Surname'),
@@ -94,7 +97,8 @@ codeunit 50043 DMTMigrationLib
             IsMatch(TargetField, Database::"Extended Text Header", 'All Language Codes'), /* Possible in old version to have Language Code + All Language */
             IsMatch(TargetField, Database::"Interaction Template", 'Language Code (Default)'), /* Avoid confirm */
             IsMatch(TargetField, Database::"Sales Header", 'Bill-to Customer No.'), /* Avoid confirm */
-             IsMatch(TargetField, Database::"Sales Header", 'Sell-to Customer Name'): /* Avoid LookUp Dialog */
+            IsMatch(TargetField, Database::"Sales Header", 'Sell-to Customer Name'), /* Avoid LookUp Dialog */
+            IsMatch(TargetField, Database::"Dimension Value", 'Dimension Value ID'): /* Avoid LookUp Dialog */
                 KnownValidationType := KnownValidationType::AssignWithoutValidate;
             else
                 Found := false;

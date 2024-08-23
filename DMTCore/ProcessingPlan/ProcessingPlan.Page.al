@@ -2,13 +2,13 @@ page 50157 DMTProcessingPlan
 {
     Caption = 'DMT Processing Plan', Comment = 'de-DE=DMT Verarbeitungsplan';
     AdditionalSearchTerms = 'DMT Plan', Locked = true;
-    PageType = List;
+    PageType = Worksheet;
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTable = DMTProcessingPlan;
     AutoSplitKey = true;
     InsertAllowed = false;
-    DeleteAllowed = false;
+    DeleteAllowed = true;
 
     layout
     {
@@ -26,7 +26,13 @@ page 50157 DMTProcessingPlan
                 field(ProcessingTime; Rec."Processing Duration") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(StartTime; Rec.StartTime) { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(Status; Rec.Status) { ApplicationArea = All; StyleExpr = LineStyle; }
-                field("Source Table No."; Rec."Source Table No.") { ApplicationArea = All; StyleExpr = LineStyle; }
+                field("Source Table No."; Rec."Source Table No.")
+                {
+                    ApplicationArea = All;
+                    StyleExpr = LineStyle;
+                    ToolTip = 'Defining the source table no. for which a filter as event is provided for rows of type Codeunit.',
+                    comment = 'de-DE=Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.';
+                }
                 field("Line No."; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
             }
         }
@@ -414,7 +420,7 @@ page 50157 DMTProcessingPlan
 
     procedure GetSelection(var TempProcessingPlan_SelectedNew: Record DMTProcessingPlan temporary) HasLines: Boolean
     var
-        ProcessingPlan: Record DMTProcessingPlan;
+        ProcessingPlan, ProcessingPlan_GroupElements : Record DMTProcessingPlan;
         Debug: Integer;
     begin
         Clear(TempProcessingPlan_SelectedNew);
@@ -426,6 +432,24 @@ page 50157 DMTProcessingPlan
         Debug := ProcessingPlan.Count;
         ProcessingPlan.CopyToTemp(TempProcessingPlan_SelectedNew);
         HasLines := TempProcessingPlan_SelectedNew.FindFirst();
+        // add lines if only group is selected
+        if ProcessingPlan.Count = 1 then
+            if ProcessingPlan.Type = ProcessingPlan.Type::Group then begin
+                ProcessingPlan_GroupElements := ProcessingPlan;
+                while ProcessingPlan_GroupElements.Next() <> 0 do begin
+                    // not indented lines
+                    if ProcessingPlan.Indentation = ProcessingPlan_GroupElements.Indentation then
+                        break;
+                    // next group line
+                    if ProcessingPlan_GroupElements.Type = ProcessingPlan.Type::Group then
+                        break;
+                    // insert group elements
+                    if not TempProcessingPlan_SelectedNew.Get(ProcessingPlan_GroupElements.RecordId) then begin
+                        TempProcessingPlan_SelectedNew := ProcessingPlan_GroupElements;
+                        TempProcessingPlan_SelectedNew.Insert(false);
+                    end;
+                end;
+            end;
     end;
 
     internal procedure IndentLines(var TempProcessingPlan: Record DMTProcessingPlan temporary; Direction: Integer)

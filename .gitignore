@@ -1,14 +1,11 @@
 DMTCore/.vscode/rad.json
-DMTCodeGenerator/.vscode/rad.json
 DMTOnPrem/.vscode/rad.json
+DMTNAVUpgradeHelper/.vscode/rad.json
 
 DMTCore/*.app
-DMTCodeGenerator/*.app
 DMTOnPrem/*.app
 DMTTest/*.app
+DMTNAVUpgradeHelper/*.app
 
 Workspace/.alpackages/*
 Workspace/*.app
-
-
-DMTCodeGenerator/generatedObjects/*.al
