@@ -73,20 +73,6 @@ codeunit 90022 DMTTestLibrary
         sourceFileStorage.TestField(Size);
     end;
 
-    internal procedure CreateOrGetDataLayout(var dataLayout: Record DMTDataLayout; dataLayoutName: Text) OK: Boolean
-    var
-        dataLayouts: page DMTDataLayouts;
-    begin
-        dataLayouts.InsertPresetDataLayouts();
-        dataLayout.SetRange(Name, dataLayoutName);
-        OK := dataLayout.FindFirst();
-    end;
-
-    internal procedure GetDefaultNAVDMTLayout() dataLayout: Record DMTDataLayout
-    begin
-        CreateOrGetDataLayout(dataLayout, 'DMT NAV CSV Export');
-    end;
-
     internal procedure BuildDataTable(var dataTable: List of [List of [Text]]; rowNo: Integer; colNo: Integer; content: Decimal)
     begin
         BuildDataTable(dataTable, rowNo, colNo, Format(content));
@@ -244,5 +230,10 @@ codeunit 90022 DMTTestLibrary
         replacementAssignments.SetRange("Line Type", replacementAssignments."Line Type"::Rule);
         if replacementAssignments.IsEmpty() then
             Error('No replacement rules found for the replacement code');
+    end;
+
+    internal procedure GetDefaultNAVDMTLayout() dataLayout: Record DMTDataLayout
+    begin
+        dataLayout := dataLayout.GetDefaultNAVDMTLayout();
     end;
 }

@@ -12,12 +12,16 @@
 			"name": "APP OnPrem"
 		},
 		{
-			"path": "..\\DMTCodeGenerator",
-			"name": "APP CodeGenerator"
+			"path": "..\\DMTNAVUpgradeHelper",
+			"name": "APP NAVUpgradeHelper"
 		},
 		{
 			"path": "..\\DMTTest",
 			"name": "APP Tests"
+		},
+		{
+			"path": "..\\Docs",
+			"name": "Docs"
 		}
 	],
 	"settings": {
@@ -147,5 +151,14 @@
 		"editor.stickyScroll.maxLineCount": 5,
 		"git.openRepositoryInParentFolders": "prompt",
 		"alOutline.addToolTipsToPageFields": false
+	}
+	,
+	"extensions": {
+		"recommendations": [
+			"rvanbekkum.xliff-sync",
+			"yzane.markdown-pdf",
+			"andrzejzwierzchowski.al-code-outline",
+			"vscode-icons-team.vscode-icons"
+		]
 	}
 }

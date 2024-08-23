@@ -47,4 +47,17 @@ codeunit 91005 DMTExcelFileImportImpl implements ISourceFileImport
             Error(GetLastErrorText());
         HeaderLine := excelReader.GetHeadlineColumnValues(FirstRowWithValues);
     end;
+
+    procedure ImportSelectedRows(importConfigHeader: Record DMTImportConfigHeader; fromLineNo: Integer; toLineLineNo: Integer)
+    var
+        sourceFileStorage: Record DMTSourceFileStorage;
+        excelReader: Codeunit DMTExcelReader;
+    begin
+        sourceFileStorage := importConfigHeader.GetSourceFileStorage();
+        if fromLineNo = 0 then
+            excelReader.InitReadRows(1, 1)
+        else
+            excelReader.InitReadRows(fromLineNo, toLineLineNo);
+        excelReader.InitImportToGenBuffer(sourceFileStorage, importConfigHeader);
+    end;
 }

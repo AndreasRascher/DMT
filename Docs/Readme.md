@@ -1,6 +1,6 @@
 # DMT - Data Migration Tool #
 
-[doc/readme.md](/../../edit/master/doc/readme.md)
+[a relative link](Guides/02%20-%20Empfohlene%20Vorgehensweise.md)
 
 ## Features ##
 - Read structured files (CSV or XLSX)

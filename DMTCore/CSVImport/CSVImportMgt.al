@@ -60,6 +60,22 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
         HeaderLine := CSVReader.GetHeadlineColumnValues(FirstRowWithValues);
     end;
 
+    procedure ImportSelectedRows(importConfigHeader: Record DMTImportConfigHeader; fromLineNo: Integer; toLineLineNo: Integer)
+    var
+        sourceFileStorage: Record DMTSourceFileStorage;
+        CSVReader: XmlPort DMTCSVReader;
+    begin
+        sourceFileStorage := importConfigHeader.GetSourceFileStorage();
+        PrepareXMLPortWithCSVOptionsAndSourceFile(sourceFileStorage, importConfigHeader.GetDataLayout(), CSVReader);
+
+        if fromLineNo = 0 then
+            CSVReader.InitReadRows(1, 1)
+        else
+            CSVReader.InitReadRows(fromLineNo, toLineLineNo);
+        CSVReader.InitImportToGenBuffer(sourceFileStorage, importConfigHeader);
+        CSVReader.Import();
+    end;
+
     local procedure PrepareXMLPortWithCSVOptionsAndSourceFile(SourceFileStorage: Record DMTSourceFileStorage; dataLayout: Record DMTDataLayout; var CSVReader: XmlPort DMTCSVReader)
     begin
         SourceFileStorage.TestField(Name);

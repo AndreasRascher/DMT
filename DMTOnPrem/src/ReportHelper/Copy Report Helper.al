@@ -378,6 +378,5 @@ page 90001 "Copy Report Helper"
     end;
 
     var
-        [InDataSet]
         addSetDataGetDataCustomCodeOption, removeALWhitespaceOption : Boolean;
 }

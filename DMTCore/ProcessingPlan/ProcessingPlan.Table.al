@@ -97,7 +97,7 @@ table 91009 DMTProcessingPlan
         if CurrView <> '' then
             BufferRef.SetView(CurrView);
         if FPBuilder.RunModal(BufferRef, ImportConfigHeader) then begin
-            SaveSourceTableFilter(BufferRef.GetView());
+            SaveSourceTableFilter(BufferRef.GetView(false));
         end;
     end;
 
@@ -216,7 +216,8 @@ table 91009 DMTProcessingPlan
                     exit(true);
                 end;
             else begin
-                ImportConfigHeader.Get(Rec.ID);
+                if not ImportConfigHeader.Get(Rec.ID) then
+                    exit(false);
                 ImportConfigHeader.BufferTableMgt().InitBufferRef(SourceRef);
                 exit(true)
             end;

@@ -1,6 +1,6 @@
 page 91014 DMTImportConfigFactBox
 {
-    Caption = 'ImportConfig FactBox';
+    Caption = 'ImportConfig FactBox', Locked = true;
     PageType = ListPart;
     SourceTable = DMTLogEntry;
     InsertAllowed = false;
