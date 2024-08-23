@@ -72,8 +72,8 @@ table 91003 DMTImportConfigHeader
         }
         field(44; BufferTableIDStyle; Text[15]) { Caption = 'BufferTableIDStyle', Locked = true; Editable = false; }
         #region Import and Processing Options
-        field(50; LastUsedUpdateFieldsSelection; Blob) { }
-        field(51; LastUsedFilter; Blob) { }
+        field(50; LastUsedUpdateFieldsSelection; Blob) { Caption = 'LastUsedUpdateFieldsSelection', Locked = true; }
+        field(51; LastUsedFilter; Blob) { Caption = 'LastUsedFilter', Locked = true; }
         field(52; "Use OnInsert Trigger"; Boolean) { Caption = 'Use OnInsert Trigger', Comment = 'de-DE=OnInsert Trigger verwenden'; InitValue = true; }
         field(53; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
         field(54; "Skip Records with User Changes"; Boolean) { Caption = 'Skip Records with User Changes', Comment = 'de-DE=Datensätze mit Nutzeränderung überspringen'; }

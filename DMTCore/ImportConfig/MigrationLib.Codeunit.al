@@ -48,8 +48,8 @@ codeunit 91003 DMTMigrationLib
     /// <param name="KnownValidationType"></param>
     /// <returns></returns>
     local procedure FindKnownUseValidateValue(TargetField: Record Field; var KnownValidationType: Enum DMTFieldValidationType) Found: Boolean
-    var
-        DimensionValue: Record "Dimension Value";
+    // var
+    // DimensionValue: Record "Dimension Value";
     begin
         KnownValidationType := KnownValidationType::AlwaysValidate;
         Found := true;

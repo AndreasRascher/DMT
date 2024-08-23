@@ -57,9 +57,9 @@ xmlport 90011 DMTFieldBufferImport
             {
                 group(Umgebung)
                 {
-                    Caption = 'Environment';
-                    field(GetDatabaseNameCtrl; GetDatabaseName()) { Caption = 'Database'; ApplicationArea = All; }
-                    field(COMPANYNAME; CompanyName) { Caption = 'Company'; ApplicationArea = All; }
+                    Caption = 'Environment', Comment = 'de-DE=Umgebung';
+                    field(GetDatabaseNameCtrl; GetDatabaseName()) { Caption = 'Database', Comment = 'de-DE=Datenbank'; ApplicationArea = All; }
+                    field(COMPANYNAME; CompanyName) { Caption = 'Company', Comment = 'de-DE=Mandant'; ApplicationArea = All; }
                 }
             }
         }
@@ -67,7 +67,7 @@ xmlport 90011 DMTFieldBufferImport
 
     trigger OnPostXmlPort()
     var
-        LinesProcessedMsg: Label '%1 Buffer\%2 lines imported';
+        LinesProcessedMsg: Label '%1 Buffer\%2 lines imported', Comment = 'de-DE=%1 Puffer\%2 Zeilen importiert';
     begin
         if currXMLport.Filename <> '' then //only for manual excecution
             Message(LinesProcessedMsg, Field.TableCaption, ReceivedLinesCount);

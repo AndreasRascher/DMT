@@ -10,16 +10,16 @@ page 90013 DMTConfirm
         {
             group(Options)
             {
-                Caption = 'Optionen';
+                Caption = 'Option', Comment = 'de-DE=Optionen';
                 field(DownloadURL; URL)
                 {
-                    Caption = 'Download URL';
+                    Caption = 'Download URL', Locked = true;
                     ApplicationArea = All;
                 }
                 field(ImportOption; ImportOption)
                 {
                     ApplicationArea = All;
-                    Caption = 'Option';
+                    Caption = 'Import Option', comment = 'de-DE=Importoptionen';
                     OptionCaption = 'Replace entries,Add entries', Comment = 'de-DE=Einträge ersetzen,Neue Einträge hinzufügen';
                 }
 
