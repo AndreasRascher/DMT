@@ -9,12 +9,13 @@ codeunit 90028 ProzessTemplateTest
     var
         processTemplateLib: codeunit DMTProcessTemplateLib;
         downloadedFile: Codeunit "Temp Blob";
+        importOptionNew: Option "Replace entries","Add entries";
     begin
         // [GIVEN] Download URL exists
         // [WHEN] When downloading the file
         // [THEN] no error occurs
         Initialize();
-        processTemplateLib.downloadProcessTemplateXLSFromGitHub(downloadedFile);
+        processTemplateLib.downloadProcessTemplateXLSFromGitHub(downloadedFile, importOptionNew, true);
     end;
 
     local procedure Initialize()

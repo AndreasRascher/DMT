@@ -81,7 +81,7 @@ page 90015 DMTProcessTemplateSetup
                     downloadedFile: Codeunit "Temp Blob";
                     importOption: Option "Replace entries","Add entries";
                 begin
-                    processTemplateLib.downloadProcessTemplateXLSFromGitHub(downloadedFile, importOption);
+                    processTemplateLib.downloadProcessTemplateXLSFromGitHub(downloadedFile, importOption, false);
                     processTemplateLib.ImportTemplateSetupFromExcel(downloadedFile, importOption);
                 end;
             }

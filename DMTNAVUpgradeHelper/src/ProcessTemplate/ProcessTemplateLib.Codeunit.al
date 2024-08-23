@@ -395,7 +395,7 @@ codeunit 90013 DMTProcessTemplateLib
         until processTemplateSetup.Next() = 0;
     end;
 
-    procedure downloadProcessTemplateXLSFromGitHub(var downloadedFile: Codeunit "Temp Blob"; var importOptionNew: Option "Replace entries","Add entries")
+    procedure downloadProcessTemplateXLSFromGitHub(var downloadedFile: Codeunit "Temp Blob"; var importOptionNew: Option "Replace entries","Add entries"; HideDialog: Boolean)
     var
         DMTReqURL: Page DMTConfirm;
         Client: HttpClient;
@@ -405,9 +405,12 @@ codeunit 90013 DMTProcessTemplateLib
         downloadURLTok: Label 'https://github.com/AndreasRascher/DMT/raw/NAV-Upgrade-Helper/DMTNAVUpgradeHelper/src/ProcessTemplate/DefaultProcessTemplateSetup.xlsx', Locked = true;
         OutStr: OutStream;
     begin
-        DMTReqURL.SetURL(downloadURLTok);
-        DMTReqURL.RunModal();
-        importOptionNew := DMTReqURL.GetImportOption();
+        importOptionNew := importOptionNew::"Replace entries";
+        if not HideDialog then begin
+            DMTReqURL.SetURL(downloadURLTok);
+            DMTReqURL.RunModal();
+            importOptionNew := DMTReqURL.GetImportOption();
+        end;
         downloadedFile.CreateInStream(InStr);
         // Client.Get(DMTReqURL.GetURL(), ResponseMessage);
         if not Client.Get(DMTReqURL.GetURL(), ResponseMessage) then begin
