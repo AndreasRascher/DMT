@@ -2,7 +2,7 @@
   "id": "9f7ca7e4-6acb-4f40-b403-bbbdcb288ada",
   "name": "DMT NAV Upgrade Helper",
   "publisher": "Andreas Rascher",
-  "version": "1.0.0.0",
+  "version": "24.0.0.24082301",
   "brief": "",
   "description": "Move your NAV data to Business Central.\r\n- Create buffer tables and XMLPorts\r\n- Use process templates to integrate your data in the correct order",
   "privacyStatement": "",
