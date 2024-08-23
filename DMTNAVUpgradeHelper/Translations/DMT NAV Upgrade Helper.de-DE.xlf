@@ -219,6 +219,30 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCode - Control TargetRecVarName - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2076196089 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Optionen</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control Options - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2076196089 - Control 349474617 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Download URL</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control DownloadURL - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2076196089 - Control 652589522 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Option</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control ImportOption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2076196089 - Control 652589522 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Replace entries,Add entries</source>
+          <target state="translated">Einträge ersetzen,Neue Einträge hinzufügen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Einträge ersetzen,Neue Einträge hinzufügen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control ImportOption - Property OptionCaption</note>
+        </trans-unit>
         <trans-unit id="Page 1270938733 - Control 4292991650 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Requirements</source>
           <target state="translated">Erforderliche Daten</target>
@@ -285,17 +309,17 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Benötigte Daten</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateList - Control ProcessTemplateDataReqsFB - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2371400208 - Control 3655853132 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Required Files &amp; Objects</source>
-          <target state="translated">Benötigte Dateien &amp; Objekte</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Benötigte Dateien &amp; Objekte</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateList - Control ProcessTemplateRequirementFB - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 2371400208 - Control 936007610 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Steps</source>
           <target state="translated">Schritte</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Schritte</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateList - Control ProcessTemplateStepsFB - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2371400208 - Control 4090178495 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Required Files &amp; Objects</source>
+          <target state="translated">Benötigte Dateien &amp; Objekte</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Benötigte Dateien &amp; Objekte</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateList - Control RequiredFilesAndObjectsFB - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2371400208 - Action 2014718948 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Transfer to Processing Plan</source>
