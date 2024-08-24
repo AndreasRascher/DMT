@@ -590,5 +590,26 @@ codeunit 90013 DMTProcessTemplateLib
         end;
     end;
 
+    procedure getNAVTableIDFilter(var NAVTableFilter: Text; templateCode: Code[150]) HasFilter: Boolean
+    var
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+        tempCollectedNumbers: Record Integer temporary;
+    begin
+        Clear(NAVTableFilter);
+        processTemplateSetup.SetRange("Template Code", templateCode);
+        if processTemplateSetup.FindSet(false) then
+            repeat
+                if processTemplateSetup."NAV Source Table No." <> 0 then begin
+                    tempCollectedNumbers.Number := processTemplateSetup."NAV Source Table No.";
+                    if tempCollectedNumbers.Insert(false) then;
+                end;
+            until processTemplateSetup.Next() = 0;
+        if tempCollectedNumbers.FindSet() then
+            repeat
+                NAVTableFilter += Format(tempCollectedNumbers.Number) + '|';
+            until tempCollectedNumbers.Next() = 0;
+        NAVTableFilter := NAVTableFilter.TrimEnd('|');
+        HasFilter := NAVTableFilter <> '';
+    end;
 
 }

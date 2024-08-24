@@ -23,7 +23,6 @@ codeunit 90024 SourceFileStorageTests
         sourceFileMgt: Codeunit DMTSourceFileMgt;
         dataTableHelper: Codeunit dataTableHelper;
         fileBlob1, fileBlob2 : Codeunit "Temp Blob";
-        iStr: InStream;
         fileID1, fileID2 : Integer;
     begin
         // [GIVEN] DMT Setup exists
@@ -42,10 +41,8 @@ codeunit 90024 SourceFileStorageTests
         dataTableHelper.WriteDataTableToFileBlob(fileBlob2);
 
         // [WHEN] Adding a file to the source file storage and then adding another file with the same name
-        fileBlob1.CreateInStream(iStr);
-        fileID1 := sourceFileMgt.AddFileToStorage('ExtTextHeader.csv', iStr);
-        fileBlob2.CreateInStream(iStr);
-        fileID2 := sourceFileMgt.AddFileToStorage('ExtTextHeader.csv', iStr);
+        fileID1 := sourceFileMgt.AddFileToStorage('ExtTextHeader.csv', fileBlob1);
+        fileID2 := sourceFileMgt.AddFileToStorage('ExtTextHeader.csv', fileBlob2);
         if fileID1 <> fileID2 then
             error('The file was not overwritten');
     end;

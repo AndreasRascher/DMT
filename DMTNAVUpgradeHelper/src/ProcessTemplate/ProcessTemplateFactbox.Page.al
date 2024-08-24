@@ -16,6 +16,12 @@ page 90014 DMTProcessTemplateFactbox
         {
             // field(TemplateCodeGlobal; TemplateCodeGlobal) { }
             // field(LastUpdateTime; LastUpdateTime) { }
+            group(NAVTableFilterGroup)
+            {
+                ShowCaption = false;
+                Visible = NAVTableFilterVisible;
+                field(NAVTableFilter; NAVTableFilter) { Caption = 'Table Filter', Comment = 'de-DE=Tabellenfilter'; }
+            }
             repeater(RequirementListView)
             {
                 Visible = IsRequirementListView;
@@ -36,11 +42,30 @@ page 90014 DMTProcessTemplateFactbox
             }
             repeater(ReqData)
             {
-                Visible = IsReqDataView;
-                Enabled = IsReqDataView;
+                Visible = IsReqSetupView;
+                Enabled = IsReqSetupView;
                 Caption = 'Data Requirements', Comment = 'de-DE=Erforderliche Daten';
                 field("Target Table Caption"; DataTableMgtGlobal.Get('Table', Rec.Number, DataTableMgtGlobal.Constant_ReqData())) { Caption = 'Table', Comment = 'de-DE=Tabelle'; ApplicationArea = All; StyleExpr = lineStyle; }
                 field("Field Name"; DataTableMgtGlobal.Get('Field', Rec.Number, DataTableMgtGlobal.Constant_ReqData())) { Caption = 'Field Name', Comment = 'de-DE=Feldname'; ApplicationArea = All; StyleExpr = lineStyle; }
+            }
+        }
+    }
+    actions
+    {
+        area(Processing)
+        {
+            action(UploadFile)
+            {
+                Visible = isRequirementListView;
+                Image = MoveUp;
+                Caption = 'Upload Source File', Comment = 'de-DE=Quelldatei hochladen';
+                ApplicationArea = All;
+                trigger OnAction()
+                var
+                    SourceFileMgt: Codeunit DMTSourceFileMgt;
+                begin
+                    SourceFileMgt.UploadFileIntoFileStorage();
+                end;
             }
         }
     }
@@ -51,15 +76,17 @@ page 90014 DMTProcessTemplateFactbox
     end;
 
 
-    internal procedure InitAsRequiredFilesAndObjects(templateCode: Text; var dataTableMgt: Codeunit DMTDataTableMgt)
+    internal procedure InitAsRequiredFilesAndObjects(templateCode: Code[150]; var dataTableMgt: Codeunit DMTDataTableMgt)
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
+        processTemplateLib: Codeunit DMTProcessTemplateLib;
         lineStyleNew: Text;
         addedRequirements: List of [Text];
     begin
+        NAVTableFilterVisible := processTemplateLib.getNAVTableIDFilter(NAVTableFilter, templateCode);
         IsRequirementListView := true;
         IsStepView := false;
-        IsReqDataView := false;
+        IsReqSetupView := false;
         templateCodeGlobal := templateCode;
         LastUpdateTime := Time;
 
@@ -101,9 +128,10 @@ page 90014 DMTProcessTemplateFactbox
         processingPlanType: Enum DMTProcessingPlanType;
         lineStyleNew: Text;
     begin
+        NAVTableFilterVisible := false;
         IsRequirementListView := false;
         IsStepView := true;
-        IsReqDataView := false;
+        IsReqSetupView := false;
         templateCodeGlobal := templateCode;
         LastUpdateTime := Time;
 
@@ -138,9 +166,10 @@ page 90014 DMTProcessTemplateFactbox
         tableCaptionText: Text;
         lineStyleNew: Text;
     begin
+        NAVTableFilterVisible := false;
         IsRequirementListView := false;
         IsStepView := false;
-        IsReqDataView := true;
+        IsReqSetupView := true;
         templateCodeGlobal := templateCode;
         LastUpdateTime := Time;
 
@@ -193,17 +222,10 @@ page 90014 DMTProcessTemplateFactbox
             lineStyleNew := Format(Enum::DMTFieldStyle::"Bold + Green");
     end;
 
-    procedure doUpdate()
-    begin
-        // Hinweis: Update der Factboxen mit Update(false) von der 1 zur 2. Zeile funktioniert nicht, wenn es mehr als 2 Zeilen gibt
-        CurrPage.Update(false);
-        CurrPage.Activate(true);
-    end;
-
     var
         DataTableMgtGlobal: Codeunit DMTDataTableMgt;
-        IsStepView, IsRequirementListView, IsReqDataView : Boolean;
-        lineStyle: Text;
+        IsStepView, IsRequirementListView, IsReqSetupView, NAVTableFilterVisible : Boolean;
+        lineStyle, NAVTableFilter : Text;
         templateCodeGlobal: Text;
         LastUpdateTime: Time;
 }

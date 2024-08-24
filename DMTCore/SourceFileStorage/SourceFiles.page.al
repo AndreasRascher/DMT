@@ -92,8 +92,7 @@ page 91005 DMTSourceFiles
                         TempBlob.CreateOutStream(OStr);
                         CopyStream(OStr, IStr);
                         Length := TempBlob.Length();
-                        TempBlob.CreateInStream(IStr);
-                        sourceFileMgt.AddFileToStorage(WebDAVFileBrowser.getSetSelectedRecord().Name, IStr);
+                        sourceFileMgt.AddFileToStorage(WebDAVFileBrowser.getSetSelectedRecord().Name, TempBlob);
                     end;
                 end;
             }

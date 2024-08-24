@@ -237,6 +237,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Einträge ersetzen,Neue Einträge hinzufügen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control ImportOption - Property OptionCaption</note>
         </trans-unit>
+        <trans-unit id="Page 1270938733 - Control 1481971033 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Table Filter</source>
+          <target state="translated">Tabellenfilter</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Tabellenfilter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateFactbox - Control NAVTableFilter - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1270938733 - Control 4292991650 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Requirements</source>
           <target state="translated">Erforderliche Daten</target>
@@ -290,6 +296,12 @@
           <target state="translated">Name</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Name</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateFactbox - Control Step Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1270938733 - Action 1139572727 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Upload Source File</source>
+          <target state="translated">Quelldatei hochladen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Quelldatei hochladen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessTemplateFactbox - Action UploadFile - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2371400208 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Process Templates</source>

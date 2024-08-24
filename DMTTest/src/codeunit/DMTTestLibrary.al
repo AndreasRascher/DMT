@@ -65,11 +65,9 @@ codeunit 90022 DMTTestLibrary
     internal procedure AddFileToSourceFileStorage(var sourceFileStorage: Record DMTSourceFileStorage; fileNameWithExtension: Text; DMTDataLayout: Record DMTDataLayout; var TempBlob: Codeunit "Temp Blob") OK: Boolean
     var
         sourceFileMgt: Codeunit DMTSourceFileMgt;
-        iStr: InStream;
     begin
         Clear(sourceFileStorage);
-        TempBlob.CreateInStream(iStr);
-        sourceFileStorage.Get(sourceFileMgt.AddFileToStorage(fileNameWithExtension, iStr));
+        sourceFileStorage.Get(sourceFileMgt.AddFileToStorage(fileNameWithExtension, TempBlob));
         sourceFileStorage.TestField(Size);
     end;
 
