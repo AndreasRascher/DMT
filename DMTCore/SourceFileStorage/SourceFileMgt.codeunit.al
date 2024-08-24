@@ -15,7 +15,7 @@ codeunit 91001 DMTSourceFileMgt
             exit;
         uploadedFile.CreateOutStream(OStr);
         CopyStream(OStr, IStr);
-        length := uploadedFile.Length;
+        length := uploadedFile.Length();
 
         if not GetFilesFromZipFile(FileName, uploadedFile) then begin
             AddFileToStorage(FileName, uploadedFile);
@@ -115,7 +115,7 @@ codeunit 91001 DMTSourceFileMgt
             end else begin
                 break;
             end;
-        until not fileNamesContainInvalidChars(EntryList, invalidFileNameChars, codepages);
+        until not fileNamesContainInvalidChars(EntryList, invalidFileNameChars);
 
         foreach FileNameInArchive in EntryList do begin
             Clear(TempBlob);
@@ -143,7 +143,7 @@ codeunit 91001 DMTSourceFileMgt
         hasFileWithTheSameName := SourceFileStorageExisting.FindFirst();
     end;
 
-    local procedure fileNamesContainInvalidChars(EntryList: List of [Text]; invalidFileNameChars: List of [Text]; codepages: List of [Integer]) hasInvalidChars: Boolean
+    local procedure fileNamesContainInvalidChars(EntryList: List of [Text]; invalidFileNameChars: List of [Text]) hasInvalidChars: Boolean
     var
         FileNameInArchive, invalidFileNameChar : Text;
     begin
