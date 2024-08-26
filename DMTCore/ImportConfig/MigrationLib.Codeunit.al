@@ -98,7 +98,11 @@ codeunit 91003 DMTMigrationLib
             IsMatch(TargetField, Database::"Interaction Template", 'Language Code (Default)'), /* Avoid confirm */
             IsMatch(TargetField, Database::"Sales Header", 'Bill-to Customer No.'), /* Avoid confirm */
             IsMatch(TargetField, Database::"Sales Header", 'Sell-to Customer Name'), /* Avoid LookUp Dialog */
-            IsMatch(TargetField, Database::"Dimension Value", 'Dimension Value ID'): /* Avoid LookUp Dialog */
+            IsMatch(TargetField, Database::"Dimension Value", 'Dimension Value ID'), /* Avoid LookUp Dialog */
+            IsMatch(TargetField, Database::"General Ledger Setup", 'Acc. Sched. for Balance Sheet'), /*obsolete BC22+*/
+            IsMatch(TargetField, Database::"General Ledger Setup", 'Acc. Sched. for Income Stmt.'), /*obsolete BC22+*/
+            IsMatch(TargetField, Database::"General Ledger Setup", 'Acc. Sched. for Cash Flow Stmt'), /*obsolete BC22+*/
+            IsMatch(TargetField, Database::"General Ledger Setup", 'Acc. Sched. for Retained Earn.'): /*obsolete BC22+*/
                 KnownValidationType := KnownValidationType::AssignWithoutValidate;
             else
                 Found := false;

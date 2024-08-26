@@ -20,7 +20,7 @@ page 90011 DMTCode
                     Caption = 'Variable Name (Source Record)',
                     Comment = 'de-DE=Variablenname (Herkunftsdatensatz)';
                 }
-                field(TargetRecVarName; TargetRecVarName) { Caption = 'Variable Name (Target Record)'; }
+                field(TargetRecVarName; TargetRecVarName) { Caption = 'Variable Name (Target Record)', Comment = 'de-DE=Variablenname (Zieldatensatz)'; }
             }
             repeater(GroupName)
             {

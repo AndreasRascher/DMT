@@ -57,6 +57,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Codeunit ID ausführen (Verarbeitungsplan)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateSetup - Field Run Codeunit - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 373303067 - Field 2895872703 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sorting No.</source>
+          <target state="translated">Reihenfolge</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Reihenfolge</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateSetup - Field Sorting No. - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 373303067 - Field 3920905560 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source File Name</source>
           <target state="translated">Quelldatei Name</target>

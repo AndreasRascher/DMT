@@ -68,6 +68,7 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
         fromValueToValueList: list of [Text];
         changedFieldNo: Integer;
     begin
+        //ToDo: FiBu Einrichtung erzeugt zu viele Zeilen
         if findChangedFields(changedFields, targetRefBeforeChangeGlobal, TargetRef) then begin
             foreach changedFieldNo in changedFields.Keys do begin
                 changedFields.Get(changedFieldNo, fromValueToValueList);

@@ -48,6 +48,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Codeunit ID ausführen (Verarbeitungsplan)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateSetup - Field Run Codeunit - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 373303067 - Field 2895872703 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sorting No.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Reihenfolge</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessTemplateSetup - Field Sorting No. - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 373303067 - Field 3920905560 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source File Name</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Quelldatei Name</note>
@@ -180,7 +185,7 @@
         </trans-unit>
         <trans-unit id="Page 2911572108 - Control 2161219289 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Variable Name (Target Record)</source>
-          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Variablenname (Zieldatensatz)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCode - Control TargetRecVarName - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2076196089 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

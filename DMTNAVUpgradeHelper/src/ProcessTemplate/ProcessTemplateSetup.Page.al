@@ -5,6 +5,8 @@ page 90015 DMTProcessTemplateSetup
     UsageCategory = Lists;
     ApplicationArea = All;
     SourceTable = DMTProcessTemplateSetup;
+    AutoSplitKey = true;
+    SourceTableView = sorting("Sorting No.", "Template Code", "Line No.");
 
     layout
     {
@@ -12,14 +14,18 @@ page 90015 DMTProcessTemplateSetup
         {
             repeater(Group)
             {
+                IndentationControls = "Template Code";
+                IndentationColumn = Rec.Indentation;
                 field("Template Code"; Rec."Template Code") { StyleExpr = lineStyleExpr; }
-                field("Line No."; Rec."Line No.") { }
+                // field("Line No."; Rec."Line No.") { }
+                field("Sorting No."; Rec."Sorting No.") { }
                 field("Type"; Rec."Type")
                 {
                     StyleExpr = lineStyleExpr;
                     trigger OnValidate()
                     begin
                         UpdateMandatoryIndicator();
+                        UpdateLineStyle();
                     end;
                 }
                 field("Source File Name"; Rec."Source File Name") { ShowMandatory = SourceFileName_Mandatory; }
@@ -32,11 +38,39 @@ page 90015 DMTProcessTemplateSetup
                 field("Run Codeunit"; Rec."Run Codeunit") { ShowMandatory = RunCodeunit_Mandatory; }
                 field("Target Table ID"; Rec."Target Table ID") { ShowMandatory = TargetTableID_Mandatory; }
             }
+            group(SetupRequirementDetails)
+            {
+                Visible = IsSetupRequirementType;
+                ShowCaption = false;
+                field("Target Table ID2"; Rec."Target Table ID") { }
+                field("Target Table Caption2"; Rec."Target Table Caption") { }
+                field("Field Name2"; Rec."Field Name") { }
+            }
+            group(GroupTypeDetails)
+            {
+                Visible = IsGroupLineType;
+                ShowCaption = false;
+                field("Template Code2"; Rec."Template Code") { }
+                field("Sorting No.2"; Rec."Sorting No.") { }
+            }
+            group(FilterDetails)
+            {
+                Visible = IsFilterType;
+                ShowCaption = false;
+                field("Field Name3"; Rec."Field Name") { }
+                field("Filter Expression2"; Rec."Filter Expression") { }
+            }
+            group(ImportDetails)
+            {
+                Visible = IsImportToTargetType;
+                ShowCaption = false;
+                field("Source File Name3"; Rec."Source File Name") { }
+                field("NAV Source Table No.3"; Rec."NAV Source Table No.") { }
+                field("Target Table ID3"; Rec."Target Table ID") { }
+                field("Target Table Caption3"; Rec."Target Table Caption") { }
+            }
         }
-        area(Factboxes)
-        {
-
-        }
+        area(Factboxes) { }
     }
 
     actions
@@ -88,31 +122,25 @@ page 90015 DMTProcessTemplateSetup
         }
     }
     trigger OnOpenPage()
-    // var
-    //     processTemplateSetup: Record DMTProcessTemplateSetup;
-    //     downloadedFile: Codeunit "Temp Blob";
-    //     processTemplateLib: Codeunit DMTProcessTemplateLib;
     begin
-        // if processTemplateSetup.IsEmpty then begin
-        //     processTemplateLib.downloadProcessTemplateXLSFromGitHub(downloadedFile);
-        //     processTemplateLib.ImportTemplateSetupFromExcel(downloadedFile);
-        // end;
     end;
 
     trigger OnAfterGetCurrRecord()
     begin
         UpdateMandatoryIndicator();
+        UpdateLineDetails();
     end;
 
     trigger OnAfterGetRecord()
     begin
         UpdateMandatoryIndicator();
-        case true of
-            (Rec.Type = Rec.Type::Group):
-                lineStyleExpr := Format(Enum::DMTFieldStyle::Bold);
-            else
-                lineStyleExpr := Format(Enum::DMTFieldStyle::None);
-        end;
+        UpdateLineStyle();
+        UpdateLineDetails();
+    end;
+
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    begin
+        rec.prepareNewLine(Rec);
     end;
 
     local procedure UpdateMandatoryIndicator()
@@ -171,6 +199,24 @@ page 90015 DMTProcessTemplateSetup
         TargetTableID_Mandatory := false;
     end;
 
+    local procedure UpdateLineStyle()
+    begin
+        case true of
+            (Rec.Type = Rec.Type::Group):
+                lineStyleExpr := Format(Enum::DMTFieldStyle::Bold);
+            else
+                lineStyleExpr := Format(Enum::DMTFieldStyle::None);
+        end;
+    end;
+
+    local procedure UpdateLineDetails()
+    begin
+        IsSetupRequirementType := Rec.Type = Rec.Type::"Req. Setup";
+        IsGroupLineType := Rec.Type = Rec.Type::Group;
+        IsFilterType := Rec.Type = Rec.Type::Filter;
+        IsImportToTargetType := Rec.Type in [Rec.Type::"Import Buffer+Target", Rec.Type::"Import Target"];
+    end;
+
     var
         lineStyleExpr: Text;
         // mandatory boolean fields
@@ -182,5 +228,6 @@ page 90015 DMTProcessTemplateSetup
         NAVSourceTableNo_Mandatory: Boolean;
         RunCodeunit_Mandatory: Boolean;
         TargetTableID_Mandatory: Boolean;
+        IsGroupLineType, IsSetupRequirementType, IsFilterType, IsImportToTargetType : Boolean;
 
 }

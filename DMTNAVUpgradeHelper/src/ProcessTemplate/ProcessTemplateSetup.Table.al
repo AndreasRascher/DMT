@@ -6,31 +6,39 @@ table 90014 DMTProcessTemplateSetup
         field(1; "Template Code"; Code[150]) { Caption = 'Template Code', Comment = 'de-DE=Vorlagencode'; }
         field(2; "Line No."; Integer) { Caption = 'Line No.', Comment = 'de-DE=Zeilennummer'; }
         #region SourceInfo
-        field(10; Type; Option)
+        field(10; "Sorting No."; Integer)
+        {
+            Caption = 'Sorting No.', Comment = 'de-DE=Reihenfolge';
+            trigger OnValidate()
+            begin
+                propagateField(rec.FieldNo("Sorting No."));
+            end;
+        }
+        field(20; Type; Option)
         {
             Caption = 'Type', Comment = 'de-DE=Art';
             OptionMembers = " ",Group,"Import Buffer","Import Target","Import Buffer+Target","Update Field","Default Value","Filter","Req. Setup","Run Codeunit";
             OptionCaption = ' ,Group,Import Buffer,Import Target,Import Buffer+Target,Update Field,Default Value,Filter,Req. Setup,Run Codeunit',
             Comment = 'de-DE= ,Gruppe,In Puffertabelle einlesen,In Zieltabelle einlesen,Puffer- und Zieltab. importieren,Felder aktualisieren,Vorgaberwert,Filter,benötigte Einrichtung,Codeunit ausführen';
         }
-        field(11; "NAV Source Table No."; Integer) { Caption = 'NAV Source Table No.', Comment = 'de-DE=NAV Quelltabelle Nr.'; BlankZero = true; }
-        field(12; "Source File Name"; Text[250]) { Caption = 'Source File Name', Comment = 'de-DE=Quelldatei Name'; }
+        field(21; "NAV Source Table No."; Integer) { Caption = 'NAV Source Table No.', Comment = 'de-DE=NAV Quelltabelle Nr.'; BlankZero = true; }
+        field(22; "Source File Name"; Text[250]) { Caption = 'Source File Name', Comment = 'de-DE=Quelldatei Name'; }
         #endregion SourceInfo
         #region ProcessingPlan
-        field(21; "Description"; Text[250]) { Caption = 'Description (Processing Plan)', Comment = 'de-DE=Beschreibung (Verarbeitungsplan)'; }
-        field(22; "Indentation"; Integer) { Caption = 'Indentation (Processing Plan)', Comment = 'de-DE=Einrückung (Verarbeitungsplan)'; BlankZero = true; }
-        field(23; "Run Codeunit"; Integer) { Caption = 'Run Codeunit ID (Processing Plan)', Comment = 'de-DE=Codeunit ID ausführen (Verarbeitungsplan)'; BlankZero = true; }
-        field(30; "Field Name"; Text[30]) { Caption = 'Field Name', Comment = 'de-DE=Feldname'; }
-        field(31; "Default Value"; Text[250]) { Caption = 'Default Value', Comment = 'de-DE=Vorgabewert'; }
-        field(32; "Filter Expression"; Text[250]) { Caption = 'Filter', Comment = 'de-DE=Filter'; }
-        field(24; "Target Table ID"; Integer)
+        field(31; "Description"; Text[250]) { Caption = 'Description (Processing Plan)', Comment = 'de-DE=Beschreibung (Verarbeitungsplan)'; }
+        field(32; "Indentation"; Integer) { Caption = 'Indentation (Processing Plan)', Comment = 'de-DE=Einrückung (Verarbeitungsplan)'; BlankZero = true; }
+        field(33; "Run Codeunit"; Integer) { Caption = 'Run Codeunit ID (Processing Plan)', Comment = 'de-DE=Codeunit ID ausführen (Verarbeitungsplan)'; BlankZero = true; }
+        field(40; "Field Name"; Text[30]) { Caption = 'Field Name', Comment = 'de-DE=Feldname'; }
+        field(41; "Default Value"; Text[250]) { Caption = 'Default Value', Comment = 'de-DE=Vorgabewert'; }
+        field(42; "Filter Expression"; Text[250]) { Caption = 'Filter', Comment = 'de-DE=Filter'; }
+        field(50; "Target Table ID"; Integer)
         {
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
             ValidateTableRelation = false;
             Caption = 'Target Table ID', Comment = 'de-DE=Zieltabelle ID';
             BlankZero = true;
         }
-        field(25; "Target Table Caption"; Text[249])
+        field(51; "Target Table Caption"; Text[249])
         {
             Caption = 'Target Table Caption', Comment = 'de-DE=Zieltabellen Bezeichnung';
             Editable = false;
@@ -42,10 +50,8 @@ table 90014 DMTProcessTemplateSetup
 
     keys
     {
-        key(Key1; "Template Code", "Line No.")
-        {
-            Clustered = true;
-        }
+        key(Key1; "Template Code", "Line No.") { Clustered = true; }
+        key(Key2; "Sorting No.", "Template Code", "Line No.") { }
     }
 
     fieldgroups
@@ -121,6 +127,40 @@ table 90014 DMTProcessTemplateSetup
     internal procedure IsCodeunitRequirement(): Boolean
     begin
         exit(Rec.Type = Rec.Type::"Run Codeunit");
+    end;
+
+    local procedure propagateField(FieldNo: Integer)
+    var
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+    begin
+        processTemplateSetup.SetRange("Template Code", Rec."Template Code");
+        processTemplateSetup.SetFilter("Line No.", '<>%1', Rec."Line No.");
+        case FieldNo of
+            Rec.FieldNo("Sorting No."):
+                begin
+                    processTemplateSetup.ModifyAll("Sorting No.", Rec."Sorting No.");
+                end;
+        end;
+    end;
+
+    procedure prepareNewLine(var newLine: Record DMTProcessTemplateSetup) OK: Boolean
+    var
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+    begin
+        OK := true;
+        if newLine."Template Code" = '' then
+            exit(false);
+
+        if newLine."Line No." = 0 then
+            newLine."Line No." := newLine.getNextLineNo(newLine."Template Code");
+
+        if newLine."Sorting No." = 0 then begin
+            processTemplateSetup.Reset();
+            processTemplateSetup.SetRange("Template Code", newLine."Template Code");
+            processTemplateSetup.SetFilter("Sorting No.", '<>0');
+            if processTemplateSetup.FindFirst() then
+                newLine."Sorting No." := processTemplateSetup."Sorting No.";
+        end;
     end;
 
     procedure IsCodeunitRequirementFulfilled() exists: Boolean
