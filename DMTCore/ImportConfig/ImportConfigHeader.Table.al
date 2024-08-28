@@ -99,7 +99,7 @@ table 91003 DMTImportConfigHeader
 
     fieldgroups
     {
-        fieldgroup(DropDown; ID, "Target Table Caption") { }
+        fieldgroup(DropDown; ID, "Target Table Caption", "Target Table ID") { }
     }
     trigger OnInsert()
     begin

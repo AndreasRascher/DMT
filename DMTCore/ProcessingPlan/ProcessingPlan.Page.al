@@ -132,9 +132,26 @@ page 91017 DMTProcessingPlan
                 ShortcutKey = 'Ctrl+Delete'; //TODO ShortcutKey geht nicht, Ctrl+ ist richtig
                 Image = Delete;
                 trigger OnAction()
+                var
+                    TempProcessingPlan_SELECTED: Record DMTProcessingPlan temporary;
+                    processingPlan: Record DMTProcessingPlan;
+                    doDeleteLines: Boolean;
+                    DeleteSelectedLinesQst: Label 'Delete %1 selected lines?', Comment = 'de-DE=Wollen sie %1 Zeilen löschen?';
                 begin
-                    if Rec."Line No." <> 0 then // no error when empty
-                        Rec.Delete();
+                    if GetSelection(TempProcessingPlan_SELECTED) then
+                        if TempProcessingPlan_SELECTED.FindSet() then begin
+                            // confirm if more than one line is selected
+                            if TempProcessingPlan_SELECTED.Count > 1 then
+                                doDeleteLines := Confirm(StrSubstNo(DeleteSelectedLinesQst, TempProcessingPlan_SELECTED.Count))
+                            else
+                                doDeleteLines := true;
+                            // delete selected lines
+                            if doDeleteLines then
+                                repeat
+                                    processingPlan.Get(TempProcessingPlan_SELECTED.RecordId);
+                                    processingPlan.Delete();
+                                until TempProcessingPlan_SELECTED.Next() = 0;
+                        end;
                 end;
             }
             action(IndentLeft)

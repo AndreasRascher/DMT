@@ -1448,6 +1448,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Löschen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action DeleteLine - Property ToolTip</note>
         </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 247166185 - Method 1377591017 - NamedType 666616013" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Delete %1 selected lines?</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Wollen sie %1 Zeilen löschen?</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action DeleteLine - Method OnAction - NamedType DeleteSelectedLinesQst</note>
+        </trans-unit>
         <trans-unit id="Page 1212190007 - Action 1042755249 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Indent Left</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Links einrücken</note>
