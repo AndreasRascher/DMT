@@ -399,6 +399,8 @@ codeunit 91002 DMTImportConfigMgt
         migrationLib: Codeunit DMTMigrationLib;
         NAVExportFileNamesDict: Dictionary of [Text, Integer];
         TargetTableID: Integer;
+        NAVTableID: Integer;
+        NAVTableCaption: Text;
     begin
         DMTSetup.GetRecordOnce();
         if DMTSetup.IsNAVExport() then
@@ -413,9 +415,16 @@ codeunit 91002 DMTImportConfigMgt
                 importConfigHeader."Source File Name" := tempSourceFileStorage_SELECTED.Name;
                 importConfigHeader.Insert(true);
                 // Assign Target Table
-                if DMTSetup.IsNAVExport() then
+                if DMTSetup.IsNAVExport() then begin
+                    // in newer versions of DMT, the NAVTableID is stored in the filename
+                    if tempSourceFileStorage_SELECTED.Name.Contains('_') then begin
+                        migrationLib.GetNAVTableIDFromFileName(NAVTableID, NAVTableCaption, tempSourceFileStorage_SELECTED.Name);
+                        tempSourceFileStorage_SELECTED.Name := CopyStr(NAVTableCaption, 1, MaxStrLen(tempSourceFileStorage_SELECTED.Name));
+                    end;
+
                     if not NAVExportFileNamesDict.Get(tempSourceFileStorage_SELECTED.Name, TargetTableID) then
                         Clear(TargetTableID);
+                end;
             end;
 
             if DMTSetup.IsNAVExport() and (TargetTableID <> 0) then

@@ -2,8 +2,8 @@ OBJECT XMLport 50050 DMT Export2
 {
   OBJECT-PROPERTIES
   {
-    Date=30.01.24;
-    Time=14:20:21;
+    Date=28.08.24;
+    Time=09:19:15;
     Modified=Yes;
     Version List=DMT;
   }
@@ -2714,7 +2714,7 @@ OBJECT XMLport 50050 DMT Export2
         TAB[1] := 9; // TAB
         ReadyMsg := ExportFinished + ':';
         REPEAT
-          ExportToFilePath := ExportToFolderPath + CONVERTSTR(AllObjWithCaption."Object Caption",'<>*\/|"','_______') +'.csv';
+          ExportToFilePath := ExportToFolderPath + STRSUBSTNO('%1_',AllObjWithCaption."Object ID") + CONVERTSTR(AllObjWithCaption."Object Caption",'<>*\/|"','_______') +'.csv';
           ExportTable(ExportToFilePath,AllObjWithCaption."Object ID",exportDuration,'');
           ReadyMsg += STRSUBSTNO('\%1:%2%3',AllObjWithCaption."Object Caption",TAB,exportDuration);
         UNTIL AllObjWithCaption.NEXT = 0;

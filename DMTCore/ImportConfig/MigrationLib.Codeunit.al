@@ -201,6 +201,22 @@ codeunit 91003 DMTMigrationLib
         end;
     end;
 
+    internal procedure GetNAVTableIDFromFileName(var NAVTableID: Integer; var NAVTableCaption: Text; SourceFileName: Text) OK: Boolean
+    var
+        TypeHelper: Codeunit "Type Helper";
+        Splitted: List of [Text];
+        numberText: Text;
+    begin
+        ok := true;
+        NAVTableCaption := SourceFileName;
+        Splitted := NAVTableCaption.Split('_');
+        numberText := Splitted.Get(1);
+        if not TypeHelper.IsNumeric(numberText) then
+            exit(false);
+        Evaluate(NAVTableID, numberText);
+        NAVTableCaption := SourceFileName.TrimStart(StrSubstNo('%1_', numberText));
+    end;
+
     procedure CreateNAVExportFileNameDictionary(var NAVExportFileNamesDict: Dictionary of [Text, Integer])
     var
         tableMetadata: Record "Table Metadata";

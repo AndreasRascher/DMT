@@ -13,11 +13,11 @@ codeunit 91022 DMTSeparateBufferTableMgtImpl implements IBufferTableMgt
     procedure InitBufferRef(var BufferRef: RecordRef);
     var
         TableMetadata: Record "Table Metadata";
-        BufferTableMissingErr: Label 'Buffer Table %1 not found', Comment = 'de-DE=Eine Puffertabelle mit der ID %1 wurde nicht gefunden.';
+        BufferTableMissingErr: Label 'Buffer Table %1 not found.\Import Config Header\ID:"%2"\Filename:"%3"', Comment = 'de-DE=Eine Puffertabelle mit der ID %1 wurde nicht gefunden.\Importkonfiguration\ID:"%2"\Dateiname:"%3"';
     begin
         checkHeaderIsSet();
         if not TableMetadata.Get(ImportConfigHeaderGlobal."Buffer Table ID") then
-            Error(BufferTableMissingErr, ImportConfigHeaderGlobal."Buffer Table ID");
+            Error(BufferTableMissingErr, ImportConfigHeaderGlobal."Buffer Table ID", ImportConfigHeaderGlobal.ID, ImportConfigHeaderGlobal."Source File Name");
         BufferRef.Open(ImportConfigHeaderGlobal."Buffer Table ID");
     end;
 

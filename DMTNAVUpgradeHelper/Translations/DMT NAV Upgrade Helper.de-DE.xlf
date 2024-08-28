@@ -221,8 +221,8 @@
         </trans-unit>
         <trans-unit id="Page 2911572108 - Control 2161219289 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Variable Name (Target Record)</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2"/>
+          <target state="translated">Variablenname (Zieldatensatz)</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Variablenname (Zieldatensatz)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCode - Control TargetRecVarName - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2076196089 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -428,6 +428,18 @@
           <target state="translated">Puffertabellen Objekte runterladen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Puffertabellen Objekte runterladen</note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension ImportConfigList - Action ExportALObjects - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 4113247020 - Action 3778679344 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1212190007">
+          <source>Creates a filter expression for NAV Table IDs based on selected lines</source>
+          <target state="translated">Erstellt einen Filterausdruck für NAV-Tabellen-IDs basierend auf ausgewählten Zeilen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Erstellt einen Filterausdruck für NAV-Tabellen-IDs basierend auf ausgewählten Zeilen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension ProcessingPlan - Action GetNAVTableIDFilter - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 4113247020 - Action 3778679344 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1212190007">
+          <source>NAV Table ID Filter</source>
+          <target state="translated">NAV-Tabellen-ID Filter</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=NAV-Tabellen-ID Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension ProcessingPlan - Action GetNAVTableIDFilter - Property Caption</note>
         </trans-unit>
         <trans-unit id="TableExtension 200502431 - Method 3628817529 - NamedType 2192461025" size-unit="char" translate="yes" xml:space="preserve" al-object-target="TableExtension 200502431">
           <source>You have to import the Schema.csv.</source>

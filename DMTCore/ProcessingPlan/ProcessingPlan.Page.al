@@ -21,7 +21,16 @@ page 91017 DMTProcessingPlan
                 ShowAsTree = true;
                 // Visible = ShowTreeView;
                 field("Line Type"; Rec.Type) { ApplicationArea = All; StyleExpr = LineStyle; }
-                field(ImportConfigHeaderID; Rec.ID) { ApplicationArea = All; StyleExpr = LineStyle; BlankZero = true; }
+                field(ImportConfigHeaderID; Rec.ID)
+                {
+                    ApplicationArea = All;
+                    StyleExpr = LineStyle;
+                    BlankZero = true;
+                    trigger OnValidate()
+                    begin
+                        TargetTableID_HideValue := not Rec.TypeSupportsProcessSelectedFieldsOnly();
+                    end;
+                }
                 field(Description; Rec.Description) { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(ProcessingTime; Rec."Processing Duration") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(StartTime; Rec.StartTime) { ApplicationArea = All; StyleExpr = LineStyle; }
@@ -34,6 +43,7 @@ page 91017 DMTProcessingPlan
                     comment = 'de-DE=Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.';
                 }
                 field("Line No."; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
+                field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; StyleExpr = LineStyle; Visible = false; HideValue = TargetTableID_HideValue; }
             }
         }
         area(FactBoxes)
@@ -253,13 +263,8 @@ page 91017 DMTProcessingPlan
                 ShowAs = Standard;
                 Caption = 'Backup', Locked = true;
                 Image = XMLSetup;
-                // group(XMLBackupActions)
-                // {
-                // Caption = 'XML Backup2', Locked = true;
-                // Image = XMLSetup;
                 actionref(XMLExportRef; XMLExport) { }
                 actionref(XMLImportRef; XMLImport) { }
-                // }
             }
             group(LineActions)
             {
@@ -286,6 +291,7 @@ page 91017 DMTProcessingPlan
             (Rec.Status = Rec.Status::Finished):
                 LineStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
         end;
+        TargetTableID_HideValue := not Rec.TypeSupportsProcessSelectedFieldsOnly();
     end;
 
     trigger OnAfterGetCurrRecord()
@@ -300,6 +306,7 @@ page 91017 DMTProcessingPlan
             CurrPage.LogFactBox.Page.ShowAsLogAndUpdateOnAfterGetCurrRecord(importConfigHeader);
             CurrPage.LogFactBox.Page.Update(false);
         end;
+        TargetTableID_HideValue := not Rec.TypeSupportsProcessSelectedFieldsOnly();
     end;
 
     local procedure RunSelected(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
@@ -505,10 +512,11 @@ page 91017 DMTProcessingPlan
         end;
     end;
 
+
     var
         TempProcessingPlan_SELECTED: Record DMTProcessingPlan temporary;
         ProcessingPlanMgt: Codeunit DMTProcessingPlanMgt;
         // [InDataSet]
-        ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart, ShowLogFactboxPart : Boolean;
+        ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart, ShowLogFactboxPart, TargetTableID_HideValue : Boolean;
         LineStyle: Text;
 }

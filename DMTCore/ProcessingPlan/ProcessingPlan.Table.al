@@ -70,6 +70,15 @@ table 91009 DMTProcessingPlan
         field(41; StartTime; DateTime) { Caption = 'Start Time', Comment = 'de-DE=Startzeit'; Editable = false; }
         field(42; "Processing Duration"; Duration) { Caption = 'Processing Duration', Comment = 'de-DE=Verarbeitungszeit'; Editable = false; }
         field(50; Indentation; Integer) { Caption = 'Indentation', Comment = 'de-DE=Einrückung'; Editable = false; }
+        field(60; "Target Table ID"; Integer)
+        {
+            Caption = 'Target Table ID', Comment = 'de-DE=Zieltabellen ID';
+            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
+            FieldClass = FlowField;
+            CalcFormula = lookup(DMTImportConfigHeader."Target Table ID" where(ID = field(ID)));
+            Editable = false;
+            BlankZero = true;
+        }
     }
 
     keys

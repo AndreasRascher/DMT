@@ -518,6 +518,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE= ,in Arbeit,Abgeschlossen,Fehler</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Status - Property OptionCaption</note>
         </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 1666780894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Table ID</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zieltabellen ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Target Table ID - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1212190007 - Field 1878130204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Type</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Art</note>
@@ -944,8 +949,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTRefHelper - Method EvaluateFieldRef - NamedType InvalidValueForTypeErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 107245564 - Method 705889565 - NamedType 935989145" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Buffer Table %1 not found</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Eine Puffertabelle mit der ID %1 wurde nicht gefunden.</note>
+          <source>Buffer Table %1 not found.\Import Config Header\ID:"%2"\Filename:"%3"</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Eine Puffertabelle mit der ID %1 wurde nicht gefunden.\Importkonfiguration\ID:"%2"\Dateiname:"%3"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTSeparateBufferTableMgtImpl - Method InitBufferRef - NamedType BufferTableMissingErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 107245564 - Method 883257532 - NamedType 1097618994" size-unit="char" translate="yes" xml:space="preserve">
