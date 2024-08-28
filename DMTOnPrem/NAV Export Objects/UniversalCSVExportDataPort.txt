@@ -1,9 +1,9 @@
-OBJECT Dataport 50009 DMTExport
+OBJECT Dataport 50100 DMTExport
 {
   OBJECT-PROPERTIES
   {
-    Date=29.02.24;
-    Time=16:28:04;
+    Date=28.08.24;
+    Time=12:52:33;
     Modified=Yes;
     Version List=DMT;
   }
@@ -476,7 +476,7 @@ OBJECT Dataport 50009 DMTExport
     PROCEDURE StartTableExport@1000000002();
     VAR
       AllObjWithCaption@1000000000 : Record 2000000058;
-      ExportToPath@1000000001 : Text[1024];
+      ExportToFilePath@1000000001 : Text[1024];
       ExportDuration@1000000002 : Duration;
       Progress@1000000003 : Dialog;
       ReadyMsgArray@1000000006 : ARRAY [100] OF Text[1024];
@@ -499,8 +499,10 @@ OBJECT Dataport 50009 DMTExport
       AllObjWithCaption.FINDSET;
       Index := 0;
       REPEAT
-        ExportToPath := ExportToFolderPath + CONVERTSTR(AllObjWithCaption."Object Caption",'<>*\/|"','_______') +'.csv';
-        ExportTable(ExportToPath,AllObjWithCaption."Object ID",ExportDuration,'');
+        ExportToFilePath := ExportToFolderPath +
+                            STRSUBSTNO('%1_',AllObjWithCaption."Object ID") +
+                            CONVERTSTR(AllObjWithCaption."Object Caption",'<>*\/|"','_______') +'.csv';
+        ExportTable(ExportToFilePath,AllObjWithCaption."Object ID",ExportDuration,'');
         Index += 1;
         ReadyMsgArray[Index] := STRSUBSTNO('\%1:%2%3',AllObjWithCaption."Object Caption",TAB,ExportDuration);
       UNTIL AllObjWithCaption.NEXT = 0;
