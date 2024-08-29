@@ -20,8 +20,23 @@ codeunit 50048 DMTProcessRecord
                 else begin
                     if ProcessedFields.Count < TargetKeyFieldIDs.Count then
                         ProcessKeyFields();
-                    if (not SkipRecordGlobal) or UpdateFieldsInExistingRecordsOnly then
-                        ProcessNonKeyFields();
+
+                    // Nicht-Schlüsselfelder verarbeiten wenn:
+                    case true of
+                        // Bei Feldupdate: Nur wenn Ziel-Datensatz vorhanden
+                        (RunMode = RunMode::FieldTransfer) and UpdateFieldsInExistingRecordsOnly:
+                            if TargetRecordExistsGlobal then
+                                ProcessNonKeyFields();
+                        // Bei Insert Regel "Nur neue Datensätze" wenn Ziel-Datensatz nicht vorhanden
+                        (RunMode = RunMode::FieldTransfer) and ImportConfigHeader."Import Only New Records":
+                            if not TargetRecordExistsGlobal then
+                                ProcessNonKeyFields();
+                        // sonst
+                        else begin
+                            if not SkipRecordGlobal then
+                                ProcessNonKeyFields();
+                        end;
+                    end;
                 end;
             end;
         end;
@@ -231,12 +246,12 @@ codeunit 50048 DMTProcessRecord
             end;
         until TempImportConfigLine.Next() = 0;
         SkipRecordGlobal := false;
-        TargetRecordExists := FindExistingTargetRef(ExistingRef, TmpTargetRef);
+        TargetRecordExistsGlobal := FindExistingTargetRef(ExistingRef, TmpTargetRef);
         case true of
             // Nur vorhandene Datensätze updaten. Felder aus exist. Datensatz kopieren.
             UpdateFieldsInExistingRecordsOnly:
                 begin
-                    if TargetRecordExists then
+                    if TargetRecordExistsGlobal then
                         RefHelper.CopyRecordRef(ExistingRef, TmpTargetRef)
                     else
                         SkipRecordGlobal := true; // only update, do not insert record when updating records
@@ -244,12 +259,12 @@ codeunit 50048 DMTProcessRecord
             // Kein Insert neuer Datensätze
             ImportConfigHeader."Import Only New Records" and not UpdateFieldsInExistingRecordsOnly:
                 begin
-                    if TargetRecordExists then
+                    if TargetRecordExistsGlobal then
                         SkipRecordGlobal := true;
                 end;
             ImportConfigHeader."Import Only New Records":
                 begin
-                    if TargetRecordExists then
+                    if TargetRecordExistsGlobal then
                         SkipRecordGlobal := true;
                 end;
         end;
@@ -459,7 +474,7 @@ codeunit 50048 DMTProcessRecord
         SourceRefGlobal, TargetRef_INIT, TmpTargetRef : RecordRef;
         CurrValueToAssign: FieldRef;
         CurrValueToAssign_IsInitialized: Boolean;
-        ErrorsOccuredThatShouldNotBeIngored, SkipRecordGlobal, TargetRecordExists : Boolean;
+        ErrorsOccuredThatShouldNotBeIngored, SkipRecordGlobal, TargetRecordExistsGlobal : Boolean;
         UpdateFieldsInExistingRecordsOnly: Boolean;
         ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
         IReplacementHandler: Interface IReplacementHandler;

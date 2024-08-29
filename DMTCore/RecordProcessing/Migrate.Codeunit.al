@@ -69,6 +69,8 @@ codeunit 50054 DMTMigrate
         DMTImportSettings.UpdateFieldsFilter(ProcessingPlan.ReadUpdateFieldsFilter());
         DMTImportSettings.SourceTableView(ProcessingPlan.ReadSourceTableView());
         LoadImportConfigLine(DMTImportSettings);
+        if ProcessingPlan.Type = ProcessingPlan.Type::"Update Field" then
+            DMTImportSettings.UpdateExistingRecordsOnly(true);
         ProcessFullBuffer(DMTImportSettings);
     end;
 
