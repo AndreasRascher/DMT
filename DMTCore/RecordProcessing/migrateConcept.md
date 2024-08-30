@@ -49,3 +49,43 @@ IMigrateRecordSet
 IMigrateRecord
 - MigrateKeyFields(var TargetRef,SourceRef)
 - MigrateNonKeyFields(var TargetRef,SourceRef)
+
+Prozess
+=========
+SetSource(RecID)
+SetTarget(TableID)
+SetRunMode
+LoadFieldMapping
+LoadReplacements
+PrepareLog
+
+
+Testfälle
+==========
+
+InsertSimpleRecordFromProcessingPlan
+- Given
+    - test table Object
+    - SourceFile
+    - ImportConfigHeader, ImportConfigLine Record
+    - ProcessingPlan Record
+- When
+    - ImportToTarget
+- THen
+    - Target Record Exists
+    - Log Entry exists
+    - Log Entry correct Count of processed records
+    - Log Entry correct Count of inserted records
+    - Log Entry correct Count of failed records
+InsertSimpleRecordFromImportConfig
+InsertRecordWithReplacmentInKeyField
+
+InsertRecordWithModifyInValidate
+InsertRecordWithErrorInValidate_Ignored
+InsertRecordWithErrorInValidate_NotIgnored
+
+UpdateExistingRecord
+TryUpdatingMissingRecord
+
+InsertRecordInRecordLinks
+UpdateRecordinRecordLinks
