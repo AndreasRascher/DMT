@@ -943,6 +943,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Dateiname: "%1"\ Filter: "%2"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessingPlanMgt - Method ImportWithProcessingPlanParams - NamedType noBufferTableRecorsInFilterErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3046076509 - Method 4147440478 - NamedType 2116364116" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The value %1 could not be entered into the field %2</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Der Wert %1 konnte nicht in das Feld %2 eingetragen werden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessRecord - Method AssignValueToFieldRef - NamedType ValidateFailedErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1536080462 - Method 1564743796 - NamedType 3980904368" size-unit="char" translate="yes" xml:space="preserve">
           <source>"%1" is not a valid %2 value.</source>
           <note from="Developer" annotates="general" priority="2">de-DE="%1" ist kein gültiger %2 Wert</note>
