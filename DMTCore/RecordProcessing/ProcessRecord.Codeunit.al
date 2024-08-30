@@ -101,6 +101,8 @@ codeunit 50048 DMTProcessRecord
         TargetRecRef2: RecordRef;
         FromField: FieldRef;
         EvaluateOptionValueAsNumber: Boolean;
+        ValidateFailedErr: Label 'The value %1 could not be entered into the field %2',
+                 Comment = 'de-DE=Der Wert %1 konnte nicht in das Feld %2 eingetragen werden';
     begin
         if not HandleBase64ToBlobTransferfromGenBuffTable(FromField, ImportConfigLine, SourceRecRef) then
             FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
@@ -115,7 +117,9 @@ codeunit 50048 DMTProcessRecord
                 FieldWithTypeCorrectValueToValidate.Value := FromField.Value; // Same Type -> no conversion needed
             (FromField.Type in [FieldType::Text, FieldType::Code]):
                 if not RefHelper.EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
-                    Error('TODO'); // Kommt beim Wechsel von Puffertabelle zu generischer Tabelle vor
+                    // Kommt beim Wechsel von Puffertabelle zu generischer Tabelle vor
+                    // Kommt vor wenn der alte Wert ein Code war und der neue Wert ein Option
+                    Error(ValidateFailedErr, CurrValueToAssignText, TargetRecRef.Field(ImportConfigLine."Target Field No.").Caption);
             else
                 Error('unhandled TODO %1', FromField.Type);
         end;

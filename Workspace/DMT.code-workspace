@@ -38,7 +38,7 @@
 					"authentication": "UserPassword",
 					"startupObjectType": "Page",
 					"startupObjectId": 50157,
-					"breakOnError": "ExcludeTry",
+					"breakOnError": "None",
 					"breakOnRecordWrite": "None",
 					"launchBrowser": true,
 					"enableSqlInformationDebugger": true,
@@ -47,7 +47,8 @@
 					"numberOfSqlStatements": 10,
 					"tenant": "default",
 					"usePublicURLFromServer": true,
-					"schemaUpdateMode": "ForceSync"
+					"schemaUpdateMode": "ForceSync",
+					"startupCompany": "DTM - Variante Test"
 				},
 				{
 					"name": "kadeco.de TEST_MC",
