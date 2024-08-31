@@ -35,6 +35,23 @@ pageextension 90012 ProcessingPlan extends DMTProcessingPlan
                     Message(FilterExpr);
                 end;
             }
+            action(CopySelectedLinesToProcessTemplateSetup)
+            {
+                Image = Copy;
+                Caption = 'Transfer to Process Template Setup', Comment = 'de-DE=In Prozessvorlage Einrichtung übernehmen';
+                ToolTip = 'Copies selected lines to Process Template Setup', Comment = 'de-DE=Kopiert ausgewählte Zeilen in Prozessvorlage Einrichtung';
+                ApplicationArea = All;
+                trigger OnAction()
+                var
+                    TempProcessingPlan_SelectedNew: Record DMTProcessingPlan temporary;
+                    processTemplateLib: Codeunit DMTProcessTemplateLib;
+                begin
+                    if not GetSelection(TempProcessingPlan_SelectedNew) then
+                        exit;
+                    processTemplateLib.CopySelectedLinesToProcessTemplateSetup(TempProcessingPlan_SelectedNew);
+
+                end;
+            }
         }
         addlast(LineActions)
         {

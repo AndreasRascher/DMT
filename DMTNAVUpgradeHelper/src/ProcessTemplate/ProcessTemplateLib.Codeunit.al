@@ -25,6 +25,25 @@ codeunit 90013 DMTProcessTemplateLib
         until processTemplateSetup.Next() = 0;
     end;
 
+    internal procedure CopySelectedLinesToProcessTemplateSetup(var TempProcessingPlan_SelectedNew: Record DMTProcessingPlan temporary)
+    var
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+        confirm: Page DMTConfirm;
+        targetTemplateCode: Code[150];
+    begin
+        confirm.SetMode_SelectTargetTemplateCodeMode();
+        if not (Confirm.RunModal() in [Action::LookupOK, Action::OK]) then
+            exit;
+        targetTemplateCode := confirm.GetTargetProcessTemplateCode();
+        if targetTemplateCode = '' then
+            exit;
+        if TempProcessingPlan_SelectedNew.FindSet(false) then
+            repeat
+                processTemplateSetup.AddFromProcessingPlan(targetTemplateCode);
+            until TempProcessingPlan_SelectedNew.Next() = 0;
+        processTemplateSetup.
+    end;
+
     local procedure AddToProcessingPlan(processTemplateSetup: Record DMTProcessTemplateSetup; nextLineNo: Integer)
     var
         processingPlan: Record DMTProcessingPlan;
@@ -397,7 +416,7 @@ codeunit 90013 DMTProcessTemplateLib
 
     procedure downloadProcessTemplateXLSFromGitHub(var downloadedFile: Codeunit "Temp Blob"; var importOptionNew: Option "Replace entries","Add entries"; HideDialog: Boolean)
     var
-        DMTReqURL: Page DMTConfirm;
+        Confirm: Page DMTConfirm;
         Client: HttpClient;
         ResponseMessage: HttpResponseMessage;
         InStr: InStream;
@@ -407,13 +426,15 @@ codeunit 90013 DMTProcessTemplateLib
     begin
         importOptionNew := importOptionNew::"Replace entries";
         if not HideDialog then begin
-            DMTReqURL.SetURL(downloadURLTok);
-            DMTReqURL.RunModal();
-            importOptionNew := DMTReqURL.GetImportOption();
+            Confirm.SetMode_DownloadDefaultTemplateMode();
+            Confirm.SetURL(downloadURLTok);
+            if not (Confirm.RunModal() in [Action::LookupOK, Action::OK]) then
+                exit;
+            importOptionNew := Confirm.GetImportOption();
         end;
         downloadedFile.CreateInStream(InStr);
         // Client.Get(DMTReqURL.GetURL(), ResponseMessage);
-        if not Client.Get(DMTReqURL.GetURL(), ResponseMessage) then begin
+        if not Client.Get(Confirm.GetURL(), ResponseMessage) then begin
             ResponseMessage.Content.ReadAs(ResponseText);
             Error('The call to the web service failed.');
         end;

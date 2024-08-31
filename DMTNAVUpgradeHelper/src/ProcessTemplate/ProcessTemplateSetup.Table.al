@@ -129,6 +129,39 @@ table 90014 DMTProcessTemplateSetup
         exit(Rec.Type = Rec.Type::"Run Codeunit");
     end;
 
+    internal procedure AddFromProcessingPlan(targetTemplateCode: Code[150]; processingPlan: Record DMTProcessingPlan) OK: Boolean
+    var
+        processTemplateSetup: Record DMTProcessTemplateSetup;
+        processingPlanType: Enum DMTProcessingPlanType;
+    begin
+        if not processTemplateSetup.tryFindMappedProcessingPlanType(processingPlanType) then
+            exit(false);
+        case processingPlanType of
+            processingPlanType::" ", processingPlanType::Group, processingPlanType::"Import To Buffer":
+                begin
+                    processTemplateSetup.New(targetTemplateCode);
+                    copyDefaultFields(processingPlan, processingPlanType, processTemplateSetup);
+                end;
+            processingPlanType::"Import To Target", processingPlanType::"Buffer + Target":
+                begin
+                    copyDefaultFields(processingPlan, processingPlanType, processTemplateSetup);
+                    //TODO:Filter;
+                end;
+            processingPlanType::"Update Field":
+                begin
+                    //ToDo
+                end;
+            processingPlanType::"Run Codeunit":
+                begin
+                    copyDefaultFields(processingPlan, processingPlanType, processTemplateSetup);
+                    processTemplateSetup."Run Codeunit" := processingPlan.ID;
+                end;
+            else
+                Error('Unhandled processing plan type %1', processingPlanType);
+        end;
+        processTemplateSetup.Insert();
+    end;
+
     local procedure propagateField(FieldNo: Integer)
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
@@ -141,6 +174,13 @@ table 90014 DMTProcessTemplateSetup
                     processTemplateSetup.ModifyAll("Sorting No.", Rec."Sorting No.");
                 end;
         end;
+    end;
+
+    local procedure copyDefaultFields(var processingPlan: Record DMTProcessingPlan; var processingPlanType: Enum DMTProcessingPlanType; var processTemplateSetup: Record DMTProcessTemplateSetup)
+    begin
+        processTemplateSetup.Type := processingPlanType;
+        processTemplateSetup."Description" := processingPlan."Description";
+        processTemplateSetup.Indentation := processingPlan.Indentation;
     end;
 
     procedure prepareNewLine(var newLine: Record DMTProcessTemplateSetup) OK: Boolean

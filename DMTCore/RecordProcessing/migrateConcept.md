@@ -78,6 +78,8 @@ InsertSimpleRecordFromProcessingPlan
     - Log Entry correct Count of inserted records
     - Log Entry correct Count of failed records
 InsertSimpleRecordFromImportConfig
+    - Target Entry Exists
+    - 
 InsertRecordWithReplacmentInKeyField
 
 InsertRecordWithModifyInValidate
