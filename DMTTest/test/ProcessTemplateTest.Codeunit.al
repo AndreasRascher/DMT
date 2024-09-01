@@ -49,6 +49,7 @@ codeunit 90028 ProzessTemplateTest
     begin
         confirm.TargetProcessTemplateCode.SetValue('TEST_TEMPLATE');
         confirm.Close();
+        //TODO: invoke ok on confirm page
     end;
 
     local procedure Initialize()
