@@ -14,7 +14,7 @@
   "internalsVisibleTo": [
     {
       "id": "9f7ca7e4-6acb-4f40-b403-bbbdcb288ada",
-      "name": "DMT CodeGenerator",
+      "name": "DMT NAV Upgrade Helper",
       "publisher": "Andreas Rascher"
     },{
       "id": "a8397bb9-221a-4b7e-b8e9-53b19c0d3876",

@@ -129,7 +129,7 @@ page 91017 DMTProcessingPlan
                 // Caption = 'Delete', Comment = 'de-DE=Löschen';
                 Caption = ' ', Locked = true;
                 ToolTip = 'Delete', Comment = 'de-DE=Löschen';
-                ShortcutKey = 'Ctrl+Delete'; //TODO ShortcutKey geht nicht, Ctrl+ ist richtig
+                // ShortcutKey = 'Ctrl+Delete'; //TODO ShortcutKey geht nicht, Ctrl+ ist richtig
                 Image = Delete;
                 trigger OnAction()
                 var

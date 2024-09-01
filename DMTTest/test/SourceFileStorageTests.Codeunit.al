@@ -21,7 +21,7 @@ codeunit 90024 SourceFileStorageTests
     var
         ExtTextHeader1, ExtTextHeader2 : Record "Extended Text Header";
         sourceFileMgt: Codeunit DMTSourceFileMgt;
-        dataTableHelper: Codeunit dataTableHelper;
+        dataTableHelper: Codeunit DMTDataTableHelper;
         fileBlob1, fileBlob2 : Codeunit "Temp Blob";
         fileID1, fileID2 : Integer;
     begin

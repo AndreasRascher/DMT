@@ -78,7 +78,7 @@ codeunit 90021 ReplacementTests
     var
         dataLayout: Record DMTDataLayout;
         sourceFileStorage: Record DMTSourceFileStorage;
-        dataTableHelper: Codeunit dataTableHelper;
+        dataTableHelper: Codeunit DMTDataTableHelper;
         TempBlob: Codeunit "Temp Blob";
     begin
         if CreatedImportConfigHeaderID <> 0 then begin

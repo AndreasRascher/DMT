@@ -1,4 +1,4 @@
-codeunit 90027 dataTableHelper
+codeunit 90027 DMTDataTableHelper
 {
     internal procedure GetFieldCaptionsAsRow(recRef: RecordRef) Row: List of [Text]
     var

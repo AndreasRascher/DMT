@@ -144,15 +144,19 @@ table 90014 DMTProcessTemplateSetup
                 end;
             processingPlanType::"Import To Target", processingPlanType::"Buffer + Target":
                 begin
+                    processTemplateSetup.New(targetTemplateCode);
                     copyDefaultFields(processingPlan, processingPlanType, processTemplateSetup);
                     //TODO:Filter;
                 end;
             processingPlanType::"Update Field":
                 begin
-                    //ToDo
+                    processTemplateSetup.New(targetTemplateCode);
+                    copyDefaultFields(processingPlan, processingPlanType, processTemplateSetup);
+                    //TODO:Filter
                 end;
             processingPlanType::"Run Codeunit":
                 begin
+
                     copyDefaultFields(processingPlan, processingPlanType, processTemplateSetup);
                     processTemplateSetup."Run Codeunit" := processingPlan.ID;
                 end;

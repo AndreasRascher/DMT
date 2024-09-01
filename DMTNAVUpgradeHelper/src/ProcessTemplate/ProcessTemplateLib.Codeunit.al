@@ -25,7 +25,7 @@ codeunit 90013 DMTProcessTemplateLib
         until processTemplateSetup.Next() = 0;
     end;
 
-    internal procedure CopySelectedLinesToProcessTemplateSetup(var TempProcessingPlan_SelectedNew: Record DMTProcessingPlan temporary)
+    procedure CopySelectedLinesToProcessTemplateSetup(var TempProcessingPlan_Selected: Record DMTProcessingPlan temporary)
     var
         processTemplateSetup: Record DMTProcessTemplateSetup;
         confirm: Page DMTConfirm;
@@ -37,11 +37,10 @@ codeunit 90013 DMTProcessTemplateLib
         targetTemplateCode := confirm.GetTargetProcessTemplateCode();
         if targetTemplateCode = '' then
             exit;
-        if TempProcessingPlan_SelectedNew.FindSet(false) then
+        if TempProcessingPlan_Selected.FindSet(false) then
             repeat
-                processTemplateSetup.AddFromProcessingPlan(targetTemplateCode);
-            until TempProcessingPlan_SelectedNew.Next() = 0;
-        processTemplateSetup.
+                processTemplateSetup.AddFromProcessingPlan(targetTemplateCode, TempProcessingPlan_Selected);
+            until TempProcessingPlan_Selected.Next() = 0;
     end;
 
     local procedure AddToProcessingPlan(processTemplateSetup: Record DMTProcessTemplateSetup; nextLineNo: Integer)
@@ -154,7 +153,7 @@ codeunit 90013 DMTProcessTemplateLib
         end;
     end;
 
-    local procedure translateTargetFilterToSourceFilter(var filteredView: Text; processingPlan: Record DMTProcessingPlan; filter: Dictionary of [Text, Text]) OK: Boolean
+    local procedure translateTargetFilterToSourceFilter(var filteredView: Text; processingPlan: Record DMTProcessingPlan; filter: Dictionary of [Text/*field name*/, Text/*filter expression|default value*/]) OK: Boolean
     var
         importConfigHeader: Record DMTImportConfigHeader;
         importConfigLine: Record DMTImportConfigLine;
@@ -186,7 +185,7 @@ codeunit 90013 DMTProcessTemplateLib
     local procedure addFilterAndDefaults(var processingPlan: Record DMTProcessingPlan; processTemplateSetup: Record DMTProcessTemplateSetup) OK: Boolean
     var
         processTemplateSetup2: Record DMTProcessTemplateSetup;
-        filter: Dictionary of [Text, Text];
+        filter: Dictionary of [Text/*field name*/, Text/*filter expression|default value*/];
         defaults: Dictionary of [Text, Text];
         filteredView: Text;
     begin
@@ -209,7 +208,6 @@ codeunit 90013 DMTProcessTemplateLib
             processingPlan.SaveSourceTableFilter(filteredView);
         if translateTargetFilterToSourceFilter(filteredView, processingPlan, defaults) then
             processingPlan.SaveDefaultValuesView(filteredView);
-        //TODO: Update Field
     end;
 
     /// <summary>

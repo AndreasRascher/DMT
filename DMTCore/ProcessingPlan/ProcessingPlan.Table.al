@@ -379,6 +379,75 @@ table 91009 DMTProcessingPlan
         IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"];
     end;
 
+    internal procedure New()
+    var
+        processingPlan: Record DMTProcessingPlan;
+    begin
+        processingPlan."Line No." := Rec.getNextLineNo();
+        Rec.Copy(processingPlan);
+    end;
+
+    internal procedure getIndentation() indentationFound: Integer
+    var
+        processingPlan: Record DMTProcessingPlan;
+        tempProcessingPlan: Record DMTProcessingPlan temporary;
+    begin
+        if Rec.IsTemporary then begin
+
+            tempProcessingPlan.Copy(Rec, true);
+            if not tempProcessingPlan.get(Rec.RecordId) then
+                exit(0);
+
+            tempProcessingPlan.Reset();
+            tempProcessingPlan.get(Rec.RecordId);
+            if tempProcessingPlan.Next(-1) = -1 then begin
+                if tempProcessingPlan.Type = tempProcessingPlan.Type::Group then begin
+                    // Lines below group: indent + 1
+                    indentationFound := tempProcessingPlan.Indentation + 1;
+                end else begin
+                    // other keep indentation from above
+                    indentationFound := tempProcessingPlan.Indentation;
+                end;
+                exit(indentationFound);
+            end;
+
+        end else begin
+
+            if not processingPlan.get(Rec.RecordId) then
+                exit(0);
+
+            processingPlan.Reset();
+            processingPlan.get(Rec.RecordId);
+            if processingPlan.Next(-1) = -1 then begin
+                if processingPlan.Type = processingPlan.Type::Group then begin
+                    // Lines below group: indent + 1
+                    indentationFound := processingPlan.Indentation + 1;
+                end else begin
+                    // other keep indentation from above
+                    indentationFound := processingPlan.Indentation;
+                end;
+                exit(indentationFound);
+            end;
+
+        end;
+    end;
+
+    procedure getNextLineNo() nextLineNo: Integer
+    var
+        processingPlan: Record DMTProcessingPlan;
+        tempProcessingPlan: Record DMTProcessingPlan temporary;
+    begin
+        if Rec.IsTemporary then begin
+            tempProcessingPlan.Copy(Rec, true);
+            if tempProcessingPlan.FindLast() then;
+            nextLineNo += tempProcessingPlan."Line No." + 10000;
+        end else begin
+            if processingPlan.FindLast() then;
+            nextLineNo += processingPlan."Line No." + 10000;
+        end;
+    end;
+
+
     procedure findImportConfigHeader(var importConfigHeader: Record DMTImportConfigHeader) OK: Boolean
     begin
         if not (Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"]) then
@@ -386,4 +455,88 @@ table 91009 DMTProcessingPlan
         Clear(importConfigHeader);
         OK := importConfigHeader.Get(Rec.ID);
     end;
+
+    /// <summary>
+    /// <p>uses the indentation of the parent group + 1</p>
+    /// </summary>
+    procedure setUseAutomaticIndentation(useAutomaticIndentationNEW: Boolean)
+    begin
+        UseAutomaticIndentation := useAutomaticIndentationNEW;
+    end;
+
+    procedure addGroupLine(DescriptionNew: Text[150]; indentationNew: Integer) processingPlan: Record DMTProcessingPlan;
+    begin
+        addLine(Enum::DMTProcessingPlanType::Group, 0, indentationNew, DescriptionNew);
+    end;
+
+    procedure addImportToBufferLine(importConfigHeaderID: Integer; descriptionNEW: Text[250])
+    begin
+        addLine(Enum::DMTProcessingPlanType::"Import To Buffer", importConfigHeaderID, Rec.getIndentation(), descriptionNEW);
+    end;
+
+    procedure addImportToTargetLine(importConfigHeaderID: Integer; descriptionNEW: Text[250])
+    begin
+        addLine(Enum::DMTProcessingPlanType::"Import To Target", importConfigHeaderID, Rec.getIndentation(), descriptionNEW);
+    end;
+
+    local procedure addLine(TypeNEW: Enum DMTProcessingPlanType; importConfigHeaderID: Integer; indentationNEW: Integer; descriptionNEW: Text[250])
+    var
+        processingPlan: Record DMTProcessingPlan;
+    begin
+        processingPlan.New();
+        processingPlan.Type := TypeNEW;
+        processingPlan.Validate(ID, importConfigHeaderID);
+        if (indentationNEW = 0) and UseAutomaticIndentation then
+            processingPlan.Indentation := Rec.getIndentation()
+        else
+            processingPlan.Indentation := indentationNEW;
+        processingPlan.Description := descriptionNEW;
+        processingPlan.Insert();
+        Rec.Copy(processingPlan);
+    end;
+
+    /// <summary>create a filter for the source table based on the filter for the target table</summary>
+    /// <param name="filteredView">table view result</param>
+    /// <param name="importConfigHeaderID">ID of the config. header containing the field mapping</param>
+    /// <param name="filter">filter: Dictionary of [Text/*field name*/, Text/*filter expression|default value*/]</param>
+    /// <returns>true - field filters found</returns>
+    procedure createSourceTableFilterFromTargetFilter(var filteredView: Text; importConfigHeaderID: Integer; filter: Dictionary of [Text/*field name*/, Text/*filter expression|default value*/]) OK: Boolean
+    var
+        importConfigHeader: Record DMTImportConfigHeader;
+        importConfigLine: Record DMTImportConfigLine;
+        fieldFilters: List of [Text];
+        index: Integer;
+    begin
+        importConfigHeader.Get(importConfigHeaderID);
+        importConfigHeader.TestField("Source File Name");
+
+        for index := 1 to filter.Count do begin
+            importConfigLine.SetRange("Source Field Caption", filter.Keys.Get(index));
+            importConfigHeader.FilterRelated(importConfigLine);
+            if importConfigLine.FindFirst() then begin
+                fieldFilters.Add(StrSubstNo('Field%1=1(%2)', importConfigLine."Source Field No.", filter.Values.Get(index)));
+            end;
+        end;
+
+        for index := 1 to fieldFilters.Count do begin
+            filteredView += fieldFilters.Get(index);
+            if index < fieldFilters.Count then
+                filteredView += ',';
+        end;
+        filteredView := 'VERSION(1) SORTING(Field1) WHERE(' + filteredView + ')';
+        OK := fieldFilters.Count > 0;
+    end;
+
+
+    procedure SaveSourceTableFilterCreatedFromTargetFilter(CreatedImportConfigHeaderID: Integer; filter: Dictionary of [Text/*field name*/, Text/*filter expression|default value*/])
+    var
+        filteredView: Text;
+    begin
+        createSourceTableFilterFromTargetFilter(filteredView, CreatedImportConfigHeaderID, filter);
+        Rec.SaveSourceTableFilter(filteredView);
+    end;
+
+
+    var
+        UseAutomaticIndentation: Boolean;
 }

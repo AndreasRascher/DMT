@@ -12,7 +12,7 @@ codeunit 90026 LogTests
         importConfigLine: Record DMTImportConfigLine;
         TempBlob: Codeunit "Temp Blob";
         testLibrary: Codeunit DMTTestLibrary;
-        dataTableHelper: Codeunit dataTableHelper;
+        dataTableHelper: Codeunit DMTDataTableHelper;
     begin
         // [GIVEN] Import field values with validate 
         testLibrary.CreateDMTSetup();

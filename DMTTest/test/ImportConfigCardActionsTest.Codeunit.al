@@ -52,7 +52,7 @@ codeunit 90023 ImportConfigCardActionsTest
         sourceFileStorage: Record DMTSourceFileStorage;
         ExtendedTextHeader: Record "Extended Text Header";
         testLibrary: Codeunit DMTTestLibrary;
-        dataTableHelper: Codeunit dataTableHelper;
+        dataTableHelper: Codeunit DMTDataTableHelper;
         tempBlob: Codeunit "Temp Blob";
     begin
         if IsInitializedGlobal then
