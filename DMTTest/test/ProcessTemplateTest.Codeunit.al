@@ -1,6 +1,7 @@
 codeunit 90028 ProzessTemplateTest
 {
     Subtype = Test;
+    TestPermissions = Disabled;
 
     [Test]
     procedure DefaultDownloadURLIsValidTest()
@@ -20,6 +21,7 @@ codeunit 90028 ProzessTemplateTest
 
     // Test: Copy Processing Plan Line to Process Template Setup
     [Test]
+    [HandlerFunctions('SetTemplateCodePageHandler')]
     procedure CopyProcessingPlanLineToProcessTemplateSetup()
     // [FEATURE] Copy Processing Plan Line to Process Template Setup
     // [SCENARIO] Copy Processing Plan Line to Process Template Setup
@@ -40,6 +42,13 @@ codeunit 90028 ProzessTemplateTest
             Error('Process Template Setup is not created');
         // [THEN] Filters are copied
         //TODO: Check if filters are copied
+    end;
+
+    [ModalPageHandler]
+    procedure SetTemplateCodePageHandler(var confirm: TestPage DMTConfirm)
+    begin
+        confirm.TargetProcessTemplateCode.SetValue('TEST_TEMPLATE');
+        confirm.Close();
     end;
 
     local procedure Initialize()

@@ -188,10 +188,10 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Variablenname (Zieldatensatz)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCode - Control TargetRecVarName - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2076196089 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 2076196089 - Control 255541656 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Option</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Optionen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control Options - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control DownloadTemplateOptions - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2076196089 - Control 652589522 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Option</source>
@@ -202,6 +202,21 @@
           <source>Replace entries,Add entries</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Einträge ersetzen,Neue Einträge hinzufügen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control ImportOption - Property OptionCaption</note>
+        </trans-unit>
+        <trans-unit id="Page 2076196089 - Control 2298090088 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Option</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Optionen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control SelectTargetTemplateCode - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2076196089 - Control 3004893441 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Selection of an existing process template: Entries will be added.\nInput of a new process template code: New process template will be created.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE= Auswahl einer vorhandene Prozessvorlage: Einträge werden hinzugefügt.\Eingabe eines neuen Prozessvorlagen-Codes: Neue Prozessvorlage wird erstellt.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control TargetProcessTemplateCode - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2076196089 - Control 3004893441 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Process Template Code</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Prozessvorlagen-Code</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTConfirm - Control TargetProcessTemplateCode - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1270938733 - Control 1481971033 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Table Filter</source>
@@ -357,6 +372,16 @@
           <source>Download buffer table objects</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Puffertabellen Objekte runterladen</note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension ImportConfigList - Action ExportALObjects - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 4113247020 - Action 3588884554 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1212190007">
+          <source>Copies selected lines to Process Template Setup</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Kopiert ausgewählte Zeilen in Prozessvorlage Einrichtung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension ProcessingPlan - Action CopySelectedLinesToProcessTemplateSetup - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 4113247020 - Action 3588884554 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1212190007">
+          <source>Transfer to Process Template Setup</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=In Prozessvorlage Einrichtung übernehmen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension ProcessingPlan - Action CopySelectedLinesToProcessTemplateSetup - Property Caption</note>
         </trans-unit>
         <trans-unit id="PageExtension 4113247020 - Action 3778679344 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1212190007">
           <source>Creates a filter expression for NAV Table IDs based on selected lines</source>
