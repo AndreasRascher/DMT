@@ -272,6 +272,7 @@ codeunit 50048 DMTProcessRecord
                         SkipRecordGlobal := true;
                 end;
         end;
+        if TmpTargetRef.Insert(false) then; // provide a record to avoid errors in trigger code when calling Rec.Modify
         CurrTargetRecIDText := Format(TmpTargetRef.RecordId);
     end;
 
