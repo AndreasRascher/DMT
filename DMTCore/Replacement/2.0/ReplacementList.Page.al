@@ -1,4 +1,4 @@
-page 91022 DMTReplacementList
+page 50162 DMTReplacementList
 {
     Caption = 'DMT Replacement List', Comment = 'de-DE=DMT Ersetzungen';
     PageType = List;

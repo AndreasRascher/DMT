@@ -1,4 +1,4 @@
-enum 91006 DMTLogUsage
+enum 50046 DMTLogUsage
 {
     value(0; " ") { Caption = ' ', Locked = true; }
     value(10; Information) { Caption = 'Information', Locked = true; }

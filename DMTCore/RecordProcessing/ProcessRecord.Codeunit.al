@@ -1,4 +1,4 @@
-codeunit 91008 DMTProcessRecord
+codeunit 50048 DMTProcessRecord
 {
     trigger OnRun()
     begin
@@ -20,6 +20,7 @@ codeunit 91008 DMTProcessRecord
                 else begin
                     if ProcessedFields.Count < TargetKeyFieldIDs.Count then
                         ProcessKeyFields();
+
                     if ProcessedFields.Count = TargetKeyFieldIDs.Count then
                         TmpTargetRef.Insert(false); // insert record to allow modify in validate triggers
 

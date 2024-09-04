@@ -1,4 +1,4 @@
-page 91016 DMTProcessInstructionFactBox
+page 50156 DMTProcessInstructionFactBox
 {
     Caption = 'Processing Instructions', Comment = 'de-DE=Verarbeitungsanweisungen';
     PageType = ListPart;

@@ -1,4 +1,4 @@
-page 90015 DMTProcessTemplateSetup
+page 50171 DMTProcessTemplateSetup
 {
     Caption = 'DMT Process Template Setup', Comment = 'de-DE=DMT Prozessvorlagen Einrichtung';
     PageType = List;

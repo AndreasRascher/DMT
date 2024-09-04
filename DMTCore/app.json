@@ -2,7 +2,7 @@
   "id": "4698691e-c550-4026-9fac-05f90572a975",
   "name": "DMT Core",
   "publisher": "Andreas Rascher",
-  "version": "23.0.0.24082901",
+  "version": "23.0.0.24090301",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -26,9 +26,9 @@
   "platform": "1.0.0.0",
   "application": "22.0.0.0",
   "idRanges": [
-    {
-      "from": 91000,
-      "to": 91099
+    { 
+      "from": 50000,
+      "to":50166
     }
   ],
   "resourceExposurePolicy": {

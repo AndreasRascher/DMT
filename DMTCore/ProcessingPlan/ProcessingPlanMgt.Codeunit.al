@@ -1,4 +1,4 @@
-codeunit 91015 DMTProcessingPlanMgt
+codeunit 50055 DMTProcessingPlanMgt
 {
     internal procedure ImportWithProcessingPlanParams(processingPlan: Record DMTProcessingPlan) Success: Boolean
     var

@@ -1,4 +1,4 @@
-page 91018 DMTSelectMultipleFields
+page 50158 DMTSelectMultipleFields
 {
     Caption = 'Select multiple fields', Comment = 'de-DE=Mehrere Felder auswählen';
     PageType = List;

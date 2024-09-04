@@ -1,4 +1,4 @@
-codeunit 90011 DMTCodeGenerator
+codeunit 50047 DMTCodeGenerator
 {
 
     procedure CreateALXMLPort(importConfigHeader: Record DMTImportConfigHeader) C: TextBuilder

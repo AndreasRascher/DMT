@@ -1,4 +1,4 @@
-page 91007 DMTDataLayouts
+page 50147 DMTDataLayouts
 {
     Caption = 'DMT Data Layouts', Comment = 'de-DE=DMT Datenlayouts Übersicht';
     PageType = List;

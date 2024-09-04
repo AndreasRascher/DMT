@@ -1,4 +1,4 @@
-codeunit 91014 DMTMigrate
+codeunit 50054 DMTMigrate
 {
     /// <summary>
     /// Process buffer records defined by RecordIds
@@ -69,6 +69,8 @@ codeunit 91014 DMTMigrate
         DMTImportSettings.UpdateFieldsFilter(ProcessingPlan.ReadUpdateFieldsFilter());
         DMTImportSettings.SourceTableView(ProcessingPlan.ReadSourceTableView());
         LoadImportConfigLine(DMTImportSettings);
+        if ProcessingPlan.Type = ProcessingPlan.Type::"Update Field" then
+            DMTImportSettings.UpdateExistingRecordsOnly(true);
         ProcessFullBuffer(DMTImportSettings);
     end;
 

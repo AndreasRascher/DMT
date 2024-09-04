@@ -1,4 +1,4 @@
-codeunit 91022 DMTSeparateBufferTableMgtImpl implements IBufferTableMgt
+codeunit 50062 DMTSeparateBufferTableMgtImpl implements IBufferTableMgt
 {
     procedure setImportConfigHeader(var ImportConfigHeader: record DMTImportConfigHeader);
     begin

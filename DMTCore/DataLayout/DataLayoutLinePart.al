@@ -1,4 +1,4 @@
-page 91006 DMTLayoutLinePart
+page 50146 DMTLayoutLinePart
 {
     Caption = 'Lines', Comment = 'de-DE=Zeilen';
     PageType = ListPart;

@@ -1,4 +1,4 @@
-page 91012 DMTFieldLookup
+page 50152 DMTFieldLookup
 {
     Caption = 'Fields', Comment = 'de-DE=Felder';
     PageType = List;

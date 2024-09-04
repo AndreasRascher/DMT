@@ -1,4 +1,4 @@
-page 91011 DMTDataLayoutCard
+page 50151 DMTDataLayoutCard
 {
     Caption = 'DMT Data Layout', Comment = 'de-DE=DMT Datenlayout';
     PageType = List;
