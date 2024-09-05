@@ -1,11 +1,24 @@
 codeunit 91027 DMTLicenseMgt
 {
     trigger OnRun()
+    var
+        RIMDXObjectFilter: Dictionary of [Text, Text];
+        appList: JsonArray;
+        coreAppId, navUpgradeHelperAppId : JsonObject;
     begin
-        importFromPemissionsReport();
+        importFromPemissionsReport(RIMDXObjectFilter);
+        coreAppId.Add('id', '4698691e-c550-4026-9fac-05f90572a975');
+        coreAppId.Add('name', 'DMT Core');
+        coreAppId.Add('publisher', 'Andreas Rascher');
+        navUpgradeHelperAppId.Add('id', '9f7ca7e4-6acb-4f40-b403-bbbdcb288ada');
+        navUpgradeHelperAppId.Add('name', 'DMT NAV Upgrade Helper');
+        navUpgradeHelperAppId.Add('publisher', 'Andreas Rascher');
+        appList.Add(coreAppId);
+        appList.Add(navUpgradeHelperAppId);
+        createBatchReplacerFile(RIMDXObjectFilter, appList);
     end;
 
-    procedure importFromPemissionsReport()
+    procedure importFromPemissionsReport(var RIMDXObjectFilter: Dictionary of [Text, Text])
     var
         uploadedFile: Codeunit "Temp Blob";
         IStr: InStream;
@@ -20,7 +33,6 @@ codeunit 91027 DMTLicenseMgt
         objectType, quantity, rangeFrom, rangeTo, permissions : Text;
         RIMDXPermissions: List of [List of [Text]];
         RIMDXPermission: List of [Text];
-        RIMDXObjectFilter: Dictionary of [Text, Text];
         ObjectFilter: Text;
     begin
         uploadedFile.CreateInStream(IStr, TextEncoding::Windows);
@@ -69,5 +81,46 @@ codeunit 91027 DMTLicenseMgt
         end;
 
         Message(ImportFinishedMsg);
+    end;
+
+    local procedure createBatchReplacerFile(RIMDXObjectFilter: Dictionary of [Text, Text]; appList: JsonArray)
+    var
+        NAVAppInstalledApp: Record "NAV App Installed App";
+        AllObjWithCaption: Record AllObjWithCaption;
+        JToken, JToken2 : JsonToken;
+        packageIDFilter: Text;
+        usedObjects: Dictionary of [Text, list of [Integer]];
+        usedObjectIDs: List of [Integer];
+    begin
+        // Create a filter for all objects that are used by the DMT Core and DMT NAV Upgrade Helper
+        foreach JToken in appList do begin
+            JToken.AsObject().Get('id', JToken2);
+            NAVAppInstalledApp.SetFilter("App ID", JToken2.AsValue().AsText());
+
+            JToken.AsObject().Get('name', JToken2);
+            NAVAppInstalledApp.SetRange(Name, JToken2.AsValue().AsText());
+
+            JToken.AsObject().Get('publisher', JToken2);
+            NAVAppInstalledApp.SetRange(Publisher, JToken2.AsValue().AsText());
+
+            NAVAppInstalledApp.FindFirst();
+            if packageIDFilter = '' then
+                packageIDFilter := NAVAppInstalledApp."Package ID"
+            else
+                packageIDFilter += '|' + NAVAppInstalledApp."Package ID";
+        end;
+        // Get all objects that are used by the DMT Core and DMT NAV Upgrade Helper
+        AllObjWithCaption.SetFilter("App Package ID", packageIDFilter);
+        if AllObjWithCaption.FindSet() then
+            repeat
+                if not usedObjects.Get(Format(AllObjWithCaption."Object Type"), usedObjectIDs) then begin
+                    usedObjectIDs.Add(AllObjWithCaption."Object ID");
+                    usedObjects.Add(Format(AllObjWithCaption."Object Type"), usedObjectIDs);
+                end else begin
+                    usedObjectIDs.Add(AllObjWithCaption."Object ID");
+                    usedObjects.Set(Format(AllObjWithCaption."Object Type"), usedObjectIDs);
+                end;
+            until AllObjWithCaption.Next() = 0;
+        // Check if the object is in the license filter
     end;
 }
