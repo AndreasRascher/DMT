@@ -898,6 +898,16 @@
           <note from="Developer" annotates="general" priority="2">de-DE=XMLPort %1 ist nicht vorhanden.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportCSVImpl - Method ImportViaSeparateXMLPort - NamedType xmlPortNotFoundErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1185200660 - Method 4128248281 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import finished</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLicenseMgt - Method importFromPemissionsReport - NamedType ImportFinishedMsg</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1185200660 - Method 4128248281 - NamedType 659472064" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Upload Permission Report Detailed</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Permission Report Detailed hochladen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLicenseMgt - Method importFromPemissionsReport - NamedType UploadFileMsg</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3774911051 - Method 4006425096 - NamedType 2696288649" size-unit="char" translate="yes" xml:space="preserve">
           <source>Assigned Values have been changed by triggers</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Zugewiesene Werte wurden duch Trigger Code geändert</note>

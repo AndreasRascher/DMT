@@ -241,7 +241,9 @@ table 91009 DMTProcessingPlan
         FieldIndexNo: Integer;
         CurrView: Text;
     begin
-        if not (rec.Type in [rec.Type::"Buffer + Target", Rec.Type::"Import To Target", rec.Type::"Update Field", rec.Type::"Run Codeunit"]) then
+        if not (rec.Type in [rec.Type::"Buffer + Target", Rec.Type::"Import To Target", rec.Type::"Update Field"]) then
+            exit;
+        if (rec.Type = rec.Type::"Run Codeunit") and (rec."Target Table ID" = 0) then
             exit;
         if rec.ID = 0 then exit;
         if not Rec.CreateSourceTableRef(RecRef) then

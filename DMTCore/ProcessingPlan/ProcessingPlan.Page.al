@@ -331,7 +331,7 @@ page 91017 DMTProcessingPlan
         ImportConfigHeader: Record DMTImportConfigHeader;
         ProcessingPlan: Record DMTProcessingPlan;
         ProcessStorage: Codeunit DMTProcessStorage;
-        Success: Boolean;
+        CodunitRunSuccessful: Boolean;
         HasErrors: Boolean;
     begin
         ProcessingPlan_SELECTED.SetFilter(Type, '<>%1&<>%2', ProcessingPlan_SELECTED.Type::Group, ProcessingPlan_SELECTED.Type::" ");
@@ -360,7 +360,7 @@ page 91017 DMTProcessingPlan
                         SetStatusToStartAndCommit(ProcessingPlan);
                         ClearLastError();
                         ProcessStorage.Set(ProcessingPlan);
-                        Success := Codeunit.Run(ProcessingPlan.ID);
+                        CodunitRunSuccessful := Codeunit.Run(ProcessingPlan.ID);
                         if GetLastErrorText() <> '' then
                             Message(GetLastErrorText());
                     end;
@@ -382,7 +382,7 @@ page 91017 DMTProcessingPlan
             end;
             ProcessingPlan."Processing Duration" := CurrentDateTime - ProcessingPlan.StartTime;
             ProcessingPlan.Status := ProcessingPlan.Status::Finished;
-            if HasErrors then
+            if HasErrors or ((ProcessingPlan.Type = DMTProcessingPlanType::"Run Codeunit") and not CodunitRunSuccessful) then
                 ProcessingPlan.Status := ProcessingPlan.Status::Error;
             ProcessingPlan.Modify();
             Commit();
