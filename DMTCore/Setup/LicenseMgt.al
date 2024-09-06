@@ -1,3 +1,5 @@
+TODO: Ausführbar pro App mit Überschrift
+
 codeunit 91027 DMTLicenseMgt
 {
     trigger OnRun()
@@ -99,6 +101,8 @@ codeunit 91027 DMTLicenseMgt
         ObjectIDMapping: List of [Integer/*1-Old ID 2-New ID*/];
         objectType: Text;
         oldGroup, CurrentID, NewID : Integer;
+        batchReplacerFileContent: TextBuilder;
+        object: Text;
     begin
         // Create a filter for all objects that are used by the DMT Core and DMT NAV Upgrade Helper
         foreach JToken in appList do begin
@@ -170,10 +174,18 @@ codeunit 91027 DMTLicenseMgt
                     LicensedObjectIDs.RemoveAt(1);
                     Clear(ObjectIDMapping);
                     ObjectIDMapping.AddRange(CurrentID, NewID);
-                    ObjectIDMappingDict.Add(StrSubstNo('%1%2', objectType, CurrentID), StrSubstNo('%1%2', objectType, NewID));
+                    ObjectIDMappingDict.Add(StrSubstNo('%1 %2', objectType, CurrentID), StrSubstNo('%1 %2', objectType, NewID));
                 end;
             end;
         end;
+        // create a batch replacer file
+        foreach object in ObjectIDMappingDict.Keys() do begin
+            batchReplacerFileContent.AppendLine(StrSubstNo('replace "%1"', object));
+            batchReplacerFileContent.AppendLine(StrSubstNo('with "%1"', ObjectIDMappingDict.Get(object)));
+        end;
+        // replace "xmlport 91001" 
+        // with "xmlport 50000"
+
     end;
 
     local procedure mapObjectTypeText(objectType: Text) objectType2: Text
@@ -190,7 +202,7 @@ codeunit 91027 DMTLicenseMgt
             'Query':
                 objectType2 := 'Query';
             'XMLPort':
-                objectType2 := 'XmlPort';
+                objectType2 := 'xmlport';
             else
                 Error('Unknown object type %1', objectType);
         end;
@@ -210,7 +222,7 @@ codeunit 91027 DMTLicenseMgt
             AllObjWithCaption."Object Type"::Query:
                 objectTypeText := 'Query';
             AllObjWithCaption."Object Type"::XmlPort:
-                objectTypeText := 'XmlPort';
+                objectTypeText := 'xmlport';
             else
                 Error('Unknown object type %1', AllObjWithCaption."Object Type");
         end;
