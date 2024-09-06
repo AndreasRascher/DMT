@@ -15,7 +15,7 @@ codeunit 91027 DMTLicenseMgt
         navUpgradeHelperAppId.Add('publisher', 'Andreas Rascher');
         appList.Add(coreAppId);
         appList.Add(navUpgradeHelperAppId);
-        createBatchReplacerFile(RIMDXObjectFilter, appList);
+        createBatchReplacerFile(RIMDXObjectFilter, appList, '50000..99999');
     end;
 
     procedure importFromPemissionsReport(var RIMDXObjectFilter: Dictionary of [Text, Text])
@@ -66,7 +66,7 @@ codeunit 91027 DMTLicenseMgt
             permissions := CopyStr(lines.get(i), 76, 15).Trim();
             if permissions = 'RIMDX' then begin
                 Clear(RIMDXPermission);
-                RIMDXPermission.AddRange(objectType, quantity, rangeFrom, rangeTo, permissions);
+                RIMDXPermission.AddRange(mapObjectTypeText(objectType), quantity, rangeFrom, rangeTo, permissions);
                 RIMDXPermissions.Add(RIMDXPermission);
             end;
         end;
@@ -83,14 +83,22 @@ codeunit 91027 DMTLicenseMgt
         Message(ImportFinishedMsg);
     end;
 
-    local procedure createBatchReplacerFile(RIMDXObjectFilter: Dictionary of [Text, Text]; appList: JsonArray)
+    local procedure createBatchReplacerFile(RIMDXObjectFilter: Dictionary of [Text, Text]; appList: JsonArray; preferedRange: Text)
     var
         NAVAppInstalledApp: Record "NAV App Installed App";
         AllObjWithCaption: Record AllObjWithCaption;
+        integer: Record Integer;
         JToken, JToken2 : JsonToken;
         packageIDFilter: Text;
         usedObjects: Dictionary of [Text, list of [Integer]];
         usedObjectIDs: List of [Integer];
+        LicensedObjects: Dictionary of [Text, list of [Integer]];
+        LicensedObjectIDs: List of [Integer];
+        // Infos to collect: Object Type, Object ID, New Object ID
+        ObjectIDMappingDict: Dictionary of [Text/*<objectType><oldId>*/, Text/*<objectType><newId>*/];
+        ObjectIDMapping: List of [Integer/*1-Old ID 2-New ID*/];
+        objectType: Text;
+        oldGroup, CurrentID, NewID : Integer;
     begin
         // Create a filter for all objects that are used by the DMT Core and DMT NAV Upgrade Helper
         foreach JToken in appList do begin
@@ -111,16 +119,100 @@ codeunit 91027 DMTLicenseMgt
         end;
         // Get all objects that are used by the DMT Core and DMT NAV Upgrade Helper
         AllObjWithCaption.SetFilter("App Package ID", packageIDFilter);
+        AllObjWithCaption.SetFilter("Object Type", '<>%1&<>%2&<>%3&<>%4&<>%5', AllObjWithCaption."Object Type"::TableData,
+                                                                AllObjWithCaption."Object Type"::"TableExtension",
+                                                                AllObjWithCaption."Object Type"::"PageExtension",
+                                                                AllObjWithCaption."Object Type"::Enum,
+                                                                AllObjWithCaption."Object Type"::PermissionSet);
         if AllObjWithCaption.FindSet() then
             repeat
-                if not usedObjects.Get(Format(AllObjWithCaption."Object Type"), usedObjectIDs) then begin
+                if not usedObjects.Get(mapObjectTypeText(AllObjWithCaption), usedObjectIDs) then begin
+                    Clear(usedObjectIDs);
                     usedObjectIDs.Add(AllObjWithCaption."Object ID");
-                    usedObjects.Add(Format(AllObjWithCaption."Object Type"), usedObjectIDs);
+                    usedObjects.Add(mapObjectTypeText(AllObjWithCaption), usedObjectIDs);
                 end else begin
                     usedObjectIDs.Add(AllObjWithCaption."Object ID");
-                    usedObjects.Set(Format(AllObjWithCaption."Object Type"), usedObjectIDs);
+                    usedObjects.Set(mapObjectTypeText(AllObjWithCaption), usedObjectIDs);
                 end;
             until AllObjWithCaption.Next() = 0;
-        // Check if the object is in the license filter
+        // Create Lists of free object IDs in License
+        foreach objectType in RIMDXObjectFilter.Keys() do begin
+            integer.SetFilter(Number, RIMDXObjectFilter.Get(objectType));
+            // use prefered range
+            if preferedRange <> '' then begin
+                oldGroup := integer.FilterGroup();
+                integer.FilterGroup(2);
+                integer.SetFilter(Number, preferedRange);
+                integer.FilterGroup(oldGroup);
+            end;
+            if integer.FindSet() then
+                repeat
+                    if not LicensedObjects.Get(objectType, LicensedObjectIDs) then begin
+                        Clear(LicensedObjectIDs);
+                        LicensedObjectIDs.Add(integer.Number);
+                        LicensedObjects.Add(objectType, LicensedObjectIDs);
+                    end else begin
+                        LicensedObjectIDs.Add(integer.Number);
+                        LicensedObjects.Set(objectType, LicensedObjectIDs);
+                    end;
+                until integer.Next() = 0;
+        end;
+        // find a licensed object ID for each used object
+        foreach objectType in usedObjects.Keys() do begin
+            // check if current object is in the licensed objects
+            usedObjectIDs := usedObjects.Get(objectType);
+            LicensedObjectIDs := LicensedObjects.Get(objectType);
+            foreach CurrentID in usedObjectIDs do begin
+                if LicensedObjectIDs.Count() = 0 then
+                    error('No free object ID found for object type %1', objectType);
+                if not LicensedObjectIDs.Contains(CurrentID) then begin
+                    NewID := LicensedObjectIDs.Get(1);
+                    LicensedObjectIDs.RemoveAt(1);
+                    Clear(ObjectIDMapping);
+                    ObjectIDMapping.AddRange(CurrentID, NewID);
+                    ObjectIDMappingDict.Add(StrSubstNo('%1%2', objectType, CurrentID), StrSubstNo('%1%2', objectType, NewID));
+                end;
+            end;
+        end;
+    end;
+
+    local procedure mapObjectTypeText(objectType: Text) objectType2: Text
+    begin
+        case objectType of
+            'TableData':
+                objectType2 := 'Table';
+            'Report':
+                objectType2 := 'Report';
+            'Codeunit':
+                objectType2 := 'Codeunit';
+            'Page':
+                objectType2 := 'Page';
+            'Query':
+                objectType2 := 'Query';
+            'XMLPort':
+                objectType2 := 'XmlPort';
+            else
+                Error('Unknown object type %1', objectType);
+        end;
+    end;
+
+    local procedure mapObjectTypeText(AllObjWithCaption: Record AllObjWithCaption) objectTypeText: Text
+    begin
+        case AllObjWithCaption."Object Type" of
+            AllObjWithCaption."Object Type"::Table:
+                objectTypeText := 'Table';
+            AllObjWithCaption."Object Type"::Report:
+                objectTypeText := 'Report';
+            AllObjWithCaption."Object Type"::Codeunit:
+                objectTypeText := 'Codeunit';
+            AllObjWithCaption."Object Type"::Page:
+                objectTypeText := 'Page';
+            AllObjWithCaption."Object Type"::Query:
+                objectTypeText := 'Query';
+            AllObjWithCaption."Object Type"::XmlPort:
+                objectTypeText := 'XmlPort';
+            else
+                Error('Unknown object type %1', AllObjWithCaption."Object Type");
+        end;
     end;
 }
