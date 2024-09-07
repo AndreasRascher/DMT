@@ -11,7 +11,7 @@ codeunit 91027 DMTLicenseMgt
         batchReplacerFileContent: TextBuilder;
         ObjectIDMappingDict: Dictionary of [Text/*<objectType><oldId>*/, Text/*<objectType><newId>*/];
     begin
-        ReadLicensedObjectsFromImportedPemissionsReport(LicensedObjects, RIMDXObjectFilter, '50000..99999');
+        ReadLicensedObjectsFromImportedPemissionsReport(LicensedObjects, RIMDXObjectFilter, '50000..50166');
 
         coreAppId.Add('id', '4698691e-c550-4026-9fac-05f90572a975');
         coreAppId.Add('name', 'DMT Core');
@@ -42,8 +42,10 @@ codeunit 91027 DMTLicenseMgt
         length: Integer;
         lines: List of [Text];
         currentLineText, lastLineText : Text;
-        startPos, i, endPos, oldGroup : Integer;
-        objectType, quantity, rangeFrom, rangeTo, permissions : Text;
+        i, oldGroup : Integer;
+        startPos_ObjectAssignment, endPos_ObjectAssignment : Integer;
+        startPos_ModulePermissions, endPos_ModulePermissions : Integer;
+        objectType, quantity, rangeFrom, rangeTo, permissions, moduleName : Text;
         RIMDXPermissions: List of [List of [Text]];
         RIMDXPermission: List of [Text];
         LicensedObjectIDs: List of [Integer];
@@ -63,16 +65,24 @@ codeunit 91027 DMTLicenseMgt
 
             if currentLineText = '**************************************************************************************************************' then
                 if lastLineText = 'Object Assignment' then
-                    startPos := lines.Count;
+                    startPos_ObjectAssignment := lines.Count;
 
-            if lastLineText = 'Module Objects and Permissions' then
-                if currentLineText = '**************************************************************************************************************' then
-                    endPos := lines.Count;
+            if currentLineText = '**************************************************************************************************************' then
+                if lastLineText = 'Module Objects and Permissions' then
+                    endPos_ObjectAssignment := lines.Count;
+
+            if currentLineText = '**************************************************************************************************************' then
+                if lastLineText = 'Module Objects and Permissions' then
+                    startPos_ModulePermissions := lines.Count;
+
+            if currentLineText = '**************************************************************************************************************' then
+                if lastLineText = 'Limited Usage Ranges' then
+                    endPos_ModulePermissions := lines.Count;
 
             lastLineText := currentLineText;
         end;
 
-        for i := startPos + 5 to endPos - 4 do begin
+        for i := startPos_ObjectAssignment + 5 to endPos_ObjectAssignment - 4 do begin
             objectType := CopyStr(lines.get(i), 1, 30).Trim();
             quantity := CopyStr(lines.get(i), 31, 15).Trim();
             rangeFrom := CopyStr(lines.get(i), 46, 15).Trim();
@@ -81,6 +91,20 @@ codeunit 91027 DMTLicenseMgt
             if permissions = 'RIMDX' then begin
                 Clear(RIMDXPermission);
                 RIMDXPermission.AddRange(mapObjectTypeText(objectType), quantity, rangeFrom, rangeTo, permissions);
+                RIMDXPermissions.Add(RIMDXPermission);
+            end;
+        end;
+
+        for i := startPos_ModulePermissions + 4 to endPos_ModulePermissions - 4 do begin
+            moduleName := CopyStr(lines.get(i), 1, 30).Trim();
+            rangeFrom := CopyStr(lines.get(i), 60, 15).Trim();
+            rangeTo := CopyStr(lines.get(i), 75, 15).Trim();
+            objectType := CopyStr(lines.get(i), 90, 20).Trim();
+            permissions := CopyStr(lines.get(i), 110, 15).Trim();
+            //350 Starter Pack
+            if (permissions = 'RIMDX') and not (objectType in ['MenuSuite', 'Dataport', 'TableDescription', 'Form']) then begin
+                Clear(RIMDXPermission);
+                RIMDXPermission.AddRange(mapObjectTypeText(objectType), '0', rangeFrom, rangeTo, permissions);
                 RIMDXPermissions.Add(RIMDXPermission);
             end;
         end;
@@ -96,6 +120,13 @@ codeunit 91027 DMTLicenseMgt
 
         // Create Lists of free object IDs in License
         Clear(LicensedObjects);
+        // Add all objects that are not restricted by license but should respect the prefered range
+        if preferedRange <> '' then begin
+            RIMDXObjectFilter.Add('enum', preferedRange);
+            RIMDXObjectFilter.Add('permissionSet', preferedRange);
+            RIMDXObjectFilter.Add('pageExtension', preferedRange);
+            RIMDXObjectFilter.Add('tableExtension', preferedRange);
+        end;
         foreach objectType in RIMDXObjectFilter.Keys() do begin
             integer.SetFilter(Number, RIMDXObjectFilter.Get(objectType));
             // use prefered range
@@ -135,108 +166,6 @@ codeunit 91027 DMTLicenseMgt
         DownloadFromStream(iStr, 'Download', 'ToFolder', Format(Enum::DMTFileFilter::All), toFileName);
     end;
 
-    local procedure createBatchReplacerFile(RIMDXObjectFilter: Dictionary of [Text, Text]; appList: JsonArray; preferedRange: Text)
-    var
-        NAVAppInstalledApp: Record "NAV App Installed App";
-        AllObjWithCaption: Record AllObjWithCaption;
-        integer: Record Integer;
-        JToken, JToken2 : JsonToken;
-        packageIDFilter: Text;
-        usedObjects: Dictionary of [Text, list of [Integer]];
-        usedObjectIDs: List of [Integer];
-        LicensedObjects: Dictionary of [Text, list of [Integer]];
-        LicensedObjectIDs: List of [Integer];
-        // Infos to collect: Object Type, Object ID, New Object ID
-        ObjectIDMappingDict: Dictionary of [Text/*<objectType><oldId>*/, Text/*<objectType><newId>*/];
-        ObjectIDMapping: List of [Integer/*1-Old ID 2-New ID*/];
-        objectType: Text;
-        oldGroup, CurrentID, NewID : Integer;
-        batchReplacerFileContent: TextBuilder;
-        object: Text;
-    begin
-        // Create a filter for all objects that are used by the DMT Core and DMT NAV Upgrade Helper
-        foreach JToken in appList do begin
-            JToken.AsObject().Get('id', JToken2);
-            NAVAppInstalledApp.SetFilter("App ID", JToken2.AsValue().AsText());
-
-            JToken.AsObject().Get('name', JToken2);
-            NAVAppInstalledApp.SetRange(Name, JToken2.AsValue().AsText());
-
-            JToken.AsObject().Get('publisher', JToken2);
-            NAVAppInstalledApp.SetRange(Publisher, JToken2.AsValue().AsText());
-
-            NAVAppInstalledApp.FindFirst();
-            if packageIDFilter = '' then
-                packageIDFilter := NAVAppInstalledApp."Package ID"
-            else
-                packageIDFilter += '|' + NAVAppInstalledApp."Package ID";
-        end;
-        // Get all objects that are used by the DMT Core and DMT NAV Upgrade Helper
-        AllObjWithCaption.SetFilter("App Package ID", packageIDFilter);
-        AllObjWithCaption.SetFilter("Object Type", '<>%1&<>%2&<>%3&<>%4&<>%5', AllObjWithCaption."Object Type"::TableData,
-                                                                AllObjWithCaption."Object Type"::"TableExtension",
-                                                                AllObjWithCaption."Object Type"::"PageExtension",
-                                                                AllObjWithCaption."Object Type"::Enum,
-                                                                AllObjWithCaption."Object Type"::PermissionSet);
-        if AllObjWithCaption.FindSet() then
-            repeat
-                if not usedObjects.Get(mapObjectTypeText(AllObjWithCaption), usedObjectIDs) then begin
-                    Clear(usedObjectIDs);
-                    usedObjectIDs.Add(AllObjWithCaption."Object ID");
-                    usedObjects.Add(mapObjectTypeText(AllObjWithCaption), usedObjectIDs);
-                end else begin
-                    usedObjectIDs.Add(AllObjWithCaption."Object ID");
-                    usedObjects.Set(mapObjectTypeText(AllObjWithCaption), usedObjectIDs);
-                end;
-            until AllObjWithCaption.Next() = 0;
-        // Create Lists of free object IDs in License
-        foreach objectType in RIMDXObjectFilter.Keys() do begin
-            integer.SetFilter(Number, RIMDXObjectFilter.Get(objectType));
-            // use prefered range
-            if preferedRange <> '' then begin
-                oldGroup := integer.FilterGroup();
-                integer.FilterGroup(2);
-                integer.SetFilter(Number, preferedRange);
-                integer.FilterGroup(oldGroup);
-            end;
-            if integer.FindSet() then
-                repeat
-                    if not LicensedObjects.Get(objectType, LicensedObjectIDs) then begin
-                        Clear(LicensedObjectIDs);
-                        LicensedObjectIDs.Add(integer.Number);
-                        LicensedObjects.Add(objectType, LicensedObjectIDs);
-                    end else begin
-                        LicensedObjectIDs.Add(integer.Number);
-                        LicensedObjects.Set(objectType, LicensedObjectIDs);
-                    end;
-                until integer.Next() = 0;
-        end;
-        // find a licensed object ID for each used object
-        foreach objectType in usedObjects.Keys() do begin
-            // check if current object is in the licensed objects
-            usedObjectIDs := usedObjects.Get(objectType);
-            LicensedObjectIDs := LicensedObjects.Get(objectType);
-            foreach CurrentID in usedObjectIDs do begin
-                if LicensedObjectIDs.Count() = 0 then
-                    error('No free object ID found for object type %1', objectType);
-                if not LicensedObjectIDs.Contains(CurrentID) then begin
-                    NewID := LicensedObjectIDs.Get(1);
-                    LicensedObjectIDs.RemoveAt(1);
-                    Clear(ObjectIDMapping);
-                    ObjectIDMapping.AddRange(CurrentID, NewID);
-                    ObjectIDMappingDict.Add(StrSubstNo('%1 %2', objectType, CurrentID), StrSubstNo('%1 %2', objectType, NewID));
-                end;
-            end;
-        end;
-        // create a batch replacer file
-        foreach object in ObjectIDMappingDict.Keys() do begin
-            batchReplacerFileContent.AppendLine(StrSubstNo('replace "%1"', object));
-            batchReplacerFileContent.AppendLine(StrSubstNo('with "%1"', ObjectIDMappingDict.Get(object)));
-        end;
-        // replace "xmlport 91001" 
-        // with "xmlport 50000"
-
-    end;
 
     local procedure mapObjectTypeText(objectType: Text) objectType2: Text
     begin
@@ -273,6 +202,14 @@ codeunit 91027 DMTLicenseMgt
                 objectTypeText := 'query';
             AllObjWithCaption."Object Type"::XmlPort:
                 objectTypeText := 'xmlport';
+            AllObjWithCaption."Object Type"::Enum:
+                objectTypeText := 'enum';
+            AllObjWithCaption."Object Type"::PermissionSet:
+                objectTypeText := 'permissionSet';
+            AllObjWithCaption."Object Type"::PageExtension:
+                objectTypeText := 'pageExtension';
+            AllObjWithCaption."Object Type"::TableExtension:
+                objectTypeText := 'tableExtension';
             else
                 Error('Unknown object type %1', AllObjWithCaption."Object Type");
         end;
@@ -294,11 +231,7 @@ codeunit 91027 DMTLicenseMgt
 
         // Get all objects that are used by the given app identity, excludint types without license restrictions
         AllObjWithCaption.SetFilter("App Package ID", packageIDFilter);
-        AllObjWithCaption.SetFilter("Object Type", '<>%1&<>%2&<>%3&<>%4&<>%5', AllObjWithCaption."Object Type"::TableData,
-                                                                AllObjWithCaption."Object Type"::"TableExtension",
-                                                                AllObjWithCaption."Object Type"::"PageExtension",
-                                                                AllObjWithCaption."Object Type"::Enum,
-                                                                AllObjWithCaption."Object Type"::PermissionSet);
+        AllObjWithCaption.SetFilter("Object Type", '<>%1', AllObjWithCaption."Object Type"::TableData);
         if AllObjWithCaption.FindSet() then
             repeat
                 if not usedObjects.Get(mapObjectTypeText(AllObjWithCaption), usedObjectIDs) then begin
@@ -311,7 +244,10 @@ codeunit 91027 DMTLicenseMgt
                 end;
             until AllObjWithCaption.Next() = 0;
     end;
-
+    //        AllObjWithCaption."Object Type"::"TableExtension",
+    // AllObjWithCaption."Object Type"::"PageExtension",
+    // AllObjWithCaption."Object Type"::Enum,
+    // AllObjWithCaption."Object Type"::PermissionSet
     local procedure RenumberAppId(ObjectIDMappingDict: Dictionary of [Text/*<objectType><oldId>*/, Text/*<objectType><newId>*/]; usedObjects: Dictionary of [Text, List of [Integer]]; var LicensedObjects: Dictionary of [Text, List of [Integer]])
     var
         objectType: Text;
