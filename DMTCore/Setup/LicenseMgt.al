@@ -242,15 +242,15 @@ codeunit 91027 DMTLicenseMgt
     begin
         case objectType of
             'TableData':
-                objectType2 := 'Table';
+                objectType2 := 'table';
             'Report':
-                objectType2 := 'Report';
+                objectType2 := 'report';
             'Codeunit':
-                objectType2 := 'Codeunit';
+                objectType2 := 'codeunit';
             'Page':
-                objectType2 := 'Page';
+                objectType2 := 'page';
             'Query':
-                objectType2 := 'Query';
+                objectType2 := 'query';
             'XMLPort':
                 objectType2 := 'xmlport';
             else
@@ -262,15 +262,15 @@ codeunit 91027 DMTLicenseMgt
     begin
         case AllObjWithCaption."Object Type" of
             AllObjWithCaption."Object Type"::Table:
-                objectTypeText := 'Table';
+                objectTypeText := 'table';
             AllObjWithCaption."Object Type"::Report:
-                objectTypeText := 'Report';
+                objectTypeText := 'report';
             AllObjWithCaption."Object Type"::Codeunit:
-                objectTypeText := 'Codeunit';
+                objectTypeText := 'codeunit';
             AllObjWithCaption."Object Type"::Page:
-                objectTypeText := 'Page';
+                objectTypeText := 'page';
             AllObjWithCaption."Object Type"::Query:
-                objectTypeText := 'Query';
+                objectTypeText := 'query';
             AllObjWithCaption."Object Type"::XmlPort:
                 objectTypeText := 'xmlport';
             else
