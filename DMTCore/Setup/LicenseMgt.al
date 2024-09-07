@@ -11,6 +11,10 @@ codeunit 91027 DMTLicenseMgt
     begin
         ReadLicensedObjectsFromImportedPemissionsReport(LicensedObjects, RIMDXObjectFilter, '50000..50166');
 
+        // insert instructions
+        batchReplacerFileContent.AppendLine('// Apply all commands only to .al files');
+        batchReplacerFileContent.AppendLine('filter "**/*.al"');
+
         coreAppId.Add('id', '4698691e-c550-4026-9fac-05f90572a975');
         coreAppId.Add('name', 'DMT Core');
         coreAppId.Add('publisher', 'Andreas Rascher');
@@ -284,9 +288,6 @@ codeunit 91027 DMTLicenseMgt
         NAVAppInstalledApp: Record "NAV App Installed App";
         objectTypeWithIDText, last : Text;
     begin
-        // insert instructions
-        batchReplacerFileContent.AppendLine('// Apply all commands only to .al files');
-        batchReplacerFileContent.AppendLine('filter "**/*.al"');
 
         // create title lines
         getInstalledApp(NAVAppInstalledApp, installedAppId);
