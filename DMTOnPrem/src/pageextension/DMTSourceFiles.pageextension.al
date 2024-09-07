@@ -21,9 +21,11 @@ pageextension 90001 DMTSourceFiles extends "DMTSourceFiles"
                     setup: Record DMTSetup;
                     sourceFileMgt: Codeunit DMTSourceFileMgt;
                     fileMgt: Codeunit "File Management";
+                    tempBlob: Codeunit "Temp Blob";
                     FileBrowser: Page "DMTFileBrowser";
                     File: File;
                     IStr: InStream;
+                    OStr: OutStream;
                     selectedFilePath: Text;
                 begin
                     setup.GetRecordOnce();
@@ -34,7 +36,9 @@ pageextension 90001 DMTSourceFiles extends "DMTSourceFiles"
                     if selectedFilePath = '' then exit;
                     File.Open(selectedFilePath, TextEncoding::MSDos);
                     File.CreateInStream(IStr);
-                    sourceFileMgt.AddFileToStorage(fileMgt.GetFileName(File.Name), IStr);
+                    tempBlob.CreateOutStream(OStr);
+                    CopyStream(OStr, IStr);
+                    sourceFileMgt.AddFileToStorage(fileMgt.GetFileName(File.Name), tempBlob);
                 end;
             }
         }

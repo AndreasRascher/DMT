@@ -30,6 +30,12 @@ codeunit 91027 DMTLicenseMgt
         DownloadFile(batchReplacerFileContent, 'BatchReplacerFile.txt');
     end;
 
+    /// <summary>
+    /// Read the licensed objects from the imported permissions report and create a list of free object IDs for each object type
+    /// </summary>
+    /// <param name="LicensedObjects">Result: licensed object ids </param>
+    /// <param name="RIMDXObjectFilter">objects in license filter</param>
+    /// <param name="preferedRange">lower and/or upper bound for proposed object IDs</param>
     procedure ReadLicensedObjectsFromImportedPemissionsReport(var LicensedObjects: Dictionary of [Text, list of [Integer]]; var RIMDXObjectFilter: Dictionary of [Text, Text]; preferedRange: Text)
     var
         integer: Record Integer;
