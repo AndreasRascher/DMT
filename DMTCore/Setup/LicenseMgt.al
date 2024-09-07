@@ -1,5 +1,3 @@
-// TODO: Ausführbar pro App mit Überschrift
-
 codeunit 91027 DMTLicenseMgt
 {
     trigger OnRun()
@@ -89,7 +87,7 @@ codeunit 91027 DMTLicenseMgt
         end;
 
         for i := startPos_ObjectAssignment + 5 to endPos_ObjectAssignment - 4 do begin
-            objectType := CopyStr(lines.get(i), 1, 30).Trim();
+            objectType := CopyStr(lines.get(i), 1, 30).Trim().ToLower();
             quantity := CopyStr(lines.get(i), 31, 15).Trim();
             rangeFrom := CopyStr(lines.get(i), 46, 15).Trim();
             rangeTo := CopyStr(lines.get(i), 61, 15).Trim();
@@ -105,10 +103,10 @@ codeunit 91027 DMTLicenseMgt
             moduleName := CopyStr(lines.get(i), 1, 30).Trim();
             rangeFrom := CopyStr(lines.get(i), 60, 15).Trim();
             rangeTo := CopyStr(lines.get(i), 75, 15).Trim();
-            objectType := CopyStr(lines.get(i), 90, 20).Trim();
+            objectType := CopyStr(lines.get(i), 90, 20).Trim().ToLower();
             permissions := CopyStr(lines.get(i), 110, 15).Trim();
             //350 Starter Pack
-            if (permissions = 'RIMDX') and not (objectType in ['MenuSuite', 'Dataport', 'TableDescription', 'Form']) then begin
+            if (permissions = 'RIMDX') and not (objectType in ['menusuite', 'dataport', 'tabledescription', 'form']) then begin
                 Clear(RIMDXPermission);
                 RIMDXPermission.AddRange(mapObjectTypeText(objectType), '0', rangeFrom, rangeTo, permissions);
                 RIMDXPermissions.Add(RIMDXPermission);
@@ -129,9 +127,9 @@ codeunit 91027 DMTLicenseMgt
         // Add all objects that are not restricted by license but should respect the prefered range
         if preferedRange <> '' then begin
             RIMDXObjectFilter.Add('enum', preferedRange);
-            RIMDXObjectFilter.Add('permissionSet', preferedRange);
-            RIMDXObjectFilter.Add('pageExtension', preferedRange);
-            RIMDXObjectFilter.Add('tableExtension', preferedRange);
+            RIMDXObjectFilter.Add('permissionset', preferedRange);
+            RIMDXObjectFilter.Add('pageextension', preferedRange);
+            RIMDXObjectFilter.Add('tableextension', preferedRange);
         end;
         foreach objectType in RIMDXObjectFilter.Keys() do begin
             integer.SetFilter(Number, RIMDXObjectFilter.Get(objectType));
@@ -176,17 +174,17 @@ codeunit 91027 DMTLicenseMgt
     local procedure mapObjectTypeText(objectType: Text) objectType2: Text
     begin
         case objectType of
-            'TableData':
+            'tabledata':
                 objectType2 := 'table';
-            'Report':
+            'report':
                 objectType2 := 'report';
-            'Codeunit':
+            'codeunit':
                 objectType2 := 'codeunit';
-            'Page':
+            'page':
                 objectType2 := 'page';
-            'Query':
+            'query':
                 objectType2 := 'query';
-            'XMLPort':
+            'xmlport':
                 objectType2 := 'xmlport';
             else
                 Error('Unknown object type %1', objectType);
@@ -211,11 +209,11 @@ codeunit 91027 DMTLicenseMgt
             AllObjWithCaption."Object Type"::Enum:
                 objectTypeText := 'enum';
             AllObjWithCaption."Object Type"::PermissionSet:
-                objectTypeText := 'permissionSet';
+                objectTypeText := 'permissionset';
             AllObjWithCaption."Object Type"::PageExtension:
-                objectTypeText := 'pageExtension';
+                objectTypeText := 'pageextension';
             AllObjWithCaption."Object Type"::TableExtension:
-                objectTypeText := 'tableExtension';
+                objectTypeText := 'tableextension';
             else
                 Error('Unknown object type %1', AllObjWithCaption."Object Type");
         end;
@@ -284,16 +282,25 @@ codeunit 91027 DMTLicenseMgt
     local procedure AddObjectIDMappingToBatchReplacerFile(batchReplacerFileContent: TextBuilder; ObjectIDMappingDict: Dictionary of [Text, Text]; installedAppId: JsonObject)
     var
         NAVAppInstalledApp: Record "NAV App Installed App";
-        objectTypeWithIDText: Text;
+        objectTypeWithIDText, last : Text;
     begin
+        // insert instructions
+        batchReplacerFileContent.AppendLine('// Apply all commands only to .al files');
+        batchReplacerFileContent.AppendLine('filter "**/*.al"');
+
         // create title lines
         getInstalledApp(NAVAppInstalledApp, installedAppId);
         batchReplacerFileContent.AppendLine('');
         batchReplacerFileContent.AppendLine(StrSubstNo('// App: %1', NAVAppInstalledApp.Name));
         batchReplacerFileContent.AppendLine('');
         foreach objectTypeWithIDText in ObjectIDMappingDict.Keys() do begin
+            // insert empty line between different object types
+            if (last <> '') then
+                if CopyStr(last, 1, 3) <> CopyStr(objectTypeWithIDText, 1, 3) then
+                    batchReplacerFileContent.AppendLine('');
             batchReplacerFileContent.AppendLine(StrSubstNo('replace "%1"', objectTypeWithIDText));
             batchReplacerFileContent.AppendLine(StrSubstNo('with "%1"', ObjectIDMappingDict.Get(objectTypeWithIDText)));
+            last := objectTypeWithIDText;
         end;
         // replace "xmlport 91001" 
         // with "xmlport 50000"
