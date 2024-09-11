@@ -1,4 +1,4 @@
-enum 91002 DMTMigrationProfile
+enum 50002 DMTMigrationProfile
 {
     Extensible = true;
 

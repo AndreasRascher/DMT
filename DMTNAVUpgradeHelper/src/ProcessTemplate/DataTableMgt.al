@@ -1,4 +1,4 @@
-codeunit 90014 DMTDataTableMgt
+codeunit 50031 DMTDataTableMgt
 {
     internal procedure setCaptions(caption1: Text; caption2: Text; caption3: Text)
     begin

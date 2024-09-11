@@ -1,4 +1,4 @@
-xmlport 91001 DMTCSVReader
+xmlport 50000 DMTCSVReader
 {
     Caption = 'GenBufferImport';
     Direction = Import;

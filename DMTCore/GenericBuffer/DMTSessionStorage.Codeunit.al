@@ -1,4 +1,4 @@
-codeunit 91000 DMTSessionStorage
+codeunit 50000 DMTSessionStorage
 {
     SingleInstance = true;
     procedure AddCaption(FieldNo: Integer; CaptionNew: Text)
