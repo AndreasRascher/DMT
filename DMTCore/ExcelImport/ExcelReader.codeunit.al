@@ -1,4 +1,4 @@
-codeunit 91018 DMTExcelReader
+codeunit 50018 DMTExcelReader
 {
     EventSubscriberInstance = Manual;
     trigger OnRun()

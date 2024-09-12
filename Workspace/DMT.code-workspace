@@ -29,6 +29,28 @@
 			"version": "0.2.0",
 			"configurations": [
 				{
+					"name": "kadeco.de DEV",
+					"type": "al",
+					"request": "launch",
+					"environmentType": "OnPrem",
+					"server": "https://bctest.kadeco.de/",
+					"serverInstance": "DEV",
+					"authentication": "UserPassword",
+					"startupObjectType": "Page",
+					"startupObjectId": 50017,
+					"breakOnError": "ExcludeTry",
+					"breakOnRecordWrite": "None",
+					"launchBrowser": true,
+					"enableSqlInformationDebugger": true,
+					"enableLongRunningSqlStatements": true,
+					"longRunningSqlStatementsThreshold": 500,
+					"numberOfSqlStatements": 10,
+					"tenant": "default",
+					"usePublicURLFromServer": true,
+					"schemaUpdateMode": "ForceSync",
+					"startupCompany": "MODUS - Klasse.SM Test 7"
+				},
+				{
 					"name": "BC24",
 					"type": "al",
 					"request": "launch",

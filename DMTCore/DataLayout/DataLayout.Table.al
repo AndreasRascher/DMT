@@ -1,4 +1,4 @@
-table 91002 DMTDataLayout
+table 50129 DMTDataLayout
 {
     Caption = 'Data Layout', Comment = 'de-DE=Datenlayout';
     DataClassification = CustomerContent;

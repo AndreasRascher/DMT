@@ -1,4 +1,4 @@
-codeunit 91017 DMTProgressDialog
+codeunit 50017 DMTProgressDialog
 {
     procedure AppendTextLine(TextLineNew: Text)
     begin

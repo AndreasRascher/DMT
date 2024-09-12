@@ -1,4 +1,4 @@
-codeunit 91027 DMTLicenseMgt
+codeunit 50027 DMTLicenseMgt
 {
     trigger OnRun()
     var
@@ -303,7 +303,7 @@ codeunit 91027 DMTLicenseMgt
             batchReplacerFileContent.AppendLine(StrSubstNo('with "%1"', ObjectIDMappingDict.Get(objectTypeWithIDText)));
             last := objectTypeWithIDText;
         end;
-        // replace "xmlport 91001" 
+        // replace "xmlport 50000" 
         // with "xmlport 50000"
     end;
 

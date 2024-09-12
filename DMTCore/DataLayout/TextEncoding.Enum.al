@@ -1,4 +1,4 @@
-enum 91010 DMTTextEncoding
+enum 50010 DMTTextEncoding
 {
     Extensible = true;
     value(0; MSDos) { Caption='MSDos',locked=true;}

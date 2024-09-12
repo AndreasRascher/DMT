@@ -1,4 +1,4 @@
-page 91020 DMTReplacementRulePart
+page 50020 DMTReplacementRulePart
 {
     Caption = 'Rules', Comment = 'de-DE=Regeln';
     PageType = ListPart;

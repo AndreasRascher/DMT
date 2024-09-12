@@ -1,4 +1,4 @@
-page 91004 DMTGenBufferList250
+page 50004 DMTGenBufferList250
 {
     Caption = 'DMT GenBufferList', Comment = 'de-DE=DMT Generischer Puffer Übersicht';
     PageType = List;
