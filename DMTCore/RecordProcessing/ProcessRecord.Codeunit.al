@@ -20,8 +20,6 @@ codeunit 50008 DMTProcessRecord
                 else begin
                     if ProcessedFields.Count < TargetKeyFieldIDs.Count then
                         ProcessKeyFields();
-                    if ProcessedFields.Count = TargetKeyFieldIDs.Count then
-                        TmpTargetRef.Insert(false); // insert record to allow modify in validate triggers
 
                     // Nicht-Schlüsselfelder verarbeiten wenn:
                     case true of
