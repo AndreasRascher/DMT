@@ -68,6 +68,10 @@ codeunit 50014 DMTMigrate
         DMTImportSettings.ImportConfigHeader(ImportConfigHeader);
         DMTImportSettings.UpdateFieldsFilter(ProcessingPlan.ReadUpdateFieldsFilter());
         DMTImportSettings.SourceTableView(ProcessingPlan.ReadSourceTableView());
+        // Wenn beim Feld-Update der Validierungscode das weitere Felder des Records prüft, müssen diese vorher geladen werden. 
+        // UpdateExistingRecordsOnly - sorgt dafür der vorhande Datensatz
+        if ProcessingPlan.Type = ProcessingPlan.type::"Update Field" then
+            DMTImportSettings.UpdateExistingRecordsOnly(true);
         LoadImportConfigLine(DMTImportSettings);
         ProcessFullBuffer(DMTImportSettings);
     end;
