@@ -1,4 +1,4 @@
-xmlport 50001 DMTCSVWriter
+xmlport 91002 DMTCSVWriter
 {
     Caption = 'CSVExport', Locked = true;
     Direction = Export;

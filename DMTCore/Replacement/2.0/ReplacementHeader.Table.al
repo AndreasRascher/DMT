@@ -1,4 +1,4 @@
-table 50138 DMTReplacementHeader
+table 91011 DMTReplacementHeader
 {
     DataClassification = ToBeClassified;
 

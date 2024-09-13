@@ -1,4 +1,4 @@
-table 50133 DMTImportConfigLine
+table 91006 DMTImportConfigLine
 {
     Caption = 'DMT Import Configuration Line', Comment = 'de-DE=Import Konfiguration Zeile';
     fields

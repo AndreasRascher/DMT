@@ -1,4 +1,4 @@
-codeunit 50010 DMTImportSettings
+codeunit 91010 DMTImportSettings
 {
     procedure SourceTableView(SourceTableViewNEW: Text)
     begin

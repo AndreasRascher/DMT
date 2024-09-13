@@ -1,4 +1,4 @@
-table 50131 DMTSourceFileStorage
+table 91004 DMTSourceFileStorage
 {
     LookupPageId = DMTSourceFiles;
     Caption = 'DMT Source File', Comment = 'de-DE=DMT Quelldatei';

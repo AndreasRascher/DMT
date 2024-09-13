@@ -1,4 +1,4 @@
-page 50025 WebDAVFileBrowser
+page 91025 WebDAVFileBrowser
 {
     Caption = 'WebDAV File Browser', Comment = 'de-DE=WebDAV Datei Browser';
     PageType = Worksheet;
