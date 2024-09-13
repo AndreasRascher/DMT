@@ -498,6 +498,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilennr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Line No. - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No.of Records in Buffer Table</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze in Puffertabelle</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field No.of Records in Buffer Table - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1212190007 - Field 3950656103 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Processing Duration</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Verarbeitungszeit</note>
@@ -1427,6 +1432,26 @@
           <source>DMT Processing Plan</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Verarbeitungsplan</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 465333454 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Number of records in the target table.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anzahl der Datensätze in der Zieltabelle.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control No. of Records In Trgt. Table - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 465333454 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=DS im Ziel</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control No. of Records In Trgt. Table - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 603378867 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Number of records in the buffer table.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anzahl der Datensätze in der Puffertabelle.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control No.of Records in Buffer Table - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=DS im Puffer</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control No.of Records in Buffer Table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Control 76420432 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Defining the source table no. for which a filter as event is provided for rows of type Codeunit.</source>

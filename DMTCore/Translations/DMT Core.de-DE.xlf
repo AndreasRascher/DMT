@@ -597,6 +597,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilennr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Line No. - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No.of Records in Buffer Table</source>
+          <target state="translated">Anz. Datensätze in Puffertabelle</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze in Puffertabelle</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field No.of Records in Buffer Table - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1212190007 - Field 3950656103 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Processing Duration</source>
           <target state="translated">Verarbeitungszeit</target>
@@ -1077,17 +1083,17 @@
           <note from="Developer" annotates="general" priority="2">de-DE=XMLPort %1 ist nicht vorhanden.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportCSVImpl - Method ImportViaSeparateXMLPort - NamedType xmlPortNotFoundErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 1185200660 - Method 4128248281 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 1185200660 - Method 865639783 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import finished</source>
           <target state="translated">Import abgeschlossen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLicenseMgt - Method importFromPemissionsReport - NamedType ImportFinishedMsg</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLicenseMgt - Method ReadLicensedObjectsFromImportedPemissionsReport - NamedType ImportFinishedMsg</note>
         </trans-unit>
-        <trans-unit id="Codeunit 1185200660 - Method 4128248281 - NamedType 659472064" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 1185200660 - Method 865639783 - NamedType 659472064" size-unit="char" translate="yes" xml:space="preserve">
           <source>Upload Permission Report Detailed</source>
           <target state="translated">Permission Report Detailed hochladen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Permission Report Detailed hochladen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLicenseMgt - Method importFromPemissionsReport - NamedType UploadFileMsg</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLicenseMgt - Method ReadLicensedObjectsFromImportedPemissionsReport - NamedType UploadFileMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 3774911051 - Method 4006425096 - NamedType 2696288649" size-unit="char" translate="yes" xml:space="preserve">
           <source>Assigned Values have been changed by triggers</source>
@@ -1712,6 +1718,30 @@
           <target state="translated">DMT Verarbeitungsplan</target>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Verarbeitungsplan</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 465333454 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Number of records in the target table.</source>
+          <target state="translated">Anzahl der Datensätze in der Zieltabelle.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anzahl der Datensätze in der Zieltabelle.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control No. of Records In Trgt. Table - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 465333454 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target</source>
+          <target state="translated">DS im Ziel</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=DS im Ziel</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control No. of Records In Trgt. Table - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 603378867 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Number of records in the buffer table.</source>
+          <target state="translated">Anzahl der Datensätze in der Puffertabelle.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anzahl der Datensätze in der Puffertabelle.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control No.of Records in Buffer Table - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Buffer</source>
+          <target state="translated">DS im Puffer</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=DS im Puffer</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control No.of Records in Buffer Table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Control 76420432 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Defining the source table no. for which a filter as event is provided for rows of type Codeunit.</source>

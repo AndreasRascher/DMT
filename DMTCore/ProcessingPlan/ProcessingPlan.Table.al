@@ -79,6 +79,14 @@ table 50136 DMTProcessingPlan
             Editable = false;
             BlankZero = true;
         }
+        field(61; "No.of Records in Buffer Table"; Integer)
+        {
+            Caption = 'No.of Records in Buffer Table', Comment = 'de-DE=Anz. Datensätze in Puffertabelle';
+            FieldClass = FlowField;
+            CalcFormula = lookup(DMTImportConfigHeader."No.of Records in Buffer Table" where(ID = field(ID)));
+            Editable = false;
+            BlankZero = true;
+        }
     }
 
     keys
@@ -246,6 +254,8 @@ table 50136 DMTProcessingPlan
         if (rec.Type = rec.Type::"Run Codeunit") and (rec."Target Table ID" = 0) then
             exit;
         if rec.ID = 0 then exit;
+        if not hasValidSourceTable(ImportConfigHeaderID) then
+            exit;
         if not Rec.CreateSourceTableRef(RecRef) then
             exit;
         if RecRef.Name = genBuffTable.TableName then begin
@@ -330,9 +340,10 @@ table 50136 DMTProcessingPlan
         RecRef: RecordRef;
         FieldNoFilter: Text;
     begin
-        if not Rec.CreateSourceTableRef(RecRef) then exit;
         if not ImportConfigHeader.Get(Rec.ID) then exit;
-
+        if not hasValidSourceTable(ImportConfigHeader.ID) then
+            exit;
+        if not Rec.CreateSourceTableRef(RecRef) then exit;
         FieldNoFilter := Rec.ReadUpdateFieldsFilter();
         if FieldNoFilter <> '' then begin
             ImportConfigHeader.FilterRelated(ImportConfigLine);
@@ -495,6 +506,22 @@ table 50136 DMTProcessingPlan
         processingPlan.Description := descriptionNEW;
         processingPlan.Insert();
         Rec.Copy(processingPlan);
+    end;
+
+    local procedure hasValidSourceTable(ImportConfigHeaderID: Integer): Boolean
+    var
+        TableMetadata: Record "Table Metadata";
+        importConfigHeader: Record DMTImportConfigHeader;
+    begin
+        if not importConfigHeader.Get(ImportConfigHeaderID) then
+            exit(false);
+        //* Generische Puffertabelle immer vorhanden -> Gültig
+        if importConfigHeader.UseGenericBufferTable() then
+            exit(true);
+        //* Wenn seperate Puffertabelle verwendet wird, prüfen ob diese vorhanden ist
+        if TableMetadata.Get(importConfigHeader."Buffer Table ID") then
+            exit(true);
+        exit(false);
     end;
 
     /// <summary>create a filter for the source table based on the filter for the target table</summary>

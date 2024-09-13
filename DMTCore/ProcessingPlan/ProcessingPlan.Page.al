@@ -44,6 +44,30 @@ page 50017 DMTProcessingPlan
                 }
                 field("Line No."; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
                 field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; StyleExpr = LineStyle; Visible = false; HideValue = TargetTableID_HideValue; }
+                field("No. of Records In Trgt. Table"; CurrImportConfigHeader.GetNoOfRecordsInTrgtTable())
+                {
+                    Caption = 'Target', Comment = 'de-DE=DS im Ziel';
+                    ToolTip = 'Number of records in the target table.', Comment = 'de-DE=Anzahl der Datensätze in der Zieltabelle.';
+                    ApplicationArea = All;
+                    Enabled = HasImportConfigHeader;
+                    HideValue = not HasImportConfigHeader;
+                    trigger OnDrillDown()
+                    begin
+                        CurrImportConfigHeader.ShowTableContent(CurrImportConfigHeader."Target Table ID");
+                    end;
+                }
+                field("No.of Records in Buffer Table"; rec."No.of Records in Buffer Table")
+                {
+                    Caption = 'Buffer', Comment = 'de-DE=DS im Puffer';
+                    ToolTip = 'Number of records in the buffer table.', Comment = 'de-DE=Anzahl der Datensätze in der Puffertabelle.';
+                    ApplicationArea = All;
+                    Enabled = HasImportConfigHeader;
+                    HideValue = not HasImportConfigHeader;
+                    trigger OnDrillDown()
+                    begin
+                        CurrImportConfigHeader.BufferTableMgt().ShowBufferTable();
+                    end;
+                }
             }
         }
         area(FactBoxes)
@@ -74,6 +98,10 @@ page 50017 DMTProcessingPlan
                 ApplicationArea = All;
                 Caption = 'Log', Comment = 'de-DE=Protokoll';
                 Enabled = ShowLogFactboxPart;
+            }
+            systempart(Notes; Notes)
+            {
+                ApplicationArea = Notes;
             }
         }
     }
@@ -309,6 +337,9 @@ page 50017 DMTProcessingPlan
                 LineStyle := Format(Enum::DMTFieldStyle::"Bold + Green");
         end;
         TargetTableID_HideValue := not Rec.TypeSupportsProcessSelectedFieldsOnly();
+
+        Clear(CurrImportConfigHeader);
+        HasImportConfigHeader := Rec.findImportConfigHeader(CurrImportConfigHeader);
     end;
 
     trigger OnAfterGetCurrRecord()
@@ -532,7 +563,9 @@ page 50017 DMTProcessingPlan
 
     var
         TempProcessingPlan_SELECTED: Record DMTProcessingPlan temporary;
+        CurrImportConfigHeader: Record DMTImportConfigHeader;
         ProcessingPlanMgt: Codeunit DMTProcessingPlanMgt;
+        HasImportConfigHeader: Boolean;
         // [InDataSet]
         ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart, ShowLogFactboxPart, TargetTableID_HideValue : Boolean;
         LineStyle: Text;
