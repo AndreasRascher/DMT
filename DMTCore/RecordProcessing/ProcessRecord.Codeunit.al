@@ -1,4 +1,4 @@
-codeunit 50008 DMTProcessRecord
+codeunit 91008 DMTProcessRecord
 {
     trigger OnRun()
     begin

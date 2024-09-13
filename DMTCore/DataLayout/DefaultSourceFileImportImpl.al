@@ -1,4 +1,4 @@
-codeunit 50004 DMTDefaultSourceFileImportImpl implements ISourceFileImport
+codeunit 91004 DMTDefaultSourceFileImportImpl implements ISourceFileImport
 {
     procedure ImportToBufferTable(ImportConfigHeader: Record DMTImportConfigHeader);
     begin

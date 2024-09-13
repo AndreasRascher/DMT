@@ -1,4 +1,4 @@
-enum 50004 DMTFieldValidationType
+enum 91004 DMTFieldValidationType
 {
     value(0; AlwaysValidate) { Caption = 'Always', Comment = 'de-DE=Immer'; }
     value(1; ValidateOnlyIfNotEmpty) { Caption = 'If not empty', Comment = 'de-DE=Wenn nicht leer'; }

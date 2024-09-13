@@ -1,4 +1,4 @@
-page 50008 DMTImportConfigCard
+page 91008 DMTImportConfigCard
 {
     Caption = 'DMT Import Config Card', Comment = 'de-DE=Importkonfiguration Karte';
     PageType = Document;

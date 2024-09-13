@@ -1,4 +1,4 @@
-enum 50011 DMTTriggerType
+enum 91011 DMTTriggerType
 {
     value(0; " ") { }
     value(1; Assignment) { }
