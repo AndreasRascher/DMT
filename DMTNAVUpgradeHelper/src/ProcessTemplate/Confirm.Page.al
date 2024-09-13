@@ -1,4 +1,4 @@
-page 90013 DMTConfirm
+page 50029 DMTConfirm
 {
     PageType = ConfirmationDialog;
     ApplicationArea = All;

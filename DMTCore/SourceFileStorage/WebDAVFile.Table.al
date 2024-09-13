@@ -1,4 +1,4 @@
-table 91025 DMTWebDAVFile
+table 50141 DMTWebDAVFile
 {
     TableType = Temporary;
     fields

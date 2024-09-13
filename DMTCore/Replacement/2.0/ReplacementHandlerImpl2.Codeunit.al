@@ -1,4 +1,4 @@
-codeunit 91021 ReplacementHandlerImpl2 implements IReplacementHandler
+codeunit 50021 ReplacementHandlerImpl2 implements IReplacementHandler
 {
     SingleInstance = true;
     procedure InitBatchProcess(ImportConfigHeader: Record DMTImportConfigHeader);
