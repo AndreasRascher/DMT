@@ -1,4 +1,4 @@
-table 50144 DMTProcessTemplateSetup
+table 90014 DMTProcessTemplateSetup
 {
     Caption = 'DMT Process Template Setup', Comment = 'de-DE=DMT Prozessvorlagen Einrichtung';
     fields

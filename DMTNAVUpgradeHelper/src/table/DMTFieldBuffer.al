@@ -1,4 +1,4 @@
-table 50142 DMTFieldBuffer
+table 90011 DMTFieldBuffer
 {
     CaptionML = DEU = 'DMT Field Puffer', ENU = 'DMT Field Buffer';
     DataPerCompany = false;

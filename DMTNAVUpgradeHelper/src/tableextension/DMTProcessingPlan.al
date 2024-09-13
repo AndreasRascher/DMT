@@ -1,4 +1,4 @@
-tableextension 50002 DMTProcessingPlan extends DMTProcessingPlan
+tableextension 90013 DMTProcessingPlan extends DMTProcessingPlan
 {
     fields
     {

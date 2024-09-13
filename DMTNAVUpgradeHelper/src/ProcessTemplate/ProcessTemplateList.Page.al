@@ -1,4 +1,4 @@
-page 50028 DMTProcessTemplateList
+page 90012 DMTProcessTemplateList
 {
     Caption = 'DMT Process Templates', Comment = 'de-DE=DMT Prozessvorlagen';
     PageType = List;

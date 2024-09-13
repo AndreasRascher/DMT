@@ -1,4 +1,4 @@
-pageextension 50000 DMTImportConfigCard extends DMTImportConfigCard
+pageextension 90011 DMTImportConfigCard extends DMTImportConfigCard
 {
     layout
     {

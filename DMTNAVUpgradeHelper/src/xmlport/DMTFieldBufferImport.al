@@ -1,4 +1,4 @@
-xmlport 50002 DMTFieldBufferImport
+xmlport 90011 DMTFieldBufferImport
 {
     Caption = 'Field';
     Direction = Import;

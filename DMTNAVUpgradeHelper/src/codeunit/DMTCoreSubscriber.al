@@ -1,4 +1,4 @@
-codeunit 50029 DMTCoreSubscriber
+codeunit 90012 DMTCoreSubscriber
 {
     [EventSubscriber(ObjectType::Table, Database::DMTImportConfigHeader, 'OnAfterValidateEvent', "Separate Buffer Table Objects", false, false)]
     local procedure ImportConfigHeader_OnAfterValidateEvent_UseSeparateBufferTable(var Rec: Record DMTImportConfigHeader)

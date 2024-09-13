@@ -1,5 +1,5 @@
 
-page 50030 DMTProcessTemplateFactbox
+page 90014 DMTProcessTemplateFactbox
 {
     PageType = ListPart;
     SourceTable = Integer;
