@@ -19,8 +19,10 @@ codeunit 90025 FilterPageBuilderTest
     begin
         // [GIVEN] GivenImportConfigWithSavedFilters
         testLibrary.CreateDMTSetup();
-        salesHeader.FindFirst();
-        salesHeader.SetRecFilter();
+        salesHeader."Document Type" := salesHeader."Document Type"::Order;
+        salesHeader."No." := '10000';
+        salesHeader."Sell-to Customer No." := '10000';
+        salesHeader."Location Code" := 'BLAU';
         dataTableHelper.AddRecordWithCaptionsToDataTable(salesHeader);
         dataTableHelper.WriteDataTableToFileBlob(TempBlob);
         testLibrary.AddFileToSourceFileStorage(sourceFileStorage,

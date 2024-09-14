@@ -7,6 +7,7 @@ codeunit 90026 LogTests
     procedure "GIVEN_ImportFieldValuesWithValidate_WHEN_OtherValuesAreWrittenAsIntended_THEN_LogEntriesExistToIndicateTheChanges"()
     var
         customer: Record Customer;
+        paymentTerms: Record "Payment Terms";
         sourceFileStorage: Record DMTSourceFileStorage;
         importConfigHeader: Record DMTImportConfigHeader;
         importConfigLine: Record DMTImportConfigLine;
@@ -16,9 +17,16 @@ codeunit 90026 LogTests
     begin
         // [GIVEN] Import field values with validate 
         testLibrary.CreateDMTSetup();
-        customer.SetFilter("Payment Terms Code", '<>''''');
-        customer.FindFirst();
+
+        paymentTerms."Code" := '30 DAYS';
+        paymentTerms."Description" := '30 Days';
+        paymentTerms.Insert();
+
+        customer."No." := '10000';
+        customer.Name := 'Customer 1';
+        customer."Payment Terms Code" := '30 DAYS';
         clear(customer."Payment Terms Id");  // empty the field to trigger the validation
+        customer.Insert();
 
         dataTableHelper.AddRecordWithCaptionsToDataTable(customer);
         dataTableHelper.WriteDataTableToFileBlob(TempBlob);

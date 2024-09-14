@@ -50,7 +50,7 @@ codeunit 90023 ImportConfigCardActionsTest
     local procedure initializeImportConfigHeader()
     var
         sourceFileStorage: Record DMTSourceFileStorage;
-        ExtendedTextHeader: Record "Extended Text Header";
+        customer: Record Customer;
         testLibrary: Codeunit DMTTestLibrary;
         dataTableHelper: Codeunit DMTDataTableHelper;
         tempBlob: Codeunit "Temp Blob";
@@ -58,12 +58,13 @@ codeunit 90023 ImportConfigCardActionsTest
         if IsInitializedGlobal then
             exit;
         testLibrary.CreateDMTSetup();
-        ExtendedTextHeader.FindFirst();
-        ExtendedTextHeader.SetRecFilter();
-        dataTableHelper.AddRecordWithCaptionsToDataTable(ExtendedTextHeader);
+        customer."No." := '10000';
+        customer.Name := 'Customer 1';
+
+        dataTableHelper.AddRecordWithCaptionsToDataTable(customer);
         dataTableHelper.WriteDataTableToFileBlob(tempBlob);
-        TestLibrary.AddFileToSourceFileStorage(sourceFileStorage, 'ExtendedTextHeader.csv', testLibrary.GetDefaultNAVDMTLayout(), tempBlob);
-        TestLibrary.CreateImportConfigHeader(ImportConfigHeaderGlobal, ExtendedTextHeader.RecordId.TableNo, sourceFileStorage);
+        TestLibrary.AddFileToSourceFileStorage(sourceFileStorage, 'Customer.csv', testLibrary.GetDefaultNAVDMTLayout(), tempBlob);
+        TestLibrary.CreateImportConfigHeader(ImportConfigHeaderGlobal, customer.RecordId.TableNo, sourceFileStorage);
         IsInitializedGlobal := true;
     end;
 

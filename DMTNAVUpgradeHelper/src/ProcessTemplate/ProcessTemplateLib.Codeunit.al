@@ -30,9 +30,11 @@ codeunit 90013 DMTProcessTemplateLib
         processTemplateSetup: Record DMTProcessTemplateSetup;
         confirm: Page DMTConfirm;
         targetTemplateCode: Code[150];
+        actionResult: Action;
     begin
         confirm.SetMode_SelectTargetTemplateCodeMode();
-        if not (Confirm.RunModal() in [Action::LookupOK, Action::OK]) then
+        actionResult := Confirm.RunModal();
+        if not (actionResult in [Action::LookupOK, Action::OK, Action::Yes]) then
             exit;
         targetTemplateCode := confirm.GetTargetProcessTemplateCode();
         if targetTemplateCode = '' then

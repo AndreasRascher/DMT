@@ -19,7 +19,7 @@ codeunit 90024 SourceFileStorageTests
     [Test]
     procedure WHEN_ImportingSameFileTwice_THEN_TheOldFileIsOverwriten()
     var
-        ExtTextHeader1, ExtTextHeader2 : Record "Extended Text Header";
+        Customer, Customer2 : Record Customer;
         sourceFileMgt: Codeunit DMTSourceFileMgt;
         dataTableHelper: Codeunit DMTDataTableHelper;
         fileBlob1, fileBlob2 : Codeunit "Temp Blob";
@@ -28,21 +28,20 @@ codeunit 90024 SourceFileStorageTests
         // [GIVEN] DMT Setup exists
         initialize();
         // [GIVEN] File 1
-        ExtTextHeader2.FindFirst();
-        ExtTextHeader1 := ExtTextHeader2;
-        ExtTextHeader2.Next();
-        ExtTextHeader1.SetRecFilter();
-        ExtTextHeader2.SetRecFilter();
-        dataTableHelper.AddRecordWithCaptionsToDataTable(ExtTextHeader1);
+        Customer."No." := '10000';
+        Customer.Name := 'Customer 1';
+        dataTableHelper.AddRecordWithCaptionsToDataTable(Customer);
         dataTableHelper.WriteDataTableToFileBlob(fileBlob1);
         // [GIVEN] File 2
+        Customer2."No." := '10001';
+        Customer2.Name := 'Customer 2';
         Clear(dataTableHelper);
-        dataTableHelper.AddRecordWithCaptionsToDataTable(ExtTextHeader2);
+        dataTableHelper.AddRecordWithCaptionsToDataTable(Customer2);
         dataTableHelper.WriteDataTableToFileBlob(fileBlob2);
 
         // [WHEN] Adding a file to the source file storage and then adding another file with the same name
-        fileID1 := sourceFileMgt.AddFileToStorage('ExtTextHeader.csv', fileBlob1);
-        fileID2 := sourceFileMgt.AddFileToStorage('ExtTextHeader.csv', fileBlob2);
+        fileID1 := sourceFileMgt.AddFileToStorage('Customer.csv', fileBlob1);
+        fileID2 := sourceFileMgt.AddFileToStorage('Customer.csv', fileBlob2);
         if fileID1 <> fileID2 then
             error('The file was not overwritten');
     end;

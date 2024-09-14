@@ -48,7 +48,8 @@ codeunit 90028 ProzessTemplateTest
     procedure SetTemplateCodePageHandler(var confirm: TestPage DMTConfirm)
     begin
         confirm.TargetProcessTemplateCode.SetValue('TEST_TEMPLATE');
-        confirm.Close();
+        // confirm.OK().Invoke(); // OK geht nicht
+        confirm.Yes().Invoke();
         //TODO: invoke ok on confirm page
     end;
 
