@@ -7,4 +7,5 @@ enum 91006 DMTLogUsage
     value(40; "Process Buffer - Field Update") { Caption = 'Update Fields', Comment = 'de-DE=Update'; }
     value(50; "Process Buffer - Document Migration") { Caption = 'Doc. Migration', Comment = 'de-DE=Beleg Migration'; }
     value(60; "Delete Record") { Caption = 'Delete Record', Comment = 'de-DE=DS Löschen'; }
+    value(70; "Apply Default Values") { Caption = 'Delete Record', Comment = 'de-DE=DS Löschen'; }
 }

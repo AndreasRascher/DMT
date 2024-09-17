@@ -32,7 +32,9 @@ table 91009 DMTProcessingPlan
             else
             if (Type = const("Update Field")) DMTImportConfigHeader.ID
             else
-            if (Type = const("Buffer + Target")) DMTImportConfigHeader.ID;
+            if (Type = const("Buffer + Target")) DMTImportConfigHeader.ID
+            else
+            if (Type = const("Enter default values in target table")) DMTImportConfigHeader.ID;
             trigger OnValidate()
             var
                 CodeUnitMetadata: Record "CodeUnit Metadata";

@@ -468,4 +468,78 @@ codeunit 91014 DMTMigrate
         if DoModify then
             TargetRef.Modify();
     end;
+
+    internal procedure EnterDefaultValuesInTargetTable(processingPlan: Record DMTProcessingPlan)
+    var
+        tempImportConfigLine: Record DMTImportConfigLine temporary;
+        importConfigHeader: Record DMTImportConfigHeader;
+        Log: Codeunit DMTLog;
+        targetRef: RecordRef;
+    begin
+        if not processingPlan.findImportConfigHeader(importConfigHeader) then
+            Error('ImportConfigHeader not found for ProcessingPlan %1', processingPlan.ID);
+
+        Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", ImportConfigHeader);
+        processingPlan.ConvertDefaultValuesViewToFieldLines(tempImportConfigLine);
+
+        targetRef.Open(processingPlan."Target Table ID");
+        targetRef.setview(processingPlan.ReadSourceTableView());
+        if targetRef.FindSet() then begin
+            repeat
+                ApplyDefaultValuesToSingleTargetRef(targetRef, tempImportConfigLine);
+            until targetRef.Next() = 0;
+        end;
+        Log.CreateSummary();
+    end;
+
+    internal procedure ApplyDefaultValuesToSingleTargetRef(targetRef: RecordRef; var tempImportConfigLine: Record DMTImportConfigLine temporary; var Log: Codeunit DMTLog; var triggerLog: Interface ITriggerLog; var ResultType: Enum DMTProcessingResultType)
+    var
+        processRecord: Codeunit DMTProcessRecord;
+    begin
+        processRecord.InitEnterDefaultValuesInTargetTable(tempImportConfigLine);
+        // apply field values to target record
+        Commit();
+        while not ProcessRecord.Run() do begin
+            ProcessRecord.LogLastError();
+        end;
+        // do modify on existing records
+        ProcessRecord.InitModify();
+        Commit();
+        if not ProcessRecord.Run() then
+            ProcessRecord.LogLastError();
+        ProcessRecord.SaveErrorLog(Log);
+        ProcessRecord.SaveTriggerLog(Log);
+        ResultType := ProcessRecord.GetProcessingResultType();
+
+        /*
+          ClearLastError();
+        Clear(ResultType);
+        Log.DeleteExistingLogFor(BufferRef2);
+        triggerLog.DeleteExistingLogFor(BufferRef2);
+        ProcessRecord.InitFieldTransfer(BufferRef2, DMTImportSettings);
+        // apply field values to target record
+        Commit();
+        while not ProcessRecord.Run() do begin
+            ProcessRecord.LogLastError();
+        end;
+        // do modify on existing records
+        if DMTImportSettings.UpdateExistingRecordsOnly() then begin
+            ProcessRecord.InitModify();
+            Commit();
+            if not ProcessRecord.Run() then
+                ProcessRecord.LogLastError();
+        end else begin
+            // insert new records
+            ProcessRecord.InitInsert();
+            Commit();
+            if not ProcessRecord.Run() then
+                ProcessRecord.LogLastError()
+            else
+                ProcessRecord.SaveTargetRefInfosInBuffertable();
+        end;
+        ProcessRecord.SaveErrorLog(Log);
+        ProcessRecord.SaveTriggerLog(Log);
+        ResultType := ProcessRecord.GetProcessingResultType();
+        */
+    end;
 }

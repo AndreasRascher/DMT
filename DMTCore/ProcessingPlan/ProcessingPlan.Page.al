@@ -410,6 +410,14 @@ page 91017 DMTProcessingPlan
                         if not ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan) then
                             HasErrors := true;
                     end;
+                DMTProcessingPlanType::"Enter default values in target table":
+                    begin
+                        SetStatusToStartAndCommit(ProcessingPlan);
+                        ImportConfigHeader.Get(ProcessingPlan.ID);
+                        ImportConfigHeader.SetRecFilter();
+                        if not ProcessingPlanMgt.EnterDefaultValuesInTargetTable(ProcessingPlan) then
+                            HasErrors := true;
+                    end;
             end;
             ProcessingPlan."Processing Duration" := CurrentDateTime - ProcessingPlan.StartTime;
             ProcessingPlan.Status := ProcessingPlan.Status::Finished;

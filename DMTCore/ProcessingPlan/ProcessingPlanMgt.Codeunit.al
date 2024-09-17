@@ -60,4 +60,61 @@ codeunit 91015 DMTProcessingPlanMgt
         SourceFileImport := ImportConfigHeader.GetDataLayout().SourceFileFormat;
         SourceFileImport.ImportToBufferTable(ImportConfigHeader);
     end;
+
+    internal procedure EnterDefaultValuesInTargetTable(ProcessingPlan: Record DMTProcessingPlan) Success: Boolean
+    var
+        tableMetadata: Record "Table Metadata";
+        importConfigHeader: Record DMTImportConfigHeader;
+        logEntry: Record DMTLogEntry;
+        Migrate: Codeunit DMTMigrate;
+        recRef: RecordRef;
+        lastLogEntryNoBeforeProcessing, lastLogEntryNoAfterProcessing : Integer;
+        defaultValuesView: Text;
+        targetTableNoSpecifiedErr: Label 'The target table is not specified/does not exist.', Comment = 'de-DE=Die Zieltabelle ist nicht angegeben/vorhanden.';
+    begin
+        Success := true;
+        // Pre-Checks
+        // ===========
+
+        // Processing Plan exists
+        if not ProcessingPlan.findImportConfigHeader(importConfigHeader) then
+            exit(false);
+
+        // is target table empty
+        if (importConfigHeader."Target Table ID" = 0) or ((importConfigHeader."Target Table ID" <> 0) and not tableMetadata.Get(importConfigHeader."Target Table ID")) then begin
+            Message(targetTableNoSpecifiedErr);
+            exit(false);
+        end;
+
+        // no default values to enter
+        defaultValuesView := processingPlan.ReadDefaultValuesView();
+        recRef.Open(importConfigHeader."Target Table ID");
+        if defaultValuesView <> '' then
+            recRef.SetView(defaultValuesView);
+        if not recRef.HasFilter then begin
+            Message('No default values to enter.');
+            exit(false);
+        end;
+
+        // read last log entry
+        logEntry.Reset();
+        if logEntry.FilterFor(importConfigHeader) then
+            if logEntry.FindLast() then
+                lastLogEntryNoBeforeProcessing := logEntry."Entry No.";
+
+        // Migration
+        // =========
+        Migrate.EnterDefaultValuesInTargetTable(processingPlan);
+
+        // Post-Checks
+        // ============
+        // Is migration without errors
+        logEntry.Reset();
+        logEntry.SetRange("Entry Type", logEntry."Entry Type"::Error);
+        if logEntry.FilterFor(importConfigHeader) then
+            if logEntry.FindLast() then
+                lastLogEntryNoAfterProcessing := logEntry."Entry No.";
+        if lastLogEntryNoAfterProcessing > lastLogEntryNoBeforeProcessing then
+            Success := false;
+    end;
 }
