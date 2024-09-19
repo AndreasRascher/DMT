@@ -1,43 +1,43 @@
 
-/*
-  DefineSourceRecords(SourceTableView: Text;ProcessErrorsOnly: Boolean;ImportConfigHeaderID: Integer)
-  - Filters
-  - RecordIDs to process
+// /*
+//   DefineSourceRecords(SourceTableView: Text;ProcessErrorsOnly: Boolean;ImportConfigHeaderID: Integer)
+//   - Filters
+//   - RecordIDs to process
 
-  PrepareRecordLoop
-  - InitErrorLog
-  - InitReplacements
-  - InitFieldMapping
-  - InitProgressDialog
+//   PrepareRecordLoop
+//   - InitErrorLog
+//   - InitReplacements
+//   - InitFieldMapping
+//   - InitProgressDialog
 
-  Loop through the source record set 
-    ProcessRecord
-      - FillKeyFields
-      - FindExistingRecord
-      - ProcessNonKeyFields
-      - LogError
-    UpdateProgressDialog
-    - cout Results
-  EndLoop
+//   Loop through the source record set 
+//     ProcessRecord
+//       - FillKeyFields
+//       - FindExistingRecord
+//       - ProcessNonKeyFields
+//       - LogError
+//     UpdateProgressDialog
+//     - cout Results
+//   EndLoop
 
-  PostProcess
-  - LogErrors
-  - LogStatistics
-*/
-codeunit 90000 DMTMigrationProcessor implements IMigrateRecordSet
-{
-    procedure SetSourceRecordSet(importConfigHeaderID: Integer; processErrorsOnly: Boolean; SourceTableView: Text);
-    begin
+//   PostProcess
+//   - LogErrors
+//   - LogStatistics
+// */
+// codeunit 90000 DMTMigrationProcessor implements IMigrateRecordSet
+// {
+//     procedure SetSourceRecordSet(importConfigHeaderID: Integer; processErrorsOnly: Boolean; SourceTableView: Text);
+//     begin
 
-    end;
+//     end;
 
-    procedure SetNonKeyFieldsToProcess(var tempImportConfigLine: Record DMTImportConfigLine);
-    begin
+//     procedure SetNonKeyFieldsToProcess(var tempImportConfigLine: Record DMTImportConfigLine);
+//     begin
 
-    end;
+//     end;
 
-    procedure SetProcessingOptions(UpdateExistingRecords: Boolean; InsertOnlyNewRecords: Boolean);
-    begin
+//     procedure SetProcessingOptions(UpdateExistingRecords: Boolean; InsertOnlyNewRecords: Boolean);
+//     begin
 
-    end;
-}
+//     end;
+// }
