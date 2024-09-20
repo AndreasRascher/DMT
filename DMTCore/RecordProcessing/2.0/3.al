@@ -1,42 +1,51 @@
-// // Neues Process Single Buffer 
-// while source.moveNext() do begin
+Objekte:
+- MigrateMgt: 
+    RunMigrationTypeXYZ
+    - Source
 
-//     processRecord.setSourceRecord(source.getRecordRef());
+// Neues Process Single Buffer 
+while source.moveNext() do begin
+    
+    if recordLimitIsReached(noOfRecordsProcessed) then
+      break;
 
-//     case runMode of
-//       runMode::MigrateOnlyNewRecordsFromSourceToTarget: begin
-//         ProcessKeyFields(processRecord);
-//         if not processRecord.HasErrors then
-//           if not processRecord.findExistingRecord() then begin
-//              ProcessNonKeyFields(processRecord);
-//              if not processRecord.HasErrors then
-//                InsertRecord(processRecord);
-//            end;
-//       end;
+    processRecord.setSourceRecord(source.getRecordRef());
 
-//       runMode::MigrateRecordFromSourceToTarget: begin
-//          ProcessKeyFields(processRecord);
-//          if not processRecord.HasErrors() then
-//            ProcessNonKeyFields(processRecord);
-//          if not processRecord.HasErrors() then
-//            InsertOrOverwriteRecord(processRecord);
-//       end;
+    case runMode of
+      runMode::MigrateOnlyNewRecordsFromSourceToTarget: begin
+        ProcessKeyFields(processRecord);
+        if not processRecord.HasErrors then
+          if not processRecord.findExistingRecord() then begin
+             ProcessNonKeyFields(processRecord);
+             if not processRecord.HasErrors then
+               InsertRecord(processRecord);
+           end;
+      end;
 
-//       runMode::MigrateFieldFromSourceToTarget: begin
-//         ProcessKeyFields(processRecord);
-//         if processRecord.findExistingRecord() then begin
-//            ProcessNonKeyFields(processRecord);
-//             if not processRecord.HasErrors() then
-//                 UpdateRecord(processRecord);
-//         end;
-//       end;
+      runMode::MigrateRecordFromSourceToTarget: begin
+         ProcessKeyFields(processRecord);
+         if not processRecord.HasErrors() then
+           ProcessNonKeyFields(processRecord);
+         if not processRecord.HasErrors() then
+           InsertOrOverwriteRecord(processRecord);
+      end;
 
-//       runMode::ApplyFixValuesToTarget: begin
-//         ProcessNonKeyFields(processRecord);
-//         if not processRecord.HasErrors() then
-//             UpdateRecord(processRecord);
-//       end;
-//     end;
+      runMode::MigrateFieldFromSourceToTarget: begin
+        ProcessKeyFields(processRecord);
+        if processRecord.findExistingRecord() then begin
+           ProcessNonKeyFields(processRecord);
+            if not processRecord.HasErrors() then
+                UpdateRecord(processRecord);
+        end;
+      end;
 
-//     processRecord.GetResult();
-// end;
+      runMode::ApplyFixValuesToTarget: begin
+        ProcessNonKeyFields(processRecord);
+        if not processRecord.HasErrors() then
+            UpdateRecord(processRecord);
+      end;
+    end;
+
+    processRecord.GetResult();
+    noOfRecordsProcessed+=1;
+end;
