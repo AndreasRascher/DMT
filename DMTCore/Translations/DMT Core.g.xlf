@@ -903,6 +903,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=XMLPort %1 ist nicht vorhanden.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportCSVImpl - Method ImportViaSeparateXMLPort - NamedType xmlPortNotFoundErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1130098199 - Method 1921393988 - NamedType 953187296" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 is not initialized</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=%1 ist nicht initialisiert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportSettings - Method ImportConfigHeader - NamedType notInitializedErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1185200660 - Method 865639783 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import finished</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
@@ -947,6 +952,31 @@
           <source>No. of Records..\processed: %1\imported: %2\With Error: %3\Processing Time:%4</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Anzahl Datensätze..\verarbeitet: %1\eingelesen : %2\mit Fehlern: %3\Verarbeitungsdauer: %4</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method ShowResultDialog - NamedType ResultMsg</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 194566907 - Method 4147440478 - NamedType 2116364116" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The value %1 could not be entered into the field %2</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Der Wert %1 konnte nicht in das Feld %2 eingetragen werden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecord - Method AssignValueToFieldRef - NamedType ValidateFailedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 55954293 - Method 1507708651 - NamedType 4003859195" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No field mapping found for import configuration "%1"</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Importkonfiguration "%1" enthält keine Feldzuordnung.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method CheckMappedFieldsExist - NamedType ImportConfigLineEmptyErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 55954293 - Method 1715580338 - NamedType 2737554361" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No buffer table records match the filter.\ Filter: "%1"</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method DefineSourceRecords - NamedType noBufferTableRecorsInFilterErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 55954293 - Method 3730941943 - NamedType 2931333304" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Duration</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Dauer</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method PrepareProgressBar - NamedType DurationLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 55954293 - Method 3730941943 - NamedType 1970759069" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Time Remaining</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Verbleibende Zeit</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method PrepareProgressBar - NamedType TimeRemainingLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 1786966925 - Method 3043604989 - NamedType 1097618994" size-unit="char" translate="yes" xml:space="preserve">
           <source>The buffer table is empty. Filename: "%1"</source>
@@ -1852,6 +1882,11 @@
           <source>Buffer + Target</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Puffer- und Zieltab. importieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Buffer + Target - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4037377007 - EnumValue 835028101 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Enter default values in target table</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vorgabewerte in Zieltabelle eintragen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTProcessingPlanType - EnumValue Enter default values in target table - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 4037377007 - EnumValue 739346273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Group</source>
