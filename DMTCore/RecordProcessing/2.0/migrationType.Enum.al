@@ -9,7 +9,7 @@ enum 90000 DMTMigrationType
     {
     }
 
-    value(2; Delete)
+    value(2; ApplyFixedValue)
     {
     }
-}}
+}
