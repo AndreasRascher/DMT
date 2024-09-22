@@ -6,5 +6,6 @@ enum 90000 DMTMigrationType
 
     value(1; MigrateSelectsFields) { }
 
-    value(2; ApplyFixValuesToTarget) { }
+    value(2; RetryErrors) { }
+    value(3; ApplyFixValuesToTarget) { }
 }

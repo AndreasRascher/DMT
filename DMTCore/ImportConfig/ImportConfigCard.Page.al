@@ -220,10 +220,8 @@ page 91008 DMTImportConfigCard
                 PromotedIsBig = true;
                 PromotedCategory = Process;
                 trigger OnAction()
-                var
-                    importConfigMgt: Codeunit DMTImportConfigMgt;
                 begin
-                    importConfigMgt.PageAction_RetryBufferRecordsWithError(Rec);
+                    DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_RetryBufferRecordsWithError(Rec);
                 end;
             }
             action(OpenLog)

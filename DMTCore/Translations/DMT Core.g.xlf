@@ -893,11 +893,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Sie müssen die Spaltentitel im Datenlayout "%1" einrichten.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportConfigMgt - Method CreateSourceFieldNamesDict - NamedType NoHeadlineInfoFoundInDataLayoutErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 4228541464 - Method 4048901930 - NamedType 790268351" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No errors were found for retry</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Fehler zur erneuten Verbeitung gefunden</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportConfigMgt - Method PageAction_RetryBufferRecordsWithError - NamedType NoErrorFoundLbl</note>
-        </trans-unit>
         <trans-unit id="Codeunit 3834207626 - Method 2653064554 - NamedType 2519779786" size-unit="char" translate="yes" xml:space="preserve">
           <source>XMLPort %1 not found</source>
           <note from="Developer" annotates="general" priority="2">de-DE=XMLPort %1 ist nicht vorhanden.</note>
@@ -968,6 +963,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method DefineSourceRecords - NamedType noBufferTableRecorsInFilterErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 55954293 - Method 1715580338 - NamedType 790268351" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No errors were found for retry</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Fehler zur erneuten Verbeitung gefunden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method DefineSourceRecords - NamedType NoErrorFoundLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 55954293 - Method 3730941943 - NamedType 2931333304" size-unit="char" translate="yes" xml:space="preserve">
           <source>Duration</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Dauer</note>
@@ -977,6 +977,11 @@
           <source>Time Remaining</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Verbleibende Zeit</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method PrepareProgressBar - NamedType TimeRemainingLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 55954293 - Method 771327502 - NamedType 1000503204" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Records..\processed: %1\imported: %2\With Error: %3\Processing Time:%4</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Anzahl Datensätze..\verarbeitet: %1\eingelesen : %2\mit Fehlern: %3\Verarbeitungsdauer: %4</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method ShowResultDialog - NamedType ResultMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 1786966925 - Method 3043604989 - NamedType 1097618994" size-unit="char" translate="yes" xml:space="preserve">
           <source>The buffer table is empty. Filename: "%1"</source>
@@ -1453,10 +1458,20 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Ignorierte Fehler ausblenden</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTLogEntries - Action HideIgnored - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 4199531365 - Action 462184560 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Hide trigger log entries</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Trigger Änderungen ausblenden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTLogEntries - Action HideTriggerLog - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 4199531365 - Action 2504369673 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Show ignored Errors</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Ignorierte Fehler anzeigen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTLogEntries - Action ShowIgnored - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4199531365 - Action 1199779977 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show trigger changes</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Trigger Änderungen anzeigen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTLogEntries - Action ShowTriggerLog - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Processing Plan</source>
@@ -1843,6 +1858,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Trigger Änderungen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogEntryType - EnumValue Trigger Changes - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Enum 3409397984 - EnumValue 2349947494 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Apply Fixed Values</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Fixwerte anwenden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogUsage - EnumValue Apply Fixed Values - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 3304607464 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Delete Record</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DS Löschen</note>
@@ -1852,11 +1872,6 @@
           <source>Import to Buffer Table</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Import in P.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogUsage - EnumValue Import to Buffer Table - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Enum 3409397984 - EnumValue 601505679 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Doc. Migration</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Beleg Migration</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogUsage - EnumValue Process Buffer - Document Migration - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 1384793423 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Update Fields</source>

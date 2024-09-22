@@ -17,13 +17,13 @@ codeunit 90002 DMTMigrateRecord
             else
                 Error('RunMode not handled %1', RunMode);
         end;
-
     end;
 
     internal procedure Init(bufferRef: RecordRef; importSettings: Codeunit DMTImportSettings; iReplacementHandlerNew: Interface IReplacementHandler)
     begin
         Clear(CurrTargetRecIDText); // only once, not for every field
         ImportConfigHeaderGlobal := importSettings.ImportConfigHeader();
+        importSettings.EvaluateOptionValueAsNumber();
         SourceRefGlobal := bufferRef;
         importSettings.GetImportConfigLine(TempImportConfigLine);
         TmpTargetRef.Open(ImportConfigHeaderGlobal."Target Table ID", true, CompanyName);
@@ -63,9 +63,22 @@ codeunit 90002 DMTMigrateRecord
         exit(TargetRecordExistsGlobal);
     end;
 
-    internal procedure SaveErrors(log: Codeunit DMTLog)
+    internal procedure SaveErrorLog(log: Codeunit DMTLog)
+    var
+        ImportConfigLineID: RecordId;
+        ErrorItem: Dictionary of [Text, Text];
     begin
-        Error('Procedure SaveErrors not implemented.');
+        foreach ImportConfigLineID in ErrorLogDict.Keys do begin
+            ErrorItem := ErrorLogDict.Get(ImportConfigLineID);
+            TempImportConfigLine.Get(ImportConfigLineID);
+            Log.AddErrorByImportConfigLineEntry(SourceRefGlobal.RecordId, ImportConfigHeaderGlobal, TempImportConfigLine, ErrorItem);
+        end;
+    end;
+
+    internal procedure SaveTriggerLog(Log: Codeunit DMTLog)
+    begin
+        if IsTriggerLogInterfaceInitialized then
+            ITriggerLogGlobal.SaveTriggerLog(Log, ImportConfigHeaderGlobal, SourceRefGlobal);
     end;
 
     internal procedure SetRunMode_ProcessKeyFields()
@@ -204,7 +217,7 @@ codeunit 90002 DMTMigrateRecord
                  Comment = 'de-DE=Der Wert %1 konnte nicht in das Feld %2 eingetragen werden';
     begin
         FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
-        EvaluateOptionValueAsNumber := (Database::DMTGenBuffTable = SourceRecRef.Number);
+        EvaluateOptionValueAsNumber := EvaluateOptionValueAsNumberGlobal;
         TargetRecRef2 := TargetRecRef.Duplicate(); // create a duplicate to avoid filling the original target record
         FieldWithTypeCorrectValueToValidate := TargetRecRef2.Field(ImportConfigLine."Target Field No.");
         CurrValueToAssignText := Format(FromField.Value); // Error Log Info
@@ -386,6 +399,7 @@ codeunit 90002 DMTMigrateRecord
         CurrTargetRecIDText, CurrValueToAssignText : Text;
         UseTriggerLog, IsTriggerLogInterfaceInitialized : Boolean;
         TargetRecordExistsGlobal: Boolean;
+        EvaluateOptionValueAsNumberGlobal: Boolean;
         ITriggerLogGlobal: Interface ITriggerLog;
 
 }

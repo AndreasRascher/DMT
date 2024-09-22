@@ -171,6 +171,16 @@ codeunit 91010 DMTImportSettings
         exit(UseTriggerLogGlobal);
     end;
 
+    procedure EvaluateOptionValueAsNumber(EvaluateOptionValueAsNumberNew: Boolean)
+    begin
+        EvaluateOptionValueAsNumberGlobal := EvaluateOptionValueAsNumberNew;
+    end;
+
+    procedure EvaluateOptionValueAsNumber(): Boolean
+    begin
+        exit(EvaluateOptionValueAsNumberGlobal);
+    end;
+
     var
         TempImportConfigLineGlobal: Record DMTImportConfigLine temporary;
         ImportConfigHeaderGlobal: Record DMTImportConfigHeader;
@@ -179,5 +189,6 @@ codeunit 91010 DMTImportSettings
         StopProcessingRecIDListAfterErrorGlobal, NoUserInteractionGlobal, UpdateExistingRecordsOnlyGlobal, UpdateUnchangedSinceLastImportOnlyGlobal : Boolean;
         UseTriggerLogGlobal: Boolean;
         IsSourceTableViewSet, IsImportConfigLineSet : Boolean;
+        EvaluateOptionValueAsNumberGlobal: Boolean;
         RecIdToProcessListGlobal: List of [RecordId];
 }

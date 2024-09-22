@@ -180,25 +180,6 @@ codeunit 91002 DMTImportConfigMgt
         end;
     end;
 
-    procedure PageAction_RetryBufferRecordsWithError(ImportConfigHeader: Record DMTImportConfigHeader)
-    var
-        Migrate: Codeunit DMTMigrate;
-        LogQry: Query DMTLogQry;
-        RecIdList: List of [RecordId];
-        NoErrorFoundLbl: Label 'No errors were found for retry', Comment = 'de-DE=Es wurden keine Fehler zur erneuten Verbeitung gefunden';
-    begin
-        LogQry.SetRange(LogQry.SourceFileName, ImportConfigHeader.GetSourceFileName());
-        LogQry.Open();
-        while LogQry.Read() do begin
-            if Format(LogQry.SourceID) <> '' then
-                RecIdList.Add(LogQry.SourceID);
-        end;
-        if RecIdList.Count > 0 then
-            Migrate.RetryBufferRecordIDs(RecIdList, ImportConfigHeader)
-        else
-            Message(NoErrorFoundLbl);
-    end;
-
     local procedure AssignSourceToTargetFields(ImportConfigHeader: Record DMTImportConfigHeader)
     var
         ImportConfigLine: Record DMTImportConfigLine;

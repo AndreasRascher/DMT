@@ -1,60 +1,99 @@
+TODO:
+ - Integration in Verarbeitungsplan
+ - Import Konfiguration mit neuen Optionen (Optionsfelder als Nummer,Nur x Datensätze verarbeiten), diese auf Importance:Additional
+ Verarbeitungsplan
+ - Action Aufruf im Verarbeitungsplan zum Fehler verarbeiten
+ - Nur x Datensätze verarbeiten Feld
+ Alte Migrationsobjekte auskommentieren
+ Test-App
+ - Auf neue Objekte umlegen
 codeunit 90001 DMTMigrateRecordSet
 {
-    // procedure RetryFailedRecords()
-    // var
-    //     log: Codeunit "DMTLog";
-    // begin
-    //     DefineSourceRecords();
-    //     PrepareLog(log);
-    //     PrepareReplacements();
-    //     PrepareProgressBar();
-    //     ProcessRecords(log);
-    //     CloseProgressBar();
-    //     FinishLog(log);
-    // end;
-
     procedure Start(importConfigHeader: Record DMTImportConfigHeader; migrationType: Enum DMTMigrationType; recordsToProcessLimit: Integer)
     var
         log: Codeunit "DMTLog";
         importSettings: Codeunit DMTImportSettings;
+        migrationLib: Codeunit DMTMigrationLib;
         bufferRef: recordRef;
+        RecIdList: List of [RecordId];
         Result: Enum DMTProcessingResultType;
         iReplacementHandler: Interface IReplacementHandler;
+        iTriggerLog: Interface ITriggerLog;
     begin
-        //TODO: Enable/Disable TriggerLog from Setup
+        //TODO: Extended Setup - Enable/Disable TriggerLog from Setup
         importSettings.UseTriggerLog(true);
+        //TODO: Extended Setup - Enable/Disable Evaluate Options as Number from Setup
+        importSettings.EvaluateOptionValueAsNumber(false);
+        DMTSetup.GetRecordOnce();
+        if DMTSetup.IsNAVExport() then
+            importSettings.EvaluateOptionValueAsNumber(true);
         // Checks
         CheckMappedFieldsExist(importConfigHeader);
         // Set Processing Parameters
         importSettings.init(importConfigHeader, migrationType);
         // Prepare Buffer
-        DefineSourceRecords(bufferRef, importSettings, migrationType);
+        DefineSourceRecords(bufferRef, RecIdList, importSettings, migrationType);
         // Prepare FieldMapping
         LoadImportConfigLine(importSettings);
         // Prepare Log
-        log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", importConfigHeader);
+        case migrationType of
+            migrationType::MigrateRecords:
+                log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", importConfigHeader);
+            migrationType::MigrateSelectsFields:
+                log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Field Update", importConfigHeader);
+            migrationType::RetryErrors:
+                log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", importConfigHeader);
+            migrationType::ApplyFixValuesToTarget:
+                log.InitNewProcess(Enum::DMTLogUsage::"Apply Fixed Values", importConfigHeader);
+        end;
+        if importSettings.UseTriggerLog() then
+            DMTSetup.getDefaultTriggerLogImplementation(iTriggerLog);
         // Prepare Replacements
         DMTSetup.getDefaultReplacementImplementation(iReplacementHandler);
         iReplacementHandler.InitBatchProcess(importConfigHeader);
+        // Show Filter Dialog
+        if migrationType <> migrationType::RetryErrors then begin
+            importConfigHeader.BufferTableMgt().InitBufferRef(bufferRef, true);
+            Commit(); // Runmodal Dialog in Edit View
+            if not EditView(bufferRef, importSettings) then
+                exit;
+        end;
         // Progress
         if not importSettings.NoUserInteraction() then
-            PrepareProgressBar(importConfigHeader, bufferRef);
+            if migrationType = migrationType::RetryErrors then
+                PrepareProgressBar(importConfigHeader, RecIdList.Count)
+            else
+                PrepareProgressBar(importConfigHeader, bufferRef.Count);
         // Process Records
         Clear(NoOfRecordsProcessedGlobal);
-        while MoveNext(bufferRef, recordsToProcessLimit, NoOfRecordsProcessedGlobal) do begin
+        while MoveNext(bufferRef, RecIdList, recordsToProcessLimit, NoOfRecordsProcessedGlobal, migrationType) do begin
             NoOfRecordsProcessedGlobal += 1;
-            ProcessSingleRecord(bufferRef, importSettings, log, iReplacementHandler, false, Result);
+            ProcessSingleRecord(bufferRef, importSettings, log, iTriggerLog, iReplacementHandler, false, Result);
             UpdateProgress(Result);
         end;
         // Close Progress
         if Progress_IsOpen then
             Progress.Close();
+        // Post Processing
+        migrationLib.RunPostProcessingFor(importConfigHeader);
+        importConfigHeader.BufferTableMgt().updateImportToTargetPercentage();
+        // Finish Log
+        log.CreateSummary(NoOfRecordsProcessedGlobal, NoOfRecordsProcessedGlobal - Progress_NoOfErrors - Progress_NoOfRecordsIgnored, Progress_NoOfErrors, CurrentDateTime - Progress_StartTime);
+        if not ImportSettings.NoUserInteraction() then begin
+            log.ShowLogForCurrentProcess();
+            ShowResultDialog();
+        end;
+
     end;
 
-    local procedure DefineSourceRecords(var bufferRef: RecordRef; var importSettings: Codeunit DMTImportSettings; migrationType: Enum DMTMigrationType)
+    local procedure DefineSourceRecords(var bufferRef: RecordRef; var RecIdList: List of [RecordId]; importSettings: Codeunit DMTImportSettings; migrationType: Enum DMTMigrationType)
     var
+        LogQry: Query DMTLogQry;
+
         noBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filter: "%1"',
                                     Comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"';
+        NoErrorFoundLbl: Label 'No errors were found for retry', Comment = 'de-DE=Es wurden keine Fehler zur erneuten Verbeitung gefunden';
+
     begin
         case migrationType of
             DMTMigrationType::MigrateRecords,
@@ -62,17 +101,30 @@ codeunit 90001 DMTMigrateRecordSet
                 begin
                     Clear(bufferRef);
                     importSettings.ImportConfigHeader().BufferTableMgt().InitBufferRef(bufferRef, true);
+                    if bufferRef.IsEmpty then
+                        Error(noBufferTableRecorsInFilterErr, bufferRef.GetFilters);
                 end;
             DMTMigrationType::ApplyFixValuesToTarget:
                 begin
                     Clear(bufferRef);
                     bufferRef.Open(importSettings.ImportConfigHeader()."Target Table ID");
                 end;
+            DMTMigrationType::RetryErrors:
+                begin
+                    LogQry.SetRange(LogQry.SourceFileName, importSettings.ImportConfigHeader().GetSourceFileName());
+                    LogQry.Open();
+                    while LogQry.Read() do begin
+                        if Format(LogQry.SourceID) <> '' then
+                            RecIdList.Add(LogQry.SourceID);
+                    end;
+                    // show message
+                    if not importSettings.NoUserInteraction() then
+                        if RecIdList.Count = 0 then
+                            Message(NoErrorFoundLbl);
+                end;
             else
                 Error('DefineSourceRecords: Unhandled migration type %1', migrationType);
         end;
-        if bufferRef.IsEmpty then
-            Error(noBufferTableRecorsInFilterErr, bufferRef.GetFilters);
     end;
 
     local procedure LoadImportConfigLine(var importSettings: Codeunit DMTImportSettings) OK: Boolean
@@ -136,89 +188,142 @@ codeunit 90001 DMTMigrateRecordSet
         importSettings.SetImportConfigLine(tempImportConfigLine);
     end;
 
-
-    local procedure MoveNext(var bufferRef: RecordRef; noRecordsToProcessLimit: Integer; noOfRecordsProcessed: Integer) OK: Boolean
+    local procedure EditView(var BufferRef: RecordRef; var importSettings: Codeunit DMTImportSettings) Continue: Boolean
+    var
+        ImportConfigHeader: Record DMTImportConfigHeader;
+        FPBuilder: Codeunit DMTFPBuilder;
     begin
-        case true of
-            // First Record
-            (noOfRecordsProcessed = 0):
-                OK := bufferRef.FindSet();
-            // Limit is defined and reached
-            (noRecordsToProcessLimit <> 0) and (noOfRecordsProcessed > noRecordsToProcessLimit):
-                OK := false;
-            // Next Record
-            else
-                OK := (bufferRef.Next() <> 0);
+        Continue := true; // Canceling the dialog should stop the process
+
+        if importSettings.SourceTableView() <> '' then begin
+            BufferRef.SetView(importSettings.SourceTableView());
+        end;
+
+        if importSettings.NoUserInteraction() then begin
+            exit(Continue);
+        end;
+
+        ImportConfigHeader.Get(importSettings.ImportConfigHeader().RecordId);
+        if not FPBuilder.RunModal(BufferRef, ImportConfigHeader) then
+            exit(false);
+        if BufferRef.HasFilter then begin
+            ImportConfigHeader.WriteSourceTableView(BufferRef.GetView(false));
+            Commit();
+            importSettings.SourceTableView(BufferRef.GetView(false));
+        end else begin
+            ImportConfigHeader.WriteSourceTableView('');
+            Commit();
+            importSettings.SourceTableView('');
         end;
     end;
 
-    local procedure ProcessSingleRecord(bufferRef: RecordRef; importSettings: Codeunit DMTImportSettings; log: Codeunit DMTLog; iReplacementHandler: Interface IReplacementHandler; UpdateExistingRecordsOnly: Boolean; var Result: Enum DMTProcessingResultType)
+
+    local procedure MoveNext(var bufferRef: RecordRef; var RecIdList: List of [RecordId]; noRecordsToProcessLimit: Integer; noOfRecordsProcessed: Integer; migrationType: Enum DMTMigrationType) OK: Boolean
+    begin
+        case migrationType of
+            // Retry Errors - Step through RecID List
+            migrationType::RetryErrors:
+                begin
+                    if true in [RecIdList.Count = 0, noOfRecordsProcessed = RecIdList.Count] then
+                        OK := false
+                    else
+                        OK := bufferRef.Get(RecIdList.Get(noOfRecordsProcessed + 1));
+
+                    // Limit is defined and reached
+                    if (noRecordsToProcessLimit <> 0) and (noOfRecordsProcessed > noRecordsToProcessLimit) then
+                        OK := false;
+                end;
+            // First Record from buffer table
+            migrationType::MigrateRecords, migrationType::MigrateSelectsFields, migrationType::ApplyFixValuesToTarget:
+                begin
+                    if (noOfRecordsProcessed = 0) then
+                        OK := bufferRef.FindSet()
+                    else
+                        OK := (bufferRef.Next() <> 0);
+
+                    // Limit is defined and reached
+                    if (noRecordsToProcessLimit <> 0) and (noOfRecordsProcessed > noRecordsToProcessLimit) then
+                        OK := false;
+                end;
+
+            else
+                Error('unhandled migration type %1', migrationType);
+        end;
+    end;
+
+    local procedure ProcessSingleRecord(bufferRef: RecordRef; importSettings: Codeunit DMTImportSettings; log: Codeunit DMTLog; var triggerLog: Interface ITriggerLog; iReplacementHandler: Interface IReplacementHandler; UpdateExistingRecordsOnly: Boolean; var Result: Enum DMTProcessingResultType)
     var
         migrateRecord: Codeunit DMTMigrateRecord;
         targetRecordExists: Boolean;
+        skipRecord: Boolean;
     begin
+        Log.DeleteExistingLogFor(bufferRef);
+        if importSettings.UseTriggerLog() then
+            triggerLog.DeleteExistingLogFor(bufferRef);
+
+        skipRecord := false;
         migrateRecord.Init(bufferRef, importSettings, iReplacementHandler);
         Result := Result::ChangesApplied; // default
-
+        Commit();
         // 1. Read Key Fields
         if not ProcessKeyFields(migrateRecord) then begin
-            migrateRecord.SaveErrors(log);
+            migrateRecord.CollectLastError();
             Result := Enum::DMTProcessingResultType::Error;
-            exit;
         end;
 
         // 2. Skip if no target record found for update
         targetRecordExists := migrateRecord.TargetRecordExists();
         if UpdateExistingRecordsOnly and not targetRecordExists then begin
             Result := Enum::DMTProcessingResultType::Ignored;
-            exit;
+            skipRecord := true;
         end;
 
         // 3. Read Non-Key Fields
-        if not ProcessNonKeyFields(migrateRecord) then begin
-            migrateRecord.SaveErrors(log);
-            Result := Enum::DMTProcessingResultType::Error;
-            exit;
-        end;
+        if not skipRecord then
+            ProcessNonKeyFields(migrateRecord);
 
-        if not targetRecordExists then begin
-            // 4.a Insert Record
-            if not InsertRecord(migrateRecord) then begin
-                migrateRecord.SaveErrors(log);
-                Result := Enum::DMTProcessingResultType::Error;
-                exit;
+        // 4. Insert or Update Record if no unignorable errors occured   
+        if not skipRecord and not migrateRecord.HasErrorsThatShouldNotBeIngored() then
+            if not targetRecordExists then begin
+                // 4.a Insert Record
+                if not InsertRecord(migrateRecord) then begin
+                    migrateRecord.CollectLastError();
+                    Result := Enum::DMTProcessingResultType::Error;
+                end;
+            end else begin
+                // 4.b Update Record
+                if not UpdateRecord(migrateRecord) then begin
+                    migrateRecord.CollectLastError();
+                    Result := Enum::DMTProcessingResultType::Error;
+                end;
             end;
-        end else
-            // 4.b Update Record
-            if not UpdateRecord(migrateRecord) then begin
-                migrateRecord.SaveErrors(log);
-                Result := Enum::DMTProcessingResultType::Error;
-                exit;
-            end;
+        // 5. Store Log
+        if not skipRecord then begin
+            migrateRecord.SaveErrorLog(Log);
+            if importSettings.UseTriggerLog() then
+                migrateRecord.SaveTriggerLog(Log);
+        end;
+        // 6. Set Result
+        if migrateRecord.HasErrorsThatShouldNotBeIngored() then
+            Result := Enum::DMTProcessingResultType::Error;
     end;
 
     local procedure ProcessKeyFields(var migrateRecord: Codeunit DMTMigrateRecord) Success: Boolean
     begin
-        Success := true;
         migrateRecord.SetRunMode_ProcessKeyFields();
         while not migrateRecord.Run() do begin
             migrateRecord.CollectLastError();
         end;
-        // Success is only false if there are errors that should not be ignored
-        if migrateRecord.HasErrorsThatShouldNotBeIngored() then
-            Success := false;
+        Success := not migrateRecord.HasErrorsThatShouldNotBeIngored();
     end;
 
     local procedure ProcessNonKeyFields(migrateRecord: Codeunit DMTMigrateRecord) Success: Boolean
     begin
-        Success := true;
         migrateRecord.SetRunMode_ProcessNonKeyFields();
         while not migrateRecord.Run() do begin
             migrateRecord.CollectLastError();
         end;
-        // Success is only false if there are errors that should not be ignored
-        if migrateRecord.HasErrorsThatShouldNotBeIngored() then
-            Success := false;
+        Success := not migrateRecord.HasErrorsThatShouldNotBeIngored();
     end;
 
     local procedure InsertRecord(migrateRecord: Codeunit DMTMigrateRecord) Success: Boolean
@@ -257,7 +362,7 @@ codeunit 90001 DMTMigrateRecordSet
             Error(ImportConfigLineEmptyErr, ImportConfigHeader.ID);
     end;
 
-    procedure PrepareProgressBar(var ImportConfigHeader: Record DMTImportConfigHeader; var bufferRef: RecordRef)
+    procedure PrepareProgressBar(var ImportConfigHeader: Record DMTImportConfigHeader; noOfRecordsToProcess: Integer)
     var
         MaxWith: Integer;
         DurationLbl: Label 'Duration', Comment = 'de-DE=Dauer';
@@ -275,7 +380,7 @@ codeunit 90001 DMTMigrateRecordSet
         end;
 
         Progress_StartTime := CurrentDateTime;
-        Progress_NoOfSteps := bufferRef.Count;
+        Progress_NoOfSteps := noOfRecordsToProcess;
         ProgressBarText.AppendLine(ProgressBarTitle);
         ProgressBarText.AppendLine('\Filter:' + PadStr('', 42, '#') + '1#');
         ProgressBarText.AppendLine('\Record:' + PadStr('', 42, '#') + '2#');
@@ -291,7 +396,7 @@ codeunit 90001 DMTMigrateRecordSet
     procedure UpdateProgress(ResultType: Enum DMTProcessingResultType)
     begin
         // ProgressDialog.NextStep('Process');
-        Progress_NoOfStepsProcessed += 1;
+        Progress_NoOfRecordsProcessed += 1;
         case ResultType of
             ResultType::Error:
                 Progress_NoOfErrors += 1;
@@ -305,13 +410,13 @@ codeunit 90001 DMTMigrateRecordSet
         end;
         if Progress_DoUpdate() then begin
             // ProgressDialog.UpdateFieldControl('NoofRecord', StrSubstNo('%1 / %2', ProgressDialog.GetStep('Process'), ProgressDialog.GetTotalStep('Process')));
-            Progress.Update(2, StrSubstNo('%1 / %2', Progress_NoOfStepsProcessed, Progress_NoOfSteps));
+            Progress.Update(2, StrSubstNo('%1 / %2', Progress_NoOfRecordsProcessed, Progress_NoOfSteps));
             // ProgressDialog.UpdateControlWithCustomDuration('Duration', 'Progress');
             Progress.Update(3, Format(CurrentDateTime - Progress_StartTime));
             // ProgressDialog.UpdateProgressBar('Progress', 'Process');
-            Progress.Update(4, (10000 * Progress_NoOfStepsProcessed / Progress_NoOfSteps) div 1);
+            Progress.Update(4, (10000 * Progress_NoOfRecordsProcessed / Progress_NoOfSteps) div 1);
             // ProgressDialog.UpdateFieldControl('TimeRemaining', ProgressDialog.GetRemainingTime('Progress', 'Process'));
-            Progress.Update(5, GetRemainingTime(Progress_StartTime, Progress_NoOfStepsProcessed, Progress_NoOfSteps));
+            Progress.Update(5, GetRemainingTime(Progress_StartTime, Progress_NoOfRecordsProcessed, Progress_NoOfSteps));
         end;
     end;
 
@@ -345,6 +450,18 @@ codeunit 90001 DMTMigrateRecordSet
         exit(true);
     end;
 
+    local procedure ShowResultDialog()
+    var
+        ResultMsg: Label 'No. of Records..\processed: %1\imported: %2\With Error: %3\Processing Time:%4',
+         Comment = 'de-DE=Anzahl Datensätze..\verarbeitet: %1\eingelesen : %2\mit Fehlern: %3\Verarbeitungsdauer: %4';
+    begin
+        Message(ResultMsg,
+                Progress_NoOfRecordsProcessed,
+                Progress_ResultOK,
+                Progress_NoOfErrors,
+                CurrentDateTime - Progress_StartTime);
+    end;
+
     var
         DMTSetup: Record "DMTSetup";
         NoOfRecordsProcessedGlobal: Integer;
@@ -352,5 +469,5 @@ codeunit 90001 DMTMigrateRecordSet
         Progress_StartTime, Progess_LastUpdate : DateTime;
         Progress_NoOfSteps: Integer;
         Progress_IsOpen: Boolean;
-        Progress_NoOfStepsProcessed, Progress_NoOfErrors, Progress_ResultOK, Progress_NoOfRecordsIgnored, Progress_UpdateThresholdInMS : Integer;
+        Progress_NoOfRecordsProcessed, Progress_NoOfErrors, Progress_ResultOK, Progress_NoOfRecordsIgnored, Progress_UpdateThresholdInMS : Integer;
 }
