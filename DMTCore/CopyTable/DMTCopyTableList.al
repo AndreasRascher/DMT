@@ -67,24 +67,17 @@ page 91023 DMTCopyTableList
 
     local procedure CopyDataFromSourceCompany(var CopyTable_SELECTED: Record DMTCopyTable temporary)
     var
-        ProgressDialog: Codeunit DMTProgressDialog;
+        progress: Dialog;
+        progressTxt: Label 'Copying Table ###########################1#', Comment = 'de-DE=Kopiere Tabelle ###########################1#';
     begin
         if not CopyTable_SELECTED.FindSet() then exit;
-        repeat
-            CopyTable_SELECTED.CalcFields("Table Caption");
-            ProgressDialog.AppendText(CopyTable_SELECTED."Table Caption");
-            ProgressDialog.AddField(10, format(CopyTable_SELECTED."Table No."));
-            ProgressDialog.AppendTextLine('');
-        until CopyTable_SELECTED.Next() = 0;
-
         CopyTable_SELECTED.FindSet();
-        ProgressDialog.Open();
+        progress.Open(progressTxt);
         repeat
-            ProgressDialog.SaveCustomStartTime(format(CopyTable_SELECTED."Table No."));
+            progress.Update(1, CopyTable_SELECTED."Table Caption");
             CopyDataFromSourceCompanyInner(CopyTable_SELECTED);
-            ProgressDialog.UpdateControlWithCustomDuration(format(CopyTable_SELECTED."Table No."), format(CopyTable_SELECTED."Table No."));
         until CopyTable_SELECTED.Next() = 0;
-        ProgressDialog.Close();
+        progress.Close();
     end;
 
     local procedure CopyDataFromSourceCompanyInner(CopyTable: Record DMTCopyTable)

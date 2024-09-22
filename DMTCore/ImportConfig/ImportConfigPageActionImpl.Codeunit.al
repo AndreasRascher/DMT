@@ -18,7 +18,7 @@ codeunit 91025 DMTImportConfigPageActionImpl implements IImportConfigPageAction
     var
         migrateRecordSet: Codeunit DMTMigrateRecordSet;
     begin
-        migrateRecordSet.Start(Rec, Enum::DMTMigrationType::MigrateRecords, 0);
+        migrateRecordSet.Start(Rec, Enum::DMTMigrationType::MigrateRecords);
     end;
 
     procedure ImportConfigCard_UpdateFields(var Rec: Record DMTImportConfigHeader);
@@ -34,7 +34,7 @@ codeunit 91025 DMTImportConfigPageActionImpl implements IImportConfigPageAction
         RunModalAction := SelectMultipleFields.RunModal();
         if RunModalAction = Action::OK then begin
             Rec.WriteLastFieldUpdateSelection(SelectMultipleFields.GetTargetFieldIDListAsText());
-            migrateRecordSet.Start(Rec, Enum::DMTMigrationType::MigrateSelectsFields, 0);
+            migrateRecordSet.Start(Rec, Enum::DMTMigrationType::MigrateSelectsFields);
         end;
     end;
 
@@ -47,6 +47,6 @@ codeunit 91025 DMTImportConfigPageActionImpl implements IImportConfigPageAction
     var
         migrateRecordSet: Codeunit DMTMigrateRecordSet;
     begin
-        migrateRecordSet.Start(ImportConfigHeader, Enum::DMTMigrationType::RetryErrors, 0);
+        migrateRecordSet.Start(ImportConfigHeader, Enum::DMTMigrationType::RetryErrors);
     end;
 }

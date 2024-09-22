@@ -4,12 +4,13 @@ codeunit 91015 DMTProcessingPlanMgt
     var
         importConfigHeader: Record DMTImportConfigHeader;
         logEntry: Record DMTLogEntry;
-        Migrate: Codeunit DMTMigrate;
+        migrateRecordSet: Codeunit DMTMigrateRecordSet;
         bufferRef: RecordRef;
         currView: Text;
         lastLogEntryNoAfterProcessing, lastLogEntryNoBeforeProcessing : Integer;
         bufferTableEmptyErr: Label 'The buffer table is empty. Filename: "%1"', Comment = 'de-DE=Die Puffertable entält keine Zeilen. Dateiname: "%1"';
         noBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filename: "%1"\ Filter: "%2"', Comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Dateiname: "%1"\ Filter: "%2"';
+        noDefaultValuesSetErr: Label 'No default values has been set', Comment = 'de-DE=Es wurden keine Vorgabewerte definiert';
     begin
         Success := true;
         // Pre-Checks
@@ -36,8 +37,14 @@ codeunit 91015 DMTProcessingPlanMgt
                     lastLogEntryNoBeforeProcessing := logEntry."Entry No.";
         end;
 
+        if processingPlan.Type = processingPlan.Type::"Enter default values in target table" then
+            if processingPlan.ReadDefaultValuesView() = '' then begin
+                Message(noDefaultValuesSetErr);
+                exit(false);
+            end;
+
         // Migration
-        Migrate.BufferFor(processingPlan);
+        migrateRecordSet.Start(processingPlan);
 
         // Post-Checks
         if processingPlan.Type in [processingPlan.Type::"Buffer + Target", processingPlan.Type::"Import To Target"] then begin

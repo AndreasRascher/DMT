@@ -11,7 +11,7 @@ codeunit 91011 DMTChangeRecordWithPerm
         DMTDeleteDatainTargetTable.Run();
     end;
 
-    procedure InsertOrOverwriteRecFromTmp(var TmpTargetRef: RecordRef; var CurrTargetRecIDText: Text; UseTrigger: Boolean; IsTriggerLogInterfaceInitialized: Boolean; var triggerLog: Interface ITriggerLog) InsertOK: Boolean
+    procedure InsertOrOverwriteRecFromTmp(var TmpTargetRef: RecordRef; var CurrTargetRecIDText: Text; UseTrigger: Boolean) InsertOK: Boolean
     var
         RefHelper: Codeunit DMTRefHelper;
         TargetRef: RecordRef;
@@ -23,25 +23,25 @@ codeunit 91011 DMTChangeRecordWithPerm
 
         if TargetRef2.Get(TargetRef.RecordId) then begin
 
-            if IsTriggerLogInterfaceInitialized then
-                triggerLog.InitBeforeModify(TargetRef, UseTrigger);
+            if IsTriggerLogInterfaceInitializedGlobal then
+                TriggerLogGlobal.InitBeforeModify(TargetRef, UseTrigger);
 
             InsertOK := TargetRef.Modify(UseTrigger);
 
-            if IsTriggerLogInterfaceInitialized then
-                triggerLog.CheckAfterOnModiy(TargetRef);
+            if IsTriggerLogInterfaceInitializedGlobal then
+                TriggerLogGlobal.CheckAfterOnModiy(TargetRef);
 
         end else begin
 
             xRecID := TargetRef.RecordId;
 
-            if IsTriggerLogInterfaceInitialized then
-                triggerLog.InitBeforeInsert(TargetRef, UseTrigger);
+            if IsTriggerLogInterfaceInitializedGlobal then
+                TriggerLogGlobal.InitBeforeInsert(TargetRef, UseTrigger);
 
             InsertOK := TargetRef.Insert(UseTrigger);
 
-            if IsTriggerLogInterfaceInitialized then
-                triggerLog.CheckAfterOnInsert(TargetRef);
+            if IsTriggerLogInterfaceInitializedGlobal then
+                TriggerLogGlobal.CheckAfterOnInsert(TargetRef);
 
             RecID := TargetRef.RecordId;
             if xRecID <> RecID then
@@ -49,15 +49,27 @@ codeunit 91011 DMTChangeRecordWithPerm
         end;
     end;
 
-    procedure ModifyRecFromTmp(var TmpTargetRef: RecordRef; UseTrigger: Boolean; IsTriggerLogInterfaceInitialized: Boolean; triggerLog: Interface ITriggerLog) ModifyOK: Boolean
+    procedure ModifyRecFromTmp(var TmpTargetRef: RecordRef; UseTrigger: Boolean) ModifyOK: Boolean
     var
         RefHelper: Codeunit DMTRefHelper;
         TargetRef: RecordRef;
     begin
         TargetRef.Open(TmpTargetRef.Number, false);
         RefHelper.CopyRecordRef(TmpTargetRef, TargetRef);
-        triggerLog.InitBeforeModify(TargetRef, UseTrigger);
+        if IsTriggerLogInterfaceInitializedGlobal then
+            TriggerLogGlobal.InitBeforeModify(TargetRef, UseTrigger);
         ModifyOK := TargetRef.Modify(UseTrigger);
-        triggerLog.CheckAfterOnModiy(TargetRef);
+        if IsTriggerLogInterfaceInitializedGlobal then
+            TriggerLogGlobal.CheckAfterOnModiy(TargetRef);
     end;
+
+    internal procedure SetTriggerLog(iTriggerLogNew: Interface ITriggerLog)
+    begin
+        TriggerLogGlobal := iTriggerLogNew;
+        IsTriggerLogInterfaceInitializedGlobal := true;
+    end;
+
+    var
+        IsTriggerLogInterfaceInitializedGlobal: Boolean;
+        TriggerLogGlobal: Interface ITriggerLog;
 }

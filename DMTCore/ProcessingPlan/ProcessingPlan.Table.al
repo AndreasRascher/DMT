@@ -70,6 +70,12 @@ table 91009 DMTProcessingPlan
         field(41; StartTime; DateTime) { Caption = 'Start Time', Comment = 'de-DE=Startzeit'; Editable = false; }
         field(42; "Processing Duration"; Duration) { Caption = 'Processing Duration', Comment = 'de-DE=Verarbeitungszeit'; Editable = false; }
         field(50; Indentation; Integer) { Caption = 'Indentation', Comment = 'de-DE=Einrückung'; Editable = false; }
+        field(57; "Max No. of Records to Process"; Integer)
+        {
+            Caption = 'Max No. of Records to Process', Comment = 'de-DE=max. Anzahl der zu verarbeitenden Datensätze';
+            BlankZero = true;
+            MinValue = 0;
+        }
         field(60; "Target Table ID"; Integer)
         {
             Caption = 'Target Table ID', Comment = 'de-DE=Zieltabellen ID';
@@ -384,12 +390,12 @@ table 91009 DMTProcessingPlan
 
     procedure TypeSupportsFixedValues() IsSupported: Boolean
     begin
-        IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"];
+        IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target", Rec.Type::"Enter default values in target table"];
     end;
 
     internal procedure TypeSupportsLog() IsSupported: Boolean
     begin
-        IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"];
+        IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target", Rec.Type::"Enter default values in target table"];
     end;
 
     internal procedure New()
@@ -463,7 +469,7 @@ table 91009 DMTProcessingPlan
 
     procedure findImportConfigHeader(var importConfigHeader: Record DMTImportConfigHeader) OK: Boolean
     begin
-        if not (Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"]) then
+        if not (Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target", Rec.Type::"Enter default values in target table"]) then
             exit(false);
         Clear(importConfigHeader);
         OK := importConfigHeader.Get(Rec.ID);

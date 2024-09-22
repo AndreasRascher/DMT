@@ -1,18 +1,41 @@
-TODO:
- - Integration in Verarbeitungsplan
- - Import Konfiguration mit neuen Optionen (Optionsfelder als Nummer,Nur x Datensätze verarbeiten), diese auf Importance:Additional
- Verarbeitungsplan
- - Action Aufruf im Verarbeitungsplan zum Fehler verarbeiten
- - Nur x Datensätze verarbeiten Feld
- Alte Migrationsobjekte auskommentieren
- Test-App
- - Auf neue Objekte umlegen
-codeunit 90001 DMTMigrateRecordSet
+codeunit 91014 DMTMigrateRecordSet
 {
-    procedure Start(importConfigHeader: Record DMTImportConfigHeader; migrationType: Enum DMTMigrationType; recordsToProcessLimit: Integer)
+    procedure Start(processingPlan: Record DMTProcessingPlan)
+    var
+        importConfigHeader: Record DMTImportConfigHeader;
+        importSettings: Codeunit DMTImportSettings;
+        migrationType: Enum DMTMigrationType;
+    begin
+        importSettings.init(processingPlan);
+        processingPlan.findImportConfigHeader(importConfigHeader);
+        case processingPlan.Type of
+            // do nothing
+            processingPlan.Type::" ", processingPlan.Type::"Group", processingPlan.Type::"Import To Buffer":
+                ;
+            processingPlan.Type::"Buffer + Target", processingPlan.Type::"Import To Target":
+                migrationType := migrationType::MigrateRecords;
+            processingPlan.Type::"Update Field":
+                migrationType := migrationType::MigrateSelectsFields;
+            processingPlan.Type::"Enter default values in target table":
+                migrationType := migrationType::ApplyFixValuesToTarget;
+            else
+                Error('ProcessingPlan Type %1 not supported', processingPlan.Type);
+        end;
+        Start(importSettings.ImportConfigHeader(), importSettings, migrationType);
+    end;
+
+    procedure Start(importConfigHeader: Record DMTImportConfigHeader; migrationType: Enum DMTMigrationType)
+    var
+        importSettings: Codeunit DMTImportSettings;
+    begin
+        // Set Processing Parameters
+        importSettings.init(importConfigHeader, migrationType);
+        Start(importConfigHeader, importSettings, migrationType);
+    end;
+
+    local procedure Start(importConfigHeader: Record DMTImportConfigHeader; importSettings: Codeunit DMTImportSettings; migrationType: Enum DMTMigrationType)
     var
         log: Codeunit "DMTLog";
-        importSettings: Codeunit DMTImportSettings;
         migrationLib: Codeunit DMTMigrationLib;
         bufferRef: recordRef;
         RecIdList: List of [RecordId];
@@ -20,17 +43,13 @@ codeunit 90001 DMTMigrateRecordSet
         iReplacementHandler: Interface IReplacementHandler;
         iTriggerLog: Interface ITriggerLog;
     begin
-        //TODO: Extended Setup - Enable/Disable TriggerLog from Setup
-        importSettings.UseTriggerLog(true);
-        //TODO: Extended Setup - Enable/Disable Evaluate Options as Number from Setup
-        importSettings.EvaluateOptionValueAsNumber(false);
+        importSettings.UseTriggerLog(importConfigHeader."Log Trigger Changes");
+        importSettings.EvaluateOptionValueAsNumber(importConfigHeader."Ev. Nos. for Option fields as" = importConfigHeader."Ev. Nos. for Option fields as"::Position);
         DMTSetup.GetRecordOnce();
         if DMTSetup.IsNAVExport() then
             importSettings.EvaluateOptionValueAsNumber(true);
         // Checks
         CheckMappedFieldsExist(importConfigHeader);
-        // Set Processing Parameters
-        importSettings.init(importConfigHeader, migrationType);
         // Prepare Buffer
         DefineSourceRecords(bufferRef, RecIdList, importSettings, migrationType);
         // Prepare FieldMapping
@@ -59,6 +78,7 @@ codeunit 90001 DMTMigrateRecordSet
                 exit;
         end;
         // Progress
+        Progress_StartTime := CurrentDateTime; // needed for duration calculation in log entry
         if not importSettings.NoUserInteraction() then
             if migrationType = migrationType::RetryErrors then
                 PrepareProgressBar(importConfigHeader, RecIdList.Count)
@@ -66,7 +86,7 @@ codeunit 90001 DMTMigrateRecordSet
                 PrepareProgressBar(importConfigHeader, bufferRef.Count);
         // Process Records
         Clear(NoOfRecordsProcessedGlobal);
-        while MoveNext(bufferRef, RecIdList, recordsToProcessLimit, NoOfRecordsProcessedGlobal, migrationType) do begin
+        while MoveNext(bufferRef, RecIdList, importSettings.RecordsToProcessLimit(), NoOfRecordsProcessedGlobal, migrationType) do begin
             NoOfRecordsProcessedGlobal += 1;
             ProcessSingleRecord(bufferRef, importSettings, log, iTriggerLog, iReplacementHandler, false, Result);
             UpdateProgress(Result);
@@ -308,7 +328,7 @@ codeunit 90001 DMTMigrateRecordSet
             Result := Enum::DMTProcessingResultType::Error;
     end;
 
-    local procedure ProcessKeyFields(var migrateRecord: Codeunit DMTMigrateRecord) Success: Boolean
+    procedure ProcessKeyFields(var migrateRecord: Codeunit DMTMigrateRecord) Success: Boolean
     begin
         migrateRecord.SetRunMode_ProcessKeyFields();
         while not migrateRecord.Run() do begin
@@ -378,8 +398,6 @@ codeunit 90001 DMTMigrateRecordSet
                                 ProgressBarTitle +
                                 PadStr('', (MaxWith - StrLen(ProgressBarTitle)) div 2, '_');
         end;
-
-        Progress_StartTime := CurrentDateTime;
         Progress_NoOfSteps := noOfRecordsToProcess;
         ProgressBarText.AppendLine(ProgressBarTitle);
         ProgressBarText.AppendLine('\Filter:' + PadStr('', 42, '#') + '1#');
@@ -460,6 +478,21 @@ codeunit 90001 DMTMigrateRecordSet
                 Progress_ResultOK,
                 Progress_NoOfErrors,
                 CurrentDateTime - Progress_StartTime);
+    end;
+
+    procedure FindCollationProblems(RecordMapping: Dictionary of [RecordId, RecordId]) CollationProblems: Dictionary of [RecordId, RecordId]
+    var
+        TargetRecID: RecordId;
+        LastIndex, ListIndex : Integer;
+    begin
+        for ListIndex := 1 to RecordMapping.Values.Count do begin
+            TargetRecID := RecordMapping.Values.Get(ListIndex);
+            LastIndex := RecordMapping.Values.LastIndexOf(TargetRecID);
+            if LastIndex <> ListIndex then begin
+                CollationProblems.Add(RecordMapping.Keys.Get(ListIndex), RecordMapping.Values.Get(ListIndex));
+                CollationProblems.Add(RecordMapping.Keys.Get(LastIndex), RecordMapping.Values.Get(LastIndex));
+            end;
+        end;
     end;
 
     var

@@ -163,23 +163,6 @@ codeunit 91002 DMTImportConfigMgt
         ProposeValidationRules(ImportConfigHeader);
     end;
 
-    procedure PageAction_UpdateFields(var ImportConfigHeader: Record DMTImportConfigHeader)
-    var
-        Migrate: Codeunit DMTMigrate;
-        SelectMultipleFields: Page DMTSelectMultipleFields;
-        RunModalAction: Action;
-    begin
-        // Show only Non-Key Fields for selection
-        SelectMultipleFields.Editable := true;
-        if not SelectMultipleFields.InitSelectTargetFields(ImportConfigHeader, ImportConfigHeader.ReadLastFieldUpdateSelection()) then
-            exit;
-        RunModalAction := SelectMultipleFields.RunModal();
-        if RunModalAction = Action::OK then begin
-            ImportConfigHeader.WriteLastFieldUpdateSelection(SelectMultipleFields.GetTargetFieldIDListAsText());
-            Migrate.SelectedFieldsFrom(ImportConfigHeader, false);
-        end;
-    end;
-
     local procedure AssignSourceToTargetFields(ImportConfigHeader: Record DMTImportConfigHeader)
     var
         ImportConfigLine: Record DMTImportConfigLine;

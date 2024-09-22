@@ -1,4 +1,4 @@
-codeunit 90002 DMTMigrateRecord
+codeunit 91008 DMTMigrateRecord
 {
     trigger OnRun()
     begin
@@ -11,9 +11,17 @@ codeunit 90002 DMTMigrateRecord
             RunMode::ProcessNonKeyFields:
                 ProcessNonKeyFields();
             RunMode::InsertRecord:
-                ChangeRecordWithPerm.InsertOrOverwriteRecFromTmp(TmpTargetRef, CurrTargetRecIDText, ImportConfigHeaderGlobal."Use OnInsert Trigger", IsTriggerLogInterfaceInitialized, ITriggerLogGlobal);
+                begin
+                    if IsTriggerLogInterfaceInitialized then
+                        ChangeRecordWithPerm.SetTriggerLog(ITriggerLogGlobal);
+                    ChangeRecordWithPerm.InsertOrOverwriteRecFromTmp(TmpTargetRef, CurrTargetRecIDText, ImportConfigHeaderGlobal."Use OnInsert Trigger");
+                end;
             RunMode::ModifyRecord:
-                ChangeRecordWithPerm.ModifyRecFromTmp(TmpTargetRef, ImportConfigHeaderGlobal."Use OnInsert Trigger", IsTriggerLogInterfaceInitialized, ITriggerLogGlobal);
+                begin
+                    if IsTriggerLogInterfaceInitialized then
+                        ChangeRecordWithPerm.SetTriggerLog(ITriggerLogGlobal);
+                    ChangeRecordWithPerm.ModifyRecFromTmp(TmpTargetRef, ImportConfigHeaderGlobal."Use OnInsert Trigger");
+                end;
             else
                 Error('RunMode not handled %1', RunMode);
         end;
@@ -56,6 +64,12 @@ codeunit 90002 DMTMigrateRecord
         if TmpTargetRef.Insert(false) then; // provide a record to avoid errors in trigger code when calling Rec.Modify
         CurrTargetRecIDText := Format(TmpTargetRef.RecordId);
         TargetRecordExistsGlobal := FindExistingTargetRef(ExistingTargetRefGlobal, TmpTargetRef);
+    end;
+
+    procedure GetExistingTargetRef(var existingRef: RecordRef) TargetRefFound: Boolean
+    begin
+        TargetRefFound := TargetRecordExistsGlobal;
+        existingRef := ExistingTargetRefGlobal.Duplicate();
     end;
 
     internal procedure TargetRecordExists(): Boolean

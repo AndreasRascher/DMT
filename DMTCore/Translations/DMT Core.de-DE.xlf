@@ -273,6 +273,18 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Puffertabelle ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Buffer Table ID - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 200502431 - Field 476161190 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Evaluate numbers for option fields as</source>
+          <target state="translated">Max. Anzahl zu verarbeiternder Datensatz :</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Max. Anzahl zu verarbeiternder Datensatz :</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Ev. Nos. for Option fields as - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 200502431 - Field 476161190 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Position,Caption</source>
+          <target state="translated">Position,Bezeichnung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Position,Bezeichnung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Ev. Nos. for Option fields as - Property OptionCaption</note>
+        </trans-unit>
         <trans-unit id="Table 200502431 - Field 523320669 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Only New Records</source>
           <target state="translated">Nur neue Datensätze importieren</target>
@@ -296,6 +308,12 @@
           <target state="translated">Trigger Änderungen protokollieren</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Trigger Änderungen protokollieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Log Trigger Changes - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 200502431 - Field 667936880 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Max No. of Records to Process</source>
+          <target state="translated">max. Anzahl der zu verarbeitenden Datensätze</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=max. Anzahl der zu verarbeitenden Datensätze</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Max No. of Records to Process - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>No.of Records in Buffer Table</source>
@@ -596,6 +614,12 @@
           <target state="translated">Zeilennr.</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilennr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Line No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 667936880 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Max No. of Records to Process</source>
+          <target state="translated">max. Anzahl der zu verarbeitenden Datensätze</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=max. Anzahl der zu verarbeitenden Datensätze</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Max No. of Records to Process - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>No.of Records in Buffer Table</source>
@@ -1071,12 +1095,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Sie müssen die Spaltentitel im Datenlayout "%1" einrichten.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportConfigMgt - Method CreateSourceFieldNamesDict - NamedType NoHeadlineInfoFoundInDataLayoutErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 4228541464 - Method 4048901930 - NamedType 790268351" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No errors were found for retry</source>
-          <target state="translated">Es wurden keine Fehler zur erneuten Verbeitung gefunden</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Fehler zur erneuten Verbeitung gefunden</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportConfigMgt - Method PageAction_RetryBufferRecordsWithError - NamedType NoErrorFoundLbl</note>
-        </trans-unit>
         <trans-unit id="Codeunit 3834207626 - Method 2653064554 - NamedType 2519779786" size-unit="char" translate="yes" xml:space="preserve">
           <source>XMLPort %1 not found</source>
           <target state="translated">XMLPort %1 ist nicht vorhanden.</target>
@@ -1113,36 +1131,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Prozessnummer wurde nicht initialisiert</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLog - Method CheckIfProcessNoIsSet - NamedType ProcessNoNotInitializedErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 623866352 - Method 1507708651 - NamedType 4003859195" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No field mapping found for import configuration "%1"</source>
-          <target state="translated">Importkonfiguration "%1" enthält keine Feldzuordnung.</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Importkonfiguration "%1" enthält keine Feldzuordnung.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method CheckMappedFieldsExist - NamedType ImportConfigLineEmptyErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - Method 3730941943 - NamedType 2931333304" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Duration</source>
-          <target state="translated">Dauer</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Dauer</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method PrepareProgressBar - NamedType DurationLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - Method 3730941943 - NamedType 1970759069" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Time Remaining</source>
-          <target state="translated">Verbleibende Zeit</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Verbleibende Zeit</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method PrepareProgressBar - NamedType TimeRemainingLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - Method 984899932 - NamedType 2737554361" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No buffer table records match the filter.\ Filter: "%1"</source>
-          <target state="translated">Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method ProcessFullBuffer - NamedType noBufferTableRecorsInFilterErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 623866352 - Method 771327502 - NamedType 1000503204" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No. of Records..\processed: %1\imported: %2\With Error: %3\Processing Time:%4</source>
-          <target state="translated">Anzahl Datensätze..\verarbeitet: %1\eingelesen : %2\mit Fehlern: %3\Verarbeitungsdauer: %4</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Anzahl Datensätze..\verarbeitet: %1\eingelesen : %2\mit Fehlern: %3\Verarbeitungsdauer: %4</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrate - Method ShowResultDialog - NamedType ResultMsg</note>
-        </trans-unit>
         <trans-unit id="Codeunit 194566907 - Method 4147440478 - NamedType 2116364116" size-unit="char" translate="yes" xml:space="preserve">
           <source>The value %1 could not be entered into the field %2</source>
           <target state="translated">Der Wert %1 konnte nicht in das Feld %2 eingetragen werden</target>
@@ -1160,6 +1148,12 @@
           <target state="translated">Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Filter: "%1"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method DefineSourceRecords - NamedType noBufferTableRecorsInFilterErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 55954293 - Method 1715580338 - NamedType 790268351" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No errors were found for retry</source>
+          <target state="translated">Es wurden keine Fehler zur erneuten Verbeitung gefunden</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Fehler zur erneuten Verbeitung gefunden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method DefineSourceRecords - NamedType NoErrorFoundLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 55954293 - Method 3730941943 - NamedType 2931333304" size-unit="char" translate="yes" xml:space="preserve">
           <source>Duration</source>
@@ -1191,11 +1185,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Dateiname: "%1"\ Filter: "%2"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessingPlanMgt - Method ImportWithProcessingPlanParams - NamedType noBufferTableRecorsInFilterErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3046076509 - Method 4147440478 - NamedType 2116364116" size-unit="char" translate="yes" xml:space="preserve">
-          <source>The value %1 could not be entered into the field %2</source>
-          <target state="translated">Der Wert %1 konnte nicht in das Feld %2 eingetragen werden</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Der Wert %1 konnte nicht in das Feld %2 eingetragen werden</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessRecord - Method AssignValueToFieldRef - NamedType ValidateFailedErr</note>
+        <trans-unit id="Codeunit 1786966925 - Method 3043604989 - NamedType 3975673607" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No default values has been set</source>
+          <target state="translated">Es wurden keine Vorgabewerte definiert</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Vorgabewerte definiert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessingPlanMgt - Method ImportWithProcessingPlanParams - NamedType noDefaultValuesSetErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 1536080462 - Method 1564743796 - NamedType 3980904368" size-unit="char" translate="yes" xml:space="preserve">
           <source>"%1" is not a valid %2 value.</source>
@@ -1317,6 +1311,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Tabellen kopieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCopyTableList - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1275022656 - Method 2050241899 - NamedType 2541077575" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copying Table ###########################1#</source>
+          <target state="translated">Kopiere Tabelle ###########################1#</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Kopiere Tabelle ###########################1#</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCopyTableList - Method CopyDataFromSourceCompany - NamedType progressTxt</note>
+        </trans-unit>
         <trans-unit id="Page 1275022656 - Action 1629856273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Copy Tables</source>
           <target state="translated">Tabellen kopieren</target>
@@ -1436,6 +1436,24 @@
           <target state="translated">Allgemein</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Allgemein</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control General - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Control 476161190 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Position - Option value is assigned by its position in the possible option values. Caption - Option value is assigned by its caption.</source>
+          <target state="translated">Position - Optionswert wird über seine Position in den möglichen Optionswerten zugeordnet. Bezeichnung - Optionswert wird über seinen Namen zugeordnet.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Position - Optionswert wird über seine Position in den möglichen Optionswerten zugeordnet. Bezeichnung - Optionswert wird über seinen Namen zugeordnet.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control Ev. Nos. for Option fields as - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Control 1620595835 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Logs whether transferred field values have been overwritten by trigger code. Affects the validation of fields, the insertion and saving of data records.</source>
+          <target state="translated">Protokolliert ob übernommene Feldwerte durch Trigger Code überschrieben wurden. Betrifft die Validierung von Feldern, das Einfügen und Speichern von Datensätzen.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Protokolliert ob übernommene Feldwerte durch Trigger Code überschrieben wurden. Betrifft die Validierung von Feldern, das Einfügen und Speichern von Datensätzen.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control Log Trigger Changes - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 809130730 - Control 667936880 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Stops processing after a specified number of records. Recommended for testing large data sets.</source>
+          <target state="translated">Stoppt die Verarbeitung nach einer bestimmten Anzahl von Datensätzen. Empfohlen für das Testen großer Datenmengen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Stoppt die Verarbeitung nach einer bestimmten Anzahl von Datensätzen. Empfohlen für das Testen großer Datenmengen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Control Max No. of Records to Process - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 809130730 - Control 2362813729 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffer Table Objects</source>
@@ -1763,8 +1781,7 @@
         </trans-unit>
         <trans-unit id="Page 4199531365 - Action 1199779977 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Show trigger changes</source>
-          <target state="needs-adaptation">Trigger Änderungen anzeigen</target>
-          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <target state="translated">Trigger Änderungen anzeigen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Trigger Änderungen anzeigen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTLogEntries - Action ShowTriggerLog - Property Caption</note>
         </trans-unit>
@@ -2230,6 +2247,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Trigger Änderungen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogEntryType - EnumValue Trigger Changes - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Enum 3409397984 - EnumValue 2349947494 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Apply Fixed Values</source>
+          <target state="translated">Fixwerte anwenden</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Fixwerte anwenden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogUsage - EnumValue Apply Fixed Values - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 3304607464 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Delete Record</source>
           <target state="translated">DS Löschen</target>
@@ -2241,12 +2264,6 @@
           <target state="translated">Import in P.</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Import in P.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogUsage - EnumValue Import to Buffer Table - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Enum 3409397984 - EnumValue 601505679 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Doc. Migration</source>
-          <target state="translated">Beleg Migration</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Beleg Migration</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTLogUsage - EnumValue Process Buffer - Document Migration - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3409397984 - EnumValue 1384793423 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Update Fields</source>

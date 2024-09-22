@@ -78,6 +78,18 @@ table 91003 DMTImportConfigHeader
         field(53; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
         field(54; "Skip Records with User Changes"; Boolean) { Caption = 'Skip Records with User Changes', Comment = 'de-DE=Datensätze mit Nutzeränderung überspringen'; }
         field(55; "Log Trigger Changes"; Boolean) { Caption = 'Log Trigger Changes', Comment = 'de-DE=Trigger Änderungen protokollieren'; }
+        field(56; "Ev. Nos. for Option fields as"; Option)
+        {
+            Caption = 'Evaluate numbers for option fields as', Comment = 'de-DE=Max. Anzahl zu verarbeiternder Datensatz :';
+            OptionMembers = Position,Caption;
+            OptionCaption = 'Position,Caption', Comment = 'de-DE=Position,Bezeichnung';
+        }
+        field(57; "Max No. of Records to Process"; Integer)
+        {
+            Caption = 'Max No. of Records to Process', Comment = 'de-DE=max. Anzahl der zu verarbeitenden Datensätze';
+            BlankZero = true;
+            MinValue = 0;
+        }
         field(100; "Source File ID"; Integer) { Caption = 'Source File ID', Comment = 'de-DE=Quell-Datei ID'; TableRelation = DMTSourceFileStorage; }
         field(101; "Source File Name"; Text[250])
         {
