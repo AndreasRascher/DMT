@@ -1493,6 +1493,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Verarbeitungsplan</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 667936880 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Stops processing after a specified number of records. Recommended for testing large data sets.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Stoppt die Verarbeitung nach einer bestimmten Anzahl von Datensätzen. Empfohlen für das Testen großer Datenmengen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control Max No. of Records to Process - Property ToolTip</note>
+        </trans-unit>
         <trans-unit id="Page 1212190007 - Control 465333454 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Number of records in the target table.</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Anzahl der Datensätze in der Zieltabelle.</note>
@@ -1512,11 +1517,6 @@
           <source>Buffer</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DS im Puffer</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control No.of Records in Buffer Table - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1212190007 - Control 76420432 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Defining the source table no. for which a filter as event is provided for rows of type Codeunit.</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control Source Table No. - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Control 3177385690 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Default Values</source>
@@ -1577,6 +1577,11 @@
           <source>Reset Lines</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Status und Zeiten zurücksetzen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action ResetLinesAction - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 1016274576 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Retry Records With Error</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Fehler erneut verarbeiten</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action RetryBufferRecordsWithError - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Action 620325036 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Start</source>

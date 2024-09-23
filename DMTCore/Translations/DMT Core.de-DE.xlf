@@ -1815,12 +1815,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=DS im Puffer</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control No.of Records in Buffer Table - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1212190007 - Control 76420432 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Defining the source table no. for which a filter as event is provided for rows of type Codeunit.</source>
-          <target state="translated">Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control Source Table No. - Property ToolTip</note>
-        </trans-unit>
         <trans-unit id="Page 1212190007 - Control 3177385690 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Default Values</source>
           <target state="translated">Vorgabewerte</target>
@@ -1892,6 +1886,12 @@
           <target state="translated">Status und Zeiten zurücksetzen</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Status und Zeiten zurücksetzen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action ResetLinesAction - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 1016274576 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Retry Records With Error</source>
+          <target state="translated">Fehler erneut verarbeiten</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Fehler erneut verarbeiten</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action RetryBufferRecordsWithError - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Action 620325036 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Start</source>

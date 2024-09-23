@@ -35,13 +35,13 @@ page 91017 DMTProcessingPlan
                 field(ProcessingTime; Rec."Processing Duration") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(StartTime; Rec.StartTime) { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(Status; Rec.Status) { ApplicationArea = All; StyleExpr = LineStyle; }
-                field("Source Table No."; Rec."Source Table No.")
-                {
-                    ApplicationArea = All;
-                    StyleExpr = LineStyle;
-                    ToolTip = 'Defining the source table no. for which a filter as event is provided for rows of type Codeunit.',
-                    comment = 'de-DE=Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.';
-                }
+                // field("Source Table No."; Rec."Source Table No.")
+                // {
+                //     ApplicationArea = All;
+                //     StyleExpr = LineStyle;
+                //     ToolTip = 'Defining the source table no. for which a filter as event is provided for rows of type Codeunit.',
+                //     comment = 'de-DE=Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.';
+                // }
                 field("Line No."; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
                 field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; StyleExpr = LineStyle; Visible = false; HideValue = TargetTableID_HideValue; }
                 field("No. of Records In Trgt. Table"; CurrImportConfigHeader.GetNoOfRecordsInTrgtTable())
@@ -67,6 +67,12 @@ page 91017 DMTProcessingPlan
                     begin
                         CurrImportConfigHeader.BufferTableMgt().ShowBufferTable();
                     end;
+                }
+                field("Max No. of Records to Process"; Rec."Max No. of Records to Process")
+                {
+                    ToolTip = 'Stops processing after a specified number of records. Recommended for testing large data sets.',
+                    Comment = 'de-DE=Stoppt die Verarbeitung nach einer bestimmten Anzahl von Datensätzen. Empfohlen für das Testen großer Datenmengen';
+                    Style = StrongAccent;
                 }
             }
         }
@@ -294,10 +300,27 @@ page 91017 DMTProcessingPlan
                         until ImportConfigHeader.Next() = 0;
                 end;
             }
+            action(RetryBufferRecordsWithError)
+            {
+                Caption = ' ', Locked = true;
+                ToolTip = 'Retry Records With Error', Comment = 'de-DE=Fehler erneut verarbeiten';
+                ApplicationArea = All;
+                Image = Redo;
+                Enabled = RetryBufferRecordsWithError_Enabled;
+                Visible = RetryBufferRecordsWithError_Enabled;
+                trigger OnAction()
+                var
+                    migrateRecordSet: Codeunit DMTMigrateRecordSet;
+                begin
+                    if rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Buffer + Target"] then
+                        migrateRecordSet.RetryErrors(Rec);
+                end;
+            }
         }
         area(Promoted)
         {
             actionref(StartRef; Start) { }
+            actionref(RetryBufferRecordsWithErrorRef; RetryBufferRecordsWithError) { }
             actionref(NewLineRef; NewLine) { }
             actionref(DeleteLineRef; DeleteLine) { }
             actionref(IndentLeftRef; IndentLeft) { }
@@ -355,6 +378,7 @@ page 91017 DMTProcessingPlan
             CurrPage.LogFactBox.Page.Update(false);
         end;
         TargetTableID_HideValue := not Rec.TypeSupportsProcessSelectedFieldsOnly();
+        RetryBufferRecordsWithError_Enabled := (Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Buffer + Target"]) and (Rec.Status = Rec.Status::Error);
     end;
 
     local procedure RunSelected(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
@@ -575,7 +599,7 @@ page 91017 DMTProcessingPlan
         CurrImportConfigHeader: Record DMTImportConfigHeader;
         ProcessingPlanMgt: Codeunit DMTProcessingPlanMgt;
         HasImportConfigHeader: Boolean;
-        // [InDataSet]
+        RetryBufferRecordsWithError_Enabled: Boolean;
         ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart, ShowLogFactboxPart, TargetTableID_HideValue : Boolean;
         LineStyle: Text;
 }

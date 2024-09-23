@@ -172,7 +172,7 @@ codeunit 91008 DMTMigrateRecord
 
     local procedure AssignField(ValidateSetting: Enum DMTFieldValidationType)
     var
-        FieldWithTypeCorrectValueToValidate, SourceField, TargetField : FieldRef;
+        ValueToAssignField, TargetField : FieldRef;
     begin
         // Blob handling
         TargetField := TmpTargetRef.Field(TempImportConfigLine."Target Field No.");
@@ -183,38 +183,36 @@ codeunit 91008 DMTMigrateRecord
         // =================================================
         if IReplacementHandler.HasReplacementsForTargetField(TempImportConfigLine."Target Field No.") then begin
             //use value from replacement
-            FieldWithTypeCorrectValueToValidate := IReplacementHandler.GetReplacementValue(TempImportConfigLine."Target Field No.");
+            ValueToAssignField := IReplacementHandler.GetReplacementValue(TempImportConfigLine."Target Field No.");
         end else begin
             // use value from buffer
-            SourceField := SourceRefGlobal.Field(TempImportConfigLine."Source Field No.");
-            AssignValueToFieldRef(SourceRefGlobal, TempImportConfigLine, TmpTargetRef, FieldWithTypeCorrectValueToValidate);
+            AssignValueToFieldRef(SourceRefGlobal, TempImportConfigLine, TmpTargetRef, ValueToAssignField);
         end;
-        CurrValueToAssignText := Format(FieldWithTypeCorrectValueToValidate.Value); // Error Log Info
+        CurrValueToAssignText := Format(ValueToAssignField.Value); // Error Log Info
 
         // Assign value in fieldRef to target field
         // ========================================
-
         case ValidateSetting of
             ValidateSetting::AssignWithoutValidate:
                 begin
-                    TargetField.Value := FieldWithTypeCorrectValueToValidate.Value;
+                    TargetField.Value := ValueToAssignField.Value;
                     if IsTriggerLogInterfaceInitialized then
-                        ITriggerLogGlobal.LogAssignment(SourceField, TargetField, TmpTargetRef);
+                        ITriggerLogGlobal.LogAssignment(ValueToAssignField, TargetField, TmpTargetRef);
                 end;
             ValidateSetting::AlwaysValidate:
                 begin
                     if IsTriggerLogInterfaceInitialized then
-                        ITriggerLogGlobal.InitBeforeValidate(SourceField, TargetField, TmpTargetRef);
-                    TargetField.Validate(FieldWithTypeCorrectValueToValidate.Value);
+                        ITriggerLogGlobal.InitBeforeValidate(ValueToAssignField, TargetField, TmpTargetRef);
+                    TargetField.Validate(ValueToAssignField.Value);
                     if IsTriggerLogInterfaceInitialized then
                         ITriggerLogGlobal.CheckAfterValidate(TmpTargetRef);
                 end;
             ValidateSetting::ValidateOnlyIfNotEmpty:
                 begin
-                    if Format(SourceField.Value) <> Format(TargetRef_INIT.Field(TargetField.Number).Value) then begin
+                    if Format(ValueToAssignField.Value) <> Format(TargetRef_INIT.Field(TargetField.Number).Value) then begin
                         if IsTriggerLogInterfaceInitialized then
-                            ITriggerLogGlobal.InitBeforeValidate(SourceField, TargetField, TmpTargetRef);
-                        TargetField.Validate(FieldWithTypeCorrectValueToValidate.Value);
+                            ITriggerLogGlobal.InitBeforeValidate(ValueToAssignField, TargetField, TmpTargetRef);
+                        TargetField.Validate(ValueToAssignField.Value);
                         if IsTriggerLogInterfaceInitialized then
                             ITriggerLogGlobal.CheckAfterValidate(TmpTargetRef);
                     end;
@@ -226,15 +224,18 @@ codeunit 91008 DMTMigrateRecord
     var
         TargetRecRef2: RecordRef;
         FromField: FieldRef;
-        EvaluateOptionValueAsNumber: Boolean;
         ValidateFailedErr: Label 'The value %1 could not be entered into the field %2',
                  Comment = 'de-DE=Der Wert %1 konnte nicht in das Feld %2 eingetragen werden';
     begin
-        FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
-        EvaluateOptionValueAsNumber := EvaluateOptionValueAsNumberGlobal;
+        if ImportConfigLine."Processing Action" <> ImportConfigLine."Processing Action"::FixedValue then begin
+            FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
+            CurrValueToAssignText := Format(FromField.Value); // Error Log Info
+        end else begin
+            CurrValueToAssignText := ImportConfigLine."Fixed Value"; // Error Log Info
+        end;
+
         TargetRecRef2 := TargetRecRef.Duplicate(); // create a duplicate to avoid filling the original target record
         FieldWithTypeCorrectValueToValidate := TargetRecRef2.Field(ImportConfigLine."Target Field No.");
-        CurrValueToAssignText := Format(FromField.Value); // Error Log Info
         case true of
             // Create fieldRef from fixed value
             (ImportConfigLine."Processing Action" = ImportConfigLine."Processing Action"::FixedValue):
@@ -244,12 +245,12 @@ codeunit 91008 DMTMigrateRecord
                 FieldWithTypeCorrectValueToValidate.Value := FromField.Value; // Same Type -> no conversion needed
             // evaluate text to target field
             (FromField.Type in [FieldType::Text, FieldType::Code]):
-                if not RefHelper.EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), EvaluateOptionValueAsNumber, true) then
+                if not RefHelper.EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), EvaluateOptionValueAsNumberGlobal, true) then
                     // Kommt beim Wechsel von Puffertabelle zu generischer Tabelle vor
                     // Kommt vor wenn der alte Wert ein Code war und der neue Wert ein Option
                     Error(ValidateFailedErr, CurrValueToAssignText, TargetRecRef.Field(ImportConfigLine."Target Field No.").Caption);
             else
-                Error('unhandled TODO %1', FromField.Type);
+                Error('AssignValueToFieldRef - unhandled TODO %1', FromField.Type);
         end;
     end;
 

@@ -26,13 +26,7 @@ table 91009 DMTProcessingPlan
             TableRelation =
             if (Type = const("Run Codeunit")) AllObjWithCaption."Object ID" where("Object Type" = const(Codeunit))
             else
-            if (Type = const("Import To Buffer")) DMTImportConfigHeader.ID
-            else
-            if (Type = const("Import To Target")) DMTImportConfigHeader.ID
-            else
-            if (Type = const("Update Field")) DMTImportConfigHeader.ID
-            else
-            if (Type = const("Buffer + Target")) DMTImportConfigHeader.ID;
+            DMTImportConfigHeader.ID;
             trigger OnValidate()
             var
                 CodeUnitMetadata: Record "CodeUnit Metadata";
@@ -498,7 +492,9 @@ table 91009 DMTProcessingPlan
         addLine(Enum::DMTProcessingPlanType::"Import To Target", importConfigHeaderID, Rec.getIndentation(), descriptionNEW);
     end;
 
-    local procedure addLine(TypeNEW: Enum DMTProcessingPlanType; importConfigHeaderID: Integer; indentationNEW: Integer; descriptionNEW: Text[250])
+    local procedure addLine(TypeNEW: Enum DMTProcessingPlanType; importConfigHeaderID: Integer;
+                                         indentationNEW: Integer;
+                                         descriptionNEW: Text[250])
     var
         processingPlan: Record DMTProcessingPlan;
     begin

@@ -2,12 +2,10 @@ codeunit 91014 DMTMigrateRecordSet
 {
     procedure Start(processingPlan: Record DMTProcessingPlan)
     var
-        importConfigHeader: Record DMTImportConfigHeader;
         importSettings: Codeunit DMTImportSettings;
         migrationType: Enum DMTMigrationType;
     begin
         importSettings.init(processingPlan);
-        processingPlan.findImportConfigHeader(importConfigHeader);
         case processingPlan.Type of
             // do nothing
             processingPlan.Type::" ", processingPlan.Type::"Group", processingPlan.Type::"Import To Buffer":
@@ -22,6 +20,15 @@ codeunit 91014 DMTMigrateRecordSet
                 Error('ProcessingPlan Type %1 not supported', processingPlan.Type);
         end;
         Start(importSettings.ImportConfigHeader(), importSettings, migrationType);
+    end;
+
+    procedure RetryErrors(processingPlan: Record DMTProcessingPlan)
+    var
+        importSettings: Codeunit DMTImportSettings;
+        migrationType: Enum DMTMigrationType;
+    begin
+        importSettings.init(processingPlan);
+        Start(importSettings.ImportConfigHeader(), importSettings, migrationType::RetryErrors);
     end;
 
     procedure Start(importConfigHeader: Record DMTImportConfigHeader; migrationType: Enum DMTMigrationType)
@@ -186,9 +193,17 @@ codeunit 91014 DMTMigrateRecordSet
             importSettings.ProcessingPlan().ConvertDefaultValuesViewToFieldLines(tempImportConfigLine_ProcessingPlanSettings);
             if tempImportConfigLine_ProcessingPlanSettings.FindSet() then
                 repeat
-                    tempImportConfigLine.Get(tempImportConfigLine_ProcessingPlanSettings.RecordId);
-                    tempImportConfigLine := tempImportConfigLine_ProcessingPlanSettings;
-                    tempImportConfigLine.Modify();
+                    if not tempImportConfigLine.Get(tempImportConfigLine_ProcessingPlanSettings.RecordId) then begin
+                        // if fixed value is set for a unmapped field, create a new line
+                        importConfigLine.Get(tempImportConfigLine_ProcessingPlanSettings.RecordId);
+                        tempImportConfigLine := importConfigLine;
+                        tempImportConfigLine."Processing Action" := tempImportConfigLine_ProcessingPlanSettings."Processing Action";
+                        tempImportConfigLine."Fixed Value" := tempImportConfigLine_ProcessingPlanSettings."Fixed Value";
+                        tempImportConfigLine.Insert(false);
+                    end else begin
+                        tempImportConfigLine := tempImportConfigLine_ProcessingPlanSettings;
+                        tempImportConfigLine.Modify();
+                    end;
                 until tempImportConfigLine_ProcessingPlanSettings.Next() = 0;
         end;
 
@@ -262,7 +277,7 @@ codeunit 91014 DMTMigrateRecordSet
                         OK := (bufferRef.Next() <> 0);
 
                     // Limit is defined and reached
-                    if (noRecordsToProcessLimit <> 0) and (noOfRecordsProcessed > noRecordsToProcessLimit) then
+                    if (noRecordsToProcessLimit <> 0) and (noOfRecordsProcessed >= noRecordsToProcessLimit) then
                         OK := false;
                 end;
 
