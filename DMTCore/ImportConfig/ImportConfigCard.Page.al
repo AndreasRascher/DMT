@@ -105,11 +105,13 @@ page 91008 DMTImportConfigCard
             {
                 ApplicationArea = All;
                 Caption = 'Info', Comment = 'de-DE=Info';
+                SubPageLink = FBRunMode_Filter = const("TableInfo"), ImportConfigHeaderID_Filter = field(ID);
             }
             part(LogFactBox; DMTImportConfigFactBox)
             {
                 ApplicationArea = All;
                 Caption = 'Log', Comment = 'de-DE=Protokoll';
+                SubPageLink = FBRunMode_Filter = const(Log), ImportConfigHeaderID_Filter = field(ID);
             }
         }
     }
@@ -130,8 +132,8 @@ page 91008 DMTImportConfigCard
                 trigger OnAction()
                 begin
                     DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_ImportBufferDataFromFile(Rec);
-                    CurrPage.TableInfoFactBox.Page.DoUpdate(Rec);
-                    CurrPage.LogFactBox.Page.DoUpdate(Rec);
+                    // CurrPage.TableInfoFactBox.Page.DoUpdate(Rec);
+                    // CurrPage.LogFactBox.Page.DoUpdate(Rec);
                 end;
             }
             action(DeleteRecordsInTargetTable)
@@ -312,10 +314,10 @@ page 91008 DMTImportConfigCard
 
     trigger OnAfterGetCurrRecord()
     begin
-        CurrPage.TableInfoFactBox.Page.ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(Rec);
-        CurrPage.TableInfoFactBox.Page.Update(false);
-        CurrPage.LogFactBox.Page.ShowAsLogAndUpdateOnAfterGetCurrRecord(Rec);
-        CurrPage.LogFactBox.Page.Update(false);
+        // CurrPage.TableInfoFactBox.Page.ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(Rec);
+        // CurrPage.TableInfoFactBox.Page.Update(false);
+        // CurrPage.LogFactBox.Page.ShowAsLogAndUpdateOnAfterGetCurrRecord(Rec);
+        // CurrPage.LogFactBox.Page.Update(false);
     end;
 
     local procedure SaveRecordIfMandatoryFieldsAreFilled()

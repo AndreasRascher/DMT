@@ -6,6 +6,7 @@ page 91014 DMTImportConfigFactBox
     InsertAllowed = false;
     ModifyAllowed = false;
     LinksAllowed = false;
+    SourceTableTemporary = true;
 
     layout
     {
@@ -78,35 +79,132 @@ page 91014 DMTImportConfigFactBox
         }
     }
 
-    procedure ShowAsLogAndUpdateOnAfterGetCurrRecord(importConfigHeader: Record DMTImportConfigHeader)
+    trigger OnFindRecord(Which: Text): Boolean
+    var
+        found: Boolean;
     begin
+        LoadLines();
+        found := Rec.Find(Which);
+        exit(found);
+    end;
+
+    procedure LoadLines()
+    var
+        lineNo: Integer;
+        importConfigHeaderID: Integer;
+        runMode: Option " ","TableInfo","Log";
+    begin
+        // Read RunMode from Filter
+        if GetRunModeFromSubPageLink(runMode) then
+            case true of
+
+                // Run from Import Config. Card
+                GetSubPageLinkFilterValueAsInteger(importConfigHeaderID, Rec.FieldNo(ImportConfigHeaderID_Filter)):
+                    begin
+                        // Is loaded
+                        // if importConfigHeaderID = CurrImportConfigHeader.ID then
+                        //     exit;
+                        // load
+                        CurrImportConfigHeader.Get(importConfigHeaderID);
+                        case runMode of
+                            runMode::TableInfo:
+                                ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(CurrImportConfigHeader);
+                            runMode::Log:
+                                ShowAsLogAndUpdateOnAfterGetCurrRecord(CurrImportConfigHeader);
+                        end;
+                    end;
+
+                // Run from Processing Plan
+                GetSubPageLinkFilterValueAsInteger(lineNo, Rec.FieldNo("PrPl_LineNo_Filter")):
+                    begin
+                        // Is loaded
+                        // if lineNo = CurrProcessingPlan."Line No." then
+                        //     exit;
+                        // load
+                        CurrProcessingPlan.Get(lineNo);
+                        case runMode of
+                            runMode::TableInfo:
+                                begin
+                                    CurrProcessingPlan.findImportConfigHeader(CurrImportConfigHeader);
+                                    ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(CurrImportConfigHeader);
+                                end;
+                            runMode::Log:
+                                begin
+                                    CurrProcessingPlan.Get(lineNo);
+                                    if not CurrProcessingPlan.findImportConfigHeader(CurrImportConfigHeader) then
+                                        Clear(CurrImportConfigHeader);
+                                    ShowAsLogAndUpdateOnAfterGetCurrRecord(CurrImportConfigHeader);
+                                end;
+                        end;
+                    end;
+            end;
+    end;
+
+    procedure GetRunModeFromSubPageLink(var runMode: Option) hasFilter: Boolean;
+    begin
+        Rec.FilterGroup(4);
+        hasFilter := (Rec.GetFilter(FBRunMode_Filter) <> '');
+        if hasFilter then
+            runMode := Rec.GetRangeMin(FBRunMode_Filter);
+    end;
+
+    procedure GetSubPageLinkFilterValueAsInteger(var filterValue: Integer; fieldId: Integer) hasFilter: Boolean;
+    var
+        recRef: RecordRef;
+    begin
+        recRef.GetTable(Rec);
+        recRef.FilterGroup(4);
+        hasFilter := recRef.Field(fieldId).GetFilter <> '';
+        if hasFilter then
+            filterValue := recRef.Field(fieldId).GetRangeMin();
+    end;
+
+    procedure ShowAsLogAndUpdateOnAfterGetCurrRecord(importConfigHeader: Record DMTImportConfigHeader)
+    var
+        LogEntry: Record DMTLogEntry;
+    begin
+        Rec.DeleteAll();
+        Clear(ViewMode); // hide log if type doesnt support log
+        if importConfigHeader.ID = 0 then
+            exit;
+
         ViewMode := ViewMode::Log;
-        CurrImportConfigHeader.Copy(importConfigHeader);
-        Rec.SetRange("Owner RecordID", importConfigHeader.RecordId);
-        Rec.SetRange("Entry Type", Rec."Entry Type"::Summary);
+        LogEntry.SetRange("Owner RecordID", importConfigHeader.RecordId);
+        LogEntry.SetRange("Entry Type", Rec."Entry Type"::Summary);
+        if LogEntry.FindSet() then
+            repeat
+                Rec.Copy(LogEntry);
+                Rec.Insert(false);
+            until LogEntry.Next() = 0;
     end;
 
     procedure ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(importConfigHeader: Record DMTImportConfigHeader)
     begin
+        Rec.DeleteAll();
+        Clear(ViewMode); // hide log if type doesnt support log
         ViewMode := ViewMode::TableInfo;
-        CurrImportConfigHeader.Copy(importConfigHeader);
-        Rec.SetRecFilter();
+        if importConfigHeader.ID = 0 then
+            exit;
+
+        Rec."Entry No." := importConfigHeader.ID;
+        Rec.Insert();
     end;
 
-    procedure DoUpdate(importConfigHeader: Record DMTImportConfigHeader)
-    begin
-        CurrImportConfigHeader.Copy(importConfigHeader);
+    // procedure DoUpdate(importConfigHeader: Record DMTImportConfigHeader)
+    // begin
+    //     CurrImportConfigHeader.Copy(importConfigHeader);
 
-        if ViewMode = ViewMode::Log then begin
-            Rec.SetRange("Owner RecordID", importConfigHeader.RecordId);
-            Rec.SetRange("Entry Type", Rec."Entry Type"::Summary);
-        end;
+    //     if ViewMode = ViewMode::Log then begin
+    //         Rec.SetRange("Owner RecordID", importConfigHeader.RecordId);
+    //         Rec.SetRange("Entry Type", Rec."Entry Type"::Summary);
+    //     end;
 
-        CurrPage.Update(false);
-    end;
+    //     CurrPage.Update(false);
+    // end;
 
     var
         CurrImportConfigHeader: Record DMTImportConfigHeader;
+        CurrProcessingPlan: Record DMTProcessingPlan;
         DMTSessionStorage: Codeunit DMTSessionStorage;
         ViewMode: Option " ",Log,TableInfo;
 }

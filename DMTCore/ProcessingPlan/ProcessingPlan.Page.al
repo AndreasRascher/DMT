@@ -101,8 +101,8 @@ page 91017 DMTProcessingPlan
             }
             part(LogFactBox; DMTImportConfigFactBox)
             {
-                ApplicationArea = All;
                 Caption = 'Log', Comment = 'de-DE=Protokoll';
+                SubPageLink = FBRunMode_Filter = const(Log), PrPl_LineNo_Filter = field("Line No.");
                 Enabled = ShowLogFactboxPart;
             }
             systempart(Notes; Notes)
