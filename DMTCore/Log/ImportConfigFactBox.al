@@ -90,8 +90,6 @@ page 91014 DMTImportConfigFactBox
 
     procedure LoadLines()
     var
-        lineNo: Integer;
-        importConfigHeaderID: Integer;
         runMode: Option " ","TableInfo","Log";
     begin
         // Read RunMode from Filter
@@ -99,13 +97,8 @@ page 91014 DMTImportConfigFactBox
             case true of
 
                 // Run from Import Config. Card
-                GetSubPageLinkFilterValueAsInteger(importConfigHeaderID, Rec.FieldNo(ImportConfigHeaderID_Filter)):
+                FindImportConfigHeaderFromSubPageLink(CurrImportConfigHeader):
                     begin
-                        // Is loaded
-                        // if importConfigHeaderID = CurrImportConfigHeader.ID then
-                        //     exit;
-                        // load
-                        CurrImportConfigHeader.Get(importConfigHeaderID);
                         case runMode of
                             runMode::TableInfo:
                                 ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(CurrImportConfigHeader);
@@ -115,13 +108,8 @@ page 91014 DMTImportConfigFactBox
                     end;
 
                 // Run from Processing Plan
-                GetSubPageLinkFilterValueAsInteger(lineNo, Rec.FieldNo("PrPl_LineNo_Filter")):
+                GetProcessingPlanFromSubPageLink(CurrProcessingPlan):
                     begin
-                        // Is loaded
-                        // if lineNo = CurrProcessingPlan."Line No." then
-                        //     exit;
-                        // load
-                        CurrProcessingPlan.Get(lineNo);
                         case runMode of
                             runMode::TableInfo:
                                 begin
@@ -130,7 +118,6 @@ page 91014 DMTImportConfigFactBox
                                 end;
                             runMode::Log:
                                 begin
-                                    CurrProcessingPlan.Get(lineNo);
                                     if not CurrProcessingPlan.findImportConfigHeader(CurrImportConfigHeader) then
                                         Clear(CurrImportConfigHeader);
                                     ShowAsLogAndUpdateOnAfterGetCurrRecord(CurrImportConfigHeader);
@@ -148,15 +135,21 @@ page 91014 DMTImportConfigFactBox
             runMode := Rec.GetRangeMin(FBRunMode_Filter);
     end;
 
-    procedure GetSubPageLinkFilterValueAsInteger(var filterValue: Integer; fieldId: Integer) hasFilter: Boolean;
-    var
-        recRef: RecordRef;
+    procedure FindImportConfigHeaderFromSubPageLink(var importConfigHeader: Record DMTImportConfigHeader) found: Boolean;
     begin
-        recRef.GetTable(Rec);
-        recRef.FilterGroup(4);
-        hasFilter := recRef.Field(fieldId).GetFilter <> '';
-        if hasFilter then
-            filterValue := recRef.Field(fieldId).GetRangeMin();
+        Clear(importConfigHeader);
+        Rec.FilterGroup(4);
+        if (Rec.GetFilter(ImportConfigHeaderID_Filter) <> '') then
+            found := importConfigHeader.Get(Rec.GetRangeMin(ImportConfigHeaderID_Filter));
+    end;
+
+    procedure GetProcessingPlanFromSubPageLink(var processingPlan: Record DMTProcessingPlan) Found: Boolean;
+    begin
+        Clear(processingPlan);
+        Rec.FilterGroup(4);
+        if (Rec.GetFilter("PrPl_LineNo_Filter") <> '') and (Rec.GetFilter(PrPl_BatchName_Filter) <> '') then
+            Found := processingPlan.Get(Rec.GetRangeMin(PrPl_BatchName_Filter), Rec.GetRangeMin("PrPl_LineNo_Filter"));
+        Rec.FilterGroup(0);
     end;
 
     procedure ShowAsLogAndUpdateOnAfterGetCurrRecord(importConfigHeader: Record DMTImportConfigHeader)

@@ -52,7 +52,13 @@ table 91008 DMTLogEntry
             FieldClass = FlowFilter;
             Editable = false;
         }
-        field(302; "ImportConfigHeaderID_Filter"; Integer)
+        field(302; "PrPl_BatchName_Filter"; Code[20])
+        {
+            Caption = 'Batch Name', Locked = true;
+            FieldClass = FlowFilter;
+            Editable = false;
+        }
+        field(303; "ImportConfigHeaderID_Filter"; Integer)
         {
             Caption = 'Import Config. Header ID Filter', Locked = true;
             FieldClass = FlowFilter;

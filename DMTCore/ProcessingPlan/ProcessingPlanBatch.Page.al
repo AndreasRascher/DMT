@@ -1,14 +1,15 @@
 page 91017 DMTProcessingPlan
 {
+    ApplicationArea = All;
+    AutoSplitKey = true;
     Caption = 'DMT Processing Plan', Comment = 'de-DE=DMT Verarbeitungsplan';
     AdditionalSearchTerms = 'DMT Plan', Locked = true;
-    PageType = Worksheet;
-    ApplicationArea = All;
-    UsageCategory = Lists;
-    SourceTable = DMTProcessingPlan;
-    AutoSplitKey = true;
     InsertAllowed = false;
     DeleteAllowed = true;
+    PageType = Worksheet;
+    SourceTable = DMTProcessingPlan;
+    SaveValues = true;
+    UsageCategory = Lists;
 
     layout
     {
@@ -26,14 +27,15 @@ page 91017 DMTProcessingPlan
                     processingPlanBatch.Name := CurrentJnlBatchName;
                     if Page.RunModal(0, processingPlanBatch) <> Action::LookupOK then
                         exit(false);
+
                     Text := processingPlanBatch.Name;
+                    CurrPage.Update(false);
                     exit(true);
                 end;
 
                 trigger OnValidate()
                 begin
-                    CALTestSuite.Get(CurrentJnlBatchName);
-                    CurrentSuiteNameOnAfterValidat();
+                    ChangeJournalBatch();
                 end;
             }
             repeater("Repeater")
@@ -124,7 +126,7 @@ page 91017 DMTProcessingPlan
             part(LogFactBox; DMTImportConfigFactBox)
             {
                 Caption = 'Log', Comment = 'de-DE=Protokoll';
-                SubPageLink = FBRunMode_Filter = const(Log), PrPl_LineNo_Filter = field("Line No.");
+                SubPageLink = FBRunMode_Filter = const(Log), PrPl_BatchName_Filter = field("Journal Batch Name"), PrPl_LineNo_Filter = field("Line No.");
                 Enabled = ShowLogFactboxPart;
             }
             systempart(Notes; Notes)
@@ -167,6 +169,7 @@ page 91017 DMTProcessingPlan
                     NewLineNo := findNextLineNoBelow();
                     if NewLineNo <> 0 then begin
                         Clear(Line);
+                        Line."Journal Batch Name" := CurrentJnlBatchName;
                         Line."Line No." := NewLineNo;
                         if Rec."Line No." <> 0 then
                             case true of
@@ -593,10 +596,12 @@ page 91017 DMTProcessingPlan
     begin
         // find last line no
         Clear(Line);
+        Line.SetRange("Journal Batch Name", CurrentJnlBatchName);
         if Line.FindLast() then
             LastLineNo := Line."Line No.";
         // find line before current rec
         LineBefore := Rec;
+        LineBefore.SetRange("Journal Batch Name", CurrentJnlBatchName);
         if LineBefore.Next(-1) <> -1 then
             Clear(LineBefore);
 
@@ -615,11 +620,60 @@ page 91017 DMTProcessingPlan
         end;
     end;
 
-    local procedure CurrentJnlBatchNameOnAfterVali()
+    local procedure ChangeJournalBatch()
     begin
+        GlobalProcessingPlanBatch.Get(CurrentJnlBatchName);
+
         CurrPage.SaveRecord();
-        ProcessingPlanMgt.SetName(CurrentJnlBatchName, Rec);
+
+        Rec.FilterGroup(2);
+        Rec.SetRange("Journal Batch Name", CurrentJnlBatchName);
+        Rec.FilterGroup(0);
+
         CurrPage.Update(false);
+    end;
+
+    trigger OnOpenPage()
+    begin
+        SetCurrentTestSuite();
+    end;
+
+    local procedure SetCurrentTestSuite()
+    begin
+
+        if not GlobalProcessingPlanBatch.Get(CurrentJnlBatchName) then
+            if (CurrentJnlBatchName = '') and GlobalProcessingPlanBatch.FindFirst() then
+                CurrentJnlBatchName := GlobalProcessingPlanBatch.Name
+            else begin
+                CreateBatchName(CurrentJnlBatchName);
+                Commit();
+                GlobalProcessingPlanBatch.Get(CurrentJnlBatchName);
+            end;
+
+        Rec.FilterGroup(2);
+        Rec.SetRange("Journal Batch Name", CurrentJnlBatchName);
+        Rec.FilterGroup(0);
+
+        if Rec.Find('-') then;
+    end;
+
+    procedure CreateBatchName(var batchName: Code[20])
+    var
+        processingPlanBatch: Record DMTProcessingPlanBatch;
+        processingPlan, processingPlan2 : Record DMTProcessingPlan;
+    begin
+        if batchName = '' then
+            batchName := 'Standard';
+
+        processingPlanBatch.Name := CopyStr(batchName, 1, MaxStrLen(processingPlanBatch.Name));
+        processingPlanBatch.Insert(true);
+        processingPlan.Reset();
+        processingPlan.SetRange("Journal Batch Name", '');
+        if processingPlan.FindSet() then
+            repeat
+                processingPlan2 := processingPlan;
+                processingPlan2.Rename(processingPlanBatch.Name, processingPlan2."Line No.");
+            until processingPlan.Next() = 0;
     end;
 
     var
@@ -631,4 +685,5 @@ page 91017 DMTProcessingPlan
         ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart, ShowLogFactboxPart, TargetTableID_HideValue : Boolean;
         LineStyle: Text;
         CurrentJnlBatchName: Code[20];
+        GlobalProcessingPlanBatch: Record DMTProcessingPlanBatch;
 }
