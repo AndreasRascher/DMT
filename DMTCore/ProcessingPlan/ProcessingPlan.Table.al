@@ -87,11 +87,17 @@ table 91009 DMTProcessingPlan
             Editable = false;
             BlankZero = true;
         }
+        field(70; "Journal Batch Name"; Code[10])
+        {
+            Caption = 'Journal Batch Name', Comment = 'de-DE=Buch.-Blattname';
+            TableRelation = DMTProcessingPlanBatch.Name;
+        }
+
     }
 
     keys
     {
-        key(PK; "Line No.") { Clustered = true; }
+        key(PK; "Journal Batch Name", "Line No.") { Clustered = true; }
     }
 
     procedure EditSourceTableFilter()

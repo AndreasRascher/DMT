@@ -1,4 +1,4 @@
-enum 90000 DMTMigrationType
+enum 91012 DMTMigrationType
 {
     Extensible = true;
 

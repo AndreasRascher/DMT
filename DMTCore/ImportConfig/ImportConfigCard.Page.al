@@ -28,8 +28,6 @@ page 91008 DMTImportConfigCard
                     begin
                         Rec.TargetTableCaption_OnValidate();
                         SaveRecordIfMandatoryFieldsAreFilled();
-                        CurrPage.TableInfoFactBox.Page.DoUpdate(Rec);
-                        CurrPage.LogFactBox.Page.DoUpdate(Rec);
                     end;
                 }
                 field("Source File Name"; Rec."Source File Name")
@@ -277,19 +275,6 @@ page 91008 DMTImportConfigCard
                     Message('No. of Records not Transfered: %1\' +
                             'No. of Collation Problems: %2', NotTransferedRecords.Count, CollationProblems.Count);
                 end;
-            }
-            action(CreateCode)
-            {
-                Caption = 'Create AL Mapping Code', Comment = 'de-DE=Mapping AL Code erstellen';
-                ApplicationArea = All;
-                Image = CodesList;
-                // trigger OnAction()
-                // var
-                //     DMTCode: Page DMTCode;
-                // begin
-                //     DMTCode.InitForImportConfigLine(Rec);
-                //     DMTCode.Run();
-                // end;
             }
             action(ExportTargetTableToCSV)
             {

@@ -14,6 +14,28 @@ page 91017 DMTProcessingPlan
     {
         area(Content)
         {
+            field(CurrentJnlBatchName; CurrentJnlBatchName)
+            {
+                ApplicationArea = All;
+                Caption = 'Batch Name', Comment = 'de-DE=Buch.-Blattname';
+
+                trigger OnLookup(var Text: Text): Boolean
+                var
+                    processingPlanBatch: Record DMTProcessingPlanBatch;
+                begin
+                    processingPlanBatch.Name := CurrentJnlBatchName;
+                    if Page.RunModal(0, processingPlanBatch) <> Action::LookupOK then
+                        exit(false);
+                    Text := processingPlanBatch.Name;
+                    exit(true);
+                end;
+
+                trigger OnValidate()
+                begin
+                    CALTestSuite.Get(CurrentJnlBatchName);
+                    CurrentSuiteNameOnAfterValidat();
+                end;
+            }
             repeater("Repeater")
             {
                 IndentationColumn = Rec.Indentation;
@@ -56,7 +78,7 @@ page 91017 DMTProcessingPlan
                         CurrImportConfigHeader.ShowTableContent(CurrImportConfigHeader."Target Table ID");
                     end;
                 }
-                field("No.of Records in Buffer Table"; rec."No.of Records in Buffer Table")
+                field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table")
                 {
                     Caption = 'Buffer', Comment = 'de-DE=DS im Puffer';
                     ToolTip = 'Number of records in the buffer table.', Comment = 'de-DE=Anzahl der Datensätze in der Puffertabelle.';
@@ -312,7 +334,7 @@ page 91017 DMTProcessingPlan
                 var
                     migrateRecordSet: Codeunit DMTMigrateRecordSet;
                 begin
-                    if rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Buffer + Target"] then
+                    if Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Buffer + Target"] then
                         migrateRecordSet.RetryErrors(Rec);
                 end;
             }
@@ -593,6 +615,12 @@ page 91017 DMTProcessingPlan
         end;
     end;
 
+    local procedure CurrentJnlBatchNameOnAfterVali()
+    begin
+        CurrPage.SaveRecord();
+        ProcessingPlanMgt.SetName(CurrentJnlBatchName, Rec);
+        CurrPage.Update(false);
+    end;
 
     var
         TempProcessingPlan_SELECTED: Record DMTProcessingPlan temporary;
@@ -602,4 +630,5 @@ page 91017 DMTProcessingPlan
         RetryBufferRecordsWithError_Enabled: Boolean;
         ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart, ShowLogFactboxPart, TargetTableID_HideValue : Boolean;
         LineStyle: Text;
+        CurrentJnlBatchName: Code[20];
 }
