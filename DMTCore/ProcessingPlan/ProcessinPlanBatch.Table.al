@@ -2,7 +2,7 @@ table 91014 DMTProcessingPlanBatch
 {
     Caption = 'Processing Plan Batch', Comment = 'Verarbeitungsplan Buch.-Blattname';
     DataCaptionFields = Name, Description;
-    LookupPageID = "Job Journal Batches";
+    LookupPageID = DMTProcessingPlanBatches;
 
     fields
     {
@@ -34,12 +34,12 @@ table 91014 DMTProcessingPlanBatch
         processingPlan.DeleteAll(true);
     end;
 
-    trigger OnRename()
-    var
-        processingPlan: Record DMTProcessingPlan;
-    begin
-        processingPlan.SetRange("Journal Batch Name", xRec.Name);
-        while processingPlan.FindFirst() do
-            processingPlan.Rename(Name, processingPlan."Line No.");
-    end;
+    // trigger OnRename()
+    // var
+    //     processingPlan: Record DMTProcessingPlan;
+    // begin
+    //     processingPlan.SetRange("Journal Batch Name", xRec.Name);
+    //     while processingPlan.FindFirst() do
+    //         processingPlan.Rename(Name, processingPlan."Line No.");
+    // end;
 }
