@@ -61,7 +61,7 @@
 					"startupObjectType": "Page",
 					"startupObjectId": 91017,
 					"breakOnError": "ExcludeTry",
-					"breakOnRecordWrite": "ExcludeTemporary",
+					"breakOnRecordWrite": "None",
 					"launchBrowser": true,
 					"enableSqlInformationDebugger": true,
 					"enableLongRunningSqlStatements": true,
