@@ -11,7 +11,7 @@ codeunit 91011 DMTChangeRecordWithPerm
         DMTDeleteDatainTargetTable.Run();
     end;
 
-    procedure InsertOrOverwriteRecFromTmp(var TmpTargetRef: RecordRef; var CurrTargetRecIDText: Text; UseTrigger: Boolean) InsertOK: Boolean
+    procedure InsertOrOverwriteRecFromTmp(var TmpTargetRef: RecordRef; var CurrTargetRecIDText: Text; UseTrigger: Boolean)
     var
         RefHelper: Codeunit DMTRefHelper;
         TargetRef: RecordRef;
@@ -26,7 +26,7 @@ codeunit 91011 DMTChangeRecordWithPerm
             if IsTriggerLogInterfaceInitializedGlobal then
                 TriggerLogGlobal.InitBeforeModify(TargetRef, UseTrigger);
 
-            InsertOK := TargetRef.Modify(UseTrigger);
+            TargetRef.Modify(UseTrigger);
 
             if IsTriggerLogInterfaceInitializedGlobal then
                 TriggerLogGlobal.CheckAfterOnModiy(TargetRef);
@@ -38,7 +38,7 @@ codeunit 91011 DMTChangeRecordWithPerm
             if IsTriggerLogInterfaceInitializedGlobal then
                 TriggerLogGlobal.InitBeforeInsert(TargetRef, UseTrigger);
 
-            InsertOK := TargetRef.Insert(UseTrigger);
+            TargetRef.Insert(UseTrigger);
 
             if IsTriggerLogInterfaceInitializedGlobal then
                 TriggerLogGlobal.CheckAfterOnInsert(TargetRef);

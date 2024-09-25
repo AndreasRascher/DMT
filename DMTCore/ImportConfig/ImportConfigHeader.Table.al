@@ -36,20 +36,29 @@ table 91003 DMTImportConfigHeader
             OptionCaption = 'None,buffer table and XMLPort (Best performance),Use existing buffer table & generate XMLPort only',
             Comment = 'de-DE=Keine,Puffertabelle und XMLPort (Beste Performance),Existierende Puffertabelle verwenden & nur XMLPort generieren';
             trigger OnValidate()
+            var
+                DMTSetup: Record DMTSetup;
             begin
                 case Rec."Separate Buffer Table Objects" of
                     Rec."Separate Buffer Table Objects"::None:
                         begin
                             Clear(Rec."Import XMLPort ID");
                             Clear(Rec."Buffer Table ID");
+                            if DMTSetup.IsNAVExport() then
+                                Rec."Ev. Nos. for Option fields as" := Rec."Ev. Nos. for Option fields as"::Position;
+                            UpdateBufferRecordCount();
                         end;
                     Rec."Separate Buffer Table Objects"::"Use existing buffer table & generate XMLPort only":
                         begin
-
+                            Clear("No.of Records in Buffer Table");
+                            if Rec."Buffer Table ID" <> 0 then
+                                UpdateBufferRecordCount();
                         end;
                     Rec."Separate Buffer Table Objects"::"buffer table and XMLPort (Best performance)":
                         begin
-
+                            Clear("No.of Records in Buffer Table");
+                            if Rec."Buffer Table ID" <> 0 then
+                                UpdateBufferRecordCount();
                         end;
                 end;
             end;
@@ -69,6 +78,10 @@ table 91003 DMTImportConfigHeader
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table), "App Package ID" = field("Current App Package ID Filter"));
             ValidateTableRelation = false;
             BlankZero = true;
+            trigger OnValidate()
+            begin
+                UpdateBufferRecordCount();
+            end;
         }
         field(44; BufferTableIDStyle; Text[15]) { Caption = 'BufferTableIDStyle', Locked = true; Editable = false; }
         #region Import and Processing Options

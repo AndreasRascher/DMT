@@ -137,7 +137,7 @@ codeunit 90022 DMTTestLibrary
     internal procedure ImportSelectedToTarget(importConfigHeader: Record DMTImportConfigHeader)
     var
         genBuffTable: Record DMTGenBuffTable;
-        migrate: Codeunit DMTMigrate;
+        migrateRecordSet: Codeunit DMTMigrateRecordSet;
         Log: Codeunit DMTLog;
         RecIdToProcessList: List of [RecordId];
     begin
@@ -148,26 +148,26 @@ codeunit 90022 DMTTestLibrary
             RecIdToProcessList.Add(genBuffTable.RecordId);
         until genBuffTable.Next() = 0;
         Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", ImportConfigHeader);
-        migrate.ListOfBufferRecIDs(RecIdToProcessList, Log, importConfigHeader, false);
+        migrateRecordSet.Start(importConfigHeader, enum::DMTMigrationType::RetryErrors);
     end;
 
     internal procedure ImportAllToTarget(importConfigHeader: Record DMTImportConfigHeader)
     var
-        migrate: Codeunit DMTMigrate;
+        migrateRecordSet: Codeunit DMTMigrateRecordSet;
         Log: Codeunit DMTLog;
     begin
         Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", ImportConfigHeader);
-        migrate.AllFieldsFrom(importConfigHeader, true);
+        migrateRecordSet.Start(importConfigHeader, enum::DMTMigrationType::MigrateRecords);
     end;
 
     internal procedure UpdateSelectedFieldsInTarget(importConfigHeader: Record DMTImportConfigHeader; SelectedFieldsNoFilter: Text)
     var
-        migrate: Codeunit DMTMigrate;
+        migrateRecordSet: Codeunit DMTMigrateRecordSet;
         Log: Codeunit DMTLog;
     begin
         Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Field Update", ImportConfigHeader);
         importConfigHeader.WriteLastFieldUpdateSelection(SelectedFieldsNoFilter);
-        migrate.SelectedFieldsFrom(importConfigHeader, true);
+        migrateRecordSet.Start(importConfigHeader, enum::DMTMigrationType::MigrateSelectsFields);
     end;
 
     local procedure CreateReplacementHeader(var replacementHeader: Record DMTReplacementHeader; replacementCode: Code[100]; NoOfSourceValues: Integer; NoOfTargetValues: Integer)

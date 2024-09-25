@@ -147,8 +147,8 @@ page 91014 DMTImportConfigFactBox
     begin
         Clear(processingPlan);
         Rec.FilterGroup(4);
-        if (Rec.GetFilter("PrPl_LineNo_Filter") <> '') and (Rec.GetFilter(PrPl_BatchName_Filter) <> '') then
-            Found := processingPlan.Get(Rec.GetRangeMin(PrPl_BatchName_Filter), Rec.GetRangeMin("PrPl_LineNo_Filter"));
+        if (Rec.GetFilter("PrPl_LineNo_Filter") <> '') and (Rec.GetFilter(PrPl_JnlBatchName_Filter) <> '') then
+            Found := processingPlan.Get(Rec.GetRangeMin(PrPl_JnlBatchName_Filter), Rec.GetRangeMin("PrPl_LineNo_Filter"));
         Rec.FilterGroup(0);
     end;
 

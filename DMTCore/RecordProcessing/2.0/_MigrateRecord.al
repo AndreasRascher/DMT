@@ -31,7 +31,7 @@ codeunit 91008 DMTMigrateRecord
     begin
         Clear(CurrTargetRecIDText); // only once, not for every field
         ImportConfigHeaderGlobal := importSettings.ImportConfigHeader();
-        importSettings.EvaluateOptionValueAsNumber();
+        EvaluateOptionValueAsNumberGlobal := importSettings.EvaluateOptionValueAsNumber();
         SourceRefGlobal := bufferRef;
         importSettings.GetImportConfigLine(TempImportConfigLine);
         TmpTargetRef.Open(ImportConfigHeaderGlobal."Target Table ID", true, CompanyName);

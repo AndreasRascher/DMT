@@ -47,6 +47,7 @@ table 91009 DMTProcessingPlan
                             Description := CodeUnitMetadata.Name;
                         end;
                 end;
+                CalcFields("No.of Records in Buffer Table", "No.of Records in Buffer Table");
             end;
         }
         field(12; Description; Text[250]) { Caption = 'Description', Comment = 'de-DE=Beschreibung'; }
@@ -87,7 +88,7 @@ table 91009 DMTProcessingPlan
             Editable = false;
             BlankZero = true;
         }
-        field(70; "Journal Batch Name"; Code[10])
+        field(70; "Journal Batch Name"; Code[20])
         {
             Caption = 'Journal Batch Name', Comment = 'de-DE=Buch.-Blattname';
             TableRelation = DMTProcessingPlanBatch.Name;

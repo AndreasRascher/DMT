@@ -67,7 +67,7 @@ page 91017 DMTProcessingPlan
                 //     comment = 'de-DE=Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.';
                 // }
                 field("Line No."; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
-                field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; StyleExpr = LineStyle; Visible = false; HideValue = TargetTableID_HideValue; }
+                field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; StyleExpr = LineStyle; Visible = false; HideValue = TargetTableID_HideValue; Lookup = false; DrillDown = false; }
                 field("No. of Records In Trgt. Table"; CurrImportConfigHeader.GetNoOfRecordsInTrgtTable())
                 {
                     Caption = 'Target', Comment = 'de-DE=DS im Ziel';
