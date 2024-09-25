@@ -1,7 +1,7 @@
 table 91009 DMTProcessingPlan
 {
     DataClassification = ToBeClassified;
-    Caption = 'DMTProcessingPlan', Locked = true;
+    Caption = 'DMTProcessingPlan', Comment = 'de-DE=DMT Verarbeitungsplan';
     LookupPageId = DMTProcessingPlan;
 
     fields

@@ -14,6 +14,12 @@ codeunit 91007 DMTXMLBackup
         ExportXML(exportFileBaseName);
     end;
 
+    procedure ExportSelectedRecordIDs(recordsToExport: List of [RecordId]; exportFileBaseName: Text);
+    begin
+        GlobalRecordIDList := recordsToExport;
+        ExportXML(exportFileBaseName);
+    end;
+
     procedure Import();
     var
         allObj: Record AllObj;
@@ -142,14 +148,14 @@ codeunit 91007 DMTXMLBackup
 
         //RESET;
         Clear(TablesList);
-        Clear(RecordIDList);
+        Clear(GlobalRecordIDList);
     end;
 
     procedure GetTableLineCount(_TableID: Integer) _LineCount: Integer;
     var
         ID: RecordId;
     begin
-        foreach ID in RecordIDList do
+        foreach ID in GlobalRecordIDList do
             if _TableID = ID.TableNo then
                 _LineCount += 1;
     end;
@@ -167,7 +173,7 @@ codeunit 91007 DMTXMLBackup
         recordNode: XmlNode;
         textNode: XmlText;
     begin
-        foreach ID in RecordIDList do begin
+        foreach ID in GlobalRecordIDList do begin
             if ID.TableNo = i_TableID then begin
                 recordNode := XmlElement.Create('RECORD').AsXmlNode();
                 _XMLNode_Start.AsXmlElement().Add(recordNode);
@@ -397,7 +403,7 @@ codeunit 91007 DMTXMLBackup
     var
         ID: RecordId;
     begin
-        foreach ID in RecordIDList do
+        foreach ID in GlobalRecordIDList do
             if not TablesFoundList.Contains(ID.TableNo) then
                 TablesFoundList.Add(ID.TableNo);
     end;
@@ -438,12 +444,13 @@ codeunit 91007 DMTXMLBackup
         TablesToExport.Add(Database::DMTReplacementHeader);
         TablesToExport.Add(Database::DMTReplacementLine);
         TablesToExport.Add(Database::DMTCopyTable);
+        TablesToExport.Add(Database::DMTProcessingPlanBatch);
         foreach TableID in TablesToExport do begin
             _RecRef.Open(TableID);
             if _RecRef.FindSet(false) then
                 repeat
-                    if not RecordIDList.Contains(_RecRef.RecordId) then
-                        RecordIDList.Add(_RecRef.RecordId);
+                    if not GlobalRecordIDList.Contains(_RecRef.RecordId) then
+                        GlobalRecordIDList.Add(_RecRef.RecordId);
                 until _RecRef.Next() = 0;
             _RecRef.Close();
         end;
@@ -502,8 +509,8 @@ codeunit 91007 DMTXMLBackup
             _RecRef.Open(TableID);
             if _RecRef.FindSet(false) then
                 repeat
-                    if not RecordIDList.Contains(_RecRef.RecordId) then
-                        RecordIDList.Add(_RecRef.RecordId);
+                    if not GlobalRecordIDList.Contains(_RecRef.RecordId) then
+                        GlobalRecordIDList.Add(_RecRef.RecordId);
                 until _RecRef.Next() = 0;
             _RecRef.Close();
         end;
@@ -594,7 +601,7 @@ codeunit 91007 DMTXMLBackup
 
     var
         TablesList: List of [Integer];
-        RecordIDList: List of [RecordId];
+        GlobalRecordIDList: List of [RecordId];
         ExcludedFields: Dictionary of [Integer, List of [Integer]];
         XDoc: XmlDocument;
 }

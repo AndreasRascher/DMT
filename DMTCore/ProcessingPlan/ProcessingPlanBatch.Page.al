@@ -298,12 +298,22 @@ page 91017 DMTProcessingPlan
                 trigger OnAction()
                 var
                     TableMetadata: Record "Table Metadata";
+                    processingPlan: Record DMTProcessingPlan;
+                    processingPlanBatch: Record DMTProcessingPlanBatch;
                     XMLBackup: Codeunit DMTXMLBackup;
-                    TablesToExport: List of [Integer];
+                    RecordsToExport: List of [RecordId];
                 begin
                     TableMetadata.Get(Database::DMTProcessingPlan);
-                    TablesToExport.Add(Database::DMTProcessingPlan);
-                    XMLBackup.Export(TablesToExport, TableMetadata.Caption);
+                    // Export Batch
+                    processingPlanBatch.Get(CurrentJnlBatchName);
+                    RecordsToExport.Add(processingPlanBatch.RecordId);
+                    // Export Batch Lines
+                    processingPlan.SetRange("Journal Batch Name", CurrentJnlBatchName);
+                    if processingPlan.FindSet(false) then
+                        repeat
+                            RecordsToExport.Add(processingPlan.RecordId);
+                        until processingPlan.Next() = 0;
+                    XMLBackup.ExportSelectedRecordIDs(RecordsToExport, TableMetadata.Caption + '_' + CurrentJnlBatchName + '_');
                 end;
             }
             action(XMLImport)
@@ -314,15 +324,9 @@ page 91017 DMTProcessingPlan
 
                 trigger OnAction()
                 var
-                    ImportConfigHeader: Record DMTImportConfigHeader;
                     XMLBackup: Codeunit DMTXMLBackup;
                 begin
                     XMLBackup.Import();
-                    // Update imported "Qty.Lines In Trgt. Table" with actual values
-                    if ImportConfigHeader.FindSet() then
-                        repeat
-                            ImportConfigHeader.UpdateBufferRecordCount();
-                        until ImportConfigHeader.Next() = 0;
                 end;
             }
             action(RetryBufferRecordsWithError)

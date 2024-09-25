@@ -493,6 +493,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Verwendung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTLogEntry - Field Usage - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1212190007 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMTProcessingPlan</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=DMT Verarbeitungsplan</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1212190007 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Description</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Beschreibung</note>
