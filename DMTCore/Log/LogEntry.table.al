@@ -46,13 +46,19 @@ table 91008 DMTLogEntry
             OptionMembers = " ","TableInfo","Log";
             Editable = false;
         }
-        field(301; "PrPl_LineNo_Filter"; Integer)
+        field(301; "PrPl_JnlBatchName_Filter"; Code[20])
+        {
+            Caption = 'Journal Batch Name', Locked = true;
+            FieldClass = FlowFilter;
+            Editable = false;
+        }
+        field(302; "PrPl_LineNo_Filter"; Integer)
         {
             Caption = 'Line No.', Locked = true;
             FieldClass = FlowFilter;
             Editable = false;
         }
-        field(302; "ImportConfigHeaderID_Filter"; Integer)
+        field(303; "ImportConfigHeaderID_Filter"; Integer)
         {
             Caption = 'Import Config. Header ID Filter', Locked = true;
             FieldClass = FlowFilter;

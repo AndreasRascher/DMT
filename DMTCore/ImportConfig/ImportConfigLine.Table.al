@@ -120,9 +120,15 @@ table 91006 DMTImportConfigLine
             OptionMembers = " ","SourceTableFilter","FixedValueView","UpdateSelectedFields";
             Editable = false;
         }
-        field(301; "PrPl_LineNo_Filter"; Integer)
+        field(301; "PrPl_JnlBatchName_Filter"; Code[20])
         {
-            Caption = 'Line No.', Comment = 'de-DE=Zeilennr.';
+            Caption = 'Journal Batch Name', Locked = true;
+            FieldClass = FlowFilter;
+            Editable = false;
+        }
+        field(302; "PrPl_LineNo_Filter"; Integer)
+        {
+            Caption = 'Line No.', Locked = true;
             FieldClass = FlowFilter;
             Editable = false;
         }

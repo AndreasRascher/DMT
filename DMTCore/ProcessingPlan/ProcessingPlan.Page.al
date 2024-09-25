@@ -32,8 +32,8 @@ page 91017 DMTProcessingPlan
 
                 trigger OnValidate()
                 begin
-                    CALTestSuite.Get(CurrentJnlBatchName);
-                    CurrentSuiteNameOnAfterValidat();
+                    // CALTestSuite.Get(CurrentJnlBatchName);
+                    // CurrentSuiteNameOnAfterValidat();
                 end;
             }
             repeater("Repeater")
@@ -103,28 +103,28 @@ page 91017 DMTProcessingPlan
             part(SourceTableFilter; DMTProcessInstructionFactBox)
             {
                 Caption = 'Source Table Filter', Comment = 'de-DE=Quelldaten Filter';
-                SubPageLink = PrPl_FBRunMode_Filter = const(SourceTableFilter), PrPl_LineNo_Filter = field("Line No.");
+                SubPageLink = PrPl_FBRunMode_Filter = const(SourceTableFilter), PrPl_LineNo_Filter = field("Line No."), PrPl_JnlBatchName_Filter = field("Journal Batch Name");
                 UpdatePropagation = Both;
                 Enabled = ShowSourceTableFilterPart;
             }
             part(FixedValues; DMTProcessInstructionFactBox)
             {
                 Caption = 'Default Values', Comment = 'de-DE=Vorgabewerte';
-                SubPageLink = PrPl_FBRunMode_Filter = const(FixedValueView), PrPl_LineNo_Filter = field("Line No.");
+                SubPageLink = PrPl_FBRunMode_Filter = const(FixedValueView), PrPl_LineNo_Filter = field("Line No."), PrPl_JnlBatchName_Filter = field("Journal Batch Name");
                 UpdatePropagation = Both;
                 Enabled = ShowFixedValuesPart;
             }
             part(UpdateSelectedFieldsOnly; DMTProcessInstructionFactBox)
             {
                 Caption = 'Process selected fields only', Comment = 'de-DE=Ausgew. Felder verarbeiten';
-                SubPageLink = PrPl_FBRunMode_Filter = const(UpdateSelectedFields), PrPl_LineNo_Filter = field("Line No.");
+                SubPageLink = PrPl_FBRunMode_Filter = const(UpdateSelectedFields), PrPl_LineNo_Filter = field("Line No."), PrPl_JnlBatchName_Filter = field("Journal Batch Name");
                 UpdatePropagation = Both;
                 Enabled = ShowProcessSelectedFieldsOnly;
             }
             part(LogFactBox; DMTImportConfigFactBox)
             {
                 Caption = 'Log', Comment = 'de-DE=Protokoll';
-                SubPageLink = FBRunMode_Filter = const(Log), PrPl_LineNo_Filter = field("Line No.");
+                SubPageLink = FBRunMode_Filter = const(Log), PrPl_LineNo_Filter = field("Line No."), PrPl_JnlBatchName_Filter = field("Journal Batch Name");
                 Enabled = ShowLogFactboxPart;
             }
             systempart(Notes; Notes)

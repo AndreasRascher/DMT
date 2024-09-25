@@ -338,11 +338,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Aktion</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Processing Action - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 3570477496 - Field 2382706611 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Line No.</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Zeilennr.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field PrPl_LineNo_Filter - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 3570477496 - Field 1614643981 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Field Caption</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Zielfeld Bezeichnung</note>
@@ -508,6 +503,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Einrückung</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Indentation - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 2704330142 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Journal Batch Name</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Buch.-Blattname</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Journal Batch Name - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1212190007 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Line No.</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilennr.</note>
@@ -552,6 +552,21 @@
           <source>Type</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Art</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 623088035 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processing Plan Batch</source>
+          <note from="Developer" annotates="general" priority="2">Verarbeitungsplan Buch.-Blattname</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlanBatch - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 623088035 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlanBatch - Field Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 623088035 - Field 2961552353 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlanBatch - Field Name - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2840373744 - Field 2769288159 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Compare Field 1 Caption</source>
@@ -978,6 +993,16 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Anzahl Datensätze..\verarbeitet: %1\eingelesen : %2\mit Fehlern: %3\Verarbeitungsdauer: %4</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method ShowResultDialog - NamedType ResultMsg</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1786966925 - Method 1441599427 - NamedType 1757492483" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Standard</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Standard</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessingPlanMgt - Method CheckName - NamedType standardLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1786966925 - Method 1441599427 - NamedType 1475611446" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Standard journal batch</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Standard Buch.-Blatt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessingPlanMgt - Method CheckName - NamedType standardDescrLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1786966925 - Method 3043604989 - NamedType 1097618994" size-unit="char" translate="yes" xml:space="preserve">
           <source>The buffer table is empty. Filename: "%1"</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Die Puffertable entält keine Zeilen. Dateiname: "%1"</note>
@@ -1258,11 +1283,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CountLinesInSource - Method OnAction - NamedType NoOfLinesInFilterLbl</note>
         </trans-unit>
-        <trans-unit id="Page 809130730 - Action 3448018027 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Create AL Mapping Code</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Mapping AL Code erstellen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CreateCode - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 809130730 - Action 116037593 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Delete Records In Target Table</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Datensätze in Zieltabelle löschen</note>
@@ -1493,6 +1513,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Verarbeitungsplan</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 874212758 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Batch Name</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Buch.-Blattname</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control CurrentJnlBatchName - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1212190007 - Control 667936880 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Stops processing after a specified number of records. Recommended for testing large data sets.</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Stoppt die Verarbeitung nach einer bestimmten Anzahl von Datensätzen. Empfohlen für das Testen großer Datenmengen</note>
@@ -1602,6 +1627,31 @@
           <source>Lines</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action LineActions - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3688930025 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processing Plan Batches</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Verarbeitungsplan Buch.-Blätter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlanBatches - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3688930025 - Control 3461834954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies a description of this journal.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlanBatches - Control Description - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3688930025 - Control 2961552353 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the name of this project journal. You can enter a maximum of 10 characters, both numbers and letters.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlanBatches - Control Name - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3688930025 - Action 2525623599 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Edit Journal</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Buch.-Blatt bearbeiten</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlanBatches - Action Edit Journal - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3688930025 - Action 3383493608 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Process</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlanBatches - Action Category_Process - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3333708309 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Processing Instructions</source>
