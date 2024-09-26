@@ -173,6 +173,7 @@ codeunit 91002 DMTImportConfigMgt
         FoundAtIndex: Integer;
         SourceFieldID, TargetFieldID : Integer;
         NewFieldName, SourceFieldName, SourceFieldName2, TargetFieldName : Text;
+        iSourceFileImport: Interface ISourceFileImport;
     begin
         // Load Target Field Names
         DMTSetup.GetRecordOnce();
@@ -184,6 +185,10 @@ codeunit 91002 DMTImportConfigMgt
             exit;
 
         //Load Source Field Names
+        if ImportConfigHeader.BufferTableMgt().IsBufferTableEmpty() then begin
+            iSourceFileImport := importConfigHeader.GetSourceFileStorage().SourceFileFormat;
+            iSourceFileImport.ImportSelectedRows(importConfigHeader, importConfigHeader.GetDataLayout().HeadingRowNo, importConfigHeader.GetDataLayout().HeadingRowNo);
+        end;
         SourceFieldNamesFromBuffer := CreateSourceFieldNamesDict(ImportConfigHeader);
         // if SourceFieldNames.Count = 0 then
         //     exit;

@@ -127,8 +127,12 @@ table 91003 DMTImportConfigHeader
         fieldgroup(DropDown; ID, "Target Table Caption", "Target Table ID") { }
     }
     trigger OnInsert()
+    var
+        DMTSetup: Record DMTSetup;
     begin
-        // Rec.TestField("Source File ID");
+        // NAV Exports should export option values as integer
+        if DMTSetup.IsNAVExport() then
+            Rec."Ev. Nos. for Option fields as" := Rec."Ev. Nos. for Option fields as"::Position;
         Rec.ID := GetNextID();
     end;
 

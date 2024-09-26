@@ -40,6 +40,7 @@ codeunit 91008 DMTMigrateRecord
         TargetRef_INIT.Init();
         // Logs
         IReplacementHandler := iReplacementHandlerNew;
+        iReplacementHandler.InitProcess(bufferRef);  // collect replacements for record
         UseTriggerLog := importSettings.UseTriggerLog();
         // Reset stored errors
         Clear(ErrorLogDict);

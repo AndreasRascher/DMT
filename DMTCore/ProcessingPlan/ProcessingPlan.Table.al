@@ -459,9 +459,11 @@ table 91009 DMTProcessingPlan
     begin
         if Rec.IsTemporary then begin
             tempProcessingPlan.Copy(Rec, true);
+            tempProcessingPlan.SetRange("Journal Batch Name", Rec."Journal Batch Name");
             if tempProcessingPlan.FindLast() then;
             nextLineNo += tempProcessingPlan."Line No." + 10000;
         end else begin
+            processingPlan.SetRange("Journal Batch Name", Rec."Journal Batch Name");
             if processingPlan.FindLast() then;
             nextLineNo += processingPlan."Line No." + 10000;
         end;

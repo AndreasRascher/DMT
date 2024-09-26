@@ -23,7 +23,7 @@ codeunit 90022 DMTTestLibrary
         importConfigMgt: Codeunit DMTImportConfigMgt;
     begin
         ImportConfigMgt.PageAction_InitImportConfigLine(importConfigHeader.ID);
-        importConfigHeader.ImportFileToBuffer();
+
         importConfigMgt.PageAction_ProposeMatchingFields(importConfigHeader.ID);
         importConfigHeader.FilterRelated(importConfigLine);
         if AssignWithoutValidate then
@@ -68,6 +68,8 @@ codeunit 90022 DMTTestLibrary
     begin
         Clear(sourceFileStorage);
         sourceFileStorage.Get(sourceFileMgt.AddFileToStorage(fileNameWithExtension, TempBlob));
+        sourceFileStorage.Validate("Data Layout ID", DMTDataLayout.ID);
+        sourceFileStorage.Modify();
         sourceFileStorage.TestField(Size);
     end;
 
@@ -88,67 +90,6 @@ codeunit 90022 DMTTestLibrary
         while line.Count < colNo do
             line.Add('');
         dataTable.Get(rowNo).Set(colNo, content);
-    end;
-
-    ///<summary><p>Copy the content of the table (records in view) to the data table</p></summary>
-    // internal procedure BuildDataTable(var dataTable: List of [List of [Text]]; tableNo: Integer; tableView: Text)
-    // var
-    //     recRef: RecordRef;
-    //     rowNo: Integer;
-    // begin
-    //     recRef.open(tableNo);
-    //     recRef.SetView(tableView);
-    //     recRef.FindSet(false);
-    //     repeat
-    //         rowNo += 1;
-    //         BuildDataTable(dataTable, recRef, rowNo);
-    //     until recRef.Next() = 0;
-    // end;
-
-    // internal procedure BuildDataTable(var dataTable: List of [List of [Text]]; recVariant: Variant; rowNo: Integer)
-    // var
-    //     recRef: RecordRef;
-    //     fieldIndex: Integer;
-    //     shouldWriteField: Boolean;
-    // begin
-    //     recRef.GetTable(recVariant);
-    //     // add the field names as the first row
-    //     if rowNo = 1 then begin
-    //         for fieldIndex := 1 to recRef.FieldCount do
-    //             BuildDataTable(dataTable, rowNo, fieldIndex, recRef.FieldIndex(fieldIndex).Name);
-    //         rowNo += 1;
-    //     end;
-
-    //     // add the field values as the next rows
-    //     for fieldIndex := 1 to recRef.FieldCount do begin
-    //         //exclude blob and media fields
-    //         shouldWriteField := not (recRef.FieldIndex(fieldIndex).Type in [FieldType::Blob, FieldType::MediaSet]);
-    //         //exclude system fields
-    //         if recRef.FieldIndex(fieldIndex).Number in [recRef.SystemCreatedAtNo, recRef.SystemCreatedByNo, recRef.SystemIdNo, recRef.SystemModifiedAtNo, recRef.SystemModifiedByNo] then
-    //             shouldWriteField := false;
-    //         // write the field value
-    //         if shouldWriteField then
-    //             BuildDataTable(dataTable, rowNo, fieldIndex, format(recRef.FieldIndex(fieldIndex).Value, 0, 9));
-    //     end;
-    // end;
-
-
-
-    internal procedure ImportSelectedToTarget(importConfigHeader: Record DMTImportConfigHeader)
-    var
-        genBuffTable: Record DMTGenBuffTable;
-        migrateRecordSet: Codeunit DMTMigrateRecordSet;
-        Log: Codeunit DMTLog;
-        RecIdToProcessList: List of [RecordId];
-    begin
-        genBuffTable.FilterBy(importConfigHeader);
-        genBuffTable.SetRange(IsCaptionLine, false);
-        genBuffTable.FindSet();
-        repeat
-            RecIdToProcessList.Add(genBuffTable.RecordId);
-        until genBuffTable.Next() = 0;
-        Log.InitNewProcess(Enum::DMTLogUsage::"Process Buffer - Record", ImportConfigHeader);
-        migrateRecordSet.Start(importConfigHeader, enum::DMTMigrationType::RetryErrors);
     end;
 
     internal procedure ImportAllToTarget(importConfigHeader: Record DMTImportConfigHeader)

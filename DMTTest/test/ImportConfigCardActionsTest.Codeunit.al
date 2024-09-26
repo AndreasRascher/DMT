@@ -58,7 +58,7 @@ codeunit 90023 ImportConfigCardActionsTest
         if IsInitializedGlobal then
             exit;
         testLibrary.CreateDMTSetup();
-        customer."No." := '10000';
+        customer."No." := 'DMT10000';
         customer.Name := 'Customer 1';
 
         dataTableHelper.AddRecordWithCaptionsToDataTable(customer);

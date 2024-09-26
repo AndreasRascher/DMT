@@ -154,11 +154,14 @@ codeunit 91001 DMTSourceFileMgt
                     exit(true);
     end;
 
+    /// <summary><p> Assign default data layout to source file storage if source file format is not set </p></summary>
     procedure AssignDefaultDataLayout(var sourceFileStorage: Record DMTSourceFileStorage)
     var
         dataLayout: Record DMTDataLayout;
     begin
         if SourceFileStorage.SourceFileFormat = SourceFileStorage.SourceFileFormat::" " then
+            exit;
+        if sourceFileStorage."Data Layout ID" <> 0 then
             exit;
         dataLayout.SetRange(SourceFileFormat, SourceFileStorage.SourceFileFormat);
         dataLayout.SetRange(Default, true);

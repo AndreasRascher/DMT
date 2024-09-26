@@ -54,7 +54,7 @@ codeunit 91014 DMTMigrateRecordSet
         importSettings.EvaluateOptionValueAsNumber(importConfigHeader."Ev. Nos. for Option fields as" = importConfigHeader."Ev. Nos. for Option fields as"::Position);
         DMTSetup.GetRecordOnce();
         if DMTSetup.IsNAVExport() then
-            importSettings.EvaluateOptionValueAsNumber(true);
+            importSettings.EvaluateOptionValueAsNumber(true);  //TODO should be set from Header
         // Checks
         CheckMappedFieldsExist(importConfigHeader);
         // Prepare Buffer

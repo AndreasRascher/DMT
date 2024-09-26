@@ -4,6 +4,7 @@ codeunit 90021 ReplacementTests
     TestPermissions = Disabled;
 
     [Test]
+    [HandlerFunctions('ImportToTargetFilterPageHandler,LogEntriesPageHandler,MessageHandler')]
     procedure Test2by2Replacements_MigrateSelectedRecords()
     var
         importConfigHeader: Record DMTImportConfigHeader;
@@ -18,7 +19,7 @@ codeunit 90021 ReplacementTests
         TestLibrary.ValidateRulesExitsFor('2x2');
 
         // [WHEN] Migrate Data
-        TestLibrary.ImportSelectedToTarget(importConfigHeader);
+        TestLibrary.ImportAllToTarget(importConfigHeader);
         // [THEN] Replacement is done
         VerifyReplacedValuesHaveBeenWritten(salesLine);
     end;
@@ -101,8 +102,8 @@ codeunit 90021 ReplacementTests
         dataTableHelper.WriteDataTableToFileBlob(TempBlob);
         TestLibrary.AddFileToSourceFileStorage(sourceFileStorage, 'sample.csv', dataLayout, TempBlob);
         TestLibrary.CreateImportConfigHeader(importConfigHeader, 37, sourceFileStorage);
-        TestLibrary.CreateFieldMapping(importConfigHeader, true);
         importConfigHeader.ImportFileToBuffer();
+        TestLibrary.CreateFieldMapping(importConfigHeader, true);
         CreatedImportConfigHeaderID := importConfigHeader.ID;
     end;
 
@@ -112,6 +113,24 @@ codeunit 90021 ReplacementTests
         salesLine.TestField(Description, 'NewValue1');
         salesLine.TestField("Description 2", 'NewValue2');
         salesLine.Delete(); // Cleanup;
+    end;
+
+    [FilterPageHandler]
+    procedure ImportToTargetFilterPageHandler(var Record1: RecordRef): Boolean;
+    begin
+        exit(true); // OK to proceed
+        // If this procedure isn't called, no filter page is raised and the test fails
+    end;
+
+    [PageHandler]
+    procedure LogEntriesPageHandler(var LogEntries: TestPage DMTLogEntries)
+    begin
+        LogEntries.OK().Invoke();
+    end;
+
+    [MessageHandler]
+    procedure MessageHandler(Message: Text)
+    begin
     end;
 
     var

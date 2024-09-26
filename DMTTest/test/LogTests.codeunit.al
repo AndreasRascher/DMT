@@ -4,6 +4,7 @@ codeunit 90026 LogTests
     TestPermissions = Disabled;
 
     [Test]
+    [HandlerFunctions('ImportToTargetFilterPageHandler,LogEntriesPageHandler,MessageHandler')]
     procedure "GIVEN_ImportFieldValuesWithValidate_WHEN_OtherValuesAreWrittenAsIntended_THEN_LogEntriesExistToIndicateTheChanges"()
     var
         customer: Record Customer;
@@ -22,7 +23,7 @@ codeunit 90026 LogTests
         paymentTerms."Description" := '30 Days';
         paymentTerms.Insert();
 
-        customer."No." := '10000';
+        customer."No." := 'DMT10000';
         customer.Name := 'Customer 1';
         customer."Payment Terms Code" := '30 DAYS';
         clear(customer."Payment Terms Id");  // empty the field to trigger the validation
@@ -60,9 +61,30 @@ codeunit 90026 LogTests
         importConfigLine.Modify();
 
         // [WHEN] Other values are written as intended 
-        TestLibrary.ImportSelectedToTarget(importConfigHeader);
+        importConfigHeader.ImportFileToBuffer();
+        importConfigHeader.Validate("Log Trigger Changes", true);
+        importConfigHeader.Modify();
+        TestLibrary.ImportAllToTarget(importConfigHeader);
         // [THEN] Log entries exist to indicate the changes 
         VerifyLogValuesOfTriggerChangesExist(importConfigHeader, customer);
+    end;
+
+    [FilterPageHandler]
+    procedure ImportToTargetFilterPageHandler(var Record1: RecordRef): Boolean;
+    begin
+        exit(true); // OK to proceed
+        // If this procedure isn't called, no filter page is raised and the test fails
+    end;
+
+    [PageHandler]
+    procedure LogEntriesPageHandler(var LogEntries: TestPage DMTLogEntries)
+    begin
+        LogEntries.OK().Invoke();
+    end;
+
+    [MessageHandler]
+    procedure MessageHandler(Message: Text)
+    begin
     end;
 
     local procedure VerifyLogValuesOfTriggerChangesExist(importConfigHeader: Record DMTImportConfigHeader; customer: Record Customer)
