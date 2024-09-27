@@ -25,8 +25,7 @@ codeunit 90026 LogTests
 
         customer."No." := 'DMT10000';
         customer.Name := 'Customer 1';
-        customer."Payment Terms Code" := '30 DAYS';
-        clear(customer."Payment Terms Id");  // empty the field to trigger the validation
+        customer."Search Name" := ''; // empty to trigger the override in the validation trigger
         customer.Insert();
 
         dataTableHelper.AddRecordWithCaptionsToDataTable(customer);
@@ -41,24 +40,25 @@ codeunit 90026 LogTests
         importConfigHeader.FilterRelated(importConfigLine);
         importConfigLine.SetRange("Is Key Field(Target)", false);
         importConfigLine.ModifyAll("Processing Action", importConfigLine."Processing Action"::Ignore);
-
+        // Validate Search Name -> Validate Name -> Overrides "Search Name"
         importConfigLine.Reset();
         importConfigHeader.FilterRelated(importConfigLine);
-        importConfigLine.SetRange("Target Field No.", customer.FieldNo("Payment Terms Code"));
+        importConfigLine.SetRange("Target Field No.", customer.FieldNo("Search Name"));
         importConfigLine.FindFirst();
         importConfigLine.Validate("Processing Action", importConfigLine."Processing Action"::Transfer);
         importConfigLine.Validate("Validation Type", importConfigLine."Validation Type"::AlwaysValidate);
-        importConfigLine."Validation Order" := 1;
+        importConfigLine."Validation Order" := 3;
         importConfigLine.Modify();
 
         importConfigLine.Reset();
         importConfigHeader.FilterRelated(importConfigLine);
-        importConfigLine.SetRange("Target Field No.", customer.FieldNo("Payment Terms Id"));
+        importConfigLine.SetRange("Target Field No.", customer.FieldNo(Name));
         importConfigLine.FindFirst();
         importConfigLine.Validate("Processing Action", importConfigLine."Processing Action"::Transfer);
         importConfigLine.Validate("Validation Type", importConfigLine."Validation Type"::AlwaysValidate);
-        importConfigLine."Validation Order" := 2;
+        importConfigLine."Validation Order" := 4;
         importConfigLine.Modify();
+
 
         // [WHEN] Other values are written as intended 
         importConfigHeader.ImportFileToBuffer();

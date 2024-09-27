@@ -5,7 +5,7 @@ codeunit 90021 ReplacementTests
 
     [Test]
     [HandlerFunctions('ImportToTargetFilterPageHandler,LogEntriesPageHandler,MessageHandler')]
-    procedure Test2by2Replacements_MigrateSelectedRecords()
+    procedure Test2by2Replacements()
     var
         importConfigHeader: Record DMTImportConfigHeader;
         salesLine: Record "Sales Line";
@@ -25,26 +25,7 @@ codeunit 90021 ReplacementTests
     end;
 
     [Test]
-    procedure Test2by2Replacements_MigrateAllRecords()
-    var
-        importConfigHeader: Record DMTImportConfigHeader;
-        salesLine: Record "Sales Line";
-    begin
-        // [GIVEN] Setup exists, DataLayout exists, Source File exists         
-        // [GIVEN] Import Config Header exists, Field Mapping exists, Buffer exists
-        CreateImportConfigWithSampleSourceFileAndFieldMapping(importConfigHeader);
-        // [GIVEN] Replacement Setup exists
-        TestLibrary.CreateReplacementSetup2by2('2x2', importConfigHeader);
-        TestLibrary.ValidateAssignmentsExitsFor(importConfigHeader);
-        TestLibrary.ValidateRulesExitsFor('2x2');
-
-        // [WHEN] Migrate Data
-        TestLibrary.ImportAllToTarget(importConfigHeader);
-        // [THEN] Replacement is done
-        VerifyReplacedValuesHaveBeenWritten(salesLine);
-    end;
-
-    [Test]
+    [HandlerFunctions('ImportToTargetFilterPageHandler,LogEntriesPageHandler,MessageHandler')]
     procedure Test2by2Replacements_UpdateRecordsWithSelectedFields()
     var
         importConfigHeader: Record DMTImportConfigHeader;
