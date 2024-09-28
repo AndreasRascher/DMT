@@ -142,7 +142,7 @@ codeunit 91013 DMTRefHelper
                         exit(true);
                     end else
                         if ThrowError then
-                            Evaluate(_RecordID, FromText);
+                            Evaluate(_Integer, FromText);
                 end else begin
                     //Optionswert wird als Text übergeben
                     NoOfOptions := StrLen(FieldRef_TO.OptionCaption) - StrLen(DelChr(FieldRef_TO.OptionCaption, '=', ',')); // zero based
