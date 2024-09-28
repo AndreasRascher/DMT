@@ -1233,6 +1233,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE="%1" ist kein gültiger %2 Wert</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTRefHelper - Method EvaluateFieldRef - NamedType InvalidValueForTypeErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1536080462 - Method 1564743796 - NamedType 2382675972" size-unit="char" translate="yes" xml:space="preserve">
+          <source>“%1” could not be converted into an integer (option index no.)</source>
+          <target state="translated">"%1" konnte nicht in eine Ganzzahl (Optionsindex Nr.) umgewandelt werden.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE="%1" konnte nicht in eine Ganzzahl (Optionsindex Nr.) umgewandelt werden.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTRefHelper - Method EvaluateFieldRef - NamedType InvalidOptionPosValueErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 107245564 - Method 705889565 - NamedType 935989145" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffer Table %1 not found.\Import Config Header\ID:"%2"\Filename:"%3"</source>
           <target state="translated">Eine Puffertabelle mit der ID %1 wurde nicht gefunden.\Importkonfiguration\ID:"%2"\Dateiname:"%3"</target>
