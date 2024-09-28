@@ -1,8 +1,3 @@
-Tests:
-- Feldmapping
-   - Import Headline
-   - Reuse Names
- 
 codeunit 90023 ImportConfigCardActionsTest
 {
     Subtype = Test;

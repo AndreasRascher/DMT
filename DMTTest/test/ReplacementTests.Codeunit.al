@@ -70,16 +70,16 @@ codeunit 90021 ReplacementTests
         TestLibrary.CreateDMTSetup();
         dataLayout.CreateOrGetDataLayout(dataLayout, 'DMT NAV CSV Export');
 
-        dataTableHelper.BuildDataTable(1, 1, 'Document Type');
-        dataTableHelper.BuildDataTable(1, 2, 'Document No.');
-        dataTableHelper.BuildDataTable(1, 3, 'Line No.');
-        dataTableHelper.BuildDataTable(1, 4, 'Description');
-        dataTableHelper.BuildDataTable(1, 5, 'Description 2');
-        dataTableHelper.BuildDataTable(2, 1, '1');
-        dataTableHelper.BuildDataTable(2, 2, 'TestDocNo');
-        dataTableHelper.BuildDataTable(2, 3, '10000');
-        dataTableHelper.BuildDataTable(2, 4, 'OldValue1');
-        dataTableHelper.BuildDataTable(2, 5, 'OldValue2');
+        dataTableHelper.setDataTableField(1, 1, 'Document Type');
+        dataTableHelper.setDataTableField(1, 2, 'Document No.');
+        dataTableHelper.setDataTableField(1, 3, 'Line No.');
+        dataTableHelper.setDataTableField(1, 4, 'Description');
+        dataTableHelper.setDataTableField(1, 5, 'Description 2');
+        dataTableHelper.setDataTableField(2, 1, '1');
+        dataTableHelper.setDataTableField(2, 2, 'TestDocNo');
+        dataTableHelper.setDataTableField(2, 3, '10000');
+        dataTableHelper.setDataTableField(2, 4, 'OldValue1');
+        dataTableHelper.setDataTableField(2, 5, 'OldValue2');
         dataTableHelper.WriteDataTableToFileBlob(TempBlob);
         TestLibrary.AddFileToSourceFileStorage(sourceFileStorage, 'sample.csv', dataLayout, TempBlob);
         TestLibrary.CreateImportConfigHeader(importConfigHeader, 37, sourceFileStorage);

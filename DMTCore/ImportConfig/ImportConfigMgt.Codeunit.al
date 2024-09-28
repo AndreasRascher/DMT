@@ -167,12 +167,11 @@ codeunit 91002 DMTImportConfigMgt
     var
         ImportConfigLine: Record DMTImportConfigLine;
         DMTSetup: Record DMTSetup;
-        MigrationLib: Codeunit DMTMigrationLib;
         SourceFieldNamesFromBuffer, TargetFieldNames : Dictionary of [Integer, Text];
         ExistingFieldMappings: Dictionary of [Text, Text];
         FoundAtIndex: Integer;
         SourceFieldID, TargetFieldID : Integer;
-        NewFieldName, SourceFieldName, SourceFieldName2, TargetFieldName : Text;
+        SourceFieldName, TargetFieldName : Text;
         iSourceFileImport: Interface ISourceFileImport;
     begin
         // Load Target Field Names
@@ -189,7 +188,9 @@ codeunit 91002 DMTImportConfigMgt
             iSourceFileImport := importConfigHeader.GetSourceFileStorage().SourceFileFormat;
             iSourceFileImport.ImportSelectedRows(importConfigHeader, importConfigHeader.GetDataLayout().HeadingRowNo, importConfigHeader.GetDataLayout().HeadingRowNo);
         end;
+
         SourceFieldNamesFromBuffer := CreateSourceFieldNamesDict(ImportConfigHeader);
+
         // if SourceFieldNames.Count = 0 then
         //     exit;
 
@@ -205,34 +206,14 @@ codeunit 91002 DMTImportConfigMgt
 
         //Match Fields by Name
         foreach SourceFieldID in SourceFieldNamesFromBuffer.Keys do begin
-            SourceFieldName := SourceFieldNamesFromBuffer.Get(SourceFieldID);
-            SourceFieldName := SourceFieldName.TrimEnd(' '); // BC Felder haben keine Leerzeichen am Ende, für Matching entfernen
-            FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName);
-            // TargetField.SetFilter(FieldName, ConvertStr(BuffTableCaption, '@()&', '????'));
-            if FoundAtIndex = 0 then
-                if MigrationLib.FindFieldNameInOldVersion(SourceFieldName, ImportConfigHeader."Target Table ID", NewFieldName) then
-                    FoundAtIndex := TargetFieldNames.Values.IndexOf(NewFieldName);
-            if FoundAtIndex = 0 then begin
-                // Base64 Fields
-                if SourceFieldName.EndsWith('[Base64]') then begin
-                    // SourceFieldName2 - original field name, SourceFieldName - field name from File
-                    SourceFieldName2 := SourceFieldName.Remove(StrLen(SourceFieldName) - StrLen('[Base64]') + 1);
-                    FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName2);
-                end;
-                // BlobText Fields
-                if SourceFieldName.EndsWith('[BlobText]') then begin
-                    // SourceFieldName2 - original field name, SourceFieldName - field name from File
-                    SourceFieldName2 := SourceFieldName.Remove(StrLen(SourceFieldName) - StrLen('[BlobText]') + 1);
-                    FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName2);
-                end;
-            end;
+            FoundAtIndex := matchFieldByName(ImportConfigHeader, SourceFieldNamesFromBuffer, TargetFieldNames, SourceFieldNamesFromBuffer.Get(SourceFieldID));
             if FoundAtIndex <> 0 then begin
                 TargetFieldID := TargetFieldNames.Keys.Get(FoundAtIndex);
                 // SetSourceField
                 ImportConfigLine.Get(ImportConfigHeader.ID, TargetFieldID);
                 if IsSupportedTargetFieldType(ImportConfigLine) then begin
                     ImportConfigLine.Validate("Source Field No.", SourceFieldID); // Validate to update processing action
-                    ImportConfigLine."Source Field Caption" := CopyStr(SourceFieldName, 1, MaxStrLen(ImportConfigLine."Source Field Caption"));
+                    ImportConfigLine."Source Field Caption" := CopyStr(SourceFieldNamesFromBuffer.Get(SourceFieldID), 1, MaxStrLen(ImportConfigLine."Source Field Caption"));
                     ImportConfigLine.Modify();
                 end;
             end;
@@ -262,7 +243,7 @@ codeunit 91002 DMTImportConfigMgt
             end;
     end;
 
-    local procedure CreateSourceFieldNamesDict(importConfigHeader: Record DMTImportConfigHeader) SourceFieldNames: Dictionary of [Integer, Text]
+    procedure CreateSourceFieldNamesDict(importConfigHeader: Record DMTImportConfigHeader) SourceFieldNames: Dictionary of [Integer, Text]
     var
         dataLayout: Record DMTDataLayout;
         dataLayoutLine: Record DMTDataLayoutLine;
@@ -358,6 +339,34 @@ codeunit 91002 DMTImportConfigMgt
         if Field.FieldName = 'Image' then
             if Field.FieldName = 'Image' then;
         if Field.Type in [Field.Type::Media, Field.Type::MediaSet] then exit(false);
+    end;
+
+    internal procedure matchFieldByName(ImportConfigHeader: Record DMTImportConfigHeader; var SourceFieldNamesFromBuffer: Dictionary of [Integer, Text]; var TargetFieldNames: Dictionary of [Integer, Text]; SourceFieldName: Text) FoundAtIndex: Integer
+    var
+        MigrationLib: Codeunit DMTMigrationLib;
+        NewFieldName: Text;
+        SourceFieldName2: Text;
+    begin
+        SourceFieldName := SourceFieldName.TrimEnd(' '); // BC Felder haben keine Leerzeichen am Ende, für Matching entfernen
+        FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName);
+        // TargetField.SetFilter(FieldName, ConvertStr(BuffTableCaption, '@()&', '????'));
+        if FoundAtIndex = 0 then
+            if MigrationLib.FindFieldNameInOldVersion(SourceFieldName, ImportConfigHeader."Target Table ID", NewFieldName) then
+                FoundAtIndex := TargetFieldNames.Values.IndexOf(NewFieldName);
+        if FoundAtIndex = 0 then begin
+            // Base64 Fields
+            if SourceFieldName.EndsWith('[Base64]') then begin
+                // SourceFieldName2 - original field name, SourceFieldName - field name from File
+                SourceFieldName2 := SourceFieldName.Remove(StrLen(SourceFieldName) - StrLen('[Base64]') + 1);
+                FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName2);
+            end;
+            // BlobText Fields
+            if SourceFieldName.EndsWith('[BlobText]') then begin
+                // SourceFieldName2 - original field name, SourceFieldName - field name from File
+                SourceFieldName2 := SourceFieldName.Remove(StrLen(SourceFieldName) - StrLen('[BlobText]') + 1);
+                FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName2);
+            end;
+        end;
     end;
 
     procedure AddImportConfigForSelectedSourceFiles(var tempSourceFileStorage_SELECTED: Record DMTSourceFileStorage temporary)

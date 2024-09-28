@@ -17,12 +17,26 @@ codeunit 90022 DMTTestLibrary
         OK := importConfigHeader.Insert(true);
     end;
 
+    procedure InitTargetFields(var importConfigHeader: Record DMTImportConfigHeader)
+    var
+        importConfigMgt: Codeunit DMTImportConfigMgt;
+    begin
+        ImportConfigMgt.PageAction_InitImportConfigLine(importConfigHeader.ID);
+    end;
+
+    procedure proposeMatchingFields(var importConfigHeader: Record DMTImportConfigHeader)
+    var
+        importConfigMgt: Codeunit DMTImportConfigMgt;
+    begin
+        ImportConfigMgt.PageAction_ProposeMatchingFields(importConfigHeader.ID);
+    end;
+
     procedure CreateFieldMapping(importConfigHeader: Record DMTImportConfigHeader; AssignWithoutValidate: Boolean) OK: Boolean
     var
         importConfigLine: Record DMTImportConfigLine;
         importConfigMgt: Codeunit DMTImportConfigMgt;
     begin
-        ImportConfigMgt.PageAction_InitImportConfigLine(importConfigHeader.ID);
+        InitTargetFields(importConfigHeader);
 
         importConfigMgt.PageAction_ProposeMatchingFields(importConfigHeader.ID);
         importConfigHeader.FilterRelated(importConfigLine);
@@ -174,5 +188,21 @@ codeunit 90022 DMTTestLibrary
     internal procedure GetDefaultNAVDMTLayout() dataLayout: Record DMTDataLayout
     begin
         dataLayout := dataLayout.GetDefaultNAVDMTLayout();
+    end;
+
+    internal procedure SetFieldMapping(importConfigHeader: Record DMTImportConfigHeader; targetCaption: Text; sourceFieldCaption: Text)
+    var
+        importConfigLine: Record DMTImportConfigLine;
+        importConfigMgt: Codeunit DMTImportConfigMgt;
+        SourceFieldNames, TargetFieldNames : Dictionary of [Integer, Text];
+    begin
+        importConfigHeader.FilterRelated(importConfigLine);
+        importConfigLine.SetRange("Target Field Caption", targetCaption);
+        importConfigLine.FindFirst();
+        importConfigLine.SetRecFilter();
+        SourceFieldNames := importConfigMgt.CreateSourceFieldNamesDict(importConfigHeader);
+        TargetFieldNames := importConfigMgt.CreateTargetFieldNamesDict(importConfigLine, true);
+        importConfigLine.Validate("Source Field No.", SourceFieldNames.Keys.get(SourceFieldNames.Values.IndexOf(sourceFieldCaption)));
+        importConfigLine.Modify();
     end;
 }
