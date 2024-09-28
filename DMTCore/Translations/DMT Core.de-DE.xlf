@@ -275,8 +275,8 @@
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 476161190 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Evaluate numbers for option fields as</source>
-          <target state="translated">Max. Anzahl zu verarbeiternder Datensatz :</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Max. Anzahl zu verarbeiternder Datensatz :</note>
+          <target state="translated">Nummern in Optionswerten zuordnen als</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Nummern in Optionswerten zuordnen als</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Ev. Nos. for Option fields as - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 476161190 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">

@@ -93,7 +93,7 @@ table 91003 DMTImportConfigHeader
         field(55; "Log Trigger Changes"; Boolean) { Caption = 'Log Trigger Changes', Comment = 'de-DE=Trigger Änderungen protokollieren'; }
         field(56; "Ev. Nos. for Option fields as"; Option)
         {
-            Caption = 'Evaluate numbers for option fields as', Comment = 'de-DE=Max. Anzahl zu verarbeiternder Datensatz :';
+            Caption = 'Evaluate numbers for option fields as', Comment = 'de-DE=Nummern in Optionswerten zuordnen als';
             OptionMembers = Position,Caption;
             OptionCaption = 'Position,Caption', Comment = 'de-DE=Position,Bezeichnung';
         }
