@@ -29,15 +29,15 @@
 			"version": "0.2.0",
 			"configurations": [
 				{
-					"name": "kadeco.de DEV",
+					"name": "https://bctest.fm-unternehmensgruppe.de/TEST_MC/",
 					"type": "al",
 					"request": "launch",
 					"environmentType": "OnPrem",
-					"server": "https://bctest.kadeco.de/",
-					"serverInstance": "DEV",
+					"server": "https://bctest.fm-unternehmensgruppe.de",
+					"serverInstance": "TEST_MC",
 					"authentication": "UserPassword",
 					"startupObjectType": "Page",
-					"startupObjectId": 50017,
+					"startupObjectId": 91017,
 					"breakOnError": "ExcludeTry",
 					"breakOnRecordWrite": "None",
 					"launchBrowser": true,
@@ -48,7 +48,7 @@
 					"tenant": "default",
 					"usePublicURLFromServer": true,
 					"schemaUpdateMode": "ForceSync",
-					"startupCompany": "MODUS - Klasse.SM Test 7"
+					"startupCompany": "Test03-fmsm"
 				},
 				{
 					"name": "BC24",
