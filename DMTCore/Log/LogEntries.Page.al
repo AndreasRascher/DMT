@@ -60,8 +60,8 @@ page 91013 DMTLogEntries
 
                 trigger OnAction()
                 begin
-                    Rec.SetRange("Ignore Error", false);
                     ShowIgnoredErrorLines := false;
+                    UpdateFilters();
                 end;
             }
             action(ShowIgnored)
@@ -76,8 +76,40 @@ page 91013 DMTLogEntries
 
                 trigger OnAction()
                 begin
-                    Rec.SetRange("Ignore Error");
                     ShowIgnoredErrorLines := true;
+                    UpdateFilters();
+                end;
+            }
+            action(HideTriggerLog)
+            {
+                Caption = 'Hide trigger log entries', Comment = 'de-DE=Trigger Änderungen ausblenden';
+                Image = ShowList;
+                Promoted = true;
+                PromotedIsBig = true;
+                PromotedOnly = true;
+                PromotedCategory = Process;
+                Visible = ShowTriggerLogLines;
+
+                trigger OnAction()
+                begin
+                    ShowTriggerLogLines := false;
+                    UpdateFilters();
+                end;
+            }
+            action(ShowTriggerLog)
+            {
+                Caption = 'Show trigger changes', Comment = 'de-DE=Trigger Änderungen anzeigen';
+                Image = ShowList;
+                Promoted = true;
+                PromotedIsBig = true;
+                PromotedOnly = true;
+                PromotedCategory = Process;
+                Visible = not ShowTriggerLogLines;
+
+                trigger OnAction()
+                begin
+                    ShowTriggerLogLines := true;
+                    UpdateFilters();
                 end;
             }
             action(DeleteFilteredLines)
@@ -99,9 +131,11 @@ page 91013 DMTLogEntries
         }
     }
 
-    trigger OnInit()
+    trigger OnOpenPage()
     begin
         ShowIgnoredErrorLines := true;
+        ShowTriggerLogLines := false;
+        UpdateFilters();
     end;
 
     trigger OnAfterGetRecord()
@@ -113,9 +147,20 @@ page 91013 DMTLogEntries
             LineStyle := Format(Enum::DMTFieldStyle::Grey);
     end;
 
+    local procedure UpdateFilters()
+    begin
+        Rec.SetRange("Ignore Error");
+        if not ShowIgnoredErrorLines then
+            Rec.SetRange("Ignore Error", false);
+
+        Rec.SetRange("Entry Type");
+        if not ShowTriggerLogLines then
+            Rec.SetFilter("Entry Type", '<>%1', Enum::DMTLogEntryType::"Trigger Changes");
+    end;
+
     var
         CallStack, LineStyle : Text;
         // [InDataSet]
-        ShowIgnoredErrorLines: Boolean;
+        ShowIgnoredErrorLines, ShowTriggerLogLines : Boolean;
 }
 

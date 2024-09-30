@@ -28,12 +28,12 @@ codeunit 90024 SourceFileStorageTests
         // [GIVEN] DMT Setup exists
         initialize();
         // [GIVEN] File 1
-        Customer."No." := '10000';
+        customer."No." := 'DMT10000';
         Customer.Name := 'Customer 1';
         dataTableHelper.AddRecordWithCaptionsToDataTable(Customer);
         dataTableHelper.WriteDataTableToFileBlob(fileBlob1);
         // [GIVEN] File 2
-        Customer2."No." := '10001';
+        Customer2."No." := 'DMT10001';
         Customer2.Name := 'Customer 2';
         Clear(dataTableHelper);
         dataTableHelper.AddRecordWithCaptionsToDataTable(Customer2);

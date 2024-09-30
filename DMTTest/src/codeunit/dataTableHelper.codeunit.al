@@ -120,10 +120,9 @@ codeunit 90027 DMTDataTableHelper
         ExcelBufferFilled.Copy(tempExcelBuffer, true);
     end;
 
-    internal procedure BuildDataTable(rowIndex: Integer; colIndex: Integer; content: Text)
+    internal procedure setDataTableField(rowIndex: Integer; colIndex: Integer; content: Text)
     var
         row: List of [Text];
-
     begin
         // add rows until the requested row index is reached
         while CurrDataTable.Count < rowIndex do
@@ -134,6 +133,25 @@ codeunit 90027 DMTDataTableHelper
             row.Add('');
         // set the new content
         CurrDataTable.Get(rowIndex).Set(colIndex, content);
+    end;
+
+    internal procedure SetLine(rowIndex: Integer; content1: Text; content2: Text; content3: Text)
+    var
+        line: List of [Text];
+    begin
+        line.AddRange(content1, content2, content3);
+        SetLine(rowIndex, line);
+    end;
+
+    internal procedure SetLine(rowIndex: Integer; Line: List of [Text])
+    var
+        cellValue: Text;
+        colIndex: Integer;
+    begin
+        for colIndex := 1 to Line.Count do begin
+            cellValue := Line.Get(colIndex);
+            setDataTableField(rowIndex, colIndex, cellValue);
+        end;
     end;
 
     var

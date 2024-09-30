@@ -39,6 +39,31 @@ table 91008 DMTLogEntry
             Editable = false;
             BlankZero = true;
         }
+        field(300; FBRunMode_Filter; Option)
+        {
+            Caption = 'FactBox RunModeFilter', Locked = true;
+            FieldClass = FlowFilter;
+            OptionMembers = " ","TableInfo","Log";
+            Editable = false;
+        }
+        field(301; "PrPl_JnlBatchName_Filter"; Code[20])
+        {
+            Caption = 'Journal Batch Name', Locked = true;
+            FieldClass = FlowFilter;
+            Editable = false;
+        }
+        field(302; "PrPl_LineNo_Filter"; Integer)
+        {
+            Caption = 'Line No.', Locked = true;
+            FieldClass = FlowFilter;
+            Editable = false;
+        }
+        field(303; "ImportConfigHeaderID_Filter"; Integer)
+        {
+            Caption = 'Import Config. Header ID Filter', Locked = true;
+            FieldClass = FlowFilter;
+            Editable = false;
+        }
 
     }
 

@@ -394,6 +394,7 @@ table 91001 DMTGenBuffTable
         RecRef: RecordRef;
         FieldIndex: Integer;
     begin
+        Clear(BuffTableCaptions);
         OK := true;
         dataLayout := ImportConfigHeader.GetDataLayout();
         if not GenBuffTable.FilterBy(ImportConfigHeader) then begin

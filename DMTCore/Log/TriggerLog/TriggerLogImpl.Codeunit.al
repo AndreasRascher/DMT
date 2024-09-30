@@ -173,7 +173,7 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
     begin
         if TempTriggerLogEntryGlobal.IsEmpty then
             exit;
-        KeepOnlyFieldsChangedMoreThanOnce();
+        //KeepOnlyFieldsChangedMoreThanOnce(); //Unklar, bei Name -> Suchname wird der Eintrag gelöscht
         if TempTriggerLogEntryGlobal.FindSet() then begin
             nextEntryNo := triggerLogEntry.GetNextEntryNo();
             repeat

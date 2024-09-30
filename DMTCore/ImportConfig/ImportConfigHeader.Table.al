@@ -36,20 +36,29 @@ table 91003 DMTImportConfigHeader
             OptionCaption = 'None,buffer table and XMLPort (Best performance),Use existing buffer table & generate XMLPort only',
             Comment = 'de-DE=Keine,Puffertabelle und XMLPort (Beste Performance),Existierende Puffertabelle verwenden & nur XMLPort generieren';
             trigger OnValidate()
+            var
+                DMTSetup: Record DMTSetup;
             begin
                 case Rec."Separate Buffer Table Objects" of
                     Rec."Separate Buffer Table Objects"::None:
                         begin
                             Clear(Rec."Import XMLPort ID");
                             Clear(Rec."Buffer Table ID");
+                            if DMTSetup.IsNAVExport() then
+                                Rec."Ev. Nos. for Option fields as" := Rec."Ev. Nos. for Option fields as"::Position;
+                            UpdateBufferRecordCount();
                         end;
                     Rec."Separate Buffer Table Objects"::"Use existing buffer table & generate XMLPort only":
                         begin
-
+                            Clear("No.of Records in Buffer Table");
+                            if Rec."Buffer Table ID" <> 0 then
+                                UpdateBufferRecordCount();
                         end;
                     Rec."Separate Buffer Table Objects"::"buffer table and XMLPort (Best performance)":
                         begin
-
+                            Clear("No.of Records in Buffer Table");
+                            if Rec."Buffer Table ID" <> 0 then
+                                UpdateBufferRecordCount();
                         end;
                 end;
             end;
@@ -69,6 +78,10 @@ table 91003 DMTImportConfigHeader
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table), "App Package ID" = field("Current App Package ID Filter"));
             ValidateTableRelation = false;
             BlankZero = true;
+            trigger OnValidate()
+            begin
+                UpdateBufferRecordCount();
+            end;
         }
         field(44; BufferTableIDStyle; Text[15]) { Caption = 'BufferTableIDStyle', Locked = true; Editable = false; }
         #region Import and Processing Options
@@ -78,6 +91,18 @@ table 91003 DMTImportConfigHeader
         field(53; "Import Only New Records"; Boolean) { Caption = 'Import Only New Records', Comment = 'de-DE=Nur neue Datensätze importieren'; }
         field(54; "Skip Records with User Changes"; Boolean) { Caption = 'Skip Records with User Changes', Comment = 'de-DE=Datensätze mit Nutzeränderung überspringen'; }
         field(55; "Log Trigger Changes"; Boolean) { Caption = 'Log Trigger Changes', Comment = 'de-DE=Trigger Änderungen protokollieren'; }
+        field(56; "Ev. Nos. for Option fields as"; Option)
+        {
+            Caption = 'Evaluate numbers for option fields as', Comment = 'de-DE=Nummern in Optionswerten zuordnen als';
+            OptionMembers = Position,Caption;
+            OptionCaption = 'Position,Caption', Comment = 'de-DE=Position,Bezeichnung';
+        }
+        field(57; "Max No. of Records to Process"; Integer)
+        {
+            Caption = 'Max No. of Records to Process', Comment = 'de-DE=max. Anzahl der zu verarbeitenden Datensätze';
+            BlankZero = true;
+            MinValue = 0;
+        }
         field(100; "Source File ID"; Integer) { Caption = 'Source File ID', Comment = 'de-DE=Quell-Datei ID'; TableRelation = DMTSourceFileStorage; }
         field(101; "Source File Name"; Text[250])
         {
@@ -102,8 +127,12 @@ table 91003 DMTImportConfigHeader
         fieldgroup(DropDown; ID, "Target Table Caption", "Target Table ID") { }
     }
     trigger OnInsert()
+    var
+        DMTSetup: Record DMTSetup;
     begin
-        // Rec.TestField("Source File ID");
+        // NAV Exports should export option values as integer
+        if DMTSetup.IsNAVExport() then
+            Rec."Ev. Nos. for Option fields as" := Rec."Ev. Nos. for Option fields as"::Position;
         Rec.ID := GetNextID();
     end;
 

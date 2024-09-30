@@ -4,27 +4,8 @@ codeunit 90021 ReplacementTests
     TestPermissions = Disabled;
 
     [Test]
-    procedure Test2by2Replacements_MigrateSelectedRecords()
-    var
-        importConfigHeader: Record DMTImportConfigHeader;
-        salesLine: Record "Sales Line";
-    begin
-        // [GIVEN] Setup exists, DataLayout exists, Source File exists         
-        // [GIVEN] Import Config Header exists, Field Mapping exists, Buffer exists
-        CreateImportConfigWithSampleSourceFileAndFieldMapping(importConfigHeader);
-        // [GIVEN] Replacement Setup exists
-        TestLibrary.CreateReplacementSetup2by2('2x2', importConfigHeader);
-        TestLibrary.ValidateAssignmentsExitsFor(importConfigHeader);
-        TestLibrary.ValidateRulesExitsFor('2x2');
-
-        // [WHEN] Migrate Data
-        TestLibrary.ImportSelectedToTarget(importConfigHeader);
-        // [THEN] Replacement is done
-        VerifyReplacedValuesHaveBeenWritten(salesLine);
-    end;
-
-    [Test]
-    procedure Test2by2Replacements_MigrateAllRecords()
+    [HandlerFunctions('ImportToTargetFilterPageHandler,LogEntriesPageHandler,MessageHandler')]
+    procedure Test2by2Replacements()
     var
         importConfigHeader: Record DMTImportConfigHeader;
         salesLine: Record "Sales Line";
@@ -44,6 +25,7 @@ codeunit 90021 ReplacementTests
     end;
 
     [Test]
+    [HandlerFunctions('ImportToTargetFilterPageHandler,LogEntriesPageHandler,MessageHandler')]
     procedure Test2by2Replacements_UpdateRecordsWithSelectedFields()
     var
         importConfigHeader: Record DMTImportConfigHeader;
@@ -88,21 +70,21 @@ codeunit 90021 ReplacementTests
         TestLibrary.CreateDMTSetup();
         dataLayout.CreateOrGetDataLayout(dataLayout, 'DMT NAV CSV Export');
 
-        dataTableHelper.BuildDataTable(1, 1, 'Document Type');
-        dataTableHelper.BuildDataTable(1, 2, 'Document No.');
-        dataTableHelper.BuildDataTable(1, 3, 'Line No.');
-        dataTableHelper.BuildDataTable(1, 4, 'Description');
-        dataTableHelper.BuildDataTable(1, 5, 'Description 2');
-        dataTableHelper.BuildDataTable(2, 1, '1');
-        dataTableHelper.BuildDataTable(2, 2, 'TestDocNo');
-        dataTableHelper.BuildDataTable(2, 3, '10000');
-        dataTableHelper.BuildDataTable(2, 4, 'OldValue1');
-        dataTableHelper.BuildDataTable(2, 5, 'OldValue2');
+        dataTableHelper.setDataTableField(1, 1, 'Document Type');
+        dataTableHelper.setDataTableField(1, 2, 'Document No.');
+        dataTableHelper.setDataTableField(1, 3, 'Line No.');
+        dataTableHelper.setDataTableField(1, 4, 'Description');
+        dataTableHelper.setDataTableField(1, 5, 'Description 2');
+        dataTableHelper.setDataTableField(2, 1, '1');
+        dataTableHelper.setDataTableField(2, 2, 'TestDocNo');
+        dataTableHelper.setDataTableField(2, 3, '10000');
+        dataTableHelper.setDataTableField(2, 4, 'OldValue1');
+        dataTableHelper.setDataTableField(2, 5, 'OldValue2');
         dataTableHelper.WriteDataTableToFileBlob(TempBlob);
         TestLibrary.AddFileToSourceFileStorage(sourceFileStorage, 'sample.csv', dataLayout, TempBlob);
         TestLibrary.CreateImportConfigHeader(importConfigHeader, 37, sourceFileStorage);
-        TestLibrary.CreateFieldMapping(importConfigHeader, true);
         importConfigHeader.ImportFileToBuffer();
+        TestLibrary.CreateFieldMapping(importConfigHeader, true);
         CreatedImportConfigHeaderID := importConfigHeader.ID;
     end;
 
@@ -112,6 +94,24 @@ codeunit 90021 ReplacementTests
         salesLine.TestField(Description, 'NewValue1');
         salesLine.TestField("Description 2", 'NewValue2');
         salesLine.Delete(); // Cleanup;
+    end;
+
+    [FilterPageHandler]
+    procedure ImportToTargetFilterPageHandler(var Record1: RecordRef): Boolean;
+    begin
+        exit(true); // OK to proceed
+        // If this procedure isn't called, no filter page is raised and the test fails
+    end;
+
+    [PageHandler]
+    procedure LogEntriesPageHandler(var LogEntries: TestPage DMTLogEntries)
+    begin
+        LogEntries.OK().Invoke();
+    end;
+
+    [MessageHandler]
+    procedure MessageHandler(Message: Text)
+    begin
     end;
 
     var

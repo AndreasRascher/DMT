@@ -9,4 +9,5 @@ enum 91008 DMTProcessingPlanType
     value(4; "Import To Target") { Caption = 'Import to Target', Comment = 'de-DE=In Zieltabelle einlesen'; }
     value(5; "Update Field") { Caption = 'Update Field', Comment = 'de-DE=Felder aktualisieren'; }
     value(6; "Buffer + Target") { Caption = 'Buffer + Target', Comment = 'de-DE=Puffer- und Zieltab. importieren'; }
+    value(7; "Enter default values in target table") { Caption = 'Enter default values in target table', Comment = 'de-DE=Vorgabewerte in Zieltabelle eintragen'; }
 }

@@ -28,8 +28,6 @@ page 91008 DMTImportConfigCard
                     begin
                         Rec.TargetTableCaption_OnValidate();
                         SaveRecordIfMandatoryFieldsAreFilled();
-                        CurrPage.TableInfoFactBox.Page.DoUpdate(Rec);
-                        CurrPage.LogFactBox.Page.DoUpdate(Rec);
                     end;
                 }
                 field("Source File Name"; Rec."Source File Name")
@@ -54,6 +52,22 @@ page 91008 DMTImportConfigCard
                 {
                     ToolTip = 'Skip records which have been changed after the import.', Comment = 'de-DE=Datensätze überspringen, die vom Benutzer geändert wurden';
                     Visible = false; // TODO: Fertig entwickeln und dann sichtbar machen
+                }
+                field("Log Trigger Changes"; Rec."Log Trigger Changes")
+                {
+                    ToolTip = 'Logs whether transferred field values have been overwritten by trigger code. Affects the validation of fields, the insertion and saving of data records.',
+                    Comment = 'de-DE=Protokolliert ob übernommene Feldwerte durch Trigger Code überschrieben wurden. Betrifft die Validierung von Feldern, das Einfügen und Speichern von Datensätzen.';
+                }
+                field("Ev. Nos. for Option fields as"; Rec."Ev. Nos. for Option fields as")
+                {
+                    ToolTip = 'Position - Option value is assigned by its position in the possible option values. Caption - Option value is assigned by its caption.',
+                    Comment = 'de-DE=Position - Optionswert wird über seine Position in den möglichen Optionswerten zugeordnet. Bezeichnung - Optionswert wird über seinen Namen zugeordnet.';
+                }
+                field("Max No. of Records to Process"; Rec."Max No. of Records to Process")
+                {
+                    ToolTip = 'Stops processing after a specified number of records. Recommended for testing large data sets.',
+                    Comment = 'de-DE=Stoppt die Verarbeitung nach einer bestimmten Anzahl von Datensätzen. Empfohlen für das Testen großer Datenmengen';
+                    Style = StrongAccent;
                 }
                 field("Separate Buffer Table Objects"; Rec."Separate Buffer Table Objects") { }
                 group(SeperateBufferObjects)
@@ -89,11 +103,13 @@ page 91008 DMTImportConfigCard
             {
                 ApplicationArea = All;
                 Caption = 'Info', Comment = 'de-DE=Info';
+                SubPageLink = FBRunMode_Filter = const("TableInfo"), ImportConfigHeaderID_Filter = field(ID);
             }
             part(LogFactBox; DMTImportConfigFactBox)
             {
                 ApplicationArea = All;
                 Caption = 'Log', Comment = 'de-DE=Protokoll';
+                SubPageLink = FBRunMode_Filter = const(Log), ImportConfigHeaderID_Filter = field(ID);
             }
         }
     }
@@ -114,8 +130,8 @@ page 91008 DMTImportConfigCard
                 trigger OnAction()
                 begin
                     DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_ImportBufferDataFromFile(Rec);
-                    CurrPage.TableInfoFactBox.Page.DoUpdate(Rec);
-                    CurrPage.LogFactBox.Page.DoUpdate(Rec);
+                    // CurrPage.TableInfoFactBox.Page.DoUpdate(Rec);
+                    // CurrPage.LogFactBox.Page.DoUpdate(Rec);
                 end;
             }
             action(DeleteRecordsInTargetTable)
@@ -220,10 +236,8 @@ page 91008 DMTImportConfigCard
                 PromotedIsBig = true;
                 PromotedCategory = Process;
                 trigger OnAction()
-                var
-                    importConfigMgt: Codeunit DMTImportConfigMgt;
                 begin
-                    importConfigMgt.PageAction_RetryBufferRecordsWithError(Rec);
+                    DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_RetryBufferRecordsWithError(Rec);
                 end;
             }
             action(OpenLog)
@@ -251,29 +265,16 @@ page 91008 DMTImportConfigCard
 
                 trigger OnAction()
                 var
-                    Migrate: Codeunit DMTMigrate;
+                    migrateRecordSet: Codeunit DMTMigrateRecordSet;
                     CollationProblems: Dictionary of [RecordId, RecordId];
                     RecordMapping: Dictionary of [RecordId, RecordId];
                     NotTransferedRecords: List of [RecordId];
                 begin
                     // RecordMapping := DMTImport.CreateSourceToTargetRecIDMapping(Rec, NotTransferedRecords);
-                    CollationProblems := Migrate.FindCollationProblems(RecordMapping);
+                    CollationProblems := migrateRecordSet.FindCollationProblems(RecordMapping);
                     Message('No. of Records not Transfered: %1\' +
                             'No. of Collation Problems: %2', NotTransferedRecords.Count, CollationProblems.Count);
                 end;
-            }
-            action(CreateCode)
-            {
-                Caption = 'Create AL Mapping Code', Comment = 'de-DE=Mapping AL Code erstellen';
-                ApplicationArea = All;
-                Image = CodesList;
-                // trigger OnAction()
-                // var
-                //     DMTCode: Page DMTCode;
-                // begin
-                //     DMTCode.InitForImportConfigLine(Rec);
-                //     DMTCode.Run();
-                // end;
             }
             action(ExportTargetTableToCSV)
             {
@@ -298,10 +299,10 @@ page 91008 DMTImportConfigCard
 
     trigger OnAfterGetCurrRecord()
     begin
-        CurrPage.TableInfoFactBox.Page.ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(Rec);
-        CurrPage.TableInfoFactBox.Page.Update(false);
-        CurrPage.LogFactBox.Page.ShowAsLogAndUpdateOnAfterGetCurrRecord(Rec);
-        CurrPage.LogFactBox.Page.Update(false);
+        // CurrPage.TableInfoFactBox.Page.ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(Rec);
+        // CurrPage.TableInfoFactBox.Page.Update(false);
+        // CurrPage.LogFactBox.Page.ShowAsLogAndUpdateOnAfterGetCurrRecord(Rec);
+        // CurrPage.LogFactBox.Page.Update(false);
     end;
 
     local procedure SaveRecordIfMandatoryFieldsAreFilled()

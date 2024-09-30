@@ -203,7 +203,7 @@ page 91015 DMTDeleteDataInTargetTable
                         Error(ProcessStoppedErr);
                     end;
                     Commit();
-                    DeleteSingeRecordWithLog(ImportConfigHeader, useOnDeleteTrigger, Log, RecRef.RecordId);
+                    DeleteSingleRecordWithLog(ImportConfigHeader, useOnDeleteTrigger, Log, RecRef.RecordId);
                 until RecRef.Next() = 0;
                 Log.CreateSummary();
                 Log.ShowLogForCurrentProcess();
@@ -228,14 +228,14 @@ page 91015 DMTDeleteDataInTargetTable
                     Error(ProcessStoppedErr);
                 end;
                 Commit();
-                DeleteSingeRecordWithLog(ImportConfigHeader, useOnDeleteTrigger, Log, RecID);
+                DeleteSingleRecordWithLog(ImportConfigHeader, useOnDeleteTrigger, Log, RecID);
             end;
             Log.CreateSummary();
             Log.ShowLogForCurrentProcess();
         end;
     end;
 
-    local procedure DeleteSingeRecordWithLog(var ImportConfigHeader: Record DMTImportConfigHeader; useOnDeleteTrigger: Boolean; var log: Codeunit DMTLog; recID: RecordId)
+    local procedure DeleteSingleRecordWithLog(var ImportConfigHeader: Record DMTImportConfigHeader; useOnDeleteTrigger: Boolean; var log: Codeunit DMTLog; recID: RecordId)
     var
         DeleteRecordsWithErrorLog: Codeunit DMTDeleteRecordsWithErrorLog;
     begin
@@ -256,33 +256,23 @@ page 91015 DMTDeleteDataInTargetTable
         CurrImportConfigHeader := ImportConfigHeader;
     end;
 
-    procedure GetTargetRefRecordID(importConfigHeader: Record DMTImportConfigHeader; SourceRef: RecordRef; var TmpImportConfigLine: Record DMTImportConfigLine temporary) TargetRecID: RecordId
+    procedure GetTargetRefRecordID(importConfigHeader: Record DMTImportConfigHeader; sourceRef: RecordRef; var TmpImportConfigLine: Record DMTImportConfigLine temporary) TargetRecID: RecordId
     var
-        Migrate: Codeunit DMTMigrate;
-        RefHelper: Codeunit DMTRefHelper;
-        TmpTargetRef: RecordRef;
-        ToFieldRef: FieldRef;
+        DMTSetup: Record DMTSetup;
+        importSettings: Codeunit DMTImportSettings;
+        migrateRecord: Codeunit DMTMigrateRecord;
+        migrateRecordSet: Codeunit DMTMigrateRecordSet;
+        targetRef: RecordRef;
+        iReplacementHandler: Interface IReplacementHandler;
     begin
-        TmpTargetRef.Open(importConfigHeader."Target Table ID", true);
-
-        TmpImportConfigLine.Reset();
-        TmpImportConfigLine.SetRange("Is Key Field(Target)", true);
-        TmpImportConfigLine.FindSet();
-        repeat
-
-            case TmpImportConfigLine."Processing Action" of
-                TmpImportConfigLine."Processing Action"::Ignore:
-                    ;
-                TmpImportConfigLine."Processing Action"::Transfer:
-                    Migrate.AssignFieldWithoutValidate(TmpTargetRef, SourceRef, TmpImportConfigLine, false);
-                TmpImportConfigLine."Processing Action"::FixedValue:
-                    begin
-                        ToFieldRef := TmpTargetRef.Field(TmpImportConfigLine."Target Field No.");
-                        RefHelper.AssignFixedValueToFieldRef(ToFieldRef, TmpImportConfigLine."Fixed Value");
-                    end;
-            end;
-        until TmpImportConfigLine.Next() = 0;
-        TargetRecID := TmpTargetRef.RecordId;
+        //TODO: Testen
+        importSettings.init(importConfigHeader, Enum::DMTMigrationType::MigrateSelectsFields);
+        DMTSetup.getDefaultReplacementImplementation(iReplacementHandler);
+        migrateRecord.Init(sourceRef, importSettings, iReplacementHandler);
+        Commit();
+        if migrateRecordSet.ProcessKeyFields(migrateRecord) then
+            if migrateRecord.GetExistingTargetRef(targetRef) then
+                TargetRecID := targetRef.RecordId;
     end;
 
 

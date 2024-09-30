@@ -185,7 +185,7 @@ codeunit 91006 DMTLog
         logEntry.Insert();
     end;
 
-    procedure CreateSummary()
+    procedure CreateSummary(noOfRecordsProcessed: Integer; noOfRecordsWithSuccess: Integer; noOfRecordsWithError: Integer; processDuration: Duration)
     var
         LogEntry: Record DMTLogEntry;
         SummaryLbl: Label '∑: %1/ ✅: %2/ ❌: %3 / ⌛: %4', Locked = true;
@@ -194,11 +194,19 @@ codeunit 91006 DMTLog
         LogEntry := LogEntryTemplate;
         LogEntry."Entry Type" := LogEntry."Entry Type"::Summary;
         LogEntry."Context Description" := StrSubstNo(SummaryLbl,
-                                           ProcessingStatistics.Get(Format(StatisticType::Processed)),
-                                           ProcessingStatistics.Get(Format(StatisticType::Success)),
-                                           ProcessingStatistics.Get(Format(StatisticType::Error)),
-                                           CurrentDateTime - StartGlobal);
+                                            noOfRecordsProcessed,
+                                            noOfRecordsWithSuccess,
+                                            noOfRecordsWithError,
+                                            processDuration);
         LogEntry.Insert(true);
+    end;
+
+    procedure CreateSummary()
+    begin
+        CreateSummary(ProcessingStatistics.Get(Format(StatisticType::Processed)),
+                      ProcessingStatistics.Get(Format(StatisticType::Success)),
+                      ProcessingStatistics.Get(Format(StatisticType::Error)),
+                      CurrentDateTime - StartGlobal);
     end;
 
     local procedure CheckIfProcessNoIsSet()

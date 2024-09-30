@@ -58,6 +58,7 @@ codeunit 91013 DMTRefHelper
         NoOfOptions: Integer;
         OptionIndex: Integer;
         InvalidValueForTypeErr: Label '"%1" is not a valid %2 value.', Comment = 'de-DE="%1" ist kein gültiger %2 Wert';
+        InvalidOptionPosValueErr: Label '“%1” could not be converted into an integer (option index no.)', Comment = 'de-DE="%1" konnte nicht in eine Ganzzahl (Optionsindex Nr.) umgewandelt werden.';
         _OutStream: OutStream;
         _InStream: InStream;
         OptionElement: Text;
@@ -142,7 +143,7 @@ codeunit 91013 DMTRefHelper
                         exit(true);
                     end else
                         if ThrowError then
-                            Evaluate(_Integer, FromText);
+                            Error(InvalidOptionPosValueErr, FromText);
                 end else begin
                     //Optionswert wird als Text übergeben
                     NoOfOptions := StrLen(FieldRef_TO.OptionCaption) - StrLen(DelChr(FieldRef_TO.OptionCaption, '=', ',')); // zero based
@@ -153,6 +154,7 @@ codeunit 91013 DMTRefHelper
                             exit(true);
                         end;
                     end;
+                    Error(InvalidValueForTypeErr, FromText, FieldRef_TO.Type);
                 end;
             'DATE':
                 begin

@@ -1,19 +1,43 @@
 page 91017 DMTProcessingPlan
 {
+    ApplicationArea = All;
+    AutoSplitKey = true;
     Caption = 'DMT Processing Plan', Comment = 'de-DE=DMT Verarbeitungsplan';
     AdditionalSearchTerms = 'DMT Plan', Locked = true;
-    PageType = Worksheet;
-    ApplicationArea = All;
-    UsageCategory = Lists;
-    SourceTable = DMTProcessingPlan;
-    AutoSplitKey = true;
     InsertAllowed = false;
     DeleteAllowed = true;
+    PageType = Worksheet;
+    SourceTable = DMTProcessingPlan;
+    SaveValues = true;
+    UsageCategory = Lists;
 
     layout
     {
         area(Content)
         {
+            field(CurrentJnlBatchName; CurrentJnlBatchName)
+            {
+                ApplicationArea = All;
+                Caption = 'Batch Name', Comment = 'de-DE=Buch.-Blattname';
+
+                trigger OnLookup(var Text: Text): Boolean
+                var
+                    processingPlanBatch: Record DMTProcessingPlanBatch;
+                begin
+                    processingPlanBatch.Name := CurrentJnlBatchName;
+                    if Page.RunModal(0, processingPlanBatch) <> Action::LookupOK then
+                        exit(false);
+
+                    Text := processingPlanBatch.Name;
+                    CurrPage.Update(false);
+                    exit(true);
+                end;
+
+                trigger OnValidate()
+                begin
+                    ChangeJournalBatch();
+                end;
+            }
             repeater("Repeater")
             {
                 IndentationColumn = Rec.Indentation;
@@ -35,15 +59,15 @@ page 91017 DMTProcessingPlan
                 field(ProcessingTime; Rec."Processing Duration") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(StartTime; Rec.StartTime) { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(Status; Rec.Status) { ApplicationArea = All; StyleExpr = LineStyle; }
-                field("Source Table No."; Rec."Source Table No.")
-                {
-                    ApplicationArea = All;
-                    StyleExpr = LineStyle;
-                    ToolTip = 'Defining the source table no. for which a filter as event is provided for rows of type Codeunit.',
-                    comment = 'de-DE=Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.';
-                }
+                // field("Source Table No."; Rec."Source Table No.")
+                // {
+                //     ApplicationArea = All;
+                //     StyleExpr = LineStyle;
+                //     ToolTip = 'Defining the source table no. for which a filter as event is provided for rows of type Codeunit.',
+                //     comment = 'de-DE=Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.';
+                // }
                 field("Line No."; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
-                field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; StyleExpr = LineStyle; Visible = false; HideValue = TargetTableID_HideValue; }
+                field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; StyleExpr = LineStyle; Visible = false; HideValue = TargetTableID_HideValue; Lookup = false; DrillDown = false; }
                 field("No. of Records In Trgt. Table"; CurrImportConfigHeader.GetNoOfRecordsInTrgtTable())
                 {
                     Caption = 'Target', Comment = 'de-DE=DS im Ziel';
@@ -56,7 +80,7 @@ page 91017 DMTProcessingPlan
                         CurrImportConfigHeader.ShowTableContent(CurrImportConfigHeader."Target Table ID");
                     end;
                 }
-                field("No.of Records in Buffer Table"; rec."No.of Records in Buffer Table")
+                field("No.of Records in Buffer Table"; Rec."No.of Records in Buffer Table")
                 {
                     Caption = 'Buffer', Comment = 'de-DE=DS im Puffer';
                     ToolTip = 'Number of records in the buffer table.', Comment = 'de-DE=Anzahl der Datensätze in der Puffertabelle.';
@@ -68,6 +92,12 @@ page 91017 DMTProcessingPlan
                         CurrImportConfigHeader.BufferTableMgt().ShowBufferTable();
                     end;
                 }
+                field("Max No. of Records to Process"; Rec."Max No. of Records to Process")
+                {
+                    ToolTip = 'Stops processing after a specified number of records. Recommended for testing large data sets.',
+                    Comment = 'de-DE=Stoppt die Verarbeitung nach einer bestimmten Anzahl von Datensätzen. Empfohlen für das Testen großer Datenmengen';
+                    Style = StrongAccent;
+                }
             }
         }
         area(FactBoxes)
@@ -75,28 +105,28 @@ page 91017 DMTProcessingPlan
             part(SourceTableFilter; DMTProcessInstructionFactBox)
             {
                 Caption = 'Source Table Filter', Comment = 'de-DE=Quelldaten Filter';
-                SubPageLink = PrPl_FBRunMode_Filter = const(SourceTableFilter), PrPl_LineNo_Filter = field("Line No.");
+                SubPageLink = PrPl_FBRunMode_Filter = const(SourceTableFilter), PrPl_LineNo_Filter = field("Line No."), PrPl_JnlBatchName_Filter = field("Journal Batch Name");
                 UpdatePropagation = Both;
                 Enabled = ShowSourceTableFilterPart;
             }
             part(FixedValues; DMTProcessInstructionFactBox)
             {
                 Caption = 'Default Values', Comment = 'de-DE=Vorgabewerte';
-                SubPageLink = PrPl_FBRunMode_Filter = const(FixedValueView), PrPl_LineNo_Filter = field("Line No.");
+                SubPageLink = PrPl_FBRunMode_Filter = const(FixedValueView), PrPl_LineNo_Filter = field("Line No."), PrPl_JnlBatchName_Filter = field("Journal Batch Name");
                 UpdatePropagation = Both;
                 Enabled = ShowFixedValuesPart;
             }
             part(UpdateSelectedFieldsOnly; DMTProcessInstructionFactBox)
             {
                 Caption = 'Process selected fields only', Comment = 'de-DE=Ausgew. Felder verarbeiten';
-                SubPageLink = PrPl_FBRunMode_Filter = const(UpdateSelectedFields), PrPl_LineNo_Filter = field("Line No.");
+                SubPageLink = PrPl_FBRunMode_Filter = const(UpdateSelectedFields), PrPl_LineNo_Filter = field("Line No."), PrPl_JnlBatchName_Filter = field("Journal Batch Name");
                 UpdatePropagation = Both;
                 Enabled = ShowProcessSelectedFieldsOnly;
             }
             part(LogFactBox; DMTImportConfigFactBox)
             {
-                ApplicationArea = All;
                 Caption = 'Log', Comment = 'de-DE=Protokoll';
+                SubPageLink = FBRunMode_Filter = const(Log), PrPl_LineNo_Filter = field("Line No."), PrPl_JnlBatchName_Filter = field("Journal Batch Name");
                 Enabled = ShowLogFactboxPart;
             }
             systempart(Notes; Notes)
@@ -139,6 +169,7 @@ page 91017 DMTProcessingPlan
                     NewLineNo := findNextLineNoBelow();
                     if NewLineNo <> 0 then begin
                         Clear(Line);
+                        Line."Journal Batch Name" := CurrentJnlBatchName;
                         Line."Line No." := NewLineNo;
                         if Rec."Line No." <> 0 then
                             case true of
@@ -267,12 +298,22 @@ page 91017 DMTProcessingPlan
                 trigger OnAction()
                 var
                     TableMetadata: Record "Table Metadata";
+                    processingPlan: Record DMTProcessingPlan;
+                    processingPlanBatch: Record DMTProcessingPlanBatch;
                     XMLBackup: Codeunit DMTXMLBackup;
-                    TablesToExport: List of [Integer];
+                    RecordsToExport: List of [RecordId];
                 begin
                     TableMetadata.Get(Database::DMTProcessingPlan);
-                    TablesToExport.Add(Database::DMTProcessingPlan);
-                    XMLBackup.Export(TablesToExport, TableMetadata.Caption);
+                    // Export Batch
+                    processingPlanBatch.Get(CurrentJnlBatchName);
+                    RecordsToExport.Add(processingPlanBatch.RecordId);
+                    // Export Batch Lines
+                    processingPlan.SetRange("Journal Batch Name", CurrentJnlBatchName);
+                    if processingPlan.FindSet(false) then
+                        repeat
+                            RecordsToExport.Add(processingPlan.RecordId);
+                        until processingPlan.Next() = 0;
+                    XMLBackup.ExportSelectedRecordIDs(RecordsToExport, TableMetadata.Caption + '_' + CurrentJnlBatchName + '_');
                 end;
             }
             action(XMLImport)
@@ -283,21 +324,32 @@ page 91017 DMTProcessingPlan
 
                 trigger OnAction()
                 var
-                    ImportConfigHeader: Record DMTImportConfigHeader;
                     XMLBackup: Codeunit DMTXMLBackup;
                 begin
                     XMLBackup.Import();
-                    // Update imported "Qty.Lines In Trgt. Table" with actual values
-                    if ImportConfigHeader.FindSet() then
-                        repeat
-                            ImportConfigHeader.UpdateBufferRecordCount();
-                        until ImportConfigHeader.Next() = 0;
+                end;
+            }
+            action(RetryBufferRecordsWithError)
+            {
+                Caption = ' ', Locked = true;
+                ToolTip = 'Retry Records With Error', Comment = 'de-DE=Fehler erneut verarbeiten';
+                ApplicationArea = All;
+                Image = Redo;
+                Enabled = RetryBufferRecordsWithError_Enabled;
+                Visible = RetryBufferRecordsWithError_Enabled;
+                trigger OnAction()
+                var
+                    migrateRecordSet: Codeunit DMTMigrateRecordSet;
+                begin
+                    if Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Buffer + Target"] then
+                        migrateRecordSet.RetryErrors(Rec);
                 end;
             }
         }
         area(Promoted)
         {
             actionref(StartRef; Start) { }
+            actionref(RetryBufferRecordsWithErrorRef; RetryBufferRecordsWithError) { }
             actionref(NewLineRef; NewLine) { }
             actionref(DeleteLineRef; DeleteLine) { }
             actionref(IndentLeftRef; IndentLeft) { }
@@ -355,6 +407,7 @@ page 91017 DMTProcessingPlan
             CurrPage.LogFactBox.Page.Update(false);
         end;
         TargetTableID_HideValue := not Rec.TypeSupportsProcessSelectedFieldsOnly();
+        RetryBufferRecordsWithError_Enabled := (Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Buffer + Target"]) and (Rec.Status = Rec.Status::Error);
     end;
 
     local procedure RunSelected(var ProcessingPlan_SELECTED: Record DMTProcessingPlan temporary)
@@ -398,7 +451,8 @@ page 91017 DMTProcessingPlan
                 DMTProcessingPlanType::"Update Field":
                     begin
                         SetStatusToStartAndCommit(ProcessingPlan);
-                        ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan);
+                        if ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan) then
+                            HasErrors := true;
                     end;
                 DMTProcessingPlanType::"Buffer + Target":
                     begin
@@ -410,6 +464,14 @@ page 91017 DMTProcessingPlan
                         if not ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan) then
                             HasErrors := true;
                     end;
+                DMTProcessingPlanType::"Enter default values in target table":
+                    begin
+                        SetStatusToStartAndCommit(ProcessingPlan);
+                        if not ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan) then
+                            HasErrors := true;
+                    end;
+                else
+                    Error('Unhandled ProcessingPlan Type %1', ProcessingPlan.Type);
             end;
             ProcessingPlan."Processing Duration" := CurrentDateTime - ProcessingPlan.StartTime;
             ProcessingPlan.Status := ProcessingPlan.Status::Finished;
@@ -538,10 +600,12 @@ page 91017 DMTProcessingPlan
     begin
         // find last line no
         Clear(Line);
+        Line.SetRange("Journal Batch Name", CurrentJnlBatchName);
         if Line.FindLast() then
             LastLineNo := Line."Line No.";
         // find line before current rec
         LineBefore := Rec;
+        LineBefore.SetRange("Journal Batch Name", CurrentJnlBatchName);
         if LineBefore.Next(-1) <> -1 then
             Clear(LineBefore);
 
@@ -560,13 +624,70 @@ page 91017 DMTProcessingPlan
         end;
     end;
 
+    local procedure ChangeJournalBatch()
+    begin
+        GlobalProcessingPlanBatch.Get(CurrentJnlBatchName);
+
+        CurrPage.SaveRecord();
+
+        Rec.FilterGroup(2);
+        Rec.SetRange("Journal Batch Name", CurrentJnlBatchName);
+        Rec.FilterGroup(0);
+
+        CurrPage.Update(false);
+    end;
+
+    trigger OnOpenPage()
+    begin
+        SetCurrentTestSuite();
+    end;
+
+    local procedure SetCurrentTestSuite()
+    begin
+
+        if not GlobalProcessingPlanBatch.Get(CurrentJnlBatchName) then
+            if (CurrentJnlBatchName = '') and GlobalProcessingPlanBatch.FindFirst() then
+                CurrentJnlBatchName := GlobalProcessingPlanBatch.Name
+            else begin
+                CreateBatchName(CurrentJnlBatchName);
+                Commit();
+                GlobalProcessingPlanBatch.Get(CurrentJnlBatchName);
+            end;
+
+        Rec.FilterGroup(2);
+        Rec.SetRange("Journal Batch Name", CurrentJnlBatchName);
+        Rec.FilterGroup(0);
+
+        if Rec.Find('-') then;
+    end;
+
+    procedure CreateBatchName(var batchName: Code[20])
+    var
+        processingPlanBatch: Record DMTProcessingPlanBatch;
+        processingPlan, processingPlan2 : Record DMTProcessingPlan;
+    begin
+        if batchName = '' then
+            batchName := 'Standard';
+
+        processingPlanBatch.Name := CopyStr(batchName, 1, MaxStrLen(processingPlanBatch.Name));
+        processingPlanBatch.Insert(true);
+        processingPlan.Reset();
+        processingPlan.SetRange("Journal Batch Name", '');
+        if processingPlan.FindSet() then
+            repeat
+                processingPlan2 := processingPlan;
+                processingPlan2.Rename(processingPlanBatch.Name, processingPlan2."Line No.");
+            until processingPlan.Next() = 0;
+    end;
 
     var
         TempProcessingPlan_SELECTED: Record DMTProcessingPlan temporary;
         CurrImportConfigHeader: Record DMTImportConfigHeader;
         ProcessingPlanMgt: Codeunit DMTProcessingPlanMgt;
         HasImportConfigHeader: Boolean;
-        // [InDataSet]
+        RetryBufferRecordsWithError_Enabled: Boolean;
         ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart, ShowLogFactboxPart, TargetTableID_HideValue : Boolean;
         LineStyle: Text;
+        CurrentJnlBatchName: Code[20];
+        GlobalProcessingPlanBatch: Record DMTProcessingPlanBatch;
 }

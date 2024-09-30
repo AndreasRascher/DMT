@@ -1,5 +1,15 @@
 Ziele:
 - mit Interfaces die Migrationslogik erweiterbarer zu gestalten
+Funktionalität:
+- AssignField
+- InsertRecord
+- ModifyRecord
+Reihenfolge
+- AssignKeyFields
+- CheckExisting
+- AssignNonKeyFields
+- InsertRecord/UpdateRecord
+
 
 IMigrateRecordSet
 =================

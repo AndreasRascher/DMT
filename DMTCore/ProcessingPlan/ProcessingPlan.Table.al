@@ -1,7 +1,7 @@
 table 91009 DMTProcessingPlan
 {
     DataClassification = ToBeClassified;
-    Caption = 'DMTProcessingPlan', Locked = true;
+    Caption = 'DMTProcessingPlan', Comment = 'de-DE=DMT Verarbeitungsplan';
     LookupPageId = DMTProcessingPlan;
 
     fields
@@ -26,13 +26,7 @@ table 91009 DMTProcessingPlan
             TableRelation =
             if (Type = const("Run Codeunit")) AllObjWithCaption."Object ID" where("Object Type" = const(Codeunit))
             else
-            if (Type = const("Import To Buffer")) DMTImportConfigHeader.ID
-            else
-            if (Type = const("Import To Target")) DMTImportConfigHeader.ID
-            else
-            if (Type = const("Update Field")) DMTImportConfigHeader.ID
-            else
-            if (Type = const("Buffer + Target")) DMTImportConfigHeader.ID;
+            DMTImportConfigHeader.ID;
             trigger OnValidate()
             var
                 CodeUnitMetadata: Record "CodeUnit Metadata";
@@ -53,6 +47,7 @@ table 91009 DMTProcessingPlan
                             Description := CodeUnitMetadata.Name;
                         end;
                 end;
+                CalcFields("No.of Records in Buffer Table", "No.of Records in Buffer Table");
             end;
         }
         field(12; Description; Text[250]) { Caption = 'Description', Comment = 'de-DE=Beschreibung'; }
@@ -70,6 +65,12 @@ table 91009 DMTProcessingPlan
         field(41; StartTime; DateTime) { Caption = 'Start Time', Comment = 'de-DE=Startzeit'; Editable = false; }
         field(42; "Processing Duration"; Duration) { Caption = 'Processing Duration', Comment = 'de-DE=Verarbeitungszeit'; Editable = false; }
         field(50; Indentation; Integer) { Caption = 'Indentation', Comment = 'de-DE=Einrückung'; Editable = false; }
+        field(57; "Max No. of Records to Process"; Integer)
+        {
+            Caption = 'Max No. of Records to Process', Comment = 'de-DE=max. Anzahl der zu verarbeitenden Datensätze';
+            BlankZero = true;
+            MinValue = 0;
+        }
         field(60; "Target Table ID"; Integer)
         {
             Caption = 'Target Table ID', Comment = 'de-DE=Zieltabellen ID';
@@ -87,11 +88,17 @@ table 91009 DMTProcessingPlan
             Editable = false;
             BlankZero = true;
         }
+        field(70; "Journal Batch Name"; Code[20])
+        {
+            Caption = 'Journal Batch Name', Comment = 'de-DE=Buch.-Blattname';
+            TableRelation = DMTProcessingPlanBatch.Name;
+        }
+
     }
 
     keys
     {
-        key(PK; "Line No.") { Clustered = true; }
+        key(PK; "Journal Batch Name", "Line No.") { Clustered = true; }
     }
 
     procedure EditSourceTableFilter()
@@ -384,12 +391,12 @@ table 91009 DMTProcessingPlan
 
     procedure TypeSupportsFixedValues() IsSupported: Boolean
     begin
-        IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"];
+        IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target", Rec.Type::"Enter default values in target table"];
     end;
 
     internal procedure TypeSupportsLog() IsSupported: Boolean
     begin
-        IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"];
+        IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target", Rec.Type::"Enter default values in target table"];
     end;
 
     internal procedure New()
@@ -452,9 +459,11 @@ table 91009 DMTProcessingPlan
     begin
         if Rec.IsTemporary then begin
             tempProcessingPlan.Copy(Rec, true);
+            tempProcessingPlan.SetRange("Journal Batch Name", Rec."Journal Batch Name");
             if tempProcessingPlan.FindLast() then;
             nextLineNo += tempProcessingPlan."Line No." + 10000;
         end else begin
+            processingPlan.SetRange("Journal Batch Name", Rec."Journal Batch Name");
             if processingPlan.FindLast() then;
             nextLineNo += processingPlan."Line No." + 10000;
         end;
@@ -463,9 +472,9 @@ table 91009 DMTProcessingPlan
 
     procedure findImportConfigHeader(var importConfigHeader: Record DMTImportConfigHeader) OK: Boolean
     begin
-        if not (Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target"]) then
-            exit(false);
         Clear(importConfigHeader);
+        if not (Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target", Rec.Type::"Enter default values in target table"]) then
+            exit(false);
         OK := importConfigHeader.Get(Rec.ID);
     end;
 
@@ -492,7 +501,9 @@ table 91009 DMTProcessingPlan
         addLine(Enum::DMTProcessingPlanType::"Import To Target", importConfigHeaderID, Rec.getIndentation(), descriptionNEW);
     end;
 
-    local procedure addLine(TypeNEW: Enum DMTProcessingPlanType; importConfigHeaderID: Integer; indentationNEW: Integer; descriptionNEW: Text[250])
+    local procedure addLine(TypeNEW: Enum DMTProcessingPlanType; importConfigHeaderID: Integer;
+                                         indentationNEW: Integer;
+                                         descriptionNEW: Text[250])
     var
         processingPlan: Record DMTProcessingPlan;
     begin
