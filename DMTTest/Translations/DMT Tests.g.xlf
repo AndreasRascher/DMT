@@ -2,7 +2,38 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en-US" target-language="en-US" original="DMT Tests">
     <body>
-      <group id="body" />
+      <group id="body">
+        <trans-unit id="Table 196709268 - Field 2407146574 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DoModifyInValidate</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TestTable - Field DoModifyInValidate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 196709268 - Field 141373622 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>OptionEvalutionTest</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TestTable - Field OptionEvalutionTest - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 196709268 - Field 141373622 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>1,2,3</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TestTable - Field OptionEvalutionTest - Property OptionCaption</note>
+        </trans-unit>
+        <trans-unit id="Table 196709268 - Field 3484189134 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>PK1</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TestTable - Field PK1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 196709268 - Field 1012397706 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ThrowErrorOnDelete</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TestTable - Field ThrowErrorOnDelete - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 196709268 - Field 2076948623 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ThrowErrorWhenInsert</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table TestTable - Field ThrowErrorWhenInsert - Property Caption</note>
+        </trans-unit>
+      </group>
     </body>
   </file>
 </xliff>
