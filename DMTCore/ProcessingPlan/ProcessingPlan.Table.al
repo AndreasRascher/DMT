@@ -23,10 +23,16 @@ table 91009 DMTProcessingPlan
         field(11; ID; Integer)
         {
             Caption = 'ID', Locked = true;
+            // has to defined for each type except group
             TableRelation =
             if (Type = const("Run Codeunit")) AllObjWithCaption."Object ID" where("Object Type" = const(Codeunit))
             else
-            DMTImportConfigHeader.ID;
+            if (Type = filter("Import To Buffer" | "Import To Target" | "Buffer + Target")) DMTImportConfigHeader.ID
+            else
+            if (Type = filter("Update Field")) DMTImportConfigHeader.ID
+            else
+            if (Type = const("Enter default values in target table")) DMTImportConfigHeader.ID;
+
             trigger OnValidate()
             var
                 CodeUnitMetadata: Record "CodeUnit Metadata";

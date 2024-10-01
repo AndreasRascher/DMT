@@ -345,6 +345,35 @@ page 91017 DMTProcessingPlan
                         migrateRecordSet.RetryErrors(Rec);
                 end;
             }
+            action(CopySelectedLinesToBatch)
+            {
+                Caption = 'Copy to Batch', Comment = 'de-DE=In Buch.-Blatt kopieren';
+                ApplicationArea = All;
+                Image = CopyWorksheet;
+
+                trigger OnAction()
+                var
+                    processingPlanBatch: Record DMTProcessingPlanBatch;
+                    processingPlan: Record DMTProcessingPlan;
+                    TempProcessingPlan_SELECTED: Record DMTProcessingPlan temporary;
+                begin
+                    if not GetSelection(TempProcessingPlan_SELECTED) then
+                        exit;
+                    if Page.RunModal(0, processingPlanBatch) <> Action::LookupOK then
+                        exit;
+                    if processingPlanBatch.Name = CurrentJnlBatchName then
+                        exit;
+                    TempProcessingPlan_SELECTED.FindSet();
+                    repeat
+                        processingPlan.Get(TempProcessingPlan_SELECTED.RecordId);
+                        processingPlan."Journal Batch Name" := processingPlanBatch.Name;
+                        processingPlan."Line No." := processingPlan.getNextLineNo();
+                        clearProcessingInfo(processingPlan);
+                        processingPlan.Insert();
+                        processingPlan.CopyLinks(TempProcessingPlan_SELECTED);
+                    until TempProcessingPlan_SELECTED.Next() = 0;
+                end;
+            }
         }
         area(Promoted)
         {
@@ -370,6 +399,7 @@ page 91017 DMTProcessingPlan
                 Image = AllLines;
                 actionref(RenumberLinesActionRef; RenumberLinesAction) { }
                 actionref(ResetLinesActionRef; ResetLinesAction) { }
+                actionref(CopySelectedLinesToBatchRef; CopySelectedLinesToBatch) { }
             }
         }
     }
@@ -490,9 +520,7 @@ page 91017 DMTProcessingPlan
         if not ProcessingPlan_SELECTED_NEW.FindSet() then exit;
         repeat
             ProcessingPlan.Get(ProcessingPlan_SELECTED_NEW.RecordId);
-            Clear(ProcessingPlan.Status);
-            Clear(ProcessingPlan.StartTime);
-            Clear(ProcessingPlan."Processing Duration");
+            clearProcessingInfo(ProcessingPlan);
             ProcessingPlan.Modify();
             Commit();
         until ProcessingPlan_SELECTED_NEW.Next() = 0;
@@ -639,10 +667,11 @@ page 91017 DMTProcessingPlan
 
     trigger OnOpenPage()
     begin
-        SetCurrentTestSuite();
+        SetCurrentBatchSuite();
+        fillEmptyBatchName();
     end;
 
-    local procedure SetCurrentTestSuite()
+    local procedure SetCurrentBatchSuite()
     begin
 
         if not GlobalProcessingPlanBatch.Get(CurrentJnlBatchName) then
@@ -661,23 +690,39 @@ page 91017 DMTProcessingPlan
         if Rec.Find('-') then;
     end;
 
+    local procedure fillEmptyBatchName()
+    var
+        processingPlan: Record DMTProcessingPlan;
+        processingPlan2: Record DMTProcessingPlan;
+        batchName: Code[20];
+    begin
+        batchName := 'Standard';
+        processingPlan.Reset();
+        processingPlan.SetRange("Journal Batch Name", '');
+        if processingPlan.FindSet() then
+            repeat
+                processingPlan2 := processingPlan;
+                processingPlan2.Rename(batchName, processingPlan2."Line No.");
+            until processingPlan.Next() = 0;
+    end;
+
+    local procedure clearProcessingInfo(var ProcessingPlan: Record DMTProcessingPlan)
+    begin
+        Clear(ProcessingPlan.Status);
+        Clear(ProcessingPlan.StartTime);
+        Clear(ProcessingPlan."Processing Duration");
+    end;
+
     procedure CreateBatchName(var batchName: Code[20])
     var
         processingPlanBatch: Record DMTProcessingPlanBatch;
-        processingPlan, processingPlan2 : Record DMTProcessingPlan;
     begin
         if batchName = '' then
             batchName := 'Standard';
 
         processingPlanBatch.Name := CopyStr(batchName, 1, MaxStrLen(processingPlanBatch.Name));
         processingPlanBatch.Insert(true);
-        processingPlan.Reset();
-        processingPlan.SetRange("Journal Batch Name", '');
-        if processingPlan.FindSet() then
-            repeat
-                processingPlan2 := processingPlan;
-                processingPlan2.Rename(processingPlanBatch.Name, processingPlan2."Line No.");
-            until processingPlan.Next() = 0;
+        fillEmptyBatchName();
     end;
 
     var

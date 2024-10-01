@@ -10,7 +10,7 @@ codeunit 91015 DMTProcessingPlanMgt
         lastLogEntryNoAfterProcessing, lastLogEntryNoBeforeProcessing : Integer;
         bufferTableEmptyErr: Label 'The buffer table is empty. Filename: "%1"', Comment = 'de-DE=Die Puffertable entält keine Zeilen. Dateiname: "%1"';
         noBufferTableRecorsInFilterErr: Label 'No buffer table records match the filter.\ Filename: "%1"\ Filter: "%2"', Comment = 'de-DE=Keine Puffertabellen-Zeilen im Filter gefunden.\ Dateiname: "%1"\ Filter: "%2"';
-        noDefaultValuesSetErr: Label 'No default values has been set', Comment = 'de-DE=Es wurden keine Vorgabewerte definiert';
+        noDefaultValuesSetErr: Label 'No default values has been set. \Line No: %1\Description: %2', Comment = 'de-DE=Es wurden keine Vorgabewerte definiert. \Zeilennr: %1 \Beschreibung: %2';
     begin
         Success := true;
         // Pre-Checks
@@ -39,7 +39,7 @@ codeunit 91015 DMTProcessingPlanMgt
 
         if processingPlan.Type = processingPlan.Type::"Enter default values in target table" then
             if processingPlan.ReadDefaultValuesView() = '' then begin
-                Message(noDefaultValuesSetErr);
+                Message(noDefaultValuesSetErr, processingPlan."Line No.", processingPlan.Description);
                 exit(false);
             end;
 

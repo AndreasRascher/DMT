@@ -1019,8 +1019,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessingPlanMgt - Method ImportWithProcessingPlanParams - NamedType noBufferTableRecorsInFilterErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 1786966925 - Method 3043604989 - NamedType 3975673607" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No default values has been set</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Vorgabewerte definiert</note>
+          <source>No default values has been set. \Line No: %1\Description: %2</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Vorgabewerte definiert. \Zeilennr: %1 \Beschreibung: %2</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTProcessingPlanMgt - Method ImportWithProcessingPlanParams - NamedType noDefaultValuesSetErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 1536080462 - Method 1564743796 - NamedType 3980904368" size-unit="char" translate="yes" xml:space="preserve">
@@ -1577,6 +1577,11 @@
           <source>Clone Line</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Zeile klonen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action CloneCurrLine - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Action 975425842 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copy to Batch</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=In Buch.-Blatt kopieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Action CopySelectedLinesToBatch - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Action 247166185 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Delete</source>
