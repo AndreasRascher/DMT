@@ -359,6 +359,7 @@ page 91017 DMTProcessingPlan
                 begin
                     if not GetSelection(TempProcessingPlan_SELECTED) then
                         exit;
+                    processingPlanBatch.SetFilter(Name, '<>%1', CurrentJnlBatchName);
                     if Page.RunModal(0, processingPlanBatch) <> Action::LookupOK then
                         exit;
                     if processingPlanBatch.Name = CurrentJnlBatchName then
