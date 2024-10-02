@@ -15,7 +15,13 @@ page 91009 DMTImportConfigLinePart
             repeater(LineRepeater)
             {
                 // Editable = HasDataLayoutAssigned;
-                field("Processing Action"; Rec."Processing Action") { }
+                field("Processing Action"; Rec."Processing Action")
+                {
+                    trigger OnValidate()
+                    begin
+                        EnableControls();
+                    end;
+                }
                 field("To Field No."; Rec."Target Field No.") { Visible = false; Editable = false; }
                 field("To Field Caption"; Rec."Target Field Caption") { StyleExpr = LineStyleExpr; Editable = false; }
                 field("From Field Caption"; Rec."Source Field Caption")
@@ -32,6 +38,7 @@ page 91009 DMTImportConfigLinePart
                 {
                     LookupPageId = DMTFieldLookup;
                     HideValue = IsFixedValue;
+                    ShowMandatory = ShowMandatory_FromFieldNo;
                 }
                 field("Ignore Validation Error"; Rec."Ignore Validation Error")
                 {
@@ -39,7 +46,7 @@ page 91009 DMTImportConfigLinePart
                     Comment = 'de-DE=VerarbeitungsfehlerDaten importieren auch';
                 }
                 field("Validation Type"; Rec."Validation Type") { }
-                field("Fixed Value"; Rec."Fixed Value") { }
+                field("Fixed Value"; Rec."Fixed Value") { ShowMandatory = ShowMandatory_FixedValue; }
                 field(ValidationOrder; Rec."Validation Order") { Visible = false; }
             }
         }
@@ -203,11 +210,24 @@ page 91009 DMTImportConfigLinePart
         HasLines := ImportConfigLine_SELECTED.FindFirst();
     end;
 
+    local procedure EnableControls()
+    begin
+        ShowMandatory_FromFieldNo := false;
+        if Rec."Processing Action" <> Rec."Processing Action"::FixedValue then
+            if rec."Is Key Field(Target)" then
+                ShowMandatory_FromFieldNo := true;
+
+        ShowMandatory_FixedValue := false;
+        if Rec."Processing Action" = Rec."Processing Action"::FixedValue then
+            ShowMandatory_FixedValue := true;
+    end;
+
     trigger OnAfterGetRecord()
     var
         Log: Codeunit DMTLog;
     begin
         // IsFixedValue := Rec."Processing Action" = Rec."Processing Action"::FixedValue;
+        EnableControls();
         LineStyleExpr := '';
         if Rec."Processing Action" = Rec."Processing Action"::Ignore then
             LineStyleExpr := Format(Enum::DMTFieldStyle::Grey);
@@ -218,6 +238,6 @@ page 91009 DMTImportConfigLinePart
     var
         TempImportConfigLine_Selected: Record DMTImportConfigLine temporary;
         ImportConfigMgt: Codeunit DMTImportConfigMgt;
-        IsFixedValue, HasDataLayoutAssigned : Boolean;
+        IsFixedValue, HasDataLayoutAssigned, ShowMandatory_FromFieldNo, ShowMandatory_FixedValue : Boolean;
         LineStyleExpr: Text;
 }
