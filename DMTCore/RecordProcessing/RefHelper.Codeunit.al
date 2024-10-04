@@ -42,7 +42,7 @@ codeunit 91013 DMTRefHelper
         exit(recRef.IsEmpty);
     end;
 
-    procedure EvaluateFieldRef(var FieldRef_TO: FieldRef; FromText: Text; EvaluateOptionValueAsNumber: Boolean; ThrowError: Boolean): Boolean
+    procedure EvaluateFieldRef(var FieldRef_TO: FieldRef; FromText: Text; EvaluateOptionValueAsNumber: Boolean; EvaluateDateAndTimeValuesForXMLFormat: Boolean; ThrowError: Boolean): Boolean
     var
         TempBlob: Record "Tenant Media" temporary;
         tempDummyVendor: Record Vendor temporary;
@@ -169,12 +169,19 @@ codeunit 91013 DMTRefHelper
 
             'DATETIME':
                 begin
-                    //ApplicationMgt.MakeDateTimeText(FromText);
-                    if Evaluate(_DateTime, FromText, 9) then begin
-                        FieldRef_TO.Value := _DateTime;
-                        exit(true);
-                    end else
-                        if ThrowError then Evaluate(_DateTime, FromText, 9);
+                    if EvaluateDateAndTimeValuesForXMLFormat then begin
+                        if Evaluate(_DateTime, FromText, 9) then begin
+                            FieldRef_TO.Value := _DateTime;
+                            exit(true);
+                        end else
+                            if ThrowError then Evaluate(_DateTime, FromText, 9);
+                    end else begin
+                        if Evaluate(_DateTime, FromText) then begin
+                            FieldRef_TO.Value := _DateTime;
+                            exit(true);
+                        end else
+                            if ThrowError then Evaluate(_DateTime, FromText);
+                    end;
                 end;
             'TIME':
                 begin
@@ -240,7 +247,7 @@ codeunit 91013 DMTRefHelper
     var
         RefHelper: Codeunit DMTRefHelper;
     begin
-        if not RefHelper.EvaluateFieldRef(ToFieldRef, FixedValue, false, false) then
+        if not RefHelper.EvaluateFieldRef(ToFieldRef, FixedValue, false, false, true) then
             Error('Invalid Fixed Value %1', FixedValue);
     end;
 

@@ -606,7 +606,7 @@ codeunit 90013 DMTProcessTemplateLib
         InvalidValueErr: Label 'Invalid cell value "%1" in cell %2%3', Comment = 'de-DE=Ungültiger Zellwert %1 in Zelle %2%3';
     begin
         fieldRef := recRef.Field(fieldNo);
-        if not refHelper.EvaluateFieldRef(fieldRef, tempExcelBuffer."Cell Value as Text", false, false) then begin
+        if not refHelper.EvaluateFieldRef(fieldRef, tempExcelBuffer."Cell Value as Text", false, true, false) then begin
             Error(InvalidValueErr, tempExcelBuffer."Cell Value as Text", tempExcelBuffer.xlColID, tempExcelBuffer.xlRowID);
         end;
     end;

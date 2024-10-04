@@ -77,7 +77,7 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
         end;
     end;
 
-    internal procedure findChangedFields(var changedFields: Dictionary of [Integer, List of [Text]]; recRefFrom: RecordRef; recRefTO: RecordRef) hasChangedFields: Boolean
+    internal procedure findChangedFields(var changedFields: Dictionary of [Integer, List of [Text/*1:Value from 2:Value to*/]]; recRefFrom: RecordRef; recRefTO: RecordRef) hasChangedFields: Boolean
     var
         fRefFrom, fRefTo : FieldRef;
         fromValueToValueList: list of [Text];

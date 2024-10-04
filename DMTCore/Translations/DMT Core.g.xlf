@@ -1518,6 +1518,41 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Trigger Änderungen anzeigen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTLogEntries - Action ShowTriggerLog - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2087262978 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Migration Steps Analyzer</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2087262978 - Control 1471100112 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Changed Fields</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Geänderte Felder</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Control ChangedFieldsForCurrStep - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2087262978 - Control 90410743 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Neuer Wert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Control Fixed Value - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2087262978 - Control 199974095 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Current Step:</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Aktueller Schritt:</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Control CurrStepType1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2087262978 - Control 2115667088 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Field:</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zielfeld:</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Control CurrTargetDescr - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2087262978 - Control 4081847810 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Description:</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Quellenbeschreibung:</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Control SourceDescr - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2087262978 - Control 1158422744 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Type:</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Quelle</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Control SourceType1 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1212190007 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Processing Plan</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Verarbeitungsplan</note>

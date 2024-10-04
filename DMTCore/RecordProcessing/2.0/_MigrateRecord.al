@@ -46,6 +46,14 @@ codeunit 91008 DMTMigrateRecord
         Clear(ErrorLogDict);
     end;
 
+    /// <summary>
+    /// Set specific ImportConfigLine for the current processing
+    /// </summary>
+    internal procedure SetImportConfigLine(var tempImportConfigLineNew: Record DMTImportConfigLine)
+    begin
+        TempImportConfigLine.Copy(tempImportConfigLineNew, true);
+    end;
+
     local procedure ProcessKeyFields()
     begin
         TempImportConfigLine.SetRange("Is Key Field(Target)", true);
@@ -71,6 +79,11 @@ codeunit 91008 DMTMigrateRecord
     begin
         TargetRefFound := TargetRecordExistsGlobal;
         existingRef := ExistingTargetRefGlobal.Duplicate();
+    end;
+
+    procedure GetTempTargetRef(var currTempTargetRef: RecordRef)
+    begin
+        currTempTargetRef := TmpTargetRef.Duplicate();
     end;
 
     internal procedure TargetRecordExists(): Boolean
@@ -246,7 +259,7 @@ codeunit 91008 DMTMigrateRecord
                 FieldWithTypeCorrectValueToValidate.Value := FromField.Value; // Same Type -> no conversion needed
             // evaluate text to target field
             (FromField.Type in [FieldType::Text, FieldType::Code]):
-                if not RefHelper.EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), EvaluateOptionValueAsNumberGlobal, true) then
+                if not RefHelper.EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), EvaluateOptionValueAsNumberGlobal, true, true) then
                     // Kommt beim Wechsel von Puffertabelle zu generischer Tabelle vor
                     // Kommt vor wenn der alte Wert ein Code war und der neue Wert ein Option
                     Error(ValidateFailedErr, CurrValueToAssignText, TargetRecRef.Field(ImportConfigLine."Target Field No.").Caption);
