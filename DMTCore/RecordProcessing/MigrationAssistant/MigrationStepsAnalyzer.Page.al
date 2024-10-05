@@ -34,6 +34,7 @@ page 91028 DMTMigrationStepsAnalyzer
             }
             group(Errors)
             {
+                Visible = ErrorsVisible;
                 field(ErrorType; GetLastErrorCode) { Editable = false; }
                 field(ErrorDescription; GetLastErrorText()) { MultiLine = true; Editable = false; }
                 field(ErrorCallstack; GetLastErrorCallStack())
@@ -49,9 +50,9 @@ page 91028 DMTMigrationStepsAnalyzer
             }
             group(ChangedFields)
             {
+                Caption = 'Changed Fields', Comment = 'de-DE=Geänderte Felder';
                 repeater(ChangedFieldsForCurrStep)
                 {
-                    Caption = 'Changed Fields', Comment = 'de-DE=Geänderte Felder';
                     field("Target Field Caption"; Rec."Target Field Caption") { }
                     field("Fixed Value"; Rec."Fixed Value") { Caption = 'New Value', Comment = 'de-DE=Neuer Wert'; }
                 }
@@ -78,9 +79,6 @@ page 91028 DMTMigrationStepsAnalyzer
                 begin
                     ClearLastError();
                     GlobalNoOfStepsProcessed += 1;
-                    // Rec.DeleteAll(); // delete lines from last step
-                    // Rec.Insert(); // keep empty line for better control rendering
-                    // CurrPage.Update();
                     // Delete Steps from the list
                     ProcessingSteps.RemoveAt(1);
                     updateStepInfo(importConfigLine, SourceDescr, CurrTargetDescr, CurrStepType, CurrSourceType, ProcessingSteps);
@@ -91,20 +89,14 @@ page 91028 DMTMigrationStepsAnalyzer
                     case CurrStepType of
                         CurrStepType::Field_Validate, CurrStepType::Field_ValidateIfNotEmpty, CurrStepType::Field_Assign,
                         CurrStepType::FixedValue_AssignValue, CurrStepType::FixedValue_ValidateValue, CurrStepType::FixedValue_ValidateIfNotEmpty:
-                            begin
-                                if importConfigLine."Is Key Field(Target)" then
-                                    GlobalMigrateRecord.SetRunMode_ProcessKeyFields()
-                                else
-                                    GlobalMigrateRecord.SetRunMode_ProcessNonKeyFields();
-                            end;
+                            if importConfigLine."Is Key Field(Target)" then
+                                GlobalMigrateRecord.SetRunMode_ProcessKeyFields()
+                            else
+                                GlobalMigrateRecord.SetRunMode_ProcessNonKeyFields();
                         CurrStepType::InsertRecord, CurrStepType::InsertRecord_WithTrigger:
-                            begin
-                                GlobalMigrateRecord.SetRunMode_InsertRecord();
-                            end;
+                            GlobalMigrateRecord.SetRunMode_InsertRecord();
                         CurrStepType::UpdateRecord, CurrStepType::UpdateRecord_WithTrigger:
-                            begin
-                                GlobalMigrateRecord.SetRunMode_ModifyRecord();
-                            end;
+                            GlobalMigrateRecord.SetRunMode_ModifyRecord();
                     end;
                     if GlobalMigrateRecord.Run() then begin
                         LastTmpTargetRef := TmpTargetRef;
@@ -120,7 +112,7 @@ page 91028 DMTMigrationStepsAnalyzer
                         foreach fieldNo in changedFields.Keys do begin
                             importConfigLine.Get(GlobalImportConfigHeader.ID, fieldNo);
                             Rec := importConfigLine;
-                            Rec."Fixed Value" := changedFields.Get(fieldNo).Get(2);
+                            Rec."Fixed Value" := copyStr(changedFields.Get(fieldNo).Get(2), 1, MaxStrLen(rec."Fixed Value"));
                             Rec.Insert();
                         end;
                     end;
@@ -129,6 +121,7 @@ page 91028 DMTMigrationStepsAnalyzer
                     // Get the next step
                     // updateStepInfo(importConfigLine, NextSourceDescription, NextTargetFieldCaption, NextStepType, NextSourceType, ProcessingSteps);
                     NextVisible := ProcessingSteps.Count > 0;
+                    ErrorsVisible := GetLastErrorText() <> '';
                     CurrPage.Update();
                 end;
             }
@@ -319,7 +312,7 @@ page 91028 DMTMigrationStepsAnalyzer
         CurrSourceType: Option SourceField,FixedValue,ReplacementValue;
         CurrTargetDescr: Text;
         SourceDescr: Text;
-        NextVisible: Boolean;
+        NextVisible, ErrorsVisible : Boolean;
         GlobalNoOfStepsProcessed: Integer;
 
 }

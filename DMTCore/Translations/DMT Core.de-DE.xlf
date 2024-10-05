@@ -1827,11 +1827,11 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2087262978 - Control 1471100112 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 2087262978 - Control 1819327909 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Changed Fields</source>
           <target state="translated">Geänderte Felder</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Geänderte Felder</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Control ChangedFieldsForCurrStep - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Control ChangedFields - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2087262978 - Control 90410743 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>New Value</source>
