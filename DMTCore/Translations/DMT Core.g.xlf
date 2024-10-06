@@ -1523,15 +1523,10 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2087262978 - Control 1819327909 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Changed Fields</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Geänderte Felder</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Control ChangedFields - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2087262978 - Control 90410743 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>New Value</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Neuer Wert</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Control Fixed Value - Property Caption</note>
+        <trans-unit id="Page 2087262978 - Method 2175535615 - NamedType 108779776" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Replacement</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ersetzung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Method updateStepInfo - NamedType replacementLbl</note>
         </trans-unit>
         <trans-unit id="Page 2087262978 - Control 199974095 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Current Step:</source>
@@ -1552,6 +1547,16 @@
           <source>Source Type:</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Quelle</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Control SourceType1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2087262978 - Control 2918007201 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Changed Fields</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Geänderte Felder</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Control LinesOfChangedFields - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2087262978 - Control 90410743 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Value</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Neuer Wert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTMigrationStepsAnalyzer - Control Fixed Value - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Processing Plan</source>
