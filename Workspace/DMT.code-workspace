@@ -51,6 +51,28 @@
 					"startupCompany": "MODUS - KlassenSM Final test"
 				},
 				{
+					"name": "kadeco.de TEST_MC",
+					"type": "al",
+					"request": "launch",
+					"environmentType": "OnPrem",
+					"server": "https://bctest.kadeco.de/",
+					"serverInstance": "TEST_MC",
+					"authentication": "UserPassword",
+					"startupObjectType": "Page",
+					"startupObjectId": 50017,
+					"breakOnError": "ExcludeTry",
+					"breakOnRecordWrite": "None",
+					"launchBrowser": true,
+					"enableSqlInformationDebugger": true,
+					"enableLongRunningSqlStatements": true,
+					"longRunningSqlStatementsThreshold": 500,
+					"numberOfSqlStatements": 10,
+					"tenant": "default",
+					"usePublicURLFromServer": true,
+					"schemaUpdateMode": "ForceSync",
+					"startupCompany": "Variante Test Einspielen"
+				},
+				{
 					"name": "BC24",
 					"type": "al",
 					"request": "launch",
