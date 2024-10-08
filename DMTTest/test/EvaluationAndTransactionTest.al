@@ -47,6 +47,7 @@ codeunit 90030 EvaluationAndTransactionTest
         end;
     end;
 
+    [Test]
     procedure GivenValuesToEvaluate_WhenConvertingToEnum_ThenAssignCorrectValueOrThrowCorrectError()
     var
         testTable: Record "TestTable";
@@ -59,13 +60,12 @@ codeunit 90030 EvaluationAndTransactionTest
         recRef.GetTable(testTable);
         fRef := recRef.Field(testTable.FieldNo(EnumEvalutionTest));
         // [GIVEN] Value To Evaluate - Option Caption
-        valueToEvaluate := 'Classification';
+        valueToEvaluate := 'PM';
         evaluateOptionValueAsNumber := false;
         // [WHEN] When Converting To Option by Caption 
         if refHelper.EvaluateFieldRef(fRef, valueToEvaluate, false, true) then begin
-            // [THEN] Then result should be "1"
             recRef.SetTable(testTable);
-            if not (testTable.EnumEvalutionTest = testTable.EnumEvalutionTest::Classification) then
+            if not (testTable.EnumEvalutionTest = testTable.EnumEvalutionTest::PM) then
                 Error('Option value not set correctly');
         end else begin
             Error('Evaluation failed');
@@ -83,5 +83,23 @@ codeunit 90030 EvaluationAndTransactionTest
         end else begin
             Error('Evaluation failed');
         end;
+    end;
+
+    procedure GetOptionNo(Value: Text; FieldRef: FieldRef): Integer
+    var
+        FieldRefValueVar: Variant;
+        FieldRefValueInt: Integer;
+    begin
+        if (Value = '') and (FieldRef.GetEnumValueName(1) = ' ') then
+            exit(0);
+
+        FieldRefValueVar := FieldRef.Value();
+        FieldRefValueInt := -1;
+        if Evaluate(FieldRef, Value) then begin
+            FieldRefValueInt := FieldRef.Value();
+            FieldRef.Value(FieldRefValueVar);
+        end;
+
+        exit(FieldRefValueInt);
     end;
 }
