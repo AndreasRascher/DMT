@@ -1,4 +1,4 @@
-table 91001 DMTGenBuffTable
+table 50128 DMTGenBuffTable
 {
     Access = Internal;
     fields

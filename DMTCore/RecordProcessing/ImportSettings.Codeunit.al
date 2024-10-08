@@ -1,4 +1,4 @@
-codeunit 91010 DMTImportSettings
+codeunit 50010 DMTImportSettings
 {
     procedure init(importConfigHeaderNEW: Record DMTImportConfigHeader; migrationType: Enum DMTMigrationType)
     begin

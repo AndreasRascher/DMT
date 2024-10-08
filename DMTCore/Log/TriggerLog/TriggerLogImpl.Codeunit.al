@@ -1,4 +1,4 @@
-codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
+codeunit 50026 DMTTriggerLogImpl implements ITriggerLog
 {
 
     internal procedure InitBeforeValidate(SourceField: FieldRef; TargetField: FieldRef; TmpTargetRef: RecordRef)

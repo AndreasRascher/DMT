@@ -1,4 +1,4 @@
-table 91003 DMTImportConfigHeader
+table 50130 DMTImportConfigHeader
 {
     Caption = 'DMT Import Configuration Header', Comment = 'de-DE=Import Konfiguration Kopf';
     LookupPageId = DMTImportConfigList;

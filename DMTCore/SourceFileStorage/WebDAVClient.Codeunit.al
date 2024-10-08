@@ -6,7 +6,7 @@
 /// 
 /// <b>GET_Request</b> is the request to get the files
 /// </summary>
-codeunit 91024 DMTWebDAVClient
+codeunit 50024 DMTWebDAVClient
 {
     procedure setBasicAuth(username: Text; password: Text)
     begin

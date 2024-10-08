@@ -1,4 +1,4 @@
-table 91000 DMTSetup
+table 50127 DMTSetup
 {
     Caption = 'DMT Setup', Comment = 'de-DE=DMT Einrichtung';
     DataClassification = ToBeClassified;

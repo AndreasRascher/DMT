@@ -1,4 +1,4 @@
-codeunit 91008 DMTMigrateRecord
+codeunit 50008 DMTMigrateRecord
 {
     trigger OnRun()
     begin

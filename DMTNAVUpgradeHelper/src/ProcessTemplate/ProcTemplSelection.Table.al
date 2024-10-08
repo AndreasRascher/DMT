@@ -1,5 +1,5 @@
 
-table 90012 DMTProcTemplSelection
+table 50143 DMTProcTemplSelection
 {
     DataClassification = ToBeClassified;
     Caption = 'DMT Process Template', Comment = 'de-DE=DMT Prozessvorlage';

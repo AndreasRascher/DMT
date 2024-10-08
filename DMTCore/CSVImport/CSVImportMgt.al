@@ -1,4 +1,4 @@
-codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
+codeunit 50020 DMTImportCSVImpl implements ISourceFileImport
 {
     procedure ImportToBufferTable(ImportConfigHeader: Record DMTImportConfigHeader);
     var

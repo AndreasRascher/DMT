@@ -1,4 +1,4 @@
-codeunit 91027 DMTLicenseMgt
+codeunit 50027 DMTLicenseMgt
 {
     trigger OnRun()
     var

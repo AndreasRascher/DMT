@@ -1,4 +1,4 @@
-page 91009 DMTImportConfigLinePart
+page 50009 DMTImportConfigLinePart
 {
     Caption = 'Lines', Comment = 'de-DE=Zeilen';
     PageType = ListPart;
