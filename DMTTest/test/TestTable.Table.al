@@ -6,6 +6,7 @@ table 90021 TestTable
     {
         field(1; PK1; Integer) { }
         field(10; OptionEvalutionTest; Option) { OptionMembers = "1","2","3"; OptionCaption = '1,2,3'; }
+        field(11; EnumEvalutionTest; Enum TestEnum) { }
         field(20; DoModifyInValidate; Boolean)
         {
             trigger OnValidate()

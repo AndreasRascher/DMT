@@ -46,4 +46,42 @@ codeunit 90030 EvaluationAndTransactionTest
             Error('Evaluation failed');
         end;
     end;
+
+    procedure GivenValuesToEvaluate_WhenConvertingToEnum_ThenAssignCorrectValueOrThrowCorrectError()
+    var
+        testTable: Record "TestTable";
+        refHelper: Codeunit DMTRefHelper;
+        recRef: RecordRef;
+        fRef: FieldRef;
+        valueToEvaluate: Text;
+        evaluateOptionValueAsNumber: Boolean;
+    begin
+        recRef.GetTable(testTable);
+        fRef := recRef.Field(testTable.FieldNo(EnumEvalutionTest));
+        // [GIVEN] Value To Evaluate - Option Caption
+        valueToEvaluate := 'Classification';
+        evaluateOptionValueAsNumber := false;
+        // [WHEN] When Converting To Option by Caption 
+        if refHelper.EvaluateFieldRef(fRef, valueToEvaluate, false, true) then begin
+            // [THEN] Then result should be "1"
+            recRef.SetTable(testTable);
+            if not (testTable.EnumEvalutionTest = testTable.EnumEvalutionTest::Classification) then
+                Error('Option value not set correctly');
+        end else begin
+            Error('Evaluation failed');
+        end;
+
+        // [GIVEN] Value To Evaluate - Option Index
+        valueToEvaluate := '1';
+        evaluateOptionValueAsNumber := true;
+        // [WHEN] When converting to option by index
+        if refHelper.EvaluateFieldRef(fRef, '1', true, true) then begin
+            // [THEN] Then result should be "2" (Index 1)
+            recRef.SetTable(testTable);
+            if testTable.EnumEvalutionTest <> 1 then
+                Error('Option value not set correctly');
+        end else begin
+            Error('Evaluation failed');
+        end;
+    end;
 }
