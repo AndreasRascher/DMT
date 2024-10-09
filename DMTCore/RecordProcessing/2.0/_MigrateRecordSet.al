@@ -86,11 +86,10 @@ codeunit 91014 DMTMigrateRecordSet
         end;
         // Progress
         Progress_StartTime := CurrentDateTime; // needed for duration calculation in log entry
-        if not importSettings.NoUserInteraction() then
-            if migrationType = migrationType::RetryErrors then
-                PrepareProgressBar(importConfigHeader, RecIdList.Count)
-            else
-                PrepareProgressBar(importConfigHeader, bufferRef.Count);
+        if migrationType = migrationType::RetryErrors then
+            PrepareProgressBar(importConfigHeader, RecIdList.Count)
+        else
+            PrepareProgressBar(importConfigHeader, bufferRef.Count);
         // Process Records
         Clear(NoOfRecordsProcessedGlobal);
         while MoveNext(bufferRef, RecIdList, importSettings.RecordsToProcessLimit(), NoOfRecordsProcessedGlobal, migrationType) do begin
