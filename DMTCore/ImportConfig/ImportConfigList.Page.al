@@ -69,6 +69,7 @@ page 91010 DMTImportConfigList
                     repeat
                         progress.Update(1, TempImportConfigHeader."Source File Name");
                         TempImportConfigHeader.ImportFileToBuffer();
+                        Commit(); // Keep progress if error occurs in next line
                     until TempImportConfigHeader.Next() = 0;
                     progress.Close();
                 end;
