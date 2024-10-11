@@ -65,14 +65,17 @@ table 91010 DMTCopyTable
 
     procedure EditSavedFilters() Continue: Boolean
     var
-        FPBuilder: Codeunit DMTFPBuilder;
+        // FPBuilder: Codeunit DMTFPBuilder;
+        fieldSelection: Page DMTFieldSelection;
         SourceRef: RecordRef;
     begin
         Continue := true; // Canceling the dialog should stop th process
         SourceRef.Open(Rec."Table No.", false, Rec.SourceCompanyName);
         if Rec.LoadTableView() <> '' then
             SourceRef.SetView(Rec.LoadTableView());
-        if not FPBuilder.RunModal(SourceRef) then
+        //if not FPBuilder.RunModal(SourceRef) then
+        //    exit(false);
+        if not fieldSelection.EditTableFilters(SourceRef) then
             exit(false);
         if SourceRef.HasFilter then begin
             Rec.SaveTableView(SourceRef.GetView());

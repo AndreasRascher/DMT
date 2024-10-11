@@ -63,18 +63,33 @@ page 91016 DMTProcessInstructionFactBox
                 Visible = ActionAddFieldVisible;
                 Image = Add;
 
+                // trigger OnAction()
+                // var
+                //     SelectMultipleFields: Page DMTSelectMultipleFields;
+                //     RunModalAction: Action;
+                // begin
+                //     // Show only Non-Key Fields for selection
+                //     if not SelectMultipleFields.InitSelectTargetFields(CurrProcessingPlan) then
+                //         exit;
+                //     RunModalAction := SelectMultipleFields.RunModal();
+                //     if RunModalAction = Action::OK then begin
+                //         CurrProcessingPlan.Get(CurrProcessingPlan.RecordId);
+                //         CurrProcessingPlan.SaveUpdateFieldsFilter(SelectMultipleFields.GetTargetFieldIDListAsText());
+                //         ReloadPageContent();
+                //     end;
+                // end;
+
                 trigger OnAction()
                 var
-                    SelectMultipleFields: Page DMTSelectMultipleFields;
-                    RunModalAction: Action;
+                    importConfigHeader: Record DMTImportConfigHeader;
+                    fieldSelection: Page DMTFieldSelection;
+                    UpdateFieldsFilter: Text;
                 begin
-                    // Show only Non-Key Fields for selection
-                    if not SelectMultipleFields.InitSelectTargetFields(CurrProcessingPlan) then
-                        exit;
-                    RunModalAction := SelectMultipleFields.RunModal();
-                    if RunModalAction = Action::OK then begin
+                    CurrProcessingPlan.findImportConfigHeader(importConfigHeader);
+                    UpdateFieldsFilter := CurrProcessingPlan.ReadUpdateFieldsFilter();
+                    if fieldSelection.SelectFieldsToProcess(UpdateFieldsFilter, importConfigHeader) then begin
                         CurrProcessingPlan.Get(CurrProcessingPlan.RecordId);
-                        CurrProcessingPlan.SaveUpdateFieldsFilter(SelectMultipleFields.GetTargetFieldIDListAsText());
+                        CurrProcessingPlan.SaveUpdateFieldsFilter(UpdateFieldsFilter);
                         ReloadPageContent();
                     end;
                 end;

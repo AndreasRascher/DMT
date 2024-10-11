@@ -31,17 +31,64 @@ page 91028 DMTFieldLookUpV2
     end;
 
     local procedure loadLines() hasLines: Boolean
+    begin
+        ReadFilters();
+        if isLoaded then exit;
+        // Read Table Relation Field Filter
+        loadLinesForTableID();
+        loadLinesForImportConfig();
+        hasLines := Rec.Count > 0;
+        isLoaded := true;
+    end;
+
+    local procedure ReadFilters()
+    var
+        i: Integer;
+        filters: Dictionary of [Integer, Text];
+        views: Dictionary of [Integer, Text];
+    begin
+        for i := 0 to 10 do begin
+            Rec.FilterGroup(i);
+            filters.Add(i, Rec.GetFilters);
+            views.Add(i, Rec.GetView());
+        end;
+    end;
+
+    local procedure loadLinesForTableID() OK: Boolean
+    var
+        tempFieldSelectionBuffer: Record DMTFieldSelectionBuffer temporary;
+        targetRef: RecordRef;
+        tableNo: Integer;
+        i: Integer;
+    begin
+        OK := true;
+        Rec.FilterGroup(4);
+        if rec.GetFilter("Table No.") = '' then
+            exit(false);
+        tableNo := Rec.GetRangeMin("Table No.");
+        targetRef.Open(tableNo);
+        for i := 1 to targetRef.FieldCount do
+            if targetRef.FieldIndex(i).Active then
+                if (targetRef.FieldIndex(i).Class = targetRef.FieldIndex(i).Class::Normal) then begin
+                    tempFieldSelectionBuffer.Type := tempFieldSelectionBuffer.Type::Target;
+                    tempFieldSelectionBuffer."Field No." := targetRef.FieldIndex(i).Number;
+                    tempFieldSelectionBuffer."Field Caption" := CopyStr(targetRef.FieldIndex(i).Caption, 1, MaxStrLen(tempFieldSelectionBuffer."Field Caption"));
+                    tempFieldSelectionBuffer.Insert();
+                end;
+        Rec.FilterGroup(0);
+        Rec.Copy(tempFieldSelectionBuffer, true);
+    end;
+
+    local procedure loadLinesForImportConfig() OK: Boolean
     var
         importConfigHeader: Record DMTImportConfigHeader;
         importConfigLine: Record DMTImportConfigLine;
         tempFieldSelectionBuffer: Record DMTFieldSelectionBuffer temporary;
         currFilter: Text;
-        importConfigHeaderID: Integer;
         currType: Option " ","Source","Target";
+        importConfigHeaderID: Integer;
     begin
-        ReadFilters();
-        if isLoaded then exit;
-        // Read Table Relation Field Filter
+        OK := true;
         Rec.FilterGroup(4);
         currFilter := Rec.Getfilter("Imp.Conf.Header ID");
         if Rec.Getfilter("Imp.Conf.Header ID") = '' then
@@ -82,20 +129,6 @@ page 91028 DMTFieldLookUpV2
             until importConfigLine.next() = 0;
         Rec.FilterGroup(0);
         Rec.copy(tempFieldSelectionBuffer, true);
-        hasLines := Rec.Count > 0;
-    end;
-
-    local procedure ReadFilters()
-    var
-        i: Integer;
-        filters: Dictionary of [Integer, Text];
-        views: Dictionary of [Integer, Text];
-    begin
-        for i := 0 to 10 do begin
-            Rec.FilterGroup(i);
-            filters.Add(i, Rec.GetFilters);
-            views.Add(i, Rec.GetView());
-        end;
     end;
 
     // procedure LoadLines()

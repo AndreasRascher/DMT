@@ -38,7 +38,6 @@ permissionset 91000 GeneratedPermission
         codeunit DMTDeleteRecordsWithErrorLog = X,
         codeunit DMTExcelFileImportImpl = X,
         codeunit DMTExcelReader = X,
-        codeunit DMTFPBuilder = X,
         codeunit DMTGenBuffAccessMgt = X,
         codeunit DMTGenericBuffertTableMgtImpl = X,
         codeunit DMTImportConfigMgt = X,

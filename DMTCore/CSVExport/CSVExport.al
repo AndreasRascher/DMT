@@ -68,7 +68,7 @@ xmlport 91002 DMTCSVWriter
 
     internal procedure ExportTargetTableAsCSV(importConfigHeader: Record DMTImportConfigHeader)
     var
-        FPBuilder: Codeunit DMTFPBuilder;
+        fieldSelection: Page DMTFieldSelection;
         tempBlob: Codeunit "Temp Blob";
         exportGenericCSV: XmlPort DMTCSVWriter;
         rRef: RecordRef;
@@ -78,7 +78,9 @@ xmlport 91002 DMTCSVWriter
     begin
         if importConfigHeader."Target Table ID" = 0 then exit;
         rRef.Open(importConfigHeader."Target Table ID");
-        if not FPBuilder.RunModal(rRef) then
+        // if not FPBuilder.RunModal(rRef) then
+        //     exit;
+        if not fieldSelection.EditTargetTableFilters(rRef, importConfigHeader) then
             exit;
         if not rRef.FindSet() then exit;
         exportGenericCSV.SetExportTable(rRef);

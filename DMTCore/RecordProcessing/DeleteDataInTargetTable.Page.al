@@ -63,13 +63,15 @@ page 91015 DMTDeleteDataInTargetTable
 
     procedure EditSourceTableView(var sourceView: Text; var sourceFilter: Text; ImportConfigHeader: Record DMTImportConfigHeader)
     var
-        FPBuilder: Codeunit DMTFPBuilder;
+        // FPBuilder: Codeunit DMTFPBuilder;
+        fieldSelection: Page DMTFieldSelection;
         BufferRef: RecordRef;
     begin
         ImportConfigHeader.BufferTableMgt().InitBufferRef(BufferRef);
         if sourceView <> '' then
             BufferRef.SetView(sourceView);
-        if not FPBuilder.RunModal(BufferRef, ImportConfigHeader) then
+        // if not FPBuilder.RunModal(BufferRef, ImportConfigHeader) then
+        if not fieldSelection.EditSourceTableFilters(BufferRef, ImportConfigHeader) then
             exit;
         sourceView := BufferRef.GetView();
         sourceFilter := BufferRef.GetFilters;
@@ -77,13 +79,15 @@ page 91015 DMTDeleteDataInTargetTable
 
     procedure EditTargetTableFilter(var targetView: Text; var targetFilter: Text; ImportConfigHeader: Record DMTImportConfigHeader)
     var
-        FPBuilder: Codeunit DMTFPBuilder;
+        // FPBuilder: Codeunit DMTFPBuilder;
+        fieldSelection: Page DMTFieldSelection;
         RecRef: RecordRef;
     begin
         RecRef.Open(ImportConfigHeader."Target Table ID");
         if targetView <> '' then
             RecRef.SetView(targetView);
-        if FPBuilder.RunModal(RecRef) then begin
+        // if FPBuilder.RunModal(RecRef) then begin
+        if fieldSelection.EditTargetTableFilters(RecRef, ImportConfigHeader) then begin
             targetView := RecRef.GetView();
             targetFilter := RecRef.GetFilters;
         end;

@@ -225,7 +225,8 @@ codeunit 91014 DMTMigrateRecordSet
     local procedure EditView(var BufferRef: RecordRef; var importSettings: Codeunit DMTImportSettings) Continue: Boolean
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
-        FPBuilder: Codeunit DMTFPBuilder;
+        // FPBuilder: Codeunit DMTFPBuilder;
+        fieldSelection: Page DMTFieldSelection;
     begin
         Continue := true; // Canceling the dialog should stop the process
 
@@ -238,7 +239,9 @@ codeunit 91014 DMTMigrateRecordSet
         end;
 
         ImportConfigHeader.Get(importSettings.ImportConfigHeader().RecordId);
-        if not FPBuilder.RunModal(BufferRef, ImportConfigHeader) then
+        // if not FPBuilder.RunModal(BufferRef, ImportConfigHeader) then
+        // exit(false);
+        if not fieldSelection.EditSourceTableFilters(BufferRef, ImportConfigHeader) then
             exit(false);
         if BufferRef.HasFilter then begin
             ImportConfigHeader.WriteSourceTableView(BufferRef.GetView(false));
