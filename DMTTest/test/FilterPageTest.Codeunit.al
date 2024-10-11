@@ -1,4 +1,4 @@
-// codeunit 90025 FilterPageBuilderTest
+// codeunit 90025 FilterPageTest
 // {
 //     Subtype = Test;
 //     TestPermissions = Disabled;
@@ -9,7 +9,7 @@
 //         sourceFileStorage: Record DMTSourceFileStorage;
 //         salesHeader: Record "Sales Header";
 //         importConfigLine: Record DMTImportConfigLine;
-//         FPBuilder: Codeunit DMTFPBuilder;
+//         fieldSelection: Page DMTFieldSelection;
 //         testLibrary: Codeunit DMTTestLibrary;
 //         TempBlob: Codeunit "Temp Blob";
 //         assert: Codeunit "Library Assert";
@@ -38,6 +38,7 @@
 //         bufferRef.Field(importConfigLine."Source Field No.").SetFilter('<>''''');
 //         ImportConfigHeader.WriteSourceTableView(bufferRef.GetView(false));
 //         // [WHEN] WhenFilterPageFieldsAreCollected 
+//         fieldSelection.
 //         FilterFields := FPBuilder.InitFilterFields(bufferRef, ImportConfigHeader);
 //         // [THEN] ThenKeyFieldsAndFilterFieldsAreShown 
 //         assert.AreEqual(2 + 1, FilterFields.Keys.Count, '1 filtered field an 2 key fields are expected');

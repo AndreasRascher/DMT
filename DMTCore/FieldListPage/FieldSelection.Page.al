@@ -120,10 +120,6 @@ page 91029 DMTFieldSelection
                 field(FilterExpression; Rec.FilterExpression) { }
             }
         }
-        area(Factboxes)
-        {
-
-        }
     }
 
     procedure SetUsage_SetSelectFieldsToProcess(importConfigHeader: Record DMTImportConfigHeader)
@@ -265,20 +261,31 @@ page 91029 DMTFieldSelection
     end;
 
     internal procedure SaveFieldsFilter(var BufferRef: RecordRef)
+    var
+        bufferRefWithNewView: RecordRef;
+        debug: Text;
     begin
-        BufferRef.Reset();
+        // create a copy of bufferRef and reset it
+        bufferRefWithNewView := BufferRef.Duplicate();
+        bufferRefWithNewView.Reset();
         if Rec.FindSet(false) then
             repeat
                 case Usage of
                     usage::EditSourceTableFilters, usage::EditTargetTableFilters,
                     Usage::EditTableFilters:
-                        BufferRef.Field(Rec."Field No.").SetFilter(Rec.FilterExpression);
+                        bufferRefWithNewView.Field(Rec."Field No.").SetFilter(Rec.FilterExpression);
                     usage::EditDefaultValues:
-                        BufferRef.Field(Rec."Field No.").SetFilter(Rec.DefaultValue);
+                        bufferRefWithNewView.Field(Rec."Field No.").SetFilter(Rec.DefaultValue);
                     else
                         Error('unhandled usage %1', Usage);
                 end;
             until Rec.Next() = 0;
+        // setting the new view keeps other filtergroups filter
+        BufferRef.SetView(bufferRefWithNewView.GetView());
+        debug := BufferRef.GetFilters();
+        BufferRef.FilterGroup(2);
+        debug := BufferRef.GetFilters();
+        BufferRef.FilterGroup(0);
     end;
 
     internal procedure loadSelectedFields(importConfigHeader: Record dmtimportConfigHeader; updateTargetFieldsFilter: Text)
@@ -311,26 +318,26 @@ page 91029 DMTFieldSelection
         selectedTargetFieldIDsFilter := selectedTargetFieldIDsFilter.TrimStart('|');
     end;
 
-    local procedure FindAssignedSourceField(var Rec: Record DMTFieldSelectionBuffer temporary)
+    local procedure FindAssignedSourceField(var tempFieldSelectionBuffer: Record DMTFieldSelectionBuffer temporary)
     var
         importConfigLine: Record DMTImportConfigLine;
     begin
-        Rec.TestField("Imp.Conf.Header ID");
-        importConfigLine.SetRange("Imp.Conf.Header ID", Rec."Imp.Conf.Header ID");
-        importConfigLine.SetRange("Target Field No.", Rec."Field No.");
+        tempFieldSelectionBuffer.TestField("Imp.Conf.Header ID");
+        importConfigLine.SetRange("Imp.Conf.Header ID", tempFieldSelectionBuffer."Imp.Conf.Header ID");
+        importConfigLine.SetRange("Target Field No.", tempFieldSelectionBuffer."Field No.");
         if importConfigLine.FindFirst() then
-            rec."Source Field Caption" := importConfigLine."Source Field Caption";
+            tempFieldSelectionBuffer."Source Field Caption" := importConfigLine."Source Field Caption";
     end;
 
-    local procedure FindAssignedTargetField(var Rec: Record DMTFieldSelectionBuffer temporary)
+    local procedure FindAssignedTargetField(var tempFieldSelectionBuffer: Record DMTFieldSelectionBuffer temporary)
     var
         importConfigLine: Record DMTImportConfigLine;
     begin
-        Rec.TestField("Imp.Conf.Header ID");
-        importConfigLine.SetRange("Imp.Conf.Header ID", Rec."Imp.Conf.Header ID");
-        importConfigLine.SetRange(importConfigLine."Source Field No.", Rec."Field No.");
+        tempFieldSelectionBuffer.TestField("Imp.Conf.Header ID");
+        importConfigLine.SetRange("Imp.Conf.Header ID", tempFieldSelectionBuffer."Imp.Conf.Header ID");
+        importConfigLine.SetRange(importConfigLine."Source Field No.", tempFieldSelectionBuffer."Field No.");
         if importConfigLine.FindFirst() then
-            rec."Target Field Caption" := importConfigLine."Target Field Caption";
+            tempFieldSelectionBuffer."Target Field Caption" := importConfigLine."Target Field Caption";
     end;
 
     procedure loadFieldFilters(var fieldFilters: Dictionary of [Integer/*Field-ID*/, Text/*Filter*/]; var recordRef: RecordRef) hasFilters: Boolean
@@ -358,7 +365,7 @@ page 91029 DMTFieldSelection
             end;
             Rec."Table No." := SourceRef.Number;
             Rec.Type := Rec.Type::Target;
-            Rec."Target Field Caption" := SourceRef.Field(fieldID).Caption;
+            Rec."Target Field Caption" := CopyStr(SourceRef.Field(fieldID).Caption, 1, MaxStrLen(Rec."Source Field Caption"));
             Rec.FilterExpression := CopyStr(fieldFilters.Get(fieldID), 1, MaxStrLen(Rec.FilterExpression));
             Rec.Modify();
         end;

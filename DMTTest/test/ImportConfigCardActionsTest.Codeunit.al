@@ -18,7 +18,7 @@ codeunit 90023 ImportConfigCardActionsTest
     end;
 
     [Test]
-    [HandlerFunctions('ImportToTargetFilterPageHandler')]
+    [HandlerFunctions('FieldSelectionHandler,LogEntriesPageHandler,MessageHandler')]
     procedure GivenImportConfigHeaderWithBufferRecords_WhenImportingToTarget_ThenFilterPageIsRaised()
     var
         DMTSetup: Record DMTSetup;
@@ -31,10 +31,21 @@ codeunit 90023 ImportConfigCardActionsTest
         DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_TransferToTargetTable(ImportConfigHeaderGlobal);
     end;
 
-    [FilterPageHandler]
-    procedure ImportToTargetFilterPageHandler(var Record1: RecordRef): Boolean;
+    [ModalPageHandler]
+    procedure FieldSelectionHandler(var fieldSelection: TestPage DMTFieldSelection)
     begin
-        // If this procedure isn't called, no filter page is raised and the test fails
+        fieldSelection.OK().Invoke();
+    end;
+
+    [PageHandler]
+    procedure LogEntriesPageHandler(var LogEntries: TestPage DMTLogEntries)
+    begin
+        LogEntries.OK().Invoke();
+    end;
+
+    [MessageHandler]
+    procedure MessageHandler(Message: Text)
+    begin
     end;
 
     procedure GivenImportConfigHeaderWithBufferRecords_WhenImportingToTarget_LinesHaveBeenUpdated()

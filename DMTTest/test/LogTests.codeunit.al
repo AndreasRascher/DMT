@@ -4,7 +4,7 @@ codeunit 90026 LogTests
     TestPermissions = Disabled;
 
     [Test]
-    [HandlerFunctions('ImportToTargetFilterPageHandler,LogEntriesPageHandler,MessageHandler')]
+    [HandlerFunctions('FieldSelectionHandler,LogEntriesPageHandler,MessageHandler')]
     procedure "GIVEN_ImportFieldValuesWithValidate_WHEN_OtherValuesAreWrittenAsIntended_THEN_LogEntriesExistToIndicateTheChanges"()
     var
         customer: Record Customer;
@@ -69,11 +69,10 @@ codeunit 90026 LogTests
         VerifyLogValuesOfTriggerChangesExist(importConfigHeader, customer);
     end;
 
-    [FilterPageHandler]
-    procedure ImportToTargetFilterPageHandler(var Record1: RecordRef): Boolean;
+    [ModalPageHandler]
+    procedure FieldSelectionHandler(var fieldSelection: TestPage DMTFieldSelection)
     begin
-        exit(true); // OK to proceed
-        // If this procedure isn't called, no filter page is raised and the test fails
+        fieldSelection.OK().Invoke();
     end;
 
     [PageHandler]
