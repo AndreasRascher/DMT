@@ -13,6 +13,7 @@ codeunit 90023 ImportConfigCardActionsTest
         // [WHEN] WhenImporting 
         DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_ImportBufferDataFromFile(ImportConfigHeaderGlobal);
         ImportConfigHeaderGlobal.UpdateBufferRecordCount();
+        // [THEN] Buffer records have been created
         if ImportConfigHeaderGlobal."No.of Records in Buffer Table" = 0 then
             Error('No records were imported');
     end;
@@ -22,13 +23,21 @@ codeunit 90023 ImportConfigCardActionsTest
     procedure GivenImportConfigHeaderWithBufferRecords_WhenImportingToTarget_ThenFilterPageIsRaised()
     var
         DMTSetup: Record DMTSetup;
+        genBuffTable: Record DMTGenBuffTable;
         testLibrary: Codeunit DMTTestLibrary;
+        targetRef: RecordRef;
     begin
         // [GIVEN] GivenImportConfigHeaderWithSourceFile 
         initializeImportConfigHeader();
         testLibrary.CreateFieldMapping(ImportConfigHeaderGlobal, false);
         // [WHEN] WhenImporting 
         DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_TransferToTargetTable(ImportConfigHeaderGlobal);
+        // [THEN] Buffer recors have reference to imported records
+        // [THEN] Gen. Buffer lines with status 'Imported' exist
+        genBuffTable.FilterBy(ImportConfigHeaderGlobal);
+        genBuffTable.FindLast();
+        genBuffTable.TestField(Imported, true);
+        targetRef.Get(genBuffTable."RecId (Imported)");
     end;
 
     [ModalPageHandler]
@@ -46,16 +55,6 @@ codeunit 90023 ImportConfigCardActionsTest
     [MessageHandler]
     procedure MessageHandler(Message: Text)
     begin
-    end;
-
-    procedure GivenImportConfigHeaderWithBufferRecords_WhenImportingToTarget_LinesHaveBeenUpdated()
-    var
-        genBuffTable: Record DMTGenBuffTable;
-    begin
-        // [GIVEN] ImportConfigHeaderWithSourceFile, Import is finished
-        // [WHEN] Lines have been updated
-        genBuffTable.FilterBy(ImportConfigHeaderGlobal);
-        // [THEN] Gen. Buffer lines with status 'Imported' exist
     end;
 
     local procedure initializeImportConfigHeader()

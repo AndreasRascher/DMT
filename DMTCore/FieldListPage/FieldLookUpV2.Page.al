@@ -131,42 +131,6 @@ page 91028 DMTFieldLookUpV2
         Rec.copy(tempFieldSelectionBuffer, true);
     end;
 
-    // procedure LoadLines()
-    // var
-    //     TempDataLayoutLine: Record DMTDataLayoutLine temporary;
-    //     ImportConfigHeader: Record DMTImportConfigHeader;
-    //     ImportConfigLine: Record DMTImportConfigLine;
-    //     importConfigMgt: Codeunit DMTImportConfigMgt;
-    //     BuffTableCaptions: Dictionary of [Integer, Text];
-    //     importConfigID: Integer;
-    //     FieldLookUpMode: Option "Look Up Source","Look Up Target";
-    //     TargetFieldNames: Dictionary of [Integer, Text];
-    // begin
-    //     if IsLoaded then exit;
-    //     Clear(BuffTableCaptions);
-    //     ReadImportConfigIDFromTableRelationFilter(importConfigID, FieldLookUpMode);
-    //     case true of
-    //         (importConfigID <> 0) and (FieldLookUpMode = FieldLookUpMode::"Look Up Source"):
-    //             begin
-    //                 ImportConfigHeader.Get(importConfigID);
-    //                 ImportConfigHeader.BufferTableMgt().ReadBufferTableColumnCaptions(BuffTableCaptions);
-    //                 CopyColumnCaptionsToTempDataLayoutLine(TempDataLayoutLine, BuffTableCaptions);
-    //                 Rec.Copy(TempDataLayoutLine, true);
-    //                 IsLoaded := true;
-    //             end;
-    //         (importConfigID <> 0) and (FieldLookUpMode = FieldLookUpMode::"Look Up Target"):
-    //             begin
-    //                 ImportConfigHeader.Get(importConfigID);
-    //                 ImportConfigLine.SetRange("Imp.Conf.Header ID", importConfigID);
-    //                 TargetFieldNames := importConfigMgt.CreateTargetFieldNamesDict(ImportConfigLine, false);
-    //                 CopyColumnCaptionsToTempDataLayoutLine(TempDataLayoutLine, TargetFieldNames);
-    //                 Rec.Copy(TempDataLayoutLine, true);
-    //                 IsLoaded := true;
-    //             end;
-    //         else
-    //             Error('unhandled case');
-    //     end;
-
     var
         isLoaded: Boolean;
 

@@ -140,6 +140,11 @@ codeunit 91008 DMTMigrateRecord
         ClearLastError();
     end;
 
+    internal procedure UpdateDMTImportFields()
+    begin
+        ImportConfigHeaderGlobal.BufferTableMgt().SetDMTImportFields(SourceRefGlobal, CurrTargetRecIDText);
+    end;
+
     procedure HasErrorsThatShouldNotBeIngored(): Boolean
     begin
         exit(ErrorsOccuredThatShouldNotBeIngored);
@@ -397,7 +402,6 @@ codeunit 91008 DMTMigrateRecord
                 end;
             until TempImportConfigLine.Next() = 0;
     end;
-
 
     var
         ImportConfigHeaderGlobal: Record DMTImportConfigHeader;

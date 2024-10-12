@@ -324,6 +324,8 @@ codeunit 91014 DMTMigrateRecordSet
                 if not InsertRecord(migrateRecord) then begin
                     migrateRecord.CollectLastError();
                     Result := Enum::DMTProcessingResultType::Error;
+                end else begin
+                    migrateRecord.UpdateDMTImportFields(); // write reference to target record after import
                 end;
             end else begin
                 // 4.b Update Record
