@@ -41,27 +41,31 @@ table 91012 DMTReplacementLine
         field(30; "Source 1 Field No."; Integer)
         {
             Caption = 'Source Field 1 No.', Comment = 'de-DE=Herkunftsfeld 1 Nr.';
-            TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            //TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            TableRelation = DMTFieldLookUpBuffer."Field No." where("Imp.Conf.Header ID" = field("Imp.Conf.Header ID"), LookUpType = const(SourceFields));
             ValidateTableRelation = false;
             BlankZero = true;
         }
         field(31; "Source 1 Field Caption"; Text[80])
         {
             Caption = 'Source 1 Field Caption', Comment = 'de-DE=Herkunftsfeld 1';
-            TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            // TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Imp.Conf.Header ID" = field("Imp.Conf.Header ID"), LookUpType = const(SourceFields));
             ValidateTableRelation = false;
         }
         field(32; "Source 2 Field No."; Integer)
         {
             Caption = 'Source 2 Field No.', Comment = 'de-DE=Herkunftsfeld 2 Nr.';
-            TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            // TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            TableRelation = DMTFieldLookUpBuffer."Field No." where("Imp.Conf.Header ID" = field("Imp.Conf.Header ID"), LookUpType = const(SourceFields));
             ValidateTableRelation = false;
             BlankZero = true;
         }
         field(33; "Source 2 Field Caption"; Text[80])
         {
             Caption = 'Source 2 Field Caption', Comment = 'de-DE=Herkunftsfeld 2';
-            TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            // TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Imp.Conf.Header ID" = field("Imp.Conf.Header ID"), LookUpType = const(SourceFields));
             ValidateTableRelation = false;
         }
         field(34; "Target 1 Field No."; Integer)
@@ -72,7 +76,8 @@ table 91012 DMTReplacementLine
         field(35; "Target 1 Field Caption"; Text[80])
         {
             Caption = 'Target Field 1 Caption', Comment = 'de-DE=Zielfeld 1';
-            TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), "Field Look Mode Filter" = const("Look Up Target"));
+            // TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), "Field Look Mode Filter" = const("Look Up Target"));
+            TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Imp.Conf.Header ID" = field("Imp.Conf.Header ID"), LookUpType = const(TargetFields));
             ValidateTableRelation = false;
         }
         field(36; "Target 2 Field No."; Integer)
@@ -83,7 +88,8 @@ table 91012 DMTReplacementLine
         field(37; "Target 2 Field Caption"; Text[80])
         {
             Caption = 'Target Field 2 Caption', Comment = 'de-DE=Zielfeld 2';
-            TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), "Field Look Mode Filter" = const("Look Up Target"));
+            // TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), "Field Look Mode Filter" = const("Look Up Target"));
+            TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Imp.Conf.Header ID" = field("Imp.Conf.Header ID"), LookUpType = const(TargetFields));
             ValidateTableRelation = false;
         }
 

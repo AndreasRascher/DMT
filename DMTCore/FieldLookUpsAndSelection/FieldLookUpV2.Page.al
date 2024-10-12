@@ -4,7 +4,7 @@ page 91028 DMTFieldLookUpV2
     PageType = List;
     UsageCategory = Lists;
     ApplicationArea = All;
-    SourceTable = DMTFieldSelectionBuffer;
+    SourceTable = DMTFieldLookUpBuffer;
     SourceTableTemporary = true;
 
     layout
@@ -56,7 +56,7 @@ page 91028 DMTFieldLookUpV2
 
     local procedure loadLinesForTableID() OK: Boolean
     var
-        tempFieldSelectionBuffer: Record DMTFieldSelectionBuffer temporary;
+        tempFieldSelectionBuffer: Record DMTFieldLookUpBuffer temporary;
         targetRef: RecordRef;
         tableNo: Integer;
         i: Integer;
@@ -70,7 +70,7 @@ page 91028 DMTFieldLookUpV2
         for i := 1 to targetRef.FieldCount do
             if targetRef.FieldIndex(i).Active then
                 if (targetRef.FieldIndex(i).Class = targetRef.FieldIndex(i).Class::Normal) then begin
-                    tempFieldSelectionBuffer.Type := tempFieldSelectionBuffer.Type::Target;
+                    tempFieldSelectionBuffer.LookUpType := tempFieldSelectionBuffer.LookUpType::TargetFields;
                     tempFieldSelectionBuffer."Field No." := targetRef.FieldIndex(i).Number;
                     tempFieldSelectionBuffer."Field Caption" := CopyStr(targetRef.FieldIndex(i).Caption, 1, MaxStrLen(tempFieldSelectionBuffer."Field Caption"));
                     tempFieldSelectionBuffer.Insert();
@@ -83,7 +83,7 @@ page 91028 DMTFieldLookUpV2
     var
         importConfigHeader: Record DMTImportConfigHeader;
         importConfigLine: Record DMTImportConfigLine;
-        tempFieldSelectionBuffer: Record DMTFieldSelectionBuffer temporary;
+        tempFieldSelectionBuffer: Record DMTFieldLookUpBuffer temporary;
         currFilter: Text;
         currType: Option " ","Source","Target";
         importConfigHeaderID: Integer;
@@ -97,10 +97,10 @@ page 91028 DMTFieldLookUpV2
         //importConfigHeaderID := Rec.GetRangeMin("Imp.Conf.Header ID");
         // Read Table Relation Const Filter
         Rec.FilterGroup(0);
-        currFilter := Rec.GetFilter(Type);
-        if Rec.GetFilter(Type) = '' then
+        currFilter := Rec.GetFilter(LookUpType);
+        if Rec.GetFilter(LookUpType) = '' then
             exit(false);
-        currType := Rec.GetRangeMin(Type);
+        currType := Rec.GetRangeMin(LookUpType);
 
         importConfigHeader.Get(importConfigHeaderID);
         importConfigLine.SetRange("Imp.Conf.Header ID", importConfigHeader."ID");
@@ -109,7 +109,7 @@ page 91028 DMTFieldLookUpV2
                 case currType of
                     currType::Source:
                         begin
-                            tempFieldSelectionBuffer.Type := tempFieldSelectionBuffer.Type::Source;
+                            tempFieldSelectionBuffer.LookUpType := tempFieldSelectionBuffer.LookUpType::SourceFields;
                             tempFieldSelectionBuffer."Field No." := importConfigLine."Source Field No.";
                             tempFieldSelectionBuffer."Field Caption" := importConfigLine."Source Field Caption";
                             tempFieldSelectionBuffer.Insert();
@@ -117,7 +117,7 @@ page 91028 DMTFieldLookUpV2
                     currType::Target:
                         begin
                             importConfigLine.CalcFields("Target Field Name", "Target Field Caption");
-                            tempFieldSelectionBuffer.Type := tempFieldSelectionBuffer.Type::Target;
+                            tempFieldSelectionBuffer.LookUpType := tempFieldSelectionBuffer.LookUpType::TargetFields;
                             tempFieldSelectionBuffer."Field No." := importConfigLine."Target Field No.";
                             tempFieldSelectionBuffer."Field Name" := importConfigLine."Target Field Name";
                             tempFieldSelectionBuffer."Field Caption" := importConfigLine."Target Field Caption";

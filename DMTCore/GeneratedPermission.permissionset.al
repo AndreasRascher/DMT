@@ -66,7 +66,7 @@ permissionset 91000 GeneratedPermission
         page DMTDataLayoutCard = X,
         page DMTDataLayouts = X,
         page DMTDeleteDataInTargetTable = X,
-        page DMTFieldLookup = X,
+        // page DMTFieldLookup = X,
         page DMTGenBufferList100 = X,
         page DMTGenBufferList150 = X,
         page DMTGenBufferList250 = X,

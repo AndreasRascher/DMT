@@ -25,7 +25,7 @@ page 91019 DMTReplacementAssignmentPart
                 field(SourceFileName_1_1; Rec."Source File Name") { }
                 field(Source1FieldCaption_1_1; Rec."Source 1 Field Caption")
                 {
-                    LookupPageId = DMTFieldLookup;
+                    LookupPageId = DMTFieldLookUpV2;
                     ShowMandatory = true;
                     Enabled = Source1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
@@ -40,7 +40,7 @@ page 91019 DMTReplacementAssignmentPart
                 }
                 field(Target1FieldCaption_1_1; Rec."Target 1 Field Caption")
                 {
-                    LookupPageId = DMTFieldLookup;
+                    LookupPageId = DMTFieldLookUpV2;
                     Enabled = Target1Enabled;
                     ShowMandatory = true;
                     trigger OnAfterLookup(Selected: RecordRef)
@@ -67,7 +67,7 @@ page 91019 DMTReplacementAssignmentPart
                 }
                 field(Source1FieldCaption_2_1; Rec."Source 1 Field Caption")
                 {
-                    LookupPageId = DMTFieldLookup;
+                    LookupPageId = DMTFieldLookUpV2;
                     ShowMandatory = true;
                     Enabled = Source1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
@@ -82,7 +82,7 @@ page 91019 DMTReplacementAssignmentPart
                 }
                 field(Source2FieldCaption_2_1; Rec."Source 2 Field Caption")
                 {
-                    LookupPageId = DMTFieldLookup;
+                    LookupPageId = DMTFieldLookUpV2;
                     ShowMandatory = true;
                     Enabled = Source2Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
@@ -97,7 +97,7 @@ page 91019 DMTReplacementAssignmentPart
                 }
                 field(Target1FieldCaption_2_1; Rec."Target 1 Field Caption")
                 {
-                    LookupPageId = DMTFieldLookup;
+                    LookupPageId = DMTFieldLookUpV2;
                     ShowMandatory = true;
                     Enabled = Target1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
@@ -124,7 +124,7 @@ page 91019 DMTReplacementAssignmentPart
                 }
                 field(Source1FieldCaption_1_2; Rec."Source 1 Field Caption")
                 {
-                    LookupPageId = DMTFieldLookup;
+                    LookupPageId = DMTFieldLookUpV2;
                     ShowMandatory = true;
                     Enabled = Source1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
@@ -139,7 +139,7 @@ page 91019 DMTReplacementAssignmentPart
                 }
                 field(Target1FieldCaption_1_2; Rec."Target 1 Field Caption")
                 {
-                    LookupPageId = DMTFieldLookup;
+                    LookupPageId = DMTFieldLookUpV2;
                     ShowMandatory = true;
                     Enabled = Target1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
@@ -154,7 +154,7 @@ page 91019 DMTReplacementAssignmentPart
                 }
                 field(Target2FieldCaption_1_2; Rec."Target 2 Field Caption")
                 {
-                    LookupPageId = DMTFieldLookup;
+                    LookupPageId = DMTFieldLookUpV2;
                     ShowMandatory = true;
                     Enabled = Target2Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
@@ -181,7 +181,7 @@ page 91019 DMTReplacementAssignmentPart
                 }
                 field(Source1FieldCaption_2_2; Rec."Source 1 Field Caption")
                 {
-                    LookupPageId = DMTFieldLookup;
+                    LookupPageId = DMTFieldLookUpV2;
                     ShowMandatory = true;
                     Enabled = Source1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
@@ -196,7 +196,7 @@ page 91019 DMTReplacementAssignmentPart
                 }
                 field(Source2FieldCaption_2_2; Rec."Source 2 Field Caption")
                 {
-                    LookupPageId = DMTFieldLookup;
+                    LookupPageId = DMTFieldLookUpV2;
                     ShowMandatory = true;
                     Enabled = Source2Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
@@ -211,7 +211,7 @@ page 91019 DMTReplacementAssignmentPart
                 }
                 field(Target1FieldCaption_2_2; Rec."Target 1 Field Caption")
                 {
-                    LookupPageId = DMTFieldLookup;
+                    LookupPageId = DMTFieldLookUpV2;
                     ShowMandatory = true;
                     Enabled = Target1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
@@ -226,7 +226,7 @@ page 91019 DMTReplacementAssignmentPart
                 }
                 field(Target2FieldCaption_2_2; Rec."Target 2 Field Caption")
                 {
-                    LookupPageId = DMTFieldLookup;
+                    LookupPageId = DMTFieldLookUpV2;
                     ShowMandatory = true;
                     Enabled = Target2Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)

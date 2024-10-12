@@ -12,7 +12,7 @@ page 91029 DMTFieldSelection
     PageType = List;
     UsageCategory = None;
     ApplicationArea = All;
-    SourceTable = DMTFieldSelectionBuffer;
+    SourceTable = DMTFieldLookUpBuffer;
     SourceTableTemporary = true;
     PopulateAllFields = true;
 
@@ -299,7 +299,7 @@ page 91029 DMTFieldSelection
         if importConfigLine.FindSet() then
             repeat
                 Rec."Imp.Conf.Header ID" := importConfigLine."Imp.Conf.Header ID";
-                Rec.Type := Rec.Type::Target;
+                Rec.LookUpType := Rec.LookUpType::TargetFields;
                 Rec."Field No." := importConfigLine."Target Field No.";
                 importConfigLine.CalcFields("Target Field Caption");
                 Rec."Target Field Caption" := importConfigLine."Target Field Caption";
@@ -310,7 +310,7 @@ page 91029 DMTFieldSelection
 
     internal procedure createSelectedTargetFieldIDsFilter() selectedTargetFieldIDsFilter: Text
     begin
-        rec.SetRange("Type", rec.Type::Target);
+        rec.SetRange(LookUpType, rec.LookUpType::TargetFields);
         if Rec.FindSet(false) then
             repeat
                 selectedTargetFieldIDsFilter += StrSubstNo('|%1', Rec."Field No.");
@@ -318,7 +318,7 @@ page 91029 DMTFieldSelection
         selectedTargetFieldIDsFilter := selectedTargetFieldIDsFilter.TrimStart('|');
     end;
 
-    local procedure FindAssignedSourceField(var tempFieldSelectionBuffer: Record DMTFieldSelectionBuffer temporary)
+    local procedure FindAssignedSourceField(var tempFieldSelectionBuffer: Record DMTFieldLookUpBuffer temporary)
     var
         importConfigLine: Record DMTImportConfigLine;
     begin
@@ -329,7 +329,7 @@ page 91029 DMTFieldSelection
             tempFieldSelectionBuffer."Source Field Caption" := importConfigLine."Source Field Caption";
     end;
 
-    local procedure FindAssignedTargetField(var tempFieldSelectionBuffer: Record DMTFieldSelectionBuffer temporary)
+    local procedure FindAssignedTargetField(var tempFieldSelectionBuffer: Record DMTFieldLookUpBuffer temporary)
     var
         importConfigLine: Record DMTImportConfigLine;
     begin
@@ -364,7 +364,7 @@ page 91029 DMTFieldSelection
                 Rec.Insert();
             end;
             Rec."Table No." := SourceRef.Number;
-            Rec.Type := Rec.Type::Target;
+            Rec.LookUpType := Rec.LookUpType::TargetFields;
             Rec."Target Field Caption" := CopyStr(SourceRef.Field(fieldID).Caption, 1, MaxStrLen(Rec."Source Field Caption"));
             Rec.FilterExpression := CopyStr(fieldFilters.Get(fieldID), 1, MaxStrLen(Rec.FilterExpression));
             Rec.Modify();
@@ -388,7 +388,7 @@ page 91029 DMTFieldSelection
                                 Rec."Field No." := fieldNo;
                                 Rec.Insert();
                             end;
-                            Rec.Type := Rec.Type::Source;
+                            Rec.LookUpType := Rec.LookUpType::SourceFields;
                             Rec."Source Field Caption" := importConfigLine."Source Field Caption";
                             Rec.FilterExpression := CopyStr(fieldFilters.Get(fieldNo), 1, MaxStrLen(Rec.FilterExpression));
                             Rec.Modify();
@@ -402,7 +402,7 @@ page 91029 DMTFieldSelection
                                 Rec."Field No." := fieldNo;
                                 Rec.Insert();
                             end;
-                            Rec.Type := Rec.Type::Target;
+                            Rec.LookUpType := Rec.LookUpType::TargetFields;
                             importConfigLine.CalcFields("Target Field Caption");
                             Rec."Target Field Caption" := importConfigLine."Target Field Caption";
                             Rec.DefaultValue := CopyStr(fieldFilters.Get(fieldNo), 1, MaxStrLen(Rec.DefaultValue));
@@ -425,7 +425,7 @@ page 91029 DMTFieldSelection
         for _KeyIndex := 1 to KeyRef.FieldCount do begin
             FieldRef := KeyRef.FieldIndex(_KeyIndex);
             Rec."Table No." := recRef.Number;
-            Rec.Type := Rec.Type::" ";
+            Rec.LookUpType := Rec.LookUpType::" ";
             Rec."Field No." := FieldRef.Number;
             Rec."Target Field Caption" := CopyStr(FieldRef.Caption, 1, MaxStrLen(Rec."Source Field Caption"));
             Rec.Insert();
@@ -445,7 +445,7 @@ page 91029 DMTFieldSelection
                     Usage::EditSourceTableFilters:
                         begin
                             Rec."Imp.Conf.Header ID" := importConfigLine."Imp.Conf.Header ID";
-                            Rec.Type := Rec.Type::Source;
+                            Rec.LookUpType := Rec.LookUpType::SourceFields;
                             Rec."Field No." := importConfigLine."Source Field No.";
                             Rec."Source Field Caption" := importConfigLine."Source Field Caption";
                             Rec.Insert();
@@ -453,7 +453,7 @@ page 91029 DMTFieldSelection
                     Usage::EditTargetTableFilters:
                         begin
                             Rec."Imp.Conf.Header ID" := importConfigLine."Imp.Conf.Header ID";
-                            Rec.Type := Rec.Type::Target;
+                            Rec.LookUpType := Rec.LookUpType::TargetFields;
                             Rec."Field No." := importConfigLine."Target Field No.";
                             importConfigLine.CalcFields("Target Field Caption");
                             Rec."Target Field Caption" := importConfigLine."Target Field Caption";
