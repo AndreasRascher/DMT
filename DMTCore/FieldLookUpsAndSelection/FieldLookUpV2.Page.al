@@ -63,9 +63,10 @@ page 91028 DMTFieldLookUpV2
     begin
         OK := true;
         Rec.FilterGroup(4);
-        if rec.GetFilter("Table No.") = '' then
-            exit(false);
-        tableNo := Rec.GetRangeMin("Table No.");
+
+        if not readFilterValue(tableNo, Rec, Rec.FieldNo("Table No."), 0) then
+            if not readFilterValue(tableNo, Rec, Rec.FieldNo("Table No."), 4) then
+                exit(false);
         targetRef.Open(tableNo);
         for i := 1 to targetRef.FieldCount do
             if targetRef.FieldIndex(i).Active then
@@ -84,23 +85,18 @@ page 91028 DMTFieldLookUpV2
         importConfigHeader: Record DMTImportConfigHeader;
         importConfigLine: Record DMTImportConfigLine;
         tempFieldSelectionBuffer: Record DMTFieldLookUpBuffer temporary;
-        currFilter: Text;
         currType: Option " ","Source","Target";
-        importConfigHeaderID: Integer;
+        importConfigHeaderID, currTypeInt : Integer;
     begin
         OK := true;
-        Rec.FilterGroup(4);
-        currFilter := Rec.Getfilter("Imp.Conf.Header ID");
-        if Rec.Getfilter("Imp.Conf.Header ID") = '' then
-            exit(false);
-        Evaluate(importConfigHeaderID, currFilter);
-        //importConfigHeaderID := Rec.GetRangeMin("Imp.Conf.Header ID");
-        // Read Table Relation Const Filter
-        Rec.FilterGroup(0);
-        currFilter := Rec.GetFilter(LookUpType);
-        if Rec.GetFilter(LookUpType) = '' then
-            exit(false);
-        currType := Rec.GetRangeMin(LookUpType);
+        if not readFilterValue(importConfigHeaderID, Rec, Rec.FieldNo("Imp.Conf.Header ID"), 0) then
+            if not readFilterValue(importConfigHeaderID, Rec, Rec.FieldNo("Imp.Conf.Header ID"), 4) then
+                exit(false);
+
+        if not readFilterValue(currTypeInt, Rec, Rec.FieldNo(LookUpType), 0) then
+            if not readFilterValue(currTypeInt, Rec, Rec.FieldNo(LookUpType), 4) then
+                exit(false);
+        currType := currTypeInt;
 
         importConfigHeader.Get(importConfigHeaderID);
         importConfigLine.SetRange("Imp.Conf.Header ID", importConfigHeader."ID");
@@ -109,10 +105,12 @@ page 91028 DMTFieldLookUpV2
                 case currType of
                     currType::Source:
                         begin
-                            tempFieldSelectionBuffer.LookUpType := tempFieldSelectionBuffer.LookUpType::SourceFields;
-                            tempFieldSelectionBuffer."Field No." := importConfigLine."Source Field No.";
-                            tempFieldSelectionBuffer."Field Caption" := importConfigLine."Source Field Caption";
-                            tempFieldSelectionBuffer.Insert();
+                            if (importConfigLine."Source Field No." <> 0) then begin // not every target field is mapped
+                                tempFieldSelectionBuffer.LookUpType := tempFieldSelectionBuffer.LookUpType::SourceFields;
+                                tempFieldSelectionBuffer."Field No." := importConfigLine."Source Field No.";
+                                tempFieldSelectionBuffer."Field Caption" := importConfigLine."Source Field Caption";
+                                tempFieldSelectionBuffer.Insert();
+                            end;
                         end;
                     currType::Target:
                         begin
@@ -129,6 +127,18 @@ page 91028 DMTFieldLookUpV2
             until importConfigLine.next() = 0;
         Rec.FilterGroup(0);
         Rec.copy(tempFieldSelectionBuffer, true);
+    end;
+
+    local procedure readFilterValue(var filterValue: Integer; var fieldLookUpBuffer: Record DMTFieldLookUpBuffer temporary; filterfieldNo: Integer; searchInfiltergroup: Integer) hasFilter: Boolean
+    var
+        recRef: RecordRef;
+    begin
+        hasFilter := true;
+        recRef.GetTable(fieldLookUpBuffer);
+        recRef.FilterGroup(searchInfiltergroup);
+        if recRef.Field(filterfieldNo).GetFilter = '' then
+            exit(false);
+        filterValue := recRef.Field(filterfieldNo).GetRangeMin;
     end;
 
     var

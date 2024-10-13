@@ -30,12 +30,12 @@ page 91019 DMTReplacementAssignmentPart
                     Enabled = Source1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
-                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
 
                     trigger OnValidate()
                     begin
-                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Source 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
                 }
                 field(Target1FieldCaption_1_1; Rec."Target 1 Field Caption")
@@ -45,12 +45,12 @@ page 91019 DMTReplacementAssignmentPart
                     ShowMandatory = true;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
-                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
 
                     trigger OnValidate()
                     begin
-                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Target 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Target 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
                 }
             }
@@ -72,12 +72,12 @@ page 91019 DMTReplacementAssignmentPart
                     Enabled = Source1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
-                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
 
                     trigger OnValidate()
                     begin
-                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Source 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
                 }
                 field(Source2FieldCaption_2_1; Rec."Source 2 Field Caption")
@@ -87,12 +87,12 @@ page 91019 DMTReplacementAssignmentPart
                     Enabled = Source2Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
-                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
 
                     trigger OnValidate()
                     begin
-                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Source 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
                 }
                 field(Target1FieldCaption_2_1; Rec."Target 1 Field Caption")
@@ -102,12 +102,12 @@ page 91019 DMTReplacementAssignmentPart
                     Enabled = Target1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
-                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
 
                     trigger OnValidate()
                     begin
-                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Target 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Target 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
                 }
             }
@@ -129,12 +129,12 @@ page 91019 DMTReplacementAssignmentPart
                     Enabled = Source1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
-                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
 
                     trigger OnValidate()
                     begin
-                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Source 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
                 }
                 field(Target1FieldCaption_1_2; Rec."Target 1 Field Caption")
@@ -144,12 +144,12 @@ page 91019 DMTReplacementAssignmentPart
                     Enabled = Target1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
-                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
 
                     trigger OnValidate()
                     begin
-                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Target 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Target 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
                 }
                 field(Target2FieldCaption_1_2; Rec."Target 2 Field Caption")
@@ -159,12 +159,12 @@ page 91019 DMTReplacementAssignmentPart
                     Enabled = Target2Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
-                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 2 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 2 Field Caption"), FieldLookUpBufferGlobal);
                     end;
 
                     trigger OnValidate()
                     begin
-                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Target 2 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Target 2 Field Caption"), FieldLookUpBufferGlobal);
                     end;
                 }
             }
@@ -186,12 +186,12 @@ page 91019 DMTReplacementAssignmentPart
                     Enabled = Source1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
-                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
 
                     trigger OnValidate()
                     begin
-                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Source 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Source 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
                 }
                 field(Source2FieldCaption_2_2; Rec."Source 2 Field Caption")
@@ -201,12 +201,12 @@ page 91019 DMTReplacementAssignmentPart
                     Enabled = Source2Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
-                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 2 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source 2 Field Caption"), FieldLookUpBufferGlobal);
                     end;
 
                     trigger OnValidate()
                     begin
-                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Source 2 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Source 2 Field Caption"), FieldLookUpBufferGlobal);
                     end;
                 }
                 field(Target1FieldCaption_2_2; Rec."Target 1 Field Caption")
@@ -216,12 +216,12 @@ page 91019 DMTReplacementAssignmentPart
                     Enabled = Target1Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
-                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
 
                     trigger OnValidate()
                     begin
-                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Target 1 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Target 1 Field Caption"), FieldLookUpBufferGlobal);
                     end;
                 }
                 field(Target2FieldCaption_2_2; Rec."Target 2 Field Caption")
@@ -231,12 +231,12 @@ page 91019 DMTReplacementAssignmentPart
                     Enabled = Target2Enabled;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
-                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 2 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target 2 Field Caption"), FieldLookUpBufferGlobal);
                     end;
 
                     trigger OnValidate()
                     begin
-                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Target 2 Field Caption"), DataLayoutLineGlobal);
+                        Rec.OnValidateOnAfterLookUp(Rec.FieldNo("Target 2 Field Caption"), FieldLookUpBufferGlobal);
                     end;
                 }
             }
@@ -348,7 +348,7 @@ page 91019 DMTReplacementAssignmentPart
 
     var
         TempImportConfigLine_Selected: Record DMTImportConfigLine temporary;
-        DataLayoutLineGlobal: Record DMTDataLayoutLine;
+        FieldLookUpBufferGlobal: Record DMTFieldLookUpBuffer;
         Source1Enabled, Source2Enabled, Target1Enabled, Target2Enabled : Boolean;
         Source2Visible, Target2Visible : Boolean;
         SelectFieldMappingVisible: Boolean;
