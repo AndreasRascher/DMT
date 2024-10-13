@@ -14,7 +14,7 @@ page 91028 DMTFieldLookUpV2
             repeater(Group)
             {
                 field("Field No."; Rec."Field No.") { ApplicationArea = All; }
-                field("Field Name"; Rec."Field Name") { ApplicationArea = All; }
+                field("Field Name"; Rec."Field Name") { ApplicationArea = All; Visible = FieldNameVisible; }
                 field("Field Caption"; Rec."Field Caption") { ApplicationArea = All; }
             }
         }
@@ -73,6 +73,7 @@ page 91028 DMTFieldLookUpV2
                 if (targetRef.FieldIndex(i).Class = targetRef.FieldIndex(i).Class::Normal) then begin
                     tempFieldSelectionBuffer.LookUpType := tempFieldSelectionBuffer.LookUpType::TargetFields;
                     tempFieldSelectionBuffer."Field No." := targetRef.FieldIndex(i).Number;
+                    tempFieldSelectionBuffer."Field Name" := CopyStr(targetRef.FieldIndex(i).Name, 1, MaxStrLen(tempFieldSelectionBuffer."Field Name"));
                     tempFieldSelectionBuffer."Field Caption" := CopyStr(targetRef.FieldIndex(i).Caption, 1, MaxStrLen(tempFieldSelectionBuffer."Field Caption"));
                     tempFieldSelectionBuffer.Insert();
                 end;
@@ -105,6 +106,7 @@ page 91028 DMTFieldLookUpV2
                 case currType of
                     currType::Source:
                         begin
+                            FieldNameVisible := false;
                             if (importConfigLine."Source Field No." <> 0) then begin // not every target field is mapped
                                 tempFieldSelectionBuffer.LookUpType := tempFieldSelectionBuffer.LookUpType::SourceFields;
                                 tempFieldSelectionBuffer."Field No." := importConfigLine."Source Field No.";
@@ -114,6 +116,7 @@ page 91028 DMTFieldLookUpV2
                         end;
                     currType::Target:
                         begin
+                            FieldNameVisible := true;
                             importConfigLine.CalcFields("Target Field Name", "Target Field Caption");
                             tempFieldSelectionBuffer.LookUpType := tempFieldSelectionBuffer.LookUpType::TargetFields;
                             tempFieldSelectionBuffer."Field No." := importConfigLine."Target Field No.";
@@ -143,5 +146,6 @@ page 91028 DMTFieldLookUpV2
 
     var
         isLoaded: Boolean;
+        FieldNameVisible: Boolean;
 
 }
