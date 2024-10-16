@@ -1,3 +1,5 @@
+TODO: Fixwerte: Alte Auswahl wieder anbieten
+TODO: Leere Fixwerte zulassen
 page 91016 DMTProcessInstructionFactBox
 {
     Caption = 'Processing Instructions', Comment = 'de-DE=Verarbeitungsanweisungen';

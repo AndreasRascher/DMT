@@ -2,7 +2,7 @@ page 91028 DMTFieldLookUpV2
 {
     Caption = 'DMTFieldLookUp';
     PageType = List;
-    UsageCategory = Lists;
+    UsageCategory = None;
     ApplicationArea = All;
     SourceTable = DMTFieldLookUpBuffer;
     SourceTableTemporary = true;
@@ -31,7 +31,14 @@ page 91028 DMTFieldLookUpV2
     end;
 
     local procedure loadLines() hasLines: Boolean
+    var
+        processStorage: Codeunit DMTProcessStorage;
+        recRef: RecordRef;
+        variant: Variant;
     begin
+        processStorage.Get(variant);
+        if variant.IsRecord then
+            recRef.GetTable(variant);
         ReadFilters();
         if isLoaded then exit;
         // Read Table Relation Field Filter
@@ -67,6 +74,8 @@ page 91028 DMTFieldLookUpV2
         if not readFilterValue(tableNo, Rec, Rec.FieldNo("Table No."), 0) then
             if not readFilterValue(tableNo, Rec, Rec.FieldNo("Table No."), 4) then
                 exit(false);
+        if tableNo = 0 then
+            exit(false);
         targetRef.Open(tableNo);
         for i := 1 to targetRef.FieldCount do
             if targetRef.FieldIndex(i).Active then

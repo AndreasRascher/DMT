@@ -152,6 +152,7 @@ page 91029 DMTFieldSelection
         CurrPage.Caption := StrSubstNo(pageCaptionTxt, importConfigHeader."Target Table Caption");
         Rec.FilterGroup(4);
         Rec.SetRange("Imp.Conf.Header ID", importConfigHeader."ID");
+        Rec.SetRange("Table No.", importConfigHeader."Target Table ID");  // only target table fields
         Rec.FilterGroup(0);
     end;
 
@@ -163,6 +164,7 @@ page 91029 DMTFieldSelection
         CurrPage.Caption := StrSubstNo(pageCaptionTxt, importConfigHeader."Target Table Caption");
         Rec.FilterGroup(4);
         Rec.SetRange("Imp.Conf.Header ID", importConfigHeader."ID");
+        Rec.SetRange("Table No.", importConfigHeader."Target Table ID");  // only target table fields
         Rec.FilterGroup(0);
     end;
 

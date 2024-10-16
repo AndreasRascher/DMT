@@ -111,6 +111,7 @@ table 91009 DMTProcessingPlan
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
         // FPBuilder: Codeunit DMTFPBuilder;
+        processStorage: Codeunit DMTProcessStorage;
         fieldSelection: Page DMTFieldSelection;
         BufferRef: RecordRef;
         CurrView: Text;
@@ -130,8 +131,10 @@ table 91009 DMTProcessingPlan
         // if FPBuilder.RunModal(BufferRef, ImportConfigHeader) then begin
         // SaveSourceTableFilter(BufferRef.GetView(false));
         // end;
+        processStorage.Set(Rec);
         if fieldSelection.EditSourceTableFilters(BufferRef, ImportConfigHeader) then
             SaveSourceTableFilter(BufferRef.GetView(false));
+        processStorage.Unbind();
     end;
 
     procedure EditDefaultValues()
