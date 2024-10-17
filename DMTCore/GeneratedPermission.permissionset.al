@@ -85,7 +85,7 @@ permissionset 91000 GeneratedPermission
         page DMTReplacementCard = X,
         page DMTReplacementList = X,
         page DMTReplacementRulePart = X,
-        page DMTSelectMultipleFields = X,
+        // page DMTSelectMultipleFields = X,
         page DMTSourceFiles = X,
         page DMTTriggerLogEntries = X,
         page WebDAVFileBrowser = X,

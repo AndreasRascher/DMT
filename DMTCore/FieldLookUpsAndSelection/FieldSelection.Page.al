@@ -1,11 +1,3 @@
-// TODO:
-// Sichten
-// - Quellfelder mit Filter (Bei In Zieltabelle übertragen, im Verarbeitungsplan)
-// - Zielfelder mit Vorgabewert ()
-// - Ausgew. Felder verarbeiten (Zielfelder)
-// Mehrfachauswahl via Action
-// - Quellfelder
-// - Zielfelder
 page 91029 DMTFieldSelection
 {
     Caption = 'Field Selection', Comment = 'de-DE=Felderauswahl';

@@ -247,7 +247,6 @@ page 91019 DMTReplacementAssignmentPart
     {
         area(Processing)
         {
-            // ToDo
             action(SelectFieldMapping)
             {
                 Caption = 'Select Field Mapping', Comment = 'de-DE=Feldmapping auswählen';

@@ -219,12 +219,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Filter</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field FilterExpression - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1163921151 - Field 2144357174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Imp.Conf.Header ID</source>
-          <target state="translated">Import Konfig. Kopf ID</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Import Konfig. Kopf ID</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field Imp.Conf.Header ID - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 1163921151 - Field 808412446 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>LookUpType</source>
           <target state="needs-translation"/>
@@ -236,12 +230,6 @@
           <target state="translated">Herkunftsfeld</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Herkunftsfeld</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field Source Field Caption - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1163921151 - Field 3017471043 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Table No.</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2"/>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field Table No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1163921151 - Field 1870234639 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Field Caption</source>
@@ -2228,24 +2216,6 @@
           <target state="translated">Regeln</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Regeln</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementRulePart - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 783956376 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Select multiple fields</source>
-          <target state="translated">Mehrere Felder auswählen</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Mehrere Felder auswählen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectMultipleFields - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 783956376 - Control 1782468518 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Current Selection</source>
-          <target state="translated">Aktuelle Auswahl</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Aktuelle Auswahl</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectMultipleFields - Control SelectedFieldsList - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 783956376 - Control 2626035516 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Select Fields</source>
-          <target state="translated">Felder auswählen</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Felder auswählen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectMultipleFields - Control SelectedFields - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 698368471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Source Files</source>

@@ -24,16 +24,22 @@ codeunit 91025 DMTImportConfigPageActionImpl implements IImportConfigPageAction
     procedure ImportConfigCard_UpdateFields(var Rec: Record DMTImportConfigHeader);
     var
         migrateRecordSet: Codeunit DMTMigrateRecordSet;
-        SelectMultipleFields: Page DMTSelectMultipleFields;
-        RunModalAction: Action;
+        fieldSelection: Page DMTFieldSelection;
+        UpdateFieldsFilter: Text;
     begin
-        // Show only Non-Key Fields for selection
-        SelectMultipleFields.Editable := true;
-        if not SelectMultipleFields.InitSelectTargetFields(Rec, Rec.ReadLastFieldUpdateSelection()) then
-            exit;
-        RunModalAction := SelectMultipleFields.RunModal();
-        if RunModalAction = Action::OK then begin
-            Rec.WriteLastFieldUpdateSelection(SelectMultipleFields.GetTargetFieldIDListAsText());
+        // // Show only Non-Key Fields for selection
+        // SelectMultipleFields.Editable := true;
+        // if not SelectMultipleFields.InitSelectTargetFields(Rec, Rec.ReadLastFieldUpdateSelection()) then
+        //     exit;
+        // RunModalAction := SelectMultipleFields.RunModal();
+        // if RunModalAction = Action::OK then begin
+        //     Rec.WriteLastFieldUpdateSelection(SelectMultipleFields.GetTargetFieldIDListAsText());
+        //     migrateRecordSet.Start(Rec, Enum::DMTMigrationType::MigrateSelectsFields);
+        // end;
+
+        UpdateFieldsFilter := Rec.ReadLastFieldUpdateSelection();
+        if fieldSelection.SelectFieldsToProcess(UpdateFieldsFilter, Rec) then begin
+            Rec.WriteLastFieldUpdateSelection(UpdateFieldsFilter);
             migrateRecordSet.Start(Rec, Enum::DMTMigrationType::MigrateSelectsFields);
         end;
     end;

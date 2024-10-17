@@ -1848,21 +1848,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Regeln</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementRulePart - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 783956376 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Select multiple fields</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Mehrere Felder auswählen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectMultipleFields - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 783956376 - Control 1782468518 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Current Selection</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Aktuelle Auswahl</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectMultipleFields - Control SelectedFieldsList - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 783956376 - Control 2626035516 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Select Fields</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Felder auswählen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectMultipleFields - Control SelectedFields - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 698368471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Source Files</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Quelldateien</note>
