@@ -128,9 +128,7 @@ page 91029 DMTFieldSelection
     begin
         Usage := Usage::SelectFieldsToProcess;
         CurrPage.Caption := pageCaptionTxt;
-        Rec.FilterGroup(4);
-        Rec.SetRange("Imp.Conf.Header ID", importConfigHeader."ID");
-        Rec.FilterGroup(0);
+        setImportConfigHeaderAndTargetTableFilter(importConfigHeader);
     end;
 
     procedure SetUsage_EditSourceTableFilters(importConfigHeader: Record DMTImportConfigHeader)
@@ -139,9 +137,7 @@ page 91029 DMTFieldSelection
     begin
         Usage := Usage::EditSourceTableFilters;
         CurrPage.Caption := StrSubstNo(pageCaptionTxt, importConfigHeader."Source File Name");
-        Rec.FilterGroup(4);
-        Rec.SetRange("Imp.Conf.Header ID", importConfigHeader."ID");
-        Rec.FilterGroup(0);
+        setImportConfigHeaderAndTargetTableFilter(importConfigHeader);
     end;
 
     procedure SetUsage_EditDefaultValues(importConfigHeader: Record DMTImportConfigHeader)
@@ -150,10 +146,7 @@ page 91029 DMTFieldSelection
     begin
         Usage := Usage::EditDefaultValues;
         CurrPage.Caption := StrSubstNo(pageCaptionTxt, importConfigHeader."Target Table Caption");
-        Rec.FilterGroup(4);
-        Rec.SetRange("Imp.Conf.Header ID", importConfigHeader."ID");
-        Rec.SetRange("Table No.", importConfigHeader."Target Table ID");  // only target table fields
-        Rec.FilterGroup(0);
+        setImportConfigHeaderAndTargetTableFilter(importConfigHeader);
     end;
 
     procedure SetUsage_EditTargetTableFilters(importConfigHeader: Record DMTImportConfigHeader)
@@ -162,10 +155,7 @@ page 91029 DMTFieldSelection
     begin
         Usage := Usage::EditTargetTableFilters;
         CurrPage.Caption := StrSubstNo(pageCaptionTxt, importConfigHeader."Target Table Caption");
-        Rec.FilterGroup(4);
-        Rec.SetRange("Imp.Conf.Header ID", importConfigHeader."ID");
-        Rec.SetRange("Table No.", importConfigHeader."Target Table ID");  // only target table fields
-        Rec.FilterGroup(0);
+        setImportConfigHeaderAndTargetTableFilter(importConfigHeader);
     end;
 
     procedure SetUsage_EditTableFilters(recRef: RecordRef)
@@ -175,7 +165,7 @@ page 91029 DMTFieldSelection
         Usage := Usage::EditTableFilters;
         CurrPage.Caption := StrSubstNo(pageCaptionTxt, recRef.Caption);
         Rec.FilterGroup(4);
-        Rec.SetRange("Table No.", recRef.Number);
+        Rec.SetRange("Table No. Filter", recRef.Number);
         Rec.FilterGroup(0);
     end;
 
@@ -300,7 +290,6 @@ page 91029 DMTFieldSelection
         importConfigLine.SetFilter("Target Field No.", updateTargetFieldsFilter);
         if importConfigLine.FindSet() then
             repeat
-                Rec."Imp.Conf.Header ID" := importConfigLine."Imp.Conf.Header ID";
                 Rec.LookUpType := Rec.LookUpType::TargetFields;
                 Rec."Field No." := importConfigLine."Target Field No.";
                 importConfigLine.CalcFields("Target Field Caption");
@@ -324,22 +313,28 @@ page 91029 DMTFieldSelection
     var
         importConfigLine: Record DMTImportConfigLine;
     begin
-        tempFieldSelectionBuffer.TestField("Imp.Conf.Header ID");
-        importConfigLine.SetRange("Imp.Conf.Header ID", tempFieldSelectionBuffer."Imp.Conf.Header ID");
+        importConfigLine.SetRange("Imp.Conf.Header ID", tempFieldSelectionBuffer.GetRangeMin("Import Config. ID Filter"));
         importConfigLine.SetRange("Target Field No.", tempFieldSelectionBuffer."Field No.");
         if importConfigLine.FindFirst() then
             tempFieldSelectionBuffer."Source Field Caption" := importConfigLine."Source Field Caption";
     end;
 
-    local procedure FindAssignedTargetField(var tempFieldSelectionBuffer: Record DMTFieldLookUpBuffer temporary)
-    var
-        importConfigLine: Record DMTImportConfigLine;
+    // local procedure FindAssignedTargetField(var tempFieldSelectionBuffer: Record DMTFieldLookUpBuffer temporary)
+    // var
+    //     importConfigLine: Record DMTImportConfigLine;
+    // begin
+    //     importConfigLine.SetRange("Imp.Conf.Header ID", tempFieldSelectionBuffer.GetRangeMin("Import Config. ID Filter"));
+    //     importConfigLine.SetRange(importConfigLine."Source Field No.", tempFieldSelectionBuffer."Field No.");
+    //     if importConfigLine.FindFirst() then
+    //         tempFieldSelectionBuffer."Target Field Caption" := importConfigLine."Target Field Caption";
+    // end;
+
+    local procedure setImportConfigHeaderAndTargetTableFilter(var importConfigHeader: Record DMTImportConfigHeader)
     begin
-        tempFieldSelectionBuffer.TestField("Imp.Conf.Header ID");
-        importConfigLine.SetRange("Imp.Conf.Header ID", tempFieldSelectionBuffer."Imp.Conf.Header ID");
-        importConfigLine.SetRange(importConfigLine."Source Field No.", tempFieldSelectionBuffer."Field No.");
-        if importConfigLine.FindFirst() then
-            tempFieldSelectionBuffer."Target Field Caption" := importConfigLine."Target Field Caption";
+        Rec.FilterGroup(4);
+        Rec.SetRange("Import Config. ID Filter", importConfigHeader."ID");
+        Rec.SetRange("Table No. Filter", importConfigHeader."Target Table ID");
+        Rec.FilterGroup(0);
     end;
 
     procedure loadFieldFilters(var fieldFilters: Dictionary of [Integer/*Field-ID*/, Text/*Filter*/]; var recordRef: RecordRef) hasFilters: Boolean
@@ -365,7 +360,6 @@ page 91029 DMTFieldSelection
                 Rec."Field No." := fieldID;
                 Rec.Insert();
             end;
-            Rec."Table No." := SourceRef.Number;
             Rec.LookUpType := Rec.LookUpType::TargetFields;
             Rec."Target Field Caption" := CopyStr(SourceRef.Field(fieldID).Caption, 1, MaxStrLen(Rec."Source Field Caption"));
             Rec.FilterExpression := CopyStr(fieldFilters.Get(fieldID), 1, MaxStrLen(Rec.FilterExpression));
@@ -380,7 +374,6 @@ page 91029 DMTFieldSelection
     begin
         importConfigLine.SetRange("Imp.Conf.Header ID", importConfigHeader."ID");
         foreach fieldNo in fieldFilters.Keys do begin
-            Rec."Imp.Conf.Header ID" := importConfigHeader."ID";
             case Usage of
                 usage::EditSourceTableFilters:
                     begin
@@ -426,7 +419,6 @@ page 91029 DMTFieldSelection
         KeyRef := RecRef.KeyIndex(1);
         for _KeyIndex := 1 to KeyRef.FieldCount do begin
             FieldRef := KeyRef.FieldIndex(_KeyIndex);
-            Rec."Table No." := recRef.Number;
             Rec.LookUpType := Rec.LookUpType::" ";
             Rec."Field No." := FieldRef.Number;
             Rec."Target Field Caption" := CopyStr(FieldRef.Caption, 1, MaxStrLen(Rec."Source Field Caption"));
@@ -446,7 +438,6 @@ page 91029 DMTFieldSelection
                 case Usage of
                     Usage::EditSourceTableFilters:
                         begin
-                            Rec."Imp.Conf.Header ID" := importConfigLine."Imp.Conf.Header ID";
                             Rec.LookUpType := Rec.LookUpType::SourceFields;
                             Rec."Field No." := importConfigLine."Source Field No.";
                             Rec."Source Field Caption" := importConfigLine."Source Field Caption";
@@ -454,7 +445,6 @@ page 91029 DMTFieldSelection
                         end;
                     Usage::EditTargetTableFilters:
                         begin
-                            Rec."Imp.Conf.Header ID" := importConfigLine."Imp.Conf.Header ID";
                             Rec.LookUpType := Rec.LookUpType::TargetFields;
                             Rec."Field No." := importConfigLine."Target Field No.";
                             importConfigLine.CalcFields("Target Field Caption");

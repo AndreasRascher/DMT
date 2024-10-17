@@ -183,11 +183,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Filter</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field FilterExpression - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1163921151 - Field 2144357174 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Imp.Conf.Header ID</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Import Konfig. Kopf ID</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field Imp.Conf.Header ID - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 1163921151 - Field 808412446 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>LookUpType</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -197,11 +192,6 @@
           <source>Source Field Caption</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Herkunftsfeld</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field Source Field Caption - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1163921151 - Field 3017471043 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Table No.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field Table No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1163921151 - Field 1870234639 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target Field Caption</source>

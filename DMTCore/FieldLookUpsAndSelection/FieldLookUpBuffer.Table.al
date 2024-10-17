@@ -8,22 +8,18 @@ table 91015 DMTFieldLookUpBuffer
         field(10; LookUpType; Option) { OptionMembers = " ",SourceFields,TargetFields; }
         field(11; "Field Name"; Text[250]) { }
         field(12; "Field Caption"; Text[250]) { }
-        field(13; "Imp.Conf.Header ID"; Integer)
-        {
-            Caption = 'Imp.Conf.Header ID', Comment = 'de-DE=Import Konfig. Kopf ID';
-            TableRelation = DMTImportConfigHeader;
-        }
-        field(14; "Table No."; Integer) { } // RecRef Filter
+        field(13; "Import Config. ID Filter"; Integer) { FieldClass = FlowFilter; Caption = 'Data File ID Filter', Locked = true; }
+        field(14; "Table No. Filter"; Integer) { FieldClass = FlowFilter; Caption = 'Table No. Filter', Locked = true; } // RecRef Filter
         field(30; "Source Field Caption"; Text[80])
         {
             Caption = 'Source Field Caption', Comment = 'de-DE=Herkunftsfeld';
-            TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Imp.Conf.Header ID" = field("Imp.Conf.Header ID"), LookUpType = const(SourceFields));
+            TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Import Config. ID Filter" = field("Import Config. ID Filter"), LookUpType = const(SourceFields));
             ValidateTableRelation = false;
         }
         field(32; "Target Field Caption"; Text[80])
         {
             Caption = 'Target Field Caption', Comment = 'de-DE=Zielfeld';
-            TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Imp.Conf.Header ID" = field("Imp.Conf.Header ID"), "Table No." = field("Table No."), LookUpType = const(TargetFields));
+            TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Import Config. ID Filter" = field("Import Config. ID Filter"), "Table No. Filter" = field("Table No. Filter"), LookUpType = const(TargetFields));
             ValidateTableRelation = false;
         }
         field(50; FilterExpression; Text[2048])
@@ -77,14 +73,14 @@ table 91015 DMTFieldLookUpBuffer
         case rec.LookUpType of
             rec.LookUpType::SourceFields:
                 begin
-                    importConfigLine.SetRange("Imp.Conf.Header ID", Rec."Imp.Conf.Header ID");
+                    importConfigLine.SetRange("Imp.Conf.Header ID", Rec.GetRangeMin("Import Config. ID Filter"));
                     importConfigLine.SetRange("Source Field No.", Rec."Field No.");
                     if importConfigLine.FindFirst() then
                         CurrREC."Field Caption" := importConfigLine."Source Field Caption";
                 end;
             Rec.LookUpType::TargetFields:
                 begin
-                    importConfigLine.SetRange("Imp.Conf.Header ID", Rec."Imp.Conf.Header ID");
+                    importConfigLine.SetRange("Imp.Conf.Header ID", Rec.GetRangeMin("Import Config. ID Filter"));
                     importConfigLine.SetRange("Target Field No.", Rec."Field No.");
                     if importConfigLine.FindFirst() then begin
                         importConfigLine.CalcFields("Target Field Caption");

@@ -1,5 +1,3 @@
-TODO: Fixwerte: Alte Auswahl wieder anbieten
-TODO: Leere Fixwerte zulassen
 page 91016 DMTProcessInstructionFactBox
 {
     Caption = 'Processing Instructions', Comment = 'de-DE=Verarbeitungsanweisungen';
@@ -64,22 +62,6 @@ page 91016 DMTProcessInstructionFactBox
                 ApplicationArea = All;
                 Visible = ActionAddFieldVisible;
                 Image = Add;
-
-                // trigger OnAction()
-                // var
-                //     SelectMultipleFields: Page DMTSelectMultipleFields;
-                //     RunModalAction: Action;
-                // begin
-                //     // Show only Non-Key Fields for selection
-                //     if not SelectMultipleFields.InitSelectTargetFields(CurrProcessingPlan) then
-                //         exit;
-                //     RunModalAction := SelectMultipleFields.RunModal();
-                //     if RunModalAction = Action::OK then begin
-                //         CurrProcessingPlan.Get(CurrProcessingPlan.RecordId);
-                //         CurrProcessingPlan.SaveUpdateFieldsFilter(SelectMultipleFields.GetTargetFieldIDListAsText());
-                //         ReloadPageContent();
-                //     end;
-                // end;
 
                 trigger OnAction()
                 var
@@ -193,36 +175,6 @@ page 91016 DMTProcessInstructionFactBox
         end;
         CurrPage.Update();
     end;
-
-    // trigger OnFindRecord(Which: Text): Boolean
-    // var
-    //     found: Boolean;
-    // begin
-    //     found := Rec.Find(Which);
-    //     LoadLines();
-    //     exit(found);
-    // end;
-
-    // procedure LoadLines()
-    // var
-    //     lineNo: Integer;
-    //     runMode: Option " ","SourceTableFilter","FixedValueView","UpdateSelectedFields";
-    // begin
-    //     runMode := rec.GetRangeMin(PrPl_FBRunMode_Filter);
-    //     lineNo := rec.GetRangeMin(PrPl_LineNo_Filter);
-    //     // if is loaded
-    //     if CurrProcessingPlan."Line No." = lineNo then
-    //         exit;
-    //     CurrProcessingPlan.Get(lineNo);
-    //     case runMode of
-    //         runMode::SourceTableFilter:
-    //             InitFactBoxAsSourceTableFilter(CurrProcessingPlan);
-    //         runMode::FixedValueView:
-    //             InitFactBoxAsFixedValueView(CurrProcessingPlan);
-    //         runMode::UpdateSelectedFields:
-    //             InitFactBoxAsUpdateSelectedFields(CurrProcessingPlan);
-    //     end;
-    // end;
 
     var
         CurrProcessingPlan: Record DMTProcessingPlan;

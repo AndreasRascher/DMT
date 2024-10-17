@@ -71,8 +71,8 @@ page 91028 DMTFieldLookUpV2
         OK := true;
         Rec.FilterGroup(4);
 
-        if not readFilterValue(tableNo, Rec, Rec.FieldNo("Table No."), 0) then
-            if not readFilterValue(tableNo, Rec, Rec.FieldNo("Table No."), 4) then
+        if not readFilterValue(tableNo, Rec, Rec.FieldNo("Table No. Filter"), 0) then
+            if not readFilterValue(tableNo, Rec, Rec.FieldNo("Table No. Filter"), 4) then
                 exit(false);
         if tableNo = 0 then
             exit(false);
@@ -99,8 +99,8 @@ page 91028 DMTFieldLookUpV2
         importConfigHeaderID, currTypeInt : Integer;
     begin
         OK := true;
-        if not readFilterValue(importConfigHeaderID, Rec, Rec.FieldNo("Imp.Conf.Header ID"), 0) then
-            if not readFilterValue(importConfigHeaderID, Rec, Rec.FieldNo("Imp.Conf.Header ID"), 4) then
+        if not readFilterValue(importConfigHeaderID, Rec, Rec.FieldNo("Import Config. ID Filter"), 0) then
+            if not readFilterValue(importConfigHeaderID, Rec, Rec.FieldNo("Import Config. ID Filter"), 4) then
                 exit(false);
 
         if not readFilterValue(currTypeInt, Rec, Rec.FieldNo(LookUpType), 0) then

@@ -727,13 +727,13 @@ page 91017 DMTProcessingPlan
     end;
 
     var
-        TempProcessingPlan_SELECTED: Record DMTProcessingPlan temporary;
         CurrImportConfigHeader: Record DMTImportConfigHeader;
+        TempProcessingPlan_SELECTED: Record DMTProcessingPlan temporary;
+        GlobalProcessingPlanBatch: Record DMTProcessingPlanBatch;
         ProcessingPlanMgt: Codeunit DMTProcessingPlanMgt;
         HasImportConfigHeader: Boolean;
         RetryBufferRecordsWithError_Enabled: Boolean;
-        ShowFixedValuesPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart, ShowLogFactboxPart, TargetTableID_HideValue : Boolean;
-        LineStyle: Text;
+        ShowFixedValuesPart, ShowLogFactboxPart, ShowProcessSelectedFieldsOnly, ShowSourceTableFilterPart, TargetTableID_HideValue : Boolean;
         CurrentJnlBatchName: Code[20];
-        GlobalProcessingPlanBatch: Record DMTProcessingPlanBatch;
+        LineStyle: Text;
 }
