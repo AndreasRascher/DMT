@@ -53,8 +53,7 @@ codeunit 91014 DMTMigrateRecordSet
         importSettings.UseTriggerLog(importConfigHeader."Log Trigger Changes");
         importSettings.EvaluateOptionValueAsNumber(importConfigHeader."Ev. Nos. for Option fields as" = importConfigHeader."Ev. Nos. for Option fields as"::Position);
         DMTSetup.GetRecordOnce();
-        if DMTSetup.IsNAVExport() then
-            importSettings.EvaluateOptionValueAsNumber(true);  //TODO should be set from Header
+
         // Checks
         CheckMappedFieldsExist(importConfigHeader);
         // Prepare Buffer
@@ -225,7 +224,7 @@ codeunit 91014 DMTMigrateRecordSet
     local procedure EditView(var BufferRef: RecordRef; var importSettings: Codeunit DMTImportSettings) Continue: Boolean
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
-        FPBuilder: Codeunit DMTFPBuilder;
+        fieldSelection: Page DMTFieldSelection;
     begin
         Continue := true; // Canceling the dialog should stop the process
 
@@ -238,7 +237,9 @@ codeunit 91014 DMTMigrateRecordSet
         end;
 
         ImportConfigHeader.Get(importSettings.ImportConfigHeader().RecordId);
-        if not FPBuilder.RunModal(BufferRef, ImportConfigHeader) then
+        // if not FPBuilder.RunModal(BufferRef, ImportConfigHeader) then
+        // exit(false);
+        if not fieldSelection.EditSourceTableFilters(BufferRef, ImportConfigHeader) then
             exit(false);
         if BufferRef.HasFilter then begin
             ImportConfigHeader.WriteSourceTableView(BufferRef.GetView(false));
@@ -323,6 +324,8 @@ codeunit 91014 DMTMigrateRecordSet
                 if not InsertRecord(migrateRecord) then begin
                     migrateRecord.CollectLastError();
                     Result := Enum::DMTProcessingResultType::Error;
+                end else begin
+                    migrateRecord.UpdateDMTImportFields(); // write reference to target record after import
                 end;
             end else begin
                 // 4.b Update Record

@@ -4,7 +4,7 @@ codeunit 90021 ReplacementTests
     TestPermissions = Disabled;
 
     [Test]
-    [HandlerFunctions('ImportToTargetFilterPageHandler,LogEntriesPageHandler,MessageHandler')]
+    [HandlerFunctions('FieldSelectionHandler,LogEntriesPageHandler,MessageHandler')]
     procedure Test2by2Replacements()
     var
         importConfigHeader: Record DMTImportConfigHeader;
@@ -25,7 +25,7 @@ codeunit 90021 ReplacementTests
     end;
 
     [Test]
-    [HandlerFunctions('ImportToTargetFilterPageHandler,LogEntriesPageHandler,MessageHandler')]
+    [HandlerFunctions('FieldSelectionHandler,LogEntriesPageHandler,MessageHandler')]
     procedure Test2by2Replacements_UpdateRecordsWithSelectedFields()
     var
         importConfigHeader: Record DMTImportConfigHeader;
@@ -96,11 +96,11 @@ codeunit 90021 ReplacementTests
         salesLine.Delete(); // Cleanup;
     end;
 
-    [FilterPageHandler]
-    procedure ImportToTargetFilterPageHandler(var Record1: RecordRef): Boolean;
+
+    [ModalPageHandler]
+    procedure FieldSelectionHandler(var fieldSelection: TestPage DMTFieldSelection)
     begin
-        exit(true); // OK to proceed
-        // If this procedure isn't called, no filter page is raised and the test fails
+        fieldSelection.OK().Invoke();
     end;
 
     [PageHandler]

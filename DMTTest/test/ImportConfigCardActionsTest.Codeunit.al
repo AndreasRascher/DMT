@@ -13,38 +13,48 @@ codeunit 90023 ImportConfigCardActionsTest
         // [WHEN] WhenImporting 
         DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_ImportBufferDataFromFile(ImportConfigHeaderGlobal);
         ImportConfigHeaderGlobal.UpdateBufferRecordCount();
+        // [THEN] Buffer records have been created
         if ImportConfigHeaderGlobal."No.of Records in Buffer Table" = 0 then
             Error('No records were imported');
     end;
 
     [Test]
-    [HandlerFunctions('ImportToTargetFilterPageHandler')]
+    [HandlerFunctions('FieldSelectionHandler,LogEntriesPageHandler,MessageHandler')]
     procedure GivenImportConfigHeaderWithBufferRecords_WhenImportingToTarget_ThenFilterPageIsRaised()
     var
         DMTSetup: Record DMTSetup;
+        genBuffTable: Record DMTGenBuffTable;
         testLibrary: Codeunit DMTTestLibrary;
+        targetRef: RecordRef;
     begin
         // [GIVEN] GivenImportConfigHeaderWithSourceFile 
         initializeImportConfigHeader();
         testLibrary.CreateFieldMapping(ImportConfigHeaderGlobal, false);
         // [WHEN] WhenImporting 
         DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_TransferToTargetTable(ImportConfigHeaderGlobal);
-    end;
-
-    [FilterPageHandler]
-    procedure ImportToTargetFilterPageHandler(var Record1: RecordRef): Boolean;
-    begin
-        // If this procedure isn't called, no filter page is raised and the test fails
-    end;
-
-    procedure GivenImportConfigHeaderWithBufferRecords_WhenImportingToTarget_LinesHaveBeenUpdated()
-    var
-        genBuffTable: Record DMTGenBuffTable;
-    begin
-        // [GIVEN] ImportConfigHeaderWithSourceFile, Import is finished
-        // [WHEN] Lines have been updated
-        genBuffTable.FilterBy(ImportConfigHeaderGlobal);
+        // [THEN] Buffer recors have reference to imported records
         // [THEN] Gen. Buffer lines with status 'Imported' exist
+        genBuffTable.FilterBy(ImportConfigHeaderGlobal);
+        genBuffTable.FindLast();
+        genBuffTable.TestField(Imported, true);
+        targetRef.Get(genBuffTable."RecId (Imported)");
+    end;
+
+    [ModalPageHandler]
+    procedure FieldSelectionHandler(var fieldSelection: TestPage DMTFieldSelection)
+    begin
+        fieldSelection.OK().Invoke();
+    end;
+
+    [PageHandler]
+    procedure LogEntriesPageHandler(var LogEntries: TestPage DMTLogEntries)
+    begin
+        LogEntries.OK().Invoke();
+    end;
+
+    [MessageHandler]
+    procedure MessageHandler(Message: Text)
+    begin
     end;
 
     local procedure initializeImportConfigHeader()

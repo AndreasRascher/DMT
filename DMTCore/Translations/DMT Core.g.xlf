@@ -158,6 +158,46 @@
           <note from="Developer" annotates="general" priority="2">de-DE= Datenlayout ID</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTDataLayoutLine - Field Data Layout ID - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1163921151 - Field 1593446156 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Default Value</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vorgabewert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field DefaultValue - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1163921151 - Field 823559016 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field Caption</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field Field Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1163921151 - Field 3070320983 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field Name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field Field Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1163921151 - Field 3531868071 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field Field No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1163921151 - Field 3394570910 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filter</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Filter</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field FilterExpression - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1163921151 - Field 808412446 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>LookUpType</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field LookUpType - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1163921151 - Field 4163973499 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Field Caption</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Herkunftsfeld</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field Source Field Caption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1163921151 - Field 1870234639 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target Field Caption</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zielfeld</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTFieldLookUpBuffer - Field Target Field Caption - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1296439604 - Field 1278776511 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Column Count</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1198,10 +1238,40 @@
           <note from="Developer" annotates="general" priority="2">de-DE=OnDelete Trigger verwenden</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDataInTargetTable - Control UseOnDeleteTriggerCtrl - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3373207527 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Fields</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Felder</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldLookup - Property Caption</note>
+        <trans-unit id="Page 2393354843 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMTFieldLookUp</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldLookUpV2 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2803682913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Field Selection</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Felderauswahl</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldSelection - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2803682913 - Method 1460349457 - NamedType 458928479" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set default values for table %1</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Legen sie Fix-Werte für die Tabelle %1 fest</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldSelection - Method SetUsage_EditDefaultValues - NamedType pageCaptionTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2803682913 - Method 3247180304 - NamedType 458928479" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Edit filter for %1</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Filter bearbeiten für %1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldSelection - Method SetUsage_EditSourceTableFilters - NamedType pageCaptionTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2803682913 - Method 3306591899 - NamedType 458928479" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Edit filter for %1</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Filter bearbeiten für %1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldSelection - Method SetUsage_EditTableFilters - NamedType pageCaptionTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2803682913 - Method 3900567964 - NamedType 458928479" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Edit filter for %1</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Filter bearbeiten für %1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldSelection - Method SetUsage_EditTargetTableFilters - NamedType pageCaptionTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2803682913 - Method 2630791397 - NamedType 458928479" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Select fields to process.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Wählen Sie Felder zur Verarbeitung aus.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldSelection - Method SetUsage_SetSelectFieldsToProcess - NamedType pageCaptionTxt</note>
         </trans-unit>
         <trans-unit id="Page 4209446702 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT GenBufferList</source>
@@ -1279,8 +1349,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CountLines - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 809130730 - Action 1922075018 - Method 1377591017 - NamedType 1392962668" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Filter:%1 \ No. of Lines in Filter: %2</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2</note>
+          <source>Filter: %1 \ No. of Lines in Filter: %2</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Filter: %1 \ Anzahl Zeilen im Filter: %2</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigCard - Action CountLines - Method OnAction - NamedType NoOfLinesInFilterLbl</note>
         </trans-unit>
         <trans-unit id="Page 809130730 - Action 321739984 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -1777,21 +1847,6 @@
           <source>Rules</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Regeln</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTReplacementRulePart - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 783956376 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Select multiple fields</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Mehrere Felder auswählen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectMultipleFields - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 783956376 - Control 1782468518 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Current Selection</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Aktuelle Auswahl</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectMultipleFields - Control SelectedFieldsList - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 783956376 - Control 2626035516 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Select Fields</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Felder auswählen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSelectMultipleFields - Control SelectedFields - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 698368471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Source Files</source>

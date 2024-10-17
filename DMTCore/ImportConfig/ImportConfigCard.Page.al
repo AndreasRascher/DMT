@@ -158,18 +158,18 @@ page 91008 DMTImportConfigCard
                 Image = CalcWorkCenterCalendar;
                 trigger OnAction()
                 var
-                    FPBuilder: Codeunit DMTFPBuilder;
-                    RecRef: RecordRef;
+                    fieldSelection: Page DMTFieldSelection;
+                    targetRef: RecordRef;
                     TargetTableView, TargetTableFilter : Text;
-                    NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', Comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
+                    NoOfLinesInFilterLbl: Label 'Filter: %1 \ No. of Lines in Filter: %2', Comment = 'de-DE=Filter: %1 \ Anzahl Zeilen im Filter: %2';
                 begin
-                    RecRef.Open(Rec."Target Table ID");
+                    targetRef.Open(Rec."Target Table ID");
                     if TargetTableView <> '' then
-                        RecRef.SetView(TargetTableView);
-                    if FPBuilder.RunModal(RecRef) then begin
-                        TargetTableView := RecRef.GetView();
-                        TargetTableFilter := RecRef.GetFilters;
-                        Message(NoOfLinesInFilterLbl, TargetTableFilter, RecRef.Count);
+                        targetRef.SetView(TargetTableView);
+                    if fieldSelection.EditTargetTableFilters(targetRef, Rec) then begin
+                        TargetTableView := targetRef.GetView();
+                        TargetTableFilter := targetRef.GetFilters;
+                        Message(NoOfLinesInFilterLbl, TargetTableFilter, targetRef.Count);
                     end;
                 end;
             }
@@ -180,7 +180,7 @@ page 91008 DMTImportConfigCard
                 Image = CalcWorkCenterCalendar;
                 trigger OnAction()
                 var
-                    FPBuilder: Codeunit DMTFPBuilder;
+                    fieldSelection: Page DMTFieldSelection;
                     RecRef: RecordRef;
                     NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', Comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
                     TargetTableFilter, TargetTableView : Text;
@@ -188,7 +188,7 @@ page 91008 DMTImportConfigCard
                     Rec.BufferTableMgt().InitBufferRef(RecRef);
                     if TargetTableView <> '' then
                         RecRef.SetView(TargetTableView);
-                    if FPBuilder.RunModal(RecRef) then begin
+                    if fieldSelection.EditSourceTableFilters(RecRef, Rec) then begin
                         TargetTableView := RecRef.GetView();
                         TargetTableFilter := RecRef.GetFilters;
                         Message(NoOfLinesInFilterLbl, TargetTableFilter, RecRef.Count);

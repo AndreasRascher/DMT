@@ -41,27 +41,31 @@ table 91012 DMTReplacementLine
         field(30; "Source 1 Field No."; Integer)
         {
             Caption = 'Source Field 1 No.', Comment = 'de-DE=Herkunftsfeld 1 Nr.';
-            TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            //TableRelation = DMTfieldLookUpBuffer."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            TableRelation = DMTFieldLookUpBuffer."Field No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), LookUpType = const(SourceFields));
             ValidateTableRelation = false;
             BlankZero = true;
         }
         field(31; "Source 1 Field Caption"; Text[80])
         {
             Caption = 'Source 1 Field Caption', Comment = 'de-DE=Herkunftsfeld 1';
-            TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            // TableRelation = DMTfieldLookUpBuffer."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), LookUpType = const(SourceFields));
             ValidateTableRelation = false;
         }
         field(32; "Source 2 Field No."; Integer)
         {
             Caption = 'Source 2 Field No.', Comment = 'de-DE=Herkunftsfeld 2 Nr.';
-            TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            // TableRelation = DMTfieldLookUpBuffer."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            TableRelation = DMTFieldLookUpBuffer."Field No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), LookUpType = const(SourceFields));
             ValidateTableRelation = false;
             BlankZero = true;
         }
         field(33; "Source 2 Field Caption"; Text[80])
         {
             Caption = 'Source 2 Field Caption', Comment = 'de-DE=Herkunftsfeld 2';
-            TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            // TableRelation = DMTfieldLookUpBuffer."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
+            TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), LookUpType = const(SourceFields));
             ValidateTableRelation = false;
         }
         field(34; "Target 1 Field No."; Integer)
@@ -72,7 +76,8 @@ table 91012 DMTReplacementLine
         field(35; "Target 1 Field Caption"; Text[80])
         {
             Caption = 'Target Field 1 Caption', Comment = 'de-DE=Zielfeld 1';
-            TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), "Field Look Mode Filter" = const("Look Up Target"));
+            // TableRelation = DMTfieldLookUpBuffer."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), "Field Look Mode Filter" = const("Look Up Target"));
+            TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), LookUpType = const(TargetFields));
             ValidateTableRelation = false;
         }
         field(36; "Target 2 Field No."; Integer)
@@ -83,7 +88,8 @@ table 91012 DMTReplacementLine
         field(37; "Target 2 Field Caption"; Text[80])
         {
             Caption = 'Target Field 2 Caption', Comment = 'de-DE=Zielfeld 2';
-            TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), "Field Look Mode Filter" = const("Look Up Target"));
+            // TableRelation = DMTfieldLookUpBuffer."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), "Field Look Mode Filter" = const("Look Up Target"));
+            TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), LookUpType = const(TargetFields));
             ValidateTableRelation = false;
         }
 
@@ -123,45 +129,45 @@ table 91012 DMTReplacementLine
         TempReplacementLine.Copy(tempReplacementLines2, true);
     end;
 
-    internal procedure OnAfterLookUpField(var Selected: RecordRef; fromFieldNo: Integer; var currDataLayoutLine: Record DMTDataLayoutLine)
+    internal procedure OnAfterLookUpField(var Selected: RecordRef; fromFieldNo: Integer; var currfieldLookUpBuffer: Record DMTFieldLookUpBuffer)
     var
-        dataLayoutLineSelected: Record DMTDataLayoutLine;
+        fieldLookUpBufferSelected: Record DMTFieldLookUpBuffer;
     begin
         case fromFieldNo of
             Rec.FieldNo("Target 1 Field Caption"):
                 begin
-                    Selected.SetTable(dataLayoutLineSelected);
-                    Rec."Target 1 Field No." := dataLayoutLineSelected."Column No.";
-                    Rec."Target 1 Field Caption" := dataLayoutLineSelected.ColumnName;
-                    currDataLayoutLine := dataLayoutLineSelected;
+                    Selected.SetTable(fieldLookUpBufferSelected);
+                    Rec."Target 1 Field No." := fieldLookUpBufferSelected."Field No.";
+                    Rec."Target 1 Field Caption" := CopyStr(fieldLookUpBufferSelected."Field Caption", 1, MaxStrLen(Rec."Target 1 Field Caption"));
+                    currfieldLookUpBuffer := fieldLookUpBufferSelected;
                 end;
             Rec.FieldNo("Target 2 Field Caption"):
                 begin
-                    Selected.SetTable(dataLayoutLineSelected);
-                    Rec."Target 2 Field No." := dataLayoutLineSelected."Column No.";
-                    Rec."Target 2 Field Caption" := dataLayoutLineSelected.ColumnName;
-                    currDataLayoutLine := dataLayoutLineSelected;
+                    Selected.SetTable(fieldLookUpBufferSelected);
+                    Rec."Target 2 Field No." := fieldLookUpBufferSelected."Field No.";
+                    Rec."Target 2 Field Caption" := CopyStr(fieldLookUpBufferSelected."Field Caption", 1, MaxStrLen(Rec."Target 2 Field Caption"));
+                    currfieldLookUpBuffer := fieldLookUpBufferSelected;
                 end;
             Rec.FieldNo("Source 1 Field Caption"):
                 begin
-                    Selected.SetTable(dataLayoutLineSelected);
-                    Rec."Source 1 Field No." := dataLayoutLineSelected."Column No.";
-                    Rec."Source 1 Field Caption" := dataLayoutLineSelected.ColumnName;
-                    currDataLayoutLine := dataLayoutLineSelected;
+                    Selected.SetTable(fieldLookUpBufferSelected);
+                    Rec."Source 1 Field No." := fieldLookUpBufferSelected."Field No.";
+                    Rec."Source 1 Field Caption" := CopyStr(fieldLookUpBufferSelected."Field Caption", 1, MaxStrLen(Rec."Source 1 Field Caption"));
+                    currfieldLookUpBuffer := fieldLookUpBufferSelected;
                 end;
             Rec.FieldNo("Source 2 Field Caption"):
                 begin
-                    Selected.SetTable(dataLayoutLineSelected);
-                    Rec."Source 2 Field No." := dataLayoutLineSelected."Column No.";
-                    Rec."Source 2 Field Caption" := dataLayoutLineSelected.ColumnName;
-                    currDataLayoutLine := dataLayoutLineSelected;
+                    Selected.SetTable(fieldLookUpBufferSelected);
+                    Rec."Source 2 Field No." := fieldLookUpBufferSelected."Field No.";
+                    Rec."Source 2 Field Caption" := CopyStr(fieldLookUpBufferSelected."Field Caption", 1, MaxStrLen(Rec."Source 2 Field Caption"));
+                    currfieldLookUpBuffer := fieldLookUpBufferSelected;
                 end;
             else
                 Error('unhandled case');
         end;
     end;
 
-    internal procedure OnValidateOnAfterLookUp(fromFieldNo: Integer; var currDataLayoutLine: Record DMTDataLayoutLine)
+    internal procedure OnValidateOnAfterLookUp(fromFieldNo: Integer; var currfieldLookUpBuffer: Record DMTfieldLookUpBuffer)
     var
         importConfigHeader: Record DMTImportConfigHeader;
         importConfigLine: Record DMTImportConfigLine;
@@ -171,7 +177,7 @@ table 91012 DMTReplacementLine
     begin
         // Field Name from user input (e.g. Copy & Paste)
         Rec.TestField("Imp.Conf.Header ID");
-        if (currDataLayoutLine."Column No." = 0) then begin
+        if (currfieldLookUpBuffer."Field No." = 0) then begin
             ImportConfigHeader.Get(Rec."Imp.Conf.Header ID");
             ImportConfigLine.SetRange("Imp.Conf.Header ID", Rec."Imp.Conf.Header ID");
             TargetFieldNames := importConfigMgt.CreateTargetFieldNamesDict(ImportConfigLine, false);
@@ -192,40 +198,40 @@ table 91012 DMTReplacementLine
         end;
 
         // Field Name Selected from selection
-        if currDataLayoutLine."Column No." <> 0 then
+        if currfieldLookUpBuffer."Field No." <> 0 then
             case fromFieldNo of
                 Rec.FieldNo("Target 1 Field Caption"):
                     begin
-                        if (currDataLayoutLine.ColumnName = '') then
+                        if (currfieldLookUpBuffer."Field Caption" = '') then
                             exit;
-                        Rec."Target 1 Field No." := currDataLayoutLine."Column No.";
-                        Rec."Target 1 Field Caption" := currDataLayoutLine.ColumnName;
+                        Rec."Target 1 Field No." := currfieldLookUpBuffer."Field No.";
+                        Rec."Target 1 Field Caption" := CopyStr(currfieldLookUpBuffer."Field Caption", 1, MaxStrLen(Rec."Target 1 Field Caption"));
                     end;
                 Rec.FieldNo("Target 2 Field Caption"):
                     begin
-                        if (currDataLayoutLine.ColumnName = '') then
+                        if (currfieldLookUpBuffer."Field Caption" = '') then
                             exit;
-                        Rec."Target 2 Field No." := currDataLayoutLine."Column No.";
-                        Rec."Target 2 Field Caption" := currDataLayoutLine.ColumnName;
+                        Rec."Target 2 Field No." := currfieldLookUpBuffer."Field No.";
+                        Rec."Target 2 Field Caption" := CopyStr(currfieldLookUpBuffer."Field Caption", 1, MaxStrLen(Rec."Target 2 Field Caption"));
                     end;
                 Rec.FieldNo("Source 1 Field Caption"):
                     begin
-                        if (currDataLayoutLine.ColumnName = '') then
+                        if (currfieldLookUpBuffer."Field Caption" = '') then
                             exit;
-                        Rec."Source 1 Field No." := currDataLayoutLine."Column No.";
-                        Rec."Source 1 Field Caption" := currDataLayoutLine.ColumnName;
+                        Rec."Source 1 Field No." := currfieldLookUpBuffer."Field No.";
+                        Rec."Source 1 Field Caption" := CopyStr(currfieldLookUpBuffer."Field Caption", 1, MaxStrLen(Rec."Source 1 Field Caption"));
                     end;
                 Rec.FieldNo("Source 2 Field Caption"):
                     begin
-                        if (currDataLayoutLine.ColumnName = '') then
+                        if (currfieldLookUpBuffer."Field Caption" = '') then
                             exit;
-                        Rec."Source 2 Field No." := currDataLayoutLine."Column No.";
-                        Rec."Source 2 Field Caption" := currDataLayoutLine.ColumnName;
+                        Rec."Source 2 Field No." := currfieldLookUpBuffer."Field No.";
+                        Rec."Source 2 Field Caption" := CopyStr(currfieldLookUpBuffer."Field Caption", 1, MaxStrLen(Rec."Source 2 Field Caption"));
                     end;
                 else
                     Error('unhandled case');
             end;
-        Clear(currDataLayoutLine);
+        Clear(currfieldLookUpBuffer);
     end;
 
     internal procedure FindReplacementHeaderForPageRec(var replacementHeader: Record DMTReplacementHeader) Found: Boolean

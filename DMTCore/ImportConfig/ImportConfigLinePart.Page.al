@@ -36,7 +36,7 @@ page 91009 DMTImportConfigLinePart
                 }
                 field("From Field No."; Rec."Source Field No.")
                 {
-                    LookupPageId = DMTFieldLookup;
+                    LookupPageId = DMTFieldLookUp;
                     HideValue = IsFixedValue;
                     ShowMandatory = ShowMandatory_FromFieldNo;
                 }

@@ -110,7 +110,9 @@ table 91009 DMTProcessingPlan
     procedure EditSourceTableFilter()
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
-        FPBuilder: Codeunit DMTFPBuilder;
+        // FPBuilder: Codeunit DMTFPBuilder;
+        processStorage: Codeunit DMTProcessStorage;
+        fieldSelection: Page DMTFieldSelection;
         BufferRef: RecordRef;
         CurrView: Text;
     begin
@@ -126,15 +128,20 @@ table 91009 DMTProcessingPlan
         CurrView := ReadSourceTableView();
         if CurrView <> '' then
             BufferRef.SetView(CurrView);
-        if FPBuilder.RunModal(BufferRef, ImportConfigHeader) then begin
+        // if FPBuilder.RunModal(BufferRef, ImportConfigHeader) then begin
+        // SaveSourceTableFilter(BufferRef.GetView(false));
+        // end;
+        processStorage.Set(Rec);
+        if fieldSelection.EditSourceTableFilters(BufferRef, ImportConfigHeader) then
             SaveSourceTableFilter(BufferRef.GetView(false));
-        end;
+        processStorage.Unbind();
     end;
 
     procedure EditDefaultValues()
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
-        FPBuilder: Codeunit DMTFPBuilder;
+        // FPBuilder: Codeunit DMTFPBuilder;
+        fieldSelection: Page DMTFieldSelection;
         TargetRef: RecordRef;
         CurrView: Text;
     begin
@@ -144,9 +151,11 @@ table 91009 DMTProcessingPlan
         CurrView := ReadDefaultValuesView();
         if CurrView <> '' then
             TargetRef.SetView(CurrView);
-        if FPBuilder.RunModal(TargetRef) then begin
+        // if FPBuilder.RunModal(TargetRef) then begin
+        //     SaveDefaultValuesView(TargetRef.GetView());
+        // end;
+        if fieldSelection.EditDefaultValues(TargetRef, ImportConfigHeader) then
             SaveDefaultValuesView(TargetRef.GetView());
-        end;
     end;
 
     procedure ReadSourceTableView() SourceTableView: Text
