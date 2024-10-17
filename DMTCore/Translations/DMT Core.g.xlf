@@ -1238,10 +1238,10 @@
           <note from="Developer" annotates="general" priority="2">de-DE=OnDelete Trigger verwenden</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDataInTargetTable - Control UseOnDeleteTriggerCtrl - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2393354843 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1308121031 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMTFieldLookUp</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldLookUpV2 - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldLookUp - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2803682913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Field Selection</source>
