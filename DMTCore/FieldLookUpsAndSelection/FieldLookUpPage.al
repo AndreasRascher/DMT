@@ -1,4 +1,4 @@
-page 91028 DMTFieldLookUpV2
+page 91028 DMTFieldLookUp
 {
     Caption = 'DMTFieldLookUp';
     PageType = List;

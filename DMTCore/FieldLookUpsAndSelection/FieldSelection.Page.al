@@ -17,7 +17,7 @@ page 91029 DMTFieldSelection
                 Visible = (Usage = Usage::EditSourceTableFilters);
                 field(EditSourceTableFilters_SourceField; Rec."Source Field Caption")
                 {
-                    LookupPageId = DMTFieldLookUpV2;
+                    LookupPageId = DMTFieldLookUp;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Source Field Caption"));
@@ -37,7 +37,7 @@ page 91029 DMTFieldSelection
                 Visible = (Usage = Usage::EditTargetTableFilters);
                 field(EditTargetTableFilters_SourceField; Rec."Target Field Caption")
                 {
-                    LookupPageId = DMTFieldLookUpV2;
+                    LookupPageId = DMTFieldLookUp;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target Field Caption"));
@@ -57,7 +57,7 @@ page 91029 DMTFieldSelection
                 Visible = (Usage = Usage::SelectFieldsToProcess);
                 field(SelectFieldsToProcess_TargetField; Rec."Target Field Caption")
                 {
-                    LookupPageId = DMTFieldLookUpV2;
+                    LookupPageId = DMTFieldLookUp;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target Field Caption"));
@@ -76,7 +76,7 @@ page 91029 DMTFieldSelection
                 Visible = (Usage = Usage::EditDefaultValues);
                 field(EditDefaultValues_TargetField; Rec."Target Field Caption")
                 {
-                    LookupPageId = DMTFieldLookUpV2;
+                    LookupPageId = DMTFieldLookUp;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target Field Caption"));
@@ -96,7 +96,7 @@ page 91029 DMTFieldSelection
                 Visible = (Usage = Usage::EditTableFilters);
                 field(TableFilters_TargetField; Rec."Target Field Caption")
                 {
-                    LookupPageId = DMTFieldLookUpV2;
+                    LookupPageId = DMTFieldLookUp;
                     trigger OnAfterLookup(Selected: RecordRef)
                     begin
                         Rec.OnAfterLookUpField(Selected, Rec.FieldNo("Target Field Caption"));
