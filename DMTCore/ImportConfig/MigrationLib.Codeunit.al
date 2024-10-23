@@ -36,7 +36,7 @@ codeunit 91003 DMTMigrationLib
         if FindKnownUseValidateValue(TargetField, ValidationType) then
             ImportConfigLine."Validation Type" := ValidationType;
         if FindKnownFixedValue(TargetField, KnownFixedValue) then
-            ImportConfigLine.Validate("Fixed Value", KnownFixedValue);
+            ImportConfigLine.Validate("Default Value", KnownFixedValue);
         if FindKnownFieldsToIgnore(TargetField) then
             ImportConfigLine."Processing Action" := ImportConfigLine."Processing Action"::Ignore;
     end;

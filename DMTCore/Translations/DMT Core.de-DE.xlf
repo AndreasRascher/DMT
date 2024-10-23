@@ -423,11 +423,17 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Import Konfiguration Zeile</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 3570477496 - Field 90410743 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Fixed Value</source>
-          <target state="translated">Fester Wert</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Fester Wert</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Fixed Value - Property Caption</note>
+        <trans-unit id="Table 3570477496 - Field 2909923317 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Default Type</source>
+          <target state="translated">Standardtyp</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Standardtyp</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Default Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 2913739292 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Default Value / Starting No.</source>
+          <target state="translated">Vorgabewert / Startnr.</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vorgabewert / Startnr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Default Value - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3570477496 - Field 4236431109 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ignore Errors</source>
@@ -1485,11 +1491,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=OnDelete Trigger verwenden</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTDeleteDataInTargetTable - Control UseOnDeleteTriggerCtrl - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2393354843 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1308121031 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMTFieldLookUp</source>
           <target state="needs-translation"/>
           <note from="Developer" annotates="general" priority="2"/>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldLookUpV2 - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldLookUp - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2803682913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Field Selection</source>

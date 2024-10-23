@@ -74,28 +74,45 @@ table 91006 DMTImportConfigLine
                 if rec."Processing Action" = Rec."Processing Action"::Transfer then
                     rec.TestField("Source Field No.");
             end;
-        }
-        field(101; "Fixed Value"; Text[250])
+        }//Default value and default type
+        field(103; "Default Type"; Option)
         {
-            Caption = 'Fixed Value', Comment = 'de-DE=Fester Wert';
+            Caption = 'Default Type', Comment = 'de-DE=Standardtyp';
+            OptionMembers = "Fixed Value","No.Series";
+        }
+        field(101; "Default Value"; Text[250])
+        {
+            Caption = 'Default Value / Starting No.', Comment = 'de-DE=Vorgabewert / Startnr.';
             trigger OnValidate()
             var
                 ConfigValidateMgt: Codeunit "Config. Validate Management";
                 RecRef: RecordRef;
                 FldRef: FieldRef;
                 ErrorMsg: Text;
+                IncreasedNoDummy: Text;
             begin
-                Rec.TestField("Target Table ID");
-                Rec.TestField("Target Field No.");
-                if "Fixed Value" <> '' then begin
-                    RecRef.Open(Rec."Target Table ID");
-                    FldRef := RecRef.Field(Rec."Target Field No.");
-                    ErrorMsg := ConfigValidateMgt.EvaluateValue(FldRef, "Fixed Value", false);
-                    if ErrorMsg <> '' then begin
-                        Error(ErrorMsg);
-                    end else begin
-                        "Fixed Value" := Format(FldRef.Value);
-                    end;
+                case rec."Default Type" of
+                    rec."Default Type"::"Fixed Value":
+                        begin
+                            Rec.TestField("Target Table ID");
+                            Rec.TestField("Target Field No.");
+                            if "Default Value" <> '' then begin
+                                RecRef.Open(Rec."Target Table ID");
+                                FldRef := RecRef.Field(Rec."Target Field No.");
+                                ErrorMsg := ConfigValidateMgt.EvaluateValue(FldRef, "Default Value", false);
+                                if ErrorMsg <> '' then begin
+                                    Error(ErrorMsg);
+                                end else begin
+                                    "Default Value" := Format(FldRef.Value);
+                                end;
+                            end;
+                        end;
+                    Rec."Default Type"::"No.Series":
+                        begin
+                            // Ensure that the Default Value is a valid No. Series
+                            if Rec."Default Value" <> '' then
+                                IncreasedNoDummy := IncStr("Default Value");
+                        end;
                 end;
             end;
         }

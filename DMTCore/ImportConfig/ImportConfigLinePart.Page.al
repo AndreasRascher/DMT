@@ -46,7 +46,8 @@ page 91009 DMTImportConfigLinePart
                     Comment = 'de-DE=VerarbeitungsfehlerDaten importieren auch';
                 }
                 field("Validation Type"; Rec."Validation Type") { }
-                field("Fixed Value"; Rec."Fixed Value") { ShowMandatory = ShowMandatory_FixedValue; }
+                field("Default Type"; Rec."Default Type") { }
+                field("Default Value"; Rec."Default Value") { ShowMandatory = ShowMandatory_DefaultValue; }
                 field(ValidationOrder; Rec."Validation Order") { Visible = false; }
             }
         }
@@ -217,9 +218,9 @@ page 91009 DMTImportConfigLinePart
             if rec."Is Key Field(Target)" then
                 ShowMandatory_FromFieldNo := true;
 
-        ShowMandatory_FixedValue := false;
+        ShowMandatory_DefaultValue := false;
         if Rec."Processing Action" = Rec."Processing Action"::FixedValue then
-            ShowMandatory_FixedValue := true;
+            ShowMandatory_DefaultValue := true;
     end;
 
     trigger OnAfterGetRecord()
@@ -238,6 +239,6 @@ page 91009 DMTImportConfigLinePart
     var
         TempImportConfigLine_Selected: Record DMTImportConfigLine temporary;
         ImportConfigMgt: Codeunit DMTImportConfigMgt;
-        IsFixedValue, HasDataLayoutAssigned, ShowMandatory_FromFieldNo, ShowMandatory_FixedValue : Boolean;
+        IsFixedValue, HasDataLayoutAssigned, ShowMandatory_FromFieldNo, ShowMandatory_DefaultValue : Boolean;
         LineStyleExpr: Text;
 }

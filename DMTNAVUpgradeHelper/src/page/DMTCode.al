@@ -71,7 +71,7 @@ page 90011 DMTCode
             case ImportConfigLine."Processing Action" of
                 DMTFieldProcessingType::FixedValue:
                     begin
-                        CodeLines.Add(StrSubstNo('%1.Validate(%2,''%3'');', _TargetRecVarName, TargetFieldName, ImportConfigLine."Fixed Value"));
+                        CodeLines.Add(StrSubstNo('%1.Validate(%2,''%3'');', _TargetRecVarName, TargetFieldName, ImportConfigLine."Default Value"));
                     end;
                 DMTFieldProcessingType::Ignore:
                     begin

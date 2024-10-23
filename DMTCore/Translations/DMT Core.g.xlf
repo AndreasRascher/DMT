@@ -353,10 +353,15 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Import Konfiguration Zeile</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 3570477496 - Field 90410743 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Fixed Value</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Fester Wert</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Fixed Value - Property Caption</note>
+        <trans-unit id="Table 3570477496 - Field 2909923317 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Default Type</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Standardtyp</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Default Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 2913739292 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Default Value / Starting No.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Vorgabewert / Startnr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Default Value - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3570477496 - Field 4236431109 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ignore Errors</source>

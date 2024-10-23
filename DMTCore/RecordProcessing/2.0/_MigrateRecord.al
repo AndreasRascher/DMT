@@ -237,7 +237,7 @@ codeunit 91008 DMTMigrateRecord
             FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
             CurrValueToAssignText := Format(FromField.Value); // Error Log Info
         end else begin
-            CurrValueToAssignText := ImportConfigLine."Fixed Value"; // Error Log Info
+            CurrValueToAssignText := ImportConfigLine."Default Value"; // Error Log Info
         end;
 
         TargetRecRef2 := TargetRecRef.Duplicate(); // create a duplicate to avoid filling the original target record
@@ -245,7 +245,7 @@ codeunit 91008 DMTMigrateRecord
         case true of
             // Create fieldRef from fixed value
             (ImportConfigLine."Processing Action" = ImportConfigLine."Processing Action"::FixedValue):
-                RefHelper.AssignFixedValueToFieldRef(FieldWithTypeCorrectValueToValidate, ImportConfigLine."Fixed Value");
+                RefHelper.AssignFixedValueToFieldRef(FieldWithTypeCorrectValueToValidate, ImportConfigLine."Default Value");
             // copy fieldRef from source field
             (TargetRecRef.Field(ImportConfigLine."Target Field No.").Type = FromField.Type):
                 FieldWithTypeCorrectValueToValidate.Value := FromField.Value; // Same Type -> no conversion needed
