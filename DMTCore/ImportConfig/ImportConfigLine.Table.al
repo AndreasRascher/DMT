@@ -75,10 +75,10 @@ table 91006 DMTImportConfigLine
                     rec.TestField("Source Field No.");
             end;
         }//Default value and default type
-        field(103; "Default Type"; Option)
+        field(103; "Custom Value Type"; Option)
         {
-            Caption = 'Default Type', Comment = 'de-DE=Standardtyp';
-            OptionMembers = "Fixed Value","No.Series";
+            Caption = 'Default Type', Comment = 'de-DE=ben.-def. Wert-Typ';
+            OptionMembers = " ","Fixed Value","No.Series";
         }
         field(101; "Default Value"; Text[250])
         {
@@ -90,9 +90,10 @@ table 91006 DMTImportConfigLine
                 FldRef: FieldRef;
                 ErrorMsg: Text;
                 IncreasedNoDummy: Text;
+                invalidStartingNoErr: Label 'Invalid Starting No. %1', Comment = 'de-DE=Ungültige Startnummer %1';
             begin
-                case rec."Default Type" of
-                    rec."Default Type"::"Fixed Value":
+                case rec."Custom Value Type" of
+                    rec."Custom Value Type"::"Fixed Value":
                         begin
                             Rec.TestField("Target Table ID");
                             Rec.TestField("Target Field No.");
@@ -107,11 +108,15 @@ table 91006 DMTImportConfigLine
                                 end;
                             end;
                         end;
-                    Rec."Default Type"::"No.Series":
+                    Rec."Custom Value Type"::"No.Series":
                         begin
                             // Ensure that the Default Value is a valid No. Series
-                            if Rec."Default Value" <> '' then
+                            if Rec."Default Value" <> '' then begin
                                 IncreasedNoDummy := IncStr("Default Value");
+                                if increasedNoDummy = '' then begin
+                                    Error(invalidStartingNoErr, Rec."Default Value");
+                                end;
+                            end;
                         end;
                 end;
             end;

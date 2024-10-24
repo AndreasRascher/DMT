@@ -328,7 +328,7 @@ table 91009 DMTProcessingPlan
                     if RecRef.FieldIndex(FieldIndexNo).GetFilter <> '' then begin
                         ImportConfigLine.Get(Rec.ID, RecRef.FieldIndex(FieldIndexNo).Number);
                         TempImportConfigLine2 := ImportConfigLine;
-                        TempImportConfigLine2."Processing Action" := TempImportConfigLine2."Processing Action"::FixedValue;
+                        TempImportConfigLine2."Processing Action" := TempImportConfigLine2."Processing Action"::CustomValue;
                         TempImportConfigLine2."Default Value" := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempImportConfigLine2."Default Value"));
                         cleanUpFixedValue(TempImportConfigLine2);
                         TempImportConfigLine2.Insert();

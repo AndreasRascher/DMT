@@ -46,7 +46,7 @@ page 91009 DMTImportConfigLinePart
                     Comment = 'de-DE=VerarbeitungsfehlerDaten importieren auch';
                 }
                 field("Validation Type"; Rec."Validation Type") { }
-                field("Default Type"; Rec."Default Type") { }
+                field("Default Type"; Rec."Custom Value Type") { }
                 field("Default Value"; Rec."Default Value") { ShowMandatory = ShowMandatory_DefaultValue; }
                 field(ValidationOrder; Rec."Validation Order") { Visible = false; }
             }
@@ -214,12 +214,12 @@ page 91009 DMTImportConfigLinePart
     local procedure EnableControls()
     begin
         ShowMandatory_FromFieldNo := false;
-        if Rec."Processing Action" <> Rec."Processing Action"::FixedValue then
+        if Rec."Processing Action" <> Rec."Processing Action"::CustomValue then
             if rec."Is Key Field(Target)" then
                 ShowMandatory_FromFieldNo := true;
 
         ShowMandatory_DefaultValue := false;
-        if Rec."Processing Action" = Rec."Processing Action"::FixedValue then
+        if Rec."Processing Action" = Rec."Processing Action"::CustomValue then
             ShowMandatory_DefaultValue := true;
     end;
 

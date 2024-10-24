@@ -233,7 +233,7 @@ codeunit 91008 DMTMigrateRecord
         ValidateFailedErr: Label 'The value %1 could not be entered into the field %2',
                  Comment = 'de-DE=Der Wert %1 konnte nicht in das Feld %2 eingetragen werden';
     begin
-        if ImportConfigLine."Processing Action" <> ImportConfigLine."Processing Action"::FixedValue then begin
+        if ImportConfigLine."Processing Action" <> ImportConfigLine."Processing Action"::CustomValue then begin
             FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
             CurrValueToAssignText := Format(FromField.Value); // Error Log Info
         end else begin
@@ -244,7 +244,7 @@ codeunit 91008 DMTMigrateRecord
         FieldWithTypeCorrectValueToValidate := TargetRecRef2.Field(ImportConfigLine."Target Field No.");
         case true of
             // Create fieldRef from fixed value
-            (ImportConfigLine."Processing Action" = ImportConfigLine."Processing Action"::FixedValue):
+            (ImportConfigLine."Processing Action" = ImportConfigLine."Processing Action"::CustomValue):
                 RefHelper.AssignFixedValueToFieldRef(FieldWithTypeCorrectValueToValidate, ImportConfigLine."Default Value");
             // copy fieldRef from source field
             (TargetRecRef.Field(ImportConfigLine."Target Field No.").Type = FromField.Type):

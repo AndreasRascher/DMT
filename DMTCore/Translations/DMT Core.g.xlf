@@ -363,6 +363,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Vorgabewert / Startnr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Default Value - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 2913739292 - Method 2126772001 - NamedType 1881128055" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Invalid Starting No. %1</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ungültige Startnummer %1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Default Value - Method OnValidate - NamedType invalidStartingNoErr</note>
+        </trans-unit>
         <trans-unit id="Table 3570477496 - Field 4236431109 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ignore Errors</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Fehler ignorieren </note>
