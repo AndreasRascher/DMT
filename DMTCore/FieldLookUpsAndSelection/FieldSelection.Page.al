@@ -1,7 +1,7 @@
 page 91029 DMTFieldSelection
 {
     Caption = 'Field Selection', Comment = 'de-DE=Felderauswahl';
-    PageType = List;
+    PageType = ListPlus;
     UsageCategory = None;
     ApplicationArea = All;
     SourceTable = DMTFieldLookUpBuffer;
@@ -172,8 +172,9 @@ page 91029 DMTFieldSelection
         fieldSelection.loadFieldFilters(fieldFilters, BufferRef);
         fieldSelection.addKeyFieldsToPage(importConfigHeader);
         fieldSelection.addFieldWithFiltersToPage(importConfigHeader, fieldFilters);
+        fieldSelection.LookupMode(true);
         runAction := fieldSelection.RunModal();
-        if runAction = Action::OK then begin
+        if runAction in [Action::OK, Action::LookupOK] then begin
             fieldSelection.SaveFieldsFilter(BufferRef);
             exit(true);
         end;
@@ -189,8 +190,9 @@ page 91029 DMTFieldSelection
         fieldSelection.loadFieldFilters(fieldFilters, TargetRef);
         fieldSelection.addKeyFieldsToPage(importConfigHeader);
         fieldSelection.addFieldWithFiltersToPage(importConfigHeader, fieldFilters);
+        fieldSelection.LookupMode(true);
         runAction := fieldSelection.RunModal();
-        if runAction = Action::OK then begin
+        if runAction in [Action::OK, Action::LookupOK] then begin
             fieldSelection.SaveFieldsFilter(TargetRef);
             exit(true);
         end;
@@ -206,7 +208,7 @@ page 91029 DMTFieldSelection
         fieldSelection.loadFieldFilters(fieldFilters, TargetRef);
         fieldSelection.addFieldWithFiltersToPage(importConfigHeader, fieldFilters);
         runAction := fieldSelection.RunModal();
-        if runAction = Action::OK then begin
+        if runAction in [Action::OK, Action::LookupOK] then begin
             fieldSelection.SaveFieldsFilter(TargetRef);
             exit(true);
         end;
@@ -222,9 +224,9 @@ page 91029 DMTFieldSelection
         fieldSelection.addKeyFieldsToPage(SourceRef);
         fieldSelection.loadFieldFilters(fieldFilters, SourceRef);
         fieldSelection.addFieldWithFiltersToPage(SourceRef, fieldFilters);
-
+        fieldSelection.LookupMode(true);
         runAction := fieldSelection.RunModal();
-        if runAction = Action::OK then begin
+        if runAction in [Action::OK, Action::LookupOK] then begin
             fieldSelection.SaveFieldsFilter(SourceRef);
             exit(true);
         end;
@@ -237,8 +239,9 @@ page 91029 DMTFieldSelection
     begin
         fieldSelection.SetUsage_SetSelectFieldsToProcess(importConfigHeader);
         fieldSelection.loadSelectedFields(importConfigHeader, updateFieldsFilter);
+        fieldSelection.LookupMode(true);
         runAction := fieldSelection.RunModal();
-        if runAction = Action::OK then begin
+        if runAction in [Action::OK, Action::LookupOK] then begin
             updateFieldsFilter := fieldSelection.createSelectedTargetFieldIDsFilter();
             exit(true);
         end;
@@ -454,6 +457,5 @@ page 91029 DMTFieldSelection
 
     var
         Usage: Option " ",SelectFieldsToProcess,EditSourceTableFilters,EditTargetTableFilters,EditDefaultValues,EditTableFilters;
-
-
+        GlobalCloseAction: Action;
 }
