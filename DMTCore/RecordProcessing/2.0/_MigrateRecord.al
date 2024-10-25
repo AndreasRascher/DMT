@@ -47,12 +47,15 @@ codeunit 91008 DMTMigrateRecord
     end;
 
     local procedure ProcessKeyFields()
+    var
+        noKeyFieldsAssignedError: Label 'No key fields have been assigned for import configuration %1',
+                    Comment = 'de-DE=Es wurden keine Schlüsselfelder zugewiesen für Importkonfiguration %1';
     begin
         TempImportConfigLine.SetRange("Is Key Field(Target)", true);
         TempImportConfigLine.SetFilter("Processing Action", '<>%1', TempImportConfigLine."Processing Action"::Ignore);
         TempImportConfigLine.SetCurrentKey("Validation Order");
         if not TempImportConfigLine.FindSet() then
-            Error('ImportConfigLine for Key Fields is invalid');
+            Error(noKeyFieldsAssignedError, ImportConfigHeaderGlobal.ID);
         repeat
             if not ProcessedFields.Contains(TempImportConfigLine.RecordId) then begin
                 CurrFieldToProcess := TempImportConfigLine.RecordId;
