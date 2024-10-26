@@ -353,20 +353,20 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Import Konfiguration Zeile</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 3570477496 - Field 2909923317 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Default Type</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Standardtyp</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Default Type - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 3570477496 - Field 2913739292 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Default Value / Starting No.</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Vorgabewert / Startnr.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Default Value - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 3570477496 - Field 2913739292 - Method 2126772001 - NamedType 1881128055" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 3570477496 - Method 1771664437 - NamedType 1881128055" size-unit="char" translate="yes" xml:space="preserve">
           <source>Invalid Starting No. %1</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Ungültige Startnummer %1</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Default Value - Method OnValidate - NamedType invalidStartingNoErr</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Method CheckIfStartingNoCanBeIncreased - NamedType invalidStartingNoErr</note>
+        </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 2735847476 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Custom Value</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ben.-def. Wert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Custom Value - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 3187820900 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Custom Value Type</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=ben.-def. Wert-Typ</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Custom Value Type - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3570477496 - Field 4236431109 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ignore Errors</source>
@@ -387,21 +387,6 @@
           <source>Action</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Aktion</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Processing Action - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 3570477496 - Field 1614643981 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Target Field Caption</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Zielfeld Bezeichnung</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Search Target Field Caption - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 3570477496 - Field 2861800262 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Target Field Name</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Zielfeld Name</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Search Target Field Name - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 3570477496 - Field 870794884 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Selection</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Auswahl</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Selection - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3570477496 - Field 4163973499 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source Field Caption</source>
@@ -1018,6 +1003,16 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Der Wert %1 konnte nicht in das Feld %2 eingetragen werden</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecord - Method AssignValueToFieldRef - NamedType ValidateFailedErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 194566907 - Method 1785215266 - NamedType 3838444462" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Custom Value Type is not defined</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ben.-def. Wert ist nicht definiert.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecord - Method GetCustomValue - NamedType customValueNotSetErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 194566907 - Method 265583079 - NamedType 3052813894" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No key fields have been assigned for import configuration %1</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Schlüsselfelder zugewiesen für Importkonfiguration %1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecord - Method ProcessKeyFields - NamedType noKeyFieldsAssignedErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 55954293 - Method 1507708651 - NamedType 4003859195" size-unit="char" translate="yes" xml:space="preserve">
           <source>No field mapping found for import configuration "%1"</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Importkonfiguration "%1" enthält keine Feldzuordnung.</note>
@@ -1187,6 +1182,16 @@
           <source>Copy Tables</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Tabellen kopieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCopyTableList - Action CopyDataFromSourceCompanyAction - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 107618972 - Control 100902544 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Used No.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Letzte verwendete Nr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Control LastUsedNo - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 107618972 - Control 2996299723 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starting No.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Startnummer</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Control StartingNo - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1540911173 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Data Layout</source>
@@ -1913,10 +1918,10 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTCSVReader - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Enum 101561864 - EnumValue 3972427471 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Fixed Value</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Fixwert</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFieldProcessingType - EnumValue FixedValue - Property Caption</note>
+        <trans-unit id="Enum 101561864 - EnumValue 1534645988 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Custom Value</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=benutzerdefinierter Wert</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFieldProcessingType - EnumValue CustomValue - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 101561864 - EnumValue 785863684 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ignore</source>

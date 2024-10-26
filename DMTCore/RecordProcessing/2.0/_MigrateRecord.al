@@ -48,14 +48,14 @@ codeunit 91008 DMTMigrateRecord
 
     local procedure ProcessKeyFields()
     var
-        noKeyFieldsAssignedError: Label 'No key fields have been assigned for import configuration %1',
+        noKeyFieldsAssignedErr: Label 'No key fields have been assigned for import configuration %1',
                     Comment = 'de-DE=Es wurden keine Schlüsselfelder zugewiesen für Importkonfiguration %1';
     begin
         TempImportConfigLine.SetRange("Is Key Field(Target)", true);
         TempImportConfigLine.SetFilter("Processing Action", '<>%1', TempImportConfigLine."Processing Action"::Ignore);
         TempImportConfigLine.SetCurrentKey("Validation Order");
         if not TempImportConfigLine.FindSet() then
-            Error(noKeyFieldsAssignedError, ImportConfigHeaderGlobal.ID);
+            Error(noKeyFieldsAssignedErr, ImportConfigHeaderGlobal.ID);
         repeat
             if not ProcessedFields.Contains(TempImportConfigLine.RecordId) then begin
                 CurrFieldToProcess := TempImportConfigLine.RecordId;
@@ -236,19 +236,20 @@ codeunit 91008 DMTMigrateRecord
         ValidateFailedErr: Label 'The value %1 could not be entered into the field %2',
                  Comment = 'de-DE=Der Wert %1 konnte nicht in das Feld %2 eingetragen werden';
     begin
+        // find value to assign
         if ImportConfigLine."Processing Action" <> ImportConfigLine."Processing Action"::CustomValue then begin
             FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
-            CurrValueToAssignText := Format(FromField.Value); // Error Log Info
+            CurrValueToAssignText := Format(FromField.Value);
         end else begin
-            CurrValueToAssignText := ImportConfigLine."Default Value"; // Error Log Info
+            CurrValueToAssignText := GetCustomValue(ImportConfigLine);
         end;
-
+        // assign current value to target field
         TargetRecRef2 := TargetRecRef.Duplicate(); // create a duplicate to avoid filling the original target record
         FieldWithTypeCorrectValueToValidate := TargetRecRef2.Field(ImportConfigLine."Target Field No.");
         case true of
             // Create fieldRef from fixed value
             (ImportConfigLine."Processing Action" = ImportConfigLine."Processing Action"::CustomValue):
-                RefHelper.AssignFixedValueToFieldRef(FieldWithTypeCorrectValueToValidate, ImportConfigLine."Default Value");
+                RefHelper.AssignFixedValueToFieldRef(FieldWithTypeCorrectValueToValidate, CurrValueToAssignText);
             // copy fieldRef from source field
             (TargetRecRef.Field(ImportConfigLine."Target Field No.").Type = FromField.Type):
                 FieldWithTypeCorrectValueToValidate.Value := FromField.Value; // Same Type -> no conversion needed
@@ -406,6 +407,32 @@ codeunit 91008 DMTMigrateRecord
             until TempImportConfigLine.Next() = 0;
     end;
 
+    local procedure GetCustomValue(ImportConfigLine: Record DMTImportConfigLine) CustomValue: Text
+    var
+        customValueNotSetErr: Label 'Custom Value Type is not defined',
+                    Comment = 'de-DE=Ben.-def. Wert ist nicht definiert.';
+    begin
+        case true of
+            ImportConfigLine."Custom Value Type" = importConfigLine."Custom Value Type"::" ":
+                Error(customValueNotSetErr);
+            ImportConfigLine."Custom Value Type" = importConfigLine."Custom Value Type"::"Fixed Value":
+                CustomValue := ImportConfigLine."Custom Value";
+            ImportConfigLine."Custom Value Type" = importConfigLine."Custom Value Type"::"No.Series":
+                CustomValue := GetNextNo(ImportConfigLine);
+            else
+                Error('GetCustomValue - unhandled TODO %1', ImportConfigLine."Custom Value Type");
+        end;
+    end;
+
+    local procedure GetNextNo(ImportConfigLine: Record DMTImportConfigLine): Text
+    begin
+        if GlobalLastUsedNoFromSeries = '' then begin
+            if not ImportConfigLine.CustomValueSettings_Get(GlobalLastUsedNoFromSeries, 'LastUsedNo') then
+                ImportConfigLine.CustomValueSettings_Get(GlobalLastUsedNoFromSeries, 'StartingNo');
+        end else
+            GlobalLastUsedNoFromSeries := IncStr(GlobalLastUsedNoFromSeries);
+    end;
+
     var
         ImportConfigHeaderGlobal: Record DMTImportConfigHeader;
         TempImportConfigLine: Record DMTImportConfigLine temporary;
@@ -424,5 +451,6 @@ codeunit 91008 DMTMigrateRecord
         TargetRecordExistsGlobal: Boolean;
         EvaluateOptionValueAsNumberGlobal: Boolean;
         ITriggerLogGlobal: Interface ITriggerLog;
+        GlobalLastUsedNoFromSeries: Text;
 
 }

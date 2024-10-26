@@ -299,7 +299,7 @@ table 91009 DMTProcessingPlan
                         TempImportConfigLine2."Imp.Conf.Header ID" := Rec.ID;
                         TempImportConfigLine2."Target Field No." := RecRef.FieldIndex(FieldIndexNo).Number;
                         TempImportConfigLine2."Source Field Caption" := CopyStr(RecRef.FieldIndex(FieldIndexNo).Caption, 1, MaxStrLen(TempImportConfigLine2."Source Field Caption"));
-                        TempImportConfigLine2."Default Value" := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempImportConfigLine2."Default Value"));
+                        TempImportConfigLine2."Custom Value" := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempImportConfigLine2."Custom Value"));
                         TempImportConfigLine2.Insert();
                     end;
                 end;
@@ -329,7 +329,7 @@ table 91009 DMTProcessingPlan
                         ImportConfigLine.Get(Rec.ID, RecRef.FieldIndex(FieldIndexNo).Number);
                         TempImportConfigLine2 := ImportConfigLine;
                         TempImportConfigLine2."Processing Action" := TempImportConfigLine2."Processing Action"::CustomValue;
-                        TempImportConfigLine2."Default Value" := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempImportConfigLine2."Default Value"));
+                        TempImportConfigLine2."Custom Value" := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempImportConfigLine2."Custom Value"));
                         cleanUpFixedValue(TempImportConfigLine2);
                         TempImportConfigLine2.Insert();
                     end;
@@ -344,14 +344,14 @@ table 91009 DMTProcessingPlan
         fixedValueText: Text;
     begin
         // if filter value contains spaces, brackets or quotes then the filter value is enclosed in quotes
-        fixedValueText := TempImportConfigLine."Default Value";
+        fixedValueText := TempImportConfigLine."Custom Value";
         if fixedValueText = '' then exit;
         if not (fixedValueText.EndsWith('''') and fixedValueText.StartsWith('''')) then
             exit;
         if StrLen(fixedValueText) = StrLen(DelChr(fixedValueText, '=', '() ')) then
             exit;
         fixedValueText := CopyStr(fixedValueText, 2, StrLen(fixedValueText) - 2);
-        TempImportConfigLine."Default Value" := CopyStr(fixedValueText, 1, MaxStrLen(TempImportConfigLine."Default Value"));
+        TempImportConfigLine."Custom Value" := CopyStr(fixedValueText, 1, MaxStrLen(TempImportConfigLine."Custom Value"));
     end;
 
     procedure ConvertUpdateFieldsListToFieldLines(var TmpImportConfigLine: Record DMTImportConfigLine temporary) LineCount: Integer

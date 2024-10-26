@@ -74,68 +74,52 @@ table 91006 DMTImportConfigLine
                 if rec."Processing Action" = Rec."Processing Action"::Transfer then
                     rec.TestField("Source Field No.");
             end;
-        }//Default value and default type
-        field(103; "Custom Value Type"; Option)
+        }//Custom value and Custom type
+        field(101; "Custom Value"; Text[250])
         {
-            Caption = 'Default Type', Comment = 'de-DE=ben.-def. Wert-Typ';
-            OptionMembers = " ","Fixed Value","No.Series";
-        }
-        field(101; "Default Value"; Text[250])
-        {
-            Caption = 'Default Value / Starting No.', Comment = 'de-DE=Vorgabewert / Startnr.';
+            Caption = 'Custom Value', Comment = 'de-DE=Ben.-def. Wert';
             trigger OnValidate()
-            var
-                ConfigValidateMgt: Codeunit "Config. Validate Management";
-                RecRef: RecordRef;
-                FldRef: FieldRef;
-                ErrorMsg: Text;
-                IncreasedNoDummy: Text;
-                invalidStartingNoErr: Label 'Invalid Starting No. %1', Comment = 'de-DE=Ungültige Startnummer %1';
             begin
                 case rec."Custom Value Type" of
                     rec."Custom Value Type"::"Fixed Value":
                         begin
-                            Rec.TestField("Target Table ID");
-                            Rec.TestField("Target Field No.");
-                            if "Default Value" <> '' then begin
-                                RecRef.Open(Rec."Target Table ID");
-                                FldRef := RecRef.Field(Rec."Target Field No.");
-                                ErrorMsg := ConfigValidateMgt.EvaluateValue(FldRef, "Default Value", false);
-                                if ErrorMsg <> '' then begin
-                                    Error(ErrorMsg);
-                                end else begin
-                                    "Default Value" := Format(FldRef.Value);
-                                end;
-                            end;
+                            CheckIfValidValueForTargetField();
+                            CustomValueSettings_Clear();
                         end;
                     Rec."Custom Value Type"::"No.Series":
                         begin
-                            // Ensure that the Default Value is a valid No. Series
-                            if Rec."Default Value" <> '' then begin
-                                IncreasedNoDummy := IncStr("Default Value");
-                                if increasedNoDummy = '' then begin
-                                    Error(invalidStartingNoErr, Rec."Default Value");
-                                end;
-                            end;
+                            CheckIfStartingNoCanBeIncreased();
+                            CustomValueSettings_Set('StartingNo', Rec."Custom Value");
                         end;
                 end;
             end;
         }
-        field(102; "Validation Order"; Integer) { Caption = 'Validation Order', Comment = 'de-DE=Reihenfolge Validierung'; }
+        field(102; "Custom Value Type"; Option)
+        {
+            Caption = 'Custom Value Type', Comment = 'de-DE=ben.-def. Wert-Typ';
+            OptionMembers = " ","Fixed Value","No.Series";
+        }
+        field(103; "Custom Value Settings"; Blob)
+        {
+            Caption = 'Custom Value Settings', Locked = true;
+            Subtype = Json;
+        }
+        field(104; "Validation Order"; Integer) { Caption = 'Validation Order', Comment = 'de-DE=Reihenfolge Validierung'; }
         #region SelectMulipleFields
-        field(200; "Search Target Field Name"; Text[80])
-        {
-            Description = 'Searchable field because Flowfields are not covered by the page search';
-            Caption = 'Target Field Name', Comment = 'de-DE=Zielfeld Name';
-            Editable = false;
-        }
-        field(201; "Search Target Field Caption"; Text[80])
-        {
-            Description = 'Searchable field because Flowfields are not covered by the page search';
-            Caption = 'Target Field Caption', Comment = 'de-DE=Zielfeld Bezeichnung';
-            Editable = false;
-        }
-        field(202; Selection; Boolean) { Caption = 'Selection', Comment = 'de-DE=Auswahl'; }
+        // field(200; "Search Target Field Name"; Text[80])
+        // {
+        //     Description = 'Searchable field because Flowfields are not covered by the page search';
+        //     Caption = 'Target Field Name', Comment = 'de-DE=Zielfeld Name';
+        //     Editable = false;
+        // }
+        // field(201; "Search Target Field Caption"; Text[80])
+        // {
+        //     Description = 'Searchable field because Flowfields are not covered by the page search';
+        //     Caption = 'Target Field Caption', Comment = 'de-DE=Zielfeld Bezeichnung';
+        //     Editable = false;
+        // }
+        // field(202; Selection; Boolean) { Caption = 'Selection', Comment = 'de-DE=Auswahl'; }
+        #endregion SelectMulipleFields
         field(300; PrPl_FBRunMode_Filter; Option)
         {
             Caption = 'ProcessingPlan FactBox RunModeFilter', Locked = true;
@@ -155,7 +139,6 @@ table 91006 DMTImportConfigLine
             FieldClass = FlowFilter;
             Editable = false;
         }
-        #endregion SelectMulipleFields
     }
 
     keys
@@ -204,6 +187,64 @@ table 91006 DMTImportConfigLine
         end;
     end;
 
+    local procedure CheckIfValidValueForTargetField()
+    var
+        ConfigValidateMgt: Codeunit "Config. Validate Management";
+        RecRef: RecordRef;
+        FldRef: FieldRef;
+        ErrorMsg: Text;
+    begin
+        Rec.TestField("Target Table ID");
+        Rec.TestField("Target Field No.");
+        if "Custom Value" <> '' then begin
+            RecRef.Open(Rec."Target Table ID");
+            FldRef := RecRef.Field(Rec."Target Field No.");
+            ErrorMsg := ConfigValidateMgt.EvaluateValue(FldRef, "Custom Value", false);
+            if ErrorMsg <> '' then begin
+                Error(ErrorMsg);
+            end else begin
+                "Custom Value" := Format(FldRef.Value);
+            end;
+        end;
+    end;
+
+    local procedure CheckIfStartingNoCanBeIncreased()
+    var
+        IncreasedNoDummy: Text;
+        invalidStartingNoErr: Label 'Invalid Starting No. %1', Comment = 'de-DE=Ungültige Startnummer %1';
+    begin
+        if Rec."Custom Value" <> '' then begin
+            IncreasedNoDummy := IncStr("Custom Value");
+            if increasedNoDummy = '' then begin
+                Error(invalidStartingNoErr, Rec."Custom Value");
+            end;
+        end;
+    end;
+
+    procedure CustomValueSettings_Set(PropertyName: Text; PropertyValue: Text);
+    var
+        JObj: JsonObject;
+        IStr: InStream;
+        OStr: OutStream;
+    begin
+        Rec.CalcFields("Custom Value Settings");
+        Rec."Custom Value Settings".CreateInStream(IStr);
+        if Rec."Custom Value Settings".HasValue then
+            JObj.ReadFrom(IStr);
+        if JObj.Contains(PropertyName) then
+            JObj.Remove(PropertyName);
+        JObj.Add(PropertyName, PropertyValue);
+        Rec."Custom Value Settings".CreateOutStream(OStr);
+        JObj.WriteTo(OStr);
+        Rec.Modify();
+    end;
+
+    local procedure CustomValueSettings_Clear()
+    begin
+        Clear(Rec."Custom Value Settings");
+        Rec.Modify();
+    end;
+
     procedure CopyToTemp(var TempImportConfigLine: Record DMTImportConfigLine temporary) LineCount: Integer
     var
         ImportConfigLine: Record DMTImportConfigLine;
@@ -218,5 +259,28 @@ table 91006 DMTImportConfigLine
                 TempImportConfigLine2.Insert(false);
             until ImportConfigLine.Next() = 0;
         TempImportConfigLine.Copy(TempImportConfigLine2, true);
+    end;
+
+    internal procedure CustomValueSettings_Get(var PropertyValue: Text; PropertyName: Text) OK: Boolean
+    var
+        JObj: JsonObject;
+        JToken: JsonToken;
+        IStr: InStream;
+    begin
+        Rec.CalcFields("Custom Value Settings");
+        Rec."Custom Value Settings".CreateInStream(IStr);
+        if not Rec."Custom Value Settings".HasValue then
+            exit(false);
+        JObj.ReadFrom(IStr);
+        if not JObj.Contains(PropertyName) then
+            exit(false);
+        OK := JObj.Get(PropertyName, JToken);
+        PropertyValue := JToken.AsValue().AsText();
+    end;
+
+    internal procedure CustomValueSettings_Get(PropertyName: Text) PropertyValue: Text
+    begin
+        if not CustomValueSettings_Get(PropertyValue, PropertyName) then
+            exit('');
     end;
 }

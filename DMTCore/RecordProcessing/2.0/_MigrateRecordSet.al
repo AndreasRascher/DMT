@@ -196,7 +196,7 @@ codeunit 91014 DMTMigrateRecordSet
                         importConfigLine.Get(tempImportConfigLine_ProcessingPlanSettings.RecordId);
                         tempImportConfigLine := importConfigLine;
                         tempImportConfigLine."Processing Action" := tempImportConfigLine_ProcessingPlanSettings."Processing Action";
-                        tempImportConfigLine."Default Value" := tempImportConfigLine_ProcessingPlanSettings."Default Value";
+                        tempImportConfigLine."Custom Value" := tempImportConfigLine_ProcessingPlanSettings."Custom Value";
                         tempImportConfigLine.Insert(false);
                     end else begin
                         tempImportConfigLine := tempImportConfigLine_ProcessingPlanSettings;

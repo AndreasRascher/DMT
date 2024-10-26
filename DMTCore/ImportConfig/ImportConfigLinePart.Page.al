@@ -46,8 +46,21 @@ page 91009 DMTImportConfigLinePart
                     Comment = 'de-DE=VerarbeitungsfehlerDaten importieren auch';
                 }
                 field("Validation Type"; Rec."Validation Type") { }
-                field("Default Type"; Rec."Custom Value Type") { }
-                field("Default Value"; Rec."Default Value") { ShowMandatory = ShowMandatory_DefaultValue; }
+                field("Custom Value Type"; Rec."Custom Value Type") { }
+                field("Custom Value"; Rec."Custom Value")
+                {
+                    ShowMandatory = ShowMandatory_CustomValue;
+                    Editable = IsEditable_CustomValue;
+                    trigger OnDrillDown()
+                    var
+                        DMTCustomValueSettings: Page DMTCustomValueSettings;
+                    begin
+                        DMTCustomValueSettings.setImportConfigLine(Rec);
+                        DMTCustomValueSettings.LookupMode(true);
+                        if DMTCustomValueSettings.RunModal() in [Action::LookupOK, Action::OK] then
+                            DMTCustomValueSettings.saveCustomValueSettings(Rec);
+                    end;
+                }
                 field(ValidationOrder; Rec."Validation Order") { Visible = false; }
             }
         }
@@ -218,9 +231,28 @@ page 91009 DMTImportConfigLinePart
             if rec."Is Key Field(Target)" then
                 ShowMandatory_FromFieldNo := true;
 
-        ShowMandatory_DefaultValue := false;
+        ShowMandatory_CustomValue := false;
         if Rec."Processing Action" = Rec."Processing Action"::CustomValue then
-            ShowMandatory_DefaultValue := true;
+            ShowMandatory_CustomValue := true;
+        case Rec."Custom Value Type" of
+            Rec."Custom Value Type"::" ":
+                begin
+                    IsEditable_CustomValue := false;
+                    ShowMandatory_CustomValue := false;
+                    Rec."Custom Value" := '';
+                end;
+            Rec."Custom Value Type"::"No.Series":
+                begin
+                    IsEditable_CustomValue := false;
+                    ShowMandatory_CustomValue := false;
+                    Rec."Custom Value" := '';
+                end;
+            Rec."Custom Value Type"::"Fixed Value":
+                begin
+                    ShowMandatory_CustomValue := false;
+                    IsEditable_CustomValue := true;
+                end;
+        end;
     end;
 
     trigger OnAfterGetRecord()
@@ -239,6 +271,6 @@ page 91009 DMTImportConfigLinePart
     var
         TempImportConfigLine_Selected: Record DMTImportConfigLine temporary;
         ImportConfigMgt: Codeunit DMTImportConfigMgt;
-        IsFixedValue, HasDataLayoutAssigned, ShowMandatory_FromFieldNo, ShowMandatory_DefaultValue : Boolean;
+        IsFixedValue, HasDataLayoutAssigned, ShowMandatory_FromFieldNo, ShowMandatory_CustomValue, IsEditable_CustomValue : Boolean;
         LineStyleExpr: Text;
 }
