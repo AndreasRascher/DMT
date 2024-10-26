@@ -353,11 +353,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Import Konfiguration Zeile</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 3570477496 - Method 1771664437 - NamedType 1881128055" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Invalid Starting No. %1</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Ungültige Startnummer %1</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Method CheckIfStartingNoCanBeIncreased - NamedType invalidStartingNoErr</note>
-        </trans-unit>
         <trans-unit id="Table 3570477496 - Field 2735847476 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Custom Value</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Ben.-def. Wert</note>
@@ -1182,6 +1177,11 @@
           <source>Copy Tables</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Tabellen kopieren</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCopyTableList - Action CopyDataFromSourceCompanyAction - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 107618972 - Method 4210513733 - NamedType 1881128055" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Invalid Starting No. %1</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ungültige Startnummer %1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Method CheckIfNoCanBeIncreased - NamedType invalidStartingNoErr</note>
         </trans-unit>
         <trans-unit id="Page 107618972 - Control 100902544 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Last Used No.</source>

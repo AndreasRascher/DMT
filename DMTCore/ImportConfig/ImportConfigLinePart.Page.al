@@ -14,7 +14,6 @@ page 91009 DMTImportConfigLinePart
         {
             repeater(LineRepeater)
             {
-                // Editable = HasDataLayoutAssigned;
                 field("Processing Action"; Rec."Processing Action")
                 {
                     trigger OnValidate()
@@ -46,19 +45,22 @@ page 91009 DMTImportConfigLinePart
                     Comment = 'de-DE=VerarbeitungsfehlerDaten importieren auch';
                 }
                 field("Validation Type"; Rec."Validation Type") { }
-                field("Custom Value Type"; Rec."Custom Value Type") { }
+                field("Custom Value Type"; Rec."Custom Value Type")
+                {
+                    trigger OnValidate()
+                    begin
+                        EnableControls();
+                    end;
+                }
                 field("Custom Value"; Rec."Custom Value")
                 {
                     ShowMandatory = ShowMandatory_CustomValue;
                     Editable = IsEditable_CustomValue;
                     trigger OnDrillDown()
                     var
-                        DMTCustomValueSettings: Page DMTCustomValueSettings;
+                        customValueSettings: Page DMTCustomValueSettings;
                     begin
-                        DMTCustomValueSettings.setImportConfigLine(Rec);
-                        DMTCustomValueSettings.LookupMode(true);
-                        if DMTCustomValueSettings.RunModal() in [Action::LookupOK, Action::OK] then
-                            DMTCustomValueSettings.saveCustomValueSettings(Rec);
+                        customValueSettings.RunNoSeriesDialog(Rec);
                     end;
                 }
                 field(ValidationOrder; Rec."Validation Order") { Visible = false; }
@@ -225,6 +227,8 @@ page 91009 DMTImportConfigLinePart
     end;
 
     local procedure EnableControls()
+    var
+        customValueSettings: Page DMTCustomValueSettings;
     begin
         ShowMandatory_FromFieldNo := false;
         if Rec."Processing Action" <> Rec."Processing Action"::CustomValue then
@@ -246,6 +250,7 @@ page 91009 DMTImportConfigLinePart
                     IsEditable_CustomValue := false;
                     ShowMandatory_CustomValue := false;
                     Rec."Custom Value" := '';
+                    customValueSettings.UpdateCustomValueDescription(Rec);
                 end;
             Rec."Custom Value Type"::"Fixed Value":
                 begin
@@ -271,6 +276,6 @@ page 91009 DMTImportConfigLinePart
     var
         TempImportConfigLine_Selected: Record DMTImportConfigLine temporary;
         ImportConfigMgt: Codeunit DMTImportConfigMgt;
-        IsFixedValue, HasDataLayoutAssigned, ShowMandatory_FromFieldNo, ShowMandatory_CustomValue, IsEditable_CustomValue : Boolean;
+        IsFixedValue, ShowMandatory_FromFieldNo, ShowMandatory_CustomValue, IsEditable_CustomValue : Boolean;
         LineStyleExpr: Text;
 }

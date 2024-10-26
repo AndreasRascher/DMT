@@ -425,10 +425,12 @@ codeunit 91008 DMTMigrateRecord
     end;
 
     local procedure GetNextNo(ImportConfigLine: Record DMTImportConfigLine): Text
+    var
+        customValueSettings: Page DMTCustomValueSettings;
     begin
         if GlobalLastUsedNoFromSeries = '' then begin
-            if not ImportConfigLine.CustomValueSettings_Get(GlobalLastUsedNoFromSeries, 'LastUsedNo') then
-                ImportConfigLine.CustomValueSettings_Get(GlobalLastUsedNoFromSeries, 'StartingNo');
+            if customValueSettings.GetSetting_LastUsedNo(ImportConfigLine) = '' then
+                GlobalLastUsedNoFromSeries := customValueSettings.GetSetting_StartingNo(ImportConfigLine);
         end else
             GlobalLastUsedNoFromSeries := IncStr(GlobalLastUsedNoFromSeries);
     end;

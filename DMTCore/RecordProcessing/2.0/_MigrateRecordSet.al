@@ -53,13 +53,17 @@ codeunit 91014 DMTMigrateRecordSet
         importSettings.UseTriggerLog(importConfigHeader."Log Trigger Changes");
         importSettings.EvaluateOptionValueAsNumber(importConfigHeader."Ev. Nos. for Option fields as" = importConfigHeader."Ev. Nos. for Option fields as"::Position);
         DMTSetup.GetRecordOnce();
-
+        ToDo: 
+        - Laden der nächsten Nummern vor der Verarbeitung
+        - Wenn der Prozess erfolgreich war, dann die Nummern speichern
         // Checks
         CheckMappedFieldsExist(importConfigHeader);
+        CheckNoSeriesFieldSetup(importConfigHeader);
         // Prepare Buffer
         DefineSourceRecords(bufferRef, RecIdList, importSettings, migrationType);
         // Prepare FieldMapping
         LoadImportConfigLine(importSettings);
+        // Prepare NoSeries
         // Prepare Log
         case migrationType of
             migrationType::MigrateRecords:
@@ -397,6 +401,33 @@ codeunit 91014 DMTMigrateRecordSet
 
         if ImportConfigLine.IsEmpty then
             Error(ImportConfigLineEmptyErr, ImportConfigHeader.ID);
+    end;
+
+    local procedure CheckNoSeriesFieldSetup(importConfigHeader: Record DMTImportConfigHeader)
+    var
+        ImportConfigLine: Record DMTImportConfigLine;
+        CustomValueSettings: Page DMTCustomValueSettings;
+        StartingNo, LastUsedNo : Text;
+    begin
+        // Check if Starting Nos is valid and exists
+        ImportConfigHeader.FilterRelated(ImportConfigLine);
+        ImportConfigLine.SetFilter("Processing Action", '<>%1', ImportConfigLine."Processing Action"::Ignore);
+        ImportConfigLine.SetRange("Custom Value Type", ImportConfigLine."Custom Value Type"::"No.Series");
+        if ImportConfigLine.FindSet() then
+            repeat
+                ImportConfigLine.TestField("Source Field No.", 0);
+
+                StartingNo := CustomValueSettings.GetSetting_StartingNo(ImportConfigLine);
+                if StartingNo = '' then begin
+                    ImportConfigLine.CalcFields("Target Field Caption");
+                    Error('No Starting No. defined for field %1', ImportConfigLine."Target Field Caption");
+                end else
+                    CustomValueSettings.CheckIfNoCanBeIncreased(StartingNo);
+
+                LastUsedNo := CustomValueSettings.GetSetting_LastUsedNo(ImportConfigLine);
+                if LastUsedNo <> '' then
+                    CustomValueSettings.CheckIfNoCanBeIncreased(LastUsedNo);
+            until ImportConfigLine.Next() = 0;
     end;
 
     procedure PrepareProgressBar(var ImportConfigHeader: Record DMTImportConfigHeader; noOfRecordsToProcess: Integer)
