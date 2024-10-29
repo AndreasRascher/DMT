@@ -72,7 +72,8 @@ table 91006 DMTImportConfigLine
                 if xRec."Processing Action" = rec."Processing Action" then
                     exit;
                 if rec."Processing Action" = Rec."Processing Action"::Transfer then
-                    rec.TestField("Source Field No.");
+                    if rec."Custom Value Type" <> rec."Custom Value Type"::"No.Series" then
+                        rec.TestField("Source Field No.");
             end;
         }//Custom value and Custom type
         field(101; "Custom Value"; Text[250])
@@ -194,6 +195,7 @@ table 91006 DMTImportConfigLine
         if ImportConfigLine.FindSet(false) then
             repeat
                 LineCount += 1;
+                ImportConfigLine.CalcFields("Custom Value Settings");
                 TempImportConfigLine2 := ImportConfigLine;
                 TempImportConfigLine2.Insert(false);
             until ImportConfigLine.Next() = 0;

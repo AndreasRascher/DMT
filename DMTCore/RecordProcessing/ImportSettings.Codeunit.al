@@ -67,19 +67,19 @@ codeunit 91010 DMTImportSettings
         exit(SourceTableViewGlobal);
     end;
 
-    procedure SetImportConfigLine(var TempImportConfigLine: Record DMTImportConfigLine temporary)
+    procedure SetImportConfigLine(var tempImportConfigLine: Record DMTImportConfigLine temporary)
     begin
-        TempImportConfigLineGlobal.Copy(TempImportConfigLine, true);
+        TempImportConfigLineGlobal.Copy(tempImportConfigLine, true);
         IsImportConfigLineSet := true;
     end;
 
-    procedure GetImportConfigLine(var TempImportConfigLine: Record DMTImportConfigLine temporary)
+    procedure GetImportConfigLine(var tempImportConfigLine: Record DMTImportConfigLine temporary)
     begin
         if not IsImportConfigLineSet then
             Error('ImportConfigLine not set');
         if TempImportConfigLineGlobal.IsEmpty then
             Error('ImportConfigLine empty');
-        TempImportConfigLine.Copy(TempImportConfigLineGlobal, true);
+        tempImportConfigLine.Copy(TempImportConfigLineGlobal, true);
     end;
 
     procedure NoUserInteraction(NoUserInteractionNew: Boolean)
@@ -176,6 +176,16 @@ codeunit 91010 DMTImportSettings
         exit(UseTriggerLogGlobal);
     end;
 
+    internal procedure SetNoSeriesStartingNos(noSeriesStartingNos: Dictionary of [RecordId, Text])
+    begin
+        NoSeriesStartingNosGlobal := noSeriesStartingNos;
+    end;
+
+    internal procedure GetNoSeriesStartingNos(): Dictionary of [RecordId, Text]
+    begin
+        exit(NoSeriesStartingNosGlobal);
+    end;
+
     procedure EvaluateOptionValueAsNumber(EvaluateOptionValueAsNumberNew: Boolean)
     begin
         EvaluateOptionValueAsNumberGlobal := EvaluateOptionValueAsNumberNew;
@@ -207,4 +217,5 @@ codeunit 91010 DMTImportSettings
         IsSourceTableViewSet, IsImportConfigLineSet : Boolean;
         EvaluateOptionValueAsNumberGlobal: Boolean;
         RecIdToProcessListGlobal: List of [RecordId];
+        NoSeriesStartingNosGlobal: Dictionary of [RecordId, Text];
 }

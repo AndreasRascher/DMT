@@ -1008,10 +1008,10 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Schlüsselfelder zugewiesen für Importkonfiguration %1</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecord - Method ProcessKeyFields - NamedType noKeyFieldsAssignedErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 55954293 - Method 1507708651 - NamedType 4003859195" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No field mapping found for import configuration "%1"</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Importkonfiguration "%1" enthält keine Feldzuordnung.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method CheckMappedFieldsExist - NamedType ImportConfigLineEmptyErr</note>
+        <trans-unit id="Codeunit 55954293 - Method 1930740882 - NamedType 3365976546" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No valid mapping found for key field "%1"</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Keine gültige Zuordnung für Schlüsselfeld "%1" gefunden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method CheckAreKeyFieldsAssigned - NamedType noValidMappingFoundForKeyFieldErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 55954293 - Method 1715580338 - NamedType 2737554361" size-unit="char" translate="yes" xml:space="preserve">
           <source>No buffer table records match the filter.\ Filter: "%1"</source>
@@ -1183,15 +1183,40 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Ungültige Startnummer %1</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Method CheckIfNoCanBeIncreased - NamedType invalidStartingNoErr</note>
         </trans-unit>
-        <trans-unit id="Page 107618972 - Control 100902544 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Last Used No.</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Letzte verwendete Nr.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Control LastUsedNo - Property Caption</note>
+        <trans-unit id="Page 107618972 - Control 2309547594 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>BC No. Series</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=BC Nummernserie</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Control BcNoSeriesCode - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 107618972 - Control 2996299723 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 107618972 - Control 3307022581 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. Series Setup</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Nummernserie-Einstellungen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Control NoSeriensSetup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 107618972 - Control 4099709494 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. Series Type</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Nummernserien-Typ</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Control NoSeriesType - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 107618972 - Control 4099709494 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starting No.,BC No. Series</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Startnummer,BC Nummernserie</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Control NoSeriesType - Property OptionCaption</note>
+        </trans-unit>
+        <trans-unit id="Page 107618972 - Control 1306163408 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Starting No.</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Startnummer</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Control StartingNo - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Control StartingNoGrp - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 107618972 - Control 58369974 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Used No.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Letzte verwendete Nr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Control LastUsedNoFld - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 107618972 - Control 4125570129 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starting No.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Startnummer</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Control StartingNoFld - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1540911173 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT Data Layout</source>

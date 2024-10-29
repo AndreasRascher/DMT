@@ -31,6 +31,7 @@ codeunit 91008 DMTMigrateRecord
     begin
         Clear(CurrTargetRecIDText); // only once, not for every field
         ImportConfigHeaderGlobal := importSettings.ImportConfigHeader();
+        NoSeriesStartingNosGlobal := importSettings.GetNoSeriesStartingNos();
         EvaluateOptionValueAsNumberGlobal := importSettings.EvaluateOptionValueAsNumber();
         SourceRefGlobal := bufferRef;
         importSettings.GetImportConfigLine(TempImportConfigLine);
@@ -148,6 +149,11 @@ codeunit 91008 DMTMigrateRecord
         ImportConfigHeaderGlobal.BufferTableMgt().SetDMTImportFields(SourceRefGlobal, CurrTargetRecIDText);
     end;
 
+    internal procedure GetNoSeriesStartingNos(): Dictionary of [RecordId, Text]
+    begin
+        exit(NoSeriesStartingNosGlobal);
+    end;
+
     procedure HasErrorsThatShouldNotBeIngored(): Boolean
     begin
         exit(ErrorsOccuredThatShouldNotBeIngored);
@@ -241,7 +247,7 @@ codeunit 91008 DMTMigrateRecord
             FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
             CurrValueToAssignText := Format(FromField.Value);
         end else begin
-            CurrValueToAssignText := GetCustomValue(ImportConfigLine);
+            CurrValueToAssignText := GetCustomValue(SourceRecRef, ImportConfigLine);
         end;
         // assign current value to target field
         TargetRecRef2 := TargetRecRef.Duplicate(); // create a duplicate to avoid filling the original target record
@@ -407,7 +413,7 @@ codeunit 91008 DMTMigrateRecord
             until TempImportConfigLine.Next() = 0;
     end;
 
-    local procedure GetCustomValue(ImportConfigLine: Record DMTImportConfigLine) CustomValue: Text
+    local procedure GetCustomValue(var SourceRecRef: RecordRef; ImportConfigLine: Record DMTImportConfigLine) CustomValue: Text
     var
         customValueNotSetErr: Label 'Custom Value Type is not defined',
                     Comment = 'de-DE=Ben.-def. Wert ist nicht definiert.';
@@ -417,22 +423,24 @@ codeunit 91008 DMTMigrateRecord
                 Error(customValueNotSetErr);
             ImportConfigLine."Custom Value Type" = importConfigLine."Custom Value Type"::"Fixed Value":
                 CustomValue := ImportConfigLine."Custom Value";
-            ImportConfigLine."Custom Value Type" = importConfigLine."Custom Value Type"::"No.Series":
-                CustomValue := GetNextNo(ImportConfigLine);
+            ImportConfigLine."Custom Value Type" = importConfigLine."Custom Value Type"::"No.Series": begin
+                ToDo:
+                - Wenn GenBuffTable aus RecID die alte gezogene Nummer holen
+                - Wenn eine alte Nummer verwendet wird, dann den Prozess zum sichern der verwendeten Nummer anpassen
+                CustomValue := GetNextNo(NoSeriesStartingNosGlobal, ImportConfigLine);
+            end;
             else
                 Error('GetCustomValue - unhandled TODO %1', ImportConfigLine."Custom Value Type");
         end;
     end;
 
-    local procedure GetNextNo(ImportConfigLine: Record DMTImportConfigLine): Text
+    local procedure GetNextNo(var noSeriesStartingNos: Dictionary of [RecordId, Text]; importConfigLine: Record DMTImportConfigLine) nextNo: Text
     var
-        customValueSettings: Page DMTCustomValueSettings;
+        startingNo: Text;
     begin
-        if GlobalLastUsedNoFromSeries = '' then begin
-            if customValueSettings.GetSetting_LastUsedNo(ImportConfigLine) = '' then
-                GlobalLastUsedNoFromSeries := customValueSettings.GetSetting_StartingNo(ImportConfigLine);
-        end else
-            GlobalLastUsedNoFromSeries := IncStr(GlobalLastUsedNoFromSeries);
+        startingNo := noSeriesStartingNos.Get(importConfigLine.RecordId);
+        nextNo := IncStr(startingNo);
+        noSeriesStartingNos.Set(importConfigLine.RecordId, nextNo);
     end;
 
     var
@@ -445,6 +453,7 @@ codeunit 91008 DMTMigrateRecord
         SourceRefGlobal, TargetRef_INIT, TmpTargetRef, ExistingTargetRefGlobal : RecordRef;
         ErrorsOccuredThatShouldNotBeIngored: Boolean;
         ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
+        NoSeriesStartingNosGlobal: Dictionary of [RecordId, Text];
         IReplacementHandler: Interface IReplacementHandler;
         ProcessedFields: List of [RecordId];
         RunMode: Option ProcessKeyFields,ProcessNonKeyFields,InsertRecord,ModifyRecord;
@@ -453,6 +462,4 @@ codeunit 91008 DMTMigrateRecord
         TargetRecordExistsGlobal: Boolean;
         EvaluateOptionValueAsNumberGlobal: Boolean;
         ITriggerLogGlobal: Interface ITriggerLog;
-        GlobalLastUsedNoFromSeries: Text;
-
 }

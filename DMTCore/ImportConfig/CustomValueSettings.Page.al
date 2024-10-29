@@ -8,8 +8,34 @@ page 91012 DMTCustomValueSettings
     {
         area(Content)
         {
-            group(GroupName)
+            group(NoSeriensSetup)
             {
+                Caption = 'No. Series Setup', Comment = 'de-DE=Nummernserie-Einstellungen';
+                field(NoSeriesType; NoSeriesTypeGlobal)
+                {
+                    Caption = 'No. Series Type', comment = 'de-DE=Nummernserien-Typ';
+                    OptionCaption = 'Starting No.,BC No. Series', Comment = 'de-DE=Startnummer,BC Nummernserie';
+                    trigger OnValidate()
+                    begin
+                        CurrPage.Update();
+                    end;
+                }
+            }
+            group(BCNoSeries)
+            {
+                Visible = (NoSeriesTypeGlobal = NoSeriesTypeGlobal::"BC No. Series");
+                field(BcNoSeriesCode; BcNoSeriesCodeGlobal)
+                {
+                    Caption = 'BC No. Series', Comment = 'de-DE=BC Nummernserie';
+                    TableRelation = "No. Series";
+                    ShowMandatory = true;
+                }
+            }
+            group(StartingNoGrp)
+            {
+                Caption = 'Starting No.', Comment = 'de-DE=Startnummer';
+                Visible = (NoSeriesTypeGlobal = NoSeriesTypeGlobal::"Starting No.");
+
                 field(StartingNoFld; StartingNoGlobal)
                 {
                     Caption = 'Starting No.', Comment = 'de-DE=Startnummer';
@@ -36,16 +62,22 @@ page 91012 DMTCustomValueSettings
     begin
         StartingNoGlobal := GetSetting_StartingNo(ImportConfigLine);
         LastUsedNoGlobal := GetSetting_LastUsedNo(ImportConfigLine);
+        BcNoSeriesCodeGlobal := GetSetting_BcNoSeriesCode(ImportConfigLine);
+        if Evaluate(NoSeriesTypeGlobal, GetSetting_NoSeriesType(ImportConfigLine)) then;
     end;
 
     procedure saveCustomValueSettings(var ImportConfigLine: Record DMTImportConfigLine)
     begin
         SetSetting_StartingNo(ImportConfigLine, StartingNoGlobal);
         SetSetting_LastUsedNo(ImportConfigLine, LastUsedNoGlobal);
+        SetSetting_BcNoSeriesCode(ImportConfigLine, BcNoSeriesCodeGlobal);
+        SetSetting_NoSeriesType(ImportConfigLine, format(NoSeriesTypeGlobal));
     end;
 
     procedure GetSetting_StartingNo(var ImportConfigLine: Record DMTImportConfigLine) PropertyValue: Text
     begin
+        if GetSetting_NoSeriesType(ImportConfigLine) = '' then
+            exit('');
         if not GetSetting(PropertyValue, 'StartingNo', ImportConfigLine) then
             exit('');
     end;
@@ -56,6 +88,20 @@ page 91012 DMTCustomValueSettings
             exit('');
     end;
 
+    procedure GetSetting_BcNoSeriesCode(var ImportConfigLine: Record DMTImportConfigLine) PropertyValueCode: Code[20]
+    var
+        PropertyValue: Text;
+    begin
+        if not GetSetting(PropertyValue, 'BcNoSeriesCode', ImportConfigLine) then
+            exit('');
+        PropertyValueCode := CopyStr(PropertyValue, 1, MaxStrLen(PropertyValueCode));
+    end;
+
+    local procedure GetSetting_NoSeriesType(var ImportConfigLine: Record DMTImportConfigLine) PropertyValue: Text
+    begin
+        if not GetSetting(PropertyValue, 'NoSeriesType', ImportConfigLine) then
+            exit('');
+    end;
 
     local procedure GetSetting(var PropertyValue: Text; PropertyName: Text; var ImportConfigLine: Record DMTImportConfigLine) OK: Boolean
     var
@@ -88,6 +134,16 @@ page 91012 DMTCustomValueSettings
     procedure SetSetting_LastUsedNo(var ImportConfigLine: Record DMTImportConfigLine; LastUsedNo: Text);
     begin
         SetSetting('LastUsedNo', LastUsedNo, ImportConfigLine);
+    end;
+
+    procedure SetSetting_BcNoSeriesCode(var ImportConfigLine: Record DMTImportConfigLine; BcNoSeriesCodeNew: Text);
+    begin
+        SetSetting('BcNoSeriesCode', BcNoSeriesCodeNew, ImportConfigLine);
+    end;
+
+    procedure SetSetting_NoSeriesType(var ImportConfigLine: Record DMTImportConfigLine; noSeriesTypeNew: Text);
+    begin
+        SetSetting('NoSeriesType', noSeriesTypeNew, ImportConfigLine);
     end;
 
     local procedure SetSetting(PropertyName: Text; PropertyValue: Text; var ImportConfigLine: Record DMTImportConfigLine);
@@ -123,7 +179,8 @@ page 91012 DMTCustomValueSettings
 
     internal procedure UpdateCustomValueDescription(var CurrentRec: Record DMTImportConfigLine)
     var
-        StartingNo, LastUsedNo : Text;
+        noSeries: Record "No. Series";
+        LastUsedNo, StartingNo : Text;
     begin
         case CurrentRec."Custom Value Type" of
             CurrentRec."Custom Value Type"::" ":
@@ -138,17 +195,42 @@ page 91012 DMTCustomValueSettings
                 end;
             CurrentRec."Custom Value Type"::"No.Series":
                 begin
-                    StartingNo := GetSetting_StartingNo(CurrentRec);
-                    LastUsedNo := GetSetting_LastUsedNo(CurrentRec);
-                    if LastUsedNo <> '' then
-                        CurrentRec."Custom Value" := '[Last Used:]' + LastUsedNo
-                    else
-                        if StartingNo <> '' then
-                            CurrentRec."Custom Value" := '[Starting No:]' + StartingNo
-                        else
-                            CurrentRec."Custom Value" := '[undefinded]';
+                    case true of
+                        isNoSeriesTypeStartingNo(CurrentRec):
+                            begin
+                                StartingNo := GetSetting_StartingNo(CurrentRec);
+                                LastUsedNo := GetSetting_LastUsedNo(CurrentRec);
+                                if LastUsedNo <> '' then
+                                    CurrentRec."Custom Value" := '[Last Used:]' + LastUsedNo
+                                else
+                                    if StartingNo <> '' then
+                                        CurrentRec."Custom Value" := '[Starting No:]' + StartingNo
+                                    else
+                                        CurrentRec."Custom Value" := '[undefinded]';
+
+                            end;
+                        IsNoSeriesTypeBCNoSeries(CurrentRec):
+                            begin
+                                CurrentRec."Custom Value" := '[undefinded]';
+
+                                BcNoSeriesCodeGlobal := GetSetting_BcNoSeriesCode(CurrentRec);
+                                if (BcNoSeriesCodeGlobal <> '') then
+                                    if noSeries.Get(BcNoSeriesCodeGlobal) then
+                                        CurrentRec."Custom Value" := '[BC No. Series:] ' + noSeries.Description;
+                            end;
+                    end;
                 end;
         end;
+    end;
+
+    procedure IsNoSeriesTypeStartingNo(ImportConfigLine: Record DMTImportConfigLine) OK: Boolean
+    begin
+        OK := GetSetting_NoSeriesType(ImportConfigLine) = Format(NoSeriesTypeGlobal::"Starting No.");
+    end;
+
+    procedure IsNoSeriesTypeBCNoSeries(ImportConfigLine: Record DMTImportConfigLine) OK: Boolean
+    begin
+        OK := GetSetting_NoSeriesType(ImportConfigLine) = Format(NoSeriesTypeGlobal::"BC No. Series");
     end;
 
     internal procedure ValidateCustomValue(var importConfigLine: Record DMTImportConfigLine)
@@ -165,7 +247,7 @@ page 91012 DMTCustomValueSettings
         end;
     end;
 
-    internal procedure RunNoSeriesDialog(Rec: Record DMTImportConfigLine)
+    internal procedure RunNoSeriesDialog(var Rec: Record DMTImportConfigLine)
     var
         customValueSettings: Page DMTCustomValueSettings;
     begin
@@ -176,6 +258,27 @@ page 91012 DMTCustomValueSettings
         if customValueSettings.RunModal() in [Action::LookupOK, Action::OK] then
             customValueSettings.saveCustomValueSettings(Rec);
         customValueSettings.UpdateCustomValueDescription(Rec);
+    end;
+
+    internal procedure writeLastUsedNoToImportConfigLine(noSeriesStartingNos: Dictionary of [RecordId, Text])
+    var
+        importConfigLine: Record DMTImportConfigLine;
+        NoSeries: Codeunit "No. Series";
+        recID: RecordId;
+    begin
+        foreach recID in noSeriesStartingNos.Keys do begin
+            importConfigLine.Get(recID);
+            case true of
+                IsNoSeriesTypeStartingNo(importConfigLine):
+                    begin
+                        SetSetting_LastUsedNo(importConfigLine, noSeriesStartingNos.Get(recID));
+                    end;
+                IsNoSeriesTypeBCNoSeries(importConfigLine):
+                    begin
+                        noSeries.GetNextNo(GetSetting_BcNoSeriesCode(importConfigLine), 0D, false);
+                    end;
+            end;
+        end;
     end;
 
 
@@ -202,4 +305,6 @@ page 91012 DMTCustomValueSettings
 
     var
         StartingNoGlobal, LastUsedNoGlobal : Text;
+        NoSeriesTypeGlobal: Option "Starting No.","BC No. Series";
+        BcNoSeriesCodeGlobal: Code[20];
 }
