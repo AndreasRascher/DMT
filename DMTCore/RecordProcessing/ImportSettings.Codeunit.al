@@ -176,14 +176,14 @@ codeunit 91010 DMTImportSettings
         exit(UseTriggerLogGlobal);
     end;
 
-    internal procedure SetNoSeriesStartingNos(noSeriesStartingNos: Dictionary of [RecordId, Text])
+    internal procedure NoSeriesSettings(noSeriesSettingsNew: Dictionary of [RecordId, Dictionary of [Text, Text]])
     begin
-        NoSeriesStartingNosGlobal := noSeriesStartingNos;
+        NoSeriesSettingsGlobal := noSeriesSettingsNew;
     end;
 
-    internal procedure GetNoSeriesStartingNos(): Dictionary of [RecordId, Text]
+    internal procedure GetNoSeriesSettings(): Dictionary of [RecordId, Dictionary of [Text, Text]]
     begin
-        exit(NoSeriesStartingNosGlobal);
+        exit(NoSeriesSettingsGlobal);
     end;
 
     procedure EvaluateOptionValueAsNumber(EvaluateOptionValueAsNumberNew: Boolean)
@@ -217,5 +217,5 @@ codeunit 91010 DMTImportSettings
         IsSourceTableViewSet, IsImportConfigLineSet : Boolean;
         EvaluateOptionValueAsNumberGlobal: Boolean;
         RecIdToProcessListGlobal: List of [RecordId];
-        NoSeriesStartingNosGlobal: Dictionary of [RecordId, Text];
+        NoSeriesSettingsGlobal: Dictionary of [RecordId, Dictionary of [Text, Text]];
 }

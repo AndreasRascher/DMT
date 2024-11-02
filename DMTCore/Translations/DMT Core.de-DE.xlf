@@ -1209,11 +1209,23 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Es wurden keine Schlüsselfelder zugewiesen für Importkonfiguration %1</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecord - Method ProcessKeyFields - NamedType noKeyFieldsAssignedErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 55954293 - Method 1507708651 - NamedType 4003859195" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No field mapping found for import configuration "%1"</source>
-          <target state="translated">Importkonfiguration "%1" enthält keine Feldzuordnung.</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Importkonfiguration "%1" enthält keine Feldzuordnung.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method CheckMappedFieldsExist - NamedType ImportConfigLineEmptyErr</note>
+        <trans-unit id="Codeunit 55954293 - Method 1088282324 - NamedType 3365976546" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No valid mapping found for key field "%1"</source>
+          <target state="translated">Keine gültige Zuordnung für Schlüsselfeld "%1" gefunden</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Keine gültige Zuordnung für Schlüsselfeld "%1" gefunden</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method CheckIfAllKeyFieldsAreAssigned - NamedType noValidMappingFoundForKeyFieldErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 55954293 - Method 2783449691 - NamedType 1499559392" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No Starting No. defined for field %1</source>
+          <target state="translated">Keine Startnummer definiert für Feld %1</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Keine Startnummer definiert für Feld %1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method CheckNoSeriesFieldSetup - NamedType noStartingNoDefinedErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 55954293 - Method 2783449691 - NamedType 1194067263" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. Series Code %1 not found for field %2</source>
+          <target state="translated">Nummernserie %1 nicht gefunden für Feld %2</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Nummernserie %1 nicht gefunden für Feld %2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTMigrateRecordSet - Method CheckNoSeriesFieldSetup - NamedType bcNoSeriesNotFoundErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 55954293 - Method 1715580338 - NamedType 2737554361" size-unit="char" translate="yes" xml:space="preserve">
           <source>No buffer table records match the filter.\ Filter: "%1"</source>
@@ -1419,6 +1431,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Ungültige Startnummer %1</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Method CheckIfNoCanBeIncreased - NamedType invalidStartingNoErr</note>
         </trans-unit>
+        <trans-unit id="Page 107618972 - Method 4210513733 - NamedType 4225716300" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Invalid Last Used No. %1</source>
+          <target state="translated">Ungültige Letzte verwendete Nr. %1</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ungültige Letzte verwendete Nr. %1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Method CheckIfNoCanBeIncreased - NamedType invalidLastUsedNoErr</note>
+        </trans-unit>
         <trans-unit id="Page 107618972 - Control 2309547594 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>BC No. Series</source>
           <target state="translated">BC Nummernserie</target>
@@ -1442,6 +1460,12 @@
           <target state="translated">Startnummer,BC Nummernserie</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Startnummer,BC Nummernserie</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Control NoSeriesType - Property OptionCaption</note>
+        </trans-unit>
+        <trans-unit id="Page 107618972 - Control 1306163408 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starting No.</source>
+          <target state="translated">Startnummer</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Startnummer</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Control StartingNoGrp - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 107618972 - Control 58369974 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Last Used No.</source>
@@ -1540,27 +1564,31 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldSelection - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2803682913 - Method 1460349457 - NamedType 458928479" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Set default values for table %1</source>
-          <target state="translated">Legen sie Fix-Werte für die Tabelle %1 fest</target>
+          <source>Set default values for table "%1"</source>
+          <target state="needs-adaptation">Legen sie Fix-Werte für die Tabelle %1 fest</target>
+          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
           <note from="Developer" annotates="general" priority="2">de-DE=Legen sie Fix-Werte für die Tabelle %1 fest</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldSelection - Method SetUsage_EditDefaultValues - NamedType pageCaptionTxt</note>
         </trans-unit>
         <trans-unit id="Page 2803682913 - Method 3247180304 - NamedType 458928479" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Edit filter for %1</source>
-          <target state="translated">Filter bearbeiten für %1</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Filter bearbeiten für %1</note>
+          <source>Edit filter for "%1"</source>
+          <target state="needs-adaptation">Filter bearbeiten für "%1"</target>
+          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Filter bearbeiten für "%1"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldSelection - Method SetUsage_EditSourceTableFilters - NamedType pageCaptionTxt</note>
         </trans-unit>
         <trans-unit id="Page 2803682913 - Method 3306591899 - NamedType 458928479" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Edit filter for %1</source>
-          <target state="translated">Filter bearbeiten für %1</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Filter bearbeiten für %1</note>
+          <source>Edit filter for "%1"</source>
+          <target state="needs-adaptation">Filter bearbeiten für "%1"</target>
+          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Filter bearbeiten für "%1"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldSelection - Method SetUsage_EditTableFilters - NamedType pageCaptionTxt</note>
         </trans-unit>
         <trans-unit id="Page 2803682913 - Method 3900567964 - NamedType 458928479" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Edit filter for %1</source>
-          <target state="translated">Filter bearbeiten für %1</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=Filter bearbeiten für %1</note>
+          <source>Edit filter for "%1"</source>
+          <target state="needs-adaptation">Filter bearbeiten für "%1"</target>
+          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=Filter bearbeiten für "%1"</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldSelection - Method SetUsage_EditTargetTableFilters - NamedType pageCaptionTxt</note>
         </trans-unit>
         <trans-unit id="Page 2803682913 - Method 2630791397 - NamedType 458928479" size-unit="char" translate="yes" xml:space="preserve">

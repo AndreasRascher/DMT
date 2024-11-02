@@ -135,6 +135,14 @@ codeunit 90027 DMTDataTableHelper
         CurrDataTable.Get(rowIndex).Set(colIndex, content);
     end;
 
+    internal procedure SetLine(rowIndex: Integer; content1: Text; content2: Text)
+    var
+        line: List of [Text];
+    begin
+        line.AddRange(content1, content2);
+        SetLine(rowIndex, line);
+    end;
+
     internal procedure SetLine(rowIndex: Integer; content1: Text; content2: Text; content3: Text)
     var
         line: List of [Text];

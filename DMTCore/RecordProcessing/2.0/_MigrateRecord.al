@@ -31,7 +31,7 @@ codeunit 91008 DMTMigrateRecord
     begin
         Clear(CurrTargetRecIDText); // only once, not for every field
         ImportConfigHeaderGlobal := importSettings.ImportConfigHeader();
-        NoSeriesStartingNosGlobal := importSettings.GetNoSeriesStartingNos();
+        NoSeriesSettings := importSettings.GetNoSeriesSettings();
         EvaluateOptionValueAsNumberGlobal := importSettings.EvaluateOptionValueAsNumber();
         SourceRefGlobal := bufferRef;
         importSettings.GetImportConfigLine(TempImportConfigLine);
@@ -149,9 +149,9 @@ codeunit 91008 DMTMigrateRecord
         ImportConfigHeaderGlobal.BufferTableMgt().SetDMTImportFields(SourceRefGlobal, CurrTargetRecIDText);
     end;
 
-    internal procedure GetNoSeriesStartingNos(): Dictionary of [RecordId, Text]
+    internal procedure GetNoSeriesStartingNos(): Dictionary of [RecordId, Dictionary of [Text, Text]]
     begin
-        exit(NoSeriesStartingNosGlobal);
+        exit(NoSeriesSettings);
     end;
 
     procedure HasErrorsThatShouldNotBeIngored(): Boolean
@@ -253,7 +253,7 @@ codeunit 91008 DMTMigrateRecord
         TargetRecRef2 := TargetRecRef.Duplicate(); // create a duplicate to avoid filling the original target record
         FieldWithTypeCorrectValueToValidate := TargetRecRef2.Field(ImportConfigLine."Target Field No.");
         case true of
-            // Create fieldRef from fixed value
+            // Create fieldRef from custom value
             (ImportConfigLine."Processing Action" = ImportConfigLine."Processing Action"::CustomValue):
                 RefHelper.AssignFixedValueToFieldRef(FieldWithTypeCorrectValueToValidate, CurrValueToAssignText);
             // copy fieldRef from source field
@@ -423,24 +423,34 @@ codeunit 91008 DMTMigrateRecord
                 Error(customValueNotSetErr);
             ImportConfigLine."Custom Value Type" = importConfigLine."Custom Value Type"::"Fixed Value":
                 CustomValue := ImportConfigLine."Custom Value";
-            ImportConfigLine."Custom Value Type" = importConfigLine."Custom Value Type"::"No.Series": begin
-                ToDo:
-                - Wenn GenBuffTable aus RecID die alte gezogene Nummer holen
-                - Wenn eine alte Nummer verwendet wird, dann den Prozess zum sichern der verwendeten Nummer anpassen
-                CustomValue := GetNextNo(NoSeriesStartingNosGlobal, ImportConfigLine);
-            end;
+            ImportConfigLine."Custom Value Type" = importConfigLine."Custom Value Type"::"No.Series":
+                begin
+                    if not restoreUsedSerialNoFromRecordID(CustomValue, ImportConfigLine, SourceRecRef) then begin
+                        CustomValue := noSeriesSettings.Get(ImportConfigLine.RecordId).Get('NextNo');
+                    end;
+                end;
             else
                 Error('GetCustomValue - unhandled TODO %1', ImportConfigLine."Custom Value Type");
         end;
     end;
 
-    local procedure GetNextNo(var noSeriesStartingNos: Dictionary of [RecordId, Text]; importConfigLine: Record DMTImportConfigLine) nextNo: Text
+    local procedure restoreUsedSerialNoFromRecordID(var CustomValue: Text; ImportConfigLine: Record DMTImportConfigLine; var SourceRecRef: RecordRef) OK: Boolean
     var
-        startingNo: Text;
+        genBuffTable: Record DMTGenBuffTable;
+        oldSourceRef: RecordRef;
     begin
-        startingNo := noSeriesStartingNos.Get(importConfigLine.RecordId);
-        nextNo := IncStr(startingNo);
-        noSeriesStartingNos.Set(importConfigLine.RecordId, nextNo);
+        // - Wenn GenBuffTable aus RecID die alte Nummer holen
+        OK := true;
+        if genBuffTable.TableName <> SourceRecRef.Name then
+            exit(false);
+
+        SourceRecRef.SetTable(genBuffTable);
+        if Format(genBuffTable."RecId (Imported)") = '' then
+            exit(false);
+        oldSourceRef := genBuffTable."RecId (Imported)".GetRecord();
+        CustomValue := oldSourceRef.Field(ImportConfigLine."Target Field No.").Value;
+        // Wenn eine alte Nummer verwendet wird, dann dan keine neue Nummer ziehen
+        NoSeriesSettings.Get(ImportConfigLine.RecordId).Set('DoIncrement_Yes_No', 'Increment_No');
     end;
 
     var
@@ -453,7 +463,7 @@ codeunit 91008 DMTMigrateRecord
         SourceRefGlobal, TargetRef_INIT, TmpTargetRef, ExistingTargetRefGlobal : RecordRef;
         ErrorsOccuredThatShouldNotBeIngored: Boolean;
         ErrorLogDict: Dictionary of [RecordId, Dictionary of [Text, Text]];
-        NoSeriesStartingNosGlobal: Dictionary of [RecordId, Text];
+        NoSeriesSettings: Dictionary of [RecordId, Dictionary of [Text, Text]];
         IReplacementHandler: Interface IReplacementHandler;
         ProcessedFields: List of [RecordId];
         RunMode: Option ProcessKeyFields,ProcessNonKeyFields,InsertRecord,ModifyRecord;

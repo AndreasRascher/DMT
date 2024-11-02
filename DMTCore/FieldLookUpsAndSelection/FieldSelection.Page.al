@@ -7,6 +7,7 @@ page 91029 DMTFieldSelection
     SourceTable = DMTFieldLookUpBuffer;
     SourceTableTemporary = true;
     PopulateAllFields = true;
+    DataCaptionExpression = '';
 
     layout
     {
@@ -125,7 +126,7 @@ page 91029 DMTFieldSelection
 
     procedure SetUsage_EditSourceTableFilters(importConfigHeader: Record DMTImportConfigHeader)
     var
-        pageCaptionTxt: Label 'Edit filter for %1', Comment = 'de-DE=Filter bearbeiten für %1';
+        pageCaptionTxt: Label 'Edit filter for "%1"', Comment = 'de-DE=Filter bearbeiten für "%1"';
     begin
         Usage := Usage::EditSourceTableFilters;
         CurrPage.Caption := StrSubstNo(pageCaptionTxt, importConfigHeader."Source File Name");
@@ -134,7 +135,7 @@ page 91029 DMTFieldSelection
 
     procedure SetUsage_EditDefaultValues(importConfigHeader: Record DMTImportConfigHeader)
     var
-        pageCaptionTxt: Label 'Set default values for table %1', Comment = 'de-DE=Legen sie Fix-Werte für die Tabelle %1 fest';
+        pageCaptionTxt: Label 'Set default values for table "%1"', Comment = 'de-DE=Legen sie Fix-Werte für die Tabelle %1 fest';
     begin
         Usage := Usage::EditDefaultValues;
         CurrPage.Caption := StrSubstNo(pageCaptionTxt, importConfigHeader."Target Table Caption");
@@ -143,7 +144,7 @@ page 91029 DMTFieldSelection
 
     procedure SetUsage_EditTargetTableFilters(importConfigHeader: Record DMTImportConfigHeader)
     var
-        pageCaptionTxt: Label 'Edit filter for %1', Comment = 'de-DE=Filter bearbeiten für %1';
+        pageCaptionTxt: Label 'Edit filter for "%1"', Comment = 'de-DE=Filter bearbeiten für "%1"';
     begin
         Usage := Usage::EditTargetTableFilters;
         CurrPage.Caption := StrSubstNo(pageCaptionTxt, importConfigHeader."Target Table Caption");
@@ -152,7 +153,7 @@ page 91029 DMTFieldSelection
 
     procedure SetUsage_EditTableFilters(recRef: RecordRef)
     var
-        pageCaptionTxt: Label 'Edit filter for %1', Comment = 'de-DE=Filter bearbeiten für %1';
+        pageCaptionTxt: Label 'Edit filter for "%1"', Comment = 'de-DE=Filter bearbeiten für "%1"';
     begin
         Usage := Usage::EditTableFilters;
         CurrPage.Caption := StrSubstNo(pageCaptionTxt, recRef.Caption);

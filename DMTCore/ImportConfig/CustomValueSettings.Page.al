@@ -41,7 +41,7 @@ page 91012 DMTCustomValueSettings
                     Caption = 'Starting No.', Comment = 'de-DE=Startnummer';
                     trigger OnValidate()
                     begin
-                        CheckIfNoCanBeIncreased(StartingNoGlobal);
+                        CheckIfNoCanBeIncreased(StartingNoGlobal, '');
                     end;
                 }
                 field(LastUsedNoFld; LastUsedNoGlobal)
@@ -49,7 +49,7 @@ page 91012 DMTCustomValueSettings
                     Caption = 'Last Used No.', Comment = 'de-DE=Letzte verwendete Nr.';
                     trigger OnValidate()
                     begin
-                        CheckIfNoCanBeIncreased(LastUsedNoGlobal);
+                        CheckIfNoCanBeIncreased('', LastUsedNoGlobal);
                     end;
                 }
             }
@@ -68,15 +68,28 @@ page 91012 DMTCustomValueSettings
 
     procedure saveCustomValueSettings(var ImportConfigLine: Record DMTImportConfigLine)
     begin
-        SetSetting_StartingNo(ImportConfigLine, StartingNoGlobal);
-        SetSetting_LastUsedNo(ImportConfigLine, LastUsedNoGlobal);
-        SetSetting_BcNoSeriesCode(ImportConfigLine, BcNoSeriesCodeGlobal);
-        SetSetting_NoSeriesType(ImportConfigLine, format(NoSeriesTypeGlobal));
+        case NoSeriesTypeGlobal of
+            NoSeriesTypeGlobal::"Starting No.":
+                begin
+                    ClearSettings(ImportConfigLine);
+                    SetSetting_NoSeriesType_StartingNo(ImportConfigLine);
+                    SetSetting_StartingNo(ImportConfigLine, StartingNoGlobal);
+                    SetSetting_LastUsedNo(ImportConfigLine, LastUsedNoGlobal);
+                end;
+            NoSeriesTypeGlobal::"BC No. Series":
+                begin
+                    ClearSettings(ImportConfigLine);
+                    SetSetting_NoSeriesType_BCNoSeries(ImportConfigLine);
+                    SetSetting_BcNoSeriesCode(ImportConfigLine, BcNoSeriesCodeGlobal);
+                end;
+            else
+                Error('undefinded No Series Type');
+        end;
     end;
 
     procedure GetSetting_StartingNo(var ImportConfigLine: Record DMTImportConfigLine) PropertyValue: Text
     begin
-        if GetSetting_NoSeriesType(ImportConfigLine) = '' then
+        if not IsNoSeriesTypeStartingNo(ImportConfigLine) then
             exit('');
         if not GetSetting(PropertyValue, 'StartingNo', ImportConfigLine) then
             exit('');
@@ -141,6 +154,16 @@ page 91012 DMTCustomValueSettings
         SetSetting('BcNoSeriesCode', BcNoSeriesCodeNew, ImportConfigLine);
     end;
 
+    procedure SetSetting_NoSeriesType_StartingNo(var ImportConfigLine: Record DMTImportConfigLine);
+    begin
+        SetSetting('NoSeriesType', Format(NoSeriesTypeGlobal::"Starting No."), ImportConfigLine);
+    end;
+
+    procedure SetSetting_NoSeriesType_BCNoSeries(var ImportConfigLine: Record DMTImportConfigLine);
+    begin
+        SetSetting('NoSeriesType', Format(NoSeriesTypeGlobal::"BC No. Series"), ImportConfigLine);
+    end;
+
     procedure SetSetting_NoSeriesType(var ImportConfigLine: Record DMTImportConfigLine; noSeriesTypeNew: Text);
     begin
         SetSetting('NoSeriesType', noSeriesTypeNew, ImportConfigLine);
@@ -164,16 +187,21 @@ page 91012 DMTCustomValueSettings
         ImportConfigLine.Modify();
     end;
 
-    procedure CheckIfNoCanBeIncreased(NoToIncrease: Text)
+    procedure CheckIfNoCanBeIncreased(StartingNo: Text; LastUsedNo: Text)
     var
         IncreasedNoDummy: Text;
         invalidStartingNoErr: Label 'Invalid Starting No. %1', Comment = 'de-DE=Ungültige Startnummer %1';
+        invalidLastUsedNoErr: Label 'Invalid Last Used No. %1', Comment = 'de-DE=Ungültige Letzte verwendete Nr. %1';
     begin
-        if NoToIncrease = '' then
-            exit;
-        IncreasedNoDummy := IncStr(NoToIncrease);
-        if increasedNoDummy = '' then begin
-            Error(invalidStartingNoErr, NoToIncrease);
+        if StartingNo <> '' then begin
+            IncreasedNoDummy := IncStr(StartingNo);
+            if increasedNoDummy = '' then
+                Error(invalidStartingNoErr, StartingNo);
+        end;
+        if LastUsedNo <> '' then begin
+            IncreasedNoDummy := IncStr(LastUsedNo);
+            if increasedNoDummy = '' then
+                Error(invalidLastUsedNoErr, LastUsedNo);
         end;
     end;
 
@@ -260,25 +288,86 @@ page 91012 DMTCustomValueSettings
         customValueSettings.UpdateCustomValueDescription(Rec);
     end;
 
-    internal procedure writeLastUsedNoToImportConfigLine(noSeriesStartingNos: Dictionary of [RecordId, Text])
+    internal procedure finalizeNoSeries(noSeriesSettings: Dictionary of [RecordId, Dictionary of [Text, Text]])
     var
         importConfigLine: Record DMTImportConfigLine;
         NoSeries: Codeunit "No. Series";
         recID: RecordId;
     begin
-        foreach recID in noSeriesStartingNos.Keys do begin
+        if noSeriesSettings.Count = 0 then
+            exit;
+        foreach recID in noSeriesSettings.Keys do begin
             importConfigLine.Get(recID);
-            case true of
-                IsNoSeriesTypeStartingNo(importConfigLine):
-                    begin
-                        SetSetting_LastUsedNo(importConfigLine, noSeriesStartingNos.Get(recID));
+            case noSeriesSettings.Get(recID).Get('NoSeriesType') of
+                format(NoSeriesTypeGlobal::"Starting No."):
+                    if noSeriesSettings.Get(recID).get('DoIncrement_Yes_No') = 'Increment_Yes' then begin
+                        noSeriesSettings.Get(recID).set('LastUsedNo', noSeriesSettings.Get(recID).get('NextNo'));
+                        SetSetting_LastUsedNo(importConfigLine, noSeriesSettings.Get(recID).get('LastUsedNo'));
                     end;
-                IsNoSeriesTypeBCNoSeries(importConfigLine):
+                Format(NoSeriesTypeGlobal::"BC No. Series"):
                     begin
-                        noSeries.GetNextNo(GetSetting_BcNoSeriesCode(importConfigLine), 0D, false);
+                        if noSeriesSettings.Get(recID).get('DoIncrement_Yes_No') = 'Increment_Yes' then
+                            noSeries.GetNextNo(CopyStr(noSeriesSettings.Get(recID).Get('BCNoSeriesCode'), 1, 20), 0D, false);
                     end;
             end;
+            // set to default for next record
+            noSeriesSettings.Get(recID).set('DoIncrement_Yes_No', 'Increment_Yes');
         end;
+    end;
+
+    internal procedure AddToNoSeriesSetting(var noSeriesSettings: Dictionary of [RecordId, Dictionary of [Text, Text]]; var tempImportConfigLine: Record DMTImportConfigLine temporary)
+    var
+        noSeriesProperties: Dictionary of [Text, Text];
+    begin
+        noSeriesProperties.Add('NoSeriesType', GetSetting_NoSeriesType(tempImportConfigLine));
+        noSeriesProperties.Add('BCNoSeriesCode', GetSetting_BcNoSeriesCode(tempImportConfigLine));
+        noSeriesProperties.Add('StartingNo', GetSetting_StartingNo(tempImportConfigLine));
+        noSeriesProperties.Add('LastUsedNo', GetSetting_LastUsedNo(tempImportConfigLine));
+        noSeriesProperties.Add('DoIncrement_Yes_No', 'Increment_Yes');
+        noSeriesSettings.Add(tempImportConfigLine.RecordId, noSeriesProperties);
+    end;
+
+    /// <summary>
+    /// peek next no for no series
+    /// </summary>
+    /// <param name="importSettings"></param>
+    internal procedure prepareNoSeriesNextNo(var importSettings: Codeunit DMTImportSettings)
+    var
+        noSeries: Codeunit "No. Series";
+        recID: RecordId;
+        noSeriesSettings: Dictionary of [RecordId, Dictionary of [Text, Text]];
+        nextNo: Text;
+    begin
+        if importSettings.GetNoSeriesSettings().Count = 0 then
+            exit;
+
+        noSeriesSettings := importSettings.GetNoSeriesSettings();
+        foreach recID in noSeriesSettings.Keys do begin
+            /*
+        noSeriesProperties.Add('NoSeriesType', GetSetting_NoSeriesType(tempImportConfigLine));
+        noSeriesProperties.Add('BCNoSeriesCode', GetSetting_BcNoSeriesCode(tempImportConfigLine));
+        noSeriesProperties.Add('StartingNo', GetSetting_StartingNo(tempImportConfigLine));
+        noSeriesProperties.Add('DoIncrement_Yes_No', 'Increment_Yes');
+            */
+            case noSeriesSettings.Get(recID).Get('NoSeriesType') of
+                Format(NoSeriesTypeGlobal::"Starting No."):
+                    begin
+                        if noSeriesSettings.Get(recID).Get('DoIncrement_Yes_No') = 'Increment_Yes' then
+                            if noSeriesSettings.Get(recID).Get('LastUsedNo') <> '' then begin
+                                nextNo := IncStr(noSeriesSettings.Get(recID).Get('LastUsedNo'))
+                            end else begin
+                                nextNo := noSeriesSettings.Get(recID).Get('StartingNo');
+                            end;
+                    end;
+                Format(NoSeriesTypeGlobal::"BC No. Series"):
+                    begin
+                        if noSeriesSettings.Get(recID).Get('DoIncrement_Yes_No') = 'Increment_Yes' then
+                            nextNo := noSeries.PeekNextNo(CopyStr(noSeriesSettings.Get(recID).Get('BCNoSeriesCode'), 1, 20), 0D);
+                    end;
+            end;
+            noSeriesSettings.Get(recID).Set('NextNo', nextNo);
+        end;
+        importSettings.NoSeriesSettings(noSeriesSettings);
     end;
 
 
