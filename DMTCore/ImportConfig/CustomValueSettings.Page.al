@@ -209,6 +209,10 @@ page 91012 DMTCustomValueSettings
     var
         noSeries: Record "No. Series";
         LastUsedNo, StartingNo : Text;
+        lastUsedLbl: Label '[Last Used No:]', Comment = 'de-DE=[Letzte Nr. verwendet:]';
+        startingNoLbl: Label '[Starting No:]', Comment = 'de-DE=[Startnummer:]';
+        undefinedLbl: Label '[undefinded]', Comment = 'de-DE=[undefiniert]';
+        bcNoSeriesLbl: Label '[BC No. Series:]', Comment = 'de-DE=[BC Nr.-Serie:]';
     begin
         case CurrentRec."Custom Value Type" of
             CurrentRec."Custom Value Type"::" ":
@@ -229,22 +233,22 @@ page 91012 DMTCustomValueSettings
                                 StartingNo := GetSetting_StartingNo(CurrentRec);
                                 LastUsedNo := GetSetting_LastUsedNo(CurrentRec);
                                 if LastUsedNo <> '' then
-                                    CurrentRec."Custom Value" := '[Last Used:]' + LastUsedNo
+                                    CurrentRec."Custom Value" := lastUsedLbl + LastUsedNo
                                 else
                                     if StartingNo <> '' then
-                                        CurrentRec."Custom Value" := '[Starting No:]' + StartingNo
+                                        CurrentRec."Custom Value" := startingNoLbl + StartingNo
                                     else
-                                        CurrentRec."Custom Value" := '[undefinded]';
+                                        CurrentRec."Custom Value" := undefinedLbl;
 
                             end;
                         IsNoSeriesTypeBCNoSeries(CurrentRec):
                             begin
-                                CurrentRec."Custom Value" := '[undefinded]';
+                                CurrentRec."Custom Value" := undefinedLbl;
 
                                 BcNoSeriesCodeGlobal := GetSetting_BcNoSeriesCode(CurrentRec);
                                 if (BcNoSeriesCodeGlobal <> '') then
                                     if noSeries.Get(BcNoSeriesCodeGlobal) then
-                                        CurrentRec."Custom Value" := '[BC No. Series:] ' + noSeries.Description;
+                                        CurrentRec."Custom Value" := bcNoSeriesLbl + ' ' + noSeries.Description;
                             end;
                     end;
                 end;

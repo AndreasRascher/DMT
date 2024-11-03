@@ -363,6 +363,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=ben.-def. Wert-Typ</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Custom Value Type - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3570477496 - Field 3187820900 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source> ,Fixed Value,No.Series</source>
+          <note from="Developer" annotates="general" priority="2">de-DE= ,Fester Wert,Nummernserie</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Custom Value Type - Property OptionCaption</note>
+        </trans-unit>
         <trans-unit id="Table 3570477496 - Field 4236431109 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ignore Errors</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Fehler ignorieren </note>
@@ -1197,6 +1202,26 @@
           <source>Invalid Last Used No. %1</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Ungültige Letzte verwendete Nr. %1</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Method CheckIfNoCanBeIncreased - NamedType invalidLastUsedNoErr</note>
+        </trans-unit>
+        <trans-unit id="Page 107618972 - Method 3474283721 - NamedType 2714926937" size-unit="char" translate="yes" xml:space="preserve">
+          <source>[Last Used No:]</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=[Letzte Nr. verwendet:]</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Method UpdateCustomValueDescription - NamedType lastUsedLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 107618972 - Method 3474283721 - NamedType 1103751853" size-unit="char" translate="yes" xml:space="preserve">
+          <source>[Starting No:]</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=[Startnummer:]</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Method UpdateCustomValueDescription - NamedType startingNoLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 107618972 - Method 3474283721 - NamedType 91648612" size-unit="char" translate="yes" xml:space="preserve">
+          <source>[undefinded]</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=[undefiniert]</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Method UpdateCustomValueDescription - NamedType undefinedLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 107618972 - Method 3474283721 - NamedType 725773763" size-unit="char" translate="yes" xml:space="preserve">
+          <source>[BC No. Series:]</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=[BC Nr.-Serie:]</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCustomValueSettings - Method UpdateCustomValueDescription - NamedType bcNoSeriesLbl</note>
         </trans-unit>
         <trans-unit id="Page 107618972 - Control 2309547594 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>BC No. Series</source>

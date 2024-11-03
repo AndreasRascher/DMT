@@ -90,11 +90,15 @@ table 91006 DMTImportConfigLine
         {
             Caption = 'Custom Value Type', Comment = 'de-DE=ben.-def. Wert-Typ';
             OptionMembers = " ","Fixed Value","No.Series";
+            OptionCaption = ' ,Fixed Value,No.Series', Comment = 'de-DE= ,Fester Wert,Nummernserie';
             trigger OnValidate()
             var
                 customValueSettings: Page DMTCustomValueSettings;
             begin
                 customValueSettings.UpdateCustomValueDescription(Rec);
+                if (xRec."Custom Value Type" <> rec."Custom Value Type") then
+                    if rec."Custom Value Type" <> rec."Custom Value Type"::" " then
+                        rec."Processing Action" := rec."Processing Action"::CustomValue;
             end;
         }
         field(103; "Custom Value Settings"; Blob)
