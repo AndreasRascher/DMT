@@ -53,11 +53,11 @@ codeunit 91014 DMTMigrateRecordSet
         importSettings.UseTriggerLog(importConfigHeader."Log Trigger Changes");
         importSettings.EvaluateOptionValueAsNumber(importConfigHeader."Ev. Nos. for Option fields as" = importConfigHeader."Ev. Nos. for Option fields as"::Position);
         DMTSetup.GetRecordOnce();
-        // ToDo: 
-        // - Laden der nächsten Nummern vor der Verarbeitung
-        // - Wenn der Prozess erfolgreich war, dann die Nummern speichern
         // Checks
         CheckIfAllKeyFieldsAreAssigned(importConfigHeader);
+        // Nummernserien:
+        // - Laden der nächsten Nummern vor der Verarbeitung
+        // - Nur wenn der Prozess erfolgreich war, dann die Nummern speichern
         CheckNoSeriesFieldSetup(importConfigHeader);
         // Prepare Buffer
         DefineSourceRecords(bufferRef, RecIdList, importSettings, migrationType);

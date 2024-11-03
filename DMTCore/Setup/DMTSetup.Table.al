@@ -42,7 +42,6 @@ table 91000 DMTSetup
         if RecordHasBeenRead then
             exit;
         Get();
-        // ToDo: Dialog DMT Einrichtung öffnen wenn Get fehlschlägt
         RecordHasBeenRead := true;
     end;
 
