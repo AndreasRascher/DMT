@@ -53,13 +53,18 @@ codeunit 91014 DMTMigrateRecordSet
         importSettings.UseTriggerLog(importConfigHeader."Log Trigger Changes");
         importSettings.EvaluateOptionValueAsNumber(importConfigHeader."Ev. Nos. for Option fields as" = importConfigHeader."Ev. Nos. for Option fields as"::Position);
         DMTSetup.GetRecordOnce();
-
         // Checks
-        CheckMappedFieldsExist(importConfigHeader);
+        CheckIfAllKeyFieldsAreAssigned(importConfigHeader);
+        // Nummernserien:
+        // - Laden der nächsten Nummern vor der Verarbeitung
+        // - Nur wenn der Prozess erfolgreich war, dann die Nummern speichern
+        CheckNoSeriesFieldSetup(importConfigHeader);
         // Prepare Buffer
         DefineSourceRecords(bufferRef, RecIdList, importSettings, migrationType);
         // Prepare FieldMapping
         LoadImportConfigLine(importSettings);
+        // Prepare NoSeries
+        LoadNoSeriesConfig(importSettings);
         // Prepare Log
         case migrationType of
             migrationType::MigrateRecords:
@@ -196,7 +201,7 @@ codeunit 91014 DMTMigrateRecordSet
                         importConfigLine.Get(tempImportConfigLine_ProcessingPlanSettings.RecordId);
                         tempImportConfigLine := importConfigLine;
                         tempImportConfigLine."Processing Action" := tempImportConfigLine_ProcessingPlanSettings."Processing Action";
-                        tempImportConfigLine."Fixed Value" := tempImportConfigLine_ProcessingPlanSettings."Fixed Value";
+                        tempImportConfigLine."Custom Value" := tempImportConfigLine_ProcessingPlanSettings."Custom Value";
                         tempImportConfigLine.Insert(false);
                     end else begin
                         tempImportConfigLine := tempImportConfigLine_ProcessingPlanSettings;
@@ -297,6 +302,7 @@ codeunit 91014 DMTMigrateRecordSet
             triggerLog.DeleteExistingLogFor(bufferRef);
 
         skipRecord := false;
+        CustomValueSettingsGlobal.prepareNoSeriesNextNo(importSettings);
         migrateRecord.Init(bufferRef, importSettings, iReplacementHandler);
         Result := Result::ChangesApplied; // default
         Commit();
@@ -343,6 +349,9 @@ codeunit 91014 DMTMigrateRecordSet
         // 6. Set Result
         if migrateRecord.HasErrorsThatShouldNotBeIngored() then
             Result := Enum::DMTProcessingResultType::Error;
+        // 7. Update last used no. series no. in import config line if Success
+        if Result <> Enum::DMTProcessingResultType::Error then
+            CustomValueSettingsGlobal.finalizeNoSeries(migrateRecord.GetNoSeriesStartingNos());
     end;
 
     procedure ProcessKeyFields(var migrateRecord: Codeunit DMTMigrateRecord) Success: Boolean
@@ -383,23 +392,81 @@ codeunit 91014 DMTMigrateRecordSet
         end;
     end;
 
-    procedure CheckMappedFieldsExist(ImportConfigHeader: Record DMTImportConfigHeader)
+    procedure CheckIfAllKeyFieldsAreAssigned(ImportConfigHeader: Record DMTImportConfigHeader)
     var
         ImportConfigLine: Record DMTImportConfigLine;
-        ImportConfigLineEmptyErr: Label 'No field mapping found for import configuration "%1"',
-                        Comment = 'de-DE=Importkonfiguration "%1" enthält keine Feldzuordnung.';
+        noValidMappingFoundForKeyFieldErr: Label 'No valid mapping found for key field "%1"',
+                        Comment = 'de-DE=Keine gültige Zuordnung für Schlüsselfeld "%1" gefunden';
     begin
         // Key Fields Mapping Exists
         ImportConfigHeader.FilterRelated(ImportConfigLine);
         ImportConfigLine.SetFilter("Processing Action", '<>%1', ImportConfigLine."Processing Action"::Ignore);
         ImportConfigLine.SetRange("Is Key Field(Target)", true);
-        ImportConfigLine.SetFilter("Source Field No.", '<>0');
+        if ImportConfigLine.FindSet(false) then
+            repeat
+                case true of
+                    // source field mapping
+                    (ImportConfigLine."Source Field No." <> 0):
+                        ;
+                    // no series as source
+                    (ImportConfigLine."Custom Value Type" = ImportConfigLine."Custom Value Type"::"No.Series"):
+                        ;
+                    // fixed value as source
+                    (ImportConfigLine."Custom Value Type" = ImportConfigLine."Custom Value Type"::"Fixed Value"):
+                        ;
+                    else begin
+                        ImportConfigLine.CalcFields("Target Field Caption");
+                        Error(noValidMappingFoundForKeyFieldErr, ImportConfigLine."Target Field Caption");
+                    end;
+                end;
+            until ImportConfigLine.Next() = 0;
 
         if ImportConfigLine.IsEmpty then
-            Error(ImportConfigLineEmptyErr, ImportConfigHeader.ID);
+            Error(noValidMappingFoundForKeyFieldErr, ImportConfigHeader.ID);
     end;
 
-    procedure PrepareProgressBar(var ImportConfigHeader: Record DMTImportConfigHeader; noOfRecordsToProcess: Integer)
+    local procedure CheckNoSeriesFieldSetup(importConfigHeader: Record DMTImportConfigHeader)
+    var
+        importConfigLine: Record DMTImportConfigLine;
+        NoSeries: Record "No. Series";
+        StartingNo, LastUsedNo : Text;
+        BCNoSeriesCode: Text;
+        noStartingNoDefinedErr: Label 'No Starting No. defined for field %1', Comment = 'de-DE=Keine Startnummer definiert für Feld %1';
+        bcNoSeriesNotFoundErr: Label 'No. Series Code %1 not found for field %2', Comment = 'de-DE=Nummernserie %1 nicht gefunden für Feld %2';
+    begin
+        // Check if Starting Nos is valid and exists
+        ImportConfigHeader.FilterRelated(importConfigLine);
+        importConfigLine.SetFilter("Processing Action", '<>%1', importConfigLine."Processing Action"::Ignore);
+        importConfigLine.SetRange("Custom Value Type", importConfigLine."Custom Value Type"::"No.Series");
+        if importConfigLine.FindSet() then
+            repeat
+                importConfigLine.TestField("Source Field No.", 0);
+                // Type Starting No
+                if CustomValueSettingsGlobal.IsNoSeriesTypeStartingNo(importConfigLine) then begin
+                    StartingNo := CustomValueSettingsGlobal.GetSetting_StartingNo(importConfigLine);
+                    if StartingNo = '' then begin
+                        importConfigLine.CalcFields("Target Field Caption");
+                        Error(noStartingNoDefinedErr, importConfigLine."Target Field Caption");
+                    end else
+                        CustomValueSettingsGlobal.CheckIfNoCanBeIncreased(StartingNo, '');
+                    LastUsedNo := CustomValueSettingsGlobal.GetSetting_LastUsedNo(importConfigLine);
+                    if LastUsedNo <> '' then
+                        CustomValueSettingsGlobal.CheckIfNoCanBeIncreased('', LastUsedNo);
+                end;
+                // Type BC No Series
+                if CustomValueSettingsGlobal.IsNoSeriesTypeBCNoSeries(importConfigLine) then begin
+                    BCNoSeriesCode := CustomValueSettingsGlobal.GetSetting_BcNoSeriesCode(importConfigLine);
+                    if true in [BCNoSeriesCode = '', not NoSeries.Get(BCNoSeriesCode)] then begin
+                        importConfigLine.CalcFields("Target Field Caption");
+                        Error(BCNoSeriesNotFoundErr, BCNoSeriesCode, importConfigLine."Target Field Caption");
+                    end;
+                end;
+            until importConfigLine.Next() = 0;
+    end;
+
+    procedure PrepareProgressBar(var
+                                     ImportConfigHeader: Record DMTImportConfigHeader;
+                                     noOfRecordsToProcess: Integer)
     var
         MaxWith: Integer;
         DurationLbl: Label 'Duration', Comment = 'de-DE=Dauer';
@@ -497,6 +564,22 @@ codeunit 91014 DMTMigrateRecordSet
                 CurrentDateTime - Progress_StartTime);
     end;
 
+    local procedure LoadNoSeriesConfig(var importSettings: Codeunit DMTImportSettings)
+    var
+        tempImportConfigLine: Record DMTImportConfigLine temporary;
+        noSeriesSettings: Dictionary of [RecordId, Dictionary of [Text, Text]];
+    begin
+        importSettings.GetImportConfigLine(tempImportConfigLine);
+        tempImportConfigLine.Reset();
+        tempImportConfigLine.SetRange("Custom Value Type", tempImportConfigLine."Custom Value Type"::"No.Series");
+        if not tempImportConfigLine.FindSet() then
+            exit;
+        repeat
+            CustomValueSettingsGlobal.AddToNoSeriesSetting(noSeriesSettings, tempImportConfigLine);
+        until tempImportConfigLine.Next() = 0;
+        importSettings.NoSeriesSettings(noSeriesSettings);
+    end;
+
     procedure FindCollationProblems(RecordMapping: Dictionary of [RecordId, RecordId]) CollationProblems: Dictionary of [RecordId, RecordId]
     var
         TargetRecID: RecordId;
@@ -514,6 +597,7 @@ codeunit 91014 DMTMigrateRecordSet
 
     var
         DMTSetup: Record "DMTSetup";
+        CustomValueSettingsGlobal: Page DMTCustomValueSettings;
         NoOfRecordsProcessedGlobal: Integer;
         Progress: Dialog;
         Progress_StartTime, Progess_LastUpdate : DateTime;

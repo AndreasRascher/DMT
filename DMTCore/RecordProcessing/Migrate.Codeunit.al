@@ -315,8 +315,6 @@
 //                                 ProgressBarTitle +
 //                                 PadStr('', (MaxWith - StrLen(ProgressBarTitle)) div 2, '_');
 //         end;
-//         // ToDo: Performance der Codeunit ProgressDialog schlecht, ggf.weniger generisch,
-//         //       durch konkrete Programmierung aller Progressdialoge ersetzten
 
 //         ProgressDialog.SaveCustomStartTime('Progress');
 //         ProgressDialog.SetTotalSteps('Process', BufferRef.Count);

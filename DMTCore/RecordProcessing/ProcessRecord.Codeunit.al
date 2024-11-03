@@ -428,7 +428,6 @@
 //             Log.AddErrorByImportConfigLineEntry(SourceRefGlobal.RecordId, ImportConfigHeader, TempImportConfigLine, ErrorItem);
 //         end;
 //     end;
-//     //ToDo: if values have been changed via trigger, create log entry and write the changes in the trigger log to the database
 //     internal procedure SaveTriggerLog(Log: Codeunit DMTLog)
 //     begin
 //         if IsTriggerLogInterfaceInitialized then

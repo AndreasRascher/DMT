@@ -72,48 +72,56 @@ table 91006 DMTImportConfigLine
                 if xRec."Processing Action" = rec."Processing Action" then
                     exit;
                 if rec."Processing Action" = Rec."Processing Action"::Transfer then
-                    rec.TestField("Source Field No.");
+                    if rec."Custom Value Type" <> rec."Custom Value Type"::"No.Series" then
+                        rec.TestField("Source Field No.");
             end;
-        }
-        field(101; "Fixed Value"; Text[250])
+        }//Custom value and Custom type
+        field(101; "Custom Value"; Text[250])
         {
-            Caption = 'Fixed Value', Comment = 'de-DE=Fester Wert';
+            Caption = 'Custom Value', Comment = 'de-DE=Ben.-def. Wert';
             trigger OnValidate()
             var
-                ConfigValidateMgt: Codeunit "Config. Validate Management";
-                RecRef: RecordRef;
-                FldRef: FieldRef;
-                ErrorMsg: Text;
+                customValueSettings: Page DMTCustomValueSettings;
             begin
-                Rec.TestField("Target Table ID");
-                Rec.TestField("Target Field No.");
-                if "Fixed Value" <> '' then begin
-                    RecRef.Open(Rec."Target Table ID");
-                    FldRef := RecRef.Field(Rec."Target Field No.");
-                    ErrorMsg := ConfigValidateMgt.EvaluateValue(FldRef, "Fixed Value", false);
-                    if ErrorMsg <> '' then begin
-                        Error(ErrorMsg);
-                    end else begin
-                        "Fixed Value" := Format(FldRef.Value);
-                    end;
-                end;
+                customValueSettings.ValidateCustomValue(Rec);
             end;
         }
-        field(102; "Validation Order"; Integer) { Caption = 'Validation Order', Comment = 'de-DE=Reihenfolge Validierung'; }
+        field(102; "Custom Value Type"; Option)
+        {
+            Caption = 'Custom Value Type', Comment = 'de-DE=ben.-def. Wert-Typ';
+            OptionMembers = " ","Fixed Value","No.Series";
+            OptionCaption = ' ,Fixed Value,No.Series', Comment = 'de-DE= ,Fester Wert,Nummernserie';
+            trigger OnValidate()
+            var
+                customValueSettings: Page DMTCustomValueSettings;
+            begin
+                customValueSettings.UpdateCustomValueDescription(Rec);
+                if (xRec."Custom Value Type" <> rec."Custom Value Type") then
+                    if rec."Custom Value Type" <> rec."Custom Value Type"::" " then
+                        rec."Processing Action" := rec."Processing Action"::CustomValue;
+            end;
+        }
+        field(103; "Custom Value Settings"; Blob)
+        {
+            Caption = 'Custom Value Settings', Locked = true;
+            Subtype = Json;
+        }
+        field(105; "Validation Order"; Integer) { Caption = 'Validation Order', Comment = 'de-DE=Reihenfolge Validierung'; }
         #region SelectMulipleFields
-        field(200; "Search Target Field Name"; Text[80])
-        {
-            Description = 'Searchable field because Flowfields are not covered by the page search';
-            Caption = 'Target Field Name', Comment = 'de-DE=Zielfeld Name';
-            Editable = false;
-        }
-        field(201; "Search Target Field Caption"; Text[80])
-        {
-            Description = 'Searchable field because Flowfields are not covered by the page search';
-            Caption = 'Target Field Caption', Comment = 'de-DE=Zielfeld Bezeichnung';
-            Editable = false;
-        }
-        field(202; Selection; Boolean) { Caption = 'Selection', Comment = 'de-DE=Auswahl'; }
+        // field(200; "Search Target Field Name"; Text[80])
+        // {
+        //     Description = 'Searchable field because Flowfields are not covered by the page search';
+        //     Caption = 'Target Field Name', Comment = 'de-DE=Zielfeld Name';
+        //     Editable = false;
+        // }
+        // field(201; "Search Target Field Caption"; Text[80])
+        // {
+        //     Description = 'Searchable field because Flowfields are not covered by the page search';
+        //     Caption = 'Target Field Caption', Comment = 'de-DE=Zielfeld Bezeichnung';
+        //     Editable = false;
+        // }
+        // field(202; Selection; Boolean) { Caption = 'Selection', Comment = 'de-DE=Auswahl'; }
+        #endregion SelectMulipleFields
         field(300; PrPl_FBRunMode_Filter; Option)
         {
             Caption = 'ProcessingPlan FactBox RunModeFilter', Locked = true;
@@ -133,7 +141,6 @@ table 91006 DMTImportConfigLine
             FieldClass = FlowFilter;
             Editable = false;
         }
-        #endregion SelectMulipleFields
     }
 
     keys
@@ -192,9 +199,11 @@ table 91006 DMTImportConfigLine
         if ImportConfigLine.FindSet(false) then
             repeat
                 LineCount += 1;
+                ImportConfigLine.CalcFields("Custom Value Settings");
                 TempImportConfigLine2 := ImportConfigLine;
                 TempImportConfigLine2.Insert(false);
             until ImportConfigLine.Next() = 0;
         TempImportConfigLine.Copy(TempImportConfigLine2, true);
     end;
+
 }

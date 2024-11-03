@@ -69,9 +69,9 @@ page 90011 DMTCode
             SourceFieldName := CodeGenerator.GetALFieldNameWithMasking(ImportConfigLine."Target Field Name");
             TargetFieldName := CodeGenerator.GetALFieldNameWithMasking(ImportConfigLine."Source Field Caption");
             case ImportConfigLine."Processing Action" of
-                DMTFieldProcessingType::FixedValue:
+                DMTFieldProcessingType::CustomValue:
                     begin
-                        CodeLines.Add(StrSubstNo('%1.Validate(%2,''%3'');', _TargetRecVarName, TargetFieldName, ImportConfigLine."Fixed Value"));
+                        CodeLines.Add(StrSubstNo('%1.Validate(%2,''%3'');', _TargetRecVarName, TargetFieldName, ImportConfigLine."Custom Value"));
                     end;
                 DMTFieldProcessingType::Ignore:
                     begin

@@ -14,7 +14,6 @@ page 91009 DMTImportConfigLinePart
         {
             repeater(LineRepeater)
             {
-                // Editable = HasDataLayoutAssigned;
                 field("Processing Action"; Rec."Processing Action")
                 {
                     trigger OnValidate()
@@ -46,7 +45,24 @@ page 91009 DMTImportConfigLinePart
                     Comment = 'de-DE=VerarbeitungsfehlerDaten importieren auch';
                 }
                 field("Validation Type"; Rec."Validation Type") { }
-                field("Fixed Value"; Rec."Fixed Value") { ShowMandatory = ShowMandatory_FixedValue; }
+                field("Custom Value Type"; Rec."Custom Value Type")
+                {
+                    trigger OnValidate()
+                    begin
+                        EnableControls();
+                    end;
+                }
+                field("Custom Value"; Rec."Custom Value")
+                {
+                    ShowMandatory = ShowMandatory_CustomValue;
+                    Editable = IsEditable_CustomValue;
+                    trigger OnDrillDown()
+                    var
+                        customValueSettings: Page DMTCustomValueSettings;
+                    begin
+                        customValueSettings.RunNoSeriesDialog(Rec);
+                    end;
+                }
                 field(ValidationOrder; Rec."Validation Order") { Visible = false; }
             }
         }
@@ -211,15 +227,37 @@ page 91009 DMTImportConfigLinePart
     end;
 
     local procedure EnableControls()
+    var
+        customValueSettings: Page DMTCustomValueSettings;
     begin
         ShowMandatory_FromFieldNo := false;
-        if Rec."Processing Action" <> Rec."Processing Action"::FixedValue then
+        if Rec."Processing Action" <> Rec."Processing Action"::CustomValue then
             if rec."Is Key Field(Target)" then
                 ShowMandatory_FromFieldNo := true;
 
-        ShowMandatory_FixedValue := false;
-        if Rec."Processing Action" = Rec."Processing Action"::FixedValue then
-            ShowMandatory_FixedValue := true;
+        ShowMandatory_CustomValue := false;
+        if Rec."Processing Action" = Rec."Processing Action"::CustomValue then
+            ShowMandatory_CustomValue := true;
+        case Rec."Custom Value Type" of
+            Rec."Custom Value Type"::" ":
+                begin
+                    IsEditable_CustomValue := false;
+                    ShowMandatory_CustomValue := false;
+                    Rec."Custom Value" := '';
+                end;
+            Rec."Custom Value Type"::"No.Series":
+                begin
+                    IsEditable_CustomValue := false;
+                    ShowMandatory_CustomValue := false;
+                    Rec."Custom Value" := '';
+                    customValueSettings.UpdateCustomValueDescription(Rec);
+                end;
+            Rec."Custom Value Type"::"Fixed Value":
+                begin
+                    ShowMandatory_CustomValue := false;
+                    IsEditable_CustomValue := true;
+                end;
+        end;
     end;
 
     trigger OnAfterGetRecord()
@@ -238,6 +276,6 @@ page 91009 DMTImportConfigLinePart
     var
         TempImportConfigLine_Selected: Record DMTImportConfigLine temporary;
         ImportConfigMgt: Codeunit DMTImportConfigMgt;
-        IsFixedValue, HasDataLayoutAssigned, ShowMandatory_FromFieldNo, ShowMandatory_FixedValue : Boolean;
+        IsFixedValue, ShowMandatory_FromFieldNo, ShowMandatory_CustomValue, IsEditable_CustomValue : Boolean;
         LineStyleExpr: Text;
 }

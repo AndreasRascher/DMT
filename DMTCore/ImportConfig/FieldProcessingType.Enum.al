@@ -4,5 +4,5 @@ enum 91003 DMTFieldProcessingType
 
     value(0; Ignore) { Caption = 'Ignore', Comment = 'de-DE=Ignorieren'; }
     value(1; Transfer) { Caption = 'Transfer', Comment = 'de-DE=Transfer'; }
-    value(2; FixedValue) { Caption = 'Fixed Value', Comment = 'de-DE=Fixwert'; }
+    value(2; CustomValue) { Caption = 'Custom Value', Comment = 'de-DE=benutzerdefinierter Wert'; }
 }

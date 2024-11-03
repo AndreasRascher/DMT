@@ -269,7 +269,6 @@ page 91015 DMTDeleteDataInTargetTable
         targetRef: RecordRef;
         iReplacementHandler: Interface IReplacementHandler;
     begin
-        //TODO: Testen
         importSettings.init(importConfigHeader, Enum::DMTMigrationType::MigrateSelectsFields);
         DMTSetup.getDefaultReplacementImplementation(iReplacementHandler);
         migrateRecord.Init(sourceRef, importSettings, iReplacementHandler);
