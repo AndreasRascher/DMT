@@ -301,18 +301,24 @@ page 91017 DMTProcessingPlan
                     processingPlan: Record DMTProcessingPlan;
                     processingPlanBatch: Record DMTProcessingPlanBatch;
                     XMLBackup: Codeunit DMTXMLBackup;
-                    RecordsToExport: List of [RecordId];
+                    recordsToExport: Dictionary of [Integer, List of [RecordId]];
+                    recIdList: List of [RecordId];
                 begin
                     TableMetadata.Get(Database::DMTProcessingPlan);
                     // Export Batch
                     processingPlanBatch.Get(CurrentJnlBatchName);
-                    RecordsToExport.Add(processingPlanBatch.RecordId);
+                    Clear(recIdList);
+                    recIdList.Add(processingPlanBatch.RecordId);
+                    RecordsToExport.Add(processingPlanBatch.RecordId.TableNo, recIdList);
                     // Export Batch Lines
+                    Clear(recIdList);
                     processingPlan.SetRange("Journal Batch Name", CurrentJnlBatchName);
-                    if processingPlan.FindSet(false) then
+                    if processingPlan.FindSet(false) then begin
                         repeat
-                            RecordsToExport.Add(processingPlan.RecordId);
+                            recIdList.Add(processingPlan.RecordId);
                         until processingPlan.Next() = 0;
+                        RecordsToExport.Add(processingPlan.RecordId.TableNo, recIdList);
+                    end;
                     XMLBackup.ExportSelectedRecordIDs(RecordsToExport, TableMetadata.Caption + '_' + CurrentJnlBatchName + '_');
                 end;
             }

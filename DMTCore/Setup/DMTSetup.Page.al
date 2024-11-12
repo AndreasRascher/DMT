@@ -119,15 +119,9 @@ page 91000 "DMT Setup"
 
                 trigger OnAction()
                 var
-                    ImportConfigHeader: Record DMTImportConfigHeader;
                     XMLBackup: Codeunit DMTXMLBackup;
                 begin
                     XMLBackup.Import();
-                    // Update imported "Qty.Lines In Trgt. Table" with actual values
-                    if ImportConfigHeader.FindSet() then
-                        repeat
-                            ImportConfigHeader.UpdateBufferRecordCount();
-                        until ImportConfigHeader.Next() = 0;
                 end;
             }
         }

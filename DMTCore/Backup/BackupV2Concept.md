@@ -1,10 +1,17 @@
 # DMT Backup
 ## Anforderungen
 - Elemente wie Verarbeitungsbuch.-Blatt oder Import Konfigurationen sollen sich zwischen Datenbanken übertragen lassen
-## Probleme
-- Import Konfiguration und Quelldateien sind ID basierte Tabellen. Bei einem Import in bestehende Strukturen passt der ID Bezug der Quelldateien nicht mehr
-- Wenn eine Quelldateien ID bereits vorhanden ist, aber der Quelldateienname abweicht
-- Wenn die Import Konfiguration bereits existiert, aber auf eine andere Datei verweist
+Import Konfiguration
+  * Kombination von Quelldateiname und Zieltabelle bereits vorhanden
+    * Ersetzen anbieten 
+  * ID bereits vorhanden
+    * Nächste freie ID verwenden 
+  * Problem gleicher Dateiname und gleiches Ziel aber unterschiedliche Zeilen
+    * Lösungsmöglichkeiten - Fehlermeldung bei Anlage der Import Konf. 
+  * Felder in Zielsystem nicht vorhanden
+    * anbieten, die Felder zu löschen
+    * Status der Felder aus ignorieren 
+   
 ## Lösungsansatz
 Import Worksheet
  - Typen:

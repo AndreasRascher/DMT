@@ -9,4 +9,5 @@ enum 91001 DMTFileFilter
     value(4; Txt) { Caption = 'Text-Files (*.txt)|*.txt', Comment = 'de-DE=Textdateien (*.txt)|*.txt'; }
     value(5; Xml) { Caption = 'XML-Files (*.xml)|*.xml', Comment = 'de-DE=XML-Dateien (*.xml)|*.xml'; }
     value(6; CSV) { Caption = 'CSV-Files (*.csv)|*.csv', Comment = 'de-DE=CSV-Dateien (*.csv)|*.csv'; }
+    value(7; JSON) { Caption = 'JSON-Files (*.json)|*.json', Comment = 'de-DE=JSON-Dateien (*.json)|*.json'; }
 }
