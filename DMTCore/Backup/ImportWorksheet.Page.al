@@ -20,4 +20,13 @@ page 91018 "DMTImportWorksheet"
             }
         }
     }
+    procedure setLines(var importWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    begin
+        Rec.Copy(importWorksheetBuffer, true);
+    end;
+
+    procedure getLines(var importWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    begin
+        importWorksheetBuffer.Copy(Rec, true);
+    end;
 }

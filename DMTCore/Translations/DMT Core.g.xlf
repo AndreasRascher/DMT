@@ -438,6 +438,26 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Valid. Typ</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Validation Type - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 4253467002 - Field 2962556037 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import Action</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Importaktion</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field ImportAction - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4253467002 - Field 3766340152 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>SourceRecID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field SourceRecID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4253467002 - Field 1878130204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Type</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Art</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4253467002 - Field 663275594 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unique ID</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Eindeutige ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field UniqueID - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 744607175 - Field 1004182435 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Context Description</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Kontext Beschreibung</note>
@@ -1113,6 +1133,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Die Variablen zum Vergleichen sind nicht initialisiert.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTTriggerLogImpl - Method CheckAfterValidate - NamedType varsToCompareNotInitializedErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1787269974 - Method 3201496503 - NamedType 3033722242" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import abgeschlossen\ Import Dauer: %1</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen\ Import Dauer: %1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTXMLBackup - Method Import - NamedType importFinishedMsg</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2940556576 - Method 3472600955 - NamedType 2829063540" size-unit="char" translate="yes" xml:space="preserve">
           <source>Invalid assignment in replacement "%1". An import configuration with the ID %2 does not exist.</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Ungültige Zuordnung in Ersetzung "%1". Eine Importkonfiguration mit der ID %2 ist nicht verhanden.</note>
@@ -1628,6 +1653,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Migration</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigList - Action Category_Category6 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2405865346 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Import Worksheet</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=DMT Import-Arbeitsblatt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportWorksheet - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2711900234 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Lines</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Zeilen</note>
@@ -2027,6 +2057,11 @@
           <source>Excel-Files (*.xlsx)|*.xlsx</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Excel-Dateien (*.xlsx)|*.xlsx</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue Excel - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 2264048100 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>JSON-Files (*.json)|*.json</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=JSON-Dateien (*.json)|*.json</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue JSON - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 2768277382 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc</source>

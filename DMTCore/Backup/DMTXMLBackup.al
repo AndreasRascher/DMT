@@ -22,6 +22,7 @@ codeunit 91007 DMTXMLBackup
 
     procedure Import();
     var
+        tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary;
         allObj: Record AllObj;
         TmpTargetRef: RecordRef;
         FldRef: FieldRef;
@@ -75,9 +76,12 @@ codeunit 91007 DMTXMLBackup
                             FldRefEvaluate(FldRef, XFieldNode.AsXmlElement().InnerText);
                     end;
                 end;
-                storeTableToTemp(TmpTargetRef);
+                processImportedRecord(tempImportWorksheetBuffer, TmpTargetRef);
+                findImportAction(tempImportWorksheetBuffer);
             end;
         end;
+        if openImportWorksheet(tempImportWorksheetBuffer) then
+            importSelectedRecords(tempImportWorksheetBuffer);
 
         RunPostImportOperations();
 
@@ -421,7 +425,6 @@ codeunit 91007 DMTXMLBackup
         TablesToExport.Add(Database::DMTImportConfigLine);
         TablesToExport.Add(Database::DMTSourceFileStorage);
         TablesToExport.Add(Database::DMTProcessingPlan);
-        TablesToExport.Add(Database::DMTSetup);
         TablesToExport.Add(Database::DMTReplacementHeader);
         TablesToExport.Add(Database::DMTReplacementLine);
         TablesToExport.Add(Database::DMTCopyTable);
@@ -504,7 +507,7 @@ codeunit 91007 DMTXMLBackup
             until processingPlan.Next() = 0;
     end;
 
-    local procedure storeTableToTemp(TmpTargetRef: RecordRef)
+    local procedure processImportedRecord(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary; TmpTargetRef: RecordRef)
     var
         i: Integer;
     begin
@@ -519,13 +522,19 @@ codeunit 91007 DMTXMLBackup
                 begin
                     TmpTargetRef.SetTable(TempSetup);
                     TempSetup.Insert();
-                    CollectImportedRecUniqueID(Enum::DMTBackupEntity::Setup, TempSetup);
+                    tempImportWorksheetBuffer.Type := Enum::DMTBackupEntity::Setup;
+                    tempImportWorksheetBuffer.UniqueID := StrSubstNo('');
+                    tempImportWorksheetBuffer.SourceRecID := TmpTargetRef.RecordId;
+                    tempImportWorksheetBuffer.Insert();
                 end;
             TempDataLayout.TableName:
                 begin
                     TmpTargetRef.SetTable(TempDataLayout);
                     TempDataLayout.Insert();
-                    CollectImportedRecUniqueID(Enum::DMTBackupEntity::"Data Layout", TempDataLayout);
+                    tempImportWorksheetBuffer.Type := Enum::DMTBackupEntity::"Data Layout";
+                    tempImportWorksheetBuffer.UniqueID := StrSubstNo('%1', TempDataLayout.Name);
+                    tempImportWorksheetBuffer.SourceRecID := TmpTargetRef.RecordId;
+                    tempImportWorksheetBuffer.Insert();
                 end;
             TempDataLayoutLine.TableName:
                 begin
@@ -536,7 +545,10 @@ codeunit 91007 DMTXMLBackup
                 begin
                     TmpTargetRef.SetTable(TempImportConfigHeader);
                     TempImportConfigHeader.Insert();
-                    CollectImportedRecUniqueID(Enum::DMTBackupEntity::"Import Config", TempImportConfigHeader);
+                    tempImportWorksheetBuffer.Type := Enum::DMTBackupEntity::"Import Config";
+                    tempImportWorksheetBuffer.UniqueID := StrSubstNo('Zieltabelle: %1 - Quelle:%2', TempImportConfigHeader."Target Table Caption", TempImportConfigHeader."Source File Name");
+                    tempImportWorksheetBuffer.SourceRecID := TmpTargetRef.RecordId;
+                    tempImportWorksheetBuffer.Insert();
                 end;
             TempImportConfigLine.TableName:
                 begin
@@ -547,13 +559,19 @@ codeunit 91007 DMTXMLBackup
                 begin
                     TmpTargetRef.SetTable(TempSourceFileStorage);
                     TempSourceFileStorage.Insert();
-                    CollectImportedRecUniqueID(Enum::DMTBackupEntity::"Source File", TempSourceFileStorage);
+                    tempImportWorksheetBuffer.Type := Enum::DMTBackupEntity::"Source File";
+                    tempImportWorksheetBuffer.UniqueID := StrSubstNo('%1', TempSourceFileStorage.Name);
+                    tempImportWorksheetBuffer.SourceRecID := TmpTargetRef.RecordId;
+                    tempImportWorksheetBuffer.Insert();
                 end;
             TempProcessingPlanBatch.TableName:
                 begin
                     TmpTargetRef.SetTable(TempProcessingPlanBatch);
                     TempProcessingPlanBatch.Insert();
-                    CollectImportedRecUniqueID(Enum::DMTBackupEntity::"Proc.Plan Batch", TempProcessingPlanBatch);
+                    tempImportWorksheetBuffer.Type := Enum::DMTBackupEntity::"Proc.Plan Batch";
+                    tempImportWorksheetBuffer.UniqueID := StrSubstNo('%1', TempProcessingPlanBatch.Name);
+                    tempImportWorksheetBuffer.SourceRecID := TmpTargetRef.RecordId;
+                    tempImportWorksheetBuffer.Insert();
                 end;
             TempProcessingPlan.TableName:
                 begin
@@ -564,7 +582,10 @@ codeunit 91007 DMTXMLBackup
                 begin
                     TmpTargetRef.SetTable(TempReplacementHeader);
                     TempReplacementHeader.Insert();
-                    CollectImportedRecUniqueID(Enum::DMTBackupEntity::Replacement, TempReplacementHeader);
+                    tempImportWorksheetBuffer.Type := Enum::DMTBackupEntity::Replacement;
+                    tempImportWorksheetBuffer.UniqueID := StrSubstNo('%1 %2', TempReplacementHeader.Code, TempReplacementHeader.Description);
+                    tempImportWorksheetBuffer.SourceRecID := TmpTargetRef.RecordId;
+                    tempImportWorksheetBuffer.Insert();
                 end;
             TempReplacementLine.TableName:
                 begin
@@ -575,37 +596,77 @@ codeunit 91007 DMTXMLBackup
                 begin
                     TmpTargetRef.SetTable(TempCopyTable);
                     TempCopyTable.Insert();
-                    CollectImportedRecUniqueID(Enum::DMTBackupEntity::"Copy Table", TempCopyTable);
+                    tempImportWorksheetBuffer.Type := Enum::DMTBackupEntity::"Copy Table";
+                    TempCopyTable.CalcFields("Table Caption");
+                    tempImportWorksheetBuffer.UniqueID := StrSubstNo('%1-%2', TempCopyTable.SourceCompanyName, TempCopyTable."Table Caption");
+                    tempImportWorksheetBuffer.SourceRecID := TmpTargetRef.RecordId;
+                    tempImportWorksheetBuffer.Insert();
                 end;
             else
                 Error('Table %1 not implemented', TmpTargetRef.Name);
         end;
     end;
 
-    local procedure CollectImportedRecUniqueID(recUniqueIDs: Dictionary of [Text, List of [Text]]; BackupEntity: Enum DMTBackupEntity; recVariant: Variant)
+    local procedure openImportWorksheet(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary) OK: Boolean
     var
-        recRef: RecordRef;
-        UniqueIDsList: List of [Text];
+        importWorksheet: Page DMTImportWorksheet;
+        runmodalAction: Action;
     begin
-        if recUniqueIDs.ContainsKey(Format(BackupEntity)) then
-            UniqueIDsList := recUniqueIDs.Get(Format(BackupEntity));
-        recRef.GetTable(recVariant);
-        case recRef.Name of
-            TempSetup.TableName,
-            TempDataLayout.TableName,
-            TempDataLayoutLine.TableName,
-            TempImportConfigHeader.TableName,
-            TempImportConfigLine.TableName,
-            TempSourceFileStorage.TableName,
-            TempProcessingPlan.TableName,
-            TempReplacementHeader.TableName,
-            TempReplacementLine.TableName,
-            TempCopyTable.TableName,
-            TempProcessingPlanBatch.TableName:
-                UniqueIDsList.Add(Format(TempSetup.RecordId));
+        OK := true;
+        importWorksheet.setLines(tempImportWorksheetBuffer);
+        importWorksheet.LookupMode(true);
+        runmodalAction := importWorksheet.RunModal();
+        if not (runmodalAction in [Action::LookupOK, Action::OK]) then
+            exit(false);
+        importWorksheet.getLines(tempImportWorksheetBuffer);
+    end;
+
+    local procedure findImportAction(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    var
+        importConfigHeader: Record DMTImportConfigHeader;
+        sourceFileStorage, sourceFileStorageFrom : Record DMTSourceFileStorage;
+        recordRef: RecordRef;
+    begin
+        tempImportWorksheetBuffer.ImportAction := tempImportWorksheetBuffer.ImportAction::Add;
+        case tempImportWorksheetBuffer.Type of
+            Enum::DMTBackupEntity::Setup,
+            Enum::DMTBackupEntity::"Copy Table",
+            Enum::DMTBackupEntity::"Data Layout",
+            Enum::DMTBackupEntity::"Proc.Plan Batch",
+            Enum::DMTBackupEntity::Replacement:
+                begin
+                    if recordRef.Get(tempImportWorksheetBuffer.SourceRecID) then
+                        tempImportWorksheetBuffer.ImportAction := tempImportWorksheetBuffer.ImportAction::Replace;
+                end;
+            Enum::DMTBackupEntity::"Import Config":
+                begin
+                    // Replace if same source file and target table
+                    TempImportConfigHeader.Get(tempImportWorksheetBuffer.SourceRecID);
+                    importConfigHeader.SetRange("Source File Name", TempImportConfigHeader."Source File Name");
+                    importConfigHeader.SetRange("Target Table ID", TempImportConfigHeader."Target Table ID");
+                    if importConfigHeader.FindFirst() then begin
+                        tempImportWorksheetBuffer.ImportAction := tempImportWorksheetBuffer.ImportAction::Replace;
+                        tempImportWorksheetBuffer.OldID := importConfigHeader.ID;
+                        // TODO Remapping of Import Config Header and Lines, Delete existing
+                    end;
+                end;
+            Enum::DMTBackupEntity::"Source File":
+                begin
+                    // Replace if source file with the same name exists
+                    TempSourceFileStorage.Get(tempImportWorksheetBuffer.SourceRecID);
+                    sourceFileStorage.SetRange(Name, TempSourceFileStorage.Name);
+                    if sourceFileStorage.FindFirst() then begin
+                        tempImportWorksheetBuffer.SourceRecID.GetRecord().SetTable(sourceFileStorageFrom);
+                        tempImportWorksheetBuffer.ImportAction := tempImportWorksheetBuffer.ImportAction::Replace;
+                        tempImportWorksheetBuffer.OldID := sourceFileStorage."File ID";
+                        // TODO Remapping of Source File Storage, Delete existing
+
+                    end;
+                end;
+            else
+                Error('Type %1 not implemented', tempImportWorksheetBuffer.Type);
         end;
-        UniqueIDsList.Add(Format(TempSetup.RecordId));
-        recUniqueIDs.Set(Format(BackupEntity), UniqueIDsList);
+        tempImportWorksheetBuffer.Modify();
     end;
 
     procedure MarkSelected(TablesToExport: List of [Integer]);
@@ -714,12 +775,12 @@ codeunit 91007 DMTXMLBackup
         TempSourceFileStorage: Record DMTSourceFileStorage temporary;
         TempDataLayout: Record DMTDataLayout temporary;
         TempDataLayoutLine: Record DMTDataLayoutLine temporary;
+        TempProcessingPlanBatch: Record DMTProcessingPlanBatch temporary;
         TempProcessingPlan: Record DMTProcessingPlan temporary;
         TempSetup: Record DMTSetup temporary;
         TempReplacementHeader: Record DMTReplacementHeader temporary;
         TempReplacementLine: Record DMTReplacementLine temporary;
         TempCopyTable: Record DMTCopyTable temporary;
-        TempProcessingPlanBatch: Record DMTProcessingPlanBatch temporary;
     #endregion Import Buffer Tables
     var
         TablesList: List of [Integer];

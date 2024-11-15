@@ -10,6 +10,8 @@ table 91016 DMTImportWorksheetBuffer
             Caption = 'Import Action', Comment = 'de-DE=Importaktion';
             OptionMembers = "Add",Replace,Skip;
         }
+        field(4; SourceRecID; RecordID) { }
+        field(5; OldID; Integer) { }
     }
 
     keys
