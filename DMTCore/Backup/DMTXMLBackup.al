@@ -8,12 +8,6 @@ codeunit 91007 DMTXMLBackup
         ExportXML('');
     end;
 
-    procedure Export(TablesToExport: List of [Integer]; exportFileBaseName: Text);
-    begin
-        MarkSelected(TablesToExport);
-        ExportXML(exportFileBaseName);
-    end;
-
     procedure ExportSelectedRecordIDs(recordsToExport: Dictionary of [Integer/*TableID*/, List of [RecordId]]; exportFileBaseName: Text);
     begin
         GlobalRecordIDList := recordsToExport;
@@ -23,22 +17,10 @@ codeunit 91007 DMTXMLBackup
     procedure Import();
     var
         tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary;
-        allObj: Record AllObj;
-        TmpTargetRef: RecordRef;
-        FldRef: FieldRef;
         FileFound: Boolean;
         Start: DateTime;
         InStr: InStream;
-        FieldNodeID: Integer;
-        TableNodeID: Integer;
         FileName: Text;
-        TableNodeName: Text;
-        XFieldNode: XmlNode;
-        XRecordNode: XmlNode;
-        XTableNode: XmlNode;
-        XFieldList: XmlNodeList;
-        XRecordList: XmlNodeList;
-        XTableList: XmlNodeList;
         importFinishedMsg: Label 'Import abgeschlossen\ Import Dauer: %1', Comment = 'de-DE=Import abgeschlossen\ Import Dauer: %1';
     begin
         if not FileFound then
@@ -47,39 +29,7 @@ codeunit 91007 DMTXMLBackup
             end;
 
         Start := CurrentDateTime;
-        Clear(XDoc);
-        if not XmlDocument.ReadFrom(InStr, XDoc) then
-            Error('reading xml failed');
-        XDoc.SelectNodes('//DMT/child::*', XTableList);
-        foreach XTableNode in XTableList do begin
-            Evaluate(TableNodeID, GetAttributeValue(XTableNode, 'ID'));
-            TableNodeName := GetAttributeValue(XTableNode, 'NAME');
-            XTableNode.SelectNodes('child::RECORD', XRecordList); // select all element children
-            foreach XRecordNode in XRecordList do begin
-                // Check for renumbering
-                if not allObj.Get(allObj."Object Type"::Table, TableNodeID) then
-                    if TableNodeName <> '' then begin
-                        allObj.SetRange("Object Type", allObj."Object Type"::Table);
-                        allObj.SetFilter("Object Name", ConvertStr(TableNodeName, '_', '?'));
-                        if allObj.FindFirst() then
-                            TableNodeID := allObj."Object ID";
-                    end;
-                Clear(TmpTargetRef);
-                TmpTargetRef.Open(TableNodeID, true);
-                //XFieldList := XRecordNode.AsXmlElement().GetChildNodes();
-                XRecordNode.SelectNodes('child::*', XFieldList); // select all element children
-                foreach XFieldNode in XFieldList do begin
-                    Evaluate(FieldNodeID, GetAttributeValue(XFieldNode, 'ID'));
-                    if TmpTargetRef.FieldExist(FieldNodeID) then begin
-                        FldRef := TmpTargetRef.Field(FieldNodeID);
-                        if XFieldNode.AsXmlElement().InnerText <> '' then
-                            FldRefEvaluate(FldRef, XFieldNode.AsXmlElement().InnerText);
-                    end;
-                end;
-                processImportedRecord(tempImportWorksheetBuffer, TmpTargetRef);
-                findImportAction(tempImportWorksheetBuffer);
-            end;
-        end;
+        Import(InStr);
         if openImportWorksheet(tempImportWorksheetBuffer) then begin
             deleteExistingRecords(tempImportWorksheetBuffer);
             saveRecords(tempImportWorksheetBuffer);
@@ -107,52 +57,11 @@ codeunit 91007 DMTXMLBackup
 
     local procedure ExportXML(exportFileBaseName: Text);
     var
-        allObj: Record AllObj;
-        Company: Record Company;
-        tempTenantMedia: Record "Tenant Media" temporary;
-        tableID: Integer;
-        oStr: OutStream;
-        fieldDefinitionNode: XmlNode;
-        rootNode: XmlNode;
-        tableNode: XmlNode;
+        xmlFile: Codeunit "Temp Blob";
     begin
-        // DOKUMENT
-        Clear(XDoc);
-        XDoc := XmlDocument.Create();
-
-        // ROOT
-        rootNode := XmlElement.Create('DMT').AsXmlNode();
-        XDoc.Add(rootNode);
-        AddAttribute(rootNode, 'Version', '2.0');
-
-        // Table Loop
-        foreach tableID in GlobalRecordIDList.Keys do
-            if GetTableLineCount(tableID) > 0 then begin
-                allObj.Get(allObj."Object Type"::Table, tableID);
-                tableNode := XmlElement.Create(CreateTagName(allObj."Object Name")).AsXmlNode();
-                rootNode.AsXmlElement().Add(tableNode);
-
-                AddAttribute(tableNode, 'ID', Format(tableID));
-                AddAttribute(tableNode, 'NAME', ConvertStr(allObj."Object Name", '"', '_'));
-                fieldDefinitionNode := CreateFieldDefinitionNode(tableID);
-                tableNode.AsXmlElement().Add(fieldDefinitionNode);
-                AddTable(tableNode, allObj."Object ID");
-            end;
-
-        tempTenantMedia.Content.CreateOutStream(oStr);
-        XDoc.WriteTo(oStr);
-        // Compose Export Filename
-        if exportFileBaseName = '' then
-            exportFileBaseName := 'Backup_';
-        Company.Get(CompanyName);
-        if Company."Display Name" <> '' then
-            exportFileBaseName += Company."Display Name"
-        else
-            exportFileBaseName += Company.Name;
-        exportFileBaseName += Format(CurrentDateTime, 0, '<Year4><Month,2><Day,2>_<Hours24,2><Minutes,2>_<Seconds,2>');
-        exportFileBaseName += '.xml';
-        exportFileBaseName := ConvertStr(exportFileBaseName, '<>*\/|"', '_______');
-        DownloadBlobContent(tempTenantMedia, exportFileBaseName, TextEncoding::UTF8);
+        CreateExportXML(xmlFile);
+        CreateExportFileName(exportFileBaseName);
+        DownloadFile(xmlFile, exportFileBaseName, TextEncoding::UTF8);
 
         //RESET;
         Clear(TablesList);
@@ -820,23 +729,128 @@ codeunit 91007 DMTXMLBackup
                 targetRef.FieldIndex(i).CalcField();
     end;
 
-    procedure MarkSelected(TablesToExport: List of [Integer]);
+    internal procedure CreateExportXML(var xmlFile: Codeunit "Temp Blob")
     var
-        _RecRef: RecordRef;
-        TableID: Integer;
+        allObj: Record AllObj;
+        tableID: Integer;
+        fieldDefinitionNode: XmlNode;
+        rootNode: XmlNode;
+        tableNode: XmlNode;
+        oStr: OutStream;
+        backupXMLDocument: XmlDocument;
     begin
-        foreach TableID in TablesToExport do begin
-            _RecRef.Open(TableID);
-            if _RecRef.FindSet(false) then
-                repeat
-                    if not GlobalRecordIDList.Get(TableID).Contains(_RecRef.RecordId) then
-                        GlobalRecordIDList.Get(TableID).Add(_RecRef.RecordId);
-                until _RecRef.Next() = 0;
-            _RecRef.Close();
+        // DOKUMENT
+        Clear(backupXMLDocument);
+        backupXMLDocument := XmlDocument.Create();
+
+        // ROOT
+        rootNode := XmlElement.Create('DMT').AsXmlNode();
+        backupXMLDocument.Add(rootNode);
+        AddAttribute(rootNode, 'Version', '2.0');
+
+        // Table Loop
+        foreach tableID in GlobalRecordIDList.Keys do
+            if GetTableLineCount(tableID) > 0 then begin
+                allObj.Get(allObj."Object Type"::Table, tableID);
+                tableNode := XmlElement.Create(CreateTagName(allObj."Object Name")).AsXmlNode();
+                rootNode.AsXmlElement().Add(tableNode);
+
+                AddAttribute(tableNode, 'ID', Format(tableID));
+                AddAttribute(tableNode, 'NAME', ConvertStr(allObj."Object Name", '"', '_'));
+                fieldDefinitionNode := CreateFieldDefinitionNode(tableID);
+                tableNode.AsXmlElement().Add(fieldDefinitionNode);
+                AddTable(tableNode, allObj."Object ID");
+            end;
+        Clear(xmlFile);
+        xmlFile.CreateOutStream(oStr);
+        backupXMLDocument.WriteTo(oStr);
+    end;
+
+    local procedure CreateExportFileName(var exportFileBaseName: Text)
+    var
+        Company: Record Company;
+    begin
+        // Compose Export Filename
+        if exportFileBaseName = '' then
+            exportFileBaseName := 'Backup_';
+        Company.Get(CompanyName);
+        if Company."Display Name" <> '' then
+            exportFileBaseName += Company."Display Name"
+        else
+            exportFileBaseName += Company.Name;
+        exportFileBaseName += Format(CurrentDateTime, 0, '<Year4><Month,2><Day,2>_<Hours24,2><Minutes,2>_<Seconds,2>');
+        exportFileBaseName += '.xml';
+        exportFileBaseName := ConvertStr(exportFileBaseName, '<>*\/|"', '_______');
+    end;
+
+    local procedure Import(var InStr: InStream)
+    var
+        TableNodeID: Integer;
+        TableNodeName: Text;
+        XTableNode: XmlNode;
+        XTableList: XmlNodeList;
+        XDoc: XmlDocument;
+    begin
+        if not XmlDocument.ReadFrom(InStr, XDoc) then
+            Error('reading xml failed');
+
+        XDoc.SelectNodes('//DMT/child::*', XTableList);
+        foreach XTableNode in XTableList do begin
+            Evaluate(TableNodeID, GetAttributeValue(XTableNode, 'ID'));
+            TableNodeName := GetAttributeValue(XTableNode, 'NAME');
+            readTableNode(TableNodeID, TableNodeName, XTableNode);
         end;
     end;
 
-    procedure DownloadBlobContent(var TempTenantMedia: Record "Tenant Media"; FileName: Text; FileEncoding: TextEncoding): Text
+    local procedure readTableNode(var TableNodeID: Integer; TableNodeName: Text; var XTableNode: XmlNode)
+    var
+        allObj: Record AllObj;
+        TmpTargetRef: RecordRef;
+        FldRef: FieldRef;
+        FieldNodeID: Integer;
+        XFieldNode: XmlNode;
+        XRecordNode: XmlNode;
+        XFieldList: XmlNodeList;
+        XRecordList: XmlNodeList;
+    begin
+        XTableNode.SelectNodes('child::RECORD', XRecordList); // select all element children
+        foreach XRecordNode in XRecordList do begin
+            // Check for renumbering
+            if not allObj.Get(allObj."Object Type"::Table, TableNodeID) then
+                if TableNodeName <> '' then begin
+                    allObj.SetRange("Object Type", allObj."Object Type"::Table);
+                    allObj.SetFilter("Object Name", ConvertStr(TableNodeName, '_', '?'));
+                    if allObj.FindFirst() then
+                        TableNodeID := allObj."Object ID";
+                end;
+            Clear(TmpTargetRef);
+            TmpTargetRef.Open(TableNodeID, true);
+            //XFieldList := XRecordNode.AsXmlElement().GetChildNodes();
+            XRecordNode.SelectNodes('child::*', XFieldList); // select all element children
+            foreach XFieldNode in XFieldList do begin
+                Evaluate(FieldNodeID, GetAttributeValue(XFieldNode, 'ID'));
+                if TmpTargetRef.FieldExist(FieldNodeID) then begin
+                    FldRef := TmpTargetRef.Field(FieldNodeID);
+                    if XFieldNode.AsXmlElement().InnerText <> '' then
+                        FldRefEvaluate(FldRef, XFieldNode.AsXmlElement().InnerText);
+                end;
+            end;
+        end;
+    end;
+
+    internal procedure MarkRecordForExport(recID: RecordId)
+    var
+        recIDList: List of [RecordId];
+    begin
+        // add table entry with empty list if not exists
+        if not GlobalRecordIDList.ContainsKey(recID.TableNo) then
+            GlobalRecordIDList.Add(recID.TableNo, recIDList);
+        // add record id
+        if not GlobalRecordIDList.Get(recID.TableNo).Contains(recID) then
+            GlobalRecordIDList.Get(recID.TableNo).Add(recID);
+    end;
+
+    procedure DownloadFile(var tempBlob: Codeunit "Temp Blob"; FileName: Text; FileEncoding: TextEncoding): Text
     var
         FileMgt: Codeunit "File Management";
         IsDownloaded: Boolean;
@@ -868,7 +882,7 @@ codeunit 91007 DMTXMLBackup
         else
             OutExt += '|' + AllFilesDescriptionTxt;
 
-        TempTenantMedia.Content.CreateInStream(InStr, FileEncoding);
+        tempBlob.CreateInStream(InStr, FileEncoding);
         IsDownloaded := DownloadFromStream(InStr, ExportLbl, Path, OutExt, FileName);
         if IsDownloaded then
             exit(FileName);
@@ -919,6 +933,17 @@ codeunit 91007 DMTXMLBackup
             IStream.ReadText(BlobContentAsText);
     end;
 
+    procedure ImportSetup(xmlDoc: XmlDocument) OK: Boolean
+    var
+        dmtSetup: Record DMTSetup;
+        tableNodeName: Text;
+        xNode: XmlNode;
+    begin
+        tableNodeName := CreateTagName(dmtSetup.TableName);
+        if not xmlDoc.SelectSingleNode(StrSubstNo('//DMT/%1/child::*', tableNodeName), xNode) then
+            exit;
+    end;
+
     var
         #region Import Buffer Tables
         TempImportConfigLine: Record DMTImportConfigLine temporary;
@@ -937,6 +962,5 @@ codeunit 91007 DMTXMLBackup
         TablesList: List of [Integer];
         GlobalRecordIDList: Dictionary of [Integer, List of [RecordId]];
         ExcludedFields: Dictionary of [Integer, List of [Integer]];
-        XDoc: XmlDocument;
         ImportedRecUniqueIDsGlobal: Dictionary of [Text, List of [Text]];
 }
