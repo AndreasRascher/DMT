@@ -80,8 +80,10 @@ codeunit 91007 DMTXMLBackup
                 findImportAction(tempImportWorksheetBuffer);
             end;
         end;
-        if openImportWorksheet(tempImportWorksheetBuffer) then
-            importSelectedRecords(tempImportWorksheetBuffer);
+        if openImportWorksheet(tempImportWorksheetBuffer) then begin
+            deleteExistingRecords(tempImportWorksheetBuffer);
+            saveRecords(tempImportWorksheetBuffer);
+        end;
 
         RunPostImportOperations();
 
@@ -508,13 +510,8 @@ codeunit 91007 DMTXMLBackup
     end;
 
     local procedure processImportedRecord(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary; TmpTargetRef: RecordRef)
-    var
-        i: Integer;
     begin
-        // calculate all blob fields
-        for i := 1 to TmpTargetRef.FieldCount do
-            if TmpTargetRef.FieldIndex(i).Type = FieldType::Blob then
-                TmpTargetRef.FieldIndex(i).CalcField();
+        calcAllBlobFields(TmpTargetRef);
 
         // map to correct table
         case TmpTargetRef.Name of
@@ -669,14 +666,8 @@ codeunit 91007 DMTXMLBackup
         tempImportWorksheetBuffer.Modify();
     end;
 
-    local procedure importSelectedRecords(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    local procedure deleteExistingRecords(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
     var
-
-        copyTable: Record DMTCopyTable;
-        importConfigHeader: Record DMTImportConfigHeader;
-        dataLayout: Record DMTDataLayout;
-        processingPlanBatch: Record DMTProcessingPlanBatch;
-        replacementHeader: Record DMTReplacementHeader;
         recRef: RecordRef;
     begin
         tempImportWorksheetBuffer.Reset();
@@ -687,46 +678,146 @@ codeunit 91007 DMTXMLBackup
             if tempImportWorksheetBuffer.ImportAction = tempImportWorksheetBuffer.ImportAction::Replace then begin
                 // Delete existing record
                 case tempImportWorksheetBuffer.Type of
-                    Enum::DMTBackupEntity::" ":
-                        ;
-                    Enum::DMTBackupEntity::"Copy Table":
-                        begin
-                            copyTable.Get(tempImportWorksheetBuffer.SourceRecID);
-                            copyTable.Delete(true);
-                        end;
-                    Enum::DMTBackupEntity::"Data Layout":
-                        begin
-                            importConfigHeader.Get(tempImportWorksheetBuffer.SourceRecID);
-                            importConfigHeader.Delete(true);
-                        end;
-                    Enum::DMTBackupEntity::"Import Config":
-                        begin
-                            dataLayout.Get(tempImportWorksheetBuffer.SourceRecID);
-                            dataLayout.Delete(true);
-                        end;
-                    Enum::DMTBackupEntity::"Proc.Plan Batch":
-                        begin
-                            processingPlanBatch.Get(tempImportWorksheetBuffer.SourceRecID);
-                            processingPlanBatch.Delete(true);
-                        end;
+                    Enum::DMTBackupEntity::" ",
+                    Enum::DMTBackupEntity::"Source File",
+                    Enum::DMTBackupEntity::Setup,
+                    Enum::DMTBackupEntity::"Copy Table",
+                    Enum::DMTBackupEntity::"Data Layout",
+                    Enum::DMTBackupEntity::"Import Config",
+                    Enum::DMTBackupEntity::"Proc.Plan Batch",
                     Enum::DMTBackupEntity::Replacement:
                         begin
-                            replacementHeader.Get(tempImportWorksheetBuffer.SourceRecID);
-                            replacementHeader.Delete(true);
-                        end;
-                    Enum::DMTBackupEntity::Setup:
-                        begin
-
-                        end;
-                    Enum::DMTBackupEntity::"Source File":
-                        begin
-
+                            recRef.Get(tempImportWorksheetBuffer.SourceRecID);
+                            recRef.Delete(true);
                         end;
                     else
                         Error('Type %1 not implemented', tempImportWorksheetBuffer.Type);
                 end;
             end;
         until tempImportWorksheetBuffer.Next() = 0;
+    end;
+
+    local procedure saveRecords(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    var
+        setup: Record DMTSetup;
+        sourceFileStorage: Record DMTSourceFileStorage;
+        copyTable: Record DMTCopyTable;
+        dataLayout: Record DMTDataLayout;
+        importConfigHeader: Record DMTImportConfigHeader;
+        importConfigLine: Record DMTImportConfigLine;
+        processingPlanBatch: Record DMTProcessingPlanBatch;
+        processingPlan: Record DMTProcessingPlan;
+        replacementHeader: Record DMTReplacementHeader;
+        replacementLine: Record DMTReplacementLine;
+        recRef: RecordRef;
+    begin
+
+        if not (tempImportWorksheetBuffer.ImportAction in [tempImportWorksheetBuffer.ImportAction::Replace,
+                                                      tempImportWorksheetBuffer.ImportAction::Add]) then
+            exit;
+
+        // Delete existing record
+        case tempImportWorksheetBuffer.Type of
+            Enum::DMTBackupEntity::" ":
+                ;
+            Enum::DMTBackupEntity::"Source File":
+                begin
+                    TempSourceFileStorage.get(tempImportWorksheetBuffer.SourceRecID);
+                    recRef.GetTable(TempSourceFileStorage);
+                    calcAllBlobFields(recRef);
+                    recRef.SetTable(sourceFileStorage);
+                end;
+            Enum::DMTBackupEntity::Setup:
+                begin
+                    TempSetup.get(tempImportWorksheetBuffer.SourceRecID);
+                    recRef.GetTable(TempSetup);
+                    calcAllBlobFields(recRef);
+                    recRef.SetTable(setup);
+                    setup.Insert();
+                end;
+            Enum::DMTBackupEntity::"Copy Table":
+                begin
+                    TempCopyTable.get(tempImportWorksheetBuffer.SourceRecID);
+                    recRef.GetTable(TempCopyTable);
+                    calcAllBlobFields(recRef);
+                    recRef.SetTable(copyTable);
+                    copyTable.Insert();
+                end;
+            Enum::DMTBackupEntity::"Data Layout":
+                begin
+                    TempDataLayout.get(tempImportWorksheetBuffer.SourceRecID);
+                    recRef.GetTable(TempDataLayout);
+                    calcAllBlobFields(recRef);
+                    recRef.SetTable(dataLayout);
+                    dataLayout.Insert();
+                end;
+            Enum::DMTBackupEntity::"Import Config":
+                begin
+                    TempImportConfigHeader.get(tempImportWorksheetBuffer.SourceRecID);
+                    recRef.GetTable(TempImportConfigHeader);
+                    calcAllBlobFields(recRef);
+                    recRef.SetTable(importConfigHeader);
+                    importConfigHeader.Insert();
+
+                    TempImportConfigLine.Reset();
+                    TempImportConfigLine.SetRange("Imp.Conf.Header ID", TempImportConfigHeader.ID);
+                    if TempImportConfigLine.FindSet() then
+                        repeat
+                            recRef.GetTable(TempImportConfigLine);
+                            calcAllBlobFields(recRef);
+                            recRef.SetTable(importConfigLine);
+                            importConfigLine.Insert();
+                        until TempImportConfigLine.Next() = 0;
+                end;
+            Enum::DMTBackupEntity::"Proc.Plan Batch":
+                begin
+                    TempProcessingPlanBatch.get(tempImportWorksheetBuffer.SourceRecID);
+                    recRef.GetTable(TempProcessingPlanBatch);
+                    calcAllBlobFields(recRef);
+                    recRef.SetTable(processingPlanBatch);
+                    processingPlanBatch.Insert();
+
+                    processingPlan.Reset();
+                    processingPlan.SetRange("Journal Batch Name", processingPlanBatch.Name);
+                    if processingPlan.FindSet() then
+                        repeat
+                            recRef.GetTable(processingPlan);
+                            calcAllBlobFields(recRef);
+                            recRef.SetTable(importConfigLine);
+                            importConfigLine.Insert();
+                        until processingPlan.Next() = 0;
+                end;
+            Enum::DMTBackupEntity::Replacement:
+                begin
+                    TempReplacementHeader.get(tempImportWorksheetBuffer.SourceRecID);
+                    recRef.GetTable(TempReplacementHeader);
+                    calcAllBlobFields(recRef);
+                    recRef.SetTable(replacementHeader);
+                    replacementHeader.Insert();
+
+                    TempReplacementLine.Reset();
+                    TempReplacementLine.SetRange("Replacement Code", TempReplacementHeader.Code);
+                    if TempReplacementLine.FindSet() then
+                        repeat
+                            recRef.GetTable(TempReplacementLine);
+                            calcAllBlobFields(recRef);
+                            recRef.SetTable(replacementLine);
+                            replacementLine.Insert();
+                        until TempReplacementLine.Next() = 0;
+                end;
+            else
+                Error('Type %1 not implemented', tempImportWorksheetBuffer.Type);
+        end;
+    end;
+
+    local procedure calcAllBlobFields(var targetRef: RecordRef)
+    var
+        i: Integer;
+    begin
+        // calculate all blob fields
+        for i := 1 to targetRef.FieldCount do
+            if targetRef.FieldIndex(i).Type = FieldType::Blob then
+                targetRef.FieldIndex(i).CalcField();
     end;
 
     procedure MarkSelected(TablesToExport: List of [Integer]);
