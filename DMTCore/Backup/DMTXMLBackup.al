@@ -669,6 +669,66 @@ codeunit 91007 DMTXMLBackup
         tempImportWorksheetBuffer.Modify();
     end;
 
+    local procedure importSelectedRecords(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    var
+
+        copyTable: Record DMTCopyTable;
+        importConfigHeader: Record DMTImportConfigHeader;
+        dataLayout: Record DMTDataLayout;
+        processingPlanBatch: Record DMTProcessingPlanBatch;
+        replacementHeader: Record DMTReplacementHeader;
+        recRef: RecordRef;
+    begin
+        tempImportWorksheetBuffer.Reset();
+        tempImportWorksheetBuffer.SetFilter(ImportAction, '<>%1', tempImportWorksheetBuffer.ImportAction::Skip);
+        if not tempImportWorksheetBuffer.FindSet() then
+            exit;
+        repeat
+            if tempImportWorksheetBuffer.ImportAction = tempImportWorksheetBuffer.ImportAction::Replace then begin
+                // Delete existing record
+                case tempImportWorksheetBuffer.Type of
+                    Enum::DMTBackupEntity::" ":
+                        ;
+                    Enum::DMTBackupEntity::"Copy Table":
+                        begin
+                            copyTable.Get(tempImportWorksheetBuffer.SourceRecID);
+                            copyTable.Delete(true);
+                        end;
+                    Enum::DMTBackupEntity::"Data Layout":
+                        begin
+                            importConfigHeader.Get(tempImportWorksheetBuffer.SourceRecID);
+                            importConfigHeader.Delete(true);
+                        end;
+                    Enum::DMTBackupEntity::"Import Config":
+                        begin
+                            dataLayout.Get(tempImportWorksheetBuffer.SourceRecID);
+                            dataLayout.Delete(true);
+                        end;
+                    Enum::DMTBackupEntity::"Proc.Plan Batch":
+                        begin
+                            processingPlanBatch.Get(tempImportWorksheetBuffer.SourceRecID);
+                            processingPlanBatch.Delete(true);
+                        end;
+                    Enum::DMTBackupEntity::Replacement:
+                        begin
+                            replacementHeader.Get(tempImportWorksheetBuffer.SourceRecID);
+                            replacementHeader.Delete(true);
+                        end;
+                    Enum::DMTBackupEntity::Setup:
+                        begin
+
+                        end;
+                    Enum::DMTBackupEntity::"Source File":
+                        begin
+
+                        end;
+                    else
+                        Error('Type %1 not implemented', tempImportWorksheetBuffer.Type);
+                end;
+            end;
+        until tempImportWorksheetBuffer.Next() = 0;
+    end;
+
     procedure MarkSelected(TablesToExport: List of [Integer]);
     var
         _RecRef: RecordRef;

@@ -443,6 +443,11 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Importaktion</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field ImportAction - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 4253467002 - Field 898827438 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>OldID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field OldID - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 4253467002 - Field 3766340152 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>SourceRecID</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2012,6 +2017,41 @@
           <source>GenBufferImport</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTCSVReader - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4269954260 - EnumValue 2358453189 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copy Table</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Tabellen kopieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Copy Table - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4269954260 - EnumValue 3127433270 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data Layout</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Datenlayout</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Data Layout - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4269954260 - EnumValue 178471969 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Imp.Config</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Importkonfiguration</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Import Config - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4269954260 - EnumValue 1033457321 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Proc.Plan Batch</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Verarbeitungsplan Buch.-Blatt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Proc.Plan Batch - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4269954260 - EnumValue 1577904858 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Replacement</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ersetzungen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Replacement - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4269954260 - EnumValue 1514883969 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Setup</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Einrichtung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4269954260 - EnumValue 488031821 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source File</source>
+          <note from="Developer" annotates="general" priority="2">de-de=Quelldatei</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Source File - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 101561864 - EnumValue 1534645988 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Custom Value</source>

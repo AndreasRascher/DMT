@@ -525,6 +525,36 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Valid. Typ</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigLine - Field Validation Type - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 4253467002 - Field 2962556037 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import Action</source>
+          <target state="translated">Importaktion</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Importaktion</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field ImportAction - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4253467002 - Field 898827438 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>OldID</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field OldID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4253467002 - Field 3766340152 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>SourceRecID</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field SourceRecID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4253467002 - Field 1878130204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Type</source>
+          <target state="translated">Art</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Art</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4253467002 - Field 663275594 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unique ID</source>
+          <target state="translated">Eindeutige ID</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Eindeutige ID</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field UniqueID - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 744607175 - Field 1004182435 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Context Description</source>
           <target state="translated">Kontext Beschreibung</target>
@@ -1335,6 +1365,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Die Variablen zum Vergleichen sind nicht initialisiert.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTTriggerLogImpl - Method CheckAfterValidate - NamedType varsToCompareNotInitializedErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1787269974 - Method 3201496503 - NamedType 3033722242" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import abgeschlossen\ Import Dauer: %1</source>
+          <target state="translated">Import abgeschlossen\ Import Dauer: %1</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen\ Import Dauer: %1</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTXMLBackup - Method Import - NamedType importFinishedMsg</note>
+        </trans-unit>
         <trans-unit id="Codeunit 2940556576 - Method 3472600955 - NamedType 2829063540" size-unit="char" translate="yes" xml:space="preserve">
           <source>Invalid assignment in replacement "%1". An import configuration with the ID %2 does not exist.</source>
           <target state="translated">Ungültige Zuordnung in Ersetzung "%1". Eine Importkonfiguration mit der ID %2 ist nicht verhanden.</target>
@@ -1953,6 +1989,12 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Migration</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportConfigList - Action Category_Category6 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2405865346 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DMT Import Worksheet</source>
+          <target state="translated">DMT Import-Arbeitsblatt</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=DMT Import-Arbeitsblatt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTImportWorksheet - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2711900234 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Lines</source>
           <target state="translated">Zeilen</target>
@@ -2379,6 +2421,48 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort DMTCSVReader - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Enum 4269954260 - EnumValue 2358453189 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Copy Table</source>
+          <target state="translated">Tabellen kopieren</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Tabellen kopieren</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Copy Table - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4269954260 - EnumValue 3127433270 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data Layout</source>
+          <target state="translated">Datenlayout</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Datenlayout</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Data Layout - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4269954260 - EnumValue 178471969 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Imp.Config</source>
+          <target state="translated">Importkonfiguration</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Importkonfiguration</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Import Config - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4269954260 - EnumValue 1033457321 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Proc.Plan Batch</source>
+          <target state="translated">Verarbeitungsplan Buch.-Blatt</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Verarbeitungsplan Buch.-Blatt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Proc.Plan Batch - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4269954260 - EnumValue 1577904858 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Replacement</source>
+          <target state="translated">Ersetzungen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Ersetzungen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Replacement - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4269954260 - EnumValue 1514883969 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Setup</source>
+          <target state="translated">Einrichtung</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Einrichtung</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4269954260 - EnumValue 488031821 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source File</source>
+          <target state="needs-translation"/>
+          <note from="Developer" annotates="general" priority="2">de-de=Quelldatei</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Source File - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Enum 101561864 - EnumValue 1534645988 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Custom Value</source>
           <target state="translated">benutzerdefinierter Wert</target>
@@ -2432,6 +2516,12 @@
           <target state="translated">Excel-Dateien (*.xlsx)|*.xlsx</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Excel-Dateien (*.xlsx)|*.xlsx</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue Excel - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3677539533 - EnumValue 2264048100 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>JSON-Files (*.json)|*.json</source>
+          <target state="translated">JSON-Dateien (*.json)|*.json</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=JSON-Dateien (*.json)|*.json</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum DMTFileFilter - EnumValue JSON - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3677539533 - EnumValue 2768277382 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>SQL Report Builder (*.rdl;*.rdlc)|*.rdl;*.rdlc</source>
