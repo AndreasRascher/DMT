@@ -417,7 +417,9 @@ codeunit 91007 DMTXMLBackup
                 end;
             until processingPlan.Next() = 0;
     end;
-
+    /// <summary>
+    /// <p>Process the imported record and insert it into global temp table</p>
+    /// </summary>
     local procedure processImportedRecord(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary; TmpTargetRef: RecordRef)
     begin
         calcAllBlobFields(TmpTargetRef);
@@ -606,7 +608,7 @@ codeunit 91007 DMTXMLBackup
         until tempImportWorksheetBuffer.Next() = 0;
     end;
 
-    local procedure saveRecords(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    internal procedure saveRecords(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
     var
         setup: Record DMTSetup;
         sourceFileStorage: Record DMTSourceFileStorage;
@@ -785,11 +787,12 @@ codeunit 91007 DMTXMLBackup
 
     local procedure Import(var InStr: InStream)
     var
+        TmpTargetRef: RecordRef;
         TableNodeID: Integer;
         TableNodeName: Text;
+        XDoc: XmlDocument;
         XTableNode: XmlNode;
         XTableList: XmlNodeList;
-        XDoc: XmlDocument;
     begin
         if not XmlDocument.ReadFrom(InStr, XDoc) then
             Error('reading xml failed');
@@ -798,44 +801,43 @@ codeunit 91007 DMTXMLBackup
         foreach XTableNode in XTableList do begin
             Evaluate(TableNodeID, GetAttributeValue(XTableNode, 'ID'));
             TableNodeName := GetAttributeValue(XTableNode, 'NAME');
-            readTableNode(TableNodeID, TableNodeName, XTableNode);
+            readRecordNode(TmpTargetRef, TableNodeID, TableNodeName, XTableNode);
         end;
     end;
 
-    local procedure readTableNode(var TableNodeID: Integer; TableNodeName: Text; var XTableNode: XmlNode)
+    internal procedure readRecordNode(var TmpTargetRef: RecordRef; ImportToTableID: Integer; ImportToTableName: Text; var XRecordNode: XmlNode)
     var
         allObj: Record AllObj;
-        TmpTargetRef: RecordRef;
         FldRef: FieldRef;
         FieldNodeID: Integer;
         XFieldNode: XmlNode;
-        XRecordNode: XmlNode;
         XFieldList: XmlNodeList;
-        XRecordList: XmlNodeList;
+    // XRecordList: XmlNodeList;
     begin
-        XTableNode.SelectNodes('child::RECORD', XRecordList); // select all element children
-        foreach XRecordNode in XRecordList do begin
-            // Check for renumbering
-            if not allObj.Get(allObj."Object Type"::Table, TableNodeID) then
-                if TableNodeName <> '' then begin
-                    allObj.SetRange("Object Type", allObj."Object Type"::Table);
-                    allObj.SetFilter("Object Name", ConvertStr(TableNodeName, '_', '?'));
-                    if allObj.FindFirst() then
-                        TableNodeID := allObj."Object ID";
-                end;
-            Clear(TmpTargetRef);
-            TmpTargetRef.Open(TableNodeID, true);
-            //XFieldList := XRecordNode.AsXmlElement().GetChildNodes();
-            XRecordNode.SelectNodes('child::*', XFieldList); // select all element children
-            foreach XFieldNode in XFieldList do begin
-                Evaluate(FieldNodeID, GetAttributeValue(XFieldNode, 'ID'));
-                if TmpTargetRef.FieldExist(FieldNodeID) then begin
-                    FldRef := TmpTargetRef.Field(FieldNodeID);
-                    if XFieldNode.AsXmlElement().InnerText <> '' then
-                        FldRefEvaluate(FldRef, XFieldNode.AsXmlElement().InnerText);
-                end;
+        // Clear(TmpTargetRef);
+        // XTableNode.SelectNodes('child::RECORD', XRecordList); // select all element children
+        // foreach XRecordNode in XRecordList do begin
+        // Check for renumbering
+        if not allObj.Get(allObj."Object Type"::Table, ImportToTableID) then
+            if ImportToTableName <> '' then begin
+                allObj.SetRange("Object Type", allObj."Object Type"::Table);
+                allObj.SetFilter("Object Name", ConvertStr(ImportToTableName, '_', '?'));
+                if allObj.FindFirst() then
+                    ImportToTableID := allObj."Object ID";
+            end;
+        Clear(TmpTargetRef);
+        TmpTargetRef.Open(ImportToTableID, true);
+        //XFieldList := XRecordNode.AsXmlElement().GetChildNodes();
+        XRecordNode.SelectNodes('child::*', XFieldList); // select all element children
+        foreach XFieldNode in XFieldList do begin
+            Evaluate(FieldNodeID, GetAttributeValue(XFieldNode, 'ID'));
+            if TmpTargetRef.FieldExist(FieldNodeID) then begin
+                FldRef := TmpTargetRef.Field(FieldNodeID);
+                if XFieldNode.AsXmlElement().InnerText <> '' then
+                    FldRefEvaluate(FldRef, XFieldNode.AsXmlElement().InnerText);
             end;
         end;
+        // end;
     end;
 
     internal procedure MarkRecordForExport(recID: RecordId)
@@ -933,15 +935,25 @@ codeunit 91007 DMTXMLBackup
             IStream.ReadText(BlobContentAsText);
     end;
 
-    procedure ImportSetup(xmlDoc: XmlDocument) OK: Boolean
+    procedure ImportTable(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary; targetTableRecordVariant: Variant; xmlDoc: XmlDocument) OK: Boolean
     var
-        dmtSetup: Record DMTSetup;
+        // dmtSetup: Record DMTSetup;
+        tmpTargetRef, targetRef : RecordRef;
         tableNodeName: Text;
-        xNode: XmlNode;
+        XRecordNode, XTableNode : XmlNode;
+        XRecordList: XmlNodeList;
     begin
-        tableNodeName := CreateTagName(dmtSetup.TableName);
-        if not xmlDoc.SelectSingleNode(StrSubstNo('//DMT/%1/child::*', tableNodeName), xNode) then
-            exit;
+        targetRef.GetTable(targetTableRecordVariant);
+        tableNodeName := CreateTagName(targetRef.Name);
+        if not xmlDoc.SelectSingleNode(StrSubstNo('//DMT/%1', tableNodeName), XTableNode) then
+            exit(false);
+        if not XTableNode.SelectNodes('child::RECORD', XRecordList) then  // select all element children
+            exit(false);
+        OK := XRecordList.Count > 0;
+        foreach XRecordNode in XRecordList do begin
+            readRecordNode(tmpTargetRef, targetRef.Number, targetRef.Name, XRecordNode);
+            processImportedRecord(tempImportWorksheetBuffer, tmpTargetRef);
+        end;
     end;
 
     var
