@@ -98,7 +98,7 @@ codeunit 91014 DMTMigrateRecordSet
         Clear(NoOfRecordsProcessedGlobal);
         while MoveNext(bufferRef, RecIdList, importSettings.RecordsToProcessLimit(), NoOfRecordsProcessedGlobal, migrationType) do begin
             NoOfRecordsProcessedGlobal += 1;
-            ProcessSingleRecord(bufferRef, importSettings, log, iTriggerLog, iReplacementHandler, false, Result);
+            ProcessSingleRecord(bufferRef, importSettings, log, iTriggerLog, iReplacementHandler, Result);
             UpdateProgress(Result);
         end;
         // Close Progress
@@ -291,7 +291,7 @@ codeunit 91014 DMTMigrateRecordSet
         end;
     end;
 
-    local procedure ProcessSingleRecord(bufferRef: RecordRef; importSettings: Codeunit DMTImportSettings; log: Codeunit DMTLog; var triggerLog: Interface ITriggerLog; iReplacementHandler: Interface IReplacementHandler; UpdateExistingRecordsOnly: Boolean; var Result: Enum DMTProcessingResultType)
+    local procedure ProcessSingleRecord(bufferRef: RecordRef; importSettings: Codeunit DMTImportSettings; log: Codeunit DMTLog; var triggerLog: Interface ITriggerLog; iReplacementHandler: Interface IReplacementHandler; var Result: Enum DMTProcessingResultType)
     var
         migrateRecord: Codeunit DMTMigrateRecord;
         targetRecordExists: Boolean;
@@ -314,10 +314,14 @@ codeunit 91014 DMTMigrateRecordSet
 
         // 2. Skip if no target record found for update
         targetRecordExists := migrateRecord.TargetRecordExists();
-        if UpdateExistingRecordsOnly and not targetRecordExists then begin
+        if importSettings.UpdateExistingRecordsOnly() and not targetRecordExists then begin
             Result := Enum::DMTProcessingResultType::Ignored;
             skipRecord := true;
         end;
+
+        // 2.1. Set Existing Record as source for update
+        if targetRecordExists and importSettings.UpdateExistingRecordsOnly() then
+            migrateRecord.SetExistingRecordAsSource();
 
         // 3. Read Non-Key Fields
         if not skipRecord then
@@ -363,7 +367,7 @@ codeunit 91014 DMTMigrateRecordSet
         Success := not migrateRecord.HasErrorsThatShouldNotBeIngored();
     end;
 
-    local procedure ProcessNonKeyFields(migrateRecord: Codeunit DMTMigrateRecord) Success: Boolean
+    local procedure ProcessNonKeyFields(var migrateRecord: Codeunit DMTMigrateRecord) Success: Boolean
     begin
         migrateRecord.SetRunMode_ProcessNonKeyFields();
         while not migrateRecord.Run() do begin

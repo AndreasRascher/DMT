@@ -482,7 +482,7 @@ page 91017 DMTProcessingPlan
                 DMTProcessingPlanType::"Update Field":
                     begin
                         SetStatusToStartAndCommit(ProcessingPlan);
-                        if ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan) then
+                        if not ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan) then
                             HasErrors := true;
                     end;
                 DMTProcessingPlanType::"Buffer + Target":
