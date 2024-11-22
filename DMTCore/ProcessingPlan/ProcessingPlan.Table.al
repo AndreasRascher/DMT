@@ -73,7 +73,13 @@ table 91009 DMTProcessingPlan
         field(50; Indentation; Integer) { Caption = 'Indentation', Comment = 'de-DE=Einrückung'; Editable = false; }
         field(57; "Max No. of Records to Process"; Integer)
         {
-            Caption = 'Max No. of Records to Process', Comment = 'de-DE=max. Anzahl der zu verarbeitenden Datensätze';
+            Caption = 'Max No. of Records to Process', Comment = 'de-DE=max. Anzahl zu verarbeitender DS';
+            BlankZero = true;
+            MinValue = 0;
+        }
+        field(58; "Start with Record No."; Integer)
+        {
+            Caption = 'Start with Record No.', Comment = 'de-DE=Start mit DS Nr.';
             BlankZero = true;
             MinValue = 0;
         }

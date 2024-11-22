@@ -300,7 +300,7 @@
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 667936880 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Max No. of Records to Process</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=max. Anzahl der zu verarbeitenden Datensätze</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=max. Anzahl zu verarbeitender DS</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportConfigHeader - Field Max No. of Records to Process - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 200502431 - Field 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -555,7 +555,7 @@
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 667936880 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Max No. of Records to Process</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=max. Anzahl der zu verarbeitenden Datensätze</note>
+          <note from="Developer" annotates="general" priority="2">de-DE=max. Anzahl zu verarbeitender DS</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Max No. of Records to Process - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 603378867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -572,6 +572,11 @@
           <source>Source Table No. (Codeunit)</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Herkunftstabellennr. (Codeunit)</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Source Table No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1212190007 - Field 292438532 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Start with Record No.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Start mit DS Nr.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTProcessingPlan - Field Start with Record No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 1212190007 - Field 530928583 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Start Time</source>
@@ -1702,6 +1707,11 @@
           <source>Buffer</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DS im Puffer</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control No.of Records in Buffer Table - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1212190007 - Control 292438532 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starts processing with a specified record number.</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Startet die Verarbeitung mit einer bestimmten Datensatznummer. Empfohlen zur Aufteilung der Verarbeitung großer Datenmengen.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessingPlan - Control Start with Record No. - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1212190007 - Control 3177385690 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Default Values</source>
