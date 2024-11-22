@@ -73,7 +73,13 @@ table 91009 DMTProcessingPlan
         field(50; Indentation; Integer) { Caption = 'Indentation', Comment = 'de-DE=Einrückung'; Editable = false; }
         field(57; "Max No. of Records to Process"; Integer)
         {
-            Caption = 'Max No. of Records to Process', Comment = 'de-DE=max. Anzahl der zu verarbeitenden Datensätze';
+            Caption = 'Max No. of Records to Process', Comment = 'de-DE=max. Anzahl zu verarbeitender DS';
+            BlankZero = true;
+            MinValue = 0;
+        }
+        field(58; "Start with Record No."; Integer)
+        {
+            Caption = 'Start with Record No.', Comment = 'de-DE=Start mit DS Nr.';
             BlankZero = true;
             MinValue = 0;
         }
@@ -329,6 +335,7 @@ table 91009 DMTProcessingPlan
                         ImportConfigLine.Get(Rec.ID, RecRef.FieldIndex(FieldIndexNo).Number);
                         TempImportConfigLine2 := ImportConfigLine;
                         TempImportConfigLine2."Processing Action" := TempImportConfigLine2."Processing Action"::CustomValue;
+                        TempImportConfigLine2."Custom Value Type" := TempImportConfigLine2."Custom Value Type"::"Fixed Value";
                         TempImportConfigLine2."Custom Value" := CopyStr(RecRef.FieldIndex(FieldIndexNo).GetFilter, 1, MaxStrLen(TempImportConfigLine2."Custom Value"));
                         cleanUpFixedValue(TempImportConfigLine2);
                         TempImportConfigLine2.Insert();

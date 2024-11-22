@@ -4,7 +4,7 @@ codeunit 91010 DMTImportSettings
     begin
         ImportConfigHeader(importConfigHeaderNEW);
         SourceTableView(importConfigHeaderNEW.ReadLastUsedSourceTableView());
-        RecordsToProcessLimit(importConfigHeaderNEW."Max No. of Records to Process");
+        SetRecordsToProcessLimits(1, importConfigHeaderNEW."Max No. of Records to Process");
         case migrationType of
             migrationType::MigrateRecords:
                 begin
@@ -29,7 +29,7 @@ codeunit 91010 DMTImportSettings
         ProcessingPlan(processingPlanNEW);
         SourceTableView(processingPlanNEW.ReadSourceTableView());
         UpdateFieldsFilter(processingPlanNEW.ReadUpdateFieldsFilter());
-        RecordsToProcessLimit(processingPlanNEW."Max No. of Records to Process");
+        SetRecordsToProcessLimits(processingPlanNEW."Start with Record No.", processingPlanNEW."Max No. of Records to Process");
         NoUserInteraction(true);
 
         if processingPlanNEW.findImportConfigHeader(importConfigHeaderFound) then
@@ -196,8 +196,9 @@ codeunit 91010 DMTImportSettings
         exit(EvaluateOptionValueAsNumberGlobal);
     end;
 
-    procedure RecordsToProcessLimit(recordsToProcessLimitNew: Integer)
+    procedure SetRecordsToProcessLimits(startPos: Integer; recordsToProcessLimitNew: Integer)
     begin
+        RecordsToProcessStartPosGlobal := startPos;
         RecordsToProcessLimitGlobal := recordsToProcessLimitNew;
     end;
 
@@ -206,13 +207,18 @@ codeunit 91010 DMTImportSettings
         exit(RecordsToProcessLimitGlobal);
     end;
 
+    procedure RecordsToProcessStartPos(): Integer
+    begin
+        exit(RecordsToProcessStartPosGlobal);
+    end;
+
     var
         TempImportConfigLineGlobal: Record DMTImportConfigLine temporary;
         ImportConfigHeaderGlobal: Record DMTImportConfigHeader;
         ProcessingPlanGlobal: Record DMTProcessingPlan;
         SourceTableViewGlobal, UpdateFieldsFilterGlobal : Text;
         StopProcessingRecIDListAfterErrorGlobal, NoUserInteractionGlobal, UpdateExistingRecordsOnlyGlobal, UpdateUnchangedSinceLastImportOnlyGlobal : Boolean;
-        RecordsToProcessLimitGlobal: Integer;
+        RecordsToProcessLimitGlobal, RecordsToProcessStartPosGlobal : Integer;
         UseTriggerLogGlobal: Boolean;
         IsSourceTableViewSet, IsImportConfigLineSet : Boolean;
         EvaluateOptionValueAsNumberGlobal: Boolean;

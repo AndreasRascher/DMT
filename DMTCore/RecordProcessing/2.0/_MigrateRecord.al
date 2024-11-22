@@ -154,6 +154,11 @@ codeunit 91008 DMTMigrateRecord
         exit(NoSeriesSettings);
     end;
 
+    internal procedure SetExistingRecordAsSource()
+    begin
+        TmpTargetRef := ExistingTargetRefGlobal.Duplicate();
+    end;
+
     procedure HasErrorsThatShouldNotBeIngored(): Boolean
     begin
         exit(ErrorsOccuredThatShouldNotBeIngored);
@@ -235,7 +240,7 @@ codeunit 91008 DMTMigrateRecord
         end;
     end;
 
-    procedure AssignValueToFieldRef(SourceRecRef: RecordRef; ImportConfigLine: Record DMTImportConfigLine; TargetRecRef: RecordRef; var FieldWithTypeCorrectValueToValidate: FieldRef)
+    procedure AssignValueToFieldRef(SourceRecRef: RecordRef; var tempCurrImportConfigLine: Record DMTImportConfigLine temporary; TargetRecRef: RecordRef; var FieldWithTypeCorrectValueToValidate: FieldRef)
     var
         TargetRecRef2: RecordRef;
         FromField: FieldRef;
@@ -243,28 +248,28 @@ codeunit 91008 DMTMigrateRecord
                  Comment = 'de-DE=Der Wert %1 konnte nicht in das Feld %2 eingetragen werden';
     begin
         // find value to assign
-        if ImportConfigLine."Processing Action" <> ImportConfigLine."Processing Action"::CustomValue then begin
-            FromField := SourceRecRef.Field(ImportConfigLine."Source Field No.");
+        if tempCurrImportConfigLine."Processing Action" <> tempCurrImportConfigLine."Processing Action"::CustomValue then begin
+            FromField := SourceRecRef.Field(tempCurrImportConfigLine."Source Field No.");
             CurrValueToAssignText := Format(FromField.Value);
         end else begin
-            CurrValueToAssignText := GetCustomValue(SourceRecRef, ImportConfigLine);
+            CurrValueToAssignText := GetCustomValue(SourceRecRef, tempCurrImportConfigLine);
         end;
         // assign current value to target field
         TargetRecRef2 := TargetRecRef.Duplicate(); // create a duplicate to avoid filling the original target record
-        FieldWithTypeCorrectValueToValidate := TargetRecRef2.Field(ImportConfigLine."Target Field No.");
+        FieldWithTypeCorrectValueToValidate := TargetRecRef2.Field(tempCurrImportConfigLine."Target Field No.");
         case true of
             // Create fieldRef from custom value
-            (ImportConfigLine."Processing Action" = ImportConfigLine."Processing Action"::CustomValue):
+            (tempCurrImportConfigLine."Processing Action" = tempCurrImportConfigLine."Processing Action"::CustomValue):
                 RefHelper.AssignFixedValueToFieldRef(FieldWithTypeCorrectValueToValidate, CurrValueToAssignText);
             // copy fieldRef from source field
-            (TargetRecRef.Field(ImportConfigLine."Target Field No.").Type = FromField.Type):
+            (TargetRecRef.Field(tempCurrImportConfigLine."Target Field No.").Type = FromField.Type):
                 FieldWithTypeCorrectValueToValidate.Value := FromField.Value; // Same Type -> no conversion needed
             // evaluate text to target field
             (FromField.Type in [FieldType::Text, FieldType::Code]):
                 if not RefHelper.EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), EvaluateOptionValueAsNumberGlobal, true) then
                     // Kommt beim Wechsel von Puffertabelle zu generischer Tabelle vor
                     // Kommt vor wenn der alte Wert ein Code war und der neue Wert ein Option
-                    Error(ValidateFailedErr, CurrValueToAssignText, TargetRecRef.Field(ImportConfigLine."Target Field No.").Caption);
+                    Error(ValidateFailedErr, CurrValueToAssignText, TargetRecRef.Field(tempCurrImportConfigLine."Target Field No.").Caption);
             else
                 Error('AssignValueToFieldRef - unhandled TODO %1', FromField.Type);
         end;

@@ -92,6 +92,10 @@ page 91017 DMTProcessingPlan
                         CurrImportConfigHeader.BufferTableMgt().ShowBufferTable();
                     end;
                 }
+                field("Start with Record No."; Rec."Start with Record No.")
+                {
+                    ToolTip = 'Starts processing with a specified record number.', Comment = 'de-DE=Startet die Verarbeitung mit einer bestimmten Datensatznummer. Empfohlen zur Aufteilung der Verarbeitung großer Datenmengen.';
+                }
                 field("Max No. of Records to Process"; Rec."Max No. of Records to Process")
                 {
                     ToolTip = 'Stops processing after a specified number of records. Recommended for testing large data sets.',
@@ -488,7 +492,7 @@ page 91017 DMTProcessingPlan
                 DMTProcessingPlanType::"Update Field":
                     begin
                         SetStatusToStartAndCommit(ProcessingPlan);
-                        if ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan) then
+                        if not ProcessingPlanMgt.ImportWithProcessingPlanParams(ProcessingPlan) then
                             HasErrors := true;
                     end;
                 DMTProcessingPlanType::"Buffer + Target":

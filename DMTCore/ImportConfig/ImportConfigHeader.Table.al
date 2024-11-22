@@ -99,7 +99,7 @@ table 91003 DMTImportConfigHeader
         }
         field(57; "Max No. of Records to Process"; Integer)
         {
-            Caption = 'Max No. of Records to Process', Comment = 'de-DE=max. Anzahl der zu verarbeitenden Datensätze';
+            Caption = 'Max No. of Records to Process', Comment = 'de-DE=max. Anzahl zu verarbeitender DS';
             BlankZero = true;
             MinValue = 0;
         }
