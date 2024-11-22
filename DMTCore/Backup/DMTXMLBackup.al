@@ -529,11 +529,12 @@ codeunit 91007 DMTXMLBackup
         importWorksheet.getLines(tempImportWorksheetBuffer);
     end;
 
-    local procedure findImportAction(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    internal procedure findImportAction(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
     var
         importConfigHeader: Record DMTImportConfigHeader;
         sourceFileStorage, sourceFileStorageFrom : Record DMTSourceFileStorage;
         recordRef: RecordRef;
+        nextID: Integer;
     begin
         tempImportWorksheetBuffer.ImportAction := tempImportWorksheetBuffer.ImportAction::Add;
         case tempImportWorksheetBuffer.Type of
@@ -554,22 +555,37 @@ codeunit 91007 DMTXMLBackup
                     importConfigHeader.SetRange("Target Table ID", TempImportConfigHeader."Target Table ID");
                     if importConfigHeader.FindFirst() then begin
                         tempImportWorksheetBuffer.ImportAction := tempImportWorksheetBuffer.ImportAction::Replace;
-                        tempImportWorksheetBuffer.OldID := importConfigHeader.ID;
+                        tempImportWorksheetBuffer.mappedToID := importConfigHeader.ID;
                         // TODO Remapping of Import Config Header and Lines, Delete existing
                     end;
                 end;
             Enum::DMTBackupEntity::"Source File":
                 begin
-                    // Replace if source file with the same name exists
                     TempSourceFileStorage.Get(tempImportWorksheetBuffer.SourceRecID);
+                    // Case 1: Source File Storage exists with the same name
                     sourceFileStorage.SetRange(Name, TempSourceFileStorage.Name);
                     if sourceFileStorage.FindFirst() then begin
                         tempImportWorksheetBuffer.SourceRecID.GetRecord().SetTable(sourceFileStorageFrom);
                         tempImportWorksheetBuffer.ImportAction := tempImportWorksheetBuffer.ImportAction::Replace;
-                        tempImportWorksheetBuffer.OldID := sourceFileStorage."File ID";
-                        // TODO Remapping of Source File Storage, Delete existing
-
+                        tempImportWorksheetBuffer.mappedToID := sourceFileStorage."File ID";
+                        tempImportWorksheetBuffer.Modify();
                     end;
+
+                    // Case 2: Source File Storage exists with the same ID
+                    if tempImportWorksheetBuffer.mappedToID = 0 then begin
+                        TempSourceFileStorage.Get(tempImportWorksheetBuffer.SourceRecID);
+                        if sourceFileStorage.Get(TempSourceFileStorage."File ID") then begin
+                            // getNextID
+                            nextID := 1;
+                            sourceFileStorage.Reset();
+                            if sourceFileStorage.FindLast() then
+                                nextID += sourceFileStorage."File ID";
+                            tempImportWorksheetBuffer.mappedToID := nextID;
+                            tempImportWorksheetBuffer.Modify();
+                        end;
+                    end;
+
+                    applyMapping(tempImportWorksheetBuffer);
                 end;
             else
                 Error('Type %1 not implemented', tempImportWorksheetBuffer.Type);

@@ -11,7 +11,7 @@ table 91016 DMTImportWorksheetBuffer
             OptionMembers = "Add",Replace,Skip;
         }
         field(4; SourceRecID; RecordID) { }
-        field(5; OldID; Integer) { }
+        field(5; mappedToID; Integer) { }
     }
 
     keys

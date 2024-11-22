@@ -60,11 +60,11 @@ codeunit 90027 DMTDataTableHelper
 
     local procedure AddRecordWithCaptionsToDataTable(var recRef: RecordRef)
     begin
-        if CurrDataTable.Count = 0 then begin
-            CurrDataTable.Add(GetFieldCaptionsAsRow(recRef));
-            CurrDataTable.Add(GetFieldValuesAsRow(recRef));
+        if CurrDataTableGlobal.Count = 0 then begin
+            CurrDataTableGlobal.Add(GetFieldCaptionsAsRow(recRef));
+            CurrDataTableGlobal.Add(GetFieldValuesAsRow(recRef));
         end else
-            CurrDataTable.Add(GetFieldValuesAsRow(recRef));
+            CurrDataTableGlobal.Add(GetFieldValuesAsRow(recRef));
     end;
 
     internal procedure WriteDataTableToFileBlob(var TempBlob: Codeunit "Temp Blob")
@@ -83,7 +83,7 @@ codeunit 90027 DMTDataTableHelper
         clear(TempBlob);
         TempBlob.CreateOutStream(oStr);
         // iterate through the data table and write the content to the CSV file
-        foreach line in CurrDataTable do begin
+        foreach line in CurrDataTableGlobal do begin
             lastColNo := line.Count;
             for colNo := 1 to line.Count do
                 if colNo = lastColNo then
@@ -107,8 +107,8 @@ codeunit 90027 DMTDataTableHelper
         // 111111	Test	1M(8T)	{00000000-0000-0000-0000-000000000000}
 
         // iterate through the data table and write the content to excel buffer file
-        for currRowNo := 1 to CurrDataTable.Count do begin
-            line := CurrDataTable.Get(currRowNo);
+        for currRowNo := 1 to CurrDataTableGlobal.Count do begin
+            line := CurrDataTableGlobal.Get(currRowNo);
             for currColNo := 1 to line.Count do begin
                 tempExcelBuffer.Init();
                 tempExcelBuffer.Validate("Row No.", currRowNo);
@@ -125,14 +125,14 @@ codeunit 90027 DMTDataTableHelper
         row: List of [Text];
     begin
         // add rows until the requested row index is reached
-        while CurrDataTable.Count < rowIndex do
-            CurrDataTable.Add(row);
-        CurrDataTable.Get(rowIndex, row);
+        while CurrDataTableGlobal.Count < rowIndex do
+            CurrDataTableGlobal.Add(row);
+        CurrDataTableGlobal.Get(rowIndex, row);
         // add columns until the requested column index is reached
         while row.Count < colIndex do
             row.Add('');
         // set the new content
-        CurrDataTable.Get(rowIndex).Set(colIndex, content);
+        CurrDataTableGlobal.Get(rowIndex).Set(colIndex, content);
     end;
 
     internal procedure SetLine(rowIndex: Integer; content1: Text; content2: Text)
@@ -163,5 +163,5 @@ codeunit 90027 DMTDataTableHelper
     end;
 
     var
-        CurrDataTable: List of [List of [Text]];
+        CurrDataTableGlobal: List of [List of [Text]];
 }
