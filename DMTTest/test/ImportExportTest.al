@@ -4,77 +4,97 @@ codeunit 90032 "ImportExportTest"
     TestPermissions = Disabled;
 
     [Test]
+    // Test that the setup is found after it has been exported, deleted and re-imported
     procedure "GivenSetupExists_WhenSetupIsExportedAndImported_ThenSetupIsFoundOnImport"()
     var
-        dmtSetup: Record DMTSetup;
         tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary;
+        dmtSetup, dmtSetupOld : Record DMTSetup;
         xmlBackup: Codeunit DMTXMLBackup;
-        xmlFile: Codeunit "Temp Blob";
+        backupXmlFile: Codeunit "Temp Blob";
         xmlDoc: XmlDocument;
     begin
         // [GIVEN] GivenSetupExists
-        dmtSetup.InsertWhenEmpty();
-        dmtSetup."Use exist. mappings" := false; // init value is true
-        dmtSetup.Modify();
-        // [WHEN] WhenSetupIsExported 
-        xmlBackup.MarkRecordForExport(dmtSetup.RecordId);
-        xmlBackup.CreateExportXML(xmlFile);
-        // [WHEN] WhenSetupIsImported
+        dmtSetupOld.InsertWhenEmpty();
+        dmtSetupOld."Use exist. mappings" := false; // init value is true
+        dmtSetupOld.Modify();
+        // [WHEN] WhenSetupIsExported and cleared 
+        xmlBackup.MarkRecordForExport(dmtSetupOld.RecordId);
+        xmlBackup.CreateBackupXML(backupXmlFile);
         dmtSetup.DeleteAll();
         if not dmtSetup.isEmpty() then
             Error('DMT Setup table is not empty');
-        XmlDocument.ReadFrom(xmlFile.CreateInStream(), xmlDoc);
+        // [WHEN] When importing setup from the backup file
+        XmlDocument.ReadFrom(backupXmlFile.CreateInStream(), xmlDoc);
         xmlBackup.ImportTable(tempImportWorksheetBuffer, dmtSetup, xmlDoc);
         xmlBackup.saveRecords(tempImportWorksheetBuffer);
-        // [THEN] ThenSetupIsFoundOnImport 
+        dmtSetupOld.Copy(dmtSetup);
+        // [THEN] setup exists 
         if not dmtSetup.FindFirst() then
             Error('DMT Setup has not been imported');
+        // [THEN] imported Setup is identical to the original
+        if Format(dmtSetupOld) <> Format(dmtSetup) then
+            Error('Imported DMT Setup is not identical to the original');
     end;
 
     [Test]
-    procedure "GivenSourceTableExists_WhenOtherSourceTableWithSameIDIsImported_ThenTheNewSourceTableReceivesANewID"()
+    // Test that the import of a source file storage record with a conflicting ID will assign a new ID
+    // and that the import config header will be updated with the new ID
+    procedure GIVEN_IDIsAlreadyInUse_WHEN_ImportAssignNewID()
     var
         tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary;
+        importConfigHeader: Record DMTImportConfigHeader;
         customer: Record Customer;
         Vendor: Record Vendor;
-        sourceFileStorage1, sourceFileStorage2 : Record DMTSourceFileStorage;
-        TempBlob, backupFile : Codeunit "Temp Blob";
+        sourceFileStorage_Customer, sourcefilestorage_Vendor : Record DMTSourceFileStorage;
+        backupFile_CustomerSourceFile: Codeunit "Temp Blob";
         testLibrary: Codeunit DMTTestLibrary;
-        dataTableHelper: Codeunit DMTDataTableHelper;
         xmlBackup: Codeunit DMTXMLBackup;
         assert: Codeunit "Library Assert";
         xmlDoc: XmlDocument;
         oldID: Integer;
     begin
-        // [GIVEN] Create Backup File to Import
+        // [GIVEN] Source file storage 
         testLibrary.CreateDMTSetup();
         customer."No." := 'DMT10000';
         customer.Name := 'Customer 1';
-        Clear(dataTableHelper);
-        dataTableHelper.AddRecordWithCaptionsToDataTable(customer);
-        dataTableHelper.WriteDataTableToFileBlob(tempBlob);
-        TestLibrary.AddFileToSourceFileStorage(sourceFileStorage1, 'Customer.csv', testLibrary.GetDefaultNAVDMTLayout(), tempBlob);
-        xmlBackup.MarkRecordForExport(sourceFileStorage1.RecordId);
-        xmlBackup.CreateExportXML(backupFile);
-        sourceFileStorage1.Delete(true);
+        testLibrary.CreateSourceFileStorage(sourceFileStorage_Customer, customer);
+
+        // [GIVEN] Import Config Header using the source file storage
+        testLibrary.CreateImportConfigHeader(importConfigHeader, Database::Customer, sourceFileStorage_Customer);
+
+        // [GIVEN] Export of the source file storage and import config header
+        xmlBackup.MarkRecordForExport(sourceFileStorage_Customer.RecordId);
+        xmlBackup.MarkRecordForExport(importConfigHeader.RecordId);
+        xmlBackup.CreateBackupXML(backupFile_CustomerSourceFile);
+        importConfigHeader.Delete(true);
+        sourceFileStorage_Customer.Delete(true);
 
         // [GIVEN] Create another source file storage record with the same "File ID"
         Vendor."No." := 'DMT10000';
         Vendor.Name := 'Vendor 1';
-        Clear(dataTableHelper);
-        dataTableHelper.AddRecordWithCaptionsToDataTable(Vendor);
-        dataTableHelper.WriteDataTableToFileBlob(tempBlob);
-        TestLibrary.AddFileToSourceFileStorage(sourceFileStorage2, 'Vendor.csv', testLibrary.GetDefaultNAVDMTLayout(), tempBlob);
+        testLibrary.CreateSourceFileStorage(sourcefilestorage_Vendor, Vendor);
         // [THEN] Ensure IDs are the same
-        assert.AreEqual(sourceFileStorage1."File ID", sourceFileStorage2."File ID", 'File ID should be the same');
-        // [WHEN] WhenOtherSourceTableWithSameIDIsImported
-        XmlDocument.ReadFrom(backupFile.CreateInStream(), xmlDoc);
-        xmlBackup.ImportTable(tempImportWorksheetBuffer, sourceFileStorage1, xmlDoc);
-        xmlBackup.findImportAction(tempImportWorksheetBuffer);
+        assert.AreEqual(sourceFileStorage_Customer."File ID", sourcefilestorage_Vendor."File ID", 'File ID should be the same');
+        // [WHEN] When source file storage with conflicting ID is imported
+        XmlDocument.ReadFrom(backupFile_CustomerSourceFile.CreateInStream(), xmlDoc);
+        xmlBackup.ImportTables(tempImportWorksheetBuffer, xmlDoc);
+        xmlBackup.findImportActions(tempImportWorksheetBuffer);
+        xmlBackup.applyMappings(tempImportWorksheetBuffer);
         xmlBackup.saveRecords(tempImportWorksheetBuffer);
-        // [THEN] ThenTheNewSourceTableReceivesANewID
-        oldID := sourceFileStorage2."File ID";
-        sourceFileStorage2.SetRange(Name, sourceFileStorage2.Name);
-        sourceFileStorage2.FindFirst();
+        // [THEN] On Re-Import, the new source table receives a new ID because the ID is already in use
+        oldID := sourceFileStorage_Customer."File ID";
+        sourceFileStorage_Customer.SetRange(Name, sourceFileStorage_Customer.Name);
+        sourceFileStorage_Customer.FindFirst();
+        assert.AreNotEqual(oldID, sourceFileStorage_Customer."File ID", 'File ID should be different');
+        importConfigHeader.Get(importConfigHeader.RecordId);
+        assert.AreEqual(sourceFileStorage_Customer."File ID", importConfigHeader."Source File ID", 'Source File ID should be the same');
+    end;
+
+    [Test]
+    procedure GIVEN_ImportConfigForTheSameTargetTableAndFileNameAlreadyExists_WHEN_ImportingWithAddParameter_ANewValidIDIsAssigned()
+    begin
+        // ToDo freie ID wird gefunden
+        // ToDo die neue ID ist nicht im Buffer 
+        Error('Not implemented');
     end;
 }

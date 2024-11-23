@@ -336,7 +336,7 @@ page 91017 DMTProcessingPlan
                 var
                     XMLBackup: Codeunit DMTXMLBackup;
                 begin
-                    XMLBackup.Import();
+                    XMLBackup.ImportWithDialog();
                 end;
             }
             action(RetryBufferRecordsWithError)

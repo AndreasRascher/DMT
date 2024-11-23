@@ -120,9 +120,9 @@ codeunit 90025 DMTImportFromBufferTests
     end;
     #endregion PageHandlers
 
-    local procedure isInitialized(importConfigHeaderGlobal: Record DMTImportConfigHeader): Boolean
+    local procedure isInitialized(importConfigHeader: Record DMTImportConfigHeader): Boolean
     begin
-        exit(importConfigHeaderGlobal.ID <> 0);
+        exit(importConfigHeader.ID <> 0);
     end;
 
 

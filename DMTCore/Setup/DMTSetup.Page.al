@@ -121,7 +121,7 @@ page 91000 "DMT Setup"
                 var
                     XMLBackup: Codeunit DMTXMLBackup;
                 begin
-                    XMLBackup.Import();
+                    XMLBackup.ImportWithDialog();
                 end;
             }
         }

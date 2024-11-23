@@ -401,6 +401,14 @@ table 91009 DMTProcessingPlan
         Rec.FilterGroup(0);
     end;
 
+    procedure TypeSupportsImportConfigHeader() IsSupported: Boolean
+    begin
+        IsSupported := Rec.Type in [Rec.Type::"Import To Target",
+                                    Rec.Type::"Update Field",
+                                    Rec.Type::"Buffer + Target",
+                                    Rec.Type::"Enter default values in target table"];
+    end;
+
     procedure TypeSupportsSourceTableFilter() IsSupported: Boolean
     begin
         IsSupported := Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Run Codeunit", Rec.Type::"Buffer + Target"];
@@ -495,7 +503,7 @@ table 91009 DMTProcessingPlan
     procedure findImportConfigHeader(var importConfigHeader: Record DMTImportConfigHeader) OK: Boolean
     begin
         Clear(importConfigHeader);
-        if not (Rec.Type in [Rec.Type::"Import To Target", Rec.Type::"Update Field", Rec.Type::"Buffer + Target", Rec.Type::"Enter default values in target table"]) then
+        if not TypeSupportsImportConfigHeader() then
             exit(false);
         OK := importConfigHeader.Get(Rec.ID);
     end;

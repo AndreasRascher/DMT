@@ -1,6 +1,7 @@
 codeunit 91007 DMTXMLBackup
 {
 
+    #region Export
     procedure Export();
     begin
         MarkAllRecordsForExport();
@@ -14,22 +15,104 @@ codeunit 91007 DMTXMLBackup
         ExportXML(exportFileBaseName);
     end;
 
-    procedure Import();
+    procedure MarkAllRecordsForExport();
+    var
+        recRef: RecordRef;
+        tableID: Integer;
+        TablesToExport: List of [Integer];
+        listOfRecordIDs: List of [RecordId];
+    begin
+        TablesToExport.Add(Database::DMTSetup);
+        TablesToExport.Add(Database::DMTDataLayout);
+        TablesToExport.Add(Database::DMTDataLayoutLine);
+        TablesToExport.Add(Database::DMTImportConfigHeader);
+        TablesToExport.Add(Database::DMTImportConfigLine);
+        TablesToExport.Add(Database::DMTSourceFileStorage);
+        TablesToExport.Add(Database::DMTProcessingPlan);
+        TablesToExport.Add(Database::DMTReplacementHeader);
+        TablesToExport.Add(Database::DMTReplacementLine);
+        TablesToExport.Add(Database::DMTCopyTable);
+        TablesToExport.Add(Database::DMTProcessingPlanBatch);
+        foreach tableID in TablesToExport do begin
+            Clear(listOfRecordIDs);
+            recRef.Open(tableID);
+            if recRef.FindSet(false) then
+                repeat
+                    listOfRecordIDs.Add(recRef.RecordId);
+                until recRef.Next() = 0;
+            recRef.Close();
+            GlobalRecordIDList.Add(tableID, listOfRecordIDs);
+        end;
+    end;
+
+    local procedure ExcludeFieldsFromExport();
+    var
+        sourceFileStorage: Record DMTSourceFileStorage;
+        importConfigHeader: Record DMTImportConfigHeader;
+        processingPlan: Record DMTProcessingPlan;
+    begin
+        AddFieldToExcludeList(importConfigHeader.RecordId.TableNo, importConfigHeader.FieldNo("No.of Records in Buffer Table"));
+        AddFieldToExcludeList(importConfigHeader.RecordId.TableNo, importConfigHeader.FieldNo(ImportToTargetPercentage));
+        AddFieldToExcludeList(importConfigHeader.RecordId.TableNo, importConfigHeader.FieldNo(ImportToTargetPercentageStyle));
+        AddFieldToExcludeList(sourceFileStorage.RecordId.TableNo, sourceFileStorage.FieldNo("File Blob"));
+        AddFieldToExcludeList(sourceFileStorage.RecordId.TableNo, sourceFileStorage.FieldNo(Size));
+        AddFieldToExcludeList(sourceFileStorage.RecordId.TableNo, sourceFileStorage.FieldNo(SizeInKB));
+        AddFieldToExcludeList(sourceFileStorage.RecordId.TableNo, sourceFileStorage.FieldNo(UploadDateTime));
+        AddFieldToExcludeList(processingPlan.RecordId.TableNo, processingPlan.FieldNo(StartTime));
+        AddFieldToExcludeList(processingPlan.RecordId.TableNo, processingPlan.FieldNo("Processing Duration"));
+        AddFieldToExcludeList(processingPlan.RecordId.TableNo, processingPlan.FieldNo(Status));
+        AddFieldToExcludeList(processingPlan.RecordId.TableNo, processingPlan.FieldNo("No.of Records in Buffer Table"));
+    end;
+
+    local procedure AddFieldToExcludeList(TableNo: Integer; FieldNo: Integer)
+    var
+        FieldList: List of [Integer];
+    begin
+        if not ExcludedFields.ContainsKey(TableNo) then begin
+            ExcludedFields.Add(TableNo, FieldList);
+        end;
+        if ExcludedFields.Get(TableNo, FieldList) then begin
+            if not FieldList.Contains(FieldNo) then begin
+                FieldList.Add(FieldNo);
+                ExcludedFields.Set(TableNo, FieldList);
+            end;
+        end;
+    end;
+
+    local procedure IsFieldExcluded(var fldRef: FieldRef) IsExcluded: Boolean
+    var
+        FieldList: List of [Integer];
+    begin
+        IsExcluded := true;
+        if not ExcludedFields.Get(fldRef.Record().Number, FieldList) then
+            exit(false);
+        if not FieldList.Contains(fldRef.Number) then
+            exit(false);
+    end;
+    #endregion Export
+
+    #region Import
+    internal procedure ImportWithDialog();
     var
         tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary;
-        FileFound: Boolean;
+        uploadedFile: Codeunit "Temp Blob";
         Start: DateTime;
-        InStr: InStream;
-        FileName: Text;
+        iStr: InStream;
+        length: Integer;
         importFinishedMsg: Label 'Import abgeschlossen\ Import Dauer: %1', Comment = 'de-DE=Import abgeschlossen\ Import Dauer: %1';
+        UploadFileMsg: Label 'Select a backup.xml file', Comment = 'de-DE=Wählen Sie eine Backup.XML-Datei aus';
+        oStr: outStream;
+        FileName: Text;
     begin
-        if not FileFound then
-            if not UploadIntoStream('Select a Backup.XML file', '', 'XML Files|*.xml', FileName, InStr) then begin
-                exit;
-            end;
+        uploadedFile.CreateInStream(iStr, TextEncoding::Windows);
+        if not UploadIntoStream(UploadFileMsg, '', Format(Enum::DMTFileFilter::Xml), FileName, IStr) then
+            exit;
+        uploadedFile.CreateOutStream(OStr);
+        CopyStream(OStr, IStr);
+        length := uploadedFile.Length();
 
         Start := CurrentDateTime;
-        Import(InStr);
+        ImportToTemp(uploadedFile);
         if openImportWorksheet(tempImportWorksheetBuffer) then begin
             deleteExistingRecords(tempImportWorksheetBuffer);
             saveRecords(tempImportWorksheetBuffer);
@@ -39,6 +122,75 @@ codeunit 91007 DMTXMLBackup
 
         Message(importFinishedMsg, CurrentDateTime - Start);
     end;
+
+    local procedure ImportToTemp(var uploadedFile: Codeunit "Temp Blob")
+    var
+        TmpTargetRef: RecordRef;
+        TableNodeID: Integer;
+        TableNodeName: Text;
+        XDoc: XmlDocument;
+        XTableNode: XmlNode;
+        XTableList: XmlNodeList;
+    begin
+        if not XmlDocument.ReadFrom(uploadedFile.CreateInStream(), XDoc) then
+            Error('reading xml failed');
+
+        XDoc.SelectNodes('//DMT/child::*', XTableList);
+        foreach XTableNode in XTableList do begin
+            Evaluate(TableNodeID, GetAttributeValue(XTableNode, 'ID'));
+            TableNodeName := GetAttributeValue(XTableNode, 'NAME');
+            readRecordNode(TmpTargetRef, TableNodeID, TableNodeName, XTableNode);
+        end;
+    end;
+
+    internal procedure ImportTables(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary; xmlDoc: XmlDocument)
+    var
+        DMTSetup: Record DMTSetup;
+        DMTDataLayout: Record DMTDataLayout;
+        DMTDataLayoutLine: Record DMTDataLayoutLine;
+        DMTImportConfigHeader: Record DMTImportConfigHeader;
+        DMTImportConfigLine: Record DMTImportConfigLine;
+        DMTSourceFileStorage: Record DMTSourceFileStorage;
+        DMTProcessingPlanBatch: Record DMTProcessingPlanBatch;
+        DMTProcessingPlan: Record DMTProcessingPlan;
+        DMTReplacementHeader: Record DMTReplacementHeader;
+        DMTReplacementLine: Record DMTReplacementLine;
+        DMTCopyTable: Record DMTCopyTable;
+    begin
+        ImportTable(tempImportWorksheetBuffer, DMTSetup, xmlDoc);
+        ImportTable(tempImportWorksheetBuffer, DMTDataLayout, xmlDoc);
+        ImportTable(tempImportWorksheetBuffer, DMTDataLayoutLine, xmlDoc);
+        ImportTable(tempImportWorksheetBuffer, DMTImportConfigHeader, xmlDoc);
+        ImportTable(tempImportWorksheetBuffer, DMTImportConfigLine, xmlDoc);
+        ImportTable(tempImportWorksheetBuffer, DMTSourceFileStorage, xmlDoc);
+        ImportTable(tempImportWorksheetBuffer, DMTProcessingPlanBatch, xmlDoc);
+        ImportTable(tempImportWorksheetBuffer, DMTProcessingPlan, xmlDoc);
+        ImportTable(tempImportWorksheetBuffer, DMTReplacementHeader, xmlDoc);
+        ImportTable(tempImportWorksheetBuffer, DMTReplacementLine, xmlDoc);
+        ImportTable(tempImportWorksheetBuffer, DMTCopyTable, xmlDoc);
+    end;
+
+    internal procedure ImportTable(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary; targetTableRecordVariant: Variant; xmlDoc: XmlDocument) OK: Boolean
+    var
+        // dmtSetup: Record DMTSetup;
+        tmpTargetRef, targetRef : RecordRef;
+        tableNodeName: Text;
+        XRecordNode, XTableNode : XmlNode;
+        XRecordList: XmlNodeList;
+    begin
+        targetRef.GetTable(targetTableRecordVariant);
+        tableNodeName := CreateTagName(targetRef.Name);
+        if not xmlDoc.SelectSingleNode(StrSubstNo('//DMT/%1', tableNodeName), XTableNode) then
+            exit(false);
+        if not XTableNode.SelectNodes('child::RECORD', XRecordList) then  // select all element children
+            exit(false);
+        OK := XRecordList.Count > 0;
+        foreach XRecordNode in XRecordList do begin
+            readRecordNode(tmpTargetRef, targetRef.Number, targetRef.Name, XRecordNode);
+            processImportedRecord(tempImportWorksheetBuffer, tmpTargetRef);
+        end;
+    end;
+    #endregion Import
 
     procedure AddAttribute(XNode: XmlNode; AttrName: Text; AttrValue: Text): Boolean
     begin
@@ -59,7 +211,7 @@ codeunit 91007 DMTXMLBackup
     var
         xmlFile: Codeunit "Temp Blob";
     begin
-        CreateExportXML(xmlFile);
+        CreateBackupXML(xmlFile);
         CreateExportFileName(exportFileBaseName);
         DownloadFile(xmlFile, exportFileBaseName, TextEncoding::UTF8);
 
@@ -322,80 +474,6 @@ codeunit 91007 DMTXMLBackup
         end;
     end;
 
-    procedure MarkAllRecordsForExport();
-    var
-        recRef: RecordRef;
-        tableID: Integer;
-        TablesToExport: List of [Integer];
-        listOfRecordIDs: List of [RecordId];
-    begin
-        TablesToExport.Add(Database::DMTSetup);
-        TablesToExport.Add(Database::DMTDataLayout);
-        TablesToExport.Add(Database::DMTDataLayoutLine);
-        TablesToExport.Add(Database::DMTImportConfigHeader);
-        TablesToExport.Add(Database::DMTImportConfigLine);
-        TablesToExport.Add(Database::DMTSourceFileStorage);
-        TablesToExport.Add(Database::DMTProcessingPlan);
-        TablesToExport.Add(Database::DMTReplacementHeader);
-        TablesToExport.Add(Database::DMTReplacementLine);
-        TablesToExport.Add(Database::DMTCopyTable);
-        TablesToExport.Add(Database::DMTProcessingPlanBatch);
-        foreach tableID in TablesToExport do begin
-            Clear(listOfRecordIDs);
-            recRef.Open(tableID);
-            if recRef.FindSet(false) then
-                repeat
-                    listOfRecordIDs.Add(recRef.RecordId);
-                until recRef.Next() = 0;
-            recRef.Close();
-            GlobalRecordIDList.Add(tableID, listOfRecordIDs);
-        end;
-    end;
-
-    local procedure ExcludeFieldsFromExport();
-    var
-        sourceFileStorage: Record DMTSourceFileStorage;
-        importConfigHeader: Record DMTImportConfigHeader;
-        processingPlan: Record DMTProcessingPlan;
-    begin
-        AddFieldToExcludeList(importConfigHeader.RecordId.TableNo, importConfigHeader.FieldNo("No.of Records in Buffer Table"));
-        AddFieldToExcludeList(importConfigHeader.RecordId.TableNo, importConfigHeader.FieldNo(ImportToTargetPercentage));
-        AddFieldToExcludeList(importConfigHeader.RecordId.TableNo, importConfigHeader.FieldNo(ImportToTargetPercentageStyle));
-        AddFieldToExcludeList(sourceFileStorage.RecordId.TableNo, sourceFileStorage.FieldNo("File Blob"));
-        AddFieldToExcludeList(sourceFileStorage.RecordId.TableNo, sourceFileStorage.FieldNo(Size));
-        AddFieldToExcludeList(sourceFileStorage.RecordId.TableNo, sourceFileStorage.FieldNo(SizeInKB));
-        AddFieldToExcludeList(sourceFileStorage.RecordId.TableNo, sourceFileStorage.FieldNo(UploadDateTime));
-        AddFieldToExcludeList(processingPlan.RecordId.TableNo, processingPlan.FieldNo(StartTime));
-        AddFieldToExcludeList(processingPlan.RecordId.TableNo, processingPlan.FieldNo("Processing Duration"));
-        AddFieldToExcludeList(processingPlan.RecordId.TableNo, processingPlan.FieldNo(Status));
-        AddFieldToExcludeList(processingPlan.RecordId.TableNo, processingPlan.FieldNo("No.of Records in Buffer Table"));
-    end;
-
-    local procedure AddFieldToExcludeList(TableNo: Integer; FieldNo: Integer)
-    var
-        FieldList: List of [Integer];
-    begin
-        if not ExcludedFields.ContainsKey(TableNo) then begin
-            ExcludedFields.Add(TableNo, FieldList);
-        end;
-        if ExcludedFields.Get(TableNo, FieldList) then begin
-            if not FieldList.Contains(FieldNo) then begin
-                FieldList.Add(FieldNo);
-                ExcludedFields.Set(TableNo, FieldList);
-            end;
-        end;
-    end;
-
-    local procedure IsFieldExcluded(var fldRef: FieldRef) IsExcluded: Boolean
-    var
-        FieldList: List of [Integer];
-    begin
-        IsExcluded := true;
-        if not ExcludedFields.Get(fldRef.Record().Number, FieldList) then
-            exit(false);
-        if not FieldList.Contains(fldRef.Number) then
-            exit(false);
-    end;
 
     local procedure RunPostImportOperations()
     var
@@ -421,6 +499,8 @@ codeunit 91007 DMTXMLBackup
     /// <p>Process the imported record and insert it into global temp table</p>
     /// </summary>
     local procedure processImportedRecord(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary; TmpTargetRef: RecordRef)
+    var
+        uniqueID: Text;
     begin
         calcAllBlobFields(TmpTargetRef);
 
@@ -454,7 +534,10 @@ codeunit 91007 DMTXMLBackup
                     TmpTargetRef.SetTable(TempImportConfigHeader);
                     TempImportConfigHeader.Insert();
                     tempImportWorksheetBuffer.Type := Enum::DMTBackupEntity::"Import Config";
-                    tempImportWorksheetBuffer.UniqueID := StrSubstNo('Zieltabelle: %1 - Quelle:%2', TempImportConfigHeader."Target Table Caption", TempImportConfigHeader."Source File Name");
+                    uniqueID := StrSubstNo('Zieltabelle: %1 - Quelle:%2',
+                                           TempImportConfigHeader."Target Table Caption",
+                                           TempImportConfigHeader."Source File Name");
+                    tempImportWorksheetBuffer.UniqueID := CopyStr(uniqueID, 1, 250);
                     tempImportWorksheetBuffer.SourceRecID := TmpTargetRef.RecordId;
                     tempImportWorksheetBuffer.Insert();
                 end;
@@ -506,7 +589,8 @@ codeunit 91007 DMTXMLBackup
                     TempCopyTable.Insert();
                     tempImportWorksheetBuffer.Type := Enum::DMTBackupEntity::"Copy Table";
                     TempCopyTable.CalcFields("Table Caption");
-                    tempImportWorksheetBuffer.UniqueID := StrSubstNo('%1-%2', TempCopyTable.SourceCompanyName, TempCopyTable."Table Caption");
+                    uniqueID := StrSubstNo('%1-%2', TempCopyTable.SourceCompanyName, TempCopyTable."Table Caption");
+                    tempImportWorksheetBuffer.UniqueID := CopyStr(uniqueID, 1, 250);
                     tempImportWorksheetBuffer.SourceRecID := TmpTargetRef.RecordId;
                     tempImportWorksheetBuffer.Insert();
                 end;
@@ -529,13 +613,24 @@ codeunit 91007 DMTXMLBackup
         importWorksheet.getLines(tempImportWorksheetBuffer);
     end;
 
-    internal procedure findImportAction(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    procedure findImportActions(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary);
+    begin
+        tempImportWorksheetBuffer.Reset();
+        if not tempImportWorksheetBuffer.FindSet() then
+            exit;
+        repeat
+            findImportAction(tempImportWorksheetBuffer);
+        until tempImportWorksheetBuffer.Next() = 0;
+    end;
+
+    local procedure findImportAction(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
     var
         importConfigHeader: Record DMTImportConfigHeader;
         sourceFileStorage, sourceFileStorageFrom : Record DMTSourceFileStorage;
         recordRef: RecordRef;
         nextID: Integer;
     begin
+        Clear(tempImportWorksheetBuffer.mappedToID);
         tempImportWorksheetBuffer.ImportAction := tempImportWorksheetBuffer.ImportAction::Add;
         case tempImportWorksheetBuffer.Type of
             Enum::DMTBackupEntity::Setup,
@@ -584,8 +679,6 @@ codeunit 91007 DMTXMLBackup
                             tempImportWorksheetBuffer.Modify();
                         end;
                     end;
-
-                    applyMapping(tempImportWorksheetBuffer);
                 end;
             else
                 Error('Type %1 not implemented', tempImportWorksheetBuffer.Type);
@@ -625,6 +718,16 @@ codeunit 91007 DMTXMLBackup
     end;
 
     internal procedure saveRecords(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    begin
+        tempImportWorksheetBuffer.Reset();
+        if not tempImportWorksheetBuffer.FindSet() then
+            exit;
+        repeat
+            saveRecordFor(tempImportWorksheetBuffer);
+        until tempImportWorksheetBuffer.Next() = 0;
+    end;
+
+    local procedure saveRecordFor(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
     var
         setup: Record DMTSetup;
         sourceFileStorage: Record DMTSourceFileStorage;
@@ -653,6 +756,7 @@ codeunit 91007 DMTXMLBackup
                     recRef.GetTable(TempSourceFileStorage);
                     calcAllBlobFields(recRef);
                     recRef.SetTable(sourceFileStorage);
+                    sourceFileStorage.Insert();
                 end;
             Enum::DMTBackupEntity::Setup:
                 begin
@@ -747,7 +851,7 @@ codeunit 91007 DMTXMLBackup
                 targetRef.FieldIndex(i).CalcField();
     end;
 
-    internal procedure CreateExportXML(var xmlFile: Codeunit "Temp Blob")
+    internal procedure CreateBackupXML(var backupXmlFile: Codeunit "Temp Blob")
     var
         allObj: Record AllObj;
         tableID: Integer;
@@ -779,8 +883,8 @@ codeunit 91007 DMTXMLBackup
                 tableNode.AsXmlElement().Add(fieldDefinitionNode);
                 AddTable(tableNode, allObj."Object ID");
             end;
-        Clear(xmlFile);
-        xmlFile.CreateOutStream(oStr);
+        Clear(backupXmlFile);
+        backupXmlFile.CreateOutStream(oStr);
         backupXMLDocument.WriteTo(oStr);
     end;
 
@@ -801,23 +905,80 @@ codeunit 91007 DMTXMLBackup
         exportFileBaseName := ConvertStr(exportFileBaseName, '<>*\/|"', '_______');
     end;
 
-    local procedure Import(var InStr: InStream)
-    var
-        TmpTargetRef: RecordRef;
-        TableNodeID: Integer;
-        TableNodeName: Text;
-        XDoc: XmlDocument;
-        XTableNode: XmlNode;
-        XTableList: XmlNodeList;
+    internal procedure applyMappings(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
     begin
-        if not XmlDocument.ReadFrom(InStr, XDoc) then
-            Error('reading xml failed');
+        tempImportWorksheetBuffer.Reset();
+        if not tempImportWorksheetBuffer.FindSet() then
+            exit;
+        repeat
+            applyMapping(tempImportWorksheetBuffer);
+        until tempImportWorksheetBuffer.Next() = 0;
+    end;
 
-        XDoc.SelectNodes('//DMT/child::*', XTableList);
-        foreach XTableNode in XTableList do begin
-            Evaluate(TableNodeID, GetAttributeValue(XTableNode, 'ID'));
-            TableNodeName := GetAttributeValue(XTableNode, 'NAME');
-            readRecordNode(TmpTargetRef, TableNodeID, TableNodeName, XTableNode);
+    local procedure applyMapping(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    begin
+        if tempImportWorksheetBuffer.mappedToID = 0 then
+            exit;
+        case tempImportWorksheetBuffer.Type of
+            Enum::DMTBackupEntity::"Copy Table",
+            Enum::DMTBackupEntity::"Proc.Plan Batch",
+            Enum::DMTBackupEntity::Replacement:
+                ;// No mapping required
+            Enum::DMTBackupEntity::"Source File":
+                begin
+                    TempSourceFileStorage.get(tempImportWorksheetBuffer.SourceRecID);
+
+                    TempImportConfigHeader.Reset();
+                    TempImportConfigHeader.SetRange("Source File ID", TempSourceFileStorage."File ID");
+                    TempImportConfigHeader.ModifyAll("Source File ID", tempImportWorksheetBuffer.mappedToID);
+
+                    TempSourceFileStorage.Rename(tempImportWorksheetBuffer.mappedToID);
+                    tempImportWorksheetBuffer.SourceRecID := TempSourceFileStorage.RecordId;
+                    tempImportWorksheetBuffer.Modify();
+                end;
+            Enum::DMTBackupEntity::"Data Layout":
+                begin
+                    TempDataLayout.get(tempImportWorksheetBuffer.SourceRecID);
+
+                    // Source File Storage Reference
+                    TempSourceFileStorage.Reset();
+                    TempSourceFileStorage.SetRange("Data Layout ID", TempDataLayout.ID);
+                    TempSourceFileStorage.ModifyAll("Data Layout ID", tempImportWorksheetBuffer.mappedToID);
+
+                    TempDataLayout.Rename(tempImportWorksheetBuffer.mappedToID);
+                    tempImportWorksheetBuffer.SourceRecID := TempDataLayout.RecordId;
+                    tempImportWorksheetBuffer.Modify();
+                end;
+            Enum::DMTBackupEntity::"Import Config":
+                begin
+                    TempImportConfigHeader.get(tempImportWorksheetBuffer.SourceRecID);
+
+                    TempImportConfigLine.Reset();
+                    TempImportConfigLine.SetRange("Imp.Conf.Header ID", TempImportConfigHeader.ID);
+                    while TempImportConfigLine.FindFirst() do begin
+                        TempImportConfigLine.Rename(tempImportWorksheetBuffer.mappedToID, TempImportConfigLine."Target Field No.");
+                    end;
+
+                    TempReplacementLine.Reset();
+                    TempReplacementLine.SetRange("Imp.Conf.Header ID", TempImportConfigHeader.ID);
+                    TempReplacementLine.ModifyAll("Imp.Conf.Header ID", tempImportWorksheetBuffer.mappedToID);
+
+                    TempProcessingPlan.Reset();
+                    if TempProcessingPlan.FindSet() then
+                        repeat
+                            if TempProcessingPlan.TypeSupportsImportConfigHeader() then
+                                if TempProcessingPlan.ID = TempImportConfigHeader.ID then begin
+                                    TempProcessingPlan.ID := tempImportWorksheetBuffer.mappedToID;
+                                    TempProcessingPlan.Modify();
+                                end;
+                        until TempProcessingPlan.Next() = 0;
+
+                    TempImportConfigHeader.Rename(tempImportWorksheetBuffer.mappedToID);
+                    tempImportWorksheetBuffer.SourceRecID := TempImportConfigHeader.RecordId;
+                    tempImportWorksheetBuffer.Modify();
+                end;
+            else
+                Error('Type %1 not implemented', tempImportWorksheetBuffer);
         end;
     end;
 
@@ -828,11 +989,7 @@ codeunit 91007 DMTXMLBackup
         FieldNodeID: Integer;
         XFieldNode: XmlNode;
         XFieldList: XmlNodeList;
-    // XRecordList: XmlNodeList;
     begin
-        // Clear(TmpTargetRef);
-        // XTableNode.SelectNodes('child::RECORD', XRecordList); // select all element children
-        // foreach XRecordNode in XRecordList do begin
         // Check for renumbering
         if not allObj.Get(allObj."Object Type"::Table, ImportToTableID) then
             if ImportToTableName <> '' then begin
@@ -841,9 +998,9 @@ codeunit 91007 DMTXMLBackup
                 if allObj.FindFirst() then
                     ImportToTableID := allObj."Object ID";
             end;
+
         Clear(TmpTargetRef);
         TmpTargetRef.Open(ImportToTableID, true);
-        //XFieldList := XRecordNode.AsXmlElement().GetChildNodes();
         XRecordNode.SelectNodes('child::*', XFieldList); // select all element children
         foreach XFieldNode in XFieldList do begin
             Evaluate(FieldNodeID, GetAttributeValue(XFieldNode, 'ID'));
@@ -853,7 +1010,6 @@ codeunit 91007 DMTXMLBackup
                     FldRefEvaluate(FldRef, XFieldNode.AsXmlElement().InnerText);
             end;
         end;
-        // end;
     end;
 
     internal procedure MarkRecordForExport(recID: RecordId)
@@ -951,29 +1107,8 @@ codeunit 91007 DMTXMLBackup
             IStream.ReadText(BlobContentAsText);
     end;
 
-    procedure ImportTable(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary; targetTableRecordVariant: Variant; xmlDoc: XmlDocument) OK: Boolean
+    #region Import Buffer Globals
     var
-        // dmtSetup: Record DMTSetup;
-        tmpTargetRef, targetRef : RecordRef;
-        tableNodeName: Text;
-        XRecordNode, XTableNode : XmlNode;
-        XRecordList: XmlNodeList;
-    begin
-        targetRef.GetTable(targetTableRecordVariant);
-        tableNodeName := CreateTagName(targetRef.Name);
-        if not xmlDoc.SelectSingleNode(StrSubstNo('//DMT/%1', tableNodeName), XTableNode) then
-            exit(false);
-        if not XTableNode.SelectNodes('child::RECORD', XRecordList) then  // select all element children
-            exit(false);
-        OK := XRecordList.Count > 0;
-        foreach XRecordNode in XRecordList do begin
-            readRecordNode(tmpTargetRef, targetRef.Number, targetRef.Name, XRecordNode);
-            processImportedRecord(tempImportWorksheetBuffer, tmpTargetRef);
-        end;
-    end;
-
-    var
-        #region Import Buffer Tables
         TempImportConfigLine: Record DMTImportConfigLine temporary;
         TempImportConfigHeader: Record DMTImportConfigHeader temporary;
         TempSourceFileStorage: Record DMTSourceFileStorage temporary;
@@ -985,10 +1120,9 @@ codeunit 91007 DMTXMLBackup
         TempReplacementHeader: Record DMTReplacementHeader temporary;
         TempReplacementLine: Record DMTReplacementLine temporary;
         TempCopyTable: Record DMTCopyTable temporary;
-    #endregion Import Buffer Tables
+    #endregion Import Buffer Globals
     var
         TablesList: List of [Integer];
         GlobalRecordIDList: Dictionary of [Integer, List of [RecordId]];
         ExcludedFields: Dictionary of [Integer, List of [Integer]];
-        ImportedRecUniqueIDsGlobal: Dictionary of [Text, List of [Text]];
 }

@@ -205,4 +205,17 @@ codeunit 90022 DMTTestLibrary
         importConfigLine.Validate("Source Field No.", SourceFieldNames.Keys.get(SourceFieldNames.Values.IndexOf(sourceFieldCaption)));
         importConfigLine.Modify();
     end;
+
+    internal procedure CreateSourceFileStorage(var sourceFileStorage_NEW: Record DMTSourceFileStorage; recVarToStore: Variant)
+    var
+        dataTableHelper: Codeunit DMTDataTableHelper;
+        TempBlob: Codeunit "Temp Blob";
+        recRef: RecordRef;
+    begin
+        Clear(sourceFileStorage_NEW);
+        recRef.GetTable(recVarToStore);
+        dataTableHelper.AddRecordWithCaptionsToDataTable(recVarToStore);
+        dataTableHelper.WriteDataTableToFileBlob(tempBlob);
+        AddFileToSourceFileStorage(sourceFileStorage_NEW, StrSubstNo('%1.csv', recRef.Name), GetDefaultNAVDMTLayout(), tempBlob);
+    end;
 }
