@@ -8,7 +8,8 @@ table 91016 DMTImportWorksheetBuffer
         field(3; ImportAction; Option)
         {
             Caption = 'Import Action', Comment = 'de-DE=Importaktion';
-            OptionMembers = "Add",Replace,Skip;
+            OptionMembers = "Add",Replace;
+            OptionCaption = 'Add,Replace', Comment = 'de-DE=Hinzufügen,Ersetzen';
         }
         field(4; SourceRecID; RecordID) { }
         field(5; mappedToID; Integer) { }

@@ -16,7 +16,7 @@ page 91018 "DMTImportWorksheet"
             {
                 field(Type; Rec.Type) { }
                 field(UniqueID; Rec.UniqueID) { }
-                field(ImportAction; Rec.ImportAction) { }
+                field(ImportAction; Rec.ImportAction) { Editable = false; }
             }
         }
     }

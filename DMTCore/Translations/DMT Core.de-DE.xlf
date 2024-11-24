@@ -531,11 +531,17 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Importaktion</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field ImportAction - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 4253467002 - Field 898827438 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>OldID</source>
+        <trans-unit id="Table 4253467002 - Field 2962556037 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Add,Replace,Skip</source>
+          <target state="translated">Hinzufügen,Ersetzen,Überspringen</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Hinzufügen,Ersetzen,Überspringen</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field ImportAction - Property OptionCaption</note>
+        </trans-unit>
+        <trans-unit id="Table 4253467002 - Field 3683133181 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>mappedToID</source>
           <target state="needs-translation"/>
           <note from="Developer" annotates="general" priority="2"/>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field OldID - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table DMTImportWorksheetBuffer - Field mappedToID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 4253467002 - Field 3766340152 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>SourceRecID</source>
@@ -1371,11 +1377,17 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Die Variablen zum Vergleichen sind nicht initialisiert.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTTriggerLogImpl - Method CheckAfterValidate - NamedType varsToCompareNotInitializedErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 1787269974 - Method 3201496503 - NamedType 3033722242" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 1787269974 - Method 3893082537 - NamedType 3033722242" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import abgeschlossen\ Import Dauer: %1</source>
           <target state="translated">Import abgeschlossen\ Import Dauer: %1</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen\ Import Dauer: %1</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTXMLBackup - Method Import - NamedType importFinishedMsg</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTXMLBackup - Method ImportWithDialog - NamedType importFinishedMsg</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1787269974 - Method 3893082537 - NamedType 659472064" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Select a backup.xml file</source>
+          <target state="translated">Wählen Sie eine Backup.XML-Datei aus</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Wählen Sie eine Backup.XML-Datei aus</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTXMLBackup - Method ImportWithDialog - NamedType UploadFileMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 2940556576 - Method 3472600955 - NamedType 2829063540" size-unit="char" translate="yes" xml:space="preserve">
           <source>Invalid assignment in replacement "%1". An import configuration with the ID %2 does not exist.</source>
@@ -2471,8 +2483,8 @@
         </trans-unit>
         <trans-unit id="Enum 4269954260 - EnumValue 488031821 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source File</source>
-          <target state="needs-translation"/>
-          <note from="Developer" annotates="general" priority="2">de-de=Quelldatei</note>
+          <target state="translated">Quelldatei</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Quelldatei</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum DMTBackupEntity - EnumValue Source File - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 101561864 - EnumValue 1534645988 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

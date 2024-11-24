@@ -89,6 +89,147 @@ codeunit 91007 DMTXMLBackup
         if not FieldList.Contains(fldRef.Number) then
             exit(false);
     end;
+
+    internal procedure CreateBackupXML(var backupXmlFile: Codeunit "Temp Blob")
+    var
+        allObj: Record AllObj;
+        tableID: Integer;
+        fieldDefinitionNode: XmlNode;
+        rootNode: XmlNode;
+        tableNode: XmlNode;
+        oStr: OutStream;
+        backupXMLDocument: XmlDocument;
+    begin
+        // DOKUMENT
+        Clear(backupXMLDocument);
+        backupXMLDocument := XmlDocument.Create();
+
+        // ROOT
+        rootNode := XmlElement.Create('DMT').AsXmlNode();
+        backupXMLDocument.Add(rootNode);
+        AddAttribute(rootNode, 'Version', '2.0');
+
+        // Table Loop
+        foreach tableID in GlobalRecordIDList.Keys do
+            if GlobalRecordIDList.Get(tableID).Count > 0 then begin
+                allObj.Get(allObj."Object Type"::Table, tableID);
+                tableNode := XmlElement.Create(CreateTagName(allObj."Object Name")).AsXmlNode();
+                rootNode.AsXmlElement().Add(tableNode);
+
+                AddAttribute(tableNode, 'ID', Format(tableID));
+                AddAttribute(tableNode, 'NAME', ConvertStr(allObj."Object Name", '"', '_'));
+                fieldDefinitionNode := CreateFieldDefinitionNode(tableID);
+                tableNode.AsXmlElement().Add(fieldDefinitionNode);
+                AddTable(tableNode, allObj."Object ID");
+            end;
+        Clear(backupXmlFile);
+        backupXmlFile.CreateOutStream(oStr);
+        backupXMLDocument.WriteTo(oStr);
+    end;
+
+    procedure CreateFieldDefinitionNode(tableID: Integer) XFieldDefinition: XmlNode
+    var
+        recRef: RecordRef;
+        fldRef: FieldRef;
+        fieldList: Dictionary of [Integer, Text];
+        fieldID: Integer;
+        xField: XmlNode;
+    begin
+        recRef.Open(tableID);
+        recRef.Init();
+        XFieldDefinition := XmlElement.Create('FieldDefinition').AsXmlNode();
+        CreateListOfExportFields(recRef, fieldList);
+        foreach fieldID in fieldList.Keys do begin
+            Clear(fldRef);
+            fldRef := recRef.Field(fieldID);
+            xField := XmlElement.Create('Field').AsXmlNode();
+            AddAttribute(xField, 'Number', Format(fldRef.Number));
+            AddAttribute(xField, 'Type', Format(fldRef.Type));
+            if fldRef.Length <> 0 then
+                AddAttribute(xField, 'Length', Format(fldRef.Length));
+            if fldRef.Class <> FieldClass::Normal then
+                AddAttribute(xField, 'Class', Format(fldRef.Class));
+            if not fldRef.Active then
+                AddAttribute(xField, 'Active', Format(fldRef.Active, 0, 9));
+            AddAttribute(xField, 'Name', Format(fldRef.Name, 0, 9));
+            AddAttribute(xField, 'Caption', Format(fldRef.Caption, 0, 9));
+            if not (fldRef.Type in [FieldType::Blob, FieldType::Media, FieldType::MediaSet]) then
+                AddAttribute(xField, 'InitValue', Format(recRef.Field(fldRef.Number).Value, 0, 9));
+            if fldRef.Type = FieldType::Option then begin
+                AddAttribute(xField, 'OptionCaption', Format(fldRef.OptionCaption));
+                AddAttribute(xField, 'OptionMembers', Format(fldRef.OptionMembers));
+            end;
+            if fldRef.Relation <> 0 then
+                AddAttribute(xField, 'Relation', Format(fldRef.Relation));
+            XFieldDefinition.AsXmlElement().Add(xField);
+        end;
+    end;
+
+    local procedure AddTable(var _XMLNode_Start: XmlNode; tableID: Integer);
+    var
+        ID: RecordId;
+        recRef: RecordRef;
+        fldRef: FieldRef;
+        i: Integer;
+        keyFieldID: Integer;
+        fieldIDsList: List of [Integer];
+        fieldValueAsText: Text;
+        fieldNode: XmlNode;
+        recordNode: XmlNode;
+        textNode: XmlText;
+    begin
+        foreach ID in GlobalRecordIDList.Get(tableID) do begin
+            recordNode := XmlElement.Create('RECORD').AsXmlNode();
+            _XMLNode_Start.AsXmlElement().Add(recordNode);
+            recRef.Get(ID);
+            fieldIDsList := GetListOfKeyFieldIDs(recRef);
+            // Add Key Fields As Attributes
+            foreach keyFieldID in fieldIDsList do begin
+                fldRef := recRef.Field(keyFieldID);
+                AddAttribute(recordNode, CreateTagName(fldRef.Name), GetFldRefValueAsText(fldRef));
+            end;
+            // Add Fields with Value
+            for i := 1 to recRef.FieldCount do begin
+                fldRef := recRef.FieldIndex(i);
+                if not IsFieldExcluded(fldRef) then
+                    if not FldRefIsEmpty(fldRef) then begin
+                        fieldNode := XmlElement.Create('FIELD').AsXmlNode();
+                        recordNode.AsXmlElement().Add(fieldNode);
+                        AddAttribute(fieldNode, 'ID', Format(fldRef.Number));
+                        fieldValueAsText := GetFldRefValueAsText(fldRef);
+                        textNode := XmlText.Create(fieldValueAsText);
+                        fieldNode.AsXmlElement().Add(textNode);
+                    end;
+            end;
+        end;
+    end;
+
+    local procedure ExportXML(exportFileBaseName: Text);
+    var
+        xmlFile: Codeunit "Temp Blob";
+    begin
+        CreateBackupXML(xmlFile);
+        CreateExportFileName(exportFileBaseName);
+        DownloadFile(xmlFile, exportFileBaseName, TextEncoding::UTF8);
+        Clear(GlobalRecordIDList); // Clear the list of marked records for export
+    end;
+
+    local procedure CreateExportFileName(var exportFileBaseName: Text)
+    var
+        Company: Record Company;
+    begin
+        // Compose Export Filename
+        if exportFileBaseName = '' then
+            exportFileBaseName := 'Backup_';
+        Company.Get(CompanyName);
+        if Company."Display Name" <> '' then
+            exportFileBaseName += Company."Display Name"
+        else
+            exportFileBaseName += Company.Name;
+        exportFileBaseName += Format(CurrentDateTime, 0, '<Year4><Month,2><Day,2>_<Hours24,2><Minutes,2>_<Seconds,2>');
+        exportFileBaseName += '.xml';
+        exportFileBaseName := ConvertStr(exportFileBaseName, '<>*\/|"', '_______');
+    end;
     #endregion Export
 
     #region Import
@@ -103,6 +244,7 @@ codeunit 91007 DMTXMLBackup
         UploadFileMsg: Label 'Select a backup.xml file', Comment = 'de-DE=Wählen Sie eine Backup.XML-Datei aus';
         oStr: outStream;
         FileName: Text;
+        xDoc: XmlDocument;
     begin
         uploadedFile.CreateInStream(iStr, TextEncoding::Windows);
         if not UploadIntoStream(UploadFileMsg, '', Format(Enum::DMTFileFilter::Xml), FileName, IStr) then
@@ -112,34 +254,17 @@ codeunit 91007 DMTXMLBackup
         length := uploadedFile.Length();
 
         Start := CurrentDateTime;
-        ImportToTemp(uploadedFile);
-        if openImportWorksheet(tempImportWorksheetBuffer) then begin
-            deleteExistingRecords(tempImportWorksheetBuffer);
-            saveRecords(tempImportWorksheetBuffer);
-        end;
-
-        RunPostImportOperations();
-
-        Message(importFinishedMsg, CurrentDateTime - Start);
-    end;
-
-    local procedure ImportToTemp(var uploadedFile: Codeunit "Temp Blob")
-    var
-        TmpTargetRef: RecordRef;
-        TableNodeID: Integer;
-        TableNodeName: Text;
-        XDoc: XmlDocument;
-        XTableNode: XmlNode;
-        XTableList: XmlNodeList;
-    begin
         if not XmlDocument.ReadFrom(uploadedFile.CreateInStream(), XDoc) then
             Error('reading xml failed');
+        ImportTables(tempImportWorksheetBuffer, xDoc);
+        findImportActions(tempImportWorksheetBuffer);
 
-        XDoc.SelectNodes('//DMT/child::*', XTableList);
-        foreach XTableNode in XTableList do begin
-            Evaluate(TableNodeID, GetAttributeValue(XTableNode, 'ID'));
-            TableNodeName := GetAttributeValue(XTableNode, 'NAME');
-            readRecordNode(TmpTargetRef, TableNodeID, TableNodeName, XTableNode);
+        if openImportWorksheet(tempImportWorksheetBuffer) then begin
+            RenameIncomingRecordsIfRequired(tempImportWorksheetBuffer);
+            DeleteExistingRecords(tempImportWorksheetBuffer);
+            SaveRecords(tempImportWorksheetBuffer);
+            RunPostImportOperations();
+            Message(importFinishedMsg, CurrentDateTime - Start);
         end;
     end;
 
@@ -190,6 +315,36 @@ codeunit 91007 DMTXMLBackup
             processImportedRecord(tempImportWorksheetBuffer, tmpTargetRef);
         end;
     end;
+
+    internal procedure readRecordNode(var TmpTargetRef: RecordRef; ImportToTableID: Integer; ImportToTableName: Text; var XRecordNode: XmlNode)
+    var
+        allObj: Record AllObj;
+        FldRef: FieldRef;
+        FieldNodeID: Integer;
+        XFieldNode: XmlNode;
+        XFieldList: XmlNodeList;
+    begin
+        // Check for renumbering
+        if not allObj.Get(allObj."Object Type"::Table, ImportToTableID) then
+            if ImportToTableName <> '' then begin
+                allObj.SetRange("Object Type", allObj."Object Type"::Table);
+                allObj.SetFilter("Object Name", ConvertStr(ImportToTableName, '_', '?'));
+                if allObj.FindFirst() then
+                    ImportToTableID := allObj."Object ID";
+            end;
+
+        Clear(TmpTargetRef);
+        TmpTargetRef.Open(ImportToTableID, true);
+        XRecordNode.SelectNodes('child::*', XFieldList); // select all element children
+        foreach XFieldNode in XFieldList do begin
+            Evaluate(FieldNodeID, GetAttributeValue(XFieldNode, 'ID'));
+            if TmpTargetRef.FieldExist(FieldNodeID) then begin
+                FldRef := TmpTargetRef.Field(FieldNodeID);
+                if XFieldNode.AsXmlElement().InnerText <> '' then
+                    FldRefEvaluate(FldRef, XFieldNode.AsXmlElement().InnerText);
+            end;
+        end;
+    end;
     #endregion Import
 
     procedure AddAttribute(XNode: XmlNode; AttrName: Text; AttrValue: Text): Boolean
@@ -205,63 +360,6 @@ codeunit 91007 DMTXMLBackup
     begin
         if XNode.AsXmlElement().Attributes().Get(AttrName, XAttribute) then
             exit(XAttribute.Value());
-    end;
-
-    local procedure ExportXML(exportFileBaseName: Text);
-    var
-        xmlFile: Codeunit "Temp Blob";
-    begin
-        CreateBackupXML(xmlFile);
-        CreateExportFileName(exportFileBaseName);
-        DownloadFile(xmlFile, exportFileBaseName, TextEncoding::UTF8);
-
-        //RESET;
-        Clear(TablesList);
-        Clear(GlobalRecordIDList);
-    end;
-
-    procedure GetTableLineCount(_TableID: Integer) _LineCount: Integer;
-    begin
-        _LineCount := GlobalRecordIDList.Get(_TableID).Count;
-    end;
-
-    local procedure AddTable(var _XMLNode_Start: XmlNode; tableID: Integer);
-    var
-        ID: RecordId;
-        recRef: RecordRef;
-        fldRef: FieldRef;
-        i: Integer;
-        keyFieldID: Integer;
-        fieldIDsList: List of [Integer];
-        fieldValueAsText: Text;
-        fieldNode: XmlNode;
-        recordNode: XmlNode;
-        textNode: XmlText;
-    begin
-        foreach ID in GlobalRecordIDList.Get(tableID) do begin
-            recordNode := XmlElement.Create('RECORD').AsXmlNode();
-            _XMLNode_Start.AsXmlElement().Add(recordNode);
-            recRef.Get(ID);
-            fieldIDsList := GetListOfKeyFieldIDs(recRef);
-            // Add Key Fields As Attributes
-            foreach keyFieldID in fieldIDsList do begin
-                fldRef := recRef.Field(keyFieldID);
-                AddAttribute(recordNode, CreateTagName(fldRef.Name), GetFldRefValueAsText(fldRef));
-            end;
-            // Add Fields with Value
-            for i := 1 to recRef.FieldCount do begin
-                fldRef := recRef.FieldIndex(i);
-                if not IsFieldExcluded(fldRef) then
-                    if not FldRefIsEmpty(fldRef) then begin
-                        fieldNode := XmlElement.Create('FIELD').AsXmlNode();
-                        recordNode.AsXmlElement().Add(fieldNode);
-                        AddAttribute(fieldNode, 'ID', Format(fldRef.Number));
-                        fieldValueAsText := GetFldRefValueAsText(fldRef);
-                        textNode := XmlText.Create(fieldValueAsText);
-                        fieldNode.AsXmlElement().Add(textNode);
-                    end;
-            end;
-        end;
     end;
 
     procedure FldRefIsEmpty(FldRef: FieldRef) IsEmpty: Boolean
@@ -417,44 +515,6 @@ codeunit 91007 DMTXMLBackup
         end;
     end;
 
-    procedure CreateFieldDefinitionNode(tableID: Integer) XFieldDefinition: XmlNode
-    var
-        recRef: RecordRef;
-        fldRef: FieldRef;
-        fieldList: Dictionary of [Integer, Text];
-        fieldID: Integer;
-        xField: XmlNode;
-    begin
-        recRef.Open(tableID);
-        recRef.Init();
-        XFieldDefinition := XmlElement.Create('FieldDefinition').AsXmlNode();
-        CreateListOfExportFields(recRef, fieldList);
-        foreach fieldID in fieldList.Keys do begin
-            Clear(fldRef);
-            fldRef := recRef.Field(fieldID);
-            xField := XmlElement.Create('Field').AsXmlNode();
-            AddAttribute(xField, 'Number', Format(fldRef.Number));
-            AddAttribute(xField, 'Type', Format(fldRef.Type));
-            if fldRef.Length <> 0 then
-                AddAttribute(xField, 'Length', Format(fldRef.Length));
-            if fldRef.Class <> FieldClass::Normal then
-                AddAttribute(xField, 'Class', Format(fldRef.Class));
-            if not fldRef.Active then
-                AddAttribute(xField, 'Active', Format(fldRef.Active, 0, 9));
-            AddAttribute(xField, 'Name', Format(fldRef.Name, 0, 9));
-            AddAttribute(xField, 'Caption', Format(fldRef.Caption, 0, 9));
-            if not (fldRef.Type in [FieldType::Blob, FieldType::Media, FieldType::MediaSet]) then
-                AddAttribute(xField, 'InitValue', Format(recRef.Field(fldRef.Number).Value, 0, 9));
-            if fldRef.Type = FieldType::Option then begin
-                AddAttribute(xField, 'OptionCaption', Format(fldRef.OptionCaption));
-                AddAttribute(xField, 'OptionMembers', Format(fldRef.OptionMembers));
-            end;
-            if fldRef.Relation <> 0 then
-                AddAttribute(xField, 'Relation', Format(fldRef.Relation));
-            XFieldDefinition.AsXmlElement().Add(xField);
-        end;
-    end;
-
     procedure CreateTagName(_Name: Text) _TagName: Text;
     begin
         _Name := DelChr(_Name, '=', ' ');
@@ -502,7 +562,7 @@ codeunit 91007 DMTXMLBackup
     var
         uniqueID: Text;
     begin
-        calcAllBlobFields(TmpTargetRef);
+        CalcAllBlobFields(TmpTargetRef);
 
         // map to correct table
         case TmpTargetRef.Name of
@@ -686,12 +746,11 @@ codeunit 91007 DMTXMLBackup
         tempImportWorksheetBuffer.Modify();
     end;
 
-    local procedure deleteExistingRecords(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    local procedure DeleteExistingRecords(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
     var
         recRef: RecordRef;
     begin
         tempImportWorksheetBuffer.Reset();
-        tempImportWorksheetBuffer.SetFilter(ImportAction, '<>%1', tempImportWorksheetBuffer.ImportAction::Skip);
         if not tempImportWorksheetBuffer.FindSet() then
             exit;
         repeat
@@ -717,17 +776,17 @@ codeunit 91007 DMTXMLBackup
         until tempImportWorksheetBuffer.Next() = 0;
     end;
 
-    internal procedure saveRecords(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    internal procedure SaveRecords(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
     begin
         tempImportWorksheetBuffer.Reset();
         if not tempImportWorksheetBuffer.FindSet() then
             exit;
         repeat
-            saveRecordFor(tempImportWorksheetBuffer);
+            SaveRecordFor(tempImportWorksheetBuffer);
         until tempImportWorksheetBuffer.Next() = 0;
     end;
 
-    local procedure saveRecordFor(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    local procedure SaveRecordFor(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
     var
         setup: Record DMTSetup;
         sourceFileStorage: Record DMTSourceFileStorage;
@@ -754,7 +813,7 @@ codeunit 91007 DMTXMLBackup
                 begin
                     TempSourceFileStorage.get(tempImportWorksheetBuffer.SourceRecID);
                     recRef.GetTable(TempSourceFileStorage);
-                    calcAllBlobFields(recRef);
+                    CalcAllBlobFields(recRef);
                     recRef.SetTable(sourceFileStorage);
                     sourceFileStorage.Insert();
                 end;
@@ -762,7 +821,7 @@ codeunit 91007 DMTXMLBackup
                 begin
                     TempSetup.get(tempImportWorksheetBuffer.SourceRecID);
                     recRef.GetTable(TempSetup);
-                    calcAllBlobFields(recRef);
+                    CalcAllBlobFields(recRef);
                     recRef.SetTable(setup);
                     setup.Insert();
                 end;
@@ -770,7 +829,7 @@ codeunit 91007 DMTXMLBackup
                 begin
                     TempCopyTable.get(tempImportWorksheetBuffer.SourceRecID);
                     recRef.GetTable(TempCopyTable);
-                    calcAllBlobFields(recRef);
+                    CalcAllBlobFields(recRef);
                     recRef.SetTable(copyTable);
                     copyTable.Insert();
                 end;
@@ -778,7 +837,7 @@ codeunit 91007 DMTXMLBackup
                 begin
                     TempDataLayout.get(tempImportWorksheetBuffer.SourceRecID);
                     recRef.GetTable(TempDataLayout);
-                    calcAllBlobFields(recRef);
+                    CalcAllBlobFields(recRef);
                     recRef.SetTable(dataLayout);
                     dataLayout.Insert();
                 end;
@@ -786,7 +845,7 @@ codeunit 91007 DMTXMLBackup
                 begin
                     TempImportConfigHeader.get(tempImportWorksheetBuffer.SourceRecID);
                     recRef.GetTable(TempImportConfigHeader);
-                    calcAllBlobFields(recRef);
+                    CalcAllBlobFields(recRef);
                     recRef.SetTable(importConfigHeader);
                     importConfigHeader.Insert();
 
@@ -795,7 +854,7 @@ codeunit 91007 DMTXMLBackup
                     if TempImportConfigLine.FindSet() then
                         repeat
                             recRef.GetTable(TempImportConfigLine);
-                            calcAllBlobFields(recRef);
+                            CalcAllBlobFields(recRef);
                             recRef.SetTable(importConfigLine);
                             importConfigLine.Insert();
                         until TempImportConfigLine.Next() = 0;
@@ -804,7 +863,7 @@ codeunit 91007 DMTXMLBackup
                 begin
                     TempProcessingPlanBatch.get(tempImportWorksheetBuffer.SourceRecID);
                     recRef.GetTable(TempProcessingPlanBatch);
-                    calcAllBlobFields(recRef);
+                    CalcAllBlobFields(recRef);
                     recRef.SetTable(processingPlanBatch);
                     processingPlanBatch.Insert();
 
@@ -813,7 +872,7 @@ codeunit 91007 DMTXMLBackup
                     if processingPlan.FindSet() then
                         repeat
                             recRef.GetTable(processingPlan);
-                            calcAllBlobFields(recRef);
+                            CalcAllBlobFields(recRef);
                             recRef.SetTable(importConfigLine);
                             importConfigLine.Insert();
                         until processingPlan.Next() = 0;
@@ -822,7 +881,7 @@ codeunit 91007 DMTXMLBackup
                 begin
                     TempReplacementHeader.get(tempImportWorksheetBuffer.SourceRecID);
                     recRef.GetTable(TempReplacementHeader);
-                    calcAllBlobFields(recRef);
+                    CalcAllBlobFields(recRef);
                     recRef.SetTable(replacementHeader);
                     replacementHeader.Insert();
 
@@ -831,7 +890,7 @@ codeunit 91007 DMTXMLBackup
                     if TempReplacementLine.FindSet() then
                         repeat
                             recRef.GetTable(TempReplacementLine);
-                            calcAllBlobFields(recRef);
+                            CalcAllBlobFields(recRef);
                             recRef.SetTable(replacementLine);
                             replacementLine.Insert();
                         until TempReplacementLine.Next() = 0;
@@ -841,7 +900,7 @@ codeunit 91007 DMTXMLBackup
         end;
     end;
 
-    local procedure calcAllBlobFields(var targetRef: RecordRef)
+    local procedure CalcAllBlobFields(var targetRef: RecordRef)
     var
         i: Integer;
     begin
@@ -851,71 +910,17 @@ codeunit 91007 DMTXMLBackup
                 targetRef.FieldIndex(i).CalcField();
     end;
 
-    internal procedure CreateBackupXML(var backupXmlFile: Codeunit "Temp Blob")
-    var
-        allObj: Record AllObj;
-        tableID: Integer;
-        fieldDefinitionNode: XmlNode;
-        rootNode: XmlNode;
-        tableNode: XmlNode;
-        oStr: OutStream;
-        backupXMLDocument: XmlDocument;
-    begin
-        // DOKUMENT
-        Clear(backupXMLDocument);
-        backupXMLDocument := XmlDocument.Create();
-
-        // ROOT
-        rootNode := XmlElement.Create('DMT').AsXmlNode();
-        backupXMLDocument.Add(rootNode);
-        AddAttribute(rootNode, 'Version', '2.0');
-
-        // Table Loop
-        foreach tableID in GlobalRecordIDList.Keys do
-            if GetTableLineCount(tableID) > 0 then begin
-                allObj.Get(allObj."Object Type"::Table, tableID);
-                tableNode := XmlElement.Create(CreateTagName(allObj."Object Name")).AsXmlNode();
-                rootNode.AsXmlElement().Add(tableNode);
-
-                AddAttribute(tableNode, 'ID', Format(tableID));
-                AddAttribute(tableNode, 'NAME', ConvertStr(allObj."Object Name", '"', '_'));
-                fieldDefinitionNode := CreateFieldDefinitionNode(tableID);
-                tableNode.AsXmlElement().Add(fieldDefinitionNode);
-                AddTable(tableNode, allObj."Object ID");
-            end;
-        Clear(backupXmlFile);
-        backupXmlFile.CreateOutStream(oStr);
-        backupXMLDocument.WriteTo(oStr);
-    end;
-
-    local procedure CreateExportFileName(var exportFileBaseName: Text)
-    var
-        Company: Record Company;
-    begin
-        // Compose Export Filename
-        if exportFileBaseName = '' then
-            exportFileBaseName := 'Backup_';
-        Company.Get(CompanyName);
-        if Company."Display Name" <> '' then
-            exportFileBaseName += Company."Display Name"
-        else
-            exportFileBaseName += Company.Name;
-        exportFileBaseName += Format(CurrentDateTime, 0, '<Year4><Month,2><Day,2>_<Hours24,2><Minutes,2>_<Seconds,2>');
-        exportFileBaseName += '.xml';
-        exportFileBaseName := ConvertStr(exportFileBaseName, '<>*\/|"', '_______');
-    end;
-
-    internal procedure applyMappings(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    internal procedure RenameIncomingRecordsIfRequired(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
     begin
         tempImportWorksheetBuffer.Reset();
         if not tempImportWorksheetBuffer.FindSet() then
             exit;
         repeat
-            applyMapping(tempImportWorksheetBuffer);
+            RenameIncomingRecordIfRequired(tempImportWorksheetBuffer);
         until tempImportWorksheetBuffer.Next() = 0;
     end;
 
-    local procedure applyMapping(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
+    local procedure RenameIncomingRecordIfRequired(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
     begin
         if tempImportWorksheetBuffer.mappedToID = 0 then
             exit;
@@ -979,36 +984,6 @@ codeunit 91007 DMTXMLBackup
                 end;
             else
                 Error('Type %1 not implemented', tempImportWorksheetBuffer);
-        end;
-    end;
-
-    internal procedure readRecordNode(var TmpTargetRef: RecordRef; ImportToTableID: Integer; ImportToTableName: Text; var XRecordNode: XmlNode)
-    var
-        allObj: Record AllObj;
-        FldRef: FieldRef;
-        FieldNodeID: Integer;
-        XFieldNode: XmlNode;
-        XFieldList: XmlNodeList;
-    begin
-        // Check for renumbering
-        if not allObj.Get(allObj."Object Type"::Table, ImportToTableID) then
-            if ImportToTableName <> '' then begin
-                allObj.SetRange("Object Type", allObj."Object Type"::Table);
-                allObj.SetFilter("Object Name", ConvertStr(ImportToTableName, '_', '?'));
-                if allObj.FindFirst() then
-                    ImportToTableID := allObj."Object ID";
-            end;
-
-        Clear(TmpTargetRef);
-        TmpTargetRef.Open(ImportToTableID, true);
-        XRecordNode.SelectNodes('child::*', XFieldList); // select all element children
-        foreach XFieldNode in XFieldList do begin
-            Evaluate(FieldNodeID, GetAttributeValue(XFieldNode, 'ID'));
-            if TmpTargetRef.FieldExist(FieldNodeID) then begin
-                FldRef := TmpTargetRef.Field(FieldNodeID);
-                if XFieldNode.AsXmlElement().InnerText <> '' then
-                    FldRefEvaluate(FldRef, XFieldNode.AsXmlElement().InnerText);
-            end;
         end;
     end;
 
@@ -1122,7 +1097,6 @@ codeunit 91007 DMTXMLBackup
         TempCopyTable: Record DMTCopyTable temporary;
     #endregion Import Buffer Globals
     var
-        TablesList: List of [Integer];
         GlobalRecordIDList: Dictionary of [Integer, List of [RecordId]];
         ExcludedFields: Dictionary of [Integer, List of [Integer]];
 }

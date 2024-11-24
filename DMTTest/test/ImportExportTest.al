@@ -3,8 +3,8 @@ codeunit 90032 "ImportExportTest"
     Subtype = Test;
     TestPermissions = Disabled;
 
-    [Test]
     // Test that the setup is found after it has been exported, deleted and re-imported
+    [Test]
     procedure "GivenSetupExists_WhenSetupIsExportedAndImported_ThenSetupIsFoundOnImport"()
     var
         tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary;
@@ -26,7 +26,7 @@ codeunit 90032 "ImportExportTest"
         // [WHEN] When importing setup from the backup file
         XmlDocument.ReadFrom(backupXmlFile.CreateInStream(), xmlDoc);
         xmlBackup.ImportTable(tempImportWorksheetBuffer, dmtSetup, xmlDoc);
-        xmlBackup.saveRecords(tempImportWorksheetBuffer);
+        xmlBackup.SaveRecords(tempImportWorksheetBuffer);
         dmtSetupOld.Copy(dmtSetup);
         // [THEN] setup exists 
         if not dmtSetup.FindFirst() then
@@ -36,9 +36,9 @@ codeunit 90032 "ImportExportTest"
             Error('Imported DMT Setup is not identical to the original');
     end;
 
-    [Test]
     // Test that the import of a source file storage record with a conflicting ID will assign a new ID
     // and that the import config header will be updated with the new ID
+    [Test]
     procedure GIVEN_IDIsAlreadyInUse_WHEN_ImportAssignNewID()
     var
         tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary;
@@ -79,8 +79,8 @@ codeunit 90032 "ImportExportTest"
         XmlDocument.ReadFrom(backupFile_CustomerSourceFile.CreateInStream(), xmlDoc);
         xmlBackup.ImportTables(tempImportWorksheetBuffer, xmlDoc);
         xmlBackup.findImportActions(tempImportWorksheetBuffer);
-        xmlBackup.applyMappings(tempImportWorksheetBuffer);
-        xmlBackup.saveRecords(tempImportWorksheetBuffer);
+        xmlBackup.RenameIncomingRecordsIfRequired(tempImportWorksheetBuffer);
+        xmlBackup.SaveRecords(tempImportWorksheetBuffer);
         // [THEN] On Re-Import, the new source table receives a new ID because the ID is already in use
         oldID := sourceFileStorage_Customer."File ID";
         sourceFileStorage_Customer.SetRange(Name, sourceFileStorage_Customer.Name);
@@ -91,10 +91,44 @@ codeunit 90032 "ImportExportTest"
     end;
 
     [Test]
-    procedure GIVEN_ImportConfigForTheSameTargetTableAndFileNameAlreadyExists_WHEN_ImportingWithAddParameter_ANewValidIDIsAssigned()
+    procedure GIVEN_ImportMultipleNewImportConfigs_WHEN_ImportingNewValidIDsAreAssigned()
+    var
+        tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary;
+        importConfigHeader1, importConfigHeader2 : Record DMTImportConfigHeader;
+        xmlBackup: Codeunit DMTXMLBackup;
+        backupXmlFile: Codeunit "Temp Blob";
+        lastUsedID: Integer;
+        xmlDoc: XmlDocument;
     begin
-        // ToDo freie ID wird gefunden
-        // ToDo die neue ID ist nicht im Buffer 
-        Error('Not implemented');
+        //[GIVEN] Import Config Header with the same target table and source file name
+        if importConfigHeader1.FindLast() then
+            lastUsedID := importConfigHeader1."ID";
+        Clear(importConfigHeader1);
+
+        importConfigHeader1."ID" := lastUsedID + 1;
+        importConfigHeader1."Source File Name" := 'DummyFileName1';
+        importConfigHeader1.Insert();
+        xmlBackup.MarkRecordForExport(importConfigHeader1.RecordId);
+
+        importConfigHeader2.ID += lastUsedID + 2;
+        importConfigHeader2."Source File Name" := 'DummyFileName2';
+        importConfigHeader2.Insert();
+        xmlBackup.MarkRecordForExport(importConfigHeader2.RecordId);
+
+        xmlBackup.CreateBackupXML(backupXmlFile);
+
+        importConfigHeader1.Delete(true);
+        importConfigHeader2.Delete(true);
+
+        XmlDocument.ReadFrom(backupXmlFile.CreateInStream(), xmlDoc);
+        xmlBackup.ImportTables(tempImportWorksheetBuffer, xmlDoc);
+        xmlBackup.findImportActions(tempImportWorksheetBuffer);
+        xmlBackup.RenameIncomingRecordsIfRequired(tempImportWorksheetBuffer);
+        xmlBackup.SaveRecords(tempImportWorksheetBuffer);
+
+        importConfigHeader1.SetRecFilter();
+        importConfigHeader1.FindFirst();
+        importConfigHeader2.SetRecFilter();
+        importConfigHeader2.FindFirst();
     end;
 }
