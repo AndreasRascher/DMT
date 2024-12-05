@@ -508,7 +508,7 @@ codeunit 91014 DMTMigrateRecordSet
             // ProgressDialog.UpdateControlWithCustomDuration('Duration', 'Progress');
             Progress.Update(3, Format(CurrentDateTime - Progress_StartTime));
             // ProgressDialog.UpdateProgressBar('Progress', 'Process');
-            Progress.Update(4, (10000 * Progress_NoOfRecordsProcessed / Progress_NoOfSteps) div 1);
+            Progress.Update(4, (10000 * (Progress_NoOfRecordsProcessed / Progress_NoOfSteps)) div 1);
             // ProgressDialog.UpdateFieldControl('TimeRemaining', ProgressDialog.GetRemainingTime('Progress', 'Process'));
             Progress.Update(5, GetRemainingTime(Progress_StartTime, Progress_NoOfRecordsProcessed, Progress_NoOfSteps));
         end;
