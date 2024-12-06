@@ -27,6 +27,7 @@ codeunit 90029 FieldMappingTests
         BuffTableCaptions: Dictionary of [Integer, Text];
     begin
         // [GIVEN] Import Configuration A with source file and field mapping
+        testLibrary.CreateDMTSetup();
         dataTableHelper.SetLine(1, 'ID', 'Name', 'Street');
         dataTableHelper.SetLine(2, '1', 'Test', 'Teststreet 1');
         dataTableHelper.WriteDataTableToFileBlob(tempBlob);

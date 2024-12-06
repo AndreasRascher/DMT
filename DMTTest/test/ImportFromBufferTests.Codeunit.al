@@ -48,6 +48,7 @@ codeunit 90025 DMTImportFromBufferTests
     begin
         // [GIVEN] GivenCustomerDataWithoutNoColumn
         initializeImportConfigForCustomerDataWithoutNoField(importConfigHeader);
+        importConfigHeader.ImportFileToBuffer(); // Reset Imported To RecID
 
         // [GIVEN] NoSeries
         NoSeries.Code := 'DMTTest';

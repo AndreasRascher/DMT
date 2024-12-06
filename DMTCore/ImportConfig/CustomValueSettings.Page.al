@@ -174,6 +174,7 @@ page 91012 DMTCustomValueSettings
         JObj: JsonObject;
         IStr: InStream;
         OStr: OutStream;
+        ImportConfigLine2: Record DMTImportConfigLine;
     begin
         ImportConfigLine.CalcFields("Custom Value Settings");
         ImportConfigLine."Custom Value Settings".CreateInStream(IStr);
@@ -185,6 +186,12 @@ page 91012 DMTCustomValueSettings
         ImportConfigLine."Custom Value Settings".CreateOutStream(OStr);
         JObj.WriteTo(OStr);
         ImportConfigLine.Modify();
+        if ImportConfigLine.IsTemporary then
+            if ImportConfigLine2.Get(ImportConfigLine.RecordId) then begin
+                ImportConfigLine.CalcFields("Custom Value Settings");
+                ImportConfigLine2."Custom Value Settings" := ImportConfigLine."Custom Value Settings";
+                ImportConfigLine2.Modify();
+            end;
     end;
 
     procedure CheckIfNoCanBeIncreased(StartingNo: Text; LastUsedNo: Text)
@@ -297,6 +304,7 @@ page 91012 DMTCustomValueSettings
         importConfigLine: Record DMTImportConfigLine;
         NoSeries: Codeunit "No. Series";
         recID: RecordId;
+        dummy: Text;
     begin
         if noSeriesSettings.Count = 0 then
             exit;
@@ -311,7 +319,7 @@ page 91012 DMTCustomValueSettings
                 Format(NoSeriesTypeGlobal::"BC No. Series"):
                     begin
                         if noSeriesSettings.Get(recID).get('DoIncrement_Yes_No') = 'Increment_Yes' then
-                            noSeries.GetNextNo(CopyStr(noSeriesSettings.Get(recID).Get('BCNoSeriesCode'), 1, 20), 0D, false);
+                            dummy := noSeries.GetNextNo(CopyStr(noSeriesSettings.Get(recID).Get('BCNoSeriesCode'), 1, 20), 0D, false);
                     end;
             end;
             // set to default for next record

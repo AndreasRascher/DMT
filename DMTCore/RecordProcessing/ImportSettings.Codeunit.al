@@ -4,7 +4,7 @@ codeunit 91010 DMTImportSettings
     begin
         ImportConfigHeader(importConfigHeaderNEW);
         SourceTableView(importConfigHeaderNEW.ReadLastUsedSourceTableView());
-        SetRecordsToProcessLimits(1, importConfigHeaderNEW."Max No. of Records to Process");
+        SetRecordsToProcessLimits(1/*Import Config Header doesnt support start no as processing plan does*/, importConfigHeaderNEW."Max No. of Records to Process");
         case migrationType of
             migrationType::MigrateRecords:
                 begin
