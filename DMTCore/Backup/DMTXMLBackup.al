@@ -312,7 +312,7 @@ codeunit 91007 DMTXMLBackup
         OK := XRecordList.Count > 0;
         foreach XRecordNode in XRecordList do begin
             readRecordNode(tmpTargetRef, targetRef.Number, targetRef.Name, XRecordNode);
-            processImportedRecord(tempImportWorksheetBuffer, tmpTargetRef);
+            saveImportedRecToTemp(tempImportWorksheetBuffer, tmpTargetRef);
         end;
     end;
 
@@ -558,7 +558,7 @@ codeunit 91007 DMTXMLBackup
     /// <summary>
     /// <p>Process the imported record and insert it into global temp table</p>
     /// </summary>
-    local procedure processImportedRecord(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary; TmpTargetRef: RecordRef)
+    local procedure saveImportedRecToTemp(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary; TmpTargetRef: RecordRef)
     var
         uniqueID: Text;
     begin
@@ -748,6 +748,9 @@ codeunit 91007 DMTXMLBackup
 
     local procedure DeleteExistingRecords(var tempImportWorksheetBuffer: Record DMTImportWorksheetBuffer temporary)
     var
+        importConfigHeader: Record DMTImportConfigHeader;
+        importConfigLine: Record DMTImportConfigLine;
+        sourceFileStorage: Record DMTSourceFileStorage;
         recRef: RecordRef;
     begin
         tempImportWorksheetBuffer.Reset();
@@ -758,16 +761,27 @@ codeunit 91007 DMTXMLBackup
                 // Delete existing record
                 case tempImportWorksheetBuffer.Type of
                     Enum::DMTBackupEntity::" ",
-                    Enum::DMTBackupEntity::"Source File",
                     Enum::DMTBackupEntity::Setup,
                     Enum::DMTBackupEntity::"Copy Table",
                     Enum::DMTBackupEntity::"Data Layout",
-                    Enum::DMTBackupEntity::"Import Config",
                     Enum::DMTBackupEntity::"Proc.Plan Batch",
                     Enum::DMTBackupEntity::Replacement:
                         begin
                             recRef.Get(tempImportWorksheetBuffer.SourceRecID);
                             recRef.Delete(true);
+                        end;
+                    Enum::DMTBackupEntity::"Source File":
+                        begin
+                            sourceFileStorage.Get(tempImportWorksheetBuffer.SourceRecID);
+                            sourceFileStorage.Delete();
+                        end;
+                    Enum::DMTBackupEntity::"Import Config":
+                        begin
+                            importConfigHeader.Get(tempImportWorksheetBuffer.SourceRecID);
+                            importConfigLine.SetRange("Imp.Conf.Header ID", importConfigHeader.ID);
+                            importConfigLine.DeleteAll();
+                            importConfigHeader.Delete();
+                            //TODO GenBufferZeilen löschen?
                         end;
                     else
                         Error('Type %1 not implemented', tempImportWorksheetBuffer.Type);
@@ -958,10 +972,12 @@ codeunit 91007 DMTXMLBackup
                 begin
                     TempImportConfigHeader.get(tempImportWorksheetBuffer.SourceRecID);
 
-                    TempImportConfigLine.Reset();
-                    TempImportConfigLine.SetRange("Imp.Conf.Header ID", TempImportConfigHeader.ID);
-                    while TempImportConfigLine.FindFirst() do begin
-                        TempImportConfigLine.Rename(tempImportWorksheetBuffer.mappedToID, TempImportConfigLine."Target Field No.");
+                    if (tempImportWorksheetBuffer.mappedToID <> TempImportConfigHeader.ID) and (tempImportWorksheetBuffer.mappedToID <> 0) then begin
+                        TempImportConfigLine.Reset();
+                        TempImportConfigLine.SetRange("Imp.Conf.Header ID", TempImportConfigHeader.ID);
+                        while TempImportConfigLine.FindFirst() do begin
+                            TempImportConfigLine.Rename(tempImportWorksheetBuffer.mappedToID, TempImportConfigLine."Target Field No.");
+                        end;
                     end;
 
                     TempReplacementLine.Reset();

@@ -27,7 +27,6 @@ codeunit 90032 "ImportExportTest"
         XmlDocument.ReadFrom(backupXmlFile.CreateInStream(), xmlDoc);
         xmlBackup.ImportTable(tempImportWorksheetBuffer, dmtSetup, xmlDoc);
         xmlBackup.SaveRecords(tempImportWorksheetBuffer);
-        dmtSetupOld.Copy(dmtSetup);
         // [THEN] setup exists 
         if not dmtSetup.FindFirst() then
             Error('DMT Setup has not been imported');
@@ -126,9 +125,11 @@ codeunit 90032 "ImportExportTest"
         xmlBackup.RenameIncomingRecordsIfRequired(tempImportWorksheetBuffer);
         xmlBackup.SaveRecords(tempImportWorksheetBuffer);
 
+#pragma warning disable AA0175
         importConfigHeader1.SetRecFilter();
         importConfigHeader1.FindFirst();
         importConfigHeader2.SetRecFilter();
         importConfigHeader2.FindFirst();
+#pragma warning restore AA0175
     end;
 }
