@@ -91,9 +91,9 @@ codeunit 91014 DMTMigrateRecordSet
         // Progress
         Progress_StartTime := CurrentDateTime; // needed for duration calculation in log entry
         if migrationType = migrationType::RetryErrors then
-            PrepareProgressBar(importConfigHeader, RecIdList.Count)
+            PrepareProgressBar(importConfigHeader, RecIdList.Count, importSettings, false)
         else
-            PrepareProgressBar(importConfigHeader, bufferRef.Count);
+            PrepareProgressBar(importConfigHeader, bufferRef.Count, importSettings, true);
 
         noOfRecordsProcessed := processRecords(importSettings, migrationType, log, bufferRef, RecIdList, iReplacementHandler, iTriggerLog);
 
@@ -254,7 +254,7 @@ codeunit 91014 DMTMigrateRecordSet
     end;
 
 
-    local procedure MoveNext(var bufferRef: RecordRef; var RecIdList: List of [RecordId]; noOfRecordsProcessed: Integer; migrationType: Enum DMTMigrationType) OK: Boolean
+    local procedure MoveNext(var bufferRef: RecordRef; loopCount: Integer; var RecIdList: List of [RecordId]; noOfRecordsProcessed: Integer; migrationType: Enum DMTMigrationType) OK: Boolean
     begin
         case migrationType of
             // Retry Errors - Step through RecID List
@@ -268,7 +268,7 @@ codeunit 91014 DMTMigrateRecordSet
             // First Record from buffer table
             migrationType::MigrateRecords, migrationType::MigrateSelectsFields, migrationType::ApplyFixValuesToTarget:
                 begin
-                    if (noOfRecordsProcessed = 0) then
+                    if loopCount = 0 then
                         OK := bufferRef.FindSet()
                     else
                         OK := (bufferRef.Next() <> 0);
@@ -456,16 +456,27 @@ codeunit 91014 DMTMigrateRecordSet
             until importConfigLine.Next() = 0;
     end;
 
-    procedure PrepareProgressBar(var
-                                     ImportConfigHeader: Record DMTImportConfigHeader;
-                                     noOfRecordsToProcess: Integer)
+    procedure PrepareProgressBar(var ImportConfigHeader: Record DMTImportConfigHeader; noOfRecordsToProcess: Integer; var importSettings: Codeunit DMTImportSettings; applyLimits: Boolean)
     var
         MaxWith: Integer;
         DurationLbl: Label 'Duration', Comment = 'de-DE=Dauer';
         TimeRemainingLbl: Label 'Time Remaining', Comment = 'de-DE=Verbleibende Zeit';
         ProgressBarTitle: Text;
         ProgressBarText: TextBuilder;
+        RecordsToProcessLimit, RecordsToProcessStartPos : Integer;
+        debug: Text;
     begin
+        // Use Limit or all records for progress
+        if applyLimits then begin
+            RecordsToProcessLimit := importSettings.RecordsToProcessLimit();
+            RecordsToProcessStartPos := importSettings.RecordsToProcessStartPos();
+            if RecordsToProcessStartPos > 0 then
+                noOfRecordsToProcess := noOfRecordsToProcess - (RecordsToProcessStartPos - 1);
+            if RecordsToProcessLimit <> 0 then
+                if RecordsToProcessLimit < noOfRecordsToProcess then
+                    noOfRecordsToProcess := RecordsToProcessLimit;
+        end;
+
         Progress_UpdateThresholdInMS := 1000; // 1 Seconds
         ProgressBarTitle := ImportConfigHeader."Target Table Caption";
         MaxWith := 100 - 40;
@@ -504,7 +515,7 @@ codeunit 91014 DMTMigrateRecordSet
         end;
         if Progress_DoUpdate() then begin
             // ProgressDialog.UpdateFieldControl('NoofRecord', StrSubstNo('%1 / %2', ProgressDialog.GetStep('Process'), ProgressDialog.GetTotalStep('Process')));
-            Progress.Update(2, StrSubstNo('%1 / %2', Progress_NoOfRecordsProcessed, Progress_NoOfSteps));
+            Progress.Update(2, StrSubstNo('%1 / %2', format(Progress_NoOfRecordsProcessed, 0, '<Integer Thousand>'), format(Progress_NoOfSteps, 0, '<Integer Thousand>')));
             // ProgressDialog.UpdateControlWithCustomDuration('Duration', 'Progress');
             Progress.Update(3, Format(CurrentDateTime - Progress_StartTime));
             // ProgressDialog.UpdateProgressBar('Progress', 'Process');
@@ -582,7 +593,7 @@ codeunit 91014 DMTMigrateRecordSet
         noMaxNoOfRecords := importSettings.RecordsToProcessLimit();
         startPos := importSettings.RecordsToProcessStartPos();
 
-        while MoveNext(bufferRef, RecIdList, noOfRecordsProcessed, migrationType) do begin
+        while MoveNext(bufferRef, loopCount, RecIdList, noOfRecordsProcessed, migrationType) do begin
             loopCount += 1;
             // Limit is defined and reached
             if (noMaxNoOfRecords <> 0) and (noOfRecordsProcessed = noMaxNoOfRecords) then
