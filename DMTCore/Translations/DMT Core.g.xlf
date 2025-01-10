@@ -1853,6 +1853,16 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Feld hinzufügen/entfernen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Action AddField - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3333708309 - Action 321739984 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Count Lines in Buffer</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Zeilen zählen (Puffertab.)</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Action CountLinesInSource - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3333708309 - Action 321739984 - Method 1377591017 - NamedType 1392962668" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filter:%1 \ No. of Lines in Filter: %2</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTProcessInstructionFactBox - Action CountLinesInSource - Method OnAction - NamedType NoOfLinesInFilterLbl</note>
+        </trans-unit>
         <trans-unit id="Page 3333708309 - Action 746276264 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Edit</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Bearbeiten</note>

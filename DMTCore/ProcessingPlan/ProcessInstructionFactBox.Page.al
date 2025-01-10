@@ -56,6 +56,33 @@ page 91016 DMTProcessInstructionFactBox
                     CurrPage.Update(false);
                 end;
             }
+            action(CountLinesInSource)
+            {
+                Caption = 'Count Lines in Buffer', Comment = 'de-DE=Zeilen zählen (Puffertab.)';
+                ApplicationArea = All;
+                Image = CalcWorkCenterCalendar;
+                Visible = IsSourceTableFilterView;
+                trigger OnAction()
+                var
+                    importConfigHeader: Record DMTImportConfigHeader;
+                    fieldSelection: Page DMTFieldSelection;
+                    RecRef: RecordRef;
+                    NoOfLinesInFilterLbl: Label 'Filter:%1 \ No. of Lines in Filter: %2', Comment = 'de-DE=Filter:%1 \ Anzahl Zeilen im Filter: %2';
+                    TargetTableFilter, TargetTableView : Text;
+                begin
+                    if not CurrProcessingPlan.findImportConfigHeader(importConfigHeader) then
+                        exit;
+                    importConfigHeader.BufferTableMgt().InitBufferRef(RecRef);
+                    TargetTableView := CurrProcessingPlan.ReadSourceTableView();
+                    if TargetTableView <> '' then
+                        RecRef.SetView(TargetTableView);
+                    if fieldSelection.EditSourceTableFilters(RecRef, importConfigHeader) then begin
+                        TargetTableView := RecRef.GetView();
+                        TargetTableFilter := RecRef.GetFilters;
+                        Message(NoOfLinesInFilterLbl, TargetTableFilter, RecRef.Count);
+                    end;
+                end;
+            }
             action(AddField)
             {
                 Caption = 'Add/Remove Field', Comment = 'de-DE=Feld hinzufügen/entfernen';
