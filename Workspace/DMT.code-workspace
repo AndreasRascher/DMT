@@ -17,11 +17,11 @@
 			"version": "0.2.0",
 			"configurations": [
 				{
-					"name": "BC24",
+					"name": "BC25",
 					"type": "al",
 					"request": "launch",
 					"environmentType": "OnPrem",
-					"server": "http://bc24/",
+					"server": "http://bc25/",
 					"serverInstance": "BC",
 					"authentication": "UserPassword",
 					"startupObjectType": "Page",

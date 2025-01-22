@@ -69,33 +69,6 @@ page 91005 DMTSourceFiles
                     SourceFileMgt.DownloadSourceFile(Rec);
                 end;
             }
-            action(ImportFileFromWebDAV)
-            {
-                Image = Web;
-                Caption = 'Import File from WebDAV', Comment = 'de-DE=Datei von WebDAV importieren';
-                ApplicationArea = All;
-                trigger OnAction()
-                var
-                    sourceFileMgt: Codeunit DMTSourceFileMgt;
-                    TempBlob: Codeunit "Temp Blob";
-                    WebDAVFileBrowser: Page WebDAVFileBrowser;
-                    IStr: InStream;
-                    OStr: OutStream;
-                    RunAction: Action;
-                    Length: Integer;
-                begin
-                    // WebDAVFileBrowser.LookupMode(true);
-                    RunAction := WebDAVFileBrowser.RunModal();
-                    if WebDAVFileBrowser.hasSelectedFile() then begin
-                        TempBlob.CreateInStream(IStr);
-                        WebDAVFileBrowser.downloadSelectedFile(IStr);
-                        TempBlob.CreateOutStream(OStr);
-                        CopyStream(OStr, IStr);
-                        Length := TempBlob.Length();
-                        sourceFileMgt.AddFileToStorage(WebDAVFileBrowser.getSetSelectedRecord().Name, TempBlob);
-                    end;
-                end;
-            }
         }
         area(Promoted)
         {

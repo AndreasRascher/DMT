@@ -15,7 +15,6 @@ permissionset 91000 GeneratedPermission
         tabledata DMTSetup = RIMD,
         tabledata DMTSourceFileStorage = RIMD,
         tabledata DMTTriggerLogEntry = RIMD,
-        tabledata DMTWebDAVFile = RIMD,
         table DMTBlobStorage = X,
         table DMTDataLayout = X,
         table DMTDataLayoutLine = X,
@@ -30,7 +29,6 @@ permissionset 91000 GeneratedPermission
         table DMTSetup = X,
         table DMTSourceFileStorage = X,
         table DMTTriggerLogEntry = X,
-        table DMTWebDAVFile = X,
         codeunit DMTChangeRecordWithPerm = X,
         codeunit DMTDefaultSourceFileImportImpl = X,
         codeunit DMTDeleteRecordsWithErrorLog = X,
@@ -53,7 +51,6 @@ permissionset 91000 GeneratedPermission
         codeunit DMTSessionStorage = X,
         codeunit DMTSourceFileMgt = X,
         codeunit DMTTriggerLogImpl = X,
-        codeunit DMTWebDAVClient = X,
         codeunit DMTXMLBackup = X,
         codeunit ReplacementHandlerImpl2 = X,
         xmlport DMTCSVReader = X,
@@ -82,6 +79,5 @@ permissionset 91000 GeneratedPermission
         page DMTReplacementRulePart = X,
         page DMTSourceFiles = X,
         page DMTTriggerLogEntries = X,
-        page WebDAVFileBrowser = X,
         query DMTLogQry = X;
 }

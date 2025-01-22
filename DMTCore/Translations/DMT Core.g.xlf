@@ -18,66 +18,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Herkunftsfeld Nr.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTBlobStorage - Field Source Field No. - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2465824826 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>DMT Copy Table</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=DMT Tabellen kopieren</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2465824826 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Description</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Beschreibung</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field Description - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2465824826 - Field 2392829959 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Filter</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Filter</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field FilterText - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2465824826 - Field 523320669 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import Only New Records</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Nur neue Datensätze importieren</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field Import Only New Records - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2465824826 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Line No.</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Zeilennr.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field Line No. - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2465824826 - Field 1945179778 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No. of Records imported</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Anz. importiert</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field No. of Records inserted - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2465824826 - Field 2835452692 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No. of Records (Target)</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Anz. Datensätze (Ziel)</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field No. of Records(Target) - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2465824826 - Field 2927347786 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Processing Time</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Bearbeitungzeit</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field Processing Time - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2465824826 - Field 3041449367 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Copy from Company</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Kopieren aus Mandant</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field SourceCompanyName - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2465824826 - Field 1393533604 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Table Caption</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Tabellen Bezeichnung</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field Table Caption - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2465824826 - Field 3017471043 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Table No.</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Tabellen ID</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field Table No. - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2465824826 - Field 4113082709 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>TableView</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTCopyTable - Field TableView - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 4224547593 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Data Layout</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Datenlayout</note>
@@ -928,31 +868,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Zugewiesener Wert</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table DMTTriggerLogEntry - Field Value Assigned - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 523974668 - Field 3968297008 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Is Folder</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Ist Ordner</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTWebDAVFile - Field Is Folder - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 523974668 - Field 3374796909 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Last Modified</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Letzte Änderung</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTWebDAVFile - Field LastModified - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 523974668 - Field 2961552353 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Name</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Name</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTWebDAVFile - Field Name - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 523974668 - Field 2206733951 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Path</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Pfad</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTWebDAVFile - Field Path - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 523974668 - Field 3964473375 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Size</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Größe</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table DMTWebDAVFile - Field Size - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Codeunit 484048500 - Method 2689460527 - NamedType 1044229085" size-unit="char" translate="yes" xml:space="preserve">
           <source>too large field values have been cut off. Max. string length is 250 chars.\Filename: "%1"\Columns: "%2."</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Zu lange Feldwerte wurden abgeschnitten. Max. Textlänge ist 250 Zeichen.\Dateiname: "%1"\Betroffene Spalten: "%2."</note>
@@ -982,16 +897,6 @@
           <source>%1 is not initialized</source>
           <note from="Developer" annotates="general" priority="2">de-DE=%1 ist nicht initialisiert</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTImportSettings - Method ImportConfigHeader - NamedType notInitializedErr</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1185200660 - Method 865639783 - NamedType 1254459490" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import finished</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Import abgeschlossen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLicenseMgt - Method ReadLicensedObjectsFromImportedPemissionsReport - NamedType ImportFinishedMsg</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1185200660 - Method 865639783 - NamedType 659472064" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Upload Permission Report Detailed</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Permission Report Detailed hochladen</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTLicenseMgt - Method ReadLicensedObjectsFromImportedPemissionsReport - NamedType UploadFileMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 3774911051 - Method 4006425096 - NamedType 2696288649" size-unit="char" translate="yes" xml:space="preserve">
           <source>Assigned Values have been changed by triggers</source>
@@ -1182,21 +1087,6 @@
           <source>Delete all lines in Gen. Buffer Table?</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Alle Zeilen in gen. Puffertabelle löschen?</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMT Setup - Action ClearGenBuffer - Method OnAction - NamedType deleteGenBufferLinesQst</note>
-        </trans-unit>
-        <trans-unit id="Page 1275022656 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>DMT Copy Table List</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=DMT Tabellen kopieren</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCopyTableList - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1275022656 - Method 2050241899 - NamedType 2541077575" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Copying Table ###########################1#</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Kopiere Tabelle ###########################1#</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCopyTableList - Method CopyDataFromSourceCompany - NamedType progressTxt</note>
-        </trans-unit>
-        <trans-unit id="Page 1275022656 - Action 1629856273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Copy Tables</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Tabellen kopieren</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTCopyTableList - Action CopyDataFromSourceCompanyAction - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 107618972 - Method 4210513733 - NamedType 1881128055" size-unit="char" translate="yes" xml:space="preserve">
           <source>Invalid Starting No. %1</source>
@@ -1958,11 +1848,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE=Datei runterladen</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTSourceFiles - Action DownloadFile - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 698368471 - Action 2708485306 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import File from WebDAV</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Datei von WebDAV importieren</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTSourceFiles - Action ImportFileFromWebDAV - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 698368471 - Action 1139572727 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Upload File</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Datei hochladen</note>
@@ -1972,31 +1857,6 @@
           <source>DMT Trigger Log Entries</source>
           <note from="Developer" annotates="general" priority="2">de-DE=DMT Trigger Protokollposten</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTTriggerLogEntries - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1983903763 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>WebDAV File Browser</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=WebDAV Datei Browser</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WebDAVFileBrowser - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1983903763 - Control 486669812 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Authentication</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Authentifizierung</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WebDAVFileBrowser - Control Authentication - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1983903763 - Control 2575460289 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Password</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Passwort</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WebDAVFileBrowser - Control Password - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1983903763 - Control 3549826426 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>User Name</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Benutzername</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WebDAVFileBrowser - Control UserName - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1983903763 - Control 4266135001 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Selected File</source>
-          <note from="Developer" annotates="general" priority="2">de-DE=Ausgewählte Datei</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WebDAVFileBrowser - Control SelectedFile - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 89294914 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>GenBufferImport</source>
