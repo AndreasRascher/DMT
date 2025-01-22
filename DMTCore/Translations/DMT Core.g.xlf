@@ -1213,6 +1213,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldLookUp - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3007536070 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fields</source>
+          <note from="Developer" annotates="general" priority="2">de-DE=Felder</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldLookupOld - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2803682913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Field Selection</source>
           <note from="Developer" annotates="general" priority="2">de-DE=Felderauswahl</note>

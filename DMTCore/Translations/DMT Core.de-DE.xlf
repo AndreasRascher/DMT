@@ -1191,12 +1191,6 @@
           <note from="Developer" annotates="general" priority="2">de-DE="%1" ist kein gültiger %2 Wert</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTRefHelper - Method EvaluateFieldRef - NamedType InvalidValueForTypeErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 1536080462 - Method 1564743796 - NamedType 2382675972" size-unit="char" translate="yes" xml:space="preserve">
-          <source>“%1” could not be converted into an integer (option index no.)</source>
-          <target state="translated">"%1" konnte nicht in eine Ganzzahl (Optionsindex Nr.) umgewandelt werden.</target>
-          <note from="Developer" annotates="general" priority="2">de-DE="%1" konnte nicht in eine Ganzzahl (Optionsindex Nr.) umgewandelt werden.</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit DMTRefHelper - Method EvaluateFieldRef - NamedType InvalidOptionPosValueErr</note>
-        </trans-unit>
         <trans-unit id="Codeunit 107245564 - Method 705889565 - NamedType 935989145" size-unit="char" translate="yes" xml:space="preserve">
           <source>Buffer Table %1 not found.\Import Config Header\ID:"%2"\Filename:"%3"</source>
           <target state="translated">Eine Puffertabelle mit der ID %1 wurde nicht gefunden.\Importkonfiguration\ID:"%2"\Dateiname:"%3"</target>
@@ -1461,6 +1455,12 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldLookUp - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 3007536070 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Fields</source>
+          <target state="translated">Felder</target>
+          <note from="Developer" annotates="general" priority="2">de-DE=Felder</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldLookupOld - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2803682913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Field Selection</source>
           <target state="translated">Felderauswahl</target>
@@ -1496,18 +1496,6 @@
           <target state="translated">Wählen Sie Felder zur Verarbeitung aus.</target>
           <note from="Developer" annotates="general" priority="2">de-DE=Wählen Sie Felder zur Verarbeitung aus.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page DMTFieldSelection - Method SetUsage_SetSelectFieldsToProcess - NamedType pageCaptionTxt</note>
-        </trans-unit>
-        <trans-unit id="Page 4209446702 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>DMT GenBufferList</source>
-          <target state="translated">DMT Generischer Puffer Übersicht</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=DMT Generischer Puffer Übersicht</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTGenBufferList100 - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 710484217 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>DMT GenBufferList</source>
-          <target state="translated">DMT Generischer Puffer Übersicht</target>
-          <note from="Developer" annotates="general" priority="2">de-DE=DMT Generischer Puffer Übersicht</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page DMTGenBufferList150 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3863436688 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>DMT GenBufferList</source>
