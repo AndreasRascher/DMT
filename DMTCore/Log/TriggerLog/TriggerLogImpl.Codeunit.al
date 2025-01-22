@@ -11,7 +11,7 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
 
     internal procedure CheckAfterValidate(TmpTargetRef: RecordRef)
     var
-        changedFields: Dictionary of [Integer/*FieldNo*/, List of [Text]/*1:FromValue 2:ToValue*/];
+        changedFields: Dictionary of [Integer, List of [Text]];
         fromValueToValueList: list of [Text];
         changedFieldNo: Integer;
         varsToCompareNotInitializedErr: Label 'The variables to compare are not initialized.', Comment = 'de-DE=Die Variablen zum Vergleichen sind nicht initialisiert.';
@@ -43,7 +43,7 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
 
     internal procedure CheckAfterOnModiy(TargetRef: RecordRef)
     var
-        changedFields: Dictionary of [Integer/*FieldNo*/, List of [Text]/*1:FromValue 2:ToValue*/];
+        changedFields: Dictionary of [Integer, List of [Text]];
         fromValueToValueList: list of [Text];
         changedFieldNo: Integer;
     begin
@@ -64,7 +64,7 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
 
     internal procedure CheckAfterOnInsert(TargetRef: RecordRef)
     var
-        changedFields: Dictionary of [Integer/*FieldNo*/, List of [Text]/*1:FromValue 2:ToValue*/];
+        changedFields: Dictionary of [Integer, List of [Text]];
         fromValueToValueList: list of [Text];
         changedFieldNo: Integer;
     begin
@@ -85,7 +85,6 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
     begin
         Clear(changedFields);
         for fieldIndex := 1 to recRefFrom.FieldCount do begin
-            // ignore system fields
             if not (recRefTO.FieldIndex(fieldIndex).Number in [recRefTO.SystemCreatedAtNo, recRefTO.SystemCreatedByNo,
                                                                recRefTO.SystemModifiedByNo, recRefTO.SystemModifiedAtNo,
                                                                recRefTO.SystemIdNo]) then
@@ -135,7 +134,6 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
 
         TempTriggerLogEntryGlobal."Old Value (Trigger)" := CopyStr(fromValueToValueList.Get(1), 1, MaxStrLen(TempTriggerLogEntryGlobal."Old Value (Trigger)"));
         TempTriggerLogEntryGlobal."New Value (Trigger)" := CopyStr(fromValueToValueList.Get(2), 1, MaxStrLen(TempTriggerLogEntryGlobal."New Value (Trigger)"));
-        // we only know the value that is validated, not what happens in the trigger
         if validateFieldNo = changedFieldNo then
             TempTriggerLogEntryGlobal."Value Assigned" := CopyStr(formatField250(sourceField), 1, MaxStrLen(TempTriggerLogEntryGlobal."Value Assigned"));
         TempTriggerLogEntryGlobal.Insert();
@@ -173,18 +171,15 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
     begin
         if TempTriggerLogEntryGlobal.IsEmpty then
             exit;
-        //KeepOnlyFieldsChangedMoreThanOnce(); //Unklar, bei Name -> Suchname wird der Eintrag gelöscht
         if TempTriggerLogEntryGlobal.FindSet() then begin
             nextEntryNo := triggerLogEntry.GetNextEntryNo();
             repeat
                 triggerLogEntry := TempTriggerLogEntryGlobal;
                 triggerLogEntry."Entry No." := nextEntryNo;
                 nextEntryNo += 1;
-                //Filter information
                 triggerLogEntry."Owner RecordID" := importConfigHeader.RecordId;
                 triggerLogEntry.SourceFileName := importConfigHeader."Source File Name";
                 triggerLogEntry."Source ID" := SourceRef.RecordId;
-
                 triggerLogEntry.Insert();
             until TempTriggerLogEntryGlobal.Next() = 0;
         end;
