@@ -6,10 +6,6 @@
 		{
 			"path": "..\\DMTCore",
 			"name": "APP Core"
-		},
-		{
-			"path": "..\\DMTOnPrem",
-			"name": "APP OnPrem"
 		}
 	],
 	"settings": {
