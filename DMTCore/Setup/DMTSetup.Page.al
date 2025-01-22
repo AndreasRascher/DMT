@@ -44,7 +44,6 @@ page 91000 "DMT Setup"
                         Choice := StrMenu(Choices, NoOfChoices + 2, StopSessionInstructionLbl);
                         if Choice <> 0 then
                             case true of
-                                //StopAllOtherSessions
                                 (Choice = NoOfChoices + 1):
                                     begin
                                         foreach SessionListID in SessionList do begin
@@ -52,14 +51,13 @@ page 91000 "DMT Setup"
                                                 if StopSession(SessionListID) then;
                                         end;
                                     end;
-                                //Cancel
                                 (Choice = NoOfChoices + 2):
                                     begin
 
                                     end;
                             end;
                         if Choice <= NoOfChoices then begin
-                            if Choice <> 0 then // Cancel Menu
+                            if Choice <> 0 then
                                 Message('%1', StopSession(SessionList.Get(Choice)));
                         end;
                     end;
@@ -123,7 +121,6 @@ page 91000 "DMT Setup"
                     XMLBackup: Codeunit DMTXMLBackup;
                 begin
                     XMLBackup.Import();
-                    // Update imported "Qty.Lines In Trgt. Table" with actual values
                     if ImportConfigHeader.FindSet() then
                         repeat
                             ImportConfigHeader.UpdateBufferRecordCount();

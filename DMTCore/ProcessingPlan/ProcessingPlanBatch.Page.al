@@ -43,7 +43,6 @@ page 91017 DMTProcessingPlan
                 IndentationColumn = Rec.Indentation;
                 IndentationControls = Description;
                 ShowAsTree = true;
-                // Visible = ShowTreeView;
                 field("Line Type"; Rec.Type) { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(ImportConfigHeaderID; Rec.ID)
                 {
@@ -59,13 +58,6 @@ page 91017 DMTProcessingPlan
                 field(ProcessingTime; Rec."Processing Duration") { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(StartTime; Rec.StartTime) { ApplicationArea = All; StyleExpr = LineStyle; }
                 field(Status; Rec.Status) { ApplicationArea = All; StyleExpr = LineStyle; }
-                // field("Source Table No."; Rec."Source Table No.")
-                // {
-                //     ApplicationArea = All;
-                //     StyleExpr = LineStyle;
-                //     ToolTip = 'Defining the source table no. for which a filter as event is provided for rows of type Codeunit.',
-                //     comment = 'de-DE=Gibt die Herkunftstabellennr. an für die bei Zeilen der Art Codeunit ein Filter als Event bereitgestellt werden soll.';
-                // }
                 field("Line No."; Rec."Line No.") { ApplicationArea = All; Visible = false; StyleExpr = LineStyle; }
                 field("Target Table ID"; Rec."Target Table ID") { ApplicationArea = All; StyleExpr = LineStyle; Visible = false; HideValue = TargetTableID_HideValue; Lookup = false; DrillDown = false; }
                 field("No. of Records In Trgt. Table"; CurrImportConfigHeader.GetNoOfRecordsInTrgtTable())
@@ -146,7 +138,6 @@ page 91017 DMTProcessingPlan
         {
             action(Start)
             {
-                // Caption = 'Start', Comment = 'de-DE=Ausführen';
                 Caption = ' ', Locked = true;
                 ToolTip = 'Start', Comment = 'de-DE=Ausführen';
                 ApplicationArea = All;
@@ -189,10 +180,8 @@ page 91017 DMTProcessingPlan
             }
             action(DeleteLine)
             {
-                // Caption = 'Delete', Comment = 'de-DE=Löschen';
                 Caption = ' ', Locked = true;
                 ToolTip = 'Delete', Comment = 'de-DE=Löschen';
-                // ShortcutKey = 'Ctrl+Delete'; //TODO ShortcutKey geht nicht, Ctrl+ ist richtig
                 Image = Delete;
                 trigger OnAction()
                 var
@@ -203,12 +192,10 @@ page 91017 DMTProcessingPlan
                 begin
                     if GetSelection(TempProcessingPlan_SELECTED) then
                         if TempProcessingPlan_SELECTED.FindSet() then begin
-                            // confirm if more than one line is selected
                             if TempProcessingPlan_SELECTED.Count > 1 then
                                 doDeleteLines := Confirm(StrSubstNo(DeleteSelectedLinesQst, TempProcessingPlan_SELECTED.Count))
                             else
                                 doDeleteLines := true;
-                            // delete selected lines
                             if doDeleteLines then
                                 repeat
                                     processingPlan.Get(TempProcessingPlan_SELECTED.RecordId);
@@ -219,7 +206,6 @@ page 91017 DMTProcessingPlan
             }
             action(IndentLeft)
             {
-                // Caption = 'Indent Left', Comment = 'de-DE=Links einrücken';
                 Caption = ' ', Locked = true;
                 ToolTip = 'Indent Left', Comment = 'de-DE=Links einrücken';
                 ApplicationArea = All;
@@ -234,7 +220,6 @@ page 91017 DMTProcessingPlan
             }
             action(IndentRight)
             {
-                // Caption = 'Indent Right', Comment = 'de-DE=Rechts einrücken';
                 Caption = ' ', Locked = true;
                 ToolTip = 'Indent Right', Comment = 'de-DE=Rechts einrücken';
                 ApplicationArea = All;
@@ -249,7 +234,6 @@ page 91017 DMTProcessingPlan
             }
             action(CloneCurrLine)
             {
-                // Caption = 'Indent Right', Comment = 'de-DE=Rechts einrücken';
                 Caption = ' ', Locked = true;
                 ToolTip = 'Clone Line', Comment = 'de-DE=Zeile klonen';
                 ApplicationArea = All;
@@ -308,10 +292,8 @@ page 91017 DMTProcessingPlan
                     RecordsToExport: List of [RecordId];
                 begin
                     TableMetadata.Get(Database::DMTProcessingPlan);
-                    // Export Batch
                     processingPlanBatch.Get(CurrentJnlBatchName);
                     RecordsToExport.Add(processingPlanBatch.RecordId);
-                    // Export Batch Lines
                     processingPlan.SetRange("Journal Batch Name", CurrentJnlBatchName);
                     if processingPlan.FindSet(false) then
                         repeat
@@ -546,19 +528,15 @@ page 91017 DMTProcessingPlan
         OldLineNo, NewLineNo : Integer;
     begin
         if not ProcessingPlan.FindSet() then exit;
-        //Create Mapping
         repeat
             NewLineNo += 10000;
             LineNoMapping.Add(ProcessingPlan."Line No.", NewLineNo);
         until ProcessingPlan.Next() = 0;
-        //Rename Lines
         while LineNoMapping.Count > 0 do begin
             foreach OldLineNo in LineNoMapping.Keys do begin
-                // Remove from mapping if same line no
                 NewLineNo := LineNoMapping.Get(OldLineNo);
                 if OldLineNo = NewLineNo then
                     LineNoMapping.Remove(OldLineNo);
-                // Rename Line to free line no, Remove From Mapping
                 if not LineNoMapping.Keys.Contains(NewLineNo) then begin
                     ProcessingPlan.Get(OldLineNo);
                     ProcessingPlan.Rename(NewLineNo);
@@ -577,23 +555,19 @@ page 91017 DMTProcessingPlan
         if TempProcessingPlan_SelectedNew.IsTemporary then
             TempProcessingPlan_SelectedNew.DeleteAll();
 
-        ProcessingPlan.Copy(Rec); // if all fields are selected, no filter is applied but the view is also not applied
+        ProcessingPlan.Copy(Rec);
         CurrPage.SetSelectionFilter(ProcessingPlan);
         Debug := ProcessingPlan.Count;
         ProcessingPlan.CopyToTemp(TempProcessingPlan_SelectedNew);
         HasLines := TempProcessingPlan_SelectedNew.FindFirst();
-        // add lines if only group is selected
         if ProcessingPlan.Count = 1 then
             if ProcessingPlan.Type = ProcessingPlan.Type::Group then begin
                 ProcessingPlan_GroupElements := ProcessingPlan;
                 while ProcessingPlan_GroupElements.Next() <> 0 do begin
-                    // not indented lines
                     if ProcessingPlan.Indentation = ProcessingPlan_GroupElements.Indentation then
                         break;
-                    // next group line
                     if ProcessingPlan_GroupElements.Type = ProcessingPlan.Type::Group then
                         break;
-                    // insert group elements
                     if not TempProcessingPlan_SelectedNew.Get(ProcessingPlan_GroupElements.RecordId) then begin
                         TempProcessingPlan_SelectedNew := ProcessingPlan_GroupElements;
                         TempProcessingPlan_SelectedNew.Insert(false);
@@ -631,27 +605,22 @@ page 91017 DMTProcessingPlan
         NextLineNo: Integer;
         LastLineNo: Integer;
     begin
-        // find last line no
         Clear(Line);
         Line.SetRange("Journal Batch Name", CurrentJnlBatchName);
         if Line.FindLast() then
             LastLineNo := Line."Line No.";
-        // find line before current rec
         LineBefore := Rec;
         LineBefore.SetRange("Journal Batch Name", CurrentJnlBatchName);
         if LineBefore.Next(-1) <> -1 then
             Clear(LineBefore);
 
-        // find line no after current rec
         Line := Rec;
         if Line.Next(1) <> 1 then
             Clear(Line);
         NextLineNo := Line."Line No.";
         case true of
-            // Rec is last line oder first line
             (Rec."Line No." = LastLineNo):
                 NewLineNo := LastLineNo + 10000;
-            // new line below current line
             (Rec."Line No." < LastLineNo) and (NextLineNo > Rec."Line No."):
                 NewLineNo := (Rec."Line No." + NextLineNo) div 2;
         end;

@@ -33,13 +33,4 @@ table 91014 DMTProcessingPlanBatch
         processingPlan.SetRange("Journal Batch Name", Name);
         processingPlan.DeleteAll(true);
     end;
-
-    // trigger OnRename()
-    // var
-    //     processingPlan: Record DMTProcessingPlan;
-    // begin
-    //     processingPlan.SetRange("Journal Batch Name", xRec.Name);
-    //     while processingPlan.FindFirst() do
-    //         processingPlan.Rename(Name, processingPlan."Line No.");
-    // end;
 }

@@ -85,18 +85,15 @@ table 91004 DMTSourceFileStorage
         SearchToken: Text;
         ContinueSearch: Boolean;
     begin
-        // exit if assigned from dropdown
         if (Rec."Data Layout ID" <> 0) then
             if dataLayout.Get(Rec."Data Layout ID") and (dataLayout.Name = Rec."Data Layout Name") then
                 exit;
         case true of
-            // Case 1 - Empty
             (Rec."Data Layout Name" = ''):
                 begin
                     Rec."Data Layout ID" := 0;
                     Rec."Data Layout Name" := '';
                 end;
-            // Case 2 - Layout No.
             (Rec."Data Layout Name" <> '') and TypeHelper.IsNumeric(Rec."Data Layout Name"):
                 begin
                     Evaluate(dataLayoutID, Rec."Data Layout Name");
@@ -104,17 +101,14 @@ table 91004 DMTSourceFileStorage
                     Rec."Data Layout ID" := dataLayout.ID;
                     Rec."Data Layout Name" := dataLayout.Name;
                 end;
-            // Case 3 - Search Term
             (Rec."Data Layout Name" <> '') and not TypeHelper.IsNumeric(Rec."Data Layout Name"):
                 begin
                     SearchToken := Rec."Data Layout Name";
-                    // Search 1: exact match, not case sensitive   
                     SearchToken := ConvertStr(SearchToken, '()<>€', '?????');
                     if not SearchToken.StartsWith('@') then
                         SearchToken := '@' + SearchToken;
                     dataLayout.SetFilter(Name, SearchToken);
                     ContinueSearch := not dataLayout.FindFirst();
-                    // Search 2: part of, not case sensitive   
                     if ContinueSearch then begin
                         if not SearchToken.EndsWith('*') then
                             SearchToken := SearchToken + '*';
@@ -138,7 +132,6 @@ table 91004 DMTSourceFileStorage
             if not Confirm(StrSubstNo(DeleteSourceFileQst, sourceFileStorage."File ID", sourceFileStorage.Name)) then begin
                 Error(ProcessCanceledErr);
             end else begin
-                // remove references
                 DMTImportConfigHeader.Reset();
                 DMTImportConfigHeader.SetRange("Source File ID", sourceFileStorage."File ID");
                 DMTImportConfigHeader.ModifyAll("Source File ID", 0, false);

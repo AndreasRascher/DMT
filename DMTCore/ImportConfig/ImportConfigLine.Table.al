@@ -52,7 +52,6 @@ table 91006 DMTImportConfigLine
         field(20; "Source Field No."; Integer)
         {
             Caption = 'Source Field No.', Comment = 'de-DE=Herkunftsfeld Nr.';
-            // TableRelation = DMTDataLayoutLine."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
             TableRelation = DMTFieldLookUpBuffer."Field No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), LookUpType = const(SourceFields));
             ValidateTableRelation = false;
             BlankZero = true;
@@ -107,21 +106,6 @@ table 91006 DMTImportConfigLine
             Subtype = Json;
         }
         field(105; "Validation Order"; Integer) { Caption = 'Validation Order', Comment = 'de-DE=Reihenfolge Validierung'; }
-        #region SelectMulipleFields
-        // field(200; "Search Target Field Name"; Text[80])
-        // {
-        //     Description = 'Searchable field because Flowfields are not covered by the page search';
-        //     Caption = 'Target Field Name', Comment = 'de-DE=Zielfeld Name';
-        //     Editable = false;
-        // }
-        // field(201; "Search Target Field Caption"; Text[80])
-        // {
-        //     Description = 'Searchable field because Flowfields are not covered by the page search';
-        //     Caption = 'Target Field Caption', Comment = 'de-DE=Zielfeld Bezeichnung';
-        //     Editable = false;
-        // }
-        // field(202; Selection; Boolean) { Caption = 'Selection', Comment = 'de-DE=Auswahl'; }
-        #endregion SelectMulipleFields
         field(300; PrPl_FBRunMode_Filter; Option)
         {
             Caption = 'ProcessingPlan FactBox RunModeFilter', Locked = true;
@@ -170,14 +154,9 @@ table 91006 DMTImportConfigLine
         case FromFieldNo of
             Rec.FieldNo("Source Field No."):
                 begin
-                    // clear fields
                     Clear(Rec."Source Field Caption");
                     Clear(Rec."Processing Action");
-
-                    // Load Header
                     ImportConfigHeader.Get(Rec."Imp.Conf.Header ID");
-
-                    //Read Captions from Buffer Table Fields
                     ImportConfigHeader.BufferTableMgt().ReadBufferTableColumnCaptions(BuffTableCaptions);
                     if BuffTableCaptions.ContainsKey(Rec."Source Field No.") then begin
                         Rec."Source Field Caption" := CopyStr(BuffTableCaptions.Get(Rec."Source Field No."), 1, MaxStrLen(Rec."Source Field Caption"));

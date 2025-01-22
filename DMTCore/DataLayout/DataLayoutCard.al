@@ -94,17 +94,14 @@ page 91011 DMTDataLayoutCard
                 var
                     dataLayoutLine: Record DMTDataLayoutLine;
                     sourceFileStorage: Record DMTSourceFileStorage;
-                    // tempBlob: Codeunit "Temp Blob";
                     ISourceFileImport: Interface ISourceFileImport;
                     FirstRowWithValues: Integer;
                     HeaderLine: List of [Text];
                     ColumnName: Text;
                 begin
-                    // select source
                     if Page.RunModal(0, sourceFileStorage) <> Action::LookupOK then
                         exit;
                     sourceFileStorage.TestField(Name);
-                    // sourceFileStorage.GetFileAsTempBlob(tempBlob);
 
                     ISourceFileImport := Rec.SourceFileFormat;
                     ISourceFileImport.ReadHeadline(sourceFileStorage, rec, FirstRowWithValues, HeaderLine);

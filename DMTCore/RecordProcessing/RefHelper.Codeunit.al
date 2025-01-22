@@ -110,7 +110,6 @@ codeunit 91013 DMTRefHelper
                             FieldRef_TO.Value := _Boolean;
                             exit(true);
                         end;
-                    // Needed for Evaluate from Fixed Value Test (true,false,ja,nein), xml-format only accepts 0 or 1   
                     Evaluate(_Boolean, FromText):
                         begin
                             FieldRef_TO.Value := _Boolean;
@@ -130,7 +129,6 @@ codeunit 91013 DMTRefHelper
                         Error(InvalidValueForTypeErr, FromText, FieldRef_TO.Type);
             'OPTION':
                 if EvaluateOptionValueAsNumber then begin
-                    //Optionswert wird als Zahl übergeben
                     if Evaluate(_Integer, FromText) then begin
                         FieldRef_TO.Value := _Integer;
                         exit(true);
@@ -138,8 +136,7 @@ codeunit 91013 DMTRefHelper
                         if ThrowError then
                             Evaluate(_RecordID, FromText);
                 end else begin
-                    //Optionswert wird als Text übergeben
-                    NoOfOptions := StrLen(FieldRef_TO.OptionCaption) - StrLen(DelChr(FieldRef_TO.OptionCaption, '=', ',')); // zero based
+                    NoOfOptions := StrLen(FieldRef_TO.OptionCaption) - StrLen(DelChr(FieldRef_TO.OptionCaption, '=', ','));
                     for OptionIndex := 0 to NoOfOptions do begin
                         OptionElement := SelectStr(OptionIndex + 1, FieldRef_TO.OptionCaption);
                         if OptionElement.ToLower() = FromText.ToLower() then begin
@@ -150,7 +147,6 @@ codeunit 91013 DMTRefHelper
                 end;
             'DATE':
                 begin
-                    //ApplicationMgt.MakeDateText(FromText);
                     if Evaluate(_Date, FromText, 9) then begin
                         FieldRef_TO.Value := _Date;
                         exit(true);
@@ -161,7 +157,6 @@ codeunit 91013 DMTRefHelper
 
             'DATETIME':
                 begin
-                    //ApplicationMgt.MakeDateTimeText(FromText);
                     if Evaluate(_DateTime, FromText, 9) then begin
                         FieldRef_TO.Value := _DateTime;
                         exit(true);
@@ -195,7 +190,7 @@ codeunit 91013 DMTRefHelper
                 end;
             else
                 Message('Funktion "EvaluateFieldRef" - nicht behandelter Datentyp %1', Format(FieldRef_TO.Type));
-        end;  // end_CASE
+        end;
     end;
 
     internal procedure AssignFixedValueToFieldRef(var ToFieldRef: FieldRef; FixedValue: Text)

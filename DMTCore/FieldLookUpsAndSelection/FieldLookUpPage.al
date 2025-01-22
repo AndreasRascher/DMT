@@ -41,7 +41,7 @@ page 91028 DMTFieldLookUp
             recRef.GetTable(variant);
         ReadFilters();
         if isLoaded then exit;
-        // Read Table Relation Field Filter
+
         loadLinesForTableID();
         loadLinesForImportConfig();
         hasLines := Rec.Count > 0;

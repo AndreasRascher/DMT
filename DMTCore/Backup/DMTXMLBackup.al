@@ -128,7 +128,7 @@ codeunit 91007 DMTXMLBackup
 
         tempTenantMedia.Content.CreateOutStream(oStr);
         XDoc.WriteTo(oStr);
-        // Compose Export Filename
+
         if exportFileBaseName = '' then
             exportFileBaseName := 'Backup_';
         Company.Get(CompanyName);
@@ -141,7 +141,7 @@ codeunit 91007 DMTXMLBackup
         exportFileBaseName := ConvertStr(exportFileBaseName, '<>*\/|"', '_______');
         DownloadBlobContent(tempTenantMedia, exportFileBaseName, TextEncoding::UTF8);
 
-        //RESET;
+
         Clear(TablesList);
         Clear(GlobalRecordIDList);
     end;

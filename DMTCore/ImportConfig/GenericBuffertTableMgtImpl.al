@@ -21,7 +21,7 @@ codeunit 91019 DMTGenericBuffertTableMgtImpl implements IBufferTableMgt
     begin
         checkHeaderIsSet();
         if HideGenBufferFilters then begin
-            GenBuffTable.FilterGroup(2);        // keep in group 2 to hide in filterpage and protect from setview
+            GenBuffTable.FilterGroup(2);
             GenBuffTable.SetRange(IsCaptionLine, false);
         end;
         GenBuffTable.FilterBy(ImportConfigHeaderGlobal);
@@ -78,7 +78,7 @@ codeunit 91019 DMTGenericBuffertTableMgtImpl implements IBufferTableMgt
         checkHeaderIsSet();
         GenBuffTable.Reset();
         GenBuffTable.FilterBy(ImportConfigHeaderGlobal);
-        GenBuffTable.SetRange(IsCaptionLine, false); // don't count header line
+        GenBuffTable.SetRange(IsCaptionLine, false);
         NoOfRecords := GenBuffTable.Count;
     end;
 
@@ -114,7 +114,7 @@ codeunit 91019 DMTGenericBuffertTableMgtImpl implements IBufferTableMgt
         if not genBuffTable.FilterBy(ImportConfigHeaderGlobal) then
             exit;
 
-        ImportConfigHeaderGlobal.get(ImportConfigHeaderGlobal.RecordId); // update
+        ImportConfigHeaderGlobal.get(ImportConfigHeaderGlobal.RecordId);
         genBuffTable.SetRange(IsCaptionLine, false);
         if genBuffTable.IsEmpty then begin
             Clear(ImportConfigHeaderGlobal.ImportToTargetPercentage);

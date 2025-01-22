@@ -141,7 +141,6 @@ page 91013 DMTLogEntries
     trigger OnAfterGetRecord()
     begin
         CallStack := Rec.GetErrorCallStack();
-        // format Ignored Entries  
         LineStyle := Format(Enum::DMTFieldStyle::None);
         if Rec."Ignore Error" then
             LineStyle := Format(Enum::DMTFieldStyle::Grey);
@@ -160,7 +159,6 @@ page 91013 DMTLogEntries
 
     var
         CallStack, LineStyle : Text;
-        // [InDataSet]
         ShowIgnoredErrorLines, ShowTriggerLogLines : Boolean;
 }
 

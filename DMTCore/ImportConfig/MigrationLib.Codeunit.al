@@ -2,7 +2,6 @@ codeunit 91003 DMTMigrationLib
 {
     procedure FindFieldNameInOldVersion(FieldName: Text; TargetTableNo: Integer; var OldFieldName: Text) Found: Boolean
     begin
-        //* Hier Felder eintragen die in neueren Versionen umbenannt wurden, deren Werte aber 1:1 kopiert werden können
         Clear(OldFieldName);
         case true of
             (TargetTableNo = Database::Customer) and (FieldName = 'Country/Region Code'):
@@ -15,14 +14,13 @@ codeunit 91003 DMTMigrationLib
                 OldFieldName := 'Country of Origin Code';
             (TargetTableNo = Database::Item) and (FieldName = 'Time Bucket'):
                 OldFieldName := 'Reorder Cycle';
-            // Item Cross Reference -> Item Reference
             (TargetTableNo = Database::"Item Reference") and (FieldName = 'Reference Type'):
                 OldFieldName := 'Cross-Reference Type';
             (TargetTableNo = Database::"Item Reference") and (FieldName = 'Reference Type No.'):
                 OldFieldName := 'Cross-Reference Type No.';
             (TargetTableNo = Database::"Item Reference") and (FieldName = 'Reference No.'):
                 OldFieldName := 'Cross-Reference No.';
-        end; // end_CASE
+        end;
         Found := OldFieldName <> '';
     end;
 
@@ -43,15 +41,7 @@ codeunit 91003 DMTMigrationLib
             ImportConfigLine."Processing Action" := ImportConfigLine."Processing Action"::Ignore;
     end;
 
-    /// <summary>
-    /// List of known fields with blocking logic(ValidateCode / Self references in Table Telations). Validation type is set to AssignWithoutValidate.
-    /// </summary>
-    /// <param name="TargetField"></param>
-    /// <param name="KnownValidationType"></param>
-    /// <returns></returns>
     local procedure FindKnownUseValidateValue(TargetField: Record Field; var KnownValidationType: Enum DMTFieldValidationType) Found: Boolean
-    // var
-    // DimensionValue: Record "Dimension Value";
     begin
         KnownValidationType := KnownValidationType::AlwaysValidate;
         Found := true;
@@ -65,21 +55,13 @@ codeunit 91003 DMTMigrationLib
             IsMatch(TargetField, Database::Customer, 'Contact'),
             IsMatch(TargetField, Database::Customer, 'Block Payment Tolerance'),
             IsMatch(TargetField, Database::Customer, 'Bill-to Customer No.'),
-            IsMatch(TargetField, Database::Customer, 'Payment Terms Id'),     // ID Values clear the associated field
-            IsMatch(TargetField, Database::Customer, 'Payment Method Id'),    // ID Values clear the associated field
-            IsMatch(TargetField, Database::Customer, 'Currency Id'),          // ID Values clear the associated field
-            IsMatch(TargetField, Database::Customer, 'Contact ID'),           // ID Values clear the associated field
-            IsMatch(TargetField, Database::Customer, 'Tax Area ID'),          // ID Values clear the associated field
             IsMatch(TargetField, Database::Vendor, 'Primary Contact No.'),
             IsMatch(TargetField, Database::Vendor, 'Contact'),
             IsMatch(TargetField, Database::Vendor, 'Prices Including VAT'),
             IsMatch(TargetField, Database::Vendor, 'Pay-to Vendor No.'),
-            IsMatch(TargetField, Database::Vendor, 'Payment Terms Id'),     // ID Values clear the associated field
-            IsMatch(TargetField, Database::Vendor, 'Payment Method Id'),    // ID Values clear the associated field
-            IsMatch(TargetField, Database::Vendor, 'Currency Id'),          // ID Values clear the associated field
             IsMatch(TargetField, Database::Contact, 'Company No.'),
-            IsMatch(TargetField, Database::Contact, 'Company Name'),  // Avoid Dialog
-            IsMatch(TargetField, Database::Contact, 'First Name'),  // Avoid ProcessNameChange to clear Names
+            IsMatch(TargetField, Database::Contact, 'Company Name'),
+            IsMatch(TargetField, Database::Contact, 'First Name'),
             IsMatch(TargetField, Database::Contact, 'Middle Name'),
             IsMatch(TargetField, Database::Contact, 'Surname'),
             IsMatch(TargetField, Database::Item, 'Sales Unit of Measure'),
@@ -88,23 +70,18 @@ codeunit 91003 DMTMigrationLib
             IsMatch(TargetField, Database::Item, 'Rounding Precision'),
             IsMatch(TargetField, Database::Item, 'Standard Cost'),
             IsMatch(TargetField, Database::Item, 'Indirect Cost %'),
-            IsMatch(TargetField, Database::Item, 'Unit of Measure Id'),           // ID Values clear the associated field            
-            IsMatch(TargetField, Database::Item, 'Tax Group Id'),                 // ID Values clear the associated field
-            IsMatch(TargetField, Database::Item, 'Item Category Id'),             // ID Values clear the associated field
-            IsMatch(TargetField, Database::Item, 'Inventory Posting Group Id'),   // ID Values clear the associated field
-            IsMatch(TargetField, Database::Item, 'Gen. Prod. Posting Group Id'),  // ID Values clear the associated field
-            IsMatch(TargetField, Database::"Item Unit of Measure", 'Qty. per Unit of Measure'),
+                IsMatch(TargetField, Database::"Item Unit of Measure", 'Qty. per Unit of Measure'),
             IsMatch(TargetField, Database::"Routing Header", 'Status'),
-            IsMatch(TargetField, Database::"Extended Text Header", 'Language Code'), /* Possible in old version to have Language Code + All Language */
-            IsMatch(TargetField, Database::"Extended Text Header", 'All Language Codes'), /* Possible in old version to have Language Code + All Language */
-            IsMatch(TargetField, Database::"Interaction Template", 'Language Code (Default)'), /* Avoid confirm */
-            IsMatch(TargetField, Database::"Sales Header", 'Bill-to Customer No.'), /* Avoid confirm */
-            IsMatch(TargetField, Database::"Sales Header", 'Sell-to Customer Name'), /* Avoid LookUp Dialog */
-            IsMatch(TargetField, Database::"Dimension Value", 'Dimension Value ID'), /* Avoid LookUp Dialog */
-            IsMatch(TargetField, Database::"General Ledger Setup", 'Acc. Sched. for Balance Sheet'), /*obsolete BC22+*/
-            IsMatch(TargetField, Database::"General Ledger Setup", 'Acc. Sched. for Income Stmt.'), /*obsolete BC22+*/
-            IsMatch(TargetField, Database::"General Ledger Setup", 'Acc. Sched. for Cash Flow Stmt'), /*obsolete BC22+*/
-            IsMatch(TargetField, Database::"General Ledger Setup", 'Acc. Sched. for Retained Earn.'): /*obsolete BC22+*/
+            IsMatch(TargetField, Database::"Extended Text Header", 'Language Code'),
+            IsMatch(TargetField, Database::"Extended Text Header", 'All Language Codes'),
+            IsMatch(TargetField, Database::"Interaction Template", 'Language Code (Default)'),
+            IsMatch(TargetField, Database::"Sales Header", 'Bill-to Customer No.'),
+            IsMatch(TargetField, Database::"Sales Header", 'Sell-to Customer Name'),
+            IsMatch(TargetField, Database::"Dimension Value", 'Dimension Value ID'),
+            IsMatch(TargetField, Database::"General Ledger Setup", 'Acc. Sched. for Balance Sheet'),
+            IsMatch(TargetField, Database::"General Ledger Setup", 'Acc. Sched. for Income Stmt.'),
+            IsMatch(TargetField, Database::"General Ledger Setup", 'Acc. Sched. for Cash Flow Stmt'),
+            IsMatch(TargetField, Database::"General Ledger Setup", 'Acc. Sched. for Retained Earn.'):
                 KnownValidationType := KnownValidationType::AssignWithoutValidate;
             else
                 Found := false;
@@ -139,14 +116,14 @@ codeunit 91003 DMTMigrationLib
     local procedure FindKnownFieldsToIgnore(TargetField: Record Field) Found: Boolean
     begin
         case true of
-            // Picture BLOBs
+
             IsMatch(TargetField, Database::Item, 'Picture'),
             IsMatch(TargetField, Database::"Company Information", 'Picture'),
-            // Sales Header
+
             IsMatch(TargetField, Database::"Sales Header", 'Invoice'),
             IsMatch(TargetField, Database::"Sales Header", 'Ship'),
             IsMatch(TargetField, Database::"Sales Header", 'Receive'),
-            // Testsfields on Recreate SalesLine
+
             IsMatch(TargetField, Database::"Sales Line", 'Job No.'),
             IsMatch(TargetField, Database::"Sales Line", 'Job Contract Entry No.'),
             IsMatch(TargetField, Database::"Sales Line", 'Quantity Invoiced'),
@@ -155,7 +132,7 @@ codeunit 91003 DMTMigrationLib
             IsMatch(TargetField, Database::"Sales Line", 'Return Receipt No.'),
             IsMatch(TargetField, Database::"Sales Line", 'Blanket Order No.'),
             IsMatch(TargetField, Database::"Sales Line", 'Prepmt. Amt. Inv.'),
-            // Testfields on Recreate PurchLine
+
             IsMatch(TargetField, Database::"Purchase Line", 'Quantity Received'),
             IsMatch(TargetField, Database::"Purchase Line", 'Quantity Invoiced'),
             IsMatch(TargetField, Database::"Purchase Line", 'Return Qty. Shipped'),
@@ -225,7 +202,6 @@ codeunit 91003 DMTMigrationLib
         FeatureKey: Record "Feature Key";
         fileNameFromCaption: Text;
     begin
-        // From existing table captions
         tableMetadata.SetRange(ID, 0, 2000000000);
         tableMetadata.SetRange(ObsoleteState, tableMetadata.ObsoleteState::No);
         tableMetadata.SetFilter(ID, '<>49&<>55&<>600&<>601&<>1570&<>1571');
@@ -237,16 +213,13 @@ codeunit 91003 DMTMigrationLib
                 NAVExportFileNamesDict.Add(fileNameFromCaption, tableMetadata.ID);
         until tableMetadata.Next() = 0;
 
-        //FeatureKey: ReplaceIntrastat
         if FeatureKey.Get('ReplaceIntrastat') and (FeatureKey.Enabled <> FeatureKey.Enabled::"All Users") then begin
-            // add obsolete tables if feature is disabled
             tableMetadata.Get(261);
             NAVExportFileNamesDict.Set(createNAVExportFileName(tableMetadata.Caption), tableMetadata.ID);
             tableMetadata.Get(262);
             NAVExportFileNamesDict.Set(createNAVExportFileName(tableMetadata.Caption), tableMetadata.ID);
         end;
 
-        // Known renamed tables
         NAVExportFileNamesDict.Add(createNAVExportFileName('PLZ-Code'), 225);
         NAVExportFileNamesDict.Add(createNAVExportFileName('Bundesland'), 284);
         NAVExportFileNamesDict.Add(createNAVExportFileName('Projekt Einrichtung'), 315);
@@ -267,7 +240,6 @@ codeunit 91003 DMTMigrationLib
         FeatureKey: Record "Feature Key";
         TableMetadata: Record "Table Metadata";
     begin
-        // Feature: If Target Table Obsolete, switch to alternative
         if TableMetadata.Get(NAVTableID) then begin
             if not (TableMetadata.ObsoleteState in [TableMetadata.ObsoleteState::Removed, TableMetadata.ObsoleteState::Pending]) then begin
                 TargetTableID := TableMetadata.ID;
@@ -280,33 +252,29 @@ codeunit 91003 DMTMigrationLib
                             else
                                 Message('ToDo - Find new TableID for 261,262 (ReplaceIntrastat)');
                         end;
-                    5105: // Customer Template
+                    5105:
                         TargetTableID := Database::"Customer Templ.";
-                    5717: //Item Cross Reference
+                    5717:
                         TargetTableID := Database::"Item Reference";
-                    7002,// Sales Price - 'Replaced by the new implementation (V16) of price calculation: table Price List Line'
-                    7004,// Sales Line Discount - 'Replaced by the new implementation (V16) of price calculation: table Price List Line'
-                    7012,// Purchase Price - 'Replaced by the new implementation (V16) of price calculation: table Price List Line'
-                    7014:// Purchase Line Discount - 'Replaced by the new implementation (V16) of price calculation: table Price List Line'
+                    7002,
+                    7004,
+                    7012,
+                    7014:
                         begin
                             if FeatureKey.Get('SalesPrices') and (FeatureKey.Enabled = FeatureKey.Enabled::"All Users") then
                                 TargetTableID := Database::"Price List Line"
                             else
                                 TargetTableID := NAVTableID;
                         end;
-                    //5005350 "Phys. Inventory Order Header"
-                    //5875 "Phys. Invt. Order Header
+
                     5005350:
-                        TargetTableID := 5875; //5875
-                    // 5005351 "Phys. Inventory Order Line"
-                    // 5876 "Phys. Invt. Order Line"
+                        TargetTableID := 5875;
+
                     5005351:
-                        TargetTableID := 5876; // 5876
-                    // 5005361 "Expect. Phys. Inv. Track. Line"
-                    // 5886 "Exp. Phys. Invt. Tracking"
+                        TargetTableID := 5876;
                     5005361:
-                        TargetTableID := 5886; //5886 
-                    5723: // Product Group -> Item Category
+                        TargetTableID := 5886;
+                    5723:
                         TargetTableID := 5722;
                     else
                         Message('unhandled obsolete Table %1', NAVTableID);

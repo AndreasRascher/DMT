@@ -13,15 +13,15 @@ codeunit 91015 DMTProcessingPlanMgt
         noDefaultValuesSetErr: Label 'No default values has been set. \Line No: %1\Description: %2', Comment = 'de-DE=Es wurden keine Vorgabewerte definiert. \Zeilennr: %1 \Beschreibung: %2';
     begin
         Success := true;
-        // Pre-Checks
+
         if processingPlan.Type in [processingPlan.Type::"Buffer + Target", processingPlan.Type::"Import To Target"] then begin
-            // is buffer table empty
+
             importConfigHeader.Get(processingPlan.ID);
             if importConfigHeader.BufferTableMgt().IsBufferTableEmpty() then begin
                 Message(bufferTableEmptyErr, importConfigHeader."Source File Name");
                 exit(false);
             end;
-            // buffer has no lines in filter
+
             importConfigHeader.BufferTableMgt().InitBufferRef(bufferRef, true);
             currView := processingPlan.ReadSourceTableView();
             if currView <> '' then
@@ -30,7 +30,7 @@ codeunit 91015 DMTProcessingPlanMgt
                 Message(noBufferTableRecorsInFilterErr, importConfigHeader."Source File Name", bufferRef.GetFilters);
                 exit(false);
             end;
-            // read last log entry
+
             logEntry.Reset();
             if logEntry.FilterFor(importConfigHeader) then
                 if logEntry.FindLast() then
@@ -43,12 +43,9 @@ codeunit 91015 DMTProcessingPlanMgt
                 exit(false);
             end;
 
-        // Migration
         migrateRecordSet.Start(processingPlan);
 
-        // Post-Checks
         if processingPlan.Type in [processingPlan.Type::"Buffer + Target", processingPlan.Type::"Import To Target"] then begin
-            // Is migration without errors
             logEntry.Reset();
             logEntry.SetRange("Entry Type", logEntry."Entry Type"::Error);
             if logEntry.FilterFor(importConfigHeader) then
@@ -68,7 +65,6 @@ codeunit 91015 DMTProcessingPlanMgt
         SourceFileImport.ImportToBufferTable(ImportConfigHeader);
     end;
 
-    #region Journal
     procedure OpenJnl(CurrentJnlBatchName: Code[20]; var processingPlan: Record DMTProcessingPlan)
     begin
         processingPlan.FilterGroup := 2;
@@ -115,5 +111,4 @@ codeunit 91015 DMTProcessingPlanMgt
             SetName(CurrentJnlBatchName, processingPlan);
         end;
     end;
-    #endregion Journal
 }

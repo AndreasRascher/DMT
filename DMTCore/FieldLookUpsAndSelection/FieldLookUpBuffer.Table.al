@@ -9,7 +9,7 @@ table 91015 DMTFieldLookUpBuffer
         field(11; "Field Name"; Text[250]) { }
         field(12; "Field Caption"; Text[250]) { }
         field(13; "Import Config. ID Filter"; Integer) { FieldClass = FlowFilter; Caption = 'Data File ID Filter', Locked = true; }
-        field(14; "Table No. Filter"; Integer) { FieldClass = FlowFilter; Caption = 'Table No. Filter', Locked = true; } // RecRef Filter
+        field(14; "Table No. Filter"; Integer) { FieldClass = FlowFilter; Caption = 'Table No. Filter', Locked = true; }
         field(30; "Source Field Caption"; Text[80])
         {
             Caption = 'Source Field Caption', Comment = 'de-DE=Herkunftsfeld';
@@ -39,7 +39,6 @@ table 91015 DMTFieldLookUpBuffer
 
     fieldgroups
     {
-        // Add changes to field groups here
         fieldgroup(DropDown; "Field No.", "Field Caption") { }
     }
 

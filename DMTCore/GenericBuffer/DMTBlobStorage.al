@@ -62,11 +62,7 @@ table 91007 DMTBlobStorage
     procedure SaveFieldValue(genBuffTable: Record DMTGenBuffTable; ColumnIndex: Integer; ColumnCaption: Text; fieldContent: BigText)
     var
         blobStorage: Record DMTBlobStorage;
-        // base64Convert: Codeunit "Base64 Convert";
-        // base64decoded: text;
         OStream: OutStream;
-    // first, last : Text;
-    // JObj: JsonObject;
     begin
         if fieldContent.Length = 0 then exit;
         blobStorage."Primary Key" := GetNextEntryNo();
@@ -75,19 +71,9 @@ table 91007 DMTBlobStorage
         blobStorage."Source Field No." := 1000 + ColumnIndex;
         Clear(blobStorage.Blob);
         blobStorage.Blob.CreateOutStream(OStream);
-        // // test for JSON
-        // base64FieldContent.GetSubText(first, 1, 1);
-        // base64FieldContent.GetSubText(last, base64FieldContent.Length, 1);
-        // if (first = '{') and (last = '}') then begin
-        //     OStream.Write(base64decoded);
-        //     blobStorage.Insert();
-        //     blobStorage.CalcFields(Blob);
-        // end else begin
-        // base64decoded := base64Convert.FromBase64(format(base64FieldContent));
         fieldContent.Write(OStream);
         blobStorage.Insert();
         blobStorage.CalcFields(Blob);
-        // end;
     end;
 
     internal procedure GetNextEntryNo() NextEntryNo: Integer

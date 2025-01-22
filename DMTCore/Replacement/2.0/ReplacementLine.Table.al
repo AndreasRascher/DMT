@@ -49,14 +49,12 @@ table 91012 DMTReplacementLine
         field(31; "Source 1 Field Caption"; Text[80])
         {
             Caption = 'Source 1 Field Caption', Comment = 'de-DE=Herkunftsfeld 1';
-            // TableRelation = DMTfieldLookUpBuffer."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
             TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), LookUpType = const(SourceFields));
             ValidateTableRelation = false;
         }
         field(32; "Source 2 Field No."; Integer)
         {
             Caption = 'Source 2 Field No.', Comment = 'de-DE=Herkunftsfeld 2 Nr.';
-            // TableRelation = DMTfieldLookUpBuffer."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
             TableRelation = DMTFieldLookUpBuffer."Field No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), LookUpType = const(SourceFields));
             ValidateTableRelation = false;
             BlankZero = true;
@@ -64,7 +62,6 @@ table 91012 DMTReplacementLine
         field(33; "Source 2 Field Caption"; Text[80])
         {
             Caption = 'Source 2 Field Caption', Comment = 'de-DE=Herkunftsfeld 2';
-            // TableRelation = DMTfieldLookUpBuffer."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"));
             TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), LookUpType = const(SourceFields));
             ValidateTableRelation = false;
         }
@@ -76,7 +73,6 @@ table 91012 DMTReplacementLine
         field(35; "Target 1 Field Caption"; Text[80])
         {
             Caption = 'Target Field 1 Caption', Comment = 'de-DE=Zielfeld 1';
-            // TableRelation = DMTfieldLookUpBuffer."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), "Field Look Mode Filter" = const("Look Up Target"));
             TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), LookUpType = const(TargetFields));
             ValidateTableRelation = false;
         }
@@ -88,7 +84,6 @@ table 91012 DMTReplacementLine
         field(37; "Target 2 Field Caption"; Text[80])
         {
             Caption = 'Target Field 2 Caption', Comment = 'de-DE=Zielfeld 2';
-            // TableRelation = DMTfieldLookUpBuffer."Column No." where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), "Field Look Mode Filter" = const("Look Up Target"));
             TableRelation = DMTFieldLookUpBuffer."Field Caption" where("Import Config. ID Filter" = field("Imp.Conf.Header ID"), LookUpType = const(TargetFields));
             ValidateTableRelation = false;
         }
@@ -175,7 +170,6 @@ table 91012 DMTReplacementLine
         TargetFieldNames: Dictionary of [Integer, Text];
         foundAtIndex: Integer;
     begin
-        // Field Name from user input (e.g. Copy & Paste)
         Rec.TestField("Imp.Conf.Header ID");
         if (currfieldLookUpBuffer."Field No." = 0) then begin
             ImportConfigHeader.Get(Rec."Imp.Conf.Header ID");
@@ -197,7 +191,6 @@ table 91012 DMTReplacementLine
             end;
         end;
 
-        // Field Name Selected from selection
         if currfieldLookUpBuffer."Field No." <> 0 then
             case fromFieldNo of
                 Rec.FieldNo("Target 1 Field Caption"):
@@ -240,15 +233,12 @@ table 91012 DMTReplacementLine
     begin
         Clear(replacementHeader);
         replacementLine.Copy(Rec);
-        // Source: Table Relation
         if replacementLine."Replacement Code" <> '' then
             if replacementHeader.Get(replacementLine."Replacement Code") then
                 exit(true);
-        // Source: Filter
         if (replacementLine.GetFilter("Replacement Code") <> '') then
             if replacementHeader.Get(replacementLine.GetRangeMin("Replacement Code")) then
                 exit(true);
-        // Source: SubPageLink
         replacementLine.FilterGroup(4);
         if (replacementLine.GetFilter("Replacement Code") <> '') then
             if replacementHeader.Get(replacementLine.GetRangeMin("Replacement Code")) then

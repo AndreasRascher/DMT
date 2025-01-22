@@ -51,7 +51,7 @@ page 91008 DMTImportConfigCard
                 field("Skip Records with User Changes"; Rec."Skip Records with User Changes")
                 {
                     ToolTip = 'Skip records which have been changed after the import.', Comment = 'de-DE=Datensätze überspringen, die vom Benutzer geändert wurden';
-                    Visible = false; // TODO: Fertig entwickeln und dann sichtbar machen
+                    Visible = false;
                 }
                 field("Log Trigger Changes"; Rec."Log Trigger Changes")
                 {
@@ -130,8 +130,6 @@ page 91008 DMTImportConfigCard
                 trigger OnAction()
                 begin
                     DMTSetup.getDefaultImportConfigPageActionImplementation().ImportConfigCard_ImportBufferDataFromFile(Rec);
-                    // CurrPage.TableInfoFactBox.Page.DoUpdate(Rec);
-                    // CurrPage.LogFactBox.Page.DoUpdate(Rec);
                 end;
             }
             action(DeleteRecordsInTargetTable)
@@ -146,7 +144,6 @@ page 91008 DMTImportConfigCard
                     ChangeRecordWithPerm: Codeunit DMTChangeRecordWithPerm;
                 begin
                     ChangeRecordWithPerm.DeleteRecordsInTargetTable(Rec);
-                    // Rec.UpdateBufferRecordCount();
                     CurrPage.TableInfoFactBox.Page.Update(false);
                 end;
             }
@@ -270,7 +267,6 @@ page 91008 DMTImportConfigCard
                     RecordMapping: Dictionary of [RecordId, RecordId];
                     NotTransferedRecords: List of [RecordId];
                 begin
-                    // RecordMapping := DMTImport.CreateSourceToTargetRecIDMapping(Rec, NotTransferedRecords);
                     CollationProblems := migrateRecordSet.FindCollationProblems(RecordMapping);
                     Message('No. of Records not Transfered: %1\' +
                             'No. of Collation Problems: %2', NotTransferedRecords.Count, CollationProblems.Count);
@@ -295,14 +291,6 @@ page 91008 DMTImportConfigCard
     begin
         CurrPage.LinePart.Page.DoUpdate(false);
         Rec.UpdateIndicators();
-    end;
-
-    trigger OnAfterGetCurrRecord()
-    begin
-        // CurrPage.TableInfoFactBox.Page.ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(Rec);
-        // CurrPage.TableInfoFactBox.Page.Update(false);
-        // CurrPage.LogFactBox.Page.ShowAsLogAndUpdateOnAfterGetCurrRecord(Rec);
-        // CurrPage.LogFactBox.Page.Update(false);
     end;
 
     local procedure SaveRecordIfMandatoryFieldsAreFilled()

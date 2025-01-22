@@ -23,7 +23,6 @@ table 91009 DMTProcessingPlan
         field(11; ID; Integer)
         {
             Caption = 'ID', Locked = true;
-            // has to defined for each type except group
             TableRelation =
             if (Type = const("Run Codeunit")) AllObjWithCaption."Object ID" where("Object Type" = const(Codeunit))
             else
@@ -116,7 +115,6 @@ table 91009 DMTProcessingPlan
     procedure EditSourceTableFilter()
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
-        // FPBuilder: Codeunit DMTFPBuilder;
         processStorage: Codeunit DMTProcessStorage;
         fieldSelection: Page DMTFieldSelection;
         BufferRef: RecordRef;
@@ -125,7 +123,6 @@ table 91009 DMTProcessingPlan
         if Rec.Type = Rec.Type::"Run Codeunit" then begin
             Rec.TestField("Source Table No.");
             BufferRef.Open(Rec."Source Table No.");
-            // ImportConfigHeader.BufferTableType := ImportConfigHeader.BufferTableType::"Seperate Buffer Table per CSV";
         end else begin
             ImportConfigHeader.Get(Rec.ID);
             ImportConfigHeader.BufferTableMgt().ThrowErrorIfBufferTableIsEmpty();
@@ -134,9 +131,6 @@ table 91009 DMTProcessingPlan
         CurrView := ReadSourceTableView();
         if CurrView <> '' then
             BufferRef.SetView(CurrView);
-        // if FPBuilder.RunModal(BufferRef, ImportConfigHeader) then begin
-        // SaveSourceTableFilter(BufferRef.GetView(false));
-        // end;
         processStorage.Set(Rec);
         if fieldSelection.EditSourceTableFilters(BufferRef, ImportConfigHeader) then
             SaveSourceTableFilter(BufferRef.GetView(false));
@@ -146,7 +140,6 @@ table 91009 DMTProcessingPlan
     procedure EditDefaultValues()
     var
         ImportConfigHeader: Record DMTImportConfigHeader;
-        // FPBuilder: Codeunit DMTFPBuilder;
         fieldSelection: Page DMTFieldSelection;
         TargetRef: RecordRef;
         CurrView: Text;
@@ -157,9 +150,6 @@ table 91009 DMTProcessingPlan
         CurrView := ReadDefaultValuesView();
         if CurrView <> '' then
             TargetRef.SetView(CurrView);
-        // if FPBuilder.RunModal(TargetRef) then begin
-        //     SaveDefaultValuesView(TargetRef.GetView());
-        // end;
         if fieldSelection.EditDefaultValues(TargetRef, ImportConfigHeader) then
             SaveDefaultValuesView(TargetRef.GetView());
     end;
@@ -292,7 +282,7 @@ table 91009 DMTProcessingPlan
                 TmpImportConfigLine.Copy(TempImportConfigLine2, true);
                 exit;
             end;
-            genBuffTable.InitFirstLineAsCaptions(genBuffTable); // init column caption single instance codeunit
+            genBuffTable.InitFirstLineAsCaptions(genBuffTable);
             RecRef.GetTable(genBuffTable);
         end;
         CurrView := Rec.ReadSourceTableView();
@@ -324,7 +314,7 @@ table 91009 DMTProcessingPlan
         FieldIndexNo: Integer;
         CurrView: Text;
     begin
-        if not ImportConfigHeader.Get(Rec.ID) then exit; // ID can be zero
+        if not ImportConfigHeader.Get(Rec.ID) then exit;
         RecRef.Open(ImportConfigHeader."Target Table ID");
         CurrView := Rec.ReadDefaultValuesView();
         if CurrView <> '' then begin
@@ -350,7 +340,6 @@ table 91009 DMTProcessingPlan
     var
         fixedValueText: Text;
     begin
-        // if filter value contains spaces, brackets or quotes then the filter value is enclosed in quotes
         fixedValueText := TempImportConfigLine."Custom Value";
         if fixedValueText = '' then exit;
         if not (fixedValueText.EndsWith('''') and fixedValueText.StartsWith('''')) then
@@ -444,10 +433,8 @@ table 91009 DMTProcessingPlan
             tempProcessingPlan.get(Rec.RecordId);
             if tempProcessingPlan.Next(-1) = -1 then begin
                 if tempProcessingPlan.Type = tempProcessingPlan.Type::Group then begin
-                    // Lines below group: indent + 1
                     indentationFound := tempProcessingPlan.Indentation + 1;
                 end else begin
-                    // other keep indentation from above
                     indentationFound := tempProcessingPlan.Indentation;
                 end;
                 exit(indentationFound);
@@ -462,10 +449,8 @@ table 91009 DMTProcessingPlan
             processingPlan.get(Rec.RecordId);
             if processingPlan.Next(-1) = -1 then begin
                 if processingPlan.Type = processingPlan.Type::Group then begin
-                    // Lines below group: indent + 1
                     indentationFound := processingPlan.Indentation + 1;
                 end else begin
-                    // other keep indentation from above
                     indentationFound := processingPlan.Indentation;
                 end;
                 exit(indentationFound);
@@ -500,9 +485,6 @@ table 91009 DMTProcessingPlan
         OK := importConfigHeader.Get(Rec.ID);
     end;
 
-    /// <summary>
-    /// <p>uses the indentation of the parent group + 1</p>
-    /// </summary>
     procedure setUseAutomaticIndentation(useAutomaticIndentationNEW: Boolean)
     begin
         UseAutomaticIndentation := useAutomaticIndentationNEW;

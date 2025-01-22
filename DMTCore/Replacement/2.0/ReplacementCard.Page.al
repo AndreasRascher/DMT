@@ -118,11 +118,6 @@ page 91024 DMTReplacementCard
         exit(found);
     end;
 
-    // trigger OnAfterGetCurrRecord()
-    // begin
-    //     UpdateLineParts();
-    // end;
-
     procedure UpdateLineParts(replacementHeader: Record DMTReplacementHeader)
     begin
         CurrPage.ReplacementAssigments.Page.SetVisibility(replacementHeader);

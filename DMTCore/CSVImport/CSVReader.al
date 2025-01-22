@@ -25,27 +25,26 @@ xmlport 91001 DMTCSVReader
                             currXMLport.Skip();
 
                         CurrentLineGlobal.Add(fieldContent);
-                        // save first line with values info to find headline row no
+
                         if FirstRowWithValuesGlobal = 0 then
                             if fieldContent.Length <> 0 then
                                 FirstRowWithValuesGlobal := CurrRowNoGlobal;
                     end;
                 }
-                // Called when starting new line
                 trigger OnAfterInitRecord()
                 begin
                     sessionStorage.LastLineRead(CurrRowNoGlobal);
                     CurrRowNoGlobal += 1;
-                    Line.Number := CurrRowNoGlobal; // required to raise onBeforeInsertRecord
+                    Line.Number := CurrRowNoGlobal;
                     if RowListGlobal.Count > 0 then begin
                         if (toRowNoGlobal <> 0) and (CurrRowNoGlobal > toRowNoGlobal) then
                             currXMLport.Break();
                         if not RowListGlobal.Contains(CurrRowNoGlobal) then
                             currXMLport.Skip();
                     end;
-                    Clear(CurrentLineGlobal); // prepare new line
+                    Clear(CurrentLineGlobal);
                 end;
-                // Called when finished line but only if dataitem key changed
+
                 trigger OnBeforeInsertRecord()
                 begin
                     ProcessLineAfterReceivingLastField();
@@ -95,7 +94,6 @@ xmlport 91001 DMTCSVReader
         end else begin
             HeadLineBigText := DataTable.Get(1);
         end;
-        // assumption: Columncaption is not larger than 49180 chars
         foreach columnCaption in HeadLineBigText do begin
             HeadLine.Add(Format(columnCaption));
         end;

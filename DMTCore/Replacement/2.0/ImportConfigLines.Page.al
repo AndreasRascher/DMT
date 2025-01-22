@@ -39,7 +39,7 @@ page 91021 DMTImportConfigLines
         Clear(ImportConfigLine_SELECTED);
         if ImportConfigLine_SELECTED.IsTemporary then ImportConfigLine_SELECTED.DeleteAll();
         Debug := Rec.Count;
-        ImportConfigLine.Copy(Rec); // if all fields are selected, no filter is applied but the view is also not applied
+        ImportConfigLine.Copy(Rec);
         CurrPage.SetSelectionFilter(ImportConfigLine);
         Debug := ImportConfigLine.Count;
         ImportConfigLine.CopyToTemp(ImportConfigLine_SELECTED);

@@ -64,12 +64,11 @@ codeunit 91022 DMTSeparateBufferTableMgtImpl implements IBufferTableMgt
         checkHeaderIsSet();
         ImportConfigHeaderGlobal.TestField("Target Table ID");
         field.SetRange(TableNo, ImportConfigHeaderGlobal."Buffer Table ID");
-        field.SetFilter("No.", '<2000000000'); // exclude system fields
+        field.SetFilter("No.", '<2000000000');
         field.SetRange(Enabled, true);
         field.SetRange(Class, Field.Class::Normal);
         if field.FindSet(false) then
             repeat
-                // field name is used, because renamed fields are matched on changed names not caption
                 BuffTableCaptions.Add(field."No.", field.FieldName);
             until field.Next() = 0;
     end;
@@ -151,7 +150,7 @@ codeunit 91022 DMTSeparateBufferTableMgtImpl implements IBufferTableMgt
         noOfRecords, noOfRecordsMigrated : Integer;
         TargetRecIDFieldNo, TargetRecIsImportedFieldNo : Integer;
     begin
-        ImportConfigHeaderGlobal.get(ImportConfigHeaderGlobal.RecordId); // update
+        ImportConfigHeaderGlobal.get(ImportConfigHeaderGlobal.RecordId);
         InitBufferRef(bufferRef);
         if bufferRef.IsEmpty then begin
             Clear(ImportConfigHeaderGlobal.ImportToTargetPercentage);

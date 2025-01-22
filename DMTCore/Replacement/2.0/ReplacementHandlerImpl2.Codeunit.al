@@ -6,14 +6,12 @@ codeunit 91021 ReplacementHandlerImpl2 implements IReplacementHandler
         replacementHeader: Record DMTReplacementHeader;
         replacementRule, replacementAssignments : Record DMTReplacementLine;
     begin
-        //load assigned replacements
         replacementAssignments.SetRange("Line Type", replacementAssignments."Line Type"::Assignment);
         replacementAssignments.SetRange("Imp.Conf.Header ID", ImportConfigHeader.ID);
         if replacementAssignments.CopyToTemp(TempAssignmentGlobal) = 0 then
             exit;
         TempAssignmentGlobal.FindSet();
         repeat
-            // collect replacements
             if not tempReplacementHeaderGlobal.Get(TempAssignmentGlobal."Replacement Code") then begin
                 replacementHeader.Get(TempAssignmentGlobal."Replacement Code");
                 tempReplacementHeaderGlobal := replacementHeader;
@@ -21,7 +19,6 @@ codeunit 91021 ReplacementHandlerImpl2 implements IReplacementHandler
             end;
         until TempAssignmentGlobal.Next() = 0;
 
-        // collect rules
         tempReplacementHeaderGlobal.Reset();
         if tempReplacementHeaderGlobal.FindSet() then
             repeat
@@ -36,26 +33,18 @@ codeunit 91021 ReplacementHandlerImpl2 implements IReplacementHandler
                     until replacementRule.Next() = 0;
             until tempReplacementHeaderGlobal.Next() = 0;
 
-        //         Workflow
-        // - Regel anlegen(Code Beschreibung)
-        // - Anzahl Felder definieren
-        // - Regeln definieren
-        // - Felder auswählen
         ImportConfigHeaderGlobal := ImportConfigHeader;
     end;
 
     procedure InitProcess(var SourceRef: RecordRef);
     begin
         clear(ReplacementValuesGlobal);
-        // foreach Assignment
         if not TempAssignmentGlobal.FindSet() then
             exit;
         repeat
             tempReplacementHeaderGlobal.Get(TempAssignmentGlobal."Replacement Code");
-            // find matching rules
             findMatchingRules_ReplaceFieldContent(SourceRef);
             findMatchingRules_ReplacePartOfFieldContent(SourceRef);
-            // Add replacement values from matching rules
             if TempReplacementRule.FindFirst() then begin
                 if tempReplacementHeaderGlobal."Replacement Type" = tempReplacementHeaderGlobal."Replacement Type"::"Field Content" then
                     ReplacementValuesGlobal.Add(TempAssignmentGlobal."Target 1 Field No.", TempReplacementRule."New Value 1");
@@ -171,7 +160,6 @@ codeunit 91021 ReplacementHandlerImpl2 implements IReplacementHandler
                     checkAssignmentIsValid(TempAssignmentGlobal);
                     importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
                     FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
-                    // TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
                     TempReplacementRule.ClearMarks();
                     if TempReplacementRule.FindSet() then begin
                         repeat
@@ -186,11 +174,9 @@ codeunit 91021 ReplacementHandlerImpl2 implements IReplacementHandler
                     checkAssignmentIsValid(TempAssignmentGlobal);
                     importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 1 Field No.");
                     FromValue1 := SourceRef.Field(importConfigLine."Source Field No.").Value;
-                    // TempReplacementRule.SetRange("Comp.Value 1", FromValue1);
 
                     importConfigLine.get(TempAssignmentGlobal."Imp.Conf.Header ID", TempAssignmentGlobal."Target 2 Field No.");
                     FromValue2 := SourceRef.Field(importConfigLine."Source Field No.").Value;
-                    // TempReplacementRule.SetRange("Comp.Value 2", FromValue2);
 
                     TempReplacementRule.ClearMarks();
                     if TempReplacementRule.FindSet() then begin

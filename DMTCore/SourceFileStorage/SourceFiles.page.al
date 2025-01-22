@@ -84,7 +84,7 @@ page 91005 DMTSourceFiles
         Clear(SourceFileStorage_SELECTED);
         if SourceFileStorage_SELECTED.IsTemporary then SourceFileStorage_SELECTED.DeleteAll();
         Debug := Rec.Count;
-        SourceFileStorage.Copy(Rec); // if all fields are selected, no filter is applied but the view is also not applied
+        SourceFileStorage.Copy(Rec);
         CurrPage.SetSelectionFilter(SourceFileStorage);
         Debug := SourceFileStorage.Count;
         SourceFileStorage.CopyToTemp(SourceFileStorage_SELECTED);

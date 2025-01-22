@@ -322,7 +322,6 @@ page 91012 DMTCustomValueSettings
                             dummy := noSeries.GetNextNo(CopyStr(noSeriesSettings.Get(recID).Get('BCNoSeriesCode'), 1, 20), 0D, false);
                     end;
             end;
-            // set to default for next record
             noSeriesSettings.Get(recID).set('DoIncrement_Yes_No', 'Increment_Yes');
         end;
     end;
@@ -339,10 +338,6 @@ page 91012 DMTCustomValueSettings
         noSeriesSettings.Add(tempImportConfigLine.RecordId, noSeriesProperties);
     end;
 
-    /// <summary>
-    /// peek next no for no series
-    /// </summary>
-    /// <param name="importSettings"></param>
     internal procedure prepareNoSeriesNextNo(var importSettings: Codeunit DMTImportSettings)
     var
         noSeries: Codeunit "No. Series";
@@ -355,12 +350,6 @@ page 91012 DMTCustomValueSettings
 
         noSeriesSettings := importSettings.GetNoSeriesSettings();
         foreach recID in noSeriesSettings.Keys do begin
-            /*
-        noSeriesProperties.Add('NoSeriesType', GetSetting_NoSeriesType(tempImportConfigLine));
-        noSeriesProperties.Add('BCNoSeriesCode', GetSetting_BcNoSeriesCode(tempImportConfigLine));
-        noSeriesProperties.Add('StartingNo', GetSetting_StartingNo(tempImportConfigLine));
-        noSeriesProperties.Add('DoIncrement_Yes_No', 'Increment_Yes');
-            */
             case noSeriesSettings.Get(recID).Get('NoSeriesType') of
                 Format(NoSeriesTypeGlobal::"Starting No."):
                     begin

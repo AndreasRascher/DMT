@@ -1,8 +1,6 @@
 page 91026 DMTTriggerLogEntries
 {
     Caption = 'DMT Trigger Log Entries', Comment = 'de-DE=DMT Trigger Protokollposten';
-    // DeleteAllowed = false;
-    // Editable = false;
     InsertAllowed = false;
     LinksAllowed = false;
     ModifyAllowed = false;

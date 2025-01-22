@@ -34,11 +34,10 @@ page 91014 DMTImportConfigFactBox
                         ApplicationArea = All;
                         trigger OnDrillDown()
                         begin
-                            CurrImportConfigHeader.find('='); // update if changes on main page have not been read
+                            CurrImportConfigHeader.find('=');
                             CurrImportConfigHeader.BufferTableMgt().ShowBufferTable();
                         end;
                     }
-                    // debug csv import
                     field("No.of CSV lines read"; DMTSessionStorage.LastLineRead())
                     {
                         ApplicationArea = All;
@@ -92,11 +91,9 @@ page 91014 DMTImportConfigFactBox
     var
         runMode: Option " ","TableInfo","Log";
     begin
-        // Read RunMode from Filter
         if GetRunModeFromSubPageLink(runMode) then
             case true of
 
-                // Run from Import Config. Card
                 FindImportConfigHeaderFromSubPageLink(CurrImportConfigHeader):
                     begin
                         case runMode of
@@ -107,7 +104,6 @@ page 91014 DMTImportConfigFactBox
                         end;
                     end;
 
-                // Run from Processing Plan
                 GetProcessingPlanFromSubPageLink(CurrProcessingPlan):
                     begin
                         case runMode of
@@ -157,7 +153,7 @@ page 91014 DMTImportConfigFactBox
         LogEntry: Record DMTLogEntry;
     begin
         Rec.DeleteAll();
-        Clear(ViewMode); // hide log if type doesnt support log
+        Clear(ViewMode);
         if importConfigHeader.ID = 0 then
             exit;
 
@@ -174,7 +170,7 @@ page 91014 DMTImportConfigFactBox
     procedure ShowAsTableInfoAndUpdateOnAfterGetCurrRecord(importConfigHeader: Record DMTImportConfigHeader)
     begin
         Rec.DeleteAll();
-        Clear(ViewMode); // hide log if type doesnt support log
+        Clear(ViewMode);
         ViewMode := ViewMode::TableInfo;
         if importConfigHeader.ID = 0 then
             exit;
@@ -182,18 +178,6 @@ page 91014 DMTImportConfigFactBox
         Rec."Entry No." := importConfigHeader.ID;
         Rec.Insert();
     end;
-
-    // procedure DoUpdate(importConfigHeader: Record DMTImportConfigHeader)
-    // begin
-    //     CurrImportConfigHeader.Copy(importConfigHeader);
-
-    //     if ViewMode = ViewMode::Log then begin
-    //         Rec.SetRange("Owner RecordID", importConfigHeader.RecordId);
-    //         Rec.SetRange("Entry Type", Rec."Entry Type"::Summary);
-    //     end;
-
-    //     CurrPage.Update(false);
-    // end;
 
     var
         CurrImportConfigHeader: Record DMTImportConfigHeader;

@@ -29,21 +29,18 @@ codeunit 91008 DMTMigrateRecord
 
     internal procedure Init(bufferRef: RecordRef; importSettings: Codeunit DMTImportSettings; iReplacementHandlerNew: Interface IReplacementHandler)
     begin
-        Clear(CurrTargetRecIDText); // only once, not for every field
+        Clear(CurrTargetRecIDText);
         ImportConfigHeaderGlobal := importSettings.ImportConfigHeader();
         NoSeriesSettings := importSettings.GetNoSeriesSettings();
         EvaluateOptionValueAsNumberGlobal := importSettings.EvaluateOptionValueAsNumber();
         SourceRefGlobal := bufferRef;
         importSettings.GetImportConfigLine(TempImportConfigLine);
         TmpTargetRef.Open(ImportConfigHeaderGlobal."Target Table ID", true, CompanyName);
-        // Initialized target record for validate if not empty option
         TargetRef_INIT.Open(TmpTargetRef.Number, false, TmpTargetRef.CurrentCompany);
         TargetRef_INIT.Init();
-        // Logs
         IReplacementHandler := iReplacementHandlerNew;
-        iReplacementHandler.InitProcess(bufferRef);  // collect replacements for record
+        iReplacementHandler.InitProcess(bufferRef);
         UseTriggerLog := importSettings.UseTriggerLog();
-        // Reset stored errors
         Clear(ErrorLogDict);
     end;
 
@@ -66,7 +63,7 @@ codeunit 91008 DMTMigrateRecord
             end;
         until TempImportConfigLine.Next() = 0;
 
-        if TmpTargetRef.Insert(false) then; // provide a record to avoid errors in trigger code when calling Rec.Modify
+        if TmpTargetRef.Insert(false) then;
         CurrTargetRecIDText := Format(TmpTargetRef.RecordId);
         TargetRecordExistsGlobal := FindExistingTargetRef(ExistingTargetRefGlobal, TmpTargetRef);
     end;
@@ -133,7 +130,7 @@ codeunit 91008 DMTMigrateRecord
         ErrorItem.Add('ErrorTargetRecID', CurrTargetRecIDText);
         ErrorLogDict.Add(CurrFieldToProcess, ErrorItem);
         ProcessedFields.Add(CurrFieldToProcess);
-        // Check if this error should block the insert oder modify
+
         if RunMode = RunMode::ProcessNonKeyFields then
             if not ErrorsOccuredThatShouldNotBeIngored then begin
                 TempImportConfigLine.Get(CurrFieldToProcess);
@@ -194,24 +191,18 @@ codeunit 91008 DMTMigrateRecord
     var
         ValueToAssignField, TargetField : FieldRef;
     begin
-        // Blob handling
         TargetField := TmpTargetRef.Field(TempImportConfigLine."Target Field No.");
         if TargetField.Type in [FieldType::Blob, FieldType::Media] then
             if HandleBase64ToBlobTransferfromGenBuffTable(TargetField, TempImportConfigLine, SourceRefGlobal) then
                 exit;
-        // Create source field with the correct field type
-        // =================================================
+
         if IReplacementHandler.HasReplacementsForTargetField(TempImportConfigLine."Target Field No.") then begin
-            //use value from replacement
             ValueToAssignField := IReplacementHandler.GetReplacementValue(TempImportConfigLine."Target Field No.");
         end else begin
-            // use value from buffer
             AssignValueToFieldRef(SourceRefGlobal, TempImportConfigLine, TmpTargetRef, ValueToAssignField);
         end;
-        CurrValueToAssignText := Format(ValueToAssignField.Value); // Error Log Info
+        CurrValueToAssignText := Format(ValueToAssignField.Value);
 
-        // Assign value in fieldRef to target field
-        // ========================================
         case ValidateSetting of
             ValidateSetting::AssignWithoutValidate:
                 begin
@@ -247,28 +238,21 @@ codeunit 91008 DMTMigrateRecord
         ValidateFailedErr: Label 'The value %1 could not be entered into the field %2',
                  Comment = 'de-DE=Der Wert %1 konnte nicht in das Feld %2 eingetragen werden';
     begin
-        // find value to assign
         if tempCurrImportConfigLine."Processing Action" <> tempCurrImportConfigLine."Processing Action"::CustomValue then begin
             FromField := SourceRecRef.Field(tempCurrImportConfigLine."Source Field No.");
             CurrValueToAssignText := Format(FromField.Value);
         end else begin
             CurrValueToAssignText := GetCustomValue(SourceRecRef, tempCurrImportConfigLine);
         end;
-        // assign current value to target field
-        TargetRecRef2 := TargetRecRef.Duplicate(); // create a duplicate to avoid filling the original target record
+        TargetRecRef2 := TargetRecRef.Duplicate();
         FieldWithTypeCorrectValueToValidate := TargetRecRef2.Field(tempCurrImportConfigLine."Target Field No.");
         case true of
-            // Create fieldRef from custom value
             (tempCurrImportConfigLine."Processing Action" = tempCurrImportConfigLine."Processing Action"::CustomValue):
                 RefHelper.AssignFixedValueToFieldRef(FieldWithTypeCorrectValueToValidate, CurrValueToAssignText);
-            // copy fieldRef from source field
             (TargetRecRef.Field(tempCurrImportConfigLine."Target Field No.").Type = FromField.Type):
-                FieldWithTypeCorrectValueToValidate.Value := FromField.Value; // Same Type -> no conversion needed
-            // evaluate text to target field
+                FieldWithTypeCorrectValueToValidate.Value := FromField.Value;
             (FromField.Type in [FieldType::Text, FieldType::Code]):
                 if not RefHelper.EvaluateFieldRef(FieldWithTypeCorrectValueToValidate, Format(FromField.Value), EvaluateOptionValueAsNumberGlobal, true) then
-                    // Kommt beim Wechsel von Puffertabelle zu generischer Tabelle vor
-                    // Kommt vor wenn der alte Wert ein Code war und der neue Wert ein Option
                     Error(ValidateFailedErr, CurrValueToAssignText, TargetRecRef.Field(tempCurrImportConfigLine."Target Field No.").Caption);
             else
                 Error('AssignValueToFieldRef - unhandled TODO %1', FromField.Type);
@@ -308,7 +292,6 @@ codeunit 91008 DMTMigrateRecord
             exit(false);
 
         case true of
-            // is record Link Note
             (targetField.Number = recordLink.fieldNo(Note)) and (targetField.Record().RecordId.TableNo = database::"Record Link"):
                 begin
                     blobStorage.FindFirst();
@@ -320,7 +303,6 @@ codeunit 91008 DMTMigrateRecord
                     Clear(fieldContent);
                     fieldContent := RecordLinkManagement.ReadNote(recordLink);
                 end;
-            // is blob content
             (targetField.Type = FieldType::Blob):
                 begin
                     blobStorage.FindFirst();
@@ -335,7 +317,6 @@ codeunit 91008 DMTMigrateRecord
                     Base64Convert.FromBase64(fieldContent, OStream);
                     TempBlob.ToFieldRef(targetField);
                 end;
-            // is media content
             (targetField.Type = FieldType::Media):
                 begin
                     blobStorage.FindFirst();
@@ -408,7 +389,7 @@ codeunit 91008 DMTMigrateRecord
     begin
         TempImportConfigLine.SetRange("Is Key Field(Target)", false);
         TempImportConfigLine.SetCurrentKey("Validation Order");
-        if TempImportConfigLine.FindSet() then // if only Key Fields are mapped this is false
+        if TempImportConfigLine.FindSet() then
             repeat
                 if not ProcessedFields.Contains(TempImportConfigLine.RecordId) then begin
                     CurrFieldToProcess := TempImportConfigLine.RecordId;
@@ -444,7 +425,6 @@ codeunit 91008 DMTMigrateRecord
         genBuffTable: Record DMTGenBuffTable;
         oldSourceRef: RecordRef;
     begin
-        // - Wenn GenBuffTable aus RecID die alte Nummer holen
         OK := true;
         if genBuffTable.TableName <> SourceRecRef.Name then
             exit(false);
@@ -454,7 +434,6 @@ codeunit 91008 DMTMigrateRecord
             exit(false);
         oldSourceRef := genBuffTable."RecId (Imported)".GetRecord();
         CustomValue := oldSourceRef.Field(ImportConfigLine."Target Field No.").Value;
-        // Wenn eine alte Nummer verwendet wird, dann dan keine neue Nummer ziehen
         NoSeriesSettings.Get(ImportConfigLine.RecordId).Set('DoIncrement_Yes_No', 'Increment_No');
     end;
 

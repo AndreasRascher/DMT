@@ -216,7 +216,7 @@ xmlport 91002 DMTCSVWriter
                 end;
             else
                 _result := Format(fRef.Value, 0, 9);
-        end; // END_CASE
+        end;
 
         if (rRef.Number = Database::Field) and (fieldNo = fieldRecord.FieldNo(Type)) then begin
             rRef.SetTable(fieldRecord);

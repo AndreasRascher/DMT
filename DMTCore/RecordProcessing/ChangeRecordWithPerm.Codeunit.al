@@ -45,7 +45,7 @@ codeunit 91011 DMTChangeRecordWithPerm
 
             RecID := TargetRef.RecordId;
             if xRecID <> RecID then
-                CurrTargetRecIDText := Format(RecID);  // update if key is changed after insert
+                CurrTargetRecIDText := Format(RecID);
         end;
     end;
 

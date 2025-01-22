@@ -174,16 +174,14 @@ codeunit 91002 DMTImportConfigMgt
         SourceFieldName, TargetFieldName : Text;
         iSourceFileImport: Interface ISourceFileImport;
     begin
-        // Load Target Field Names
         DMTSetup.GetRecordOnce();
         if DMTSetup.MigrationProfil = DMTSetup.MigrationProfil::"From NAV" then
-            TargetFieldNames := CreateTargetFieldNamesDict(ImportConfigHeader, false)  // Names
+            TargetFieldNames := CreateTargetFieldNamesDict(ImportConfigHeader, false)
         else
-            TargetFieldNames := CreateTargetFieldNamesDict(ImportConfigHeader, true);  // Captions
+            TargetFieldNames := CreateTargetFieldNamesDict(ImportConfigHeader, true);
         if TargetFieldNames.Count = 0 then
             exit;
 
-        //Load Source Field Names
         if ImportConfigHeader.BufferTableMgt().IsBufferTableEmpty() then begin
             iSourceFileImport := importConfigHeader.GetSourceFileStorage().SourceFileFormat;
             iSourceFileImport.ImportSelectedRows(importConfigHeader, importConfigHeader.GetDataLayout().HeadingRowNo, importConfigHeader.GetDataLayout().HeadingRowNo);
@@ -191,10 +189,6 @@ codeunit 91002 DMTImportConfigMgt
 
         SourceFieldNamesFromBuffer := CreateSourceFieldNamesDict(ImportConfigHeader);
 
-        // if SourceFieldNames.Count = 0 then
-        //     exit;
-
-        //Load Existing Mappings
         ImportConfigLine.Reset();
         ImportConfigLine.SetAutoCalcFields("Target Field Caption");
         ImportConfigLine.SetFilter("Source Field Caption", '<>''''');
@@ -204,15 +198,13 @@ codeunit 91002 DMTImportConfigMgt
                 ExistingFieldMappings.Set(ImportConfigLine."Source Field Caption", ImportConfigLine."Target Field Caption");
             until ImportConfigLine.Next() = 0;
 
-        //Match Fields by Name
         foreach SourceFieldID in SourceFieldNamesFromBuffer.Keys do begin
             FoundAtIndex := matchFieldByName(ImportConfigHeader, SourceFieldNamesFromBuffer, TargetFieldNames, SourceFieldNamesFromBuffer.Get(SourceFieldID));
             if FoundAtIndex <> 0 then begin
                 TargetFieldID := TargetFieldNames.Keys.Get(FoundAtIndex);
-                // SetSourceField
                 ImportConfigLine.Get(ImportConfigHeader.ID, TargetFieldID);
                 if IsSupportedTargetFieldType(ImportConfigLine) then begin
-                    ImportConfigLine.Validate("Source Field No.", SourceFieldID); // Validate to update processing action
+                    ImportConfigLine.Validate("Source Field No.", SourceFieldID);
                     ImportConfigLine."Source Field Caption" := CopyStr(SourceFieldNamesFromBuffer.Get(SourceFieldID), 1, MaxStrLen(ImportConfigLine."Source Field Caption"));
                     ImportConfigLine.Modify();
                 end;
@@ -220,22 +212,18 @@ codeunit 91002 DMTImportConfigMgt
         end;
         DMTSetup.InsertWhenEmpty();
         DMTSetup.GetRecordOnce();
-        // Match Fields by existing Mappings
         if DMTSetup."Use exist. mappings" then
             foreach SourceFieldID in SourceFieldNamesFromBuffer.Keys do begin
-                // if fieldmapping contains sourcefieldname
                 SourceFieldName := SourceFieldNamesFromBuffer.Get(SourceFieldID);
                 FoundAtIndex := ExistingFieldMappings.Keys.IndexOf(SourceFieldName);
                 if FoundAtIndex <> 0 then begin
-                    // if target field name from mapping exists in import configuration
                     TargetFieldName := ExistingFieldMappings.Values.Get(FoundAtIndex);
                     if TargetFieldNames.Values.Contains(TargetFieldName) then begin
                         FoundAtIndex := TargetFieldNames.Values.IndexOf(TargetFieldName);
                         TargetFieldID := TargetFieldNames.Keys.Get(FoundAtIndex);
                         ImportConfigLine.Get(ImportConfigHeader.ID, TargetFieldID);
                         if ImportConfigLine."Source Field No." = 0 then begin
-                            ImportConfigLine.Validate("Source Field No.", SourceFieldID); // Validate to update processing action
-                            // ImportConfigLine."Source Field Caption" := CopyStr(, 1, MaxStrLen(ImportConfigLine."Source Field Caption"));
+                            ImportConfigLine.Validate("Source Field No.", SourceFieldID);
                             ImportConfigLine.Modify();
                         end;
                     end;
@@ -252,13 +240,10 @@ codeunit 91002 DMTImportConfigMgt
     begin
         dataLayout := importConfigHeader.GetDataLayout();
         case true of
-            // seperate buffer table -> read field names
             not importConfigHeader.UseGenericBufferTable():
                 importConfigHeader.BufferTableMgt().ReadBufferTableColumnCaptions(SourceFieldNames);
-            // use genBuffer, file has heading line  -> read heading line from buffer
             dataLayout."Has Heading Row":
                 importConfigHeader.BufferTableMgt().ReadBufferTableColumnCaptions(SourceFieldNames);
-            // use genBuffer, file without heading line  -> read data layout line
             not dataLayout."Has Heading Row":
                 begin
                     dataLayoutLine.SetRange("Data Layout ID", dataLayout.ID);
@@ -347,22 +332,17 @@ codeunit 91002 DMTImportConfigMgt
         NewFieldName: Text;
         SourceFieldName2: Text;
     begin
-        SourceFieldName := SourceFieldName.TrimEnd(' '); // BC Felder haben keine Leerzeichen am Ende, für Matching entfernen
+        SourceFieldName := SourceFieldName.TrimEnd(' ');
         FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName);
-        // TargetField.SetFilter(FieldName, ConvertStr(BuffTableCaption, '@()&', '????'));
         if FoundAtIndex = 0 then
             if MigrationLib.FindFieldNameInOldVersion(SourceFieldName, ImportConfigHeader."Target Table ID", NewFieldName) then
                 FoundAtIndex := TargetFieldNames.Values.IndexOf(NewFieldName);
         if FoundAtIndex = 0 then begin
-            // Base64 Fields
             if SourceFieldName.EndsWith('[Base64]') then begin
-                // SourceFieldName2 - original field name, SourceFieldName - field name from File
                 SourceFieldName2 := SourceFieldName.Remove(StrLen(SourceFieldName) - StrLen('[Base64]') + 1);
                 FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName2);
             end;
-            // BlobText Fields
             if SourceFieldName.EndsWith('[BlobText]') then begin
-                // SourceFieldName2 - original field name, SourceFieldName - field name from File
                 SourceFieldName2 := SourceFieldName.Remove(StrLen(SourceFieldName) - StrLen('[BlobText]') + 1);
                 FoundAtIndex := TargetFieldNames.Values.IndexOf(SourceFieldName2);
             end;
@@ -387,14 +367,11 @@ codeunit 91002 DMTImportConfigMgt
         tempSourceFileStorage_SELECTED.FindSet();
         repeat
             if not importConfigHeader.filterBy(tempSourceFileStorage_SELECTED) then begin
-                // Assign Source File
                 Clear(importConfigHeader);
                 importConfigHeader."Source File ID" := tempSourceFileStorage_SELECTED."File ID";
                 importConfigHeader."Source File Name" := tempSourceFileStorage_SELECTED.Name;
                 importConfigHeader.Insert(true);
-                // Assign Target Table
                 if DMTSetup.IsNAVExport() then begin
-                    // in newer versions of DMT, the NAVTableID is stored in the filename
                     if tempSourceFileStorage_SELECTED.Name.Contains('_') then begin
                         migrationLib.GetNAVTableIDFromFileName(NAVTableID, NAVTableCaption, tempSourceFileStorage_SELECTED.Name);
                         tempSourceFileStorage_SELECTED.Name := CopyStr(NAVTableCaption, 1, MaxStrLen(tempSourceFileStorage_SELECTED.Name));
@@ -409,7 +386,6 @@ codeunit 91002 DMTImportConfigMgt
                 TargetTableID := migrationLib.HandleObsoleteNAVTargetTable(TargetTableID);
 
             if TargetTableID <> 0 then begin
-                // validate Target Table to apply known settings from DMTMigrationLibrary
                 importConfigHeader.Validate("Target Table ID", TargetTableID);
                 importConfigHeader.Modify(true);
                 ImportConfigMgt.PageAction_InitImportConfigLine(importConfigHeader.ID);

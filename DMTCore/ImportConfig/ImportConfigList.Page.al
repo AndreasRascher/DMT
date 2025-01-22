@@ -13,7 +13,6 @@ page 91010 DMTImportConfigList
         {
             repeater(Group)
             {
-                // field("Data Layout Code"; Rec."Data Layout ID") { }
                 field("Source File Name"; Rec."Source File Name") { }
                 field(ID; Rec.ID) { }
                 field("Target Table ID"; Rec."Target Table ID") { }
@@ -69,7 +68,7 @@ page 91010 DMTImportConfigList
                     repeat
                         progress.Update(1, TempImportConfigHeader."Source File Name");
                         TempImportConfigHeader.ImportFileToBuffer();
-                        Commit(); // Keep progress if error occurs in next line
+                        Commit();
                     until TempImportConfigHeader.Next() = 0;
                     progress.Close();
                 end;
@@ -127,7 +126,7 @@ page 91010 DMTImportConfigList
         Clear(ImportConfigHeader_SELECTED);
         if ImportConfigHeader_SELECTED.IsTemporary then ImportConfigHeader_SELECTED.DeleteAll();
         Debug := Rec.Count;
-        ImportConfigHeader.Copy(Rec); // if all fields are selected, no filter is applied but the view is also not applied
+        ImportConfigHeader.Copy(Rec);
         CurrPage.SetSelectionFilter(ImportConfigHeader);
         Debug := ImportConfigHeader.Count;
         ImportConfigHeader.CopyToTemp(ImportConfigHeader_SELECTED);

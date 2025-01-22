@@ -952,19 +952,16 @@ page 91004 DMTGenBufferList250
 
     procedure GetEditable(FieldNo: Integer) IsEditable: Boolean
     begin
-        /* Only show Columns with Caption */
         IsEditable := DMTGenBufferFieldCaptions.HasCaption(FieldNo);
     end;
 
     procedure GetVisibility(FieldNo: Integer) IsEditable: Boolean
     begin
-        /* Only show Columns with Caption */
         IsEditable := DMTGenBufferFieldCaptions.HasCaption(FieldNo);
     end;
 
     var
         DMTGenBufferFieldCaptions: Codeunit DMTSessionStorage;
-        // [InDataSet]
         Fld001Editable, Fld002Editable, Fld003Editable, Fld004Editable, Fld005Editable, Fld006Editable, Fld007Editable, Fld008Editable, Fld009Editable, Fld010Editable,
         Fld011Editable, Fld012Editable, Fld013Editable, Fld014Editable, Fld015Editable, Fld016Editable, Fld017Editable, Fld018Editable, Fld019Editable, Fld020Editable,
         Fld021Editable, Fld022Editable, Fld023Editable, Fld024Editable, Fld025Editable, Fld026Editable, Fld027Editable, Fld028Editable, Fld029Editable, Fld030Editable,
@@ -995,7 +992,6 @@ page 91004 DMTGenBufferList250
         Fld271Editable, Fld272Editable, Fld273Editable, Fld274Editable, Fld275Editable, Fld276Editable, Fld277Editable, Fld278Editable, Fld279Editable, Fld280Editable,
         Fld281Editable, Fld282Editable, Fld283Editable, Fld284Editable, Fld285Editable, Fld286Editable, Fld287Editable, Fld288Editable, Fld289Editable, Fld290Editable,
         Fld291Editable, Fld292Editable, Fld293Editable, Fld294Editable, Fld295Editable, Fld296Editable, Fld297Editable, Fld298Editable, Fld299Editable, Fld300Editable : Boolean;
-        // [InDataSet]
         Fld001Visible, Fld002Visible, Fld003Visible, Fld004Visible, Fld005Visible, Fld006Visible, Fld007Visible, Fld008Visible, Fld009Visible, Fld010Visible,
         Fld011Visible, Fld012Visible, Fld013Visible, Fld014Visible, Fld015Visible, Fld016Visible, Fld017Visible, Fld018Visible, Fld019Visible, Fld020Visible,
         Fld021Visible, Fld022Visible, Fld023Visible, Fld024Visible, Fld025Visible, Fld026Visible, Fld027Visible, Fld028Visible, Fld029Visible, Fld030Visible,

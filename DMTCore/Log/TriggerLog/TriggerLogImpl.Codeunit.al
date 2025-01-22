@@ -18,16 +18,11 @@ codeunit 91026 DMTTriggerLogImpl implements ITriggerLog
     begin
         if not AreVarsToCompareInitialized then
             Error(varsToCompareNotInitializedErr);
-
         findChangedFields(changedFields, targetRefBeforeChangeGlobal, TmpTargetRef);
-
-        // log all changes besides the one that is assigned to the target field
-        // 1. add the actual validated field
         if changedFields.Get(TargetFieldGlobal.Number, fromValueToValueList) then begin
             addValidateTriggerLog(TargetFieldGlobal.Number, TargetFieldGlobal.Number, fromValueToValueList, SourceFieldGlobal, TmpTargetRef.RecordId);
             changedFields.Remove(TargetFieldGlobal.Number);
         end;
-        // 2. add all other changes
         foreach changedFieldNo in changedFields.Keys do begin
             changedFields.Get(changedFieldNo, fromValueToValueList);
             addValidateTriggerLog(TargetFieldGlobal.Number, changedFieldNo, fromValueToValueList, SourceFieldGlobal, TmpTargetRef.RecordId);

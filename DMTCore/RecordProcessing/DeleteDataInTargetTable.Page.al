@@ -63,14 +63,12 @@ page 91015 DMTDeleteDataInTargetTable
 
     procedure EditSourceTableView(var sourceView: Text; var sourceFilter: Text; ImportConfigHeader: Record DMTImportConfigHeader)
     var
-        // FPBuilder: Codeunit DMTFPBuilder;
         fieldSelection: Page DMTFieldSelection;
         BufferRef: RecordRef;
     begin
         ImportConfigHeader.BufferTableMgt().InitBufferRef(BufferRef);
         if sourceView <> '' then
             BufferRef.SetView(sourceView);
-        // if not FPBuilder.RunModal(BufferRef, ImportConfigHeader) then
         if not fieldSelection.EditSourceTableFilters(BufferRef, ImportConfigHeader) then
             exit;
         sourceView := BufferRef.GetView();
@@ -79,14 +77,12 @@ page 91015 DMTDeleteDataInTargetTable
 
     procedure EditTargetTableFilter(var targetView: Text; var targetFilter: Text; ImportConfigHeader: Record DMTImportConfigHeader)
     var
-        // FPBuilder: Codeunit DMTFPBuilder;
         fieldSelection: Page DMTFieldSelection;
         RecRef: RecordRef;
     begin
         RecRef.Open(ImportConfigHeader."Target Table ID");
         if targetView <> '' then
             RecRef.SetView(targetView);
-        // if FPBuilder.RunModal(RecRef) then begin
         if fieldSelection.EditTargetTableFilters(RecRef, ImportConfigHeader) then begin
             targetView := RecRef.GetView();
             targetFilter := RecRef.GetFilters;
@@ -104,7 +100,6 @@ page 91015 DMTDeleteDataInTargetTable
         Clear(RecordMapping);
 
         ImportConfigHeader.BufferTableMgt().LoadImportConfigLines(TempImportConfigLine);
-        // FindSourceRef - GenBuffer
         if ImportConfigHeader.UseGenericBufferTable() then begin
             GenBuffTable.Reset();
             GenBuffTable.SetRange(IsCaptionLine, false);
@@ -115,13 +110,11 @@ page 91015 DMTDeleteDataInTargetTable
             if SourceRef.IsEmpty then
                 exit;
         end;
-        // FindSourceRef - CSVBuffer
         if not ImportConfigHeader.UseGenericBufferTable() then begin
             SourceRef.Open(ImportConfigHeader."Buffer Table ID");
             if SourceRef.IsEmpty then
                 exit;
         end;
-        // Map RecordIDs
         if SourceView <> '' then
             SourceRef.SetView(SourceView);
         SourceRef.FindSet(false);
@@ -144,11 +137,9 @@ page 91015 DMTDeleteDataInTargetTable
         TargetRecordIDsToDelete: List of [RecordId];
     begin
 
-        // Create RecordID Mapping between Buffer and Target Table
         if sourceView <> '' then begin
             SourceToTargetRecordMapping := CreateSourceToTargetRecIDMapping(ImportConfigHeader, sourceView, NotTransferedRecords);
             TargetRecordIDsToDelete := SourceToTargetRecordMapping.Values;
-            // Remove TargetRecordID not in Filter
             if targetView <> '' then begin
                 foreach RecID in TargetRecordIDsToDelete do begin
                     if not IsRecIDInView(RecID, targetView) then begin
@@ -157,7 +148,6 @@ page 91015 DMTDeleteDataInTargetTable
                 end;
             end;
         end else begin
-            // Read all RecordIDs from Target
             TargetRef.Open(ImportConfigHeader."Target Table ID");
             TargetRef.SetView(targetView);
             if TargetRef.FindSet(false) then

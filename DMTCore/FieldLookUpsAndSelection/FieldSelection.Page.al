@@ -253,7 +253,6 @@ page 91029 DMTFieldSelection
         bufferRefWithNewView: RecordRef;
         debug: Text;
     begin
-        // create a copy of bufferRef and reset it
         bufferRefWithNewView := BufferRef.Duplicate();
         bufferRefWithNewView.Reset();
         if Rec.FindSet(false) then
@@ -268,7 +267,6 @@ page 91029 DMTFieldSelection
                         Error('unhandled usage %1', Usage);
                 end;
             until Rec.Next() = 0;
-        // setting the new view keeps other filtergroups filter
         BufferRef.SetView(bufferRefWithNewView.GetView());
         debug := BufferRef.GetFilters();
         BufferRef.FilterGroup(2);

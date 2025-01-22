@@ -338,7 +338,6 @@ table 91001 DMTGenBuffTable
             DMTBlobStorage.DeleteAll();
     end;
 
-    /// <summary>Check if file has header line</summary>
     procedure HasCaptionLine(ImportConfigID: Integer) Result: Boolean
     var
         importConfigHeader: Record DMTImportConfigHeader;

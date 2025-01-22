@@ -47,16 +47,13 @@ table 91000 DMTSetup
 
     procedure getDefaultReplacementImplementation(var IReplacementHandler: Interface IReplacementHandler)
     var
-        // ReplacementHandlerImpl: codeunit ReplacementHandlerImpl;
         ReplacementHandlerImpl: codeunit ReplacementHandlerImpl2;
     begin
         IReplacementHandler := ReplacementHandlerImpl;
     end;
 
-    // Interface used as return value because only atomic procedure calls are possible
     procedure getDefaultImportConfigPageActionImplementation() IImportConfigPageAction: Interface IImportConfigPageAction
     var
-        // ReplacementHandlerImpl: codeunit ReplacementHandlerImpl;
         importConfigPageActionImpl: codeunit DMTImportConfigPageActionImpl;
     begin
         IImportConfigPageAction := importConfigPageActionImpl;

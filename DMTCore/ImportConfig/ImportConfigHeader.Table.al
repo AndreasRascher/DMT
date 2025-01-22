@@ -84,7 +84,6 @@ table 91003 DMTImportConfigHeader
             end;
         }
         field(44; BufferTableIDStyle; Text[15]) { Caption = 'BufferTableIDStyle', Locked = true; Editable = false; }
-        #region Import and Processing Options
         field(50; LastUsedUpdateFieldsSelection; Blob) { Caption = 'LastUsedUpdateFieldsSelection', Locked = true; }
         field(51; LastUsedFilter; Blob) { Caption = 'LastUsedFilter', Locked = true; }
         field(52; "Use OnInsert Trigger"; Boolean) { Caption = 'Use OnInsert Trigger', Comment = 'de-DE=OnInsert Trigger verwenden'; InitValue = true; }
@@ -110,11 +109,8 @@ table 91003 DMTImportConfigHeader
             TableRelation = DMTSourceFileStorage.Name;
             ValidateTableRelation = false;
         }
-        #endregion Import and Processing Options
-        #region Processing Info
         field(110; ImportToTargetPercentage; Decimal) { Caption = 'Migrated %', Comment = 'de-DE=Migriert %'; Editable = false; AutoFormatExpression = '<precision, 1:1><standard format,0>%'; }
         field(111; ImportToTargetPercentageStyle; Text[15]) { Caption = 'ImportToTargetPercentageStyle', Locked = true; }
-        #endregion Processing Info
     }
 
     keys
@@ -130,7 +126,6 @@ table 91003 DMTImportConfigHeader
     var
         DMTSetup: Record DMTSetup;
     begin
-        // NAV Exports should export option values as integer
         if DMTSetup.IsNAVExport() then
             Rec."Ev. Nos. for Option fields as" := Rec."Ev. Nos. for Option fields as"::Position;
         Rec.ID := GetNextID();
@@ -201,18 +196,15 @@ table 91003 DMTImportConfigHeader
         SearchToken: Text;
         ContinueSearch: Boolean;
     begin
-        // exit if assigned from dropdown
         if (Rec."Source File ID" <> 0) then
             if sourceFileStorage.Get(Rec."Source File ID") and (sourceFileStorage.Name = Rec."Source File Name") then
                 exit;
         case true of
-            // Case 1 - Empty
             (Rec."Source File Name" = ''):
                 begin
                     Rec."Source File ID" := 0;
                     Rec."Source File Name" := '';
                 end;
-            // Case 2 - Table No.
             (Rec."Source File Name" <> '') and TypeHelper.IsNumeric(Rec."Source File Name"):
                 begin
                     Evaluate(sourceFileID, Rec."Source File Name");
@@ -220,17 +212,14 @@ table 91003 DMTImportConfigHeader
                     Rec."Source File ID" := sourceFileStorage."File ID";
                     Rec."Source File Name" := sourceFileStorage.Name;
                 end;
-            // Case 3 - Search Term
             (Rec."Source File Name" <> '') and not TypeHelper.IsNumeric(Rec."Source File Name"):
                 begin
                     SearchToken := Rec."Source File Name";
-                    // Search 1: exact match, not case sensitive   
                     SearchToken := ConvertStr(SearchToken, '()<>€', '?????');
                     if not SearchToken.StartsWith('@') then
                         SearchToken := '@' + SearchToken;
                     sourceFileStorage.SetFilter(Name, SearchToken);
                     ContinueSearch := not sourceFileStorage.FindFirst();
-                    // Search 2: part of, not case sensitive   
                     if ContinueSearch then begin
                         if not SearchToken.EndsWith('*') then
                             SearchToken := SearchToken + '*';
@@ -268,12 +257,11 @@ table 91003 DMTImportConfigHeader
         SourceFileMgt: Codeunit DMTSourceFileMgt;
         noSourceFileAssignedErr: Label 'The import configuration %1 has no source file assigned.', Comment = 'de-DE=Die Importkonfiguration %1 hat keine Quelldatei zugeordnet.';
     begin
-        // throw error if no source file is assigned
         if rec."Source File ID" = 0 then
             Error(noSourceFileAssignedErr, Rec.ID);
         Rec.TestField("Source File ID");
         sourceFileStorage.Get(rec."Source File ID");
-        SourceFileMgt.AssignDefaultDataLayout(sourceFileStorage);  // if setup has been set after importing source files
+        SourceFileMgt.AssignDefaultDataLayout(sourceFileStorage);
         sourceFileStorage.Modify();
         ThrowActionableErrorIfDataLayoutIsNotSet();
         sourceFileStorage.get(sourceFileStorage.RecordId);
@@ -345,19 +333,16 @@ table 91003 DMTImportConfigHeader
         SearchToken: Text;
         ContinueSearch: Boolean;
     begin
-        // exit if assigned from dropdown
         if (Rec."Target Table ID" <> 0) then
             if AllObjWithCaption.Get(AllObjWithCaption."Object Type"::Table, Rec."Target Table ID") then
                 if (AllObjWithCaption."Object Caption" = Rec."Target Table Caption") then
                     exit;
         case true of
-            // Case 1 - Empty
             (Rec."Target Table Caption" = ''):
                 begin
                     Rec."Target Table ID" := 0;
                     Rec."Target Table Caption" := '';
                 end;
-            // Case 2 - Table No.
             (Rec."Target Table Caption" <> '') and TypeHelper.IsNumeric(Rec."Target Table Caption"):
                 begin
                     Evaluate(ObjectID, Rec."Target Table Caption");
@@ -365,17 +350,14 @@ table 91003 DMTImportConfigHeader
                     Rec."Target Table ID" := AllObjWithCaption."Object ID";
                     Rec."Target Table Caption" := AllObjWithCaption."Object Caption";
                 end;
-            // Case 3 - Search Term
             (Rec."Target Table Caption" <> '') and not TypeHelper.IsNumeric(Rec."Target Table Caption"):
                 begin
                     SearchToken := Rec."Target Table Caption";
-                    // Search 1: exact match, not case sensitive   
                     SearchToken := ConvertStr(SearchToken, '()<>€', '?????');
                     if not SearchToken.StartsWith('@') then
                         SearchToken := '@' + SearchToken;
                     AllObjWithCaption.SetFilter("Object Caption", SearchToken);
                     ContinueSearch := not AllObjWithCaption.FindFirst();
-                    // Search 2: part of, not case sensitive   
                     if ContinueSearch then begin
                         if not SearchToken.EndsWith('*') then
                             SearchToken := SearchToken + '*';
@@ -417,8 +399,8 @@ table 91003 DMTImportConfigHeader
         sourceFileStorage.Get(Rec."Source File ID");
         if sourceFileStorage."Data Layout ID" <> 0 then
             exit;
-        DataLayoutMissingErrInfo.AddAction(AssignDataLayoutButtonCaptionLbl, Codeunit::DMTSourceFileMgt, 'ShowSourceFileStorageWithErrorInfo');//Method must be global and have an errorinfo parameter
-        DataLayoutMissingErrInfo.Message := StrSubstNo(SourceFileHasNoDataLayoutErr, sourceFileStorage.TableCaption, sourceFileStorage.Name);// no error shown if missing
+        DataLayoutMissingErrInfo.AddAction(AssignDataLayoutButtonCaptionLbl, Codeunit::DMTSourceFileMgt, 'ShowSourceFileStorageWithErrorInfo');
+        DataLayoutMissingErrInfo.Message := StrSubstNo(SourceFileHasNoDataLayoutErr, sourceFileStorage.TableCaption, sourceFileStorage.Name);
         DataLayoutMissingErrInfo.RecordId := sourceFileStorage.RecordId;
         Error(DataLayoutMissingErrInfo);
     end;

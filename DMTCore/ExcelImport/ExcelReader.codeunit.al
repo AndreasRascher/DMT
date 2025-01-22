@@ -74,19 +74,16 @@ codeunit 91018 DMTExcelReader
     local procedure SaveCellValuesToDataTable(lineNo: Integer; fieldContent: Text)
     begin
         if lineNo > CurrLineNoGlobal then begin
-            //save last line
             if CurrLineNoGlobal > 0 then begin
                 DataTable.Add(CurrentLineGlobal);
                 Progress_Update(lineNo);
             end;
-            //start new line
             CurrLineNoGlobal := lineNo;
             Clear(CurrentLineGlobal);
         end;
 
         CurrentLineGlobal.Add(fieldContent);
 
-        // save first line with values info to find headline row no
         if FirstRowWithValuesGlobal = 0 then
             if fieldContent <> '' then
                 FirstRowWithValuesGlobal := lineNo;
@@ -98,7 +95,6 @@ codeunit 91018 DMTExcelReader
             if CurrLineNoGlobal > 0 then
                 ImportLine(CurrentLineGlobal, (rowNo - 1) = HeadLineRowNoGlobal, ImportFromFileNameGlobal);
             Progress_Update(rowNo);
-            //start new line
             CurrLineNoGlobal := rowNo;
             Clear(CurrentLineGlobal);
         end;
@@ -122,7 +118,6 @@ codeunit 91018 DMTExcelReader
         RecRef.GetTable(genBuffTable);
         foreach cellValue in currentLine do begin
             CurrColIndex += 1;
-            //Handle large Texts
             if IsColumnCaptionLine then
                 ColCaptionsGlobal.add(CurrColIndex, cellValue);
             if not IsColumnCaptionLine then
@@ -154,7 +149,6 @@ codeunit 91018 DMTExcelReader
         exit(SheetNameGlobal);
     end;
 
-    #region ProgressDialog
     local procedure Progress_Update(lineNo: Integer)
     begin
         if not Progress_IsActive then exit;
@@ -178,7 +172,6 @@ codeunit 91018 DMTExcelReader
         Progress.Close();
         Progress_IsActive := false;
     end;
-    #endregion ProgressDialog
 
     local procedure ProcessLastLine()
     begin

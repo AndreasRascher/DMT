@@ -30,10 +30,6 @@ codeunit 91006 DMTLog
         ProcessingStatistics.Add(Format(StatisticType::Processed), 0);
     end;
 
-    /// <summary>
-    /// Returns the current log entry template. It initialized with process number and the usage. Every new log entry will be created based on this template.
-    /// </summary>
-    /// <returns>Current log entry template</returns>
     procedure GetCurrentLogEntryTemplate() CurrLogEntryTemplate: Record DMTLogEntry
     begin
         exit(LogEntryTemplate);
@@ -138,11 +134,9 @@ codeunit 91006 DMTLog
         LogEntry: Record DMTLogEntry;
     begin
         if ImportConfigLine."Imp.Conf.Header ID" = 0 then
-            // Filtered Rec from Page 
             ImportConfigHeader.Get(ImportConfigLine.GetRangeMin("Imp.Conf.Header ID"))
         else
             ImportConfigHeader.Get(ImportConfigLine."Imp.Conf.Header ID");
-        // exit if no source file is set
         if ImportConfigHeader."Source File ID" = 0 then
             exit(false);
         LogEntry.SetRange("Entry Type", LogEntry."Entry Type"::Error);
