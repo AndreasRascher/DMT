@@ -11,13 +11,12 @@ codeunit 91005 DMTExcelFileImportImpl implements ISourceFileImport
         excelReader: Codeunit DMTExcelReader;
         largeTextColCaptions: Dictionary of [Integer, Text];
     begin
-        ImportConfigHeader.BufferTableMgt().DeleteAllBufferData(); // Delete existing lines
-        if logEntry.FilterFor(ImportConfigHeader) then // Delete Error Log because it references the old autoincr. Line IDs
+        ImportConfigHeader.BufferTableMgt().DeleteAllBufferData();
+        if logEntry.FilterFor(ImportConfigHeader) then
             logEntry.DeleteAll();
-        if triggerLogEntry.FilterFor(ImportConfigHeader) then // Delete Trigger Log because it references the old autoincr. Line IDs
+        if triggerLogEntry.FilterFor(ImportConfigHeader) then
             triggerLogEntry.DeleteAll();
 
-        // Read File Blob
         SourceFileStorage.Get(ImportConfigHeader."Source File ID");
         SourceFileStorage.TestField(Name);
         BindSubscription(excelReader);
@@ -35,7 +34,6 @@ codeunit 91005 DMTExcelFileImportImpl implements ISourceFileImport
         excelReader: Codeunit DMTExcelReader;
     begin
         BindSubscription(excelReader);
-        // read top 5 rows if undefined
         excelReader.InitSourceFile(sourceFileStorage);
         if dataLayout.HeadingRowNo = 0 then
             excelReader.InitReadRows(1, 5)

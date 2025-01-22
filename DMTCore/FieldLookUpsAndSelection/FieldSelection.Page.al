@@ -167,7 +167,7 @@ page 91029 DMTFieldSelection
     var
         fieldSelection: Page DMTFieldSelection;
         runAction: Action;
-        fieldFilters: Dictionary of [Integer/*Field-ID*/, Text/*Filter*/];
+        fieldFilters: Dictionary of [Integer, Text];
     begin
         fieldSelection.SetUsage_EditSourceTableFilters(importConfigHeader);
         fieldSelection.loadFieldFilters(fieldFilters, BufferRef);
@@ -185,7 +185,7 @@ page 91029 DMTFieldSelection
     var
         fieldSelection: Page DMTFieldSelection;
         runAction: Action;
-        fieldFilters: Dictionary of [Integer/*Field-ID*/, Text/*Filter*/];
+        fieldFilters: Dictionary of [Integer, Text];
     begin
         fieldSelection.SetUsage_EditTargetTableFilters(importConfigHeader);
         fieldSelection.loadFieldFilters(fieldFilters, TargetRef);
@@ -203,7 +203,7 @@ page 91029 DMTFieldSelection
     var
         fieldSelection: Page DMTFieldSelection;
         runAction: Action;
-        fieldFilters: Dictionary of [Integer/*Field-ID*/, Text/*Filter*/];
+        fieldFilters: Dictionary of [Integer, Text];
     begin
         fieldSelection.SetUsage_EditDefaultValues(importConfigHeader);
         fieldSelection.loadFieldFilters(fieldFilters, TargetRef);
@@ -219,7 +219,7 @@ page 91029 DMTFieldSelection
     var
         fieldSelection: Page DMTFieldSelection;
         runAction: Action;
-        fieldFilters: Dictionary of [Integer/*Field-ID*/, Text/*Filter*/];
+        fieldFilters: Dictionary of [Integer, Text];
     begin
         fieldSelection.SetUsage_EditTableFilters(SourceRef);
         fieldSelection.addKeyFieldsToPage(SourceRef);
@@ -315,16 +315,6 @@ page 91029 DMTFieldSelection
             tempFieldSelectionBuffer."Source Field Caption" := importConfigLine."Source Field Caption";
     end;
 
-    // local procedure FindAssignedTargetField(var tempFieldSelectionBuffer: Record DMTFieldLookUpBuffer temporary)
-    // var
-    //     importConfigLine: Record DMTImportConfigLine;
-    // begin
-    //     importConfigLine.SetRange("Imp.Conf.Header ID", tempFieldSelectionBuffer.GetRangeMin("Import Config. ID Filter"));
-    //     importConfigLine.SetRange(importConfigLine."Source Field No.", tempFieldSelectionBuffer."Field No.");
-    //     if importConfigLine.FindFirst() then
-    //         tempFieldSelectionBuffer."Target Field Caption" := importConfigLine."Target Field Caption";
-    // end;
-
     local procedure setImportConfigHeaderAndTargetTableFilter(var importConfigHeader: Record DMTImportConfigHeader)
     begin
         Rec.FilterGroup(4);
@@ -333,7 +323,7 @@ page 91029 DMTFieldSelection
         Rec.FilterGroup(0);
     end;
 
-    procedure loadFieldFilters(var fieldFilters: Dictionary of [Integer/*Field-ID*/, Text/*Filter*/]; var recordRef: RecordRef) hasFilters: Boolean
+    procedure loadFieldFilters(var fieldFilters: Dictionary of [Integer, Text]; var recordRef: RecordRef) hasFilters: Boolean
     var
         fieldIndex: Integer;
     begin
@@ -347,7 +337,7 @@ page 91029 DMTFieldSelection
         hasFilters := fieldFilters.Count > 0;
     end;
 
-    procedure addFieldWithFiltersToPage(var SourceRef: RecordRef; var fieldFilters: Dictionary of [Integer/*Field-ID*/, Text/*Filter*/])
+    procedure addFieldWithFiltersToPage(var SourceRef: RecordRef; var fieldFilters: Dictionary of [Integer, Text])
     var
         fieldID: Integer;
     begin

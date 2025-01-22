@@ -28,13 +28,6 @@ page 91011 DMTDataLayoutCard
                 field(Default; Rec.Default) { }
 
             }
-            // group(NAV)
-            // {
-            //     Visible = IsNAVExport;
-            //     field(NAVTableID; Rec.NAVTableID) { }
-            //     field(NAVTableCaption; Rec.NAVTableCaption) { }
-            //     field(NAVNoOfRecords; Rec.NAVNoOfRecords) { }
-            // }
             group(Excel)
             {
                 Visible = Rec.SourceFileFormat = Rec.SourceFileFormat::Excel;
@@ -118,19 +111,14 @@ page 91011 DMTDataLayoutCard
                     if HeaderLine.Count = 0 then begin
                         Message('Keine Daten gefunden in Zeile %1', rec.HeadingRowNo);
                     end;
-                    // Set first row with values as headlines
                     if rec.HeadingRowNo = 0 then
                         rec.HeadingRowNo := FirstRowWithValues;
-
                     if Rec.Name = '' then
                         Rec.Name := sourceFileStorage.Name;
-
-                    CurrPage.Update(true); // save rec
-                    // clear existing lines
+                    CurrPage.Update(true);
                     dataLayoutLine.Reset();
                     dataLayoutLine.SetRange("Data Layout ID", Rec.ID);
                     dataLayoutLine.DeleteAll(true);
-                    // add lines
                     foreach ColumnName in HeaderLine do begin
                         Clear(dataLayoutLine);
                         dataLayoutLine."Data Layout ID" := Rec.ID;

@@ -200,13 +200,11 @@ page 91001 DMTGenBufferList50
 
     procedure GetEditable(FieldNo: Integer) IsEditable: Boolean
     begin
-        /* Only show Columns with Caption */
         IsEditable := DMTGenBufferFieldCaptions.HasCaption(FieldNo);
     end;
 
     procedure GetVisibility(FieldNo: Integer) IsEditable: Boolean
     begin
-        /* Only show Columns with Caption */
         IsEditable := DMTGenBufferFieldCaptions.HasCaption(FieldNo);
     end;
 

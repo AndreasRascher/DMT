@@ -15,7 +15,6 @@ xmlport 91002 DMTCSVWriter
         {
             tableelement(Line; Integer)
             {
-                // UseTemporary = true;
                 AutoReplace = true;
                 textelement(FieldContent)
                 {
@@ -23,18 +22,15 @@ xmlport 91002 DMTCSVWriter
                     TextType = BigText;
                     trigger OnBeforePassVariable()
                     begin
-                        CurrFieldIndexGlobal += 1; // count columns per line
+                        CurrFieldIndexGlobal += 1;
 
-                        // break after last column 
                         if ExportFieldListGlobal.Values.Count < CurrFieldIndexGlobal then
-                            currXMLport.BreakUnbound(); // new line                        
+                            currXMLport.BreakUnbound();
 
-                        Clear(FieldContent); // is not cleared automatically between Fields
+                        Clear(FieldContent);
                         if Line.Number = 0 then begin
-                            // Column Header
                             FieldContent.AddText(ExportFieldListGlobal.Values.Get(CurrFieldIndexGlobal));
                         end else begin
-                            // Column Content
                             FieldContent.AddText(getFieldContentAsText(SourceRef, CurrFieldIndexGlobal));
                         end;
                     end;
@@ -49,10 +45,8 @@ xmlport 91002 DMTCSVWriter
                 trigger OnAfterGetRecord()
                 begin
                     case true of
-                        //headLine
                         (Line.Number = 0):
                             ;
-                        // first line
                         (Line.Number = 1):
                             SourceRef.FindSet(false);
                         else
@@ -78,8 +72,6 @@ xmlport 91002 DMTCSVWriter
     begin
         if importConfigHeader."Target Table ID" = 0 then exit;
         rRef.Open(importConfigHeader."Target Table ID");
-        // if not FPBuilder.RunModal(rRef) then
-        //     exit;
         if not fieldSelection.EditTargetTableFilters(rRef, importConfigHeader) then
             exit;
         if not rRef.FindSet() then exit;
@@ -115,7 +107,6 @@ xmlport 91002 DMTCSVWriter
         end;
     end;
 
-    /// <summary>Get field value as text. Blob as base 64, Option as number </summary>
     local procedure getFieldContentAsText(var rRef: RecordRef; fieldIndex: Integer) _result: Text
     var
         fieldRecord: Record Field;
@@ -141,7 +132,6 @@ xmlport 91002 DMTCSVWriter
         fRef := rRef.Field(fieldNo);
         if fRef.Class = fRef.Class::FlowField then
             fRef.CalcField();
-        //* returns values in xmlformat, handles problems with field.type optionstring bug
         case fRef.Type of
             FieldType::Boolean:
                 begin

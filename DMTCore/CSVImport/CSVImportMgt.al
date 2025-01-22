@@ -11,10 +11,10 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
         largeTextColCaptions: Dictionary of [Integer, Text];
     begin
         sessionStorage.LastLineRead(0);
-        ImportConfigHeader.BufferTableMgt().DeleteAllBufferData(); // Delete existing lines
-        if DMTLogEntry.FilterFor(ImportConfigHeader) then // Delete Error Log because it references the old autoincr. Line IDs
+        ImportConfigHeader.BufferTableMgt().DeleteAllBufferData();
+        if DMTLogEntry.FilterFor(ImportConfigHeader) then
             DMTLogEntry.DeleteAll();
-        if DMTTriggerLogEntry.FilterFor(ImportConfigHeader) then // Delete Trigger Log because it references the old autoincr. Line IDs
+        if DMTTriggerLogEntry.FilterFor(ImportConfigHeader) then
             DMTTriggerLogEntry.DeleteAll();
         if not ImportViaSeparateXMLPort(ImportConfigHeader) then begin
             SourceFileStorage.Get(ImportConfigHeader."Source File ID");
@@ -35,7 +35,7 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
     begin
         if not importConfigHeader.UseSeparateXMLPort() then exit(false);
         if importConfigHeader."Import XMLPort ID" = 0 then exit(false);
-        // Validate XMLPort exists
+
         if not AllObjWithCaption.get(AllObjWithCaption."Object Type"::XMLport, importConfigHeader."Import XMLPort ID") then
             Error(xmlPortNotFoundErr, importConfigHeader."Import XMLPort ID");
         sourceFileStorage.Get(ImportConfigHeader."Source File ID");
@@ -51,7 +51,7 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
         CSVReader: XmlPort DMTCSVReader;
     begin
         PrepareXMLPortWithCSVOptionsAndSourceFile(sourceFileStorage, dataLayout, CSVReader);
-        // read top 5 rows if undefined
+
         if dataLayout.HeadingRowNo = 0 then
             CSVReader.InitReadRows(1, 5)
         else
@@ -110,7 +110,7 @@ codeunit 91020 DMTImportCSVImpl implements ISourceFileImport
         CRLF[1] := 13;
         CRLF[2] := 10;
         TAB[1] := 9;
-        //<None>,<CR/LF>,<CR>,<LF>,<TAB>
+
         Result := textWithPlaceholders;
         Result := Result.Replace('<CR>', CRLF[1]);
         Result := Result.Replace('<LF>', CRLF[2]);

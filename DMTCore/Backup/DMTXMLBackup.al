@@ -52,9 +52,8 @@ codeunit 91007 DMTXMLBackup
         foreach XTableNode in XTableList do begin
             Evaluate(TableNodeID, GetAttributeValue(XTableNode, 'ID'));
             TableNodeName := GetAttributeValue(XTableNode, 'NAME');
-            XTableNode.SelectNodes('child::RECORD', XRecordList); // select all element children
+            XTableNode.SelectNodes('child::RECORD', XRecordList);
             foreach XRecordNode in XRecordList do begin
-                // Check for renumbering
                 if not allObj.Get(allObj."Object Type"::Table, TableNodeID) then
                     if TableNodeName <> '' then begin
                         allObj.SetRange("Object Type", allObj."Object Type"::Table);
@@ -64,8 +63,7 @@ codeunit 91007 DMTXMLBackup
                     end;
                 Clear(TargetRef);
                 TargetRef.Open(TableNodeID, false);
-                //XFieldList := XRecordNode.AsXmlElement().GetChildNodes();
-                XRecordNode.SelectNodes('child::*', XFieldList); // select all element children
+                XRecordNode.SelectNodes('child::*', XFieldList);
                 foreach XFieldNode in XFieldList do begin
                     Evaluate(FieldNodeID, GetAttributeValue(XFieldNode, 'ID'));
                     if TargetRef.FieldExist(FieldNodeID) then begin
@@ -107,16 +105,13 @@ codeunit 91007 DMTXMLBackup
         rootNode: XmlNode;
         tableNode: XmlNode;
     begin
-        // DOKUMENT
         Clear(XDoc);
         XDoc := XmlDocument.Create();
 
-        // ROOT
         rootNode := XmlElement.Create('DMT').AsXmlNode();
         XDoc.Add(rootNode);
         AddAttribute(rootNode, 'Version', '2.0');
 
-        // Table Loop
         CreateTableIDList(TablesList);
         foreach tableID in TablesList do
             if GetTableLineCount(tableID) > 0 then begin
@@ -179,12 +174,10 @@ codeunit 91007 DMTXMLBackup
                 _XMLNode_Start.AsXmlElement().Add(recordNode);
                 recRef.Get(ID);
                 fieldIDsList := GetListOfKeyFieldIDs(recRef);
-                // Add Key Fields As Attributes
                 foreach keyFieldID in fieldIDsList do begin
                     fldRef := recRef.Field(keyFieldID);
                     AddAttribute(recordNode, CreateTagName(fldRef.Name), GetFldRefValueAsText(fldRef));
                 end;
-                // Add Fields with Value
                 for i := 1 to recRef.FieldCount do begin
                     fldRef := recRef.FieldIndex(i);
                     if not IsFieldExcluded(fldRef) then
@@ -289,10 +282,6 @@ codeunit 91007 DMTXMLBackup
                     Evaluate(IntegerType, ValueAsText, 9);
                     FldRef.Value(IntegerType);
                 end;
-            //FldRef.Type::Media:
-            //    ;
-            //FldRef.Type::MediaSet:
-            //    ;
             FldRef.Type::RecordId:
                 begin
                     Evaluate(RecordIDType, ValueAsText, 9);

@@ -461,25 +461,14 @@ table 91001 DMTGenBuffTable
         GenBuffTable.Reset();
         GenBuffTable.FilterBy(ImportConfigHeader);
         GenBuffTable.SetRange(IsCaptionLine, false);
-        // less Columns is faster
         case NoOfCols of
             0 .. 50:
                 Page.Run(Page::DMTGenBufferList50, GenBuffTable);
-            51 .. 100:
-                Page.Run(Page::DMTGenBufferList100, GenBuffTable);
-            101 .. 150:
-                Page.Run(Page::DMTGenBufferList150, GenBuffTable);
             else
                 Page.Run(Page::DMTGenBufferList250, GenBuffTable);
         end;
     end;
 
-    /// <summary>
-    /// Returns all unique value combinations for a set of fields
-    /// </summary>
-    /// <param name="importConfigHeaderID">Import Config Header ID with the related buffer data</param>
-    /// <param name="FieldIDs">list of field ids to process</param>
-    /// <returns>list of list of text with all unique combinations</returns>
     procedure GetUniqueColumnValues(importConfigHeaderID: integer; FieldIDs: List of [Integer]) uniqueValues: List of [List of [Text]]
     var
         genBuffTable: Record DMTGenBuffTable;

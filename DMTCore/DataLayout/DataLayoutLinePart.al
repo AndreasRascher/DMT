@@ -14,7 +14,6 @@ page 91006 DMTLayoutLinePart
             {
                 Visible = (RepeaterVisibilty = RepeaterVisibilty::Default);
                 field(DefaultGroup_ColumnName; Rec.ColumnName) { }
-                // field(DefaultGroup_DataType; Rec.DataType) { }
             }
             repeater(NAV)
             {
@@ -27,14 +26,12 @@ page 91006 DMTLayoutLinePart
                 Visible = (RepeaterVisibilty = RepeaterVisibilty::"Custom CSV");
                 field(CustomCSV_ColumnNo; Rec."Column No.") { }
                 field(CustomCSV_ColumnName; Rec.ColumnName) { }
-                // field(CustomCSV_DataType; Rec.DataType) { }
             }
             repeater(Excel)
             {
                 Visible = (RepeaterVisibilty = RepeaterVisibilty::Excel);
                 field(Excel_ColumnNo; Rec."Column No.") { }
                 field(Excel_ColumnName; Rec.ColumnName) { }
-                // field(Excel_DataType; Rec.DataType) { }
             }
         }
     }

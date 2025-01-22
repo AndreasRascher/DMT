@@ -116,7 +116,7 @@ page 91028 DMTFieldLookUp
                     currType::Source:
                         begin
                             FieldNameVisible := false;
-                            if (importConfigLine."Source Field No." <> 0) then begin // not every target field is mapped
+                            if (importConfigLine."Source Field No." <> 0) then begin
                                 tempFieldSelectionBuffer.LookUpType := tempFieldSelectionBuffer.LookUpType::SourceFields;
                                 tempFieldSelectionBuffer."Field No." := importConfigLine."Source Field No.";
                                 tempFieldSelectionBuffer."Field Caption" := importConfigLine."Source Field Caption";

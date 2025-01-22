@@ -548,20 +548,13 @@ table 91009 DMTProcessingPlan
     begin
         if not importConfigHeader.Get(ImportConfigHeaderID) then
             exit(false);
-        //* Generische Puffertabelle immer vorhanden -> Gültig
         if importConfigHeader.UseGenericBufferTable() then
             exit(true);
-        //* Wenn seperate Puffertabelle verwendet wird, prüfen ob diese vorhanden ist
         if TableMetadata.Get(importConfigHeader."Buffer Table ID") then
             exit(true);
         exit(false);
     end;
 
-    /// <summary>create a filter for the source table based on the filter for the target table</summary>
-    /// <param name="filteredView">table view result</param>
-    /// <param name="importConfigHeaderID">ID of the config. header containing the field mapping</param>
-    /// <param name="filter">filter: Dictionary of [Text/*field name*/, Text/*filter expression|default value*/]</param>
-    /// <returns>true - field filters found</returns>
     procedure createSourceTableFilterFromTargetFilter(var filteredView: Text; importConfigHeaderID: Integer; filter: Dictionary of [Text/*field name*/, Text/*filter expression|default value*/]) OK: Boolean
     var
         importConfigHeader: Record DMTImportConfigHeader;
