@@ -15,7 +15,6 @@ codeunit 91013 DMTRefHelper
 
     procedure CopyRecordRef(var RecRefSource: RecordRef; var RecRefTarget: RecordRef)
     var
-        TempBlob: Codeunit "Temp Blob";
         FieldRefSource: FieldRef;
         FieldRefTarget: FieldRef;
         i: Integer;
@@ -23,11 +22,8 @@ codeunit 91013 DMTRefHelper
         for i := 1 to RecRefSource.FieldCount do begin
             if RecRefTarget.FieldIndex(i).Class = FieldClass::Normal then begin
                 FieldRefSource := RecRefSource.FieldIndex(i);
-                if FieldRefSource.Type in [FieldType::Blob] then begin
-                    TempBlob.FromFieldRef(FieldRefSource);
-                    if not TempBlob.HasValue() then  // keep unsaved blob content
-                        FieldRefSource.CalcField();
-                end;
+                if FieldRefSource.Type in [FieldType::Blob] then
+                    FieldRefSource.CalcField();
                 FieldRefTarget := RecRefTarget.FieldIndex(i);
                 FieldRefTarget.Value := FieldRefSource.Value;
             end;
@@ -45,7 +41,6 @@ codeunit 91013 DMTRefHelper
     procedure EvaluateFieldRef(var FieldRef_TO: FieldRef; FromText: Text; EvaluateOptionValueAsNumber: Boolean; ThrowError: Boolean): Boolean
     var
         TempBlob: Record "Tenant Media" temporary;
-        tempDummyVendor: Record Vendor temporary;
         _DateFormula: DateFormula;
         _RecordID: RecordId;
         _BigInteger: BigInteger;
@@ -54,17 +49,12 @@ codeunit 91013 DMTRefHelper
         _DateTime: DateTime;
         _Decimal: Decimal;
         _Integer: Integer;
-        _Guid: Guid;
-        // NoOfOptions: Integer;
-        // OptionIndex: Integer;
+        NoOfOptions: Integer;
+        OptionIndex: Integer;
         InvalidValueForTypeErr: Label '"%1" is not a valid %2 value.', Comment = 'de-DE="%1" ist kein gültiger %2 Wert';
-        InvalidOptionPosValueErr: Label '“%1” could not be converted into an integer (option index no.)', Comment = 'de-DE="%1" konnte nicht in eine Ganzzahl (Optionsindex Nr.) umgewandelt werden.';
         _OutStream: OutStream;
-        _InStream: InStream;
-        // OptionElement: Text;
+        OptionElement: Text;
         _Time: Time;
-        optionEnumIndex: Integer;
-        enumOptionMembers: Dictionary of [Integer, Text];
     begin
         if FromText = '' then
             case UpperCase(Format(FieldRef_TO.Type)) of
@@ -75,6 +65,7 @@ codeunit 91013 DMTRefHelper
                     end;
             end;
         case UpperCase(Format(FieldRef_TO.Type)) of
+
             'INTEGER':
                 begin
                     case true of
@@ -138,66 +129,25 @@ codeunit 91013 DMTRefHelper
                     if ThrowError then
                         Error(InvalidValueForTypeErr, FromText, FieldRef_TO.Type);
             'OPTION':
-                begin
-                    // read No. and Captions to dictionary
-                    optionEnumIndex := 1;
-                    while FieldRef_TO.GetEnumValueOrdinal(optionEnumIndex) <> -1 do begin
-                        enumOptionMembers.Add(FieldRef_TO.GetEnumValueOrdinal(optionEnumIndex), FieldRef_TO.GetEnumValueCaption(optionEnumIndex).ToLower());
-                        optionEnumIndex += 1;
-                    end;
-                    if EvaluateOptionValueAsNumber then begin
-                        //Optionswert wird als Zahl übergeben
-                        //===================================
-                        if not Evaluate(_Integer, FromText) then
-                            if ThrowError then
-                                Error(InvalidOptionPosValueErr, FromText)
-                            else
-                                exit(false);
-                        // Zahl ist in Optionen enthalten
-                        if enumOptionMembers.ContainsKey(_Integer) then begin
-                            FieldRef_TO.Value := _Integer;
+                if EvaluateOptionValueAsNumber then begin
+                    //Optionswert wird als Zahl übergeben
+                    if Evaluate(_Integer, FromText) then begin
+                        FieldRef_TO.Value := _Integer;
+                        exit(true);
+                    end else
+                        if ThrowError then
+                            Evaluate(_RecordID, FromText);
+                end else begin
+                    //Optionswert wird als Text übergeben
+                    NoOfOptions := StrLen(FieldRef_TO.OptionCaption) - StrLen(DelChr(FieldRef_TO.OptionCaption, '=', ',')); // zero based
+                    for OptionIndex := 0 to NoOfOptions do begin
+                        OptionElement := SelectStr(OptionIndex + 1, FieldRef_TO.OptionCaption);
+                        if OptionElement.ToLower() = FromText.ToLower() then begin
+                            FieldRef_TO.Value := OptionIndex;
                             exit(true);
-                        end else begin
-                            if ThrowError then
-                                Error(InvalidOptionPosValueErr, FromText)
-                            else
-                                exit(false);
                         end;
-                        FieldRef_TO.Value := _Integer
-                    end else begin
-                        //Optionswert wird als Text übergeben
-                        //===================================
-                        if enumOptionMembers.Values.Contains(FromText.ToLower()) then begin
-                            FieldRef_TO.Value := enumOptionMembers.Keys.Get(enumOptionMembers.Values.IndexOf(FromText.ToLower()));
-                            exit(true);
-                        end else begin
-                            if ThrowError then
-                                Error(InvalidValueForTypeErr, FromText, FieldRef_TO.Type)
-                            else
-                                exit(false);
-                        end
                     end;
                 end;
-            // if EvaluateOptionValueAsNumber then begin
-            //     //Optionswert wird als Zahl übergeben
-            //     if Evaluate(_Integer, FromText) then begin
-            //         FieldRef_TO.Value := _Integer;
-            //         exit(true);
-            //     end else
-            //         if ThrowError then
-            //             Error(InvalidOptionPosValueErr, FromText);
-            // end else begin
-            //Optionswert wird als Text übergeben
-            // NoOfOptions := StrLen(FieldRef_TO.OptionCaption) - StrLen(DelChr(FieldRef_TO.OptionCaption, '=', ',')); // zero based
-            // for OptionIndex := 0 to NoOfOptions do begin
-            //     OptionElement := SelectStr(OptionIndex + 1, FieldRef_TO.OptionCaption);
-            //     if OptionElement.ToLower() = FromText.ToLower() then begin
-            //         FieldRef_TO.Value := OptionIndex;
-            //         exit(true);
-            //     end;
-            // end;
-            // Error(InvalidValueForTypeErr, FromText, FieldRef_TO.Type);
-            // end;
             'DATE':
                 begin
                     //ApplicationMgt.MakeDateText(FromText);
@@ -242,36 +192,6 @@ codeunit 91013 DMTRefHelper
                         exit(true);
                     end else
                         if ThrowError then Evaluate(_DateFormula, FromText, 9);
-                end;
-            'GUID':
-                begin
-                    if FromText = '' then begin
-                        Clear(_Guid);
-                        FieldRef_TO.Value := _Guid;
-                        exit(true);
-                    end;
-                    if Evaluate(_Guid, FromText, 9) then begin
-                        FieldRef_TO.Value := _Guid;
-                        exit(true);
-                    end else
-                        if ThrowError then Evaluate(_Guid, FromText, 9);
-                end;
-            'MEDIA':
-                begin
-                    if FromText = '' then begin
-                        Clear(_Guid);
-                        FieldRef_TO.Value(_Guid);
-                        exit(true);
-                    end;
-                    TempBlob.DeleteAll();
-                    TempBlob.Content.CreateOutStream(_OutStream);
-                    _OutStream.WriteText(FromText);
-                    TempBlob.Insert();
-                    TempBlob.CalcFields(Content);
-                    TempBlob.Content.CreateInStream(_InStream);
-                    _Guid := tempDummyVendor.Image.ImportStream(_InStream, '');
-                    FieldRef_TO.Value(_Guid);
-                    exit(true);
                 end;
             else
                 Message('Funktion "EvaluateFieldRef" - nicht behandelter Datentyp %1', Format(FieldRef_TO.Type));
