@@ -14,8 +14,6 @@ OBJECT XMLport 50050 DMT Export2
     TextEncoding=UTF-8;
     OnInitXMLport=BEGIN
                     InitDefaults();
-                    //ExportToFolderPath := 'C:\Users\arascher\Desktop\ARAS\DMT';
-                    //ExportTableIDFilter := '23';
                   END;
 
     OnPreXMLport=BEGIN
@@ -43,7 +41,6 @@ OBJECT XMLport 50050 DMT Export2
                                                   SourceTable=Table2000000028;
                                                   SourceTableView=SORTING(Field1,Field2);
                                                   Export::OnPreXMLItem=BEGIN
-                                                                         // Filter only needed wehn DataPerCompany=true
                                                                          IF HeaderLine.COUNT > 1 THEN
                                                                            HeaderLine.SETRANGE("Company Name",COMPANYNAME);
                                                                        END;
@@ -2603,7 +2600,7 @@ OBJECT XMLport 50050 DMT Export2
                   Name=Table ID Filter for Export;
                   SourceExpr=ExportTableIDFilter;
                   OnValidate=BEGIN
-                               CLEAR(ActualExportTableFilter); // required
+                               CLEAR(ActualExportTableFilter); 
                              END;
 
                   ShowCaption=No }
@@ -2704,14 +2701,13 @@ OBJECT XMLport 50050 DMT Export2
       TAB@55003 : Text[1];
       ReadyMsg@55004 : Text;
     BEGIN
-      //IF CONFIRM('') THEN; //debug
       CheckTablesAndCreateActualTableFilter();
       IF ActualExportTableFilter = '' THEN ERROR('Keine Tabellen fr den Export verfgbar');
 
       AllObjWithCaption.SETRANGE("Object Type",AllObjWithCaption."Object Type"::TableData);
       AllObjWithCaption.SETFILTER("Object ID",ActualExportTableFilter);
       IF AllObjWithCaption.FINDSET THEN BEGIN
-        TAB[1] := 9; // TAB
+        TAB[1] := 9;
         ReadyMsg := ExportFinished + ':';
         REPEAT
           ExportToFilePath := ExportToFolderPath + STRSUBSTNO('%1_',AllObjWithCaption."Object ID") + CONVERTSTR(AllObjWithCaption."Object Caption",'<>*\/|"','_______') +'.csv';
@@ -2741,8 +2737,7 @@ OBJECT XMLport 50050 DMT Export2
       isEmpty@55006 : Boolean;
       isInLicense@55007 : Boolean;
     BEGIN
-      //* check if tables in filter are actual available
-      IF (ActualExportTableFilter <> '') THEN // is predefined in filter
+      IF (ActualExportTableFilter <> '') THEN 
         EXIT;
       IF (ExportTableIDFilter = '') THEN
         ERROR('ExportTableIDFilter Empty');
@@ -2751,7 +2746,6 @@ OBJECT XMLport 50050 DMT Export2
       AllObjWithCaption.SETRANGE("Object Type",AllObjWithCaption."Object Type"::TableData);
       AllObjWithCaption.SETFILTER("Object ID",ExportTableIDFilter);
       IF AllObjWithCaption.FINDSET THEN REPEAT
-        // check properties
         CLEAR(isCompiled);
         CLEAR(isEmpty);
         CLEAR(isInLicense);
@@ -2760,7 +2754,6 @@ OBJECT XMLport 50050 DMT Export2
           isEmpty := IsTableEmpty(AllObjWithCaption."Object ID");
           isInLicense := IsTableInLicense(AllObjWithCaption."Object ID");
         END;
-        // property warnings
         IF NOT isCompiled THEN BEGIN
           MESSAGE(TableIsNotCompiledMsg,AllObjWithCaption."Object ID");
         END ELSE BEGIN
@@ -2769,7 +2762,6 @@ OBJECT XMLport 50050 DMT Export2
           IF isEmpty THEN
             MESSAGE(EmptyTableMsg,AllObjWithCaption."Object ID",AllObjWithCaption."Object Caption");
         END;
-        // create actual table filter
         IF isCompiled AND NOT isEmpty AND isInLicense THEN
           ActualExportTableFilter += STRSUBSTNO('|%1',AllObjWithCaption."Object ID");
       UNTIL AllObjWithCaption.NEXT=0;
@@ -2778,7 +2770,7 @@ OBJECT XMLport 50050 DMT Export2
 
     LOCAL PROCEDURE InitDefaults@55008();
     BEGIN
-      FieldSeparator[1]  := 9; // TAB
+      FieldSeparator[1]  := 9; 
       CRLF[1]:=13; CRLF[2]:=10;
       ActionTextArray[1] := ExportSchemaLbl;
       ActionTextArray[2] := ExportDataLbl;
@@ -2801,8 +2793,7 @@ OBJECT XMLport 50050 DMT Export2
       ELSE
         field.SETRANGE(Class,field.Class::Normal);
       IF NOT ExportBlobContent THEN
-        field.SETFILTER(Type,'<>26207&<>BLOB'); //26207=Media
-      //* schema export - exclude meta info fields from field table
+        field.SETFILTER(Type,'<>26207&<>BLOB');
       IF _ExportTableID = DATABASE::Field THEN
           field.SETFILTER("No.",'<>%1&<>%2&<>%3&<>%4',24{OptionString},25{ObsoleteState},26{ObsoleteReason},27{DataClassification});
       IF field.FINDSET THEN REPEAT
@@ -2824,7 +2815,6 @@ OBJECT XMLport 50050 DMT Export2
       NoOfBlobAndMediaFields := BlobAndMediaFields.COUNT;
       NoOfNormalFields := NormalFields.COUNT;
 
-      //* get last field no
       _normalFields.FINDLAST;
         LastFieldNoGlobal := _normalFields."No.";
 
@@ -2883,7 +2873,6 @@ OBJECT XMLport 50050 DMT Export2
       recRef@55002 : RecordRef;
       fieldRef@55003 : FieldRef;
     BEGIN
-      //Field.SETRANGE(ObsoleteState{Field25},0);
       recRef.GETTABLE(field);
       IF NOT recRef.FIELDEXIST(25) THEN
         EXIT;
@@ -2900,12 +2889,11 @@ OBJECT XMLport 50050 DMT Export2
       TableNos@55005 : TEMPORARY Record 2000000026;
       Object@1000000000 : Record 2000000001;
     BEGIN
-      //* depending on the version of nav some tables must be excluded
       IF AllObj.GET(AllObj."Object Type"::Table,2000000136) THEN BEGIN
 
         recRef.OPEN(2000000136);
 
-        IF recRef.FIELDEXIST(11) THEN BEGIN //TableMetadata.TableType
+        IF recRef.FIELDEXIST(11) THEN BEGIN 
           recRef.RESET;
           fieldRef := recRef.FIELD(11);
           fieldRef.SETFILTER('>0');
@@ -2917,7 +2905,7 @@ OBJECT XMLport 50050 DMT Export2
             UNTIL recRef.NEXT = 0;
         END;
 
-        IF recRef.FIELDEXIST(13) THEN BEGIN //TableMetadata.ObsoleteState
+        IF recRef.FIELDEXIST(13) THEN BEGIN 
           recRef.RESET;
           fieldRef := recRef.FIELD(13);
           fieldRef.SETFILTER('>0');
@@ -2930,7 +2918,6 @@ OBJECT XMLport 50050 DMT Export2
 
       END;
 
-      //* Exclude not compiled tables
       Object.RESET;
       Object.SETRANGE(Type,Object.Type::Table);
       Object.SETRANGE("Company Name",'');
@@ -2940,7 +2927,6 @@ OBJECT XMLport 50050 DMT Export2
         IF TableNos.INSERT THEN;
       UNTIL Object.NEXT = 0;
 
-      //* Build Filter
       IF TableNos.FINDSET THEN REPEAT
         FilterExpr += '&<>'+FORMAT(TableNos.Number);
       UNTIL TableNos.NEXT = 0;
@@ -2988,7 +2974,6 @@ OBJECT XMLport 50050 DMT Export2
     VAR
       _Caption@1000000002 : Text;
     BEGIN
-      //* add column captions for all export fields
       _NormalFields.FINDSET;
       REPEAT
         CreateHeaderLine2(HeaderLineText,_NormalFields);
@@ -3007,9 +2992,8 @@ OBJECT XMLport 50050 DMT Export2
       _Caption@1000000002 : Text;
       CRLF@55000 : Text[2];
     BEGIN
-      //* add column caption for a single field
-      _Caption := ReplaceStr(_Field.FieldName,FieldSeparator,'');  // Remove FieldSeparator from Value
-      IF UPPERCASE(FORMAT(_Field.Type)) IN ['MEDIA','BLOB'] THEN // Add Blob Identifier to import as Base64 or Text
+      _Caption := ReplaceStr(_Field.FieldName,FieldSeparator,'');  
+      IF UPPERCASE(FORMAT(_Field.Type)) IN ['MEDIA','BLOB'] THEN 
         IF IsRecordLinkNoteField2(_Field) THEN
           _Caption += NoteColumnIdentifier
         ELSE
@@ -3053,7 +3037,6 @@ OBJECT XMLport 50050 DMT Export2
       DialogText@55002 : Text;
       field@55001 : Record 2000000041;
     BEGIN
-      //* prepare schema export
       ExportRecRef.OPEN(_exportTableID);
       IF _exportTableID = DATABASE::Field THEN BEGIN
         ExportRecRef.SETTABLE(field);
@@ -3062,7 +3045,7 @@ OBJECT XMLport 50050 DMT Export2
         ExportRecRef.GETTABLE(field);
       END;
 
-      ApplyCustomExportFilters(ExportRecRef); //20240113
+      ApplyCustomExportFilters(ExportRecRef); 
       ExportRecRef.FINDSET(FALSE,FALSE);
 
       CLEAR(Progress);
@@ -3074,10 +3057,9 @@ OBJECT XMLport 50050 DMT Export2
 
     LOCAL PROCEDURE FindNextExportRecord@55009();
     BEGIN
-      //* iterate the source table record, stop export after last line
       IF ExportRecRef.NEXT = 0 THEN BEGIN
          Progress.CLOSE;
-        currXMLport.BREAK; // 20221129 Stop on last line
+        currXMLport.BREAK; 
       END ELSE BEGIN
         IF (CURRENTDATETIME - Progress_LastUpdate) > 1000 THEN BEGIN
           Progress.UPDATE(1,FORMAT(Lines.Number));
@@ -3110,7 +3092,6 @@ OBJECT XMLport 50050 DMT Export2
 
       start := CURRENTDATETIME;
       progress.OPEN(STRSUBSTNO('Export %1\Line #######1#',CONVERTSTR(exportToFilePath,'\','/')));
-      //DMTExport.InitExport(exportTableID,ExportFlowFields,ExportBlobContent,TableView);
 
       serverFile.CREATETEMPFILE;
       serverFilePath := serverFile.NAME;
@@ -3118,8 +3099,6 @@ OBJECT XMLport 50050 DMT Export2
 
       serverFile.CREATE(serverFilePath);
       serverFile.CREATEOUTSTREAM(outStream);
-      //DMTExport.SETDESTINATION(outStream);
-      //DMTExport.EXPORT;
       Params.SETRANGE("Table No.",exportTableID);
       ArgumentsToFilter(ArgumentFilter,ExportBlobContent,ExportFlowFields);
       Params.SETFILTER("Table Name",ArgumentFilter);
@@ -3139,7 +3118,6 @@ OBJECT XMLport 50050 DMT Export2
       _TableNo@1000000004 : Integer;
       field@1000000005 : Record 2000000041;
     BEGIN
-      //* returns the field value as text from the current column (ExportFieldBuffer) of the global recordref (ExportRecRef)
       CLEAR(valueAsText);
       IF fieldIndex > NoOfNormalFields THEN
         EXIT;
@@ -3151,7 +3129,6 @@ OBJECT XMLport 50050 DMT Export2
       END;
 
       CLEAR(valueAsText);
-      // Format Field in XML Format, Zero numbers are empty (Save Space)
       CLEAR(currTableRef);
       CASE TRUE OF
         (NormalFields.TableNo = DATABASE::Field) AND (NormalFields."No." = 50000): BEGIN
@@ -3164,7 +3141,6 @@ OBJECT XMLport 50050 DMT Export2
           currTableRef.OPEN(_TableNo,FALSE);
           valueAsText := GetListOfKeyFieldIDs(currTableRef.NUMBER);
         END;
-        //OptionString
         (NormalFields.TableNo = DATABASE::Field) AND (NormalFields."No." = 50002): BEGIN
           ExportRecRef.SETTABLE(field);
           IF field.Type = field.Type::Option THEN BEGIN
@@ -3178,7 +3154,6 @@ OBJECT XMLport 50050 DMT Export2
           IF field.Type = field.Type::Option THEN BEGIN
             currTableRef.OPEN(field.TableNo,FALSE);
             currFldRef := currTableRef.FIELD(field."No.");
-            //mask leading "
             IF (STRLEN(currFldRef.OPTIONCAPTION)>1) AND (COPYSTR(currFldRef.OPTIONCAPTION,1,2)=' ,') THEN BEGIN
               valueAsText := '" "'+COPYSTR(currFldRef.OPTIONCAPTION,2);
             END ELSE BEGIN
@@ -3186,19 +3161,17 @@ OBJECT XMLport 50050 DMT Export2
             END;
           END;
         END;
-        // No of Records
         (NormalFields.TableNo = DATABASE::Field) AND (NormalFields."No."=50004): BEGIN
           ExportRecRef.SETTABLE(field);
           valueAsText := GetNoOfRecordsInTable(field);
         END;
         ELSE valueAsText := GetFormattedFieldValue(ExportRecRef,NormalFields."No.");
-      END; // END_CASE
+      END; 
 
-      valueAsText := ReplaceStr(valueAsText,FieldSeparator,'');  // Remove FieldSeparator from Value
+      valueAsText := ReplaceStr(valueAsText,FieldSeparator,''); 
       valueAsText := RemoveSpecialChars(valueAsText);
 
-      // Add Closing Sign
-      IF (LastFieldNoGlobal <> NormalFields."No.") OR (NOT BlobAndMediaFields.ISEMPTY) THEN BEGIN  // Blob fields are attached at the end -> separator needed
+      IF (LastFieldNoGlobal <> NormalFields."No.") OR (NOT BlobAndMediaFields.ISEMPTY) THEN BEGIN  
         valueAsText += FieldSeparator;
       END;
 
@@ -3216,8 +3189,7 @@ OBJECT XMLport 50050 DMT Export2
       _SubStr@1000000007 : Text[30];
       Letters@1000000005 : TextConst 'DEU=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     BEGIN
-      //* Returns a list ob all option values with masked values (e.g. for spaces)
-      _OptionString := _FieldRef.OPTIONSTRING;
+     _OptionString := _FieldRef.OPTIONSTRING;
       _OptionCounter := 1;
       FOR i := 1 TO STRLEN(_OptionString) DO BEGIN
         IF _OptionString[i] = ',' THEN
@@ -3226,14 +3198,13 @@ OBJECT XMLport 50050 DMT Export2
 
       FOR i := 1 TO _OptionCounter DO BEGIN
         _OptionElement := SELECTSTR(i,_OptionString);
-        IF (DELCHR(_OptionElement,'=',Letters) = '') THEN BEGIN // ContainsOnlyLetters
+        IF (DELCHR(_OptionElement,'=',Letters) = '') THEN BEGIN 
           _Result += STRSUBSTNO('%1,',_OptionElement);
         END ELSE BEGIN
           _Result += STRSUBSTNO('"%1",',_OptionElement);
         END;
       END;
-      // remove last
-      _Result := DELCHR(_Result,'>',',');
+     _Result := DELCHR(_Result,'>',',');
     END;
 
     LOCAL PROCEDURE GetListOfKeyFieldIDs@1109900003(TableNo@1109900000 : Integer) KeyFieldsList : Text;
@@ -3244,7 +3215,6 @@ OBJECT XMLport 50050 DMT Export2
       FldRef@1000000003 : FieldRef;
       i@1000000004 : Integer;
     BEGIN
-      //* returns a comma seperated list of all primary key field numbers
       RecRef.OPEN(TableNo);
       KeyRef := RecRef.KEYINDEX(1);
       FOR i := 1 TO KeyRef.FIELDCOUNT DO BEGIN
@@ -3285,7 +3255,6 @@ OBJECT XMLport 50050 DMT Export2
       _GUID@55001 : GUID;
       _fieldRefMediaID@55002 : FieldRef;
     BEGIN
-      //* returns values in xmlformat, handles problems with field.type optionstring bug
       fieldRef := recRef.FIELD(fieldNo);
       fieldRef.VALUE := fieldRef.VALUE;
       CASE UPPERCASE(FORMAT(fieldRef.TYPE)) OF
@@ -3301,7 +3270,7 @@ OBJECT XMLport 50050 DMT Export2
         END;
         'MEDIA': _Result := GetFormattedFieldValueFromMedia(fieldRef);
         ELSE _Result := FORMAT(fieldRef.VALUE,0,9);
-      END; // END_CASE
+      END; 
 
       IF (recRef.NUMBER = DATABASE::Field) AND (fieldNo = _Field.FIELDNO(Type))THEN BEGIN
         recRef.SETTABLE(_Field);
@@ -3334,12 +3303,10 @@ OBJECT XMLport 50050 DMT Export2
       _IStream@55002 : InStream;
       char177@55003 : Text[1];
     BEGIN
-      // handle record link notes
       IF IsRecordLinkNoteField(fieldRef) THEN BEGIN
         _Result := GetFormattedFieldValueFromRecordLinkNote(fieldRef);
         EXIT(_Result);
       END;
-      // other blob fields
       fieldRef.CALCFIELD;
       _TempBlob.Blob := fieldRef.VALUE;
       IF NOT _TempBlob.Blob.HASVALUE THEN
@@ -3363,7 +3330,7 @@ OBJECT XMLport 50050 DMT Export2
     BEGIN
       _GUID := mediaFieldRef.VALUE;
       IF ISNULLGUID(_GUID) THEN EXIT('');
-      recRef.OPEN(2000000184); // TenantMedia
+      recRef.OPEN(2000000184); 
       _fieldRef := recRef.FIELD(1);
       _fieldRef.VALUE(_GUID);
       IF NOT recRef.GET(recRef.RECORDID) THEN EXIT('');
@@ -3389,18 +3356,16 @@ OBJECT XMLport 50050 DMT Export2
       char177@55003 : Text[1];
       BinReader@1000000000 : DotNet "'mscorlib'.System.IO.BinaryReader";
     BEGIN
-      // Read the Note BLOB
       fieldRef.CALCFIELD;
       _TempBlob.Blob := fieldRef.VALUE;
       IF NOT _TempBlob.Blob.HASVALUE THEN
         EXIT('');
       _TempBlob.Blob.CREATEINSTREAM(_IStream);
       BinReader := BinReader.BinaryReader(_IStream);
-      // Peek if stream is empty
       IF BinReader.BaseStream.Position = BinReader.BaseStream.Length THEN
         EXIT('');
       _Note := BinReader.ReadString;
-      _Note := ReplaceStr(_Note,FieldSeparator,'');  // Remove FieldSeparator from Value
+      _Note := ReplaceStr(_Note,FieldSeparator,''); 
     END;
 
     LOCAL PROCEDURE RemoveSpecialChars@1109900000(VAR Text@1109900000 : Text) ResultText : Text;
@@ -3462,7 +3427,6 @@ OBJECT XMLport 50050 DMT Export2
     VAR
       dotnetStringBuilder@1000000004 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Text.StringBuilder";
     BEGIN
-      //STRREPLACE(String : Text[256];Old : Text[256];New : Text[256]) : Text[256]
       dotnetStringBuilder := dotnetStringBuilder.StringBuilder(String);
       dotnetStringBuilder.Replace(Old,New);
       CLEAR(String);
@@ -3478,7 +3442,6 @@ OBJECT XMLport 50050 DMT Export2
       listOfOptionStringText@1000000002 : Text;
       listOfOptionCaptionText@1000000007 : Text;
     BEGIN
-      //* returns the field value as BigText from the current column (ExportFieldBuffer) of the global recordref (ExportRecRef)
       CLEAR(valueAsBigText);
       IF fieldIndex > noOfFields THEN
         EXIT;
@@ -3489,13 +3452,11 @@ OBJECT XMLport 50050 DMT Export2
         ExportFields.NEXT;
       END;
 
-      // Format Field in XML Format, Zero numbers are empty (Save Space)
       CLEAR(currTableRef);
       valueAsBigText.ADDTEXT(GetFormattedFieldValue(ExportRecRef,ExportFields."No."));
-      ReplaceStrBT(valueAsBigText,FieldSeparator,'');  // Remove FieldSeparator from Value
+      ReplaceStrBT(valueAsBigText,FieldSeparator,'');
       RemoveSpecialCharsBT(valueAsBigText);
 
-      // Add Closing Sign
       IF LastFieldNoGlobal <> ExportFields."No." THEN
         valueAsBigText.ADDTEXT(FieldSeparator);
 
@@ -3552,7 +3513,6 @@ OBJECT XMLport 50050 DMT Export2
     VAR
       _RecordLink@1000000001 : Record 2000000068;
     BEGIN
-      // Add Custom Export Filters here
       CASE _RecRef.NAME OF
         _RecordLink.TABLENAME: BEGIN
           _RecordLink.SETRANGE(Company,COMPANYNAME);
