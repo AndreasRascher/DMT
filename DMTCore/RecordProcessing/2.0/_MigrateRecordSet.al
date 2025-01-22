@@ -464,7 +464,6 @@ codeunit 91014 DMTMigrateRecordSet
         ProgressBarTitle: Text;
         ProgressBarText: TextBuilder;
         RecordsToProcessLimit, RecordsToProcessStartPos : Integer;
-        debug: Text;
     begin
         // Use Limit or all records for progress
         if applyLimits then begin

@@ -443,7 +443,6 @@ codeunit 91007 DMTXMLBackup
         TablesToExport.Add(Database::DMTSetup);
         TablesToExport.Add(Database::DMTReplacementHeader);
         TablesToExport.Add(Database::DMTReplacementLine);
-        TablesToExport.Add(Database::DMTCopyTable);
         TablesToExport.Add(Database::DMTProcessingPlanBatch);
         foreach TableID in TablesToExport do begin
             _RecRef.Open(TableID);
