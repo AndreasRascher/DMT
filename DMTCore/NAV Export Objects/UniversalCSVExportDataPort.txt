@@ -564,11 +564,9 @@ OBJECT Dataport 50100 DMTExport
       TextOLD@1000000001 : BigText;
       i@1000000002 : Integer;
     BEGIN
-      CharArray[1] := 3; // End of Text
       CharArray[2] := 9; // TAB
       CharArray[3] := 10; // LF
       CharArray[4] := 13; // CR
-      CharArray[5] := 30; // Record Seperator
       ResultText := DELCHR(Text,'=',CharArray);
     END;
 
