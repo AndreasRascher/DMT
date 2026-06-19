@@ -29,11 +29,11 @@
 			"version": "0.2.0",
 			"configurations": [
 				{
-					"name": "BC27",
+					"name": "BC28",
 					"type": "al",
 					"request": "launch",
 					"environmentType": "OnPrem",
-					"server": "http://bc27/",
+					"server": "http://bc28/",
 					"serverInstance": "BC",
 					"authentication": "UserPassword",
 					"startupObjectType": "Page",
@@ -50,11 +50,11 @@
 					"schemaUpdateMode": "ForceSync"
 				},
 				{
-					"name": "BC27 AL TEST TOOL",
+					"name": "BC28 AL TEST TOOL",
 					"type": "al",
 					"request": "launch",
 					"environmentType": "OnPrem",
-					"server": "http://bc27/",
+					"server": "http://bc28/",
 					"serverInstance": "BC",
 					"authentication": "UserPassword",
 					"startupObjectType": "Page",
