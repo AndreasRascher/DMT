@@ -68,9 +68,9 @@ xmlport 91002 DMTCSVWriter
 
     internal procedure ExportTargetTableAsCSV(importConfigHeader: Record DMTImportConfigHeader)
     var
-        fieldSelection: Page DMTFieldSelection;
         tempBlob: Codeunit "Temp Blob";
         exportGenericCSV: XmlPort DMTCSVWriter;
+        fieldSelection: Page DMTFieldSelection;
         rRef: RecordRef;
         IStr: InStream;
         OStr: OutStream;
